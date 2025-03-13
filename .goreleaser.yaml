@@ -1,0 +1,78 @@
+version: 2
+
+before:
+  hooks:
+    - go generate ./...
+    - go mod tidy
+    - go mod download
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: linux
+        goarch: arm
+        goarm: 7
+
+archives:
+  - formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - README.md
+      - LICENSE.md
+      - SECURITY.md
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+sboms:
+  - id: archive
+    artifacts: archive
+  - id: source
+    artifacts: source
+
+signs:
+  - cmd: cosign
+    certificate: "${artifact}.pem"
+    args:
+      - sign-blob
+      - --yes
+      - "--output-certificate=${certificate}"
+      - "--output-signature=${signature}"
+      - "${artifact}"
+    artifacts: checksum
+
+nfpms:
+  - vendor: fox
+    homepage: https://foxhunt.wtf
+    maintainer: Christian Uhsat <mail@foxhunt.wtf>
+    description: The Forensic Swiss Army Knife.
+    license: GPL-3.0
+    formats:
+      - archlinux
+      - apk
+      - deb
+      - rpm
+    provides:
+      - fox
+    section: utils
+    contents:
+      - src: ./LICENSE.md
+        dst: /usr/share/doc/fox/copyright
+        file_info:
+          mode: 0644
