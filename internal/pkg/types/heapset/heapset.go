@@ -147,7 +147,9 @@ func (hs *HeapSet) loadFile(path string) {
 		return
 	}
 
-	defer f.Close()
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
 
 	fi, err := f.Stat()
 

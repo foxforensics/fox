@@ -31,7 +31,9 @@ func Deflate(b []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	defer r.Close()
+	defer func(r io.ReadCloser) {
+		_ = r.Close()
+	}(r)
 
 	return io.ReadAll(r)
 }

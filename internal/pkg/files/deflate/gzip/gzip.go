@@ -21,7 +21,9 @@ func Deflate(b []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	defer r.Close()
+	defer func(r *gzip.Reader) {
+		_ = r.Close()
+	}(r)
 
 	return io.ReadAll(r)
 }

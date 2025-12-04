@@ -157,7 +157,7 @@ func main() {
 	case fox.Help || ctx.Error != nil:
 		fmt.Printf(long, app.Version)
 	case len(ctx.Args) == 0:
-		fmt.Printf(short)
+		fmt.Print(short)
 	default:
 		if fox.Cli.Verbose > 1 {
 			defer timer(time.Now())

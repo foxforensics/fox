@@ -16,7 +16,10 @@ func Detect(b []byte) bool {
 
 func Deflate(b []byte) ([]byte, error) {
 	r := lzw.NewReader(bytes.NewReader(b), lzw.MSB, 8)
-	defer r.Close()
+
+	defer func(r io.ReadCloser) {
+		_ = r.Close()
+	}(r)
 
 	return io.ReadAll(r)
 }
