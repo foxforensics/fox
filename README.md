@@ -45,10 +45,15 @@ $ fox hex -mc -hc512 disk.bin
 
 Find ASCII strings in binaries:
 ```console
-$ fox text -ra8 download.exe
+$ fox text -ra8 sample.exe
 ```
 
-Hash the archives contents:
+List files with high entropy:
+```console
+$ fox info -a0.9 ./**/*
+```
+
+Hash the archive contents:
 ```console
 $ fox hash -amd5,sha1 files.zip
 ```

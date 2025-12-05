@@ -112,15 +112,15 @@ type Cli struct {
 
 	// internal
 	w  io.WriteCloser   `kong:"-"`
+	re *regexp.Regexp   `kong:"-"`
 	hs *heapset.HeapSet `kong:"-"`
 }
 
 func (cli *Cli) Bootstrap(args []string) *heapset.HeapSet {
-	var re *regexp.Regexp
 	var sw io.Writer
 
 	if len(cli.Regex) > 0 {
-		re = regexp.MustCompile(cli.Regex)
+		cli.re = regexp.MustCompile(cli.Regex)
 	}
 
 	if len(cli.Url) > 0 {
@@ -191,7 +191,7 @@ func (cli *Cli) Bootstrap(args []string) *heapset.HeapSet {
 			Bytes:  cli.Bytes,
 		},
 		Filter: &types.Filters{
-			Regex:  re,
+			Regex:  cli.re,
 			Before: cli.Before,
 			After:  cli.After,
 		},
@@ -429,12 +429,18 @@ func (cmd *Cat) Run(cli *Cli) error {
 		}
 
 		for l := range buffer.Text(h, 2).Lines {
+			s := l.Str
+
+			if cli.re != nil && l.Nr != buffer.Sep {
+				s = text.MarkMatch(s, cli.re)
+			}
+
 			if !cli.NoLine && l.Nr == buffer.Sep {
 				_, _ = fmt.Fprintf(cli.w, "%s\n", text.Hide(buffer.Sep))
 			} else if !cli.NoLine {
-				_, _ = fmt.Fprintf(cli.w, "%s %s\n", text.Hide(l.Nr), l)
+				_, _ = fmt.Fprintf(cli.w, "%s %s\n", text.Hide(l.Nr), s)
 			} else {
-				_, _ = fmt.Fprintf(cli.w, "%s\n", l)
+				_, _ = fmt.Fprintf(cli.w, "%s\n", s)
 			}
 		}
 	}

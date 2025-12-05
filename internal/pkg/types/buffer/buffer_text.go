@@ -20,10 +20,6 @@ type TextBuffer struct {
 	Pad   uint
 }
 
-func (l TextLine) String() string {
-	return l.Str
-}
-
 func Text(h *heap.Heap, e int) *TextBuffer {
 	var buf = &TextBuffer{
 		make(chan *TextLine, Size),
