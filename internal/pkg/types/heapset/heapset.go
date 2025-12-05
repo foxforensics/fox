@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"errors"
 	"io"
-	"iter"
 	"log"
 	"os"
 	"path/filepath"
@@ -389,19 +388,4 @@ func isPiped(f *os.File) bool {
 	}
 
 	return (fi.Mode() & os.ModeCharDevice) != os.ModeCharDevice
-}
-
-func apply[V any](seq iter.Seq[V], fn func(V any)) {
-	var wg sync.WaitGroup
-
-	for v := range seq {
-		wg.Add(1)
-
-		go func() {
-			fn(v)
-			wg.Done()
-		}()
-	}
-
-	wg.Wait()
 }
