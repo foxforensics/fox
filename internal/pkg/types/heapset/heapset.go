@@ -4,9 +4,11 @@ import (
 	"bufio"
 	"errors"
 	"io"
+	"iter"
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
@@ -85,7 +87,14 @@ func (hs *HeapSet) Len() int {
 func (hs *HeapSet) Get() []*heap.Heap {
 	hs.RLock()
 	defer hs.RUnlock()
-	return hs.heaps[:]
+
+	r := hs.heaps[:]
+
+	sort.SliceStable(r, func(i, j int) bool {
+		return r[i].Name < r[j].Name
+	})
+
+	return r
 }
 
 func (hs *HeapSet) ThrowAway() {
@@ -108,6 +117,8 @@ func (hs *HeapSet) loadPath(path string) {
 		return
 	}
 
+	var wg sync.WaitGroup
+
 	for _, m := range match {
 		fi, err := os.Stat(m)
 
@@ -116,12 +127,19 @@ func (hs *HeapSet) loadPath(path string) {
 			continue
 		}
 
-		if fi.IsDir() {
-			hs.loadDir(m)
-		} else {
-			hs.loadFile(m)
-		}
+		wg.Add(1)
+
+		go func() {
+			if fi.IsDir() {
+				hs.loadDir(m)
+			} else {
+				hs.loadFile(m)
+			}
+			wg.Done()
+		}()
 	}
+
+	wg.Wait()
 }
 
 func (hs *HeapSet) loadDir(path string) {
@@ -132,11 +150,21 @@ func (hs *HeapSet) loadDir(path string) {
 		return
 	}
 
+	var wg sync.WaitGroup
+
 	for _, f := range dir {
 		if !f.IsDir() {
-			hs.loadFile(filepath.Join(path, f.Name()))
+			wg.Add(1)
+
+			go func() {
+				hs.loadFile(filepath.Join(path, f.Name()))
+				wg.Done()
+			}()
+
 		}
 	}
+
+	wg.Wait()
 }
 
 func (hs *HeapSet) loadFile(path string) {
@@ -361,4 +389,19 @@ func isPiped(f *os.File) bool {
 	}
 
 	return (fi.Mode() & os.ModeCharDevice) != os.ModeCharDevice
+}
+
+func apply[V any](seq iter.Seq[V], fn func(V any)) {
+	var wg sync.WaitGroup
+
+	for v := range seq {
+		wg.Add(1)
+
+		go func() {
+			fn(v)
+			wg.Done()
+		}()
+	}
+
+	wg.Wait()
 }
