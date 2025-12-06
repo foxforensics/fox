@@ -44,6 +44,7 @@ type Info struct {
 type Text struct {
 	Min   uint     `short:"a" default:"3"`
 	Max   uint     `short:"b" default:"256"`
+	Wtf   int      `short:"w" type:"counter"`
 	Paths []string `arg:"" type:"path" optional:""`
 }
 
@@ -340,8 +341,11 @@ func (cmd *Text) Run(cli *Cli) error {
 		for s := range h.Strings(
 			cli.Text.Min,
 			cli.Text.Max,
+			cli.Text.Wtf,
 		) {
-			if !cli.NoLine {
+			if !cli.NoLine && cli.Text.Wtf > 0 {
+				_, _ = fmt.Fprintf(cli.w, "%s  %s  %s\n", text.Hide(s.Off), s.Str, text.Hide(s.Cls))
+			} else if !cli.NoLine {
 				_, _ = fmt.Fprintf(cli.w, "%s  %s\n", text.Hide(s.Off), s.Str)
 			} else {
 				_, _ = fmt.Fprintf(cli.w, "%s\n", s.Str)

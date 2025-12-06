@@ -10,6 +10,7 @@ import (
 
 type String struct {
 	Off string
+	Cls string
 	Str string
 }
 
@@ -40,22 +41,31 @@ func (h *Heap) Entropy(mn, mx float64) (float64, bool) {
 	return v, true
 }
 
-func (h *Heap) Strings(mn, mx uint) <-chan String {
+func (h *Heap) Strings(mn, mx uint, wtf int) <-chan String {
 	var ch = make(chan String, 4096)
-
+	var db *text.Strings
 	var buf []byte
 	var off int
 	var b byte
 
+	if wtf > 0 {
+		db = text.GetStrings(wtf)
+	}
+
 	// flush closure
 	flush := func() {
-		str := string(buf)
+		cls, str := "", string(buf)
 
 		v := uint(len(strings.TrimSpace(str)))
 
 		if v >= mn && v <= mx {
+			if db != nil {
+				cls = db.Search(str).String()
+			}
+
 			ch <- String{
 				fmt.Sprintf("%08x", max(off-(len(buf)+1), 0)),
+				cls,
 				str,
 			}
 		}

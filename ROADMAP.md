@@ -10,12 +10,13 @@
 * ~~Done~~
 
 ## 4. Optimizations
+* Make hunt parallel processing heaps
+  * Sort must sort lines of all heaps
 * Add host, user, time to -f *.coc
 * Add more event ids
   * https://gist.github.com/githubfoam/69eee155e4edafb2e679fb6ac5ea47d0
 * Add integration tests
   * https://lucapette.me/writing/writing-integration-tests-for-a-go-cli-application/
-* Add classification like WTH to carved texts (-c, -cc)
 * SMap speed
   * https://dev.to/moseeh_52/efficient-file-reading-in-go-mastering-bufionewscanner-vs-osreadfile-4h05
   * https://dave.cheney.net/high-performance-json.html
