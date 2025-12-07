@@ -32,6 +32,8 @@ func (evt *Event) ToCEF() string {
 	msg := evt.Message
 	msg = strings.ReplaceAll(msg, `\`, `\\`)
 	msg = strings.ReplaceAll(msg, `|`, `\|`)
+	msg = strings.ReplaceAll(msg, `\t`, ` `)
+	msg = strings.ReplaceAll(msg, `\n`, ``)
 
 	if len(msg) > 512 {
 		msg = msg[:512]

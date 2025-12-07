@@ -159,7 +159,6 @@ func (hs *HeapSet) loadDir(path string) {
 				hs.loadFile(filepath.Join(path, f.Name()))
 				wg.Done()
 			}()
-
 		}
 	}
 

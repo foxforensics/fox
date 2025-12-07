@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"maps"
 	"os"
 	"regexp"
 	"slices"
 	"strings"
+	"sync"
 
 	"github.com/fatih/color"
 
@@ -22,6 +22,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"
 )
 
@@ -225,30 +226,22 @@ func (cli *Cli) ThrowAway() {
 
 func (cmd *Hunt) Run(cli *Cli) error {
 	var db *hunt.Database
+	var wg sync.WaitGroup
 	var fn text.Colored
 
 	cli.NoConvert = true // force
 
+	ch := make(chan *event.Event, 4096)
+
 	hs := cli.Bootstrap(cli.Hunt.Paths)
 	defer cli.ThrowAway()
 
-	cnt, sort := 0, func(in <-chan *event.Event) <-chan *event.Event {
-		out := make(chan *event.Event, cap(in))
+	wg.Add(hs.Len())
 
-		go func() {
-			defer close(out)
-			cache := make(map[int64]*event.Event)
+	cnt := 0
 
-			for e := range in {
-				cache[e.Time.UnixNano()] = e
-			}
-
-			for _, k := range slices.Sorted(maps.Keys(cache)) {
-				out <- cache[k]
-			}
-		}()
-
-		return out
+	if cli.Hunt.Sort {
+		ch = hunt.Sort(ch)
 	}
 
 	if cli.Verbose > 0 {
@@ -264,41 +257,47 @@ func (cmd *Hunt) Run(cli *Cli) error {
 	}
 
 	for _, h := range hs.Get() {
-		ch := hunt.Hunt(h, &hunt.Options{
-			Extensions: cli.Hunt.Ext,
-			Verbose:    cli.Verbose,
-		})
-
-		if cli.Hunt.Sort {
-			ch = sort(ch)
-		}
-
-		for e := range ch {
-			if cli.Hunt.All || e.Severity >= hunt.Level {
-				switch {
-				case cli.Hunt.All && e.Severity >= hunt.Level:
-					fn = text.Mark // mark event
-				case cli.Hunt.All:
-					fn = text.Hide // hide event
-				default:
-					fn = text.Term // reset terminal
-				}
-
-				switch {
-				case cli.Hunt.Jsonl:
-					_, _ = fmt.Fprintln(cli.w, fn(e.ToJSONL()))
-				case cli.Hunt.Json:
-					_, _ = fmt.Fprintln(cli.w, fn(e.ToJSON()))
-				default:
-					_, _ = fmt.Fprintln(cli.w, fn(e.ToCEF()))
-				}
-
-				if db != nil {
-					db.Write(e)
-				}
-
-				cnt++
+		go func(h *heap.Heap) {
+			for e := range hunt.Hunt(h, &hunt.Options{
+				Extensions: cli.Hunt.Ext,
+				Verbose:    cli.Verbose,
+			}) {
+				ch <- e
 			}
+			wg.Done()
+		}(h)
+	}
+
+	go func() {
+		wg.Wait()
+		close(ch)
+	}()
+
+	for e := range ch {
+		if cli.Hunt.All || e.Severity >= hunt.Level {
+			switch {
+			case cli.Hunt.All && e.Severity >= hunt.Level:
+				fn = text.Mark // mark event
+			case cli.Hunt.All:
+				fn = text.Hide // hide event
+			default:
+				fn = text.Term // reset terminal
+			}
+
+			switch {
+			case cli.Hunt.Jsonl:
+				_, _ = fmt.Fprintln(cli.w, fn(e.ToJSONL()))
+			case cli.Hunt.Json:
+				_, _ = fmt.Fprintln(cli.w, fn(e.ToJSON()))
+			default:
+				_, _ = fmt.Fprintln(cli.w, fn(e.ToCEF()))
+			}
+
+			if db != nil {
+				db.Write(e)
+			}
+
+			cnt++
 		}
 	}
 

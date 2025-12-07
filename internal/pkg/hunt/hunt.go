@@ -5,7 +5,9 @@ import (
 	"bytes"
 	"io"
 	"log"
+	"maps"
 	"regexp"
+	"slices"
 	"sync"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/files/format/evtx"
@@ -72,11 +74,30 @@ func Hunt(h *heap.Heap, opt *Options) <-chan *event.Event {
 
 	// wait to close
 	go func() {
-		defer close(ch)
 		wg.Wait()
+		close(ch)
 	}()
 
 	return ch
+}
+
+func Sort(in <-chan *event.Event) chan *event.Event {
+	out := make(chan *event.Event, cap(in))
+
+	go func() {
+		defer close(out)
+		cache := make(map[int64]*event.Event)
+
+		for e := range in {
+			cache[e.Time.UnixNano()] = e
+		}
+
+		for _, k := range slices.Sorted(maps.Keys(cache)) {
+			out <- cache[k]
+		}
+	}()
+
+	return out
 }
 
 func offset(rs io.ReadSeeker, re *regexp.Regexp, opt *Options) <-chan int64 {
