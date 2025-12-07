@@ -55,10 +55,10 @@ Commands:
     -a, --min=DECIMAL      minimum entropy value (default: 0.0)
     -b, --max=DECIMAL      maximal entropy value (default: 1.0)
 
-  text [FLAGS] <PATHS>     prints file ASCII strings
+  text [FLAGS] <PATHS>     prints file strings (ASCII)
     -a, --min=NUMBER       minimum string length (default: 3)
     -b, --max=NUMBER       maximal string length (default: 256)
-    -w, --wtf=[=LEVEL]     try to classify found strings (w/ww/www)
+    -w, --wtf=[=LEVEL]     use string classification (w/ww/www)
 
   hex [FLAGS] <PATHS>      prints file in hex format
     -m, --mode=[c|hd|xxd]  use compatible mode for output 
@@ -97,8 +97,8 @@ Disable:
       --no-convert         don't convert automatically
 
 Aliases:
-  -L, --logstash           alias for: -E -uhttp://localhost:8080
-  -S, --splunk             alias for: -H -uhttp://localhost:8088/...
+  -L, --logstash           alias for: -Euhttp://localhost:8080
+  -S, --splunk             alias for: -Huhttp://localhost:8088/...
 
 Standard:
   -d, --dry-run            prints only the found filenames
@@ -123,7 +123,7 @@ Checksums:
   ADLER32, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 Example: Find occurrences in event logs
-  $ fox cat -elogin ./**/*.evtx
+  $ fox cat -eWinlogon ./**/*.evtx
 
 Example: Show the MBR in canonical hex
   $ fox hex -mc -hc512 disk.bin

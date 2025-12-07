@@ -14,16 +14,18 @@ go install github.com/cuhsat/fox/v4@latest
 * Read-only filesystem access
 * [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
-* Integral `grep`, `head`, `tail`, `hexdump`, `strings` like abilities
+* String carving and classification
+* Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
 * Hunt mode
   * Built-in file carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * Built-in translation list of over 1500 Event IDs
   * Built-in warning of critical system events
   * Save as `JSON`, `JSON Lines` or `SQLite3`
-* Supports (see below)
+* Supports
+  * Over 160 string classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
   * Many popular archive and compression formats
-  * Many popular cryptographic, fuzzy and fast hashes
+  * Many popular cryptographic, fuzzy and fast hashes 
   * Data streaming in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [ECS](https://www.elastic.co/docs/reference/ecs) format
 
 ## Usage
@@ -45,7 +47,7 @@ $ fox hex -mc -hc512 disk.bin
 
 Find ASCII strings in binaries:
 ```console
-$ fox text -ra8 sample.exe
+$ fox text -rwa8 sample.exe
 ```
 
 List files with high entropy:

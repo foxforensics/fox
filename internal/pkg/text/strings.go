@@ -19,35 +19,41 @@ func GetStrings(level int) *Strings {
 	str := &Strings{level: level}
 
 	if level > 0 {
-		str.db = append(str.db, getLevel1()...)
+		str.db = append(str.db, stringsBasic()...)
 	}
 
 	if level > 1 {
-		str.db = append(str.db, getLevel2()...)
+		str.db = append(str.db, stringsMoney()...)
 	}
 
 	if level > 2 {
-		str.db = append(str.db, getLevel3()...)
+		str.db = append(str.db, stringsHashes()...)
 	}
 
 	return str
 }
 
 func (str *String) String() string {
-	return strings.Join(str.name, ",")
+	return strings.Join(str.name, " | ")
 }
 
 func (str *Strings) Search(s string) *String {
+	r := new(String)
+
 	for _, v := range str.db {
 		if v.re.MatchString(s) {
-			return &v
+			r.name = append(r.name, v.name...)
 		}
 	}
 
-	return &String{name: []string{"unknown"}}
+	if len(r.name) == 0 {
+		r.name = append(r.name, "String")
+	}
+
+	return r
 }
 
-func getLevel1() []String {
+func stringsBasic() []String {
 	return []String{
 		{
 			regexp.MustCompile(`(([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}|([a-fA-F0-9]{1,4}:){1,7}:|([a-fA-F0-9]{1,4}:){1,6}:[a-fA-F0-9]{1,4}|([a-fA-F0-9]{1,4}:){1,5}(:[a-fA-F0-9]{1,4}){1,2}|([a-fA-F0-9]{1,4}:){1,4}(:[a-fA-F0-9]{1,4}){1,3}|([a-fA-F0-9]{1,4}:){1,3}(:[a-fA-F0-9]{1,4}){1,4}|([a-fA-F0-9]{1,4}:){1,2}(:[a-fA-F0-9]{1,4}){1,5}|[a-fA-F0-9]{1,4}:((:[a-fA-F0-9]{1,4}){1,6})|:((:[a-fA-F0-9]{1,4}){1,7}|:)|fe80:(:[a-fA-F0-9]{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([a-fA-F0-9]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))`),
@@ -74,10 +80,6 @@ func getLevel1() []String {
 			[]string{"URL"},
 		},
 		{
-			regexp.MustCompile(`[a-z0-9+\-.]+://[a-z0-9\-._~%!$&'()*+,;=]+@`),
-			[]string{"URL"},
-		},
-		{
 			regexp.MustCompile("[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}"),
 			[]string{"UUID"},
 		},
@@ -90,7 +92,7 @@ func getLevel1() []String {
 			[]string{"BitLocker"},
 		},
 		{
-			regexp.MustCompile("HKEY_[A-Z_]+\\\\([A-Za-z0-9]+\\\\+)+[A-Za-z0-9]+"),
+			regexp.MustCompile("(HK??|HKEY_[A-Z_]+)\\\\([A-Za-z0-9]+\\\\+)+[A-Za-z0-9]+"),
 			[]string{"Registry"},
 		},
 		{
@@ -100,8 +102,8 @@ func getLevel1() []String {
 	}
 }
 
-// source: https://github.com/EricZimmerman/bstrings/blob/master/bstrings/Program.cs
-func getLevel2() []String {
+// https://github.com/EricZimmerman/bstrings/blob/master/bstrings/Program.cs
+func stringsMoney() []String {
 	return []String{
 		{
 			regexp.MustCompile(`[13][a-km-zA-HJ-NP-Z1-9]{25,34}`),
@@ -136,26 +138,14 @@ func getLevel2() []String {
 			[]string{"Sumokoin"},
 		},
 		{
-			regexp.MustCompile(`\A\b[0-9]{5}(?:-[0-9]{4})?\b\z`),
-			[]string{"Zip"},
-		},
-		{
-			regexp.MustCompile(`\(?\b[2-9][0-9]{2}\)?[-. ]?[2-9][0-9]{2}[-. ]?[0-9]{4}`),
-			[]string{"Phone"},
-		},
-		{
 			regexp.MustCompile(`4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11}`),
 			[]string{"CC"},
-		},
-		{
-			regexp.MustCompile(`\d{3}-?\d{2}-?\d{4}`),
-			[]string{"SSN"},
 		},
 	}
 }
 
-// source: https://github.com/s0md3v/Bolt/blob/master/db/hashes.json
-func getLevel3() []String {
+// https://github.com/s0md3v/Bolt/blob/master/db/hashes.json
+func stringsHashes() []String {
 	return []String{
 		{
 			regexp.MustCompile("^[a-f0-9]{4}"),
