@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"maps"
+	"regexp"
 	"time"
 
 	"github.com/0xrawsec/golang-evtx/evtx"
@@ -17,6 +18,10 @@ import (
 const (
 	Magic = evtx.EvtxMagic
 	Chunk = evtx.ChunkMagic
+)
+
+var (
+	Regex = regexp.MustCompile(Chunk)
 )
 
 func Detect(b []byte) bool {

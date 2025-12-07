@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"regexp"
 	"strings"
 	"time"
 
@@ -18,6 +19,10 @@ import (
 
 const (
 	Magic = "LPKSHHRH"
+)
+
+var (
+	Regex = regexp.MustCompile(Magic)
 )
 
 var (

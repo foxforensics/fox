@@ -8,7 +8,6 @@ import (
 	"regexp"
 	"slices"
 	"strings"
-	"sync"
 
 	"github.com/fatih/color"
 
@@ -21,8 +20,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"
 )
 
@@ -226,23 +223,12 @@ func (cli *Cli) ThrowAway() {
 
 func (cmd *Hunt) Run(cli *Cli) error {
 	var db *hunt.Database
-	var wg sync.WaitGroup
 	var fn text.Colored
 
 	cli.NoConvert = true // force
 
-	ch := make(chan *event.Event, 4096)
-
 	hs := cli.Bootstrap(cli.Hunt.Paths)
 	defer cli.ThrowAway()
-
-	wg.Add(hs.Len())
-
-	cnt := 0
-
-	if cli.Hunt.Sort {
-		ch = hunt.Sort(ch)
-	}
 
 	if cli.Verbose > 0 {
 		log.Println("hunt: started")
@@ -256,24 +242,13 @@ func (cmd *Hunt) Run(cli *Cli) error {
 		}
 	}
 
-	for _, h := range hs.Get() {
-		go func(h *heap.Heap) {
-			for e := range hunt.Hunt(h, &hunt.Options{
-				Extensions: cli.Hunt.Ext,
-				Verbose:    cli.Verbose,
-			}) {
-				ch <- e
-			}
-			wg.Done()
-		}(h)
-	}
+	cnt := 0
 
-	go func() {
-		wg.Wait()
-		close(ch)
-	}()
-
-	for e := range ch {
+	for e := range hunt.Hunt(hs, &hunt.Options{
+		Sort:       cli.Hunt.Sort,
+		Extensions: cli.Hunt.Ext,
+		Verbose:    cli.Verbose,
+	}) {
 		if cli.Hunt.All || e.Severity >= hunt.Level {
 			switch {
 			case cli.Hunt.All && e.Severity >= hunt.Level:
