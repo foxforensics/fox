@@ -1,4 +1,4 @@
-![fox](assets/title.png "fox")
+![fox](assets/fox_logo.png "fox")
 
 The Forensic Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 
