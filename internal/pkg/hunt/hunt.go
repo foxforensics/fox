@@ -109,15 +109,17 @@ func offset(rs io.ReadSeeker, re *regexp.Regexp, opt *Options) <-chan int64 {
 	out := make(chan int64, size)
 
 	go func(r *bufio.Reader) {
-		var lst int64
+		var lst, off int64
 
 		for loc := re.FindReaderIndex(r); loc != nil; loc = re.FindReaderIndex(r) {
-			off, _ := rs.Seek(0, io.SeekCurrent)
-			out <- lst + int64(loc[0])
-			lst = off - int64(r.Buffered())
+			cur, _ := rs.Seek(0, io.SeekCurrent)
+			off = lst + int64(loc[0])
+			lst = cur - int64(r.Buffered())
+
+			out <- off
 
 			if opt.Verbose > 2 {
-				log.Printf("hunt: parsing offset 0x%08x\n", loc[1])
+				log.Printf("hunt: parsing offset 0x%08x\n", off)
 			}
 		}
 

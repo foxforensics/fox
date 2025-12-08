@@ -20,7 +20,7 @@ Usage: fox [COMMAND] <PATHS>
   hunt   hunt suspicious activities
   hash   prints file hash using algorithm(s)
   info   prints file info and entropy
-  text   prints file ASCII strings
+  text   prints file strings (ASCII)
   hex    prints file in hex format
   cat    prints file (default)
 
