@@ -10,7 +10,6 @@
 * ~~Done~~
 
 ## 4. Optimizations
-* Add extensions to SQLite database
 * Add host, user, time to -f *.coc
 * Add more event ids
   * https://gist.github.com/githubfoam/69eee155e4edafb2e679fb6ac5ea47d0

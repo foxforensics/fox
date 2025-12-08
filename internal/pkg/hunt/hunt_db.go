@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"maps"
 	"os"
+	"sync"
 
 	_ "modernc.org/sqlite"
 
@@ -12,28 +14,45 @@ import (
 )
 
 const schema = `
-CREATE TABLE IF NOT EXISTS events (
-    id INTEGER PRIMARY KEY,
-    time INTEGER NOT NULL,
-    host TEXT NULL,
-    user TEXT NULL,
-	message TEXT NULL,
-	severity INTEGER NOT NULL,
-	UNIQUE(time) ON CONFLICT IGNORE
+CREATE TABLE IF NOT EXISTS Events (
+    ID INTEGER PRIMARY KEY,
+    Time INTEGER NOT NULL,
+    Host TEXT NULL,
+    User TEXT NULL,
+	Message TEXT NULL,
+	Severity INTEGER NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS Extensions (
+    ID INTEGER PRIMARY KEY,
+	EventID INTEGER REFERENCES Events,
+    Key TEXT NOT NULL,
+    Value TEXT NULL
+);
+
+CREATE INDEX EventID ON Extensions(EventID);
 `
 
-const insert = `
-INSERT INTO events (
-	time,
-	host,
-	user,
-	message,
-	severity
+const events = `
+INSERT OR IGNORE INTO Events (
+	Time,
+	Host,
+	User,
+	Message,
+	Severity
 ) VALUES (?,?,?,?,?);
 `
 
+const extensions = `
+INSERT OR IGNORE INTO Extensions (
+	EventID,	
+	Key,
+	Value
+) VALUES (?,?,?);
+`
+
 type Database struct {
+	sync.Mutex
 	path string
 	sql  *sql.DB
 }
@@ -41,10 +60,7 @@ type Database struct {
 func NewDB(path string) *Database {
 	var err error
 
-	db := &Database{
-		path: path,
-	}
-
+	db := &Database{path: path}
 	db.sql, err = sql.Open("sqlite", "file:"+path)
 
 	if err != nil {
@@ -69,7 +85,10 @@ func (db *Database) String() string {
 }
 
 func (db *Database) Write(evt *event.Event) {
-	_, err := db.sql.Exec(insert,
+	db.Lock()
+	defer db.Unlock()
+
+	res, err := db.sql.Exec(events,
 		evt.Time.UTC(),
 		evt.Host,
 		evt.User,
@@ -79,5 +98,23 @@ func (db *Database) Write(evt *event.Event) {
 
 	if err != nil {
 		log.Println(err)
+		return
+	}
+
+	id, err := res.LastInsertId()
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	if len(evt.Extension) > 0 {
+		for k, v := range maps.All(evt.Extension) {
+			_, err := db.sql.Exec(extensions, id, k, v)
+
+			if err != nil {
+				log.Println(err)
+			}
+		}
 	}
 }
