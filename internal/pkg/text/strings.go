@@ -33,8 +33,12 @@ func GetStrings(level int) *Strings {
 	return str
 }
 
-func (str *String) String() string {
-	return strings.Join(str.name, " | ")
+func (str *String) ToString(f bool) string {
+	if f {
+		return str.name[0]
+	} else {
+		return strings.Join(str.name, " | ")
+	}
 }
 
 func (str *Strings) Search(s string) *String {

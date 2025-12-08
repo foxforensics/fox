@@ -41,7 +41,7 @@ func (h *Heap) Entropy(mn, mx float64) (float64, bool) {
 	return v, true
 }
 
-func (h *Heap) Strings(mn, mx uint, wtf int) <-chan String {
+func (h *Heap) Strings(mn, mx uint, wtf int, fst bool) <-chan String {
 	var ch = make(chan String, 4096)
 	var db *text.Strings
 	var buf []byte
@@ -60,7 +60,7 @@ func (h *Heap) Strings(mn, mx uint, wtf int) <-chan String {
 
 		if v >= mn && v <= mx {
 			if db != nil {
-				cls = db.Search(str).String()
+				cls = db.Search(str).ToString(fst)
 			}
 
 			ch <- String{

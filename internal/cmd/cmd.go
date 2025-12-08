@@ -43,6 +43,7 @@ type Text struct {
 	Min   uint     `short:"a" default:"3"`
 	Max   uint     `short:"b" default:"256"`
 	Wtf   int      `short:"w" type:"counter"`
+	First bool     `short:"1" and:"first,wtf"`
 	Paths []string `arg:"" type:"path" optional:""`
 }
 
@@ -316,6 +317,7 @@ func (cmd *Text) Run(cli *Cli) error {
 			cli.Text.Min,
 			cli.Text.Max,
 			cli.Text.Wtf,
+			cli.Text.First,
 		) {
 			if !cli.NoLine && cli.Text.Wtf > 0 {
 				_, _ = fmt.Fprintf(cli.w, "%s  %s  %s\n", text.Hide(s.Off), s.Str, text.Hide(s.Cls))

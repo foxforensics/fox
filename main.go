@@ -58,7 +58,8 @@ Commands:
   text [FLAGS] <PATHS>     prints file strings (ASCII)
     -a, --min=NUMBER       minimum string length (default: 3)
     -b, --max=NUMBER       maximal string length (default: 256)
-    -w, --wtf=[=LEVEL]     use string classification (w/ww/www)
+    -w, --wtf=[=LEVEL]     show text classifications (w/ww/www)
+    -1, --first            show only first text class
 
   hex [FLAGS] <PATHS>      prints file in hex format
     -m, --mode=[c|hd|xxd]  use compatible mode for output 
