@@ -20,6 +20,8 @@ import (
 	"github.com/htruong/go-md2"
 	"github.com/jzelinskie/whirlpool"
 	"github.com/zeebo/xxh3"
+	"golang.org/x/crypto/blake2b"
+	"golang.org/x/crypto/blake2s"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
 
@@ -50,6 +52,14 @@ func Sum(t string, b []byte) ([]byte, error) {
 		imp = sha3.New384()
 	case types.SHA3512:
 		imp = sha3.New512()
+	case types.BLAKE2S256:
+		imp, _ = blake2s.New256(nil)
+	case types.BLAKE2B256:
+		imp, _ = blake2b.New256(nil)
+	case types.BLAKE2B384:
+		imp, _ = blake2b.New384(nil)
+	case types.BLAKE2B512:
+		imp, _ = blake2b.New512(nil)
 	case types.BLAKE3256:
 		imp = blake3.New256()
 	case types.BLAKE3512:
