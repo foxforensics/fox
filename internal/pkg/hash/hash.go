@@ -17,6 +17,8 @@ import (
 	"github.com/glaslos/ssdeep"
 	"github.com/glaslos/tlsh"
 	"github.com/zeebo/xxh3"
+	"golang.org/x/crypto/md4"
+	"golang.org/x/crypto/ripemd160"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/blake3"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/sdhash"
@@ -27,6 +29,8 @@ func Sum(t string, b []byte) ([]byte, error) {
 	var imp hash.Hash
 
 	switch strings.ToLower(t) {
+	case types.MD4:
+		imp = md4.New()
 	case types.MD5:
 		imp = md5.New()
 	case types.SHA1:
@@ -45,6 +49,8 @@ func Sum(t string, b []byte) ([]byte, error) {
 		imp = blake3.New256()
 	case types.BLAKE3512:
 		imp = blake3.New512()
+	case types.RIPEMD160:
+		imp = ripemd160.New()
 	case types.FNV1:
 		imp = fnv.New64()
 	case types.FNV1A:

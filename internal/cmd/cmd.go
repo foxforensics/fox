@@ -33,6 +33,12 @@ type Hunt struct {
 	Paths  []string `arg:"" type:"path" optional:""`
 }
 
+type Hash struct {
+	Algo  []string `short:"a" sep:"," default:"SHA256"`
+	Find  []string `short:"F" sep:","`
+	Paths []string `arg:"" type:"path" optional:""`
+}
+
 type Info struct {
 	Min   float64  `short:"a" default:"0.0"`
 	Max   float64  `short:"b" default:"1.0"`
@@ -44,12 +50,6 @@ type Text struct {
 	Max   uint     `short:"b" default:"256"`
 	Wtf   int      `short:"w" type:"counter"`
 	First bool     `short:"1" and:"first,wtf"`
-	Paths []string `arg:"" type:"path" optional:""`
-}
-
-type Hash struct {
-	Algo  []string `short:"a" sep:"," default:"SHA256"`
-	Find  []string `short:"F" sep:","`
 	Paths []string `arg:"" type:"path" optional:""`
 }
 
@@ -65,9 +65,9 @@ type Cat struct {
 type Cli struct {
 	// commands
 	Hunt Hunt `cmd:"" aliases:"u"`
+	Hash Hash `cmd:"" aliases:"h"`
 	Info Info `cmd:"" aliases:"i,wc"`
 	Text Text `cmd:"" aliases:"t,strings"`
-	Hash Hash `cmd:"" aliases:"h"`
 	Hex  Hex  `cmd:"" aliases:"x"`
 	Cat  Cat  `cmd:"" default:"withargs" aliases:"c,less"`
 
@@ -288,6 +288,41 @@ func (cmd *Hunt) Run(cli *Cli) error {
 	return nil
 }
 
+func (cmd *Hash) Run(cli *Cli) error {
+	hs := cli.Bootstrap(cli.Hash.Paths)
+	defer cli.ThrowAway()
+
+	for _, algo := range cli.Hash.Algo {
+		var v string
+
+		if len(cli.Hash.Algo) > 1 {
+			_, _ = fmt.Fprintf(cli.w, "%s\n", text.Hide(text.Header(strings.ToUpper(algo))))
+		}
+
+		for _, h := range hs.Get() {
+			sum, err := hash.Sum(algo, h.MMap())
+
+			if err != nil {
+				log.Println(err)
+				continue
+			}
+
+			switch algo {
+			case types.SDHASH:
+				v = fmt.Sprintf("%s", sum)
+			default:
+				v = fmt.Sprintf("%x", sum)
+			}
+
+			if len(cli.Hash.Find) == 0 || slices.Contains(cli.Hash.Find, v) {
+				_, _ = fmt.Fprintf(cli.w, "%s  %s\n", v, text.Hide(h))
+			}
+		}
+	}
+
+	return nil
+}
+
 func (cmd *Info) Run(cli *Cli) error {
 	hs := cli.Bootstrap(cli.Info.Paths)
 	defer cli.ThrowAway()
@@ -325,41 +360,6 @@ func (cmd *Text) Run(cli *Cli) error {
 				_, _ = fmt.Fprintf(cli.w, "%s  %s\n", text.Hide(s.Off), s.Str)
 			} else {
 				_, _ = fmt.Fprintf(cli.w, "%s\n", s.Str)
-			}
-		}
-	}
-
-	return nil
-}
-
-func (cmd *Hash) Run(cli *Cli) error {
-	hs := cli.Bootstrap(cli.Hash.Paths)
-	defer cli.ThrowAway()
-
-	for _, algo := range cli.Hash.Algo {
-		var v string
-
-		if len(cli.Hash.Algo) > 1 {
-			_, _ = fmt.Fprintf(cli.w, "%s\n", text.Hide(text.Header(strings.ToUpper(algo))))
-		}
-
-		for _, h := range hs.Get() {
-			sum, err := hash.Sum(algo, h.MMap())
-
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-
-			switch algo {
-			case types.SDHASH:
-				v = fmt.Sprintf("%s", sum)
-			default:
-				v = fmt.Sprintf("%x", sum)
-			}
-
-			if len(cli.Hash.Find) == 0 || slices.Contains(cli.Hash.Find, v) {
-				_, _ = fmt.Fprintf(cli.w, "%s  %s\n", v, text.Hide(h))
 			}
 		}
 	}
