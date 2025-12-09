@@ -24,10 +24,12 @@ const (
 	TIGER2     = "tiger2"
 	WHIRLPOOL  = "whirlpool"
 
-	FNV1  = "fnv-1"
-	FNV1A = "fnv-1a"
-	XXH64 = "xxh64"
-	XXH3  = "xxh3"
+	FNV1       = "fnv-1"
+	FNV1A      = "fnv-1a"
+	SIPHASH64  = "siphash-64"
+	SIPHASH128 = "siphash-128"
+	XXH64      = "xxh64"
+	XXH3       = "xxh3"
 
 	SDHASH = "sdhash"
 	SSDEEP = "ssdeep"

@@ -15,6 +15,7 @@ import (
 
 	"github.com/cespare/xxhash"
 	"github.com/cxmcc/tiger"
+	"github.com/dchest/siphash"
 	"github.com/glaslos/ssdeep"
 	"github.com/glaslos/tlsh"
 	"github.com/htruong/go-md2"
@@ -76,6 +77,10 @@ func Sum(t string, b []byte) ([]byte, error) {
 		imp = fnv.New64()
 	case types.FNV1A:
 		imp = fnv.New64a()
+	case types.SIPHASH64:
+		imp = siphash.New(nil)
+	case types.SIPHASH128:
+		imp = siphash.New128(nil)
 	case types.XXH64:
 		imp = xxhash.New()
 	case types.XXH3:

@@ -45,6 +45,7 @@ require (
 require (
 	github.com/0xrawsec/golang-utils v1.3.2 // indirect
 	github.com/cxmcc/tiger v0.0.0-20170524142333-bde35e2713d7 // indirect
+	github.com/dchest/siphash v1.2.3 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f // indirect

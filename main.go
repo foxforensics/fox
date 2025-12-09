@@ -116,7 +116,7 @@ Hashes (cryptographic):
   MD2, MD4, MD5, RIPEMD-160, TIGER, TIGER2, WHIRLPOOL
 
 Hashes (performance):
-  FNV-1, FNV-1A, XXH64, XXH3
+  FNV-1, FNV-1A, SIPHASH-64, SIPHASH-128, XXH64, XXH3
 
 Hashes (similarity):
   SDHASH, SSDEEP, TLSH
