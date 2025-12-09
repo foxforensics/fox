@@ -18,6 +18,7 @@ import (
 	"github.com/glaslos/ssdeep"
 	"github.com/glaslos/tlsh"
 	"github.com/htruong/go-md2"
+	"github.com/jzelinskie/whirlpool"
 	"github.com/zeebo/xxh3"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
@@ -59,6 +60,8 @@ func Sum(t string, b []byte) ([]byte, error) {
 		imp = tiger.New()
 	case types.TIGER2:
 		imp = tiger.New2()
+	case types.WHIRLPOOL:
+		imp = whirlpool.New()
 	case types.FNV1:
 		imp = fnv.New64()
 	case types.FNV1A:

@@ -18,6 +18,7 @@ const (
 	RIPEMD160 = "ripemd-160"
 	TIGER     = "tiger"
 	TIGER2    = "tiger2"
+	WHIRLPOOL = "whirlpool"
 
 	FNV1  = "fnv-1"
 	FNV1A = "fnv-1a"
