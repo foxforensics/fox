@@ -19,6 +19,7 @@ import (
 	szip "github.com/cuhsat/fox/v4/internal/pkg/files/archive/7z"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/files"
+	"github.com/cuhsat/fox/v4/internal/pkg/files/archive/ar"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/archive/cab"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/archive/rar"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/archive/tar"
@@ -244,6 +245,8 @@ func (hs *HeapSet) extract(path string, b []byte) bool {
 	var fn files.Extract
 
 	switch {
+	case ar.Detect(b):
+		fn = ar.Extract
 	case cab.Detect(b):
 		fn = cab.Extract
 	case rar.Detect(b):

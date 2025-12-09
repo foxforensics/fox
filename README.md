@@ -67,28 +67,28 @@ $ fox hunt -sxv ./**/*.dd
 
 ## Supports
 
-### Formats
-Event Logs, Journals, JSON, JSON Lines
+File formats:
+> evtx, journal, json, jsonl
 
-### Archives
-7z, Cabinet, RAR, tar, ZIP
+Archive formats:
+> 7zip, AR, CAB, RAR, TAR, ZIP
 
-### Compressions
-Brotli, bzip2, gzip, Kanzi, lz4, lzip, LZW, MinLZ, S2, Snappy, xz, zlib, zstd
+Compression formats:
+> Brotli, bzip2, gzip, Kanzi, lz4, lzip, LZW, MinLZ, S2, Snappy, xz, zlib, zstd
 
-### Cryptographic Hashes
-BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
+Cryptographic hashes:
+> BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
 GOST-256, GOST-512, MD2, MD4, MD5, RIPEMD-160, SHA1, SHA256, SHA3
 SHA3-224, SHA3-256, SHA3-384, SHA3-512, Tiger, Tiger2, Whirlpool
 
-### Performance Hashes
-FNV-1, FNV-1a, SipHash-64, SipHash-128, XXH64, XXH3
+Performance hashes:
+> FNV-1, FNV-1a, SipHash-64, SipHash-128, XXH64, XXH3
 
-### Similarity Hashes
-sdhash, SSDeep, TLSH
+Similarity hashes:
+> sdhash, SSDeep, TLSH
 
-### Checksums
-Adler-32, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+Checksums:
+> Adler-32, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 ## License
 🦊 is released under the [GPL-3.0](LICENSE.md)
