@@ -73,7 +73,7 @@ File limits:
   -c, --bytes=NUMBER       number of bytes
 
 File loader:
-  -p, --pass=PASSWORD      password for decryption (only RAR and ZIP)
+  -p, --pass=PASSWORD      password for decryption (only 7Z, RAR, ZIP)
 
 Line filter:
   -e, --regexp=PATTERN     filter for lines that match pattern

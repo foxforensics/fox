@@ -20,7 +20,6 @@
   * https://dave.cheney.net/high-performance-json.html
 
 ## 5. Ideas
-* Add old csv/tsv format with rainbow tables?
 * Add Heatmap to hex command?
 * Use reflow algos?
   * https://github.com/muesli/reflow

@@ -11,8 +11,9 @@ import (
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/lzip"
 	"github.com/edsrzf/mmap-go"
+
+	szip "github.com/cuhsat/fox/v4/internal/pkg/files/archive/7z"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/files"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/archive/cab"
@@ -24,6 +25,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/gzip"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/knz"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/lz4"
+	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/lzip"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/lzw"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/mz"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/s2"
@@ -243,6 +245,8 @@ func (hs *HeapSet) extract(path string, b []byte) bool {
 		fn = cab.Extract
 	case rar.Detect(b):
 		fn = rar.Extract
+	case szip.Detect(b):
+		fn = szip.Extract
 	case tar.Detect(b):
 		fn = tar.Extract
 	case zip.Detect(b):

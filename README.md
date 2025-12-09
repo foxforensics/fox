@@ -26,7 +26,7 @@ go install github.com/cuhsat/fox/v4@latest
   * Over 160 string classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
   * Many popular archive and compression formats
   * Many popular cryptographic, fuzzy and fast hashes 
-  * Data streaming in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [ECS](https://www.elastic.co/docs/reference/ecs) format
+  * Data streaming in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
 
 ## Usage
 Type `fox --help` for more help:
@@ -57,7 +57,7 @@ $ fox info -a0.9 ./**/*
 
 Hash the archive contents:
 ```console
-$ fox hash -amd5,sha1 files.zip
+$ fox hash -amd5,sha1 files.7z
 ```
 
 Hunt down suspicious events:
@@ -68,7 +68,7 @@ $ fox hunt -sxv ./**/*.dd
 ## Support
 
 ### File Formats
-BROTLI, BZIP2, CAB, EVTX, GZIP, JOURNAL, JSONL, KANZI, LZ4, LZIP, LZW, MINLZ, RAR, S2, SNAPPY, TAR, XZ, ZIP, ZLIB, ZSTD
+7ZIP, BROTLI, BZIP2, CAB, EVTX, GZIP, JOURNAL, JSONL, KANZI, LZ4, LZIP, LZW, MINLZ, RAR, S2, SNAPPY, TAR, XZ, ZIP, ZLIB, ZSTD
 
 ### Algorithms
 ADLER32, BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, CRC32-IEEE, CRC64-ECMA, CRC64-ISO, FNV-1, FNV-1A, GOST-256, GOST-512, MD2, MD4, MD5, RIPEMD-160, SDHASH, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512, SIPHASH-64, SIPHASH-128, SSDEEP, TIGER, TIGER2, TLSH, WHIRLPOOL, XXH3, XXH64
