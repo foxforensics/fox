@@ -10,13 +10,18 @@ require (
 	github.com/bmatcuk/doublestar/v4 v4.9.1
 	github.com/cespare/xxhash v1.1.0
 	github.com/cuhsat/zip v0.5.2
+	github.com/cxmcc/tiger v0.0.0-20170524142333-bde35e2713d7
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
+	github.com/dchest/siphash v1.2.3
 	github.com/eciavatta/sdhash v0.0.0-20210117153940-a7b55306eeff
 	github.com/edsrzf/mmap-go v1.2.0
 	github.com/fatih/color v1.18.0
+	github.com/flanglet/kanzi-go/v2 v2.4.0
 	github.com/glaslos/ssdeep v0.4.0
 	github.com/glaslos/tlsh v0.4.0
 	github.com/google/go-cabfile v0.0.0-20220815135208-f9ac3a87fd26
+	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f
+	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004
 	github.com/klauspost/compress v1.18.2
 	github.com/minio/minlz v1.0.1
 	github.com/nwaples/rardecode v1.1.3
@@ -44,12 +49,8 @@ require (
 
 require (
 	github.com/0xrawsec/golang-utils v1.3.2 // indirect
-	github.com/cxmcc/tiger v0.0.0-20170524142333-bde35e2713d7 // indirect
-	github.com/dchest/siphash v1.2.3 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f // indirect
-	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect

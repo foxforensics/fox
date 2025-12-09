@@ -1,21 +1,26 @@
-package lzw
+package knz
 
 import (
 	"bytes"
-	"compress/lzw"
 	"io"
+
+	kio "github.com/flanglet/kanzi-go/v2/io"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/files"
 )
 
 func Detect(b []byte) bool {
 	return files.HasMagic(b, 0, []byte{
-		0x1F, 0x9D,
+		0x4B, 0x41, 0x4E, 0x5A,
 	})
 }
 
 func Deflate(b []byte) ([]byte, error) {
-	r := lzw.NewReader(bytes.NewReader(b), lzw.MSB, 8)
+	r, err := kio.NewReader(io.NopCloser(bytes.NewReader(b)), 4)
+
+	if err != nil {
+		return nil, err
+	}
 
 	defer func(r io.Closer) {
 		_ = r.Close()

@@ -21,6 +21,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/br"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/bzip2"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/gzip"
+	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/knz"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/lz4"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/lzw"
 	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/mz"
@@ -275,6 +276,8 @@ func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
 		fn = bzip2.Deflate
 	case gzip.Detect(b):
 		fn = gzip.Deflate
+	case knz.Detect(b):
+		fn = knz.Deflate
 	case lz4.Detect(b):
 		fn = lz4.Deflate
 	case lzw.Detect(b):
