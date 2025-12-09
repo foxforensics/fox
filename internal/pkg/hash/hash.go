@@ -14,8 +14,10 @@ import (
 	"strings"
 
 	"github.com/cespare/xxhash"
+	"github.com/cxmcc/tiger"
 	"github.com/glaslos/ssdeep"
 	"github.com/glaslos/tlsh"
+	"github.com/htruong/go-md2"
 	"github.com/zeebo/xxh3"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
@@ -29,6 +31,8 @@ func Sum(t string, b []byte) ([]byte, error) {
 	var imp hash.Hash
 
 	switch strings.ToLower(t) {
+	case types.MD2:
+		imp = md2.New()
 	case types.MD4:
 		imp = md4.New()
 	case types.MD5:
@@ -51,6 +55,10 @@ func Sum(t string, b []byte) ([]byte, error) {
 		imp = blake3.New512()
 	case types.RIPEMD160:
 		imp = ripemd160.New()
+	case types.TIGER:
+		imp = tiger.New()
+	case types.TIGER2:
+		imp = tiger.New2()
 	case types.FNV1:
 		imp = fnv.New64()
 	case types.FNV1A:

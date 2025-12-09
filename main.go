@@ -112,7 +112,7 @@ Positional arguments:
 
 Hashes (cryptographic):
   SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512,
-  MD4, MD5, BLAKE3-256, BLAKE3-512, RIPEMD-160
+  MD2, MD4, MD5, BLAKE3-256, BLAKE3-512, RIPEMD-160, TIGER, TIGER2
 
 Hashes (performance):
   FNV-1, FNV-1A, XXH64, XXH3

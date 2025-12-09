@@ -3,6 +3,7 @@ package types
 const Database = "fox.db"
 
 const (
+	MD2       = "md2"
 	MD4       = "md4"
 	MD5       = "md5"
 	SHA1      = "sha1"
@@ -15,6 +16,8 @@ const (
 	BLAKE3256 = "blake3-256"
 	BLAKE3512 = "blake3-512"
 	RIPEMD160 = "ripemd-160"
+	TIGER     = "tiger"
+	TIGER2    = "tiger2"
 
 	FNV1  = "fnv-1"
 	FNV1A = "fnv-1a"
