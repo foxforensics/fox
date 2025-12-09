@@ -1,3 +1,6 @@
+// Package files source:
+// https://github.com/frizb/FirmwareReverseEngineering/blob/master/IdentifyingCompressionAlgorithms.md
+// https://en.wikipedia.org/wiki/List_of_file_signatures
 package files
 
 import "bytes"

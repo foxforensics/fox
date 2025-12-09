@@ -8,6 +8,7 @@ require (
 	github.com/alecthomas/kong v1.13.0
 	github.com/andybalholm/brotli v1.2.0
 	github.com/bmatcuk/doublestar/v4 v4.9.1
+	github.com/bodgit/sevenzip v1.6.1
 	github.com/cespare/xxhash v1.1.0
 	github.com/cuhsat/zip v0.5.2
 	github.com/cxmcc/tiger v0.0.0-20170524142333-bde35e2713d7
@@ -23,9 +24,12 @@ require (
 	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f
 	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004
 	github.com/klauspost/compress v1.18.2
+	github.com/mikhirev/gostribog v0.0.0-20140929084232-33bce6808ee9
 	github.com/minio/minlz v1.0.1
+	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
 	github.com/nwaples/rardecode v1.1.3
 	github.com/pierrec/lz4 v2.6.1+incompatible
+	github.com/sorairolake/lzip-go v0.3.8
 	github.com/ulikunitz/xz v0.5.15
 	github.com/zeebo/blake3 v0.2.4
 	github.com/zeebo/xxh3 v1.0.2
@@ -38,7 +42,6 @@ require (
 	github.com/Velocidex/ordereddict v0.0.0-20250821063524-02dc06e46238
 	github.com/Velocidex/yaml/v2 v2.2.8 // indirect
 	github.com/frankban/quicktest v1.14.6 // indirect
-	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
@@ -50,22 +53,19 @@ require (
 require (
 	github.com/0xrawsec/golang-utils v1.3.2 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
-	github.com/bodgit/sevenzip v1.6.1 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
+	github.com/cavaliergopher/cpio v1.0.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mikhirev/gostribog v0.0.0-20140929084232-33bce6808ee9 // indirect
-	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
-	github.com/sorairolake/lzip-go v0.3.8 // indirect
-	github.com/spf13/afero v1.11.0 // indirect
-	go4.org v0.0.0-20200411211856-f5505b9728dd // indirect
-	golang.org/x/exp v0.0.0-20251125195548-87e1e737ad39 // indirect
+	github.com/spf13/afero v1.15.0 // indirect
+	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
+	golang.org/x/exp v0.0.0-20251209150349-8475f28825e9 // indirect
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/text v0.32.0 // indirect
 	modernc.org/libc v1.67.1 // indirect
