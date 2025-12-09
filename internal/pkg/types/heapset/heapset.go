@@ -7,7 +7,10 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"reflect"
+	"runtime"
 	"sort"
+	"strings"
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
@@ -255,6 +258,10 @@ func (hs *HeapSet) extract(path string, b []byte) bool {
 		return false
 	}
 
+	if hs.opts.Verbose > 1 {
+		log.Printf("format detected %s\n", debug(fn))
+	}
+
 	var wg sync.WaitGroup
 
 	for _, e := range fn(b, path, hs.opts.Password) {
@@ -305,6 +312,10 @@ func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
 		return b, false
 	}
 
+	if hs.opts.Verbose > 1 {
+		log.Printf("format detected %s\n", debug(fn))
+	}
+
 	r, err := fn(b)
 
 	if err != nil {
@@ -324,6 +335,10 @@ func (hs *HeapSet) convert(b []byte) ([]byte, bool) {
 		fn = journal.Convert
 	default:
 		return b, false
+	}
+
+	if hs.opts.Verbose > 1 {
+		log.Printf("format detected %s\n", debug(fn))
 	}
 
 	r, err := fn(b)
@@ -397,4 +412,11 @@ func isPiped(f *os.File) bool {
 	}
 
 	return (fi.Mode() & os.ModeCharDevice) != os.ModeCharDevice
+}
+
+func debug(v any) string {
+	s := runtime.FuncForPC(reflect.ValueOf(v).Pointer()).Name()
+	t := strings.SplitAfter(s, "/")
+
+	return strings.Split(t[len(t)-1], ".")[0]
 }

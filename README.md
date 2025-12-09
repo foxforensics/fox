@@ -65,13 +65,30 @@ Hunt down suspicious events:
 $ fox hunt -sxv ./**/*.dd
 ```
 
-## Support
+## Supports
 
-### File Formats
-7ZIP, BROTLI, BZIP2, CAB, EVTX, GZIP, JOURNAL, JSONL, KANZI, LZ4, LZIP, LZW, MINLZ, RAR, S2, SNAPPY, TAR, XZ, ZIP, ZLIB, ZSTD
+### Formats
+Event Logs, Journals, JSON, JSON Lines
 
-### Algorithms
-ADLER32, BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, CRC32-IEEE, CRC64-ECMA, CRC64-ISO, FNV-1, FNV-1A, GOST-256, GOST-512, MD2, MD4, MD5, RIPEMD-160, SDHASH, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512, SIPHASH-64, SIPHASH-128, SSDEEP, TIGER, TIGER2, TLSH, WHIRLPOOL, XXH3, XXH64
+### Archives
+7z, Cabinet, RAR, tar, ZIP
+
+### Compressions
+Brotli, bzip2, gzip, Kanzi, lz4, lzip, LZW, MinLZ, S2, Snappy, xz, zlib, zstd
+
+### Cryptographic Hashes
+BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
+GOST-256, GOST-512, MD2, MD4, MD5, RIPEMD-160, SHA1, SHA256, SHA3
+SHA3-224, SHA3-256, SHA3-384, SHA3-512, Tiger, Tiger2, Whirlpool
+
+### Performance Hashes
+FNV-1, FNV-1a, SipHash-64, SipHash-128, XXH64, XXH3
+
+### Similarity Hashes
+sdhash, SSDeep, TLSH
+
+### Checksums
+Adler-32, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 ## License
 🦊 is released under the [GPL-3.0](LICENSE.md)
