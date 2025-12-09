@@ -11,6 +11,7 @@ import (
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
+	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/lzip"
 	"github.com/edsrzf/mmap-go"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/files"
@@ -280,6 +281,8 @@ func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
 		fn = knz.Deflate
 	case lz4.Detect(b):
 		fn = lz4.Deflate
+	case lzip.Detect(b):
+		fn = lzip.Deflate
 	case lzw.Detect(b):
 		fn = lzw.Deflate
 	case mz.Detect(b):
