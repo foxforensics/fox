@@ -30,7 +30,7 @@ func Extract(b []byte, root, _ string) (e []files.Entry) {
 
 		if err != nil {
 			log.Println(err)
-			continue
+			break
 		}
 
 		if h.Mode&int64(fs.ModeDir) != 0 {
