@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"path/filepath"
-	"strings"
 
 	"github.com/cavaliergopher/cpio"
 
@@ -40,7 +39,7 @@ func Extract(b []byte, root, _ string) (e []files.Entry) {
 			break
 		}
 
-		if strings.HasSuffix(h.Name, "/") {
+		if !h.Mode.IsRegular() {
 			continue
 		}
 
