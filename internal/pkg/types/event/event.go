@@ -18,7 +18,7 @@ type Event struct {
 	Host      string         `json:"host,omitempty"`
 	User      string         `json:"user,omitempty"`
 	Message   string         `json:"msg,omitempty"`
-	Severity  int8           `json:"sev"`
+	Severity  int8           `json:"lvl"`
 	Extension map[string]any `json:"ext,omitempty"`
 }
 

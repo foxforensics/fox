@@ -14,9 +14,6 @@ import (
 	"strings"
 
 	"github.com/cespare/xxhash"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/blake3"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/sdhash"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cxmcc/tiger"
 	"github.com/dchest/siphash"
 	"github.com/glaslos/ssdeep"
@@ -29,6 +26,10 @@ import (
 	"golang.org/x/crypto/blake2s"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
+
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/blake3"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/sdhash"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 func Sum(t string, b []byte) ([]byte, error) {
