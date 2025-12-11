@@ -16,30 +16,30 @@ import (
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/edsrzf/mmap-go"
 
-	szip "github.com/cuhsat/fox/v4/internal/pkg/files/archive/7z"
+	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/files"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/archive/ar"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/archive/cab"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/archive/cpio"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/archive/rar"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/archive/tar"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/archive/zip"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/br"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/bzip2"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/gzip"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/knz"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/lz4"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/lzip"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/lzw"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/mz"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/s2"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/sz"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/xz"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/zlib"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/deflate/zstd"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/format/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/format/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cpio"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/rar"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bzip2"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/gzip"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/kanzi"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lz4"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzip"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzw"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/mz"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/s2"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/snappy"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
@@ -243,7 +243,7 @@ func (hs *HeapSet) extract(path string, b []byte) bool {
 		}
 	}()
 
-	var fn files.Extract
+	var fn data.Extract
 
 	switch {
 	case ar.Detect(b):
@@ -285,7 +285,7 @@ func (hs *HeapSet) extract(path string, b []byte) bool {
 }
 
 func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
-	var fn files.Deflate
+	var fn data.Deflate
 
 	switch {
 	case br.Detect(b):
@@ -294,8 +294,8 @@ func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
 		fn = bzip2.Deflate
 	case gzip.Detect(b):
 		fn = gzip.Deflate
-	case knz.Detect(b):
-		fn = knz.Deflate
+	case kanzi.Detect(b):
+		fn = kanzi.Deflate
 	case lz4.Detect(b):
 		fn = lz4.Deflate
 	case lzip.Detect(b):
@@ -306,8 +306,8 @@ func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
 		fn = mz.Deflate
 	case s2.Detect(b):
 		fn = s2.Deflate
-	case sz.Detect(b):
-		fn = sz.Deflate
+	case snappy.Detect(b):
+		fn = snappy.Deflate
 	case xz.Detect(b):
 		fn = xz.Deflate
 	case zlib.Detect(b):
@@ -332,7 +332,7 @@ func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
 }
 
 func (hs *HeapSet) convert(b []byte) ([]byte, bool) {
-	var fn files.Convert
+	var fn data.Convert
 
 	switch {
 	case evtx.Detect(b):

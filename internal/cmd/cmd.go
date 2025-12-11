@@ -11,10 +11,10 @@ import (
 
 	"github.com/fatih/color"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/files/stream"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/stream/ecs"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/stream/hec"
-	"github.com/cuhsat/fox/v4/internal/pkg/files/stream/raw"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/ecs"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/hec"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/raw"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
 	"github.com/cuhsat/fox/v4/internal/pkg/hunt"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
