@@ -11,7 +11,9 @@ import (
 	"runtime"
 )
 
-const tests = "../../../testdata/deflate"
+const Sample = "fox.txt"
+
+const testdata = "../../../testdata"
 
 type Entry struct {
 	Path string // Entry path
@@ -33,7 +35,7 @@ func HasMagic(b []byte, off int, m []byte) bool {
 }
 
 func Assert(b []byte) bool {
-	return bytes.Equal(b, Fixture("fox.txt"))
+	return bytes.Equal(b, Fixture(Sample))
 }
 
 func Fixture(name string) []byte {
@@ -43,7 +45,7 @@ func Fixture(name string) []byte {
 		log.Fatalln("runtime error")
 	}
 
-	buf, err := os.ReadFile(filepath.Join(filepath.Dir(c), tests, name))
+	buf, err := os.ReadFile(filepath.Join(filepath.Dir(c), testdata, name))
 
 	if err != nil {
 		log.Fatalln(err)

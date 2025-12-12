@@ -6,7 +6,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "fox.zst"
+const file = "deflate/fox.zst"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)

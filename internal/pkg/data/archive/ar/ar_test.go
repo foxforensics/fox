@@ -1,4 +1,4 @@
-package lzip
+package ar
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "deflate/fox.lz"
+const file = "archive/fox.ar"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
@@ -18,13 +18,13 @@ func BenchmarkDetect(b *testing.B) {
 	}
 }
 
-func BenchmarkDeflate(b *testing.B) {
+func BenchmarkExtract(b *testing.B) {
 	buf := data.Fixture(file)
 
 	b.ResetTimer()
 
 	for b.Loop() {
-		_, _ = Deflate(buf)
+		Extract(buf, "", "")
 	}
 }
 
@@ -34,14 +34,18 @@ func TestDetect(t *testing.T) {
 	}
 }
 
-func TestDeflate(t *testing.T) {
-	buf, err := Deflate(data.Fixture(file))
+func TestExtract(t *testing.T) {
+	e := Extract(data.Fixture(file), "", "")
 
-	if err != nil {
-		t.Error(err)
+	if len(e) != 1 {
+		t.Fatal("invalid entry count")
 	}
 
-	if !data.Assert(buf) {
-		t.Fatal("not deflated")
+	if e[0].Path != data.Sample {
+		t.Fatal("invalid entry path")
+	}
+
+	if !data.Assert(e[0].Data) {
+		t.Fatal("invalid entry data")
 	}
 }
