@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS Events (
     Host TEXT NULL,
     User TEXT NULL,
 	Message TEXT NULL,
-	Severity INTEGER NOT NULL
+	Severity INTEGER NOT NULL,
+	Source INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Extensions (
@@ -39,8 +40,9 @@ INSERT OR IGNORE INTO Events (
 	Host,
 	User,
 	Message,
-	Severity
-) VALUES (?,?,?,?,?);
+	Severity,
+    Source
+) VALUES (?,?,?,?,?,?);
 `
 
 const extensions = `
@@ -94,6 +96,7 @@ func (db *Database) Write(evt *event.Event) {
 		evt.User,
 		evt.Message,
 		evt.Severity,
+		evt.Source,
 	)
 
 	if err != nil {
