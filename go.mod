@@ -9,6 +9,7 @@ require (
 	github.com/andybalholm/brotli v1.2.0
 	github.com/bmatcuk/doublestar/v4 v4.9.1
 	github.com/bodgit/sevenzip v1.6.1
+	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cespare/xxhash v1.1.0
 	github.com/cuhsat/zip v0.5.2
 	github.com/cxmcc/tiger v0.0.0-20170524142333-bde35e2713d7
@@ -54,7 +55,6 @@ require (
 	github.com/0xrawsec/golang-utils v1.3.2 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
-	github.com/cavaliergopher/cpio v1.0.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect

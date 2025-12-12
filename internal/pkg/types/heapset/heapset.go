@@ -32,7 +32,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lz4"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzip"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzw"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/mz"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/minlz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/s2"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/snappy"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
@@ -302,8 +302,8 @@ func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
 		fn = lzip.Deflate
 	case lzw.Detect(b):
 		fn = lzw.Deflate
-	case mz.Detect(b):
-		fn = mz.Deflate
+	case minlz.Detect(b):
+		fn = minlz.Deflate
 	case s2.Detect(b):
 		fn = s2.Deflate
 	case snappy.Detect(b):

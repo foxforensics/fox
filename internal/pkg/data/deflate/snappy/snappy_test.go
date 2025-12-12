@@ -1,4 +1,4 @@
-package zstd
+package snappy
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "fox.zst"
+const file = "fox.sz"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)

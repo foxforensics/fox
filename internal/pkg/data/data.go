@@ -11,7 +11,7 @@ import (
 	"runtime"
 )
 
-const tests = "../../../testdata/"
+const tests = "../../../testdata/deflate"
 
 type Entry struct {
 	Path string // Entry path
@@ -33,7 +33,7 @@ func HasMagic(b []byte, off int, m []byte) bool {
 }
 
 func Assert(b []byte) bool {
-	return bytes.Equal(b, Fixture("fox.gs"))
+	return bytes.Equal(b, Fixture("fox.txt"))
 }
 
 func Fixture(name string) []byte {

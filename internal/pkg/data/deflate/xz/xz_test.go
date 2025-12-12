@@ -6,7 +6,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "fox.gs.xz"
+const file = "fox.xz"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)

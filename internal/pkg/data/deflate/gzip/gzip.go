@@ -2,8 +2,9 @@ package gzip
 
 import (
 	"bytes"
-	"compress/gzip"
 	"io"
+
+	"github.com/klauspost/compress/gzip"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )

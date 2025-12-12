@@ -6,11 +6,10 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const frame = "frame.br"
-const file = "fox.gs.br"
+const file = "fox.br"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := data.Fixture(frame)
+	buf := data.Fixture(file)
 
 	b.ResetTimer()
 
@@ -30,7 +29,7 @@ func BenchmarkDeflate(b *testing.B) {
 }
 
 func TestDetect(t *testing.T) {
-	if !Detect(data.Fixture(frame)) {
+	if !Detect(data.Fixture(file)) {
 		t.Fatal("not detected")
 	}
 }
