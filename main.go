@@ -122,7 +122,7 @@ Hashes (similarity):
   SDHASH, SSDEEP, TLSH
 
 Checksums:
-  ADLER32, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+  ADLER32, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 Example: Find occurrences in event logs
   $ fox cat -eWinlogon ./**/*.evtx

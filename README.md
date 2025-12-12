@@ -88,7 +88,7 @@ Similarity hashes:
 > sdhash, SSDeep, TLSH
 
 Checksums:
-> Adler-32, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+> Adler-32, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 ## License
 🦊 is released under the [GPL-3.0](LICENSE.md)

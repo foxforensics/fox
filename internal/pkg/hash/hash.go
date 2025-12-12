@@ -50,6 +50,8 @@ func Sum(t string, b []byte) ([]byte, error) {
 		imp = blake3.New256()
 	case types.BLAKE3512:
 		imp = blake3.New512()
+	case types.CRC32C:
+		imp = crc32.New(crc32.MakeTable(crc32.Castagnoli))
 	case types.CRC32IEEE:
 		imp = crc32.NewIEEE()
 	case types.CRC64ECMA:
