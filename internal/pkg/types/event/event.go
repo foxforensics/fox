@@ -15,12 +15,12 @@ import (
 const CEF = "%s %s CEF:1|fox|hunt|%s|100|%s|%d|"
 
 type Event struct {
-	Type      types.Event    `json:"-"`
 	Time      time.Time      `json:"ts"`
 	Host      string         `json:"host,omitempty"`
 	User      string         `json:"user,omitempty"`
 	Message   string         `json:"msg,omitempty"`
 	Severity  int8           `json:"lvl"`
+	Source    types.Event    `json:"src"`
 	Extension map[string]any `json:"ext,omitempty"`
 }
 

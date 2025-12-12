@@ -10,9 +10,8 @@ import (
 	"time"
 
 	"github.com/0xrawsec/golang-evtx/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
-
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
@@ -130,8 +129,8 @@ func newEvent(evt *evtx.GoEvtxMap) *event.Event {
 
 	p := evtx.Path("/Event/System/Computer")
 	e := event.Event{
-		Type:      types.Eventlog,
 		Time:      evt.TimeCreated().UTC(),
+		Source:    types.Eventlog,
 		Extension: make(map[string]any),
 	}
 

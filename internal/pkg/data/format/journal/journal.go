@@ -96,7 +96,7 @@ func newEvent(od *ordereddict.Dict) (*event.Event, *ordereddict.Dict, error) {
 	var sys, evt *ordereddict.Dict
 
 	e := event.Event{
-		Type:      types.Journal,
+		Source:    types.Journal,
 		Extension: make(map[string]any),
 	}
 
