@@ -74,7 +74,7 @@ Archive formats:
 > 7zip, AR, CAB, CPIO, RAR, TAR, ZIP
 
 Compression formats:
-> Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZW, MinLZ, S2, Snappy, xz, zlib, zstd
+> Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
 
 Cryptographic hashes:
 > BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
