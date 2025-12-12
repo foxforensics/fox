@@ -71,7 +71,7 @@ File formats:
 > evtx, journal, json, jsonl
 
 Archive formats:
-> 7zip, AR, CAB, CPIO, RAR, TAR, ZIP
+> 7zip, ar, Cabinet, cpio, RAR, tar, ZIP
 
 Compression formats:
 > Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd

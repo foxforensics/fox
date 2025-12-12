@@ -12,9 +12,17 @@ import (
 )
 
 func Detect(b []byte) bool {
-	return data.HasMagic(b, 0, []byte{
-		0x50, 0x4B, 0x03, 0x04,
-	})
+	for _, m := range [][]byte{
+		{'P', 'K', 0x03, 0x04}, // default
+		{'P', 'K', 0x03, 0x06}, // empty
+		{'P', 'K', 0x03, 0x08}, // spanned
+	} {
+		if data.HasMagic(b, 0, m) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func Extract(b []byte, root, pass string) (e []data.Entry) {
