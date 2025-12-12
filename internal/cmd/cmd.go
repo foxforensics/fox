@@ -382,7 +382,18 @@ func (cmd *Hex) Run(cli *Cli) error {
 			_, _ = fmt.Fprintf(cli.w, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
+		lastHex, wasCut := "", false
+
 		for l := range buffer.Hex(h, tail, cli.Hex.Mode).Lines {
+			// cut similar lines for better readability
+			if l.Hex == lastHex && cli.Hex.Mode != types.Raw {
+				if !wasCut {
+					wasCut = true
+					_, _ = fmt.Fprintln(cli.w, text.Hide("*"))
+				}
+				continue
+			}
+
 			switch cli.Hex.Mode {
 			case types.Canonical:
 				_, _ = fmt.Fprintf(cli.w, "%s  %s%s\n", text.Hide(l.Nr), l.Hex, text.Hide(l.Str))
@@ -393,6 +404,8 @@ func (cmd *Hex) Run(cli *Cli) error {
 			case types.Raw:
 				_, _ = fmt.Fprintf(cli.w, "%s\n", l.Hex)
 			}
+
+			lastHex, wasCut = l.Hex, false
 		}
 	}
 
