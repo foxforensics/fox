@@ -9,11 +9,13 @@ import (
 	"time"
 
 	"github.com/cuhsat/fox/v4/internal"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 const CEF = "%s %s CEF:1|fox|hunt|%s|100|%s|%d|"
 
 type Event struct {
+	Type      types.Event    `json:"-"`
 	Time      time.Time      `json:"ts"`
 	Host      string         `json:"host,omitempty"`
 	User      string         `json:"user,omitempty"`

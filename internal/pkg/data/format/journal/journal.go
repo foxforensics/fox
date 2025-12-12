@@ -12,6 +12,7 @@ import (
 
 	"github.com/Velocidex/go-journalctl/parser"
 	"github.com/Velocidex/ordereddict"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
@@ -95,6 +96,7 @@ func newEvent(od *ordereddict.Dict) (*event.Event, *ordereddict.Dict, error) {
 	var sys, evt *ordereddict.Dict
 
 	e := event.Event{
+		Type:      types.Journal,
 		Extension: make(map[string]any),
 	}
 

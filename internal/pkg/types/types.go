@@ -56,6 +56,13 @@ const (
 	Splunk   = "http://localhost:8088/services/collector/event/1.0"
 )
 
+type Event int
+
+const (
+	Eventlog Event = iota
+	Journal
+)
+
 type Heap int
 
 const (
