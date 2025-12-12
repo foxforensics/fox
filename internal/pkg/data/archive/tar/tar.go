@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"io"
 	"log"
-	"path/filepath"
 	"strings"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
@@ -44,7 +43,7 @@ func Extract(b []byte, root, _ string) (e []data.Entry) {
 		}
 
 		e = append(e, data.Entry{
-			Path: filepath.Join(root, h.Name),
+			Path: data.AddStream(root, h.Name),
 			Data: buf,
 		})
 	}

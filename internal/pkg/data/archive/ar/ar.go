@@ -5,7 +5,6 @@ import (
 	"io"
 	"io/fs"
 	"log"
-	"path/filepath"
 
 	"github.com/mkrautz/goar"
 
@@ -45,7 +44,7 @@ func Extract(b []byte, root, _ string) (e []data.Entry) {
 		}
 
 		e = append(e, data.Entry{
-			Path: filepath.Join(root, h.Name),
+			Path: data.AddStream(root, h.Name),
 			Data: buf,
 		})
 	}

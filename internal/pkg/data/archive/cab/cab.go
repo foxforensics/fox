@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io"
 	"log"
-	"path/filepath"
 	"strings"
 
 	"github.com/secDre4mer/go-cab"
@@ -46,7 +45,7 @@ func Extract(b []byte, root, _ string) (e []data.Entry) {
 		}
 
 		e = append(e, data.Entry{
-			Path: filepath.Join(root, f.Name),
+			Path: data.AddStream(root, f.Name),
 			Data: buf,
 		})
 	}

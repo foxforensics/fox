@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io"
 	"log"
-	"path/filepath"
 	"strings"
 
 	"github.com/cuhsat/zip/pkg/zip"
@@ -52,7 +51,7 @@ func Extract(b []byte, root, pass string) (e []data.Entry) {
 		}
 
 		e = append(e, data.Entry{
-			Path: filepath.Join(root, f.Name),
+			Path: data.AddStream(root, f.Name),
 			Data: buf,
 		})
 	}

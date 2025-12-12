@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io"
 	"log"
-	"path/filepath"
 
 	"github.com/cavaliergopher/cpio"
 
@@ -51,7 +50,7 @@ func Extract(b []byte, root, _ string) (e []data.Entry) {
 		}
 
 		e = append(e, data.Entry{
-			Path: filepath.Join(root, h.Name),
+			Path: data.AddStream(root, h.Name),
 			Data: buf,
 		})
 	}

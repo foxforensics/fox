@@ -5,6 +5,7 @@ package data
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -32,6 +33,10 @@ func HasMagic(b []byte, off int, m []byte) bool {
 	}
 
 	return bytes.Equal(b[off:off+len(m)], m)
+}
+
+func AddStream(p, s string) string {
+	return fmt.Sprintf("%s:%s", p, s)
 }
 
 func Assert(b []byte) bool {
