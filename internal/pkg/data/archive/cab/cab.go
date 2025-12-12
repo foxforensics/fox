@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/google/go-cabfile/cabfile"
+	"github.com/secDre4mer/go-cab"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
@@ -19,19 +19,19 @@ func Detect(b []byte) bool {
 }
 
 func Extract(b []byte, root, _ string) (e []data.Entry) {
-	r, err := cabfile.New(bytes.NewReader(b))
+	r, err := cab.Open(bytes.NewReader(b), int64(len(b)))
 
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	for _, s := range r.FileList() {
-		if strings.HasSuffix(s, "/") {
+	for _, f := range r.Files {
+		if strings.HasSuffix(f.Name, "/") {
 			continue
 		}
 
-		h, err := r.Content(s)
+		h, err := f.Open()
 
 		if err != nil {
 			log.Println(err)
@@ -46,7 +46,7 @@ func Extract(b []byte, root, _ string) (e []data.Entry) {
 		}
 
 		e = append(e, data.Entry{
-			Path: filepath.Join(root, s),
+			Path: filepath.Join(root, f.Name),
 			Data: buf,
 		})
 	}
