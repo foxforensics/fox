@@ -111,18 +111,16 @@ Positional arguments:
   Path(s) to open or '-' for STDIN
 
 Hashes (cryptographic):
-  BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
-  GOST-256, GOST-512, MD2, MD4, MD5, RIPEMD-160, SHA1, SHA256, SHA3 
-  SHA3-224, SHA3-256, SHA3-384, SHA3-512, TIGER, TIGER2, WHIRLPOOL
+  MD2, MD4, MD5, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
 
 Hashes (performance):
-  FNV-1, FNV-1A, SIPHASH-64, SIPHASH-128, XXH64, XXH3
+  XXH64, XXH3
 
 Hashes (similarity):
-  SDHASH, SSDEEP, TLSH
+  SSDEEP, TLSH
 
 Checksums:
-  ADLER32, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+  CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 Example: Find occurrences in event logs
   $ fox cat -eWinlogon ./**/*.evtx

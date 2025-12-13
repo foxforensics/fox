@@ -12,19 +12,14 @@ require (
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cespare/xxhash v1.1.0
 	github.com/cuhsat/zip v0.5.2
-	github.com/cxmcc/tiger v0.0.0-20170524142333-bde35e2713d7
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
-	github.com/dchest/siphash v1.2.3
-	github.com/eciavatta/sdhash v0.0.0-20210117153940-a7b55306eeff
 	github.com/edsrzf/mmap-go v1.2.0
 	github.com/fatih/color v1.18.0
 	github.com/flanglet/kanzi-go/v2 v2.4.0
 	github.com/glaslos/ssdeep v0.4.0
 	github.com/glaslos/tlsh v0.4.0
 	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f
-	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004
 	github.com/klauspost/compress v1.18.2
-	github.com/mikhirev/gostribog v0.0.0-20140929084232-33bce6808ee9
 	github.com/minio/minlz v1.0.1
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
 	github.com/nwaples/rardecode v1.1.3
@@ -32,7 +27,6 @@ require (
 	github.com/secDre4mer/go-cab v0.0.0-20250826110853-e3fbafae92cd
 	github.com/sorairolake/lzip-go v0.3.8
 	github.com/ulikunitz/xz v0.5.15
-	github.com/zeebo/blake3 v0.2.4
 	github.com/zeebo/xxh3 v1.0.2
 	golang.org/x/term v0.38.0
 	modernc.org/sqlite v1.40.1
@@ -46,7 +40,6 @@ require (
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
-	github.com/tmthrgd/go-popcount v0.0.0-20190904054823-afb1ace8b04f // indirect
 	golang.org/x/crypto v0.46.0
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 )

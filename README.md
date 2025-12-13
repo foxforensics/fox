@@ -77,18 +77,16 @@ Compression formats:
 > Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
 
 Cryptographic hashes:
-> BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
-GOST-256, GOST-512, MD2, MD4, MD5, RIPEMD-160, SHA1, SHA256, SHA3
-SHA3-224, SHA3-256, SHA3-384, SHA3-512, Tiger, Tiger2, Whirlpool
+> MD2, MD4, MD5, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
 
 Performance hashes:
-> FNV-1, FNV-1a, SipHash-64, SipHash-128, XXH64, XXH3
+> XXH64, XXH3
 
 Similarity hashes:
-> sdhash, SSDeep, TLSH
+> SSDeep, TLSH
 
 Checksums:
-> Adler-32, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+> CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 ## License
 🦊 is released under the [GPL-3.0](LICENSE.md)

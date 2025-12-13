@@ -293,8 +293,6 @@ func (cmd *Hash) Run(cli *Cli) error {
 	defer cli.ThrowAway()
 
 	for _, algo := range cli.Hash.Algo {
-		var v string
-
 		if len(cli.Hash.Algo) > 1 {
 			_, _ = fmt.Fprintf(cli.w, "%s\n", text.Hide(text.Header(strings.ToUpper(algo))))
 		}
@@ -307,15 +305,8 @@ func (cmd *Hash) Run(cli *Cli) error {
 				continue
 			}
 
-			switch algo {
-			case types.SDHASH:
-				v = fmt.Sprintf("%s", sum)
-			default:
-				v = fmt.Sprintf("%x", sum)
-			}
-
-			if len(cli.Hash.Find) == 0 || slices.Contains(cli.Hash.Find, v) {
-				_, _ = fmt.Fprintf(cli.w, "%s  %s\n", v, text.Hide(h))
+			if len(cli.Hash.Find) == 0 || slices.Contains(cli.Hash.Find, sum) {
+				_, _ = fmt.Fprintf(cli.w, "%s  %s\n", sum, text.Hide(h))
 			}
 		}
 	}
