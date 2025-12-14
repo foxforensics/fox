@@ -44,11 +44,13 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
 
+const Input = "Input"
 const Stdin = "-"
 
 type Options struct {
 	Limit     *types.Limits
 	Filter    *types.Filters
+	Input     string
 	Password  string
 	NoDeflate bool
 	NoConvert bool
@@ -68,9 +70,13 @@ func New(paths []string, opts *Options) *HeapSet {
 		paths = append(paths, Stdin)
 	}
 
+	if len(opts.Input) > 0 {
+		hs.addInput([]byte(opts.Input))
+	}
+
 	for _, path := range paths {
 		if path == Stdin {
-			hs.addPipe()
+			hs.addStdin()
 			return &hs
 		}
 
@@ -372,7 +378,15 @@ func (hs *HeapSet) addData(name string, b []byte) {
 	}
 }
 
-func (hs *HeapSet) addPipe() {
+func (hs *HeapSet) addInput(b []byte) {
+	hs.addHeap(Input, types.String, b)
+
+	if hs.opts.Verbose > 0 {
+		log.Println("loaded heap from input")
+	}
+}
+
+func (hs *HeapSet) addStdin() {
 	if !isPiped(os.Stdin) {
 		log.Fatal("stdin not open")
 	}
@@ -383,7 +397,7 @@ func (hs *HeapSet) addPipe() {
 		log.Fatal(err)
 	}
 
-	hs.addHeap(Stdin, types.Deflate, buf)
+	hs.addHeap(Stdin, types.Stdin, buf)
 
 	if hs.opts.Verbose > 0 {
 		log.Println("loaded heap from stdin")

@@ -48,6 +48,7 @@ const (
 	Stdin Heap = iota
 	Stdout
 	Stderr
+	String
 	Regular
 	Deflate
 )

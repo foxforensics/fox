@@ -78,7 +78,8 @@ type Cli struct {
 	Bytes uint `short:"c" xor:"lines,bytes"`
 
 	// file loader
-	Pass string `short:"p"`
+	Input string `short:"i"`
+	Pass  string `short:"p"`
 
 	// line filter
 	Regex   string `short:"e"`
@@ -195,6 +196,7 @@ func (cli *Cli) Bootstrap(args []string) *heapset.HeapSet {
 			Before: cli.Before,
 			After:  cli.After,
 		},
+		Input:     cli.Input,
 		Password:  cli.Pass,
 		NoDeflate: cli.NoDeflate,
 		NoConvert: cli.NoConvert,

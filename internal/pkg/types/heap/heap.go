@@ -81,6 +81,8 @@ func (h *Heap) String() string {
 		return "stdout"
 	case types.Stderr:
 		return "stderr"
+	case types.String:
+		return "string"
 	default:
 		return h.Name
 	}
