@@ -47,12 +47,12 @@ $ fox hex -mc -hc512 disk.bin
 
 Find ASCII strings in binaries:
 ```console
-$ fox text -rwa8 sample.exe
+$ fox text -rw sample.exe
 ```
 
 List files with high entropy:
 ```console
-$ fox info -a0.9 ./**/*
+$ fox info -m0.9 ./**/*
 ```
 
 Hash the archive contents:

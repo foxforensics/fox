@@ -40,14 +40,14 @@ type Hash struct {
 }
 
 type Info struct {
-	Min   float64  `short:"a" default:"0.0"`
-	Max   float64  `short:"b" default:"1.0"`
+	Min   float64  `short:"m" default:"0.0"`
+	Max   float64  `short:"x" default:"1.0"`
 	Paths []string `arg:"" name:"path" type:"path" optional:""`
 }
 
 type Text struct {
-	Min   uint     `short:"a" default:"3"`
-	Max   uint     `short:"b" default:"256"`
+	Min   uint     `short:"m" default:"3"`
+	Max   uint     `short:"x" default:"256"`
 	Wtf   int      `short:"w" type:"counter"`
 	First bool     `short:"1" and:"first,wtf"`
 	Paths []string `arg:"" type:"path" optional:""`

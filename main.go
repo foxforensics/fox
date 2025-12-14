@@ -52,12 +52,12 @@ Commands:
     -F, --find=HASH[,]     show only files that match
 
   info [FLAGS] <PATHS>     prints file infos and entropy
-    -a, --min=DECIMAL      minimum entropy value (default: 0.0)
-    -b, --max=DECIMAL      maximal entropy value (default: 1.0)
+    -m, --min=DECIMAL      minimum entropy value (default: 0.0)
+    -x, --max=DECIMAL      maximal entropy value (default: 1.0)
 
   text [FLAGS] <PATHS>     prints file strings (ASCII)
-    -a, --min=NUMBER       minimum string length (default: 3)
-    -b, --max=NUMBER       maximal string length (default: 256)
+    -m, --min=NUMBER       minimum string length (default: 3)
+    -x, --max=NUMBER       maximal string length (default: 256)
     -w, --wtf=[=LEVEL]     show text classifications (w/ww/www)
     -1, --first            show only first text class
 
