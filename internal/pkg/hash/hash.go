@@ -22,6 +22,19 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
+func Secure(t string) bool {
+	switch strings.ToLower(t) {
+	case types.SHA256:
+		fallthrough
+	case types.SHA3:
+		fallthrough
+	case types.SHA3224, types.SHA3256, types.SHA3384, types.SHA3512:
+		return true
+	default:
+		return false
+	}
+}
+
 func Sum(t string, b []byte) (string, error) {
 	var imp hash.Hash
 

@@ -295,6 +295,10 @@ func (cmd *Hash) Run(cli *Cli) error {
 	defer cli.ThrowAway()
 
 	for _, algo := range cli.Hash.Algo {
+		if !hash.Secure(algo) {
+			log.Printf("used algorithm %s is not cryptically secure!\n", algo)
+		}
+
 		if len(cli.Hash.Algo) > 1 {
 			_, _ = fmt.Fprintf(cli.w, "%s\n", text.Hide(text.Header(strings.ToUpper(algo))))
 		}
