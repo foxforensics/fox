@@ -16,6 +16,23 @@ type Strings struct {
 	level int
 }
 
+func GetClasses(level int) []string {
+	var cls []string
+
+	for _, e := range GetStrings(level).db {
+		cls = append(cls, e.name...)
+	}
+
+	slices.SortStableFunc(cls, func(a, b string) int {
+		return strings.Compare(
+			strings.ToLower(a),
+			strings.ToLower(b),
+		)
+	})
+
+	return cls
+}
+
 func GetStrings(level int) *Strings {
 	str := &Strings{level: level}
 
@@ -34,6 +51,14 @@ func GetStrings(level int) *Strings {
 	return str
 }
 
+func (str *String) ToString(f bool) string {
+	if f {
+		return str.name[0]
+	} else {
+		return strings.Join(str.name, " | ")
+	}
+}
+
 func (str *String) Match(s []string) bool {
 	for _, name := range str.name {
 		if slices.Contains(s, strings.ToLower(name)) {
@@ -42,14 +67,6 @@ func (str *String) Match(s []string) bool {
 	}
 
 	return false
-}
-
-func (str *String) ToString(f bool) string {
-	if f {
-		return str.name[0]
-	} else {
-		return strings.Join(str.name, " | ")
-	}
 }
 
 func (str *Strings) Search(s string) *String {

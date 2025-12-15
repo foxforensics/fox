@@ -23,7 +23,7 @@ go install github.com/cuhsat/fox/v4@latest
   * Built-in warning of critical system events
   * Save as `JSON`, `JSON Lines` or `SQLite3`
 * Supports
-  * Over 160 string classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
+  * Over 290 string classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
   * Many popular archive and compression formats
   * Many popular cryptographic, fuzzy and fast hashes 
   * Data streaming in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format

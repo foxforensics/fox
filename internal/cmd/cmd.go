@@ -51,6 +51,7 @@ type Text struct {
 	Wtf   int      `short:"w" type:"counter"`
 	Find  []string `short:"F" sep:","`
 	First bool     `short:"1" and:"first,wtf"`
+	Print bool     `short:"P"`
 	Paths []string `arg:"" type:"path" optional:""`
 }
 
@@ -183,9 +184,19 @@ func (cli *Cli) Bootstrap(args []string) *heapset.HeapSet {
 
 	if len(cli.Text.Find) > 0 {
 		cli.Text.Wtf = 3
+		cli.Text.First = false
 		for i := range cli.Text.Find {
 			cli.Text.Find[i] = strings.ToLower(cli.Text.Find[i])
 		}
+	}
+
+	if cli.Text.Print {
+		for _, cls := range text.GetClasses(3) {
+			_, _ = fmt.Fprintf(cli.w, "%s\n", cls)
+		}
+
+		// exit early
+		os.Exit(0)
 	}
 
 	if cli.NoColor {
