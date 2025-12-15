@@ -2,6 +2,7 @@ package text
 
 import (
 	"regexp"
+	"slices"
 	"strings"
 )
 
@@ -31,6 +32,16 @@ func GetStrings(level int) *Strings {
 	}
 
 	return str
+}
+
+func (str *String) Match(s []string) bool {
+	for _, name := range str.name {
+		if slices.Contains(s, strings.ToLower(name)) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (str *String) ToString(f bool) string {

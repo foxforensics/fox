@@ -14,7 +14,7 @@ type String struct {
 	Str string
 }
 
-func (h *Heap) Entropy(mn, mx float64) (float64, bool) {
+func (h *Heap) Entropy(m, x float64) (float64, bool) {
 	var a [256]float64
 	var v float64
 
@@ -34,43 +34,50 @@ func (h *Heap) Entropy(mn, mx float64) (float64, bool) {
 	v /= 8
 
 	// heap filtered
-	if v < mn || v > mx {
+	if v < m || v > x {
 		return 0, false
 	}
 
 	return v, true
 }
 
-func (h *Heap) Strings(mn, mx uint, wtf int, fst bool) <-chan String {
+func (h *Heap) Strings(m, x uint, w int, s []string, f bool) <-chan String {
 	var ch = make(chan String, 4096)
 	var db *text.Strings
 	var buf []byte
 	var off int
 	var b byte
 
-	if wtf > 0 {
-		db = text.GetStrings(wtf)
+	if w > 0 {
+		db = text.GetStrings(w)
 	}
 
 	// flush closure
 	flush := func() {
-		cls, str := "", string(buf)
+		defer func() {
+			buf = buf[:0]
+		}()
+
+		str := string(buf)
 
 		v := uint(len(strings.TrimSpace(str)))
 
-		if v >= mn && v <= mx {
+		if v >= m && v <= x {
+			off := fmt.Sprintf("%08x", max(off-(len(buf)+1), 0))
+			cls := ""
+
 			if db != nil {
-				cls = db.Search(str).ToString(fst)
+				res := db.Search(str)
+
+				if len(s) > 0 && !res.Match(s) {
+					return
+				}
+
+				cls = res.ToString(f)
 			}
 
-			ch <- String{
-				fmt.Sprintf("%08x", max(off-(len(buf)+1), 0)),
-				cls,
-				str,
-			}
+			ch <- String{off, cls, str}
 		}
-
-		buf = buf[:0]
 	}
 
 	// carve closure

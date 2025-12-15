@@ -59,7 +59,8 @@ Commands:
     -m, --min=NUMBER       minimum string length (default: 3)
     -x, --max=NUMBER       maximal string length (default: 256)
     -w, --wtf=[=LEVEL]     show text classifications (w/ww/www)
-    -1, --first            show only first text class
+    -F, --find=CLASS[,]    show only texts that match
+    -1, --first            show only first class
 
   hex [FLAGS] <PATHS>      prints file in hex format
     -m, --mode=[c|hd|xxd]  use compatible mode for output 
@@ -132,7 +133,7 @@ Example: Show the MBR in canonical hex
 Example: Hunt down suspicious events
   $ fox hunt -sxv ./**/*.dd
 
-Report bugs at <mail@foxhunt.wtf>
+Report bugs at <issue@foxhunt.wtf>
 `)
 
 type Fox struct {

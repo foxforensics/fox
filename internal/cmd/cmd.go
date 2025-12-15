@@ -49,6 +49,7 @@ type Text struct {
 	Min   uint     `short:"m" default:"3"`
 	Max   uint     `short:"x" default:"256"`
 	Wtf   int      `short:"w" type:"counter"`
+	Find  []string `short:"F" sep:","`
 	First bool     `short:"1" and:"first,wtf"`
 	Paths []string `arg:"" type:"path" optional:""`
 }
@@ -178,6 +179,13 @@ func (cli *Cli) Bootstrap(args []string) *heapset.HeapSet {
 
 	if len(cli.Hunt.Paths) == 0 {
 		cli.Hunt.Paths = hunt.Paths
+	}
+
+	if len(cli.Text.Find) > 0 {
+		cli.Text.Wtf = 3
+		for i := range cli.Text.Find {
+			cli.Text.Find[i] = strings.ToLower(cli.Text.Find[i])
+		}
 	}
 
 	if cli.NoColor {
@@ -349,6 +357,7 @@ func (cmd *Text) Run(cli *Cli) error {
 			cli.Text.Min,
 			cli.Text.Max,
 			cli.Text.Wtf,
+			cli.Text.Find,
 			cli.Text.First,
 		) {
 			if !cli.NoLine && cli.Text.Wtf > 0 {
