@@ -161,7 +161,7 @@ func main() {
 	case len(ctx.Args) == 0:
 		fmt.Print(short)
 	default:
-		if fox.Cli.Verbose > 1 {
+		if fox.Cli.Verbose > 0 {
 			defer timer(time.Now())
 		}
 
@@ -172,7 +172,7 @@ func main() {
 }
 
 func timer(t time.Time) {
-	log.Printf("took %v\n", time.Since(t))
+	log.Printf("time %v\n", time.Since(t))
 }
 
 func trace() {

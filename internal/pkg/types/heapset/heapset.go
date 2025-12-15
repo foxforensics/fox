@@ -3,6 +3,7 @@ package heapset
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -112,15 +113,22 @@ func (hs *HeapSet) Get() []*heap.Heap {
 }
 
 func (hs *HeapSet) ThrowAway() {
+	var n int64
+
 	hs.Lock()
 
 	for _, h := range hs.heaps {
+		n += h.Size()
 		h.ThrowAway()
 	}
 
 	hs.heaps = hs.heaps[:0]
 
 	hs.Unlock()
+
+	if hs.opts.Verbose > 0 {
+		log.Printf("size %s\n", human(n))
+	}
 }
 
 func (hs *HeapSet) loadPath(path string) {
@@ -365,7 +373,7 @@ func (hs *HeapSet) convert(b []byte) ([]byte, bool) {
 func (hs *HeapSet) addFile(path string, b []byte) {
 	hs.addHeap(path, types.Regular, b)
 
-	if hs.opts.Verbose > 0 {
+	if hs.opts.Verbose > 1 {
 		log.Printf("loaded heap from file %s\n", path)
 	}
 }
@@ -373,7 +381,7 @@ func (hs *HeapSet) addFile(path string, b []byte) {
 func (hs *HeapSet) addData(name string, b []byte) {
 	hs.addHeap(name, types.Deflate, b)
 
-	if hs.opts.Verbose > 0 {
+	if hs.opts.Verbose > 1 {
 		log.Printf("loaded heap from data %s\n", name)
 	}
 }
@@ -381,7 +389,7 @@ func (hs *HeapSet) addData(name string, b []byte) {
 func (hs *HeapSet) addInput(b []byte) {
 	hs.addHeap(Input, types.String, b)
 
-	if hs.opts.Verbose > 0 {
+	if hs.opts.Verbose > 1 {
 		log.Println("loaded heap from input")
 	}
 }
@@ -399,7 +407,7 @@ func (hs *HeapSet) addStdin() {
 
 	hs.addHeap(Stdin, types.Stdin, buf)
 
-	if hs.opts.Verbose > 0 {
+	if hs.opts.Verbose > 1 {
 		log.Println("loaded heap from stdin")
 	}
 }
@@ -432,6 +440,23 @@ func isPiped(f *os.File) bool {
 	}
 
 	return (fi.Mode() & os.ModeCharDevice) != os.ModeCharDevice
+}
+
+func human(i int64) string {
+	const m = int64(1024) // IEC prefix
+
+	if i < m {
+		return fmt.Sprintf("%db", i)
+	}
+
+	d, e := m, 0
+
+	for n := i / m; n >= m; n /= m {
+		d *= m
+		e++
+	}
+
+	return fmt.Sprintf("%.1f%c", float64(i)/float64(d), "kmgtpezyrq"[e])
 }
 
 func debug(v any) string {
