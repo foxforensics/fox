@@ -7,7 +7,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "format/fox.journal"
+const file = "parser/fox.journal"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)

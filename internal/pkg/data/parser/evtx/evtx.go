@@ -28,7 +28,36 @@ func Detect(b []byte) bool {
 	return data.HasMagic(b, 0, []byte(Magic))
 }
 
-func Decode(rs io.ReadSeeker, off int64, ext int) <-chan *event.Event {
+func Convert(b []byte) ([]byte, error) {
+	r, err := evtx.New(bytes.NewReader(b))
+
+	if err != nil {
+		return nil, err
+	}
+
+	buf := bytes.NewBuffer(nil)
+
+	for e := range r.Events() {
+		_, err := buf.Write(evtx.ToJSON(e))
+
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		_, err = buf.WriteRune('\n')
+
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	_ = r.Close()
+
+	return buf.Bytes(), nil
+}
+
+func Parse(rs io.ReadSeeker, off int64, ext int) <-chan *event.Event {
 	ch := make(chan *event.Event, 4096)
 
 	chk, err := newChunk(rs, off)
@@ -58,35 +87,6 @@ func Decode(rs io.ReadSeeker, off int64, ext int) <-chan *event.Event {
 	}(chk)
 
 	return ch
-}
-
-func Convert(b []byte) ([]byte, error) {
-	r, err := evtx.New(bytes.NewReader(b))
-
-	if err != nil {
-		return nil, err
-	}
-
-	buf := bytes.NewBuffer(nil)
-
-	for e := range r.Events() {
-		_, err := buf.Write(evtx.ToJSON(e))
-
-		if err != nil {
-			log.Println(err)
-			continue
-		}
-
-		_, err = buf.WriteRune('\n')
-
-		if err != nil {
-			log.Println(err)
-		}
-	}
-
-	_ = r.Close()
-
-	return buf.Bytes(), nil
 }
 
 func newChunk(rs io.ReadSeeker, off int64) (*evtx.Chunk, error) {

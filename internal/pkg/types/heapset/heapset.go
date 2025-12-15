@@ -39,8 +39,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )

@@ -35,7 +35,27 @@ func Detect(b []byte) bool {
 	return data.HasMagic(b, 0, []byte(Magic))
 }
 
-func Decode(b []byte, off int64, ext int) <-chan *event.Event {
+func Convert(b []byte) ([]byte, error) {
+	j, err := parser.OpenFile(bytes.NewReader(b))
+
+	if err != nil {
+		return nil, err
+	}
+
+	buf := bytes.NewBuffer(nil)
+
+	for l := range j.GetLogs(context.Background()) {
+		_, err := buf.WriteString(fmt.Sprintf("%v\n", l))
+
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	return buf.Bytes(), err
+}
+
+func Parse(b []byte, off int64, ext int) <-chan *event.Event {
 	ch := make(chan *event.Event, 4096)
 
 	f, err := parser.OpenFile(bytes.NewReader(b[off:]))
@@ -70,26 +90,6 @@ func Decode(b []byte, off int64, ext int) <-chan *event.Event {
 	}(f)
 
 	return ch
-}
-
-func Convert(b []byte) ([]byte, error) {
-	j, err := parser.OpenFile(bytes.NewReader(b))
-
-	if err != nil {
-		return nil, err
-	}
-
-	buf := bytes.NewBuffer(nil)
-
-	for l := range j.GetLogs(context.Background()) {
-		_, err := buf.WriteString(fmt.Sprintf("%v\n", l))
-
-		if err != nil {
-			log.Println(err)
-		}
-	}
-
-	return buf.Bytes(), err
 }
 
 func newEvent(od *ordereddict.Dict) (*event.Event, *ordereddict.Dict, error) {
