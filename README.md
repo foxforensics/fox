@@ -55,9 +55,9 @@ List files with high entropy:
 $ fox info -m0.9 ./**/*
 ```
 
-Hash the archive contents:
+Hash the archive content:
 ```console
-$ fox hash -amd5,sha1 files.7z
+$ fox hash -amd5,sha1 files.7z:ioc.exe
 ```
 
 Hunt down suspicious events:

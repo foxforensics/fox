@@ -13,6 +13,7 @@ import (
 )
 
 const Sample = "fox.txt"
+const Stream = ":"
 
 const testdata = "../../../testdata"
 
@@ -36,7 +37,7 @@ func HasMagic(b []byte, off int, m []byte) bool {
 }
 
 func AddStream(p, s string) string {
-	return fmt.Sprintf("%s:%s", p, s)
+	return fmt.Sprintf("%s%s%s", p, Stream, s)
 }
 
 func Assert(b []byte) bool {

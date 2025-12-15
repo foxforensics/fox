@@ -81,13 +81,15 @@ func New(paths []string, opts *Options) *HeapSet {
 			return &hs
 		}
 
+		path, part := hs.splitPath(path)
+
 		_, err := os.Stat(path)
 
 		if errors.Is(err, os.ErrNotExist) {
 			log.Printf("%s does not exist\n", path)
 		}
 
-		hs.loadPath(path)
+		hs.loadPath(path, part)
 	}
 
 	return &hs
@@ -131,7 +133,17 @@ func (hs *HeapSet) ThrowAway() {
 	}
 }
 
-func (hs *HeapSet) loadPath(path string) {
+func (hs *HeapSet) splitPath(path string) (string, string) {
+	tokens := strings.Split(path, data.Stream)
+
+	if len(tokens) == 1 {
+		return path, ""
+	}
+
+	return tokens[0], strings.Join(tokens[1:], data.Stream)
+}
+
+func (hs *HeapSet) loadPath(path, part string) {
 	match, err := doublestar.FilepathGlob(path)
 
 	if err != nil {
@@ -141,8 +153,8 @@ func (hs *HeapSet) loadPath(path string) {
 
 	var wg sync.WaitGroup
 
-	for _, m := range match {
-		fi, err := os.Stat(m)
+	for _, path := range match {
+		fi, err := os.Stat(path)
 
 		if err != nil {
 			log.Println(err)
@@ -153,9 +165,9 @@ func (hs *HeapSet) loadPath(path string) {
 
 		go func() {
 			if fi.IsDir() {
-				hs.loadDir(m)
+				hs.loadDir(path, part)
 			} else {
-				hs.loadFile(m)
+				hs.loadFile(path, part)
 			}
 			wg.Done()
 		}()
@@ -164,7 +176,7 @@ func (hs *HeapSet) loadPath(path string) {
 	wg.Wait()
 }
 
-func (hs *HeapSet) loadDir(path string) {
+func (hs *HeapSet) loadDir(path, part string) {
 	dir, err := os.ReadDir(path)
 
 	if err != nil {
@@ -179,7 +191,7 @@ func (hs *HeapSet) loadDir(path string) {
 			wg.Add(1)
 
 			go func() {
-				hs.loadFile(filepath.Join(path, f.Name()))
+				hs.loadFile(filepath.Join(path, f.Name()), part)
 				wg.Done()
 			}()
 		}
@@ -188,7 +200,7 @@ func (hs *HeapSet) loadDir(path string) {
 	wg.Wait()
 }
 
-func (hs *HeapSet) loadFile(path string) {
+func (hs *HeapSet) loadFile(path, part string) {
 	f, err := os.OpenFile(path, os.O_RDONLY, 0x400)
 
 	if err != nil {
@@ -220,10 +232,10 @@ func (hs *HeapSet) loadFile(path string) {
 		return
 	}
 
-	hs.process(path, b, false)
+	hs.process(path, part, b, false)
 }
 
-func (hs *HeapSet) process(path string, b []byte, data bool) {
+func (hs *HeapSet) process(path, part string, b []byte, data bool) {
 	var ok bool
 
 	if !hs.opts.NoDeflate {
@@ -231,7 +243,7 @@ func (hs *HeapSet) process(path string, b []byte, data bool) {
 			data = true
 		}
 
-		if hs.extract(path, b) {
+		if hs.extract(path, part, b) {
 			return
 		}
 	}
@@ -249,7 +261,7 @@ func (hs *HeapSet) process(path string, b []byte, data bool) {
 	}
 }
 
-func (hs *HeapSet) extract(path string, b []byte) bool {
+func (hs *HeapSet) extract(path, part string, b []byte) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Println("archive corrupt or password wrong")
@@ -288,7 +300,15 @@ func (hs *HeapSet) extract(path string, b []byte) bool {
 		wg.Add(1)
 
 		go func() {
-			hs.process(e.Path, e.Data, true)
+			if hs.opts.Verbose > 2 {
+				log.Printf("stream detected %s\n", e.Path)
+			}
+
+			// extract only specific stream
+			if len(part) == 0 || strings.HasSuffix(e.Path, part) {
+				hs.process(e.Path, part, e.Data, true)
+			}
+
 			wg.Done()
 		}()
 	}
