@@ -45,8 +45,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
 
-const Input = "Input"
-const Stdin = "-"
+const stdin = "-"
 
 type Options struct {
 	Limit     *types.Limits
@@ -68,7 +67,7 @@ func New(paths []string, opts *Options) *HeapSet {
 	hs := HeapSet{opts: opts}
 
 	if isPiped(os.Stdin) {
-		paths = append(paths, Stdin)
+		paths = append(paths, stdin)
 	}
 
 	if len(opts.Input) > 0 {
@@ -76,12 +75,12 @@ func New(paths []string, opts *Options) *HeapSet {
 	}
 
 	for _, path := range paths {
-		if path == Stdin {
+		if path == stdin {
 			hs.addStdin()
 			return &hs
 		}
 
-		path, part := hs.splitPath(path)
+		path, part := data.SplitPart(path)
 
 		_, err := os.Stat(path)
 
@@ -131,16 +130,6 @@ func (hs *HeapSet) ThrowAway() {
 	if hs.opts.Verbose > 0 {
 		log.Printf("size %s\n", human(n))
 	}
-}
-
-func (hs *HeapSet) splitPath(path string) (string, string) {
-	tokens := strings.Split(path, data.Stream)
-
-	if len(tokens) == 1 {
-		return path, ""
-	}
-
-	return tokens[0], strings.Join(tokens[1:], data.Stream)
 }
 
 func (hs *HeapSet) loadPath(path, part string) {
@@ -254,10 +243,13 @@ func (hs *HeapSet) process(path, part string, b []byte, data bool) {
 		}
 	}
 
-	if data {
-		hs.addData(path, b)
-	} else {
-		hs.addFile(path, b)
+	// filter for specific streams
+	if strings.Contains(path, part) {
+		if data {
+			hs.addData(path, b)
+		} else {
+			hs.addFile(path, b)
+		}
 	}
 }
 
@@ -304,10 +296,7 @@ func (hs *HeapSet) extract(path, part string, b []byte) bool {
 				log.Printf("stream detected %s\n", e.Path)
 			}
 
-			// extract only specific stream
-			if len(part) == 0 || strings.HasSuffix(e.Path, part) {
-				hs.process(e.Path, part, e.Data, true)
-			}
+			hs.process(e.Path, part, e.Data, true)
 
 			wg.Done()
 		}()
@@ -407,7 +396,7 @@ func (hs *HeapSet) addData(name string, b []byte) {
 }
 
 func (hs *HeapSet) addInput(b []byte) {
-	hs.addHeap(Input, types.String, b)
+	hs.addHeap("input", types.String, b)
 
 	if hs.opts.Verbose > 1 {
 		log.Println("loaded heap from input")
@@ -425,7 +414,7 @@ func (hs *HeapSet) addStdin() {
 		log.Fatal(err)
 	}
 
-	hs.addHeap(Stdin, types.Stdin, buf)
+	hs.addHeap(stdin, types.Stdin, buf)
 
 	if hs.opts.Verbose > 1 {
 		log.Println("loaded heap from stdin")

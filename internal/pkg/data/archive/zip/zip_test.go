@@ -50,7 +50,7 @@ func TestExtract(t *testing.T) {
 				t.Fatal("invalid entry count")
 			}
 
-			if e[0].Path != data.AddStream("", data.Sample) {
+			if e[0].Path != data.JoinPart("", data.Sample) {
 				t.Fatal("invalid entry path")
 			}
 

@@ -59,7 +59,7 @@ func Extract(b []byte, root, pass string) (e []data.Entry) {
 		}
 
 		e = append(e, data.Entry{
-			Path: data.AddStream(root, f.Name),
+			Path: data.JoinPart(root, f.Name),
 			Data: buf,
 		})
 	}

@@ -51,7 +51,7 @@ func extractFile(f *sevenzip.File, root string) (e data.Entry, err error) {
 		_ = r.Close()
 	}(r)
 
-	e.Path = data.AddStream(root, f.Name)
+	e.Path = data.JoinPart(root, f.Name)
 	e.Data, err = io.ReadAll(r)
 
 	return e, err
