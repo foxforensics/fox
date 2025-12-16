@@ -122,8 +122,8 @@ Hashes (performance):
 Hashes (similarity):
   SSDEEP, TLSH
 
-Hashes (special):
-  NT
+Hashes (windows):
+  LM, NT
 
 Checksums:
   CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
@@ -171,7 +171,7 @@ func main() {
 		}
 
 		if err := ctx.Run(&fox.Cli); err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 	}
 }

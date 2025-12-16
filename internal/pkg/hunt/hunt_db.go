@@ -66,7 +66,7 @@ func NewDB(path string) *Database {
 	db.sql, err = sql.Open("sqlite", "file:"+path)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
 	_, err = os.Stat(path)
@@ -76,7 +76,7 @@ func NewDB(path string) *Database {
 	}
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
 	return db

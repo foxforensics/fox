@@ -405,13 +405,13 @@ func (hs *HeapSet) addInput(b []byte) {
 
 func (hs *HeapSet) addStdin() {
 	if !isPiped(os.Stdin) {
-		log.Fatal("stdin not open")
+		log.Fatalln("stdin not open")
 	}
 
 	buf, err := io.ReadAll(bufio.NewReader(os.Stdin))
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
 	hs.addHeap(stdin, types.Stdin, buf)
@@ -445,7 +445,7 @@ func isPiped(f *os.File) bool {
 	fi, err := f.Stat()
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
 	return (fi.Mode() & os.ModeCharDevice) != os.ModeCharDevice

@@ -7,6 +7,7 @@ const (
 	CRC32IEEE = "crc32-ieee"
 	CRC64ECMA = "crc64-ecma"
 	CRC64ISO  = "crc64-iso"
+	LM        = "lm"
 	NT        = "nt"
 	MD2       = "md2"
 	MD4       = "md4"

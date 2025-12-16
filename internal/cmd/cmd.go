@@ -138,11 +138,11 @@ func (cli *Cli) Bootstrap(args []string) *heapset.HeapSet {
 	}
 
 	if cli.Info.Min > cli.Info.Max {
-		log.Fatal("invalid range")
+		log.Fatalln("invalid range")
 	}
 
 	if cli.Text.Min > cli.Text.Max {
-		log.Fatal("invalid range")
+		log.Fatalln("invalid range")
 	}
 
 	if cli.Context > 0 {

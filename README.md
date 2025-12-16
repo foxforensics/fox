@@ -85,8 +85,8 @@ Performance hashes:
 Similarity hashes:
 > SSDeep, TLSH
 
-Special hashes:
-> NT
+Windows hashes:
+> LM, NT
 
 Checksums:
 > CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO

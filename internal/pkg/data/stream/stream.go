@@ -24,7 +24,7 @@ func New(path string, w io.Writer) *Stream {
 		st.f, err = os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 
 		st.ws = append(st.ws, st.f)
