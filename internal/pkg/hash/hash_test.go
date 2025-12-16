@@ -32,6 +32,7 @@ func TestSum(t *testing.T) {
 		{types.CRC32IEEE, "6de95d61"},
 		{types.CRC64ECMA, "1c10bfee4250c76f"},
 		{types.CRC64ISO, "37c0210d10e905f2"},
+		{types.NT, "044c8eef14d76b367b0004057eab688b"},
 		{types.MD2, "aceb3e20d985564d17838fc437744843"},
 		{types.MD4, "fbb9a5a610458386e0ff2bdb4dea1076"},
 		{types.MD5, "f7ebcc3119549346b871212958dbc203"},
