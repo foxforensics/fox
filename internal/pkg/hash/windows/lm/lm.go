@@ -1,3 +1,4 @@
+// Package lm source: https://github.com/staaldraad/go-ntlm/blob/master/ntlm/crypto.go
 package lm
 
 import (
@@ -36,6 +37,8 @@ func (h *LM) Write(b []byte) (n int, err error) {
 	if len(b) > block {
 		log.Fatalln("input size to large")
 	}
+
+	h.Reset()
 
 	s := strings.ToUpper(string(b))
 

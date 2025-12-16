@@ -101,8 +101,8 @@ Disable:
       --no-convert         don't convert automatically
 
 Aliases:
-  -L, --logstash           alias for: -Euhttp://localhost:8080
-  -S, --splunk             alias for: -Huhttp://localhost:8088/...
+  -L, --logstash           alias for: -E -uhttp://localhost:8080
+  -S, --splunk             alias for: -H -uhttp://localhost:8088/...
 
 Standard:
   -d, --dry-run            prints only the found filenames
@@ -122,14 +122,14 @@ Hashes (performance):
 Hashes (similarity):
   SSDEEP, TLSH
 
-Hashes (windows):
-  LM, NT
+Windows specific:
+  LM, NT, PE
 
 Checksums:
   CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 Example: Find occurrences in event logs
-  $ fox cat -eWinlogon ./**/*.evtx
+  $ fox -eWinlogon ./**/*.evtx
 
 Example: Show the MBR in canonical hex
   $ fox hex -mc -hc512 disk.bin

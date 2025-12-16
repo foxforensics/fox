@@ -36,6 +36,7 @@ func TestSum(t *testing.T) {
 		{file, types.CRC32IEEE, "6de95d61"},
 		{file, types.CRC64ECMA, "1c10bfee4250c76f"},
 		{file, types.CRC64ISO, "37c0210d10e905f2"},
+		{file, types.PE, "aac24600"},
 		{text, types.LM, "74ac61daa7e79d69482bc9e3e9caf5a9"},
 		{text, types.NT, "0b2bee3bac7bddeae69d63d53c0b68f3"},
 		{file, types.MD2, "aceb3e20d985564d17838fc437744843"},

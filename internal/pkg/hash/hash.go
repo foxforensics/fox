@@ -19,8 +19,9 @@ import (
 	"github.com/zeebo/xxh3"
 	"golang.org/x/crypto/md4"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/lm"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/nt"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/lm"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/nt"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
@@ -49,6 +50,8 @@ func Sum(t string, b []byte) (string, error) {
 		imp = crc64.New(crc64.MakeTable(crc64.ECMA))
 	case types.CRC64ISO:
 		imp = crc64.New(crc64.MakeTable(crc64.ISO))
+	case types.PE:
+		imp = pe.New()
 	case types.LM:
 		imp = lm.New()
 	case types.NT:

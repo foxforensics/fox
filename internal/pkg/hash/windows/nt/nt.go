@@ -1,3 +1,4 @@
+// Package nt source: https://github.com/staaldraad/go-ntlm/blob/master/ntlm/crypto.go
 package nt
 
 import (
