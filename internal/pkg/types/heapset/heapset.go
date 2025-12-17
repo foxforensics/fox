@@ -15,6 +15,7 @@ import (
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/windows/pe"
 	"github.com/edsrzf/mmap-go"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -39,8 +40,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/linux/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/windows/evtx"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
@@ -362,6 +363,8 @@ func (hs *HeapSet) convert(b []byte) ([]byte, bool) {
 		fn = evtx.Convert
 	case journal.Detect(b):
 		fn = journal.Convert
+	case pe.Detect(b):
+		fn = pe.Convert
 	default:
 		return b, false
 	}

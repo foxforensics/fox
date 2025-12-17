@@ -56,7 +56,9 @@ require (
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
+	github.com/saferwall/pe v1.5.7 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
+	github.com/secDre4mer/pkcs7 v0.0.0-20240322103146-665324a4461d // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/exp v0.0.0-20251209150349-8475f28825e9 // indirect

@@ -25,6 +25,9 @@ go.work.sum
 # IDEs
 .idea/
 
+# PE executables
+*.exe
+
 # Raw images
 *.dd
 

@@ -10,8 +10,8 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/linux/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/windows/evtx"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"
 )

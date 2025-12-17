@@ -12,7 +12,7 @@ import (
 )
 
 func BenchmarkMap(b *testing.B) {
-	f, m, err := fixture("bible.txt")
+	f, m, err := fixture("text/bible.txt")
 
 	if err != nil {
 		b.Fatal(err)
@@ -34,7 +34,7 @@ func BenchmarkMap(b *testing.B) {
 }
 
 func BenchmarkRender(b *testing.B) {
-	f, m, err := fixture("bible.txt")
+	f, m, err := fixture("text/bible.txt")
 
 	if err != nil {
 		b.Fatal(err)
@@ -82,7 +82,7 @@ func BenchmarkFormat(b *testing.B) {
 }
 
 func BenchmarkGrep(b *testing.B) {
-	f, m, err := fixture("bible.txt")
+	f, m, err := fixture("text/bible.txt")
 
 	if err != nil {
 		b.Fatal(err)
@@ -108,7 +108,7 @@ func BenchmarkGrep(b *testing.B) {
 }
 
 func TestMap(t *testing.T) {
-	f, m, err := fixture("bible.txt")
+	f, m, err := fixture("text/bible.txt")
 
 	if err != nil {
 		t.Fatal(err)
@@ -153,7 +153,7 @@ func TestFormat(t *testing.T) {
 }
 
 func TestGrep(t *testing.T) {
-	f, m, err := fixture("bible.txt")
+	f, m, err := fixture("text/bible.txt")
 	v := "Authorized King James Version\n"
 
 	if err != nil {

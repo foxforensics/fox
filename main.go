@@ -24,7 +24,7 @@ Modes:
   cat    prints file (default)
   hex    prints file in hex format
   info   prints file infos and entropy
-  text   prints file strings (ASCII)
+  text   prints file text contents
   hash   prints file hashes and checksums
   hunt   hunt suspicious activities
 
@@ -46,22 +46,22 @@ Modes
 Cat mode:                  prints file (default)
 
 Hex mode:                  prints file in hex format
-  -m, --mode=[c|hd|xxd]    use compatible mode for output 
+  -m, --mode=<c|hd|xxd>    use compatible mode for output 
 
 Info mode:                 prints file infos and entropy
-  -m, --min=DECIMAL        minimum entropy value (default: 0.0)
-  -x, --max=DECIMAL        maximal entropy value (default: 1.0)
+  -m, --min=DECIMAL        minimum entropy value (default 0.0)
+  -x, --max=DECIMAL        maximal entropy value (default 1.0)
 
-Text mode:                 prints file strings (ASCII)
-  -m, --min=NUMBER         minimum string length (default: 3)
-  -x, --max=NUMBER         maximal string length (default: 256)
-  -w, --wtf=[=LEVEL]       show string classifications (w/ww/www)
+Text mode:                 prints file text contents
+  -m, --min=NUMBER         minimum string length (default 3)
+  -x, --max=NUMBER         maximal string length (default 256)
+  -w, --wtf[=LEVEL]        show string classifications (w/ww/www)
   -F, --find=CLASS,...     show only strings with class(es)
   -1, --first              show only strings first class
   -P, --print              show only classification list
 
 Hash mode:                 prints file hashes and checksums
-  -a, --algo=ALGO,...      use algorithm(s) (default: SHA256)
+  -a, --algo=ALGO,...      use algorithms (default SHA256)
   -F, --find=HASH,...      show only files that match
 
 Hunt mode:                 hunt suspicious activities
@@ -108,8 +108,8 @@ Disable:
       --no-convert         don't convert automatically
 
 Aliases:
-  -L, --logstash           alias for: -E -uhttp://localhost:8080
-  -S, --splunk             alias for: -H -uhttp://localhost:8088/...
+  -L, --logstash           alias for -E -uhttp://localhost:8080
+  -S, --splunk             alias for -H -uhttp://localhost:8088/...
 
 Standard:
   -d, --dry-run            prints only the found filenames
@@ -118,7 +118,7 @@ Standard:
       --help               prints this help message
 
 Positional arguments:
-  Globbing path(s) to open or '-' to read from STDIN
+  Globbing paths to open or '-' to read from STDIN
 
 
 Algorithms

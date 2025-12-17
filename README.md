@@ -14,6 +14,7 @@ go install github.com/cuhsat/fox/v4@latest
 * Read-only filesystem access
 * [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
+* Dumping of [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * String carving and classification
 * Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
 * Hunt mode
@@ -68,7 +69,7 @@ $ fox hunt -sxv ./**/*.dd
 ## Supports
 
 File formats:
-> evtx, journal, json, jsonl
+> evtx, journal, json, jsonl, pe/coff
 
 Archive formats:
 > 7zip, ar, Cabinet, cpio, RAR, tar, ZIP

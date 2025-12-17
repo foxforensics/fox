@@ -10,7 +10,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
-const File = "bible.txt"
+const File = "text/bible.txt"
 const Text = "FOX123XOF"
 
 func BenchmarkSum(b *testing.B) {
