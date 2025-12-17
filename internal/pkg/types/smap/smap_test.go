@@ -58,7 +58,7 @@ func BenchmarkRender(b *testing.B) {
 }
 
 func BenchmarkFormat(b *testing.B) {
-	f, m, err := fixture("test.json")
+	f, m, err := fixture("parser/fox.json")
 
 	if err != nil {
 		b.Fatal(err)
