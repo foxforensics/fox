@@ -31,7 +31,7 @@ go install github.com/cuhsat/fox/v4@latest
 ## Usage
 Type `fox --help` for more help:
 ```console
-$ fox [COMMAND] [FLAGS] <PATHS>
+$ fox [MODE] [FLAGS ...] <PATHS ...>
 ```
 
 ## Examples
@@ -45,14 +45,14 @@ Show the MBR in canonical hex:
 $ fox hex -mc -hc512 disk.bin
 ```
 
-Find ASCII strings in binaries:
-```console
-$ fox text -rw sample.exe
-```
-
 List files with high entropy:
 ```console
 $ fox info -m0.9 ./**/*
+```
+
+Find ASCII strings in binaries:
+```console
+$ fox text -rw sample.exe
 ```
 
 Hash the archive contents:
@@ -85,7 +85,7 @@ Performance hashes:
 Similarity hashes:
 > SSDeep, TLSH
 
-Windows specific:
+Windows hashes:
 > LM, NT, PE
 
 Checksums:

@@ -15,14 +15,18 @@ import (
 )
 
 var short = strings.TrimSpace(`
-Usage: fox [COMMAND] <PATHS>
+The Forensic Swiss Army Knife %s
 
-  hunt   hunt suspicious activities
-  hash   prints file hash using algorithm(s)
-  info   prints file info and entropy
-  text   prints file strings (ASCII)
-  hex    prints file in hex format
+Usage:
+  fox [MODE] [FLAGS ...] <PATHS ...>
+
+Modes:
   cat    prints file (default)
+  hex    prints file in hex format
+  info   prints file infos and entropy
+  text   prints file strings (ASCII)
+  hash   prints file hashes and checksums
+  hunt   hunt suspicious activities
 
 Type "fox --help" for more help...
 `)
@@ -35,39 +39,42 @@ var long = strings.TrimSpace(`
 '--'    '----'--'  '--'   '--' '--'-------'--' '-'--'
 The Forensic Swiss Army Knife %s
 
-Usage:
-  fox [COMMAND] [FLAGS] <PATHS>
+fox [MODE] [FLAGS ...] <PATHS ...>
 
-Commands:
-  hunt [FLAGS] <PATHS>     hunt suspicious activities
-    -a, --all              show logs with all severities
-    -x, --ext              show logs with all extensions (slow)
-    -s, --sort             show logs sorted by timestamp (slow)
-    -j, --json             show logs as JSON objects
-    -J, --jsonl            show logs as JSON lines
-    -D, --sqlite           save logs to SQLite3 DB
+Modes
+─────
+Cat mode:                  prints file (default)
 
-  hash [FLAGS] <PATHS>     prints file hashes and checksums
-    -a, --algo=ALGO[,]     use algorithm(s) (default: SHA256)
-    -F, --find=HASH[,]     show only files that match
+Hex mode:                  prints file in hex format
+  -m, --mode=[c|hd|xxd]    use compatible mode for output 
 
-  info [FLAGS] <PATHS>     prints file infos and entropy
-    -m, --min=DECIMAL      minimum entropy value (default: 0.0)
-    -x, --max=DECIMAL      maximal entropy value (default: 1.0)
+Info mode:                 prints file infos and entropy
+  -m, --min=DECIMAL        minimum entropy value (default: 0.0)
+  -x, --max=DECIMAL        maximal entropy value (default: 1.0)
 
-  text [FLAGS] <PATHS>     prints file strings (ASCII)
-    -m, --min=NUMBER       minimum string length (default: 3)
-    -x, --max=NUMBER       maximal string length (default: 256)
-    -w, --wtf=[=LEVEL]     show string classifications (w/ww/www)
-    -F, --find=CLASS[,]    show only strings with class(es)
-    -1, --first            show only strings first class
-    -P, --print            show only classification list
+Text mode:                 prints file strings (ASCII)
+  -m, --min=NUMBER         minimum string length (default: 3)
+  -x, --max=NUMBER         maximal string length (default: 256)
+  -w, --wtf=[=LEVEL]       show string classifications (w/ww/www)
+  -F, --find=CLASS,...     show only strings with class(es)
+  -1, --first              show only strings first class
+  -P, --print              show only classification list
 
-  hex [FLAGS] <PATHS>      prints file in hex format
-    -m, --mode=[c|hd|xxd]  use compatible mode for output 
+Hash mode:                 prints file hashes and checksums
+  -a, --algo=ALGO,...      use algorithm(s) (default: SHA256)
+  -F, --find=HASH,...      show only files that match
 
-  cat [FLAGS] <PATHS>      prints file (default)
+Hunt mode:                 hunt suspicious activities
+  -a, --all                show logs with all severities
+  -x, --ext                show logs with all extensions (slow)
+  -s, --sort               show logs sorted by timestamp (slow)
+  -j, --json               show logs as JSON objects
+  -J, --jsonl              show logs as JSON lines
+  -D, --sqlite             save logs to SQLite3 DB
 
+
+Global Flags
+────────────
 File limits:
   -h, --head               limit head of file by ...
   -t, --tail               limit tail of file by ...
@@ -111,33 +118,39 @@ Standard:
       --help               prints this help message
 
 Positional arguments:
-  Path(s) to open or '-' for STDIN
+  Globbing path(s) to open or '-' to read from STDIN
 
-Hashes (cryptographic):
+
+Algorithms
+──────────
+Cryptographic hashes:
   MD2, MD4, MD5, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
 
-Hashes (performance):
+Performance hashes:
   XXH64, XXH3
 
-Hashes (similarity):
+Similarity hashes:
   SSDEEP, TLSH
 
-Windows specific:
+Windows hashes:
   LM, NT, PE
 
 Checksums:
   CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
-Example: Find occurrences in event logs
-  $ fox -eWinlogon ./**/*.evtx
 
-Example: Show the MBR in canonical hex
-  $ fox hex -mc -hc512 disk.bin
+Examples
+────────
+Find occurrences in event logs:
+$ fox -eWinlogon ./**/*.evtx
 
-Example: Hunt down suspicious events
-  $ fox hunt -sxv ./**/*.dd
+Show the MBR in canonical hex:
+$ fox hex -mc -hc512 disk.bin
 
-Report bugs at <issue@foxhunt.wtf>
+Hunt down suspicious events:
+$ fox hunt -sxv ./**/*.dd
+
+Please report bugs to <issue@foxhunt.wtf>
 `)
 
 type Fox struct {
@@ -164,7 +177,7 @@ func main() {
 	case fox.Help || ctx.Error != nil:
 		fmt.Printf(long, app.Version)
 	case len(ctx.Args) == 0:
-		fmt.Print(short)
+		fmt.Printf(short, app.Version)
 	default:
 		if fox.Cli.Verbose > 0 {
 			defer timer(time.Now())
