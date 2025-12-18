@@ -47,11 +47,5 @@ func (st *Stream) Post(body string) error {
 		return errors.New(http.StatusText(res.StatusCode))
 	}
 
-	err = res.Body.Close()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return res.Body.Close()
 }

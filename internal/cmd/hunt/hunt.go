@@ -151,10 +151,12 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 				_, _ = fmt.Fprintln(cli.Stdout, fn(e.ToCEF()))
 			}
 
+			// TODO: concurrent
 			if db != nil {
 				db.Write(e)
 			}
 
+			// TODO: concurrent
 			if len(cmd.Url) > 0 {
 				_ = schema.Write(e)
 			}
