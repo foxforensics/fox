@@ -42,7 +42,7 @@ func TestExtract(t *testing.T) {
 		t.Fatal("invalid entry count")
 	}
 
-	if !strings.HasSuffix(e[0].Path, "fox") {
+	if !strings.HasSuffix(e[0].Path, data.Sample) {
 		t.Fatal("invalid entry path")
 	}
 
