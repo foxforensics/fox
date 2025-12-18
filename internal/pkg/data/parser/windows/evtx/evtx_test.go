@@ -7,7 +7,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "parser/fox.evtx"
+const file = "parser/log.evtx"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)

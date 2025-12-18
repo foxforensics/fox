@@ -12,8 +12,15 @@ import (
 
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/cmd"
+	"github.com/cuhsat/fox/v4/internal/cmd/cat"
+	"github.com/cuhsat/fox/v4/internal/cmd/hash"
+	"github.com/cuhsat/fox/v4/internal/cmd/hex"
+	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
+	"github.com/cuhsat/fox/v4/internal/cmd/info"
+	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
 
+// Short usage
 var short = strings.TrimSpace(`
 The Forensic Swiss Army Knife %s
 
@@ -31,6 +38,7 @@ Modes:
 Type "fox --help" for more help...
 `)
 
+// Long usage
 var long = strings.TrimSpace(`
 .-------.----.--.  .--.   .--. .--.--. .--.-. .--.-----.
 |   ___/ .__. \  \/  /    |  |_|  |  | |  |  \|  |   _/
@@ -41,40 +49,14 @@ The Forensic Swiss Army Knife %s
 
 fox [MODE] [FLAGS ...] <PATHS ...>
 
-Modes
-─────
-Cat mode:                  prints file (default)
+Modes:
+  cat    prints file (default)
+  hex    prints file in hex format
+  info   prints file infos and entropy
+  text   prints file text contents
+  hash   prints file hashes and checksums
+  hunt   hunt suspicious activities
 
-Hex mode:                  prints file in hex format
-  -m, --mode=<c|hd|xxd>    use compatible mode for output 
-
-Info mode:                 prints file infos and entropy
-  -m, --min=DECIMAL        minimum entropy value (default 0.0)
-  -x, --max=DECIMAL        maximal entropy value (default 1.0)
-
-Text mode:                 prints file text contents
-  -m, --min=NUMBER         minimum string length (default 3)
-  -x, --max=NUMBER         maximal string length (default 256)
-  -w, --wtf[=LEVEL]        show string classifications (w/ww/www)
-  -F, --find=CLASS,...     show only strings with class(es)
-  -1, --first              show only strings first class
-  -P, --print              show only classification list
-
-Hash mode:                 prints file hashes and checksums
-  -a, --algo=ALGO,...      use algorithms (default SHA256)
-  -F, --find=HASH,...      show only files that match
-
-Hunt mode:                 hunt suspicious activities
-  -a, --all                show logs with all severities
-  -x, --ext                show logs with all extensions (slow)
-  -s, --sort               show logs sorted by timestamp (slow)
-  -j, --json               show logs as JSON objects
-  -J, --jsonl              show logs as JSON lines
-  -D, --sqlite             save logs to SQLite3 DB
-
-
-Global Flags
-────────────
 File limits:
   -h, --head               limit head of file by ...
   -t, --tail               limit tail of file by ...
@@ -120,42 +102,32 @@ Standard:
 Positional arguments:
   Globbing paths to open or '-' to read from STDIN
 
+Examples: Find occurrences in event logs
+  $ fox -eWinlogon ./**/*.evtx
 
-Algorithms
-──────────
-Cryptographic hashes:
-  MD2, MD4, MD5, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
+Examples: Show the MBR in canonical hex
+  $ fox hex -mc -hc512 disk.bin
 
-Performance hashes:
-  XXH64, XXH3
-
-Similarity hashes:
-  SSDEEP, TLSH
-
-Windows hashes:
-  LM, NT, PE
-
-Checksums:
-  CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
-
-
-Examples
-────────
-Find occurrences in event logs:
-$ fox -eWinlogon ./**/*.evtx
-
-Show the MBR in canonical hex:
-$ fox hex -mc -hc512 disk.bin
-
-Hunt down suspicious events:
-$ fox hunt -sxv ./**/*.dd
+Examples: Hunt down suspicious events
+  $ fox hunt -sxv ./**/*.dd
 
 Please report bugs to <issue@foxhunt.wtf>
 `)
 
-type Fox struct {
-	Help, Version bool
-	cmd.Cli
+type fox struct {
+	// command modes
+	Cat  cat.Cat   `cmd:"" aliases:"c,less" default:"withargs"`
+	Hex  hex.Hex   `cmd:"" aliases:"x"`
+	Info info.Info `cmd:"" aliases:"i,wc"`
+	Text text.Text `cmd:"" aliases:"t,strings"`
+	Hash hash.Hash `cmd:"" aliases:"h"`
+	Hunt hunt.Hunt `cmd:"" aliases:"u"`
+
+	// support flags
+	Version bool
+
+	// global flags
+	cmd.Globals
 }
 
 func main() {
@@ -164,28 +136,26 @@ func main() {
 	log.SetFlags(0)
 	log.SetPrefix("fox: ")
 
-	fox := new(Fox)
-	ctx := kong.Parse(fox,
-		kong.NoDefaultHelp(),
+	cli := new(fox)
+	ctx := kong.Parse(cli,
+		kong.Name("fox"),
 		kong.DefaultEnvars("FOX"),
-		kong.ConfigureHelp(kong.HelpOptions{}),
+		kong.NoDefaultHelp(),
 	)
 
 	switch {
-	case fox.Version:
+	case cli.Version:
 		fmt.Printf("fox %s\n", app.Version)
-	case fox.Help || ctx.Error != nil:
+	case (cli.Help && ctx.Command() == "cat") || ctx.Error != nil:
 		fmt.Printf(long, app.Version)
 	case len(ctx.Args) == 0:
 		fmt.Printf(short, app.Version)
 	default:
-		if fox.Cli.Verbose > 0 {
+		if cli.Verbose > 0 {
 			defer timer(time.Now())
 		}
 
-		if err := ctx.Run(&fox.Cli); err != nil {
-			log.Fatalln(err)
-		}
+		ctx.FatalIfErrorf(ctx.Run(&cli.Globals))
 	}
 }
 

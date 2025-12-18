@@ -6,8 +6,6 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"slices"
-	"strings"
 
 	"github.com/fatih/color"
 
@@ -15,64 +13,11 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/ecs"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/hec"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/raw"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash"
-	"github.com/cuhsat/fox/v4/internal/pkg/hunt"
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"
 )
 
-type Cat struct {
-	Paths []string `arg:"" type:"path" optional:""`
-}
-
-type Hex struct {
-	Mode  string   `short:"m" enum:"c,hd,xxd,raw" default:"raw"`
-	Paths []string `arg:"" type:"path"`
-}
-
-type Info struct {
-	Min   float64  `short:"m" default:"0.0"`
-	Max   float64  `short:"x" default:"1.0"`
-	Paths []string `arg:"" name:"path" type:"path" optional:""`
-}
-
-type Text struct {
-	Min   uint     `short:"m" default:"3"`
-	Max   uint     `short:"x" default:"256"`
-	Wtf   int      `short:"w" type:"counter"`
-	Find  []string `short:"F" sep:","`
-	First bool     `short:"1" and:"first,wtf"`
-	Print bool     `short:"P"`
-	Paths []string `arg:"" type:"path" optional:""`
-}
-
-type Hash struct {
-	Algo  []string `short:"a" sep:"," default:"SHA256"`
-	Find  []string `short:"F" sep:","`
-	Paths []string `arg:"" type:"path" optional:""`
-}
-
-type Hunt struct {
-	All    bool     `short:"a"`
-	Ext    int      `short:"x" type:"counter"`
-	Sort   bool     `short:"s"`
-	Json   bool     `short:"j" xor:"json,jsonl"`
-	Jsonl  bool     `short:"J" xor:"json,jsonl"`
-	Sqlite bool     `short:"D"`
-	Paths  []string `arg:"" type:"path" optional:""`
-}
-
-type Cli struct {
-	// command modes
-	Cat  Cat  `cmd:"" default:"withargs" aliases:"c,less"`
-	Hex  Hex  `cmd:"" aliases:"x"`
-	Info Info `cmd:"" aliases:"i,wc"`
-	Text Text `cmd:"" aliases:"t,strings"`
-	Hash Hash `cmd:"" aliases:"h"`
-	Hunt Hunt `cmd:"" aliases:"u"`
-
+type Globals struct {
 	// file limits
 	Head  bool `short:"h" xor:"head,tail"`
 	Tail  bool `short:"t" xor:"head,tail"`
@@ -110,20 +55,21 @@ type Cli struct {
 	Splunk   bool `short:"S" xor:"logstash,splunk"`
 
 	// standard
+	Help    bool
 	DryRun  bool `short:"d" long:"dry-run"`
 	Verbose int  `short:"v" type:"counter"`
 
-	// internal
-	w  io.WriteCloser   `kong:"-"`
-	re *regexp.Regexp   `kong:"-"`
-	hs *heapset.HeapSet `kong:"-"`
+	// bootstrapped
+	Stdout io.WriteCloser   `kong:"-"`
+	Filter *regexp.Regexp   `kong:"-"`
+	Heaps  *heapset.HeapSet `kong:"-"`
 }
 
-func (cli *Cli) Bootstrap(args []string) *heapset.HeapSet {
+func (cli *Globals) Bootstrap(args []string) *heapset.HeapSet {
 	var sw io.Writer
 
 	if len(cli.Regex) > 0 {
-		cli.re = regexp.MustCompile(cli.Regex)
+		cli.Filter = regexp.MustCompile(cli.Regex)
 	}
 
 	if len(cli.Url) > 0 {
@@ -135,14 +81,6 @@ func (cli *Cli) Bootstrap(args []string) *heapset.HeapSet {
 		default:
 			sw = raw.New(cli.Url)
 		}
-	}
-
-	if cli.Info.Min > cli.Info.Max {
-		log.Fatalln("invalid range")
-	}
-
-	if cli.Text.Min > cli.Text.Max {
-		log.Fatalln("invalid range")
 	}
 
 	if cli.Context > 0 {
@@ -170,40 +108,19 @@ func (cli *Cli) Bootstrap(args []string) *heapset.HeapSet {
 
 	if len(cli.File)+len(cli.Url) > 0 {
 		cli.NoColor = true
-		cli.w = stream.New(cli.File, sw)
+		cli.Stdout = stream.New(cli.File, sw)
 	} else if cli.Quiet {
 		log.SetOutput(io.Discard)
-		cli.w, _ = os.Open(os.DevNull)
+		cli.Stdout, _ = os.Open(os.DevNull)
 	} else {
-		cli.w = os.Stdout
-	}
-
-	if len(cli.Hunt.Paths) == 0 {
-		cli.Hunt.Paths = hunt.Paths
-	}
-
-	if len(cli.Text.Find) > 0 {
-		cli.Text.Wtf = 3
-		cli.Text.First = false
-		for i := range cli.Text.Find {
-			cli.Text.Find[i] = strings.ToLower(cli.Text.Find[i])
-		}
-	}
-
-	if cli.Text.Print {
-		for _, cls := range text.GetClasses(3) {
-			_, _ = fmt.Fprintf(cli.w, "%s\n", cls)
-		}
-
-		// exit early
-		os.Exit(0)
+		cli.Stdout = os.Stdout
 	}
 
 	if cli.NoColor {
 		color.NoColor = true
 	}
 
-	cli.hs = heapset.New(args, &heapset.Options{
+	cli.Heaps = heapset.New(args, &heapset.Options{
 		Limit: &types.Limits{
 			IsHead: cli.Head,
 			IsTail: cli.Tail,
@@ -211,7 +128,7 @@ func (cli *Cli) Bootstrap(args []string) *heapset.HeapSet {
 			Bytes:  cli.Bytes,
 		},
 		Filter: &types.Filters{
-			Regex:  cli.re,
+			Regex:  cli.Filter,
 			Before: cli.Before,
 			After:  cli.After,
 		},
@@ -223,237 +140,22 @@ func (cli *Cli) Bootstrap(args []string) *heapset.HeapSet {
 	})
 
 	if cli.DryRun {
-		for _, h := range cli.hs.Get() {
-			_, _ = fmt.Fprintf(cli.w, "%s\n", h.Name)
+		for _, h := range cli.Heaps.Get() {
+			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", h.Name)
 		}
 
 		// exit early
-		cli.hs.ThrowAway()
+		cli.Heaps.ThrowAway()
 		os.Exit(0)
 	}
 
-	return cli.hs
+	return cli.Heaps
 }
 
-func (cli *Cli) ThrowAway() {
+func (cli *Globals) ThrowAway() {
 	if len(cli.File) > 0 {
-		_ = cli.w.Close()
+		_ = cli.Stdout.Close()
 	}
 
-	cli.hs.ThrowAway()
-}
-
-func (cmd *Cat) Run(cli *Cli) error {
-	hs := cli.Bootstrap(cli.Cat.Paths)
-	defer cli.ThrowAway()
-
-	for _, h := range hs.Get() {
-		if hs.Len() > 1 && !cli.NoFile {
-			_, _ = fmt.Fprintf(cli.w, "%s\n", text.Hide(text.Header(h.String())))
-		}
-
-		for l := range buffer.Text(h, 2).Lines {
-			s := l.Str
-
-			if cli.re != nil && l.Nr != buffer.Sep {
-				s = text.MarkMatch(s, cli.re)
-			}
-
-			if !cli.NoLine && l.Nr == buffer.Sep {
-				_, _ = fmt.Fprintf(cli.w, "%s\n", text.Hide(buffer.Sep))
-			} else if !cli.NoLine {
-				_, _ = fmt.Fprintf(cli.w, "%s %s\n", text.Hide(l.Nr), s)
-			} else {
-				_, _ = fmt.Fprintf(cli.w, "%s\n", s)
-			}
-		}
-	}
-
-	return nil
-}
-
-func (cmd *Hex) Run(cli *Cli) error {
-	hs := cli.Bootstrap(cli.Hex.Paths)
-	defer cli.ThrowAway()
-
-	var tail uint
-
-	if cli.Tail {
-		tail = cli.Bytes
-	}
-
-	for _, h := range hs.Get() {
-		if hs.Len() > 1 && !cli.NoFile {
-			_, _ = fmt.Fprintf(cli.w, "%s\n", text.Hide(text.Header(h.String())))
-		}
-
-		lastHex, wasCut := "", false
-
-		for l := range buffer.Hex(h, tail, cli.Hex.Mode).Lines {
-			// cut similar lines for better readability
-			if l.Hex == lastHex && cli.Hex.Mode != types.Raw {
-				if !wasCut {
-					wasCut = true
-					_, _ = fmt.Fprintln(cli.w, text.Hide("*"))
-				}
-				continue
-			}
-
-			switch cli.Hex.Mode {
-			case types.Canonical:
-				_, _ = fmt.Fprintf(cli.w, "%s  %s%s\n", text.Hide(l.Nr), l.Hex, text.Hide(l.Str))
-			case types.Hexdump:
-				_, _ = fmt.Fprintf(cli.w, "%s %s\n", text.Hide(l.Nr), l.Hex)
-			case types.Xxd:
-				_, _ = fmt.Fprintf(cli.w, "%s %s %-16s\n", text.Hide(l.Nr), l.Hex, text.Hide(l.Str))
-			case types.Raw:
-				_, _ = fmt.Fprintf(cli.w, "%s\n", l.Hex)
-			}
-
-			lastHex, wasCut = l.Hex, false
-		}
-	}
-
-	return nil
-}
-
-func (cmd *Info) Run(cli *Cli) error {
-	hs := cli.Bootstrap(cli.Info.Paths)
-	defer cli.ThrowAway()
-
-	for _, h := range hs.Get() {
-		if e, ok := h.Entropy(
-			cli.Info.Min,
-			cli.Info.Max,
-		); ok {
-			_, _ = fmt.Fprintf(cli.w, "%10dL %10dB  %.10fE  %s\n", h.Len(), len(h.MMap()), e, text.Hide(h.String()))
-		}
-	}
-
-	return nil
-}
-
-func (cmd *Text) Run(cli *Cli) error {
-	hs := cli.Bootstrap(cli.Text.Paths)
-	defer cli.ThrowAway()
-
-	for _, h := range hs.Get() {
-		if hs.Len() > 1 && !cli.NoFile {
-			_, _ = fmt.Fprintf(cli.w, "%s\n", text.Hide(text.Header(h.String())))
-		}
-
-		for s := range h.Strings(
-			cli.Text.Min,
-			cli.Text.Max,
-			cli.Text.Wtf,
-			cli.Text.Find,
-			cli.Text.First,
-		) {
-			if !cli.NoLine && cli.Text.Wtf > 0 {
-				_, _ = fmt.Fprintf(cli.w, "%s  %s  %s\n", text.Hide(s.Off), s.Str, text.Hide(s.Cls))
-			} else if !cli.NoLine {
-				_, _ = fmt.Fprintf(cli.w, "%s  %s\n", text.Hide(s.Off), s.Str)
-			} else {
-				_, _ = fmt.Fprintf(cli.w, "%s\n", s.Str)
-			}
-		}
-	}
-
-	return nil
-}
-
-func (cmd *Hash) Run(cli *Cli) error {
-	hs := cli.Bootstrap(cli.Hash.Paths)
-	defer cli.ThrowAway()
-
-	for _, algo := range cli.Hash.Algo {
-		if !hash.Secure(algo) {
-			log.Printf("used algorithm %s is not cryptically secure!\n", algo)
-		}
-
-		if len(cli.Hash.Algo) > 1 {
-			_, _ = fmt.Fprintf(cli.w, "%s\n", text.Hide(text.Header(strings.ToUpper(algo))))
-		}
-
-		for _, h := range hs.Get() {
-			sum, err := hash.Sum(algo, h.MMap())
-
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-
-			if len(cli.Hash.Find) == 0 || slices.Contains(cli.Hash.Find, sum) {
-				_, _ = fmt.Fprintf(cli.w, "%s  %s\n", sum, text.Hide(h))
-			}
-		}
-	}
-
-	return nil
-}
-
-func (cmd *Hunt) Run(cli *Cli) error {
-	var db *hunt.Database
-	var fn text.Colored
-
-	cli.NoConvert = true // force
-
-	hs := cli.Bootstrap(cli.Hunt.Paths)
-	defer cli.ThrowAway()
-
-	if cli.Verbose > 0 {
-		log.Println("hunt: started")
-	}
-
-	if cli.Hunt.Sqlite {
-		db = hunt.NewDB(types.Database)
-
-		if cli.Verbose > 0 {
-			log.Printf("hunt: using %s\n", db)
-		}
-	}
-
-	cnt := 0
-
-	for e := range hunt.Hunt(hs, &hunt.Options{
-		Sort:       cli.Hunt.Sort,
-		Extensions: cli.Hunt.Ext,
-		Verbose:    cli.Verbose,
-	}) {
-		if cli.Hunt.All || e.Severity >= hunt.Level {
-			switch {
-			case cli.Hunt.All && e.Severity >= hunt.Level:
-				fn = text.Mark // mark event
-			case cli.Hunt.All:
-				fn = text.Hide // hide event
-			default:
-				fn = text.Term // reset terminal
-			}
-
-			switch {
-			case cli.Hunt.Jsonl:
-				_, _ = fmt.Fprintln(cli.w, fn(e.ToJSONL()))
-			case cli.Hunt.Json:
-				_, _ = fmt.Fprintln(cli.w, fn(e.ToJSON()))
-			default:
-				_, _ = fmt.Fprintln(cli.w, fn(e.ToCEF()))
-			}
-
-			if db != nil {
-				db.Write(e)
-			}
-
-			cnt++
-		}
-	}
-
-	if cli.Verbose > 0 {
-		log.Println("hunt: finished")
-	}
-
-	if cli.Verbose > 1 {
-		log.Printf("hunt: found %d events\n", cnt)
-	}
-
-	return nil
+	cli.Heaps.ThrowAway()
 }

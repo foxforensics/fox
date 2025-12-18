@@ -15,7 +15,6 @@ import (
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/windows/pe"
 	"github.com/edsrzf/mmap-go"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -42,6 +41,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/linux/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/windows/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/windows/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
@@ -86,7 +86,7 @@ func New(paths []string, opts *Options) *HeapSet {
 		_, err := os.Stat(path)
 
 		if errors.Is(err, os.ErrNotExist) {
-			log.Printf("%s does not exist\n", path)
+			log.Printf("looked for %s\n", path)
 		}
 
 		hs.loadPath(path, part)
