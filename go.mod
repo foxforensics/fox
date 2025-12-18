@@ -51,6 +51,7 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
+	github.com/korylprince/goxar v0.1.2 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
@@ -59,6 +60,7 @@ require (
 	github.com/saferwall/pe v1.5.7 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
 	github.com/secDre4mer/pkcs7 v0.0.0-20240322103146-665324a4461d // indirect
+	github.com/smallstep/pkcs7 v0.0.0-20231107075624-be1870d87d13 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/exp v0.0.0-20251209150349-8475f28825e9 // indirect

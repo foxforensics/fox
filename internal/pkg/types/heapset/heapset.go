@@ -25,6 +25,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cpio"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/rar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/xar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bzip2"
@@ -277,6 +278,8 @@ func (hs *HeapSet) extract(path, part string, b []byte) bool {
 		fn = szip.Extract
 	case tar.Detect(b):
 		fn = tar.Extract
+	case xar.Detect(b):
+		fn = xar.Extract
 	case zip.Detect(b):
 		fn = zip.Extract
 	default:

@@ -23,7 +23,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 	defer cli.ThrowAway()
 
 	for _, h := range hs.Get() {
-		if hs.Len() > 1 && !cli.NoFile {
+		if (hs.Len() > 1 || cli.Verbose > 0) && !cli.NoFile {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
