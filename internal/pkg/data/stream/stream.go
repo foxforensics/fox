@@ -1,72 +1,57 @@
 package stream
 
 import (
-	"crypto/sha256"
+	"errors"
 	"fmt"
-	"io"
-	"log"
-	"os"
+	"net/http"
+	"strings"
+
+	"github.com/cuhsat/fox/v4/internal"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
+type Streamable interface {
+	Write(*event.Event) error
+}
+
 type Stream struct {
-	path string
-
-	f  *os.File
-	ws []io.Writer
+	Tx  int64             `json:"-"`
+	Rx  int64             `json:"-"`
+	Url string            `json:"-"`
+	Map map[string]string `json:"-"`
 }
 
-func New(path string, w io.Writer) *Stream {
-	st := Stream{path: path}
-
-	if len(path) > 0 {
-		var err error
-
-		st.f, err = os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
-
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		st.ws = append(st.ws, st.f)
-	}
-
-	if w != nil {
-		st.ws = append(st.ws, w)
-	}
-
-	return &st
-}
-
-func (st *Stream) Write(p []byte) (n int, err error) {
-	for _, w := range st.ws {
-		_, err := w.Write(p)
-		if err != nil {
-			return 0, err
-		}
-	}
-
-	return len(p), nil
-}
-
-func (st *Stream) Close() error {
-	_, err := st.f.Seek(0, io.SeekStart)
+func (st *Stream) Post(body string) error {
+	req, err := http.NewRequest("POST", st.Url, strings.NewReader(body))
 
 	if err != nil {
 		return err
 	}
 
-	buf, err := io.ReadAll(st.f)
+	req.Header.Add("user-agent", fmt.Sprintf("fox %s", app.Version))
+
+	for k, v := range st.Map {
+		req.Header.Set(k, v)
+	}
+
+	res, err := new(http.Client).Do(req)
 
 	if err != nil {
 		return err
 	}
 
-	sum := fmt.Sprintf("%x", sha256.Sum256(buf))
-	err = os.WriteFile(st.path+".sha256", []byte(sum), 0600)
+	st.Tx += req.ContentLength
+	st.Rx += res.ContentLength
+
+	if res.StatusCode != http.StatusOK {
+		return errors.New(http.StatusText(res.StatusCode))
+	}
+
+	err = res.Body.Close()
 
 	if err != nil {
 		return err
 	}
 
-	return st.f.Close()
+	return nil
 }

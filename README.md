@@ -11,7 +11,7 @@ go install github.com/cuhsat/fox/v4@latest
 ```
 
 ## Features
-* Read-only filesystem access
+* Guaranteed read-only access
 * [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * Dumping of [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
@@ -23,11 +23,11 @@ go install github.com/cuhsat/fox/v4@latest
   * Built-in translation list of over 1500 Event IDs
   * Built-in warning of critical system events
   * Save as `JSON`, `JSON Lines` or `SQLite3`
+  * Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
 * Supports
   * Over 290 string classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
   * Many popular archive and compression formats
   * Many popular cryptographic, fuzzy and fast hashes 
-  * Data streaming in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
 
 ## Usage
 Type `fox --help` for more help:

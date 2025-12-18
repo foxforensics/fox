@@ -4,17 +4,19 @@ package ecs
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 	"time"
 
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
 const version = "9.1.0"
 
 type Ecs struct {
-	stream.Schema
+	stream.Stream
 
 	Timestamp time.Time `json:"@timestamp"`
 	Message   string    `json:"message"`
@@ -30,7 +32,7 @@ type Ecs struct {
 }
 
 func New(url string) Ecs {
-	ecs := Ecs{Schema: stream.Schema{Url: url, Map: map[string]string{
+	ecs := Ecs{Stream: stream.Stream{Url: url, Map: map[string]string{
 		"Content-Type": "application/json",
 	}}}
 
@@ -41,14 +43,18 @@ func New(url string) Ecs {
 	return ecs
 }
 
-func (ecs Ecs) Write(p []byte) (int, error) {
+func (ecs Ecs) String() string {
+	return fmt.Sprintf("ECS: %s", ecs.Url)
+}
+
+func (ecs Ecs) Write(e *event.Event) error {
 	ecs.Timestamp = time.Now().UTC()
-	ecs.Message = strings.TrimRight(string(p), "\n")
+	ecs.Message = strings.TrimRight(e.ToCEF(), "\n")
 
 	buf, err := json.Marshal(ecs)
 
 	if err != nil {
-		return 0, nil
+		return nil
 	}
 
 	return ecs.Post(string(buf))

@@ -9,12 +9,9 @@ import (
 
 	"github.com/fatih/color"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/ecs"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/hec"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/raw"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/writer"
 )
 
 type Globals struct {
@@ -28,18 +25,14 @@ type Globals struct {
 	Input string `short:"i"`
 	Pass  string `short:"p"`
 
+	// file writer
+	File string `short:"f"`
+
 	// line filter
 	Regex   string `short:"e"`
 	Context uint   `short:"C"`
 	Before  uint   `short:"B"`
 	After   uint   `short:"A"`
-
-	// data stream
-	File string `short:"f"`
-	Url  string `short:"u"`
-	Auth string `short:"T"`
-	Ecs  bool   `short:"E" xor:"ecs,hec"`
-	Hec  bool   `short:"H" xor:"ecs,hec" and:"hec,auth"`
 
 	// disable
 	Raw       bool `short:"r"`
@@ -49,10 +42,6 @@ type Globals struct {
 	NoColor   bool `long:"no-color"`
 	NoDeflate bool `long:"no-deflate"`
 	NoConvert bool `long:"no-convert"`
-
-	// aliases
-	Logstash bool `short:"L" xor:"logstash,splunk"`
-	Splunk   bool `short:"S" xor:"logstash,splunk"`
 
 	// standard
 	Help    bool
@@ -66,21 +55,8 @@ type Globals struct {
 }
 
 func (cli *Globals) Bootstrap(args []string) *heapset.HeapSet {
-	var sw io.Writer
-
 	if len(cli.Regex) > 0 {
 		cli.Filter = regexp.MustCompile(cli.Regex)
-	}
-
-	if len(cli.Url) > 0 {
-		switch {
-		case cli.Hec:
-			sw = hec.New(cli.Url, cli.Auth)
-		case cli.Ecs:
-			sw = ecs.New(cli.Url)
-		default:
-			sw = raw.New(cli.Url)
-		}
 	}
 
 	if cli.Context > 0 {
@@ -96,19 +72,9 @@ func (cli *Globals) Bootstrap(args []string) *heapset.HeapSet {
 		cli.NoDeflate = true
 	}
 
-	if cli.Logstash {
-		cli.Url = types.Logstash
-		cli.Ecs = true
-	}
-
-	if cli.Splunk {
-		cli.Url = types.Splunk
-		cli.Hec = true
-	}
-
-	if len(cli.File)+len(cli.Url) > 0 {
+	if len(cli.File) > 0 {
 		cli.NoColor = true
-		cli.Stdout = stream.New(cli.File, sw)
+		cli.Stdout = writer.New(cli.File)
 	} else if cli.Quiet {
 		log.SetOutput(io.Discard)
 		cli.Stdout, _ = os.Open(os.DevNull)
@@ -117,7 +83,7 @@ func (cli *Globals) Bootstrap(args []string) *heapset.HeapSet {
 	}
 
 	if cli.NoColor {
-		color.NoColor = true
+		color.NoColor = true // turn off color package
 	}
 
 	cli.Heaps = heapset.New(args, &heapset.Options{

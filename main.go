@@ -67,18 +67,14 @@ File loader:
   -i, --input=STRING       use input in place of file content
   -p, --pass=PASSWORD      use password for decryption (only 7Z, RAR, ZIP)
 
+File writer:
+  -f, --file=FILE          write output to file name (with SHA256)
+
 Line filter:
   -e, --regexp=PATTERN     filter for lines that match pattern
   -C, --context=NUMBER     number of lines surrounding context of match
   -B, --before=NUMBER      number of lines leading context before match
   -A, --after=NUMBER       number of lines trailing context after match
-
-Data stream:
-  -f, --file=FILE          stream data to file name
-  -u, --url=SERVER         stream data to server address
-  -T, --auth=TOKEN         stream data using auth token
-  -E, --ecs                use ECS schema for streaming
-  -H, --hec                use HEC schema for streaming
 
 Disable:
   -r, --raw                don't process files at all
@@ -88,10 +84,6 @@ Disable:
       --no-color           don't colorize the output
       --no-deflate         don't deflate automatically
       --no-convert         don't convert automatically
-
-Aliases:
-  -L, --logstash           alias for -E -uhttp://localhost:8080
-  -S, --splunk             alias for -H -uhttp://localhost:8088/...
 
 Standard:
   -d, --dry-run            prints only the found filenames

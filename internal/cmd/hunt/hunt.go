@@ -9,6 +9,10 @@ import (
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/ecs"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/hec"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/raw"
 	"github.com/cuhsat/fox/v4/internal/pkg/hunt"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
@@ -26,21 +30,53 @@ Flags:
   -j, --json               show logs as JSON objects
   -J, --jsonl              show logs as JSON lines
   -D, --sqlite             save logs to SQLite3 DB
+
+Streams:
+  -u, --url=SERVER         stream events to server address
+  -T, --auth=TOKEN         stream events using auth token
+  -E, --ecs                use ECS schema for streaming
+  -H, --hec                use HEC schema for streaming
+
+Aliases:
+  -L, --logstash           alias for -E -uhttp://localhost:8080
+  -S, --splunk             alias for -H -uhttp://localhost:8088/...
 `)
 
 type Hunt struct {
-	All    bool     `short:"a"`
-	Ext    int      `short:"x" type:"counter"`
-	Sort   bool     `short:"s"`
-	Json   bool     `short:"j" xor:"json,jsonl"`
-	Jsonl  bool     `short:"J" xor:"json,jsonl"`
-	Sqlite bool     `short:"D"`
-	Paths  []string `arg:"" type:"path" optional:""`
+	All    bool `short:"a"`
+	Ext    int  `short:"x" type:"counter"`
+	Sort   bool `short:"s"`
+	Json   bool `short:"j" xor:"json,jsonl"`
+	Jsonl  bool `short:"J" xor:"json,jsonl"`
+	Sqlite bool `short:"D"`
+
+	// streams
+	Url  string `short:"u"`
+	Auth string `short:"T"`
+	Ecs  bool   `short:"E" xor:"ecs,hec"`
+	Hec  bool   `short:"H" xor:"ecs,hec" and:"hec,auth"`
+
+	// aliases
+	Logstash bool `short:"L" xor:"logstash,splunk"`
+	Splunk   bool `short:"S" xor:"logstash,splunk"`
+
+	// paths
+	Paths []string `arg:"" type:"path" optional:""`
 }
 
 func (cmd *Hunt) BeforeApply(_ *kong.Kong, _ kong.Vars) error {
 	if len(cmd.Paths) == 0 {
 		cmd.Paths = hunt.Paths
+	}
+
+	if cmd.Logstash {
+		cmd.Url = types.Logstash
+		cmd.Ecs = true
+	}
+
+	if cmd.Splunk {
+		cmd.Url = types.Splunk
+		cmd.Hec = true
 	}
 
 	return nil
@@ -51,6 +87,8 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		fmt.Print(Usage)
 		return nil
 	}
+
+	var schema stream.Streamable
 
 	var db *hunt.Database
 	var fn text.Colored
@@ -68,7 +106,22 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		db = hunt.NewDB(types.Database)
 
 		if cli.Verbose > 0 {
-			log.Printf("hunt: using %s\n", db)
+			log.Printf("hunt: using database %s\n", db)
+		}
+	}
+
+	if len(cmd.Url) > 0 {
+		switch {
+		case cmd.Hec:
+			schema = hec.New(cmd.Url, cmd.Auth)
+		case cmd.Ecs:
+			schema = ecs.New(cmd.Url)
+		default:
+			schema = raw.New(cmd.Url)
+		}
+
+		if cli.Verbose > 0 {
+			log.Printf("hunt: using schema %s\n", schema)
 		}
 	}
 
@@ -100,6 +153,10 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 			if db != nil {
 				db.Write(e)
+			}
+
+			if len(cmd.Url) > 0 {
+				_ = schema.Write(e)
 			}
 
 			cnt++

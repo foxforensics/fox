@@ -16,7 +16,6 @@
   * https://github.com/goccy/go-yaml
 
 ## 4. Optimizations
-* Add event stream instead of data stream in hunt mode
 * Add host, user, time to -f *.coc
 * Add more event ids
   * https://github.com/Velocidex/evtx-data
