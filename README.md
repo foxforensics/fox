@@ -69,10 +69,10 @@ $ fox hunt -sxv ./**/*.dd
 ## Supports
 
 File formats:
-> evtx, journal, json, jsonl, PE/COFF
+> evtx, journal, JSON, JSONL, PE/COFF
 
 Archive formats:
-> 7zip, ar, CAB, cpio, RAR, tar, xar, ZIP
+> 7zip, ar, CAB, cpio, RAR, RPM, tar, xar, ZIP
 
 Compression formats:
 > Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
