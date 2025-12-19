@@ -28,7 +28,7 @@ Flags:
   -s, --sort               show logs sorted by timestamp (slow)
   -j, --json               show logs as JSON objects
   -J, --jsonl              show logs as JSON lines
-  -D, --sqlite             save logs to SQLite3 DB
+  -D, --sqlite             save logs to SQLite3 DB (very slow)
 
 Stream:
   -u, --url=SERVER         stream events to server address
@@ -79,6 +79,10 @@ func (cmd *Hunt) BeforeApply(_ *kong.Kong, _ kong.Vars) error {
 		cmd.Paths = hunt.Paths
 	}
 
+	return nil
+}
+
+func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if cmd.Logstash {
 		cmd.Url = types.Logstash
 		cmd.Ecs = true
@@ -103,9 +107,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	var schema stream.Streamable
-	var streamed = len(cmd.Url) > 0
-
+	var sa stream.Streamable
 	var db *hunt.Database
 	var fn text.Colored
 	var tx int64
@@ -129,18 +131,18 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 	}
 
-	if streamed {
+	if len(cmd.Url) > 0 {
 		switch {
 		case cmd.Hec:
-			schema = hec.New(cmd.Url, cmd.Auth)
+			sa = hec.New(cmd.Url, cmd.Auth)
 		case cmd.Ecs:
-			schema = ecs.New(cmd.Url)
+			sa = ecs.New(cmd.Url)
 		default:
-			schema = raw.New(cmd.Url)
+			sa = raw.New(cmd.Url)
 		}
 
 		if cli.Verbose > 0 {
-			log.Printf("hunt: using schema %s\n", schema)
+			log.Printf("hunt: using schema %s\n", sa)
 		}
 	}
 
@@ -180,16 +182,16 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 			_, _ = fmt.Fprintln(cli.Stdout, s)
 
-			// TODO: concurrent
+			// hook for database
 			if db != nil {
-				db.Write(e)
+				db.Persist(e)
 			}
 
-			// TODO: concurrent
-			if streamed {
-				tw, rw, _ := schema.Write(e)
-				tx += tw
-				rx += rw
+			// hook for stream
+			if sa != nil {
+				td, rd, _ := sa.Write(e)
+				tx += td
+				rx += rd
 			}
 
 			cnt++
@@ -204,7 +206,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		log.Printf("hunt: found %d events\n", cnt)
 	}
 
-	if cli.Verbose > 2 && streamed {
+	if cli.Verbose > 2 && tx+rx > 0 {
 		log.Println("hunt: stream tx:", text.Humanize(tx))
 		log.Println("hunt: stream rx:", text.Humanize(rx))
 	}

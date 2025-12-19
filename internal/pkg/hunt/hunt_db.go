@@ -6,7 +6,6 @@ import (
 	"log"
 	"maps"
 	"os"
-	"sync"
 
 	_ "modernc.org/sqlite"
 
@@ -54,7 +53,6 @@ INSERT OR IGNORE INTO Extensions (
 `
 
 type Database struct {
-	sync.Mutex
 	path string
 	sql  *sql.DB
 }
@@ -86,10 +84,7 @@ func (db *Database) String() string {
 	return db.path
 }
 
-func (db *Database) Write(evt *event.Event) {
-	db.Lock()
-	defer db.Unlock()
-
+func (db *Database) Persist(evt *event.Event) {
 	res, err := db.sql.Exec(events,
 		evt.Time.UTC(),
 		evt.Host,
@@ -104,14 +99,14 @@ func (db *Database) Write(evt *event.Event) {
 		return
 	}
 
-	id, err := res.LastInsertId()
-
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
 	if len(evt.Extension) > 0 {
+		id, err := res.LastInsertId()
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
 		for k, v := range maps.All(evt.Extension) {
 			_, err := db.sql.Exec(extensions, id, k, v)
 
