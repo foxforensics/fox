@@ -1,15 +1,13 @@
-package journal
+package pe
 
 import (
-	"bufio"
-	"bytes"
 	"encoding/json"
 	"testing"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "parser/log.journal"
+const file = "binary/fox.exe"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
@@ -44,15 +42,7 @@ func TestFormat(t *testing.T) {
 		t.Error(err)
 	}
 
-	jsonl := bufio.NewScanner(bytes.NewReader(buf))
-
-	for jsonl.Scan() {
-		if !json.Valid([]byte(jsonl.Text())) {
-			t.Fatal("invalid json")
-		}
-	}
-
-	if err := jsonl.Err(); err != nil {
-		t.Error(err)
+	if !json.Valid(buf) {
+		t.Fatal("invalid json")
 	}
 }

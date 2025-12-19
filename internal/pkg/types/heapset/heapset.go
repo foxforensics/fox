@@ -241,7 +241,7 @@ func (hs *HeapSet) process(path, part string, b []byte, data bool) {
 	}
 
 	if !hs.opts.NoConvert {
-		if b, ok = hs.convert(b); ok {
+		if b, ok = hs.format(b); ok {
 			data = true
 		}
 	}
@@ -361,16 +361,16 @@ func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
 	return r, true
 }
 
-func (hs *HeapSet) convert(b []byte) ([]byte, bool) {
-	var fn data.Convert
+func (hs *HeapSet) format(b []byte) ([]byte, bool) {
+	var fn data.Format
 
 	switch {
 	case evtx.Detect(b):
-		fn = evtx.Convert
+		fn = evtx.Format
 	case journal.Detect(b):
-		fn = journal.Convert
+		fn = journal.Format
 	case pe.Detect(b):
-		fn = pe.Convert
+		fn = pe.Format
 	default:
 		return b, false
 	}

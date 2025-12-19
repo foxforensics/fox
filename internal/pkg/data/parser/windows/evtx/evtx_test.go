@@ -1,6 +1,8 @@
 package evtx
 
 import (
+	"bufio"
+	"bytes"
 	"encoding/json"
 	"testing"
 
@@ -19,13 +21,13 @@ func BenchmarkDetect(b *testing.B) {
 	}
 }
 
-func BenchmarkConvert(b *testing.B) {
+func BenchmarkFormat(b *testing.B) {
 	buf := data.Fixture(file)
 
 	b.ResetTimer()
 
 	for b.Loop() {
-		_, _ = Convert(buf)
+		_, _ = Format(buf)
 	}
 }
 
@@ -35,14 +37,22 @@ func TestDetect(t *testing.T) {
 	}
 }
 
-func TestConvert(t *testing.T) {
-	buf, err := Convert(data.Fixture(file))
+func TestFormat(t *testing.T) {
+	buf, err := Format(data.Fixture(file))
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if json.Valid(buf) {
-		t.Fatal("invalid json")
+	jsonl := bufio.NewScanner(bytes.NewReader(buf))
+
+	for jsonl.Scan() {
+		if !json.Valid([]byte(jsonl.Text())) {
+			t.Fatal("invalid json")
+		}
+	}
+
+	if err := jsonl.Err(); err != nil {
+		t.Error(err)
 	}
 }

@@ -25,9 +25,6 @@ go.work.sum
 # IDEs
 .idea/
 
-# PE executables
-*.exe
-
 # COC receipts
 *.cc
 

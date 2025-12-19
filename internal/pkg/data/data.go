@@ -10,7 +10,7 @@ type Entry struct {
 	Data []byte // Entry data
 }
 
-type Convert func([]byte) ([]byte, error)
+type Format func([]byte) ([]byte, error)
 
 type Deflate func([]byte) ([]byte, error)
 

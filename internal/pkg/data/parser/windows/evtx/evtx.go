@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/0xrawsec/golang-evtx/evtx"
+
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
@@ -26,7 +27,7 @@ func Detect(b []byte) bool {
 	return data.HasMagic(b, 0, []byte(Magic))
 }
 
-func Convert(b []byte) ([]byte, error) {
+func Format(b []byte) ([]byte, error) {
 	r, err := evtx.New(bytes.NewReader(b))
 
 	if err != nil {
