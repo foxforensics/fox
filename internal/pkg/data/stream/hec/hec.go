@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
@@ -20,7 +19,7 @@ type Hec struct {
 	stream.Stream
 
 	Time       int64          `json:"time"`
-	Host       string         `json:"host"`
+	Host       string         `json:"host,omitempty"`
 	Source     string         `json:"source"`
 	Sourcetype string         `json:"sourcetype"`
 	Index      string         `json:"index"`
@@ -37,7 +36,7 @@ func New(url, token string) Hec {
 	return Hec{
 		Index:      Index,
 		Sourcetype: Type,
-		Source:     fmt.Sprintf("fox %s", app.Version),
+		Source:     fmt.Sprintf("fox %s", app.Version[1:]),
 		Stream: stream.Stream{Url: url, Map: map[string]string{
 			"Content-Type":  "application/json",
 			"Authorization": fmt.Sprintf("Splunk %s", strings.ToLower(token)),
@@ -50,7 +49,7 @@ func (hec Hec) String() string {
 }
 
 func (hec Hec) Write(e *event.Event) (int64, int64, error) {
-	hec.Time = time.Now().UTC().UnixMilli()
+	hec.Time = e.Time.UTC().UnixMilli()
 	hec.Host = e.Host
 	hec.Event = Event{
 		e.Message,

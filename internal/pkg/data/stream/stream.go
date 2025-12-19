@@ -11,8 +11,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
-var agent = fmt.Sprintf("fox %s", app.Version)
-var client = new(http.Client)
+var userAgent = fmt.Sprintf("fox %s", app.Version)
+var httpClient = new(http.Client)
 
 type Streamable interface {
 	Write(*event.Event) (int64, int64, error)
@@ -23,20 +23,20 @@ type Stream struct {
 	Map map[string]string `json:"-"`
 }
 
-func (st *Stream) Post(body string) (int64, int64, error) {
-	req, err := http.NewRequest("POST", st.Url, strings.NewReader(body))
+func (stm *Stream) Post(body string) (int64, int64, error) {
+	req, err := http.NewRequest("POST", stm.Url, strings.NewReader(body))
 
 	if err != nil {
 		return 0, 0, err
 	}
 
-	req.Header.Add("user-agent", agent)
+	req.Header.Add("user-agent", userAgent)
 
-	for k, v := range st.Map {
+	for k, v := range stm.Map {
 		req.Header.Set(k, v)
 	}
 
-	res, err := client.Do(req)
+	res, err := httpClient.Do(req)
 
 	if err != nil {
 		return 0, 0, err

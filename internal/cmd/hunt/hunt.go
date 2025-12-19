@@ -80,11 +80,13 @@ func (cmd *Hunt) BeforeApply(_ *kong.Kong, _ kong.Vars) error {
 	if cmd.Logstash {
 		cmd.Url = types.Logstash
 		cmd.Ecs = true
+		cmd.Ext = 3
 	}
 
 	if cmd.Splunk {
 		cmd.Url = types.Splunk
 		cmd.Hec = true
+		cmd.Ext = 3
 	}
 
 	return nil

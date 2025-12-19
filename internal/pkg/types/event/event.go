@@ -28,6 +28,16 @@ func (evt *Event) String() string {
 	return evt.ToCEF()
 }
 
+func (evt *Event) Value(keys ...string) string {
+	for _, key := range keys {
+		if val, ok := evt.Extension[key]; ok {
+			return fmt.Sprintf("%v", val)
+		}
+	}
+
+	return ""
+}
+
 func (evt *Event) ToCEF() string {
 	var sb strings.Builder
 

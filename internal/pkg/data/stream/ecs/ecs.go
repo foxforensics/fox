@@ -5,12 +5,13 @@ package ecs
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"github.com/zeebo/xxh3"
 )
 
 const version = "9.1.0"
@@ -18,30 +19,40 @@ const version = "9.1.0"
 type Ecs struct {
 	stream.Stream
 
-	Timestamp time.Time `json:"@timestamp"`
-	Message   string    `json:"message"`
+	Ecs struct {
+		Version string `json:"version"`
+	} `json:"ecs"`
 
 	Agent struct {
 		Type    string `json:"type"`
 		Version string `json:"version"`
 	} `json:"agent"`
 
-	Ecs struct {
-		Version string `json:"version"`
-	} `json:"ecs"`
-}
+	Host struct {
+		Hostname string `json:"hostname,omitempty"`
+	} `json:"host,omitempty"`
 
-type Evt struct {
-	Kind     string    `json:"kind,omitempty"`
-	Module   string    `json:"module,omitempty"`
-	Dataset  string    `json:"dataset,omitempty"`
-	Severity int64     `json:"severity,omitempty"`
-	ID       string    `json:"id,omitempty"`
-	Code     string    `json:"code,omitempty"`
-	Provider string    `json:"provider,omitempty"`
-	Ingested time.Time `json:"ingested,omitempty"`
-	Original string    `json:"original,omitempty"`
-	Hash     string    `json:"hash,omitempty"`
+	User struct {
+		ID string `json:"id,omitempty"`
+	} `json:"user,omitempty"`
+
+	Event struct {
+		Kind     string    `json:"kind,omitempty"`
+		Module   string    `json:"module,omitempty"`
+		Dataset  string    `json:"dataset,omitempty"`
+		Severity int64     `json:"severity,omitempty"`
+		ID       string    `json:"id,omitempty"`
+		Code     string    `json:"code,omitempty"`
+		Provider string    `json:"provider,omitempty"`
+		Ingested time.Time `json:"ingested,omitempty"`
+		Original string    `json:"original,omitempty"`
+		Hash     string    `json:"hash,omitempty"`
+	} `json:"event"`
+
+	Labels map[string]any `json:"labels,omitempty"`
+
+	Timestamp time.Time `json:"@timestamp"`
+	Message   string    `json:"message"`
 }
 
 func New(url string) Ecs {
@@ -52,6 +63,7 @@ func New(url string) Ecs {
 	ecs.Ecs.Version = version
 	ecs.Agent.Type = "fox"
 	ecs.Agent.Version = app.Version[1:]
+	ecs.Event.Kind = "event"
 
 	return ecs
 }
@@ -61,8 +73,43 @@ func (ecs Ecs) String() string {
 }
 
 func (ecs Ecs) Write(e *event.Event) (int64, int64, error) {
-	ecs.Timestamp = time.Now().UTC()
-	ecs.Message = strings.TrimRight(e.ToCEF(), "\n")
+	cef := e.ToCEF()
+
+	ecs.Timestamp = e.Time.UTC()
+	ecs.Message = e.Message
+
+	ecs.Host.Hostname = e.Host
+	ecs.User.ID = e.User
+
+	switch e.Source {
+
+	// windows specific
+	case types.Eventlog:
+		ecs.Event.Module = "eventlog"
+		ecs.Event.Dataset = "EventLog." + e.Value("System_Channel")
+		ecs.Event.ID = e.Value("System_EventRecordID")
+		ecs.Event.Code = e.Value("System_EventID", "System_EventID_Value")
+		ecs.Event.Provider = e.Value("System_Provider_Name")
+
+	// linux specific
+	case types.Journal:
+		ecs.Event.Module = "journal"
+		ecs.Event.Dataset = e.Value("_COMM")
+		ecs.Event.ID = e.Value("Seq")
+		ecs.Event.Provider = e.Value("_TRANSPORT")
+	}
+
+	// original event
+	ecs.Event.Severity = int64(e.Severity)
+	ecs.Event.Ingested = time.Now().UTC()
+	ecs.Event.Original = cef
+	ecs.Event.Hash = fmt.Sprintf("%x", xxh3.HashString(cef))
+
+	ecs.Labels = make(map[string]any)
+
+	for k, v := range e.Extension {
+		ecs.Labels[k] = v
+	}
 
 	buf, err := json.Marshal(ecs)
 
