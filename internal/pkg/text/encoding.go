@@ -67,3 +67,20 @@ func Sanitize(s string) string {
 
 	return sb.String()
 }
+
+func Humanize(i int64) string {
+	const m = int64(1024) // IEC prefix
+
+	if i < m {
+		return fmt.Sprintf("%db", i)
+	}
+
+	d, e := m, 0
+
+	for n := i / m; n >= m; n /= m {
+		d *= m
+		e++
+	}
+
+	return fmt.Sprintf("%.1f%c", float64(i)/float64(d), "kmgtpezyrq"[e])
+}

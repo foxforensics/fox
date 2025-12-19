@@ -3,7 +3,6 @@ package heapset
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -44,6 +43,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/linux/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/windows/evtx"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/windows/pe"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
@@ -131,7 +131,7 @@ func (hs *HeapSet) ThrowAway() {
 	hs.Unlock()
 
 	if hs.opts.Verbose > 0 {
-		log.Printf("size %s\n", human(n))
+		log.Printf("size %s\n", text.Humanize(n))
 	}
 }
 
@@ -458,23 +458,6 @@ func isPiped(f *os.File) bool {
 	}
 
 	return (fi.Mode() & os.ModeCharDevice) != os.ModeCharDevice
-}
-
-func human(i int64) string {
-	const m = int64(1024) // IEC prefix
-
-	if i < m {
-		return fmt.Sprintf("%db", i)
-	}
-
-	d, e := m, 0
-
-	for n := i / m; n >= m; n /= m {
-		d *= m
-		e++
-	}
-
-	return fmt.Sprintf("%.1f%c", float64(i)/float64(d), "kmgtpezyrq"[e])
 }
 
 func debug(v any) string {

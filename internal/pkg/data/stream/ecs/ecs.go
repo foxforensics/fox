@@ -31,6 +31,19 @@ type Ecs struct {
 	} `json:"ecs"`
 }
 
+type Evt struct {
+	Kind     string    `json:"kind,omitempty"`
+	Module   string    `json:"module,omitempty"`
+	Dataset  string    `json:"dataset,omitempty"`
+	Severity int64     `json:"severity,omitempty"`
+	ID       string    `json:"id,omitempty"`
+	Code     string    `json:"code,omitempty"`
+	Provider string    `json:"provider,omitempty"`
+	Ingested time.Time `json:"ingested,omitempty"`
+	Original string    `json:"original,omitempty"`
+	Hash     string    `json:"hash,omitempty"`
+}
+
 func New(url string) Ecs {
 	ecs := Ecs{Stream: stream.Stream{Url: url, Map: map[string]string{
 		"Content-Type": "application/json",
@@ -47,14 +60,14 @@ func (ecs Ecs) String() string {
 	return fmt.Sprintf("ECS: %s", ecs.Url)
 }
 
-func (ecs Ecs) Write(e *event.Event) error {
+func (ecs Ecs) Write(e *event.Event) (int64, int64, error) {
 	ecs.Timestamp = time.Now().UTC()
 	ecs.Message = strings.TrimRight(e.ToCEF(), "\n")
 
 	buf, err := json.Marshal(ecs)
 
 	if err != nil {
-		return nil
+		return 0, 0, nil
 	}
 
 	return ecs.Post(string(buf))

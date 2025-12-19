@@ -54,7 +54,7 @@ type Hunt struct {
 	Url  string `short:"u"`
 	Auth string `short:"T"`
 	Ecs  bool   `short:"E" xor:"ecs,hec"`
-	Hec  bool   `short:"H" xor:"ecs,hec" and:"hec,auth"`
+	Hec  bool   `short:"H" xor:"ecs,hec" and:"hec"`
 
 	// aliases
 	Logstash bool `short:"L" xor:"logstash,splunk"`
@@ -62,6 +62,14 @@ type Hunt struct {
 
 	// paths
 	Paths []string `arg:"" type:"path" optional:""`
+}
+
+func (cmd *Hunt) Validate() error {
+	if cmd.Hec && len(cmd.Auth) == 0 {
+		log.Fatal("auth required")
+	}
+
+	return nil
 }
 
 func (cmd *Hunt) BeforeApply(_ *kong.Kong, _ kong.Vars) error {
@@ -89,9 +97,12 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	var schema stream.Streamable
+	var streamed = len(cmd.Url) > 0
 
 	var db *hunt.Database
 	var fn text.Colored
+	var tx int64
+	var rx int64
 
 	cli.NoConvert = true // force
 
@@ -110,7 +121,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 	}
 
-	if len(cmd.Url) > 0 {
+	if streamed {
 		switch {
 		case cmd.Hec:
 			schema = hec.New(cmd.Url, cmd.Auth)
@@ -157,8 +168,10 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			}
 
 			// TODO: concurrent
-			if len(cmd.Url) > 0 {
-				_ = schema.Write(e)
+			if streamed {
+				tw, rw, _ := schema.Write(e)
+				tx += tw
+				rx += rw
 			}
 
 			cnt++
@@ -171,6 +184,11 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	if cli.Verbose > 1 {
 		log.Printf("hunt: found %d events\n", cnt)
+	}
+
+	if cli.Verbose > 2 && streamed {
+		log.Println("hunt: stream tx:", text.Humanize(tx))
+		log.Println("hunt: stream rx:", text.Humanize(rx))
 	}
 
 	return nil

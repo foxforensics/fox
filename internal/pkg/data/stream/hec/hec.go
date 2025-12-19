@@ -25,10 +25,12 @@ type Hec struct {
 	Sourcetype string         `json:"sourcetype"`
 	Index      string         `json:"index"`
 	Fields     map[string]any `json:"fields,omitempty"`
-	Event      struct {
-		Message  string `json:"message"`
-		Severity string `json:"severity"`
-	} `json:"event"`
+	Event      Event          `json:"event"`
+}
+
+type Event struct {
+	Message  string `json:"message"`
+	Severity string `json:"severity"`
 }
 
 func New(url, token string) Hec {
@@ -47,11 +49,15 @@ func (hec Hec) String() string {
 	return fmt.Sprintf("HEC: %s", hec.Url)
 }
 
-func (hec Hec) Write(e *event.Event) error {
+func (hec Hec) Write(e *event.Event) (int64, int64, error) {
 	hec.Time = time.Now().UTC().UnixMilli()
 	hec.Host = e.Host
-	hec.Event.Message = e.Message
-	hec.Event.Severity = cefName(e.Severity)
+	hec.Event = Event{
+		e.Message,
+		cefName(e.Severity),
+	}
+
+	hec.Fields = make(map[string]any)
 
 	for k, v := range e.Extension {
 		hec.Fields[k] = v
@@ -60,7 +66,7 @@ func (hec Hec) Write(e *event.Event) error {
 	buf, err := json.Marshal(hec)
 
 	if err != nil {
-		return nil
+		return 0, 0, nil
 	}
 
 	return hec.Post(string(buf))

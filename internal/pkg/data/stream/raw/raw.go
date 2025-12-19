@@ -21,6 +21,6 @@ func (raw Raw) String() string {
 	return fmt.Sprintf("raw: %s", raw.Url)
 }
 
-func (raw Raw) Write(e *event.Event) error {
+func (raw Raw) Write(e *event.Event) (int64, int64, error) {
 	return raw.Post(e.ToCEF())
 }
