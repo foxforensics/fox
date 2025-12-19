@@ -21,3 +21,9 @@ var reset = color.New(color.Reset)
 func MarkMatch(s string, re *regexp.Regexp) string {
 	return marker.Mark(s, marker.MatchRegexp(re), match)
 }
+
+func MarkMatchFunc(re *regexp.Regexp) Colored {
+	return func(a ...any) string {
+		return MarkMatch(a[0].(string), re)
+	}
+}

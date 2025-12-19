@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
@@ -108,6 +107,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	var fn text.Colored
 	var tx int64
 	var rx int64
+	var s string
 
 	cli.NoConvert = true // force
 
@@ -149,7 +149,10 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		Verbose:    cli.Verbose,
 	}) {
 		if cmd.All || e.Severity >= hunt.Level {
+			// apply color
 			switch {
+			case cli.Filter != nil:
+				fn = text.MarkMatchFunc(cli.Filter)
 			case cmd.All && e.Severity >= hunt.Level:
 				fn = text.Mark // mark event
 			case cmd.All:
@@ -158,14 +161,21 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 				fn = text.Term // reset terminal
 			}
 
+			// apply format
 			switch {
 			case cmd.Jsonl:
-				_, _ = fmt.Fprintln(cli.Stdout, fn(e.ToJSONL()))
+				s = fn(e.ToJSONL())
 			case cmd.Json:
-				_, _ = fmt.Fprintln(cli.Stdout, fn(e.ToJSON()))
+				s = fn(e.ToJSON())
 			default:
-				_, _ = fmt.Fprintln(cli.Stdout, fn(e.ToCEF()))
+				s = fn(e.ToCEF())
 			}
+
+			if cli.Filter != nil && !cli.Filter.MatchString(s) {
+				continue // filter event
+			}
+
+			_, _ = fmt.Fprintln(cli.Stdout, s)
 
 			// TODO: concurrent
 			if db != nil {
