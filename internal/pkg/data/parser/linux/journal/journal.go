@@ -18,13 +18,9 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
-const (
-	Magic = "LPKSHHRH"
-)
+const Magic = "LPKSHHRH"
 
-var (
-	Regex = regexp.MustCompile(Magic)
-)
+var Regex = regexp.MustCompile(Magic)
 
 var (
 	ErrNoSystem    = errors.New("journal has no System section")

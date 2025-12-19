@@ -20,10 +20,10 @@ go install github.com/cuhsat/fox/v4@latest
 * Hunt mode
   * Built-in file carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
-  * Built-in translation list of over 1500 Event IDs
+  * Built-in translation list of over 51600 Event IDs
   * Built-in warning of critical system events
+  * Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [ECS](https://www.elastic.co/docs/reference/ecs) format
   * Save as `JSON`, `JSON Lines` or `SQLite3`
-  * Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
 * Supports
   * Over 290 string classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
   * Many popular archive and compression formats

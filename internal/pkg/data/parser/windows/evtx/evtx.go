@@ -20,9 +20,7 @@ const (
 	Chunk = evtx.ChunkMagic
 )
 
-var (
-	Regex = regexp.MustCompile(Chunk)
-)
+var Regex = regexp.MustCompile(Chunk)
 
 func Detect(b []byte) bool {
 	return data.HasMagic(b, 0, []byte(Magic))
@@ -127,18 +125,29 @@ func newChunk(rs io.ReadSeeker, off int64) (*evtx.Chunk, error) {
 func newEvent(evt *evtx.GoEvtxMap) *event.Event {
 	var ok bool
 
-	p := evtx.Path("/Event/System/Computer")
 	e := event.Event{
 		Time:      evt.TimeCreated().UTC(),
 		Source:    types.Eventlog,
 		Extension: make(map[string]any),
 	}
 
-	e.Host, _ = evt.GetString(&p)
+	hostPath := evtx.Path("/Event/System/Computer")
+	namePath := evtx.Path("/Event/System/Provider/Name")
+
+	provider, _ := evt.GetString(&namePath)
+	e.Host, _ = evt.GetString(&hostPath)
 	e.User, _ = evt.UserID()
 
-	if e.Message, ok = Events[evt.EventID()]; !ok {
-		e.Message = fmt.Sprintf("Undescribed event: Event ID %d", evt.EventID())
+	if len(provider) == 0 {
+		provider = "unknown"
+	}
+
+	e.Message = fmt.Sprintf("Undescribed event: %s: %d", provider, evt.EventID())
+
+	if events, ok := Events[provider]; ok {
+		if message, ok := events[evt.EventID()]; ok {
+			e.Message = message
+		}
 	}
 
 	if e.Severity, ok = Levels[evt.EventID()]; !ok {

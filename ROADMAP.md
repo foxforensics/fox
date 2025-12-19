@@ -17,9 +17,6 @@
 
 ## 4. Optimizations
 * Add host, user, time to -f *.coc
-* Add more event ids
-  * https://github.com/Velocidex/evtx-data
-  * https://gist.github.com/githubfoam/69eee155e4edafb2e679fb6ac5ea47d0
 * Add Unicode to string carving
   * https://people.cs.umass.edu/~liberato/courses/2019-spring-compsci365/lecture-notes/04-carving-strings-and-unicode/
 * SMap speed

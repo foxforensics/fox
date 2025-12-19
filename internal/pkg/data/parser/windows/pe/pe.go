@@ -8,9 +8,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const (
-	Magic = "MZ"
-)
+const Magic = "MZ"
 
 func Detect(b []byte) bool {
 	return data.HasMagic(b, 0, []byte(Magic))
