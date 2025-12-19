@@ -24,7 +24,7 @@ require (
 	github.com/korylprince/goxar v0.1.2
 	github.com/minio/minlz v1.0.1
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
-	github.com/nwaples/rardecode v1.1.3
+	github.com/nwaples/rardecode/v2 v2.2.2
 	github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4
 	github.com/pierrec/lz4 v2.6.1+incompatible
 	github.com/saferwall/pe v1.5.7

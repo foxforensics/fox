@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/nwaples/rardecode"
+	"github.com/nwaples/rardecode/v2"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
@@ -18,7 +18,7 @@ func Detect(b []byte) bool {
 }
 
 func Extract(b []byte, root, pass string) (e []data.Entry) {
-	r, err := rardecode.NewReader(bytes.NewBuffer(b), pass)
+	r, err := rardecode.NewReader(bytes.NewBuffer(b), rardecode.Password(pass))
 
 	if err != nil {
 		log.Println(err)
