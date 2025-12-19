@@ -42,6 +42,7 @@ func TestSum(t *testing.T) {
 		{file, types.MD2, "aceb3e20d985564d17838fc437744843"},
 		{file, types.MD4, "fbb9a5a610458386e0ff2bdb4dea1076"},
 		{file, types.MD5, "f7ebcc3119549346b871212958dbc203"},
+		{file, types.MD6, "7abba14b23ea4438d2009118fe9d1befed73ba7420b5b7952fa8cd3c1a6ce62a"},
 		{file, types.SHA1, "7763c40e323d9d57fc151cf9732dc4d5a07eaebf"},
 		{file, types.SHA256, "61a54c7611855e09266732d923e64819273baf71b65bbb7c50249083e5b655fd"},
 		{file, types.SHA3, "3429b00349d4dae6b707647747c8f3f9c819fb2ed8087fe435a6d126"},

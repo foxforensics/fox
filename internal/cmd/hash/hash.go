@@ -24,8 +24,11 @@ Flags:
 Examples:
   $ fox hash -Tmd5,sha1 files.7z
 
-Cryptographic hashes:
-  MD2, MD4, MD5, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
+Cryptographic hashes (SHA family):
+  SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
+
+Cryptographic hashes (MD family):
+  MD2, MD4, MD5, MD6
 
 Performance hashes:
   XXH64, XXH3

@@ -16,6 +16,7 @@ import (
 	"github.com/glaslos/ssdeep"
 	"github.com/glaslos/tlsh"
 	"github.com/htruong/go-md2"
+	"github.com/pedroalbanese/md6"
 	"github.com/zeebo/xxh3"
 	"golang.org/x/crypto/md4"
 
@@ -62,6 +63,8 @@ func Sum(t string, b []byte) (string, error) {
 		imp = md4.New()
 	case types.MD5:
 		imp = md5.New()
+	case types.MD6:
+		imp = md6.New256()
 	case types.SHA1:
 		imp = sha1.New()
 	case types.SHA256:
