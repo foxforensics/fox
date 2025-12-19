@@ -32,7 +32,7 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 	}
 
 	hs := cli.Bootstrap(cmd.Paths)
-	defer cli.ThrowAway()
+	defer cli.Discard()
 
 	var tail uint
 

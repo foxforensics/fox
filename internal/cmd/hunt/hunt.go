@@ -112,7 +112,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	cli.NoConvert = true // force
 
 	hs := cli.Bootstrap(cmd.Paths)
-	defer cli.ThrowAway()
+	defer cli.Discard()
 
 	if cli.Verbose > 0 {
 		log.Println("hunt: started")

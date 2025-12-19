@@ -88,7 +88,7 @@ func (h *Heap) String() string {
 	}
 }
 
-func (h *Heap) ThrowAway() {
+func (h *Heap) Discard() {
 	h.Lock()
 
 	if h.Type == types.Regular {

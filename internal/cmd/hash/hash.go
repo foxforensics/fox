@@ -50,7 +50,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 	}
 
 	hs := cli.Bootstrap(cmd.Paths)
-	defer cli.ThrowAway()
+	defer cli.Discard()
 
 	for _, algo := range cmd.Algo {
 		if !hash.Secure(algo) {

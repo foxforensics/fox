@@ -41,7 +41,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 	}
 
 	hs := cli.Bootstrap(cmd.Paths)
-	defer cli.ThrowAway()
+	defer cli.Discard()
 
 	for _, h := range hs.Get() {
 		if e, ok := h.Entropy(

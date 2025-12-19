@@ -111,17 +111,17 @@ func (cli *Globals) Bootstrap(args []string) *heapset.HeapSet {
 		}
 
 		// exit early
-		cli.Heaps.ThrowAway()
+		cli.Heaps.Discard()
 		os.Exit(0)
 	}
 
 	return cli.Heaps
 }
 
-func (cli *Globals) ThrowAway() {
+func (cli *Globals) Discard() {
 	if len(cli.File) > 0 {
 		_ = cli.Stdout.Close()
 	}
 
-	cli.Heaps.ThrowAway()
+	cli.Heaps.Discard()
 }

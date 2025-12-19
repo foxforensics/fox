@@ -116,14 +116,14 @@ func (hs *HeapSet) Get() []*heap.Heap {
 	return r
 }
 
-func (hs *HeapSet) ThrowAway() {
+func (hs *HeapSet) Discard() {
 	var n int64
 
 	hs.Lock()
 
 	for _, h := range hs.heaps {
 		n += h.Size()
-		h.ThrowAway()
+		h.Discard()
 	}
 
 	hs.heaps = hs.heaps[:0]

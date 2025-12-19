@@ -20,7 +20,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 	}
 
 	hs := cli.Bootstrap(cmd.Paths)
-	defer cli.ThrowAway()
+	defer cli.Discard()
 
 	for _, h := range hs.Get() {
 		if (hs.Len() > 1 || cli.Verbose > 0) && !cli.NoFile {
