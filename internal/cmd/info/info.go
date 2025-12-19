@@ -18,6 +18,9 @@ fox info [FLAGS ...] <PATHS ...>
 Flags:
   -m, --min=DECIMAL        minimum entropy value (default 0.0)
   -x, --max=DECIMAL        maximal entropy value (default 1.0)
+
+Examples:
+  $ fox info -m0.9 ./**/*
 `)
 
 type Info struct {

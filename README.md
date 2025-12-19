@@ -38,7 +38,7 @@ $ fox [MODE] [FLAGS ...] <PATHS ...>
 ## Examples
 Find occurrences in event logs:
 ```console
-$ fox cat -eWinlogon ./**/*.evtx
+$ fox -eWinlogon ./**/*.evtx
 ```
 
 Show the MBR in canonical hex:
@@ -58,7 +58,7 @@ $ fox text -rw sample.exe
 
 Hash the archive contents:
 ```console
-$ fox hash -amd5,sha1 files.7z
+$ fox hash -Tmd5,sha1 files.7z
 ```
 
 Hunt down suspicious events:

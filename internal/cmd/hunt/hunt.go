@@ -39,6 +39,9 @@ Stream:
 Alias:
   -L, --logstash           alias for -E -uhttp://localhost:8080
   -S, --splunk             alias for -H -uhttp://localhost:8088/...
+
+Examples:
+  $ fox hunt -sxv ./**/*.dd
 `)
 
 type Hunt struct {

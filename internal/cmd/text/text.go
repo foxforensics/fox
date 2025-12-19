@@ -24,6 +24,9 @@ Flags:
   -F, --find=CLASS,...     show only strings with class(es)
   -1, --first              show only strings first class
   -P, --print              show only classification list
+
+Examples:
+  $ fox text -rw sample.exe
 `)
 
 type Text struct {

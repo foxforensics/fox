@@ -18,8 +18,11 @@ Prints file hashes and checksums.
 fox hash [FLAGS ...] <PATHS ...>
 
 Flags:
-  -a, --algo=ALGO,...      use algorithms (default SHA256)
+  -T, --type=ALGO,...      use algorithms (default SHA256)
   -F, --find=HASH,...      show only files that match
+
+Examples:
+  $ fox hash -Tmd5,sha1 files.7z
 
 Cryptographic hashes:
   MD2, MD4, MD5, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
@@ -38,7 +41,7 @@ Checksums:
 `)
 
 type Hash struct {
-	Algo  []string `short:"a" sep:"," default:"SHA256"`
+	Type  []string `short:"T" sep:"," default:"SHA256"`
 	Find  []string `short:"F" sep:","`
 	Paths []string `arg:"" type:"path" optional:""`
 }
@@ -52,17 +55,17 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 	hs := cli.Bootstrap(cmd.Paths)
 	defer cli.Discard()
 
-	for _, algo := range cmd.Algo {
-		if !hash.Secure(algo) {
-			log.Printf("used algorithm %s is not cryptically secure!\n", algo)
+	for _, typ := range cmd.Type {
+		if !hash.Secure(typ) {
+			log.Printf("used algorithm %s is not cryptically secure!\n", typ)
 		}
 
-		if len(cmd.Algo) > 1 {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(strings.ToUpper(algo))))
+		if len(cmd.Type) > 1 {
+			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(strings.ToUpper(typ))))
 		}
 
 		for _, h := range hs.Get() {
-			sum, err := hash.Sum(algo, h.MMap())
+			sum, err := hash.Sum(typ, h.MMap())
 
 			if err != nil {
 				log.Println(err)

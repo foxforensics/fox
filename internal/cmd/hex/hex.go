@@ -17,7 +17,10 @@ Prints file in hex format.
 fox hex [FLAGS ...] <PATHS ...>
 
 Flags:
-  -m, --mode=<c|hd|xxd>    use compatible mode for output 
+  -m, --mode=<c|hd|xxd>    use compatible mode for output
+
+Examples:
+  $ fox hex -mc -hc512 disk.bin
 `)
 
 type Hex struct {
