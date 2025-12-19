@@ -17,6 +17,7 @@ go install github.com/cuhsat/fox/v4@latest
 * Dumping of [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * String carving and classification
 * Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
+* Automatic Chain-of-Custody receipt generation
 * Hunt mode
   * Built-in file carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
@@ -27,7 +28,7 @@ go install github.com/cuhsat/fox/v4@latest
 * Supports
   * Over 290 string classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
   * Many popular archive and compression formats
-  * Many popular cryptographic, fuzzy and fast hashes 
+  * Many popular cryptographic, fuzzy and fast hashes
 
 ## Usage
 Type `fox --help` for more help:
