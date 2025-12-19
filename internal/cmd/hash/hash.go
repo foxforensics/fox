@@ -40,7 +40,7 @@ Windows hashes:
   LM, NT, PE
 
 Checksums:
-  CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+  ADLER32, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 `)
 
 type Hash struct {

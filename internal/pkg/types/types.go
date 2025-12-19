@@ -3,6 +3,7 @@ package types
 const Database = "fox.db"
 
 const (
+	ADLER32   = "adler32"
 	CRC32C    = "crc32-c"
 	CRC32IEEE = "crc32-ieee"
 	CRC64ECMA = "crc64-ecma"

@@ -32,6 +32,7 @@ func TestSum(t *testing.T) {
 		imp string
 		sum string
 	}{
+		{file, types.ADLER32, "77e8f18a"},
 		{file, types.CRC32C, "6e164f51"},
 		{file, types.CRC32IEEE, "6de95d61"},
 		{file, types.CRC64ECMA, "1c10bfee4250c76f"},

@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"hash"
+	"hash/adler32"
 	"hash/crc32"
 	"hash/crc64"
 	"strings"
@@ -43,6 +44,8 @@ func Sum(t string, b []byte) (string, error) {
 	var imp hash.Hash
 
 	switch strings.ToLower(t) {
+	case types.ADLER32:
+		imp = adler32.New()
 	case types.CRC32C:
 		imp = crc32.New(crc32.MakeTable(crc32.Castagnoli))
 	case types.CRC32IEEE:

@@ -90,7 +90,7 @@ Windows hashes:
 > LM, NT, PE
 
 Checksums:
-> CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+> ADLER32, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 ## License
 🦊 is released under the [GPL-3.0](LICENSE.md)
