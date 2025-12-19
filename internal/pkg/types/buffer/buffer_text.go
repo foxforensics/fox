@@ -5,6 +5,7 @@ import (
 	"math"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
@@ -22,7 +23,7 @@ type TextBuffer struct {
 
 func Text(h *heap.Heap, e int) *TextBuffer {
 	var buf = &TextBuffer{
-		make(chan *TextLine, Size),
+		make(chan *TextLine, types.Buffer),
 		uint(math.Log10(float64(h.Len()))) + 1,
 	}
 

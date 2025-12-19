@@ -56,7 +56,7 @@ func Convert(b []byte) ([]byte, error) {
 }
 
 func Parse(rs io.ReadSeeker, off int64, ext int) <-chan *event.Event {
-	ch := make(chan *event.Event, 4096)
+	ch := make(chan *event.Event, types.Buffer)
 
 	chk, err := newChunk(rs, off)
 

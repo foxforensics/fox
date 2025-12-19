@@ -2,6 +2,8 @@ package types
 
 const Database = "fox.db"
 
+const Buffer = 4095
+
 const (
 	ADLER32   = "adler32"
 	CRC32C    = "crc32-c"

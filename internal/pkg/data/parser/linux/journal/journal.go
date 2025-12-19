@@ -12,9 +12,9 @@ import (
 
 	"github.com/Velocidex/go-journalctl/parser"
 	"github.com/Velocidex/ordereddict"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
@@ -52,7 +52,7 @@ func Convert(b []byte) ([]byte, error) {
 }
 
 func Parse(b []byte, off int64, ext int) <-chan *event.Event {
-	ch := make(chan *event.Event, 4096)
+	ch := make(chan *event.Event, types.Buffer)
 
 	f, err := parser.OpenFile(bytes.NewReader(b[off:]))
 

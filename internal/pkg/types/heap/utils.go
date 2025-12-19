@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 type String struct {
@@ -42,7 +43,7 @@ func (h *Heap) Entropy(m, x float64) (float64, bool) {
 }
 
 func (h *Heap) Strings(m, x uint, w int, s []string, f bool) <-chan String {
-	var ch = make(chan String, 4096)
+	var ch = make(chan String, types.Buffer)
 	var db *text.Strings
 	var buf []byte
 	var off int
