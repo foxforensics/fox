@@ -28,6 +28,9 @@ go.work.sum
 # PE executables
 *.exe
 
+# COC receipts
+*.cc
+
 # Raw images
 *.dd
 

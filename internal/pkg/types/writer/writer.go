@@ -2,13 +2,30 @@
 package writer
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"os"
+	"os/user"
+	"path/filepath"
+	"strings"
 	"sync"
+	"time"
+
+	app "github.com/cuhsat/fox/v4/internal"
 )
+
+var header = strings.TrimSpace(`
+FOX CHAIN OF CUSTODY RECEIPT %s
+Time: %s
+User: %s (%s)
+Host: %s (%s)
+Path: %s
+Hash: %x SHA256
+`)
 
 type Writer struct {
 	sync.Mutex
@@ -39,7 +56,26 @@ func (w *Writer) Write(p []byte) (n int, err error) {
 func (w *Writer) Close() error {
 	w.Lock()
 	defer w.Unlock()
-	_, err := w.file.Seek(0, io.SeekStart)
+
+	hst, err := os.Hostname()
+
+	if err != nil {
+		return err
+	}
+
+	usr, err := user.Current()
+
+	if err != nil {
+		return err
+	}
+
+	abs, err := filepath.Abs(w.path)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = w.file.Seek(0, io.SeekStart)
 
 	if err != nil {
 		return err
@@ -51,12 +87,34 @@ func (w *Writer) Close() error {
 		return err
 	}
 
-	sum := fmt.Sprintf("%x", sha256.Sum256(buf))
-	err = os.WriteFile(w.path+".sha256", []byte(sum), 0600)
+	err = os.WriteFile(w.path+".cc", []byte(fmt.Sprintf(header,
+		app.Version[1:],
+		time.Now().UTC(),
+		usr.Name,
+		usr.Username,
+		hst,
+		getMacAddr(),
+		abs,
+		sha256.Sum256(buf),
+	)), 0600)
 
 	if err != nil {
 		return err
 	}
 
 	return w.file.Close()
+}
+
+func getMacAddr() string {
+	iff, err := net.Interfaces()
+
+	if err == nil {
+		for _, i := range iff {
+			if i.Flags&net.FlagUp != 0 && bytes.Compare(i.HardwareAddr, nil) != 0 {
+				return i.HardwareAddr.String()
+			}
+		}
+	}
+
+	return ""
 }
