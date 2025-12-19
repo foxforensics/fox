@@ -31,13 +31,13 @@ Flags:
   -J, --jsonl              show logs as JSON lines
   -D, --sqlite             save logs to SQLite3 DB
 
-Streams:
+Stream:
   -u, --url=SERVER         stream events to server address
   -T, --auth=TOKEN         stream events using auth token
   -E, --ecs                use ECS schema for streaming
   -H, --hec                use HEC schema for streaming
 
-Aliases:
+Alias:
   -L, --logstash           alias for -E -uhttp://localhost:8080
   -S, --splunk             alias for -H -uhttp://localhost:8088/...
 `)
@@ -50,13 +50,13 @@ type Hunt struct {
 	Jsonl  bool `short:"J" xor:"json,jsonl"`
 	Sqlite bool `short:"D"`
 
-	// streams
+	// stream
 	Url  string `short:"u"`
 	Auth string `short:"T"`
 	Ecs  bool   `short:"E" xor:"ecs,hec"`
 	Hec  bool   `short:"H" xor:"ecs,hec" and:"hec"`
 
-	// aliases
+	// alias
 	Logstash bool `short:"L" xor:"logstash,splunk"`
 	Splunk   bool `short:"S" xor:"logstash,splunk"`
 
