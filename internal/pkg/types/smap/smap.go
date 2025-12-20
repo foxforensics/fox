@@ -31,12 +31,18 @@ type chunk struct {
 func Map(m mmap.MMap) SMap {
 	s := make(SMap, 0)
 
-	scanner := bufio.NewScanner(bytes.NewReader(m))
+	r := bufio.NewReader(bytes.NewReader(m))
 
-	for scanner.Scan() {
+	for {
+		b, _, err := r.ReadLine()
+
+		if err != nil {
+			break
+		}
+
 		s = append(s, String{
 			Nr:  uint(len(s)) + 1,
-			Str: scanner.Text(),
+			Str: string(b),
 		})
 	}
 
