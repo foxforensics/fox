@@ -27,7 +27,5 @@ func Format(b []byte, _ int) ([]byte, error) {
 		return nil, err
 	}
 
-	x, _ := json.Marshal(p)
-
-	return x, nil
+	return json.MarshalIndent(p, "", "  ")
 }
