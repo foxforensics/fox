@@ -27,7 +27,7 @@ func BenchmarkFormat(b *testing.B) {
 	b.ResetTimer()
 
 	for b.Loop() {
-		_, _ = Format(buf)
+		_, _ = Format(buf, 0)
 	}
 }
 
@@ -38,7 +38,7 @@ func TestDetect(t *testing.T) {
 }
 
 func TestFormat(t *testing.T) {
-	buf, err := Format(data.Fixture(file))
+	buf, err := Format(data.Fixture(file), 0)
 
 	if err != nil {
 		t.Error(err)
