@@ -379,7 +379,7 @@ func (hs *HeapSet) format(b []byte) ([]byte, bool) {
 		log.Printf("format detected %s\n", debug(fn))
 	}
 
-	r, err := fn(b)
+	r, err := fn(b, hs.opts.Verbose)
 
 	if err != nil {
 		log.Println(err)

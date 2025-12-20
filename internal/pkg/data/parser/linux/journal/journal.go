@@ -31,7 +31,7 @@ func Detect(b []byte) bool {
 	return data.HasMagic(b, 0, []byte(Magic))
 }
 
-func Format(b []byte) ([]byte, error) {
+func Format(b []byte, _ int) ([]byte, error) {
 	j, err := parser.OpenFile(bytes.NewReader(b))
 
 	if err != nil {
