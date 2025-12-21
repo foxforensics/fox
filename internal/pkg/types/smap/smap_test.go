@@ -66,30 +66,6 @@ func BenchmarkRender(b *testing.B) {
 	}
 }
 
-func BenchmarkFormat(b *testing.B) {
-	f, m, err := fixture("format/fox.jsonl")
-
-	if err != nil {
-		b.Fatal(err)
-	}
-
-	defer func(f *os.File) {
-		_ = f.Close()
-	}(f)
-
-	defer func(m mmap.MMap) {
-		_ = m.Unmap()
-	}(m)
-
-	s := Map(m)
-
-	b.ResetTimer()
-
-	for b.Loop() {
-		s.Format()
-	}
-}
-
 func BenchmarkGrep(b *testing.B) {
 	f, m, err := fixture("text/bible.txt")
 
@@ -132,28 +108,13 @@ func TestMap(t *testing.T) {
 }
 
 func TestRender(t *testing.T) {
-	b := []byte("\ttest\n")
-	v := "  test\n"
-
-	s := Map(b).Render()
-
-	if len(s) != 1 {
-		t.Fatal("wrong length")
-	}
-
-	if s.String() != v {
-		t.Fatal("wrong string")
-	}
-}
-
-func TestFormat(t *testing.T) {
 	f, m, err := fixture("format/fox.json")
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	s := Map(m).Format()
+	s := Map(m).Render()
 
 	if len(s) != 5 {
 		t.Fatal("wrong length")

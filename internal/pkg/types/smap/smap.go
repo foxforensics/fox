@@ -65,34 +65,28 @@ func (s SMap) String() string {
 
 func (s SMap) Render() SMap {
 	return apply(func(ch chan<- String, c *chunk) {
-		for _, s := range s[c.min:c.max] {
-			ch <- String{s.Nr, s.Grp, expand(s.Str, "  ")}
-		}
-	}, len(s))
-}
-
-func (s SMap) Format() SMap {
-	return apply(func(ch chan<- String, c *chunk) {
 		var fe *register.FormatEntry
 		for _, s := range s[c.min:c.max] {
 			b := []byte(s.Str)
 
-			for _, f := range register.Formats {
-				if f.Detect(b) {
-					fe = &f
-					break
+			if len(b) > 0 || len(register.Formats) > 0 {
+				for _, f := range register.Formats {
+					if f.Detect(b) {
+						fe = &f
+						break
+					}
 				}
 			}
 
 			if fe == nil {
-				ch <- s
+				ch <- String{s.Nr, s.Grp, expand(s.Str, "  ")}
 				continue
 			}
 
 			b, err := fe.Format(b, 0)
 
 			if err != nil {
-				ch <- s
+				ch <- String{s.Nr, s.Grp, expand(s.Str, "  ")}
 				continue
 			}
 
@@ -111,22 +105,6 @@ func (s SMap) Grep(re *regexp.Regexp) SMap {
 			}
 		}
 	}, len(s))
-}
-
-func (s SMap) CanFormat() bool {
-	if len(s) == 0 || len(register.Formats) == 0 {
-		return false
-	}
-
-	b := []byte(s[0].Str)
-
-	for _, f := range register.Formats {
-		if f.Detect(b) {
-			return true
-		}
-	}
-
-	return false
 }
 
 func chunks(n int) (c []*chunk) {

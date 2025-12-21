@@ -27,13 +27,7 @@ func Text(h *heap.Heap) *TextBuffer {
 		uint(math.Log10(float64(h.Len()))) + 1,
 	}
 
-	s := h.SMap()
-
-	if s.CanFormat() {
-		go textStream(buf, s.Format())
-	} else {
-		go textStream(buf, s.Render())
-	}
+	go textStream(buf, h.SMap().Render())
 
 	return buf
 }
