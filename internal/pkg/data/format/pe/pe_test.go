@@ -7,7 +7,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "binary/fox.exe"
+const file = "format/fox.exe"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)

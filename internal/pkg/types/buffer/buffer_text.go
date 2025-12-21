@@ -21,7 +21,7 @@ type TextBuffer struct {
 	Pad   uint
 }
 
-func Text(h *heap.Heap, e int) *TextBuffer {
+func Text(h *heap.Heap) *TextBuffer {
 	var buf = &TextBuffer{
 		make(chan *TextLine, types.Size),
 		uint(math.Log10(float64(h.Len()))) + 1,
@@ -30,9 +30,9 @@ func Text(h *heap.Heap, e int) *TextBuffer {
 	s := h.SMap()
 
 	if s.CanFormat() {
-		go textStream(buf, s.Format(e))
+		go textStream(buf, s.Format())
 	} else {
-		go textStream(buf, s.Render(e))
+		go textStream(buf, s.Render())
 	}
 
 	return buf

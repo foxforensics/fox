@@ -3,7 +3,6 @@ package smap
 import (
 	"bufio"
 	"bytes"
-	"encoding/json"
 	"regexp"
 	"runtime"
 	"slices"
@@ -11,6 +10,8 @@ import (
 	"sync"
 
 	"github.com/edsrzf/mmap-go"
+
+	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
 
 const size = 1024 * 1024 * 4 // 4mb
@@ -62,29 +63,40 @@ func (s SMap) String() string {
 	return sb.String()
 }
 
-func (s SMap) Render(e int) SMap {
-	tab := strings.Repeat(" ", e)
+func (s SMap) Render() SMap {
 	return apply(func(ch chan<- String, c *chunk) {
 		for _, s := range s[c.min:c.max] {
-			ch <- String{s.Nr, s.Grp, expand(s.Str, tab)}
+			ch <- String{s.Nr, s.Grp, expand(s.Str, "  ")}
 		}
 	}, len(s))
 }
 
-func (s SMap) Format(e int) SMap {
-	tab := strings.Repeat(" ", e)
+func (s SMap) Format() SMap {
 	return apply(func(ch chan<- String, c *chunk) {
-		var buf bytes.Buffer
-
+		var fe *register.FormatEntry
 		for _, s := range s[c.min:c.max] {
-			buf.Reset()
+			b := []byte(s.Str)
 
-			if json.Indent(&buf, []byte(s.Str), "", tab) != nil {
-				ch <- String{s.Nr, s.Grp, s.Str}
+			for _, f := range register.Formats {
+				if f.Detect(b) {
+					fe = &f
+					break
+				}
+			}
+
+			if fe == nil {
+				ch <- s
 				continue
 			}
 
-			for b := range bytes.SplitSeq(buf.Bytes(), []byte("\n")) {
+			b, err := fe.Format(b, 0)
+
+			if err != nil {
+				ch <- s
+				continue
+			}
+
+			for b := range bytes.SplitSeq(b, []byte("\n")) {
 				ch <- String{s.Nr, s.Grp, string(b)}
 			}
 		}
@@ -102,11 +114,19 @@ func (s SMap) Grep(re *regexp.Regexp) SMap {
 }
 
 func (s SMap) CanFormat() bool {
-	if len(s) == 0 {
+	if len(s) == 0 || len(register.Formats) == 0 {
 		return false
 	}
 
-	return json.Valid([]byte(s[0].Str))
+	b := []byte(s[0].Str)
+
+	for _, f := range register.Formats {
+		if f.Detect(b) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func chunks(n int) (c []*chunk) {

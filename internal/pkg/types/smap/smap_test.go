@@ -9,7 +9,16 @@ import (
 	"testing"
 
 	"github.com/edsrzf/mmap-go"
+
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
+
+func TestMain(m *testing.M) {
+	register.Format("json", json.Detect, json.Format)
+
+	os.Exit(m.Run())
+}
 
 func BenchmarkMap(b *testing.B) {
 	f, m, err := fixture("text/bible.txt")
@@ -53,12 +62,12 @@ func BenchmarkRender(b *testing.B) {
 	b.ResetTimer()
 
 	for b.Loop() {
-		s.Render(2)
+		s.Render()
 	}
 }
 
 func BenchmarkFormat(b *testing.B) {
-	f, m, err := fixture("format/fox.json")
+	f, m, err := fixture("format/fox.jsonl")
 
 	if err != nil {
 		b.Fatal(err)
@@ -77,7 +86,7 @@ func BenchmarkFormat(b *testing.B) {
 	b.ResetTimer()
 
 	for b.Loop() {
-		s.Format(2)
+		s.Format()
 	}
 }
 
@@ -126,7 +135,7 @@ func TestRender(t *testing.T) {
 	b := []byte("\ttest\n")
 	v := "  test\n"
 
-	s := Map(b).Render(2)
+	s := Map(b).Render()
 
 	if len(s) != 1 {
 		t.Fatal("wrong length")
@@ -138,18 +147,20 @@ func TestRender(t *testing.T) {
 }
 
 func TestFormat(t *testing.T) {
-	b := []byte(`[{"test":123}]`)
-	v := "[\n  {\n    \"test\": 123\n  }\n]\n"
+	f, m, err := fixture("format/fox.json")
 
-	s := Map(b).Format(2)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	s := Map(m).Format()
 
 	if len(s) != 5 {
 		t.Fatal("wrong length")
 	}
 
-	if s.String() != v {
-		t.Fatal("wrong string")
-	}
+	_ = m.Unmap()
+	_ = f.Close()
 }
 
 func TestGrep(t *testing.T) {
