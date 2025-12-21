@@ -19,7 +19,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 		return errors.New("path required")
 	}
 
-	hs := cli.Bootstrap(cmd.Paths)
+	hs := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
 	for _, h := range hs.Get() {

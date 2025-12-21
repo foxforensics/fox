@@ -57,7 +57,7 @@ func Format(b []byte, _ int) ([]byte, error) {
 }
 
 func Parse(rs io.ReadSeeker, off int64, ext int) <-chan *event.Event {
-	ch := make(chan *event.Event, types.Buffer)
+	ch := make(chan *event.Event, types.Size)
 
 	chk, err := newChunk(rs, off)
 

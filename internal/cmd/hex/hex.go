@@ -34,7 +34,7 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	hs := cli.Bootstrap(cmd.Paths)
+	hs := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
 	var tail uint

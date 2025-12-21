@@ -7,8 +7,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"reflect"
-	"runtime"
 	"sort"
 	"strings"
 	"sync"
@@ -16,48 +14,21 @@ import (
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/edsrzf/mmap-go"
 
-	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
-
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cpio"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/rar"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/rpm"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/xar"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bzip2"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/gzip"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/kanzi"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lz4"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzip"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzw"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/minlz"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/s2"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/snappy"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/linux/journal"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/windows/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/windows/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
 
 const stdin = "-"
 
 type Options struct {
-	Limit     *types.Limits
-	Filter    *types.Filters
-	Input     string
-	Password  string
-	NoDeflate bool
-	NoConvert bool
-	Verbose   int
+	Limit    *types.Limits
+	Filter   *types.Filters
+	Input    string
+	Password string
+	Verbose  int
 }
 
 type HeapSet struct {
@@ -230,20 +201,19 @@ func (hs *HeapSet) loadFile(path, part string) {
 func (hs *HeapSet) process(path, part string, b []byte, data bool) {
 	var ok bool
 
-	if !hs.opts.NoDeflate {
-		if b, ok = hs.deflate(b); ok {
-			data = true
-		}
-
-		if hs.extract(path, part, b) {
-			return
-		}
+	// 1. deflate data
+	if b, ok = hs.deflate(b); ok {
+		data = true
 	}
 
-	if !hs.opts.NoConvert {
-		if b, ok = hs.format(b); ok {
-			data = true
-		}
+	// 2. extract data
+	if hs.extract(path, part, b) {
+		return
+	}
+
+	// 3. format data
+	if b, ok = hs.format(b); ok {
+		data = true
 	}
 
 	// filter for specific streams
@@ -264,128 +234,75 @@ func (hs *HeapSet) extract(path, part string, b []byte) bool {
 		}
 	}()
 
-	var fn data.Extract
-
-	switch {
-	case ar.Detect(b):
-		fn = ar.Extract
-	case cab.Detect(b):
-		fn = cab.Extract
-	case cpio.Detect(b):
-		fn = cpio.Extract
-	case rar.Detect(b):
-		fn = rar.Extract
-	case rpm.Detect(b):
-		fn = rpm.Extract
-	case szip.Detect(b):
-		fn = szip.Extract
-	case tar.Detect(b):
-		fn = tar.Extract
-	case xar.Detect(b):
-		fn = xar.Extract
-	case zip.Detect(b):
-		fn = zip.Extract
-	default:
-		return false
-	}
-
-	if hs.opts.Verbose > 1 {
-		log.Printf("format detected %s\n", debug(fn))
-	}
-
-	var wg sync.WaitGroup
-
-	for _, e := range fn(b, path, hs.opts.Password) {
-		wg.Add(1)
-
-		go func() {
-			if hs.opts.Verbose > 2 {
-				log.Printf("stream detected %s\n", e.Path)
+	for _, a := range register.Archives {
+		if a.Detect(b) {
+			if hs.opts.Verbose > 1 {
+				log.Printf("archive detected %s\n", a.Name)
 			}
 
-			hs.process(e.Path, part, e.Data, true)
+			var wg sync.WaitGroup
 
-			wg.Done()
-		}()
+			for _, e := range a.Extract(b, path, hs.opts.Password) {
+				wg.Add(1)
+
+				go func() {
+					if hs.opts.Verbose > 2 {
+						log.Printf("stream detected %s\n", e.Path)
+					}
+
+					hs.process(e.Path, part, e.Data, true)
+
+					wg.Done()
+				}()
+			}
+
+			wg.Wait()
+
+			return true
+		}
 	}
 
-	wg.Wait()
-
-	return true
+	return false
 }
 
 func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
-	var fn data.Deflate
+	for _, d := range register.Deflates {
+		if d.Detect(b) {
+			if hs.opts.Verbose > 1 {
+				log.Printf("deflate detected %s\n", d.Name)
+			}
 
-	switch {
-	case br.Detect(b):
-		fn = br.Deflate
-	case bzip2.Detect(b):
-		fn = bzip2.Deflate
-	case gzip.Detect(b):
-		fn = gzip.Deflate
-	case kanzi.Detect(b):
-		fn = kanzi.Deflate
-	case lz4.Detect(b):
-		fn = lz4.Deflate
-	case lzip.Detect(b):
-		fn = lzip.Deflate
-	case lzw.Detect(b):
-		fn = lzw.Deflate
-	case minlz.Detect(b):
-		fn = minlz.Deflate
-	case s2.Detect(b):
-		fn = s2.Deflate
-	case snappy.Detect(b):
-		fn = snappy.Deflate
-	case xz.Detect(b):
-		fn = xz.Deflate
-	case zlib.Detect(b):
-		fn = zlib.Deflate
-	case zstd.Detect(b):
-		fn = zstd.Deflate
-	default:
-		return b, false
+			r, err := d.Deflate(b)
+
+			if err != nil {
+				log.Println(err)
+			}
+
+			return r, true
+		}
 	}
 
-	if hs.opts.Verbose > 1 {
-		log.Printf("format detected %s\n", debug(fn))
-	}
-
-	r, err := fn(b)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	return r, true
+	return b, false
 }
 
 func (hs *HeapSet) format(b []byte) ([]byte, bool) {
-	var fn data.Format
+	for _, f := range register.Formats {
+		if f.Detect(b) {
+			if hs.opts.Verbose > 1 {
+				log.Printf("format detected %s\n", f.Name)
+			}
 
-	switch {
-	case evtx.Detect(b):
-		fn = evtx.Format
-	case journal.Detect(b):
-		fn = journal.Format
-	case pe.Detect(b):
-		fn = pe.Format
-	default:
-		return b, false
+			r, err := f.Format(b, hs.opts.Verbose)
+
+			if err != nil {
+				log.Println(err)
+			}
+
+			return r, true
+		}
 	}
 
-	if hs.opts.Verbose > 1 {
-		log.Printf("format detected %s\n", debug(fn))
-	}
-
-	r, err := fn(b, hs.opts.Verbose)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	return r, true
+	return b, false
 }
 
 func (hs *HeapSet) addFile(path string, b []byte) {
@@ -458,11 +375,4 @@ func isPiped(f *os.File) bool {
 	}
 
 	return (fi.Mode() & os.ModeCharDevice) != os.ModeCharDevice
-}
-
-func debug(v any) string {
-	s := runtime.FuncForPC(reflect.ValueOf(v).Pointer()).Name()
-	t := strings.SplitAfter(s, "/")
-
-	return strings.Split(t[len(t)-1], ".")[0]
 }

@@ -52,7 +52,7 @@ func Format(b []byte, _ int) ([]byte, error) {
 }
 
 func Parse(b []byte, off int64, ext int) <-chan *event.Event {
-	ch := make(chan *event.Event, types.Buffer)
+	ch := make(chan *event.Event, types.Size)
 
 	f, err := parser.OpenFile(bytes.NewReader(b[off:]))
 

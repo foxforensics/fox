@@ -13,7 +13,7 @@ import (
 	"github.com/edsrzf/mmap-go"
 )
 
-const buffer = 1024 * 1024 * 4 // 4mb
+const size = 1024 * 1024 * 4 // 4mb
 
 type action func(ch chan<- String, c *chunk)
 
@@ -33,7 +33,7 @@ type chunk struct {
 func Map(m mmap.MMap) SMap {
 	s := make(SMap, 0)
 
-	r := bufio.NewReaderSize(bytes.NewReader(m), buffer)
+	r := bufio.NewReaderSize(bytes.NewReader(m), size)
 
 	for {
 		b, _, err := r.ReadLine()

@@ -116,7 +116,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	cli.NoConvert = true // force
 
-	hs := cli.Bootstrap(cmd.Paths)
+	hs := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
 	if cli.Verbose > 0 {

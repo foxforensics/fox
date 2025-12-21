@@ -10,8 +10,8 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/linux/journal"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/parser/windows/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"
@@ -34,7 +34,7 @@ type Options struct {
 func Hunt(hs *heapset.HeapSet, opt *Options) <-chan *event.Event {
 	var wg sync.WaitGroup
 
-	ch := make(chan *event.Event, types.Buffer)
+	ch := make(chan *event.Event, types.Size)
 
 	if opt.Sort {
 		ch = sort(ch)
@@ -104,7 +104,7 @@ func sort(in <-chan *event.Event) chan *event.Event {
 }
 
 func offset(rs io.ReadSeeker, re *regexp.Regexp, opt *Options) <-chan int64 {
-	out := make(chan int64, types.Buffer)
+	out := make(chan int64, types.Size)
 
 	go func(r *bufio.Reader) {
 		var lst, off int64

@@ -43,7 +43,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	hs := cli.Bootstrap(cmd.Paths)
+	hs := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
 	for _, h := range hs.Get() {

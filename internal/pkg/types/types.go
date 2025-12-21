@@ -1,9 +1,5 @@
 package types
 
-const Database = "fox.db"
-
-const Buffer = 4095
-
 const (
 	ADLER32   = "adler32"
 	CRC32C    = "crc32-c"
@@ -35,11 +31,6 @@ const (
 	Hexdump   = "hd"
 	Xxd       = "xxd"
 	Raw       = "raw"
-)
-
-const (
-	Logstash = "http://localhost:8080"
-	Splunk   = "http://localhost:8088/services/collector/event/1.0"
 )
 
 type Event int

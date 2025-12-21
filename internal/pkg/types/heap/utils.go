@@ -43,7 +43,7 @@ func (h *Heap) Entropy(m, x float64) (float64, bool) {
 }
 
 func (h *Heap) Strings(m, x uint, w int, s []string, f bool) <-chan String {
-	var ch = make(chan String, types.Buffer)
+	var ch = make(chan String, types.Size)
 	var db *text.Strings
 	var buf []byte
 	var off int

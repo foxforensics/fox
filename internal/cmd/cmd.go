@@ -9,8 +9,36 @@ import (
 
 	"github.com/fatih/color"
 
+	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
+
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cpio"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/rar"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/rpm"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/xar"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bzip2"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/gzip"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/kanzi"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lz4"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzip"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzw"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/minlz"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/s2"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/snappy"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/writer"
 )
 
@@ -41,6 +69,7 @@ type Globals struct {
 	NoLine    bool `long:"no-line"`
 	NoColor   bool `long:"no-color"`
 	NoDeflate bool `long:"no-deflate"`
+	NoExtract bool `long:"no-extract"`
 	NoConvert bool `long:"no-convert"`
 
 	// standard
@@ -54,7 +83,7 @@ type Globals struct {
 	Heaps  *heapset.HeapSet `kong:"-"`
 }
 
-func (cli *Globals) Bootstrap(args []string) *heapset.HeapSet {
+func (cli *Globals) Load(args []string) *heapset.HeapSet {
 	if len(cli.Regex) > 0 {
 		cli.Filter = regexp.MustCompile(cli.Regex)
 	}
@@ -68,8 +97,9 @@ func (cli *Globals) Bootstrap(args []string) *heapset.HeapSet {
 		cli.NoFile = true
 		cli.NoLine = true
 		cli.NoColor = true
-		cli.NoConvert = true
 		cli.NoDeflate = true
+		cli.NoExtract = true
+		cli.NoConvert = true
 	}
 
 	if len(cli.File) > 0 {
@@ -86,6 +116,41 @@ func (cli *Globals) Bootstrap(args []string) *heapset.HeapSet {
 		color.NoColor = true // turn off color package
 	}
 
+	if !cli.NoDeflate {
+		register.Deflate("br", br.Detect, br.Deflate)
+		register.Deflate("bzip2", bzip2.Detect, bzip2.Deflate)
+		register.Deflate("gzip", gzip.Detect, gzip.Deflate)
+		register.Deflate("kanzi", kanzi.Detect, kanzi.Deflate)
+		register.Deflate("lz4", lz4.Detect, lz4.Deflate)
+		register.Deflate("lzip", lzip.Detect, lzip.Deflate)
+		register.Deflate("lzw", lzw.Detect, lzw.Deflate)
+		register.Deflate("minlz", minlz.Detect, minlz.Deflate)
+		register.Deflate("s2", s2.Detect, s2.Deflate)
+		register.Deflate("snappy", snappy.Detect, snappy.Deflate)
+		register.Deflate("xz", xz.Detect, xz.Deflate)
+		register.Deflate("zlib", zlib.Detect, zlib.Deflate)
+		register.Deflate("zstd", zstd.Detect, zstd.Deflate)
+	}
+
+	if !cli.NoExtract {
+		register.Archive("ar", ar.Detect, ar.Extract)
+		register.Archive("cab", cab.Detect, cab.Extract)
+		register.Archive("cpio", cpio.Detect, cpio.Extract)
+		register.Archive("rar", rar.Detect, rar.Extract)
+		register.Archive("rpm", rpm.Detect, rpm.Extract)
+		register.Archive("szip", szip.Detect, szip.Extract)
+		register.Archive("tar", tar.Detect, tar.Extract)
+		register.Archive("xar", xar.Detect, xar.Extract)
+		register.Archive("zip", zip.Detect, zip.Extract)
+	}
+
+	if !cli.NoConvert {
+		register.Format("evtx", evtx.Detect, evtx.Format)
+		register.Format("journal", journal.Detect, journal.Format)
+		register.Format("json", json.Detect, json.Format)
+		register.Format("pe", pe.Detect, pe.Format)
+	}
+
 	cli.Heaps = heapset.New(args, &heapset.Options{
 		Limit: &types.Limits{
 			IsHead: cli.Head,
@@ -98,11 +163,9 @@ func (cli *Globals) Bootstrap(args []string) *heapset.HeapSet {
 			Before: cli.Before,
 			After:  cli.After,
 		},
-		Input:     cli.Input,
-		Password:  cli.Pass,
-		NoDeflate: cli.NoDeflate,
-		NoConvert: cli.NoConvert,
-		Verbose:   cli.Verbose,
+		Input:    cli.Input,
+		Password: cli.Pass,
+		Verbose:  cli.Verbose,
 	})
 
 	if cli.DryRun {

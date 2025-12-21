@@ -55,7 +55,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	hs := cli.Bootstrap(cmd.Paths)
+	hs := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
 	for _, typ := range cmd.Type {

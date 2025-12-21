@@ -9,7 +9,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "parser/log.journal"
+const file = "format/log.journal"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)

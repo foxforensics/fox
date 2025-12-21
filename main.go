@@ -83,6 +83,7 @@ Disable:
       --no-line            don't print line numbers
       --no-color           don't colorize the output
       --no-deflate         don't deflate automatically
+      --no-extract         don't extract automatically
       --no-convert         don't convert automatically
 
 Standard:
@@ -108,11 +109,11 @@ Please report bugs to <issue@foxhunt.wtf>
 
 type fox struct {
 	// command modes
-	Cat  cat.Cat   `cmd:"" aliases:"c,less" default:"withargs"`
-	Hex  hex.Hex   `cmd:"" aliases:"x"`
+	Cat  cat.Cat   `cmd:"" aliases:"c,less,more" default:"withargs"`
+	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hd"`
 	Info info.Info `cmd:"" aliases:"i,wc"`
 	Text text.Text `cmd:"" aliases:"t,strings"`
-	Hash hash.Hash `cmd:"" aliases:"h"`
+	Hash hash.Hash `cmd:"" aliases:"h,sum"`
 	Hunt hunt.Hunt `cmd:"" aliases:"u"`
 
 	// support flags

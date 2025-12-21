@@ -10,11 +10,13 @@ type Entry struct {
 	Data []byte // Entry data
 }
 
-type Format func([]byte, int) ([]byte, error)
+type Detect func([]byte) bool
 
 type Deflate func([]byte) ([]byte, error)
 
 type Extract func([]byte, string, string) []Entry
+
+type Format func([]byte, int) ([]byte, error)
 
 func HasMagic(b []byte, off int, m []byte) bool {
 	if len(b) < off+len(m) {

@@ -23,7 +23,7 @@ type TextBuffer struct {
 
 func Text(h *heap.Heap, e int) *TextBuffer {
 	var buf = &TextBuffer{
-		make(chan *TextLine, types.Buffer),
+		make(chan *TextLine, types.Size),
 		uint(math.Log10(float64(h.Len()))) + 1,
 	}
 

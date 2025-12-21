@@ -20,7 +20,7 @@ type HexBuffer struct {
 }
 
 func Hex(h *heap.Heap, tail uint, mode string) *HexBuffer {
-	var buf = &HexBuffer{make(chan HexLine, types.Buffer)}
+	var buf = &HexBuffer{make(chan HexLine, types.Size)}
 	var off uint
 
 	if tail > 0 {
