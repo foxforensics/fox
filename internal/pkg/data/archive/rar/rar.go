@@ -17,7 +17,7 @@ func Detect(b []byte) bool {
 	})
 }
 
-func Extract(b []byte, root, pass string) (e []data.Entry) {
+func Extract(b []byte, root, pass string) (e []data.Stream) {
 	r, err := rardecode.NewReader(bytes.NewBuffer(b), rardecode.Password(pass))
 
 	if err != nil {
@@ -48,7 +48,7 @@ func Extract(b []byte, root, pass string) (e []data.Entry) {
 			continue
 		}
 
-		e = append(e, data.Entry{
+		e = append(e, data.Stream{
 			Path: data.JoinPart(root, h.Name),
 			Data: buf,
 		})

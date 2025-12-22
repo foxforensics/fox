@@ -286,13 +286,13 @@ func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
 }
 
 func (hs *HeapSet) format(b []byte) ([]byte, bool) {
-	for _, f := range register.Formats {
-		if f.Detect(b) {
+	for _, c := range register.Converts {
+		if c.Detect(b) {
 			if hs.opts.Verbose > 1 {
-				log.Printf("format detected %s\n", f.Name)
+				log.Printf("convert detected %s\n", c.Name)
 			}
 
-			r, err := f.Format(b, hs.opts.Verbose)
+			r, err := c.Convert(b)
 
 			if err != nil {
 				log.Println(err)

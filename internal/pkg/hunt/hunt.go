@@ -10,8 +10,8 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"
@@ -56,7 +56,7 @@ func Hunt(hs *heapset.HeapSet, opt *Options) <-chan *event.Event {
 			defer wg.Done()
 
 			for off := range offset(r1, evtx.Regex, opt) {
-				for evt := range evtx.Parse(r2, off, opt.Extensions) {
+				for evt := range evtx.Carve(r2, off, opt.Extensions) {
 					ch <- evt
 				}
 			}
@@ -67,7 +67,7 @@ func Hunt(hs *heapset.HeapSet, opt *Options) <-chan *event.Event {
 			defer wg.Done()
 
 			for off := range offset(r3, journal.Regex, opt) {
-				for evt := range journal.Parse(h.MMap(), off, opt.Extensions) {
+				for evt := range journal.Carve(h.MMap(), off, opt.Extensions) {
 					ch <- evt
 				}
 			}

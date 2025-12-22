@@ -108,7 +108,7 @@ func TestMap(t *testing.T) {
 }
 
 func TestRender(t *testing.T) {
-	f, m, err := fixture("format/fox.json")
+	f, m, err := fixture("format/fox.jsonl")
 
 	if err != nil {
 		t.Fatal(err)
@@ -116,7 +116,7 @@ func TestRender(t *testing.T) {
 
 	s := Map(m).Render()
 
-	if len(s) != 5 {
+	if len(s) != 15 {
 		t.Fatal("wrong length")
 	}
 

@@ -17,7 +17,7 @@ func Detect(b []byte) bool {
 	})
 }
 
-func Extract(b []byte, root, _ string) (e []data.Entry) {
+func Extract(b []byte, root, _ string) (e []data.Stream) {
 	r, err := xar.NewReader(nop(bytes.NewReader(b)), int64(len(b)))
 
 	if err != nil {
@@ -40,7 +40,7 @@ func Extract(b []byte, root, _ string) (e []data.Entry) {
 	return
 }
 
-func extractFile(f *xar.File, root string) (e data.Entry, err error) {
+func extractFile(f *xar.File, root string) (e data.Stream, err error) {
 	r, err := f.Open()
 
 	if err != nil {

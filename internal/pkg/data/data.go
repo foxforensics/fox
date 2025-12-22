@@ -5,18 +5,20 @@ package data
 
 import "bytes"
 
-type Entry struct {
-	Path string // Entry path
-	Data []byte // Entry data
+type Stream struct {
+	Path string // Stream path
+	Data []byte // Stream data
 }
 
 type Detect func([]byte) bool
 
+type Format func([]byte) []byte
+
+type Convert func([]byte) ([]byte, error)
+
 type Deflate func([]byte) ([]byte, error)
 
-type Extract func([]byte, string, string) []Entry
-
-type Format func([]byte, int) ([]byte, error)
+type Extract func([]byte, string, string) []Stream
 
 func HasMagic(b []byte, off int, m []byte) bool {
 	if len(b) < off+len(m) {

@@ -1,15 +1,14 @@
-package evtx
+package json
 
 import (
-	"bufio"
-	"bytes"
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "format/test.evtx"
+const file = "format/fox.json"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
@@ -27,7 +26,7 @@ func BenchmarkFormat(b *testing.B) {
 	b.ResetTimer()
 
 	for b.Loop() {
-		_, _ = Format(buf, 0)
+		_ = Format(buf)
 	}
 }
 
@@ -38,21 +37,15 @@ func TestDetect(t *testing.T) {
 }
 
 func TestFormat(t *testing.T) {
-	buf, err := Format(data.Fixture(file), 0)
+	buf := Format(data.Fixture(file))
 
-	if err != nil {
-		t.Error(err)
+	if !json.Valid(buf) {
+		t.Fatal("invalid json")
 	}
 
-	jsonl := bufio.NewScanner(bytes.NewReader(buf))
+	lines := strings.Split(string(buf), "\n")
 
-	for jsonl.Scan() {
-		if !json.Valid([]byte(jsonl.Text())) {
-			t.Fatal("invalid json")
-		}
-	}
-
-	if err := jsonl.Err(); err != nil {
-		t.Error(err)
+	if len(lines) != 5 {
+		t.Fatal("invalid length")
 	}
 }

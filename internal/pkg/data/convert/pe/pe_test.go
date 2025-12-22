@@ -7,7 +7,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "format/fox.exe"
+const file = "convert/fox.exe"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
@@ -19,13 +19,13 @@ func BenchmarkDetect(b *testing.B) {
 	}
 }
 
-func BenchmarkFormat(b *testing.B) {
+func BenchmarkConvert(b *testing.B) {
 	buf := data.Fixture(file)
 
 	b.ResetTimer()
 
 	for b.Loop() {
-		_, _ = Format(buf, 0)
+		_, _ = Convert(buf)
 	}
 }
 
@@ -35,8 +35,8 @@ func TestDetect(t *testing.T) {
 	}
 }
 
-func TestFormat(t *testing.T) {
-	buf, err := Format(data.Fixture(file), 0)
+func TestConvert(t *testing.T) {
+	buf, err := Convert(data.Fixture(file))
 
 	if err != nil {
 		t.Error(err)

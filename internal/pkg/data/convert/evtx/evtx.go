@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/0xrawsec/golang-evtx/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fox"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
@@ -27,7 +28,7 @@ func Detect(b []byte) bool {
 	return data.HasMagic(b, 0, []byte(Magic))
 }
 
-func Format(b []byte, _ int) ([]byte, error) {
+func Convert(b []byte) ([]byte, error) {
 	r, err := evtx.New(bytes.NewReader(b))
 
 	if err != nil {
@@ -37,17 +38,11 @@ func Format(b []byte, _ int) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 
 	for e := range r.Events() {
-		_, err := buf.Write(evtx.ToJSON(e))
+		_, err := buf.Write(fox.FromBytes(evtx.ToJSON(e)))
 
 		if err != nil {
 			log.Println(err)
 			continue
-		}
-
-		_, err = buf.WriteRune('\n')
-
-		if err != nil {
-			log.Println(err)
 		}
 	}
 
@@ -56,7 +51,7 @@ func Format(b []byte, _ int) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func Parse(rs io.ReadSeeker, off int64, ext int) <-chan *event.Event {
+func Carve(rs io.ReadSeeker, off int64, ext int) <-chan *event.Event {
 	ch := make(chan *event.Event, types.Size)
 
 	chk, err := newChunk(rs, off)

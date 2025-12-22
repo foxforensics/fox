@@ -14,13 +14,13 @@ func Detect(b []byte) bool {
 	return json.Valid(b)
 }
 
-func Format(b []byte, _ int) ([]byte, error) {
+func Format(b []byte) []byte {
 	buf := bytes.NewBuffer(nil)
 	err := json.Indent(buf, b, prefix, indent)
 
 	if err != nil {
-		return nil, err
+		return b
 	}
 
-	return buf.Bytes(), nil
+	return buf.Bytes()
 }

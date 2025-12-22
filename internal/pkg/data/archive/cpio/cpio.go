@@ -23,7 +23,7 @@ func Detect(b []byte) bool {
 	return false
 }
 
-func Extract(b []byte, root, _ string) (e []data.Entry) {
+func Extract(b []byte, root, _ string) (e []data.Stream) {
 	r := cpio.NewReader(bytes.NewBuffer(b))
 
 	for {
@@ -49,7 +49,7 @@ func Extract(b []byte, root, _ string) (e []data.Entry) {
 			continue
 		}
 
-		e = append(e, data.Entry{
+		e = append(e, data.Stream{
 			Path: data.JoinPart(root, h.Name),
 			Data: buf,
 		})

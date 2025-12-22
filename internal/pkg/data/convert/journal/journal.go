@@ -12,8 +12,8 @@ import (
 
 	"github.com/Velocidex/go-journalctl/parser"
 	"github.com/Velocidex/ordereddict"
-
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fox"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
@@ -31,7 +31,7 @@ func Detect(b []byte) bool {
 	return data.HasMagic(b, 0, []byte(Magic))
 }
 
-func Format(b []byte, _ int) ([]byte, error) {
+func Convert(b []byte) ([]byte, error) {
 	j, err := parser.OpenFile(bytes.NewReader(b))
 
 	if err != nil {
@@ -41,7 +41,7 @@ func Format(b []byte, _ int) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 
 	for l := range j.GetLogs(context.Background()) {
-		_, err := buf.WriteString(fmt.Sprintf("%v\n", l))
+		_, err := buf.WriteString(fox.FromString(l.String()))
 
 		if err != nil {
 			log.Println(err)
@@ -51,7 +51,7 @@ func Format(b []byte, _ int) ([]byte, error) {
 	return buf.Bytes(), err
 }
 
-func Parse(b []byte, off int64, ext int) <-chan *event.Event {
+func Carve(b []byte, off int64, ext int) <-chan *event.Event {
 	ch := make(chan *event.Event, types.Size)
 
 	f, err := parser.OpenFile(bytes.NewReader(b[off:]))

@@ -16,7 +16,7 @@ func Detect(b []byte) bool {
 	})
 }
 
-func Extract(b []byte, root, pass string) (e []data.Entry) {
+func Extract(b []byte, root, pass string) (e []data.Stream) {
 	r, err := sevenzip.NewReaderWithPassword(bytes.NewReader(b), int64(len(b)), pass)
 
 	if err != nil {
@@ -40,7 +40,7 @@ func Extract(b []byte, root, pass string) (e []data.Entry) {
 }
 
 // https://github.com/bodgit/sevenzip?tab=readme-ov-file#why-is-my-code-running-so-slow
-func extractFile(f *sevenzip.File, root string) (e data.Entry, err error) {
+func extractFile(f *sevenzip.File, root string) (e data.Stream, err error) {
 	r, err := f.Open()
 
 	if err != nil {

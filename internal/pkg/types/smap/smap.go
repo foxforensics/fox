@@ -11,10 +11,13 @@ import (
 
 	"github.com/edsrzf/mmap-go"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
 
 const size = 1024 * 1024 * 4 // 4mb
+
+var sep = []byte("\n")
 
 type action func(ch chan<- String, c *chunk)
 
@@ -63,34 +66,31 @@ func (s SMap) String() string {
 	return sb.String()
 }
 
+func (s SMap) Format() data.Format {
+	if len(s) > 0 && len(register.Formats) > 0 {
+		b := []byte(s[0].Str)
+
+		for _, f := range register.Formats {
+			if f.Detect(b) {
+				return f.Format
+			}
+		}
+	}
+
+	return nil
+}
+
 func (s SMap) Render() SMap {
+	fn := s.Format() // check only first line
+
 	return apply(func(ch chan<- String, c *chunk) {
-		var fe *register.FormatEntry
 		for _, s := range s[c.min:c.max] {
-			b := []byte(s.Str)
-
-			if len(b) > 0 || len(register.Formats) > 0 {
-				for _, f := range register.Formats {
-					if f.Detect(b) {
-						fe = &f
-						break
-					}
-				}
-			}
-
-			if fe == nil {
+			if fn == nil {
 				ch <- String{s.Nr, s.Grp, expand(s.Str, "  ")}
 				continue
 			}
 
-			b, err := fe.Format(b, 0)
-
-			if err != nil {
-				ch <- String{s.Nr, s.Grp, expand(s.Str, "  ")}
-				continue
-			}
-
-			for b := range bytes.SplitSeq(b, []byte("\n")) {
+			for b := range bytes.SplitSeq(fn([]byte(s.Str)), sep) {
 				ch <- String{s.Nr, s.Grp, string(b)}
 			}
 		}

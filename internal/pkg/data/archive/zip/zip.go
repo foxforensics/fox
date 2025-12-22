@@ -25,7 +25,7 @@ func Detect(b []byte) bool {
 	return false
 }
 
-func Extract(b []byte, root, pass string) (e []data.Entry) {
+func Extract(b []byte, root, pass string) (e []data.Stream) {
 	r, err := zip.NewReader(bytes.NewReader(b), int64(len(b)))
 
 	if err != nil {
@@ -58,7 +58,7 @@ func Extract(b []byte, root, pass string) (e []data.Entry) {
 			continue
 		}
 
-		e = append(e, data.Entry{
+		e = append(e, data.Stream{
 			Path: data.JoinPart(root, f.Name),
 			Data: buf,
 		})

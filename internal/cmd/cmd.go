@@ -19,6 +19,9 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/xar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bzip2"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/gzip"
@@ -32,10 +35,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fox"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
@@ -145,10 +146,14 @@ func (cli *Globals) Load(args []string) *heapset.HeapSet {
 	}
 
 	if !cli.NoConvert {
-		register.Format("evtx", evtx.Detect, evtx.Format)
-		register.Format("journal", journal.Detect, journal.Format)
+		register.Convert("evtx", evtx.Detect, evtx.Convert)
+		register.Convert("journal", journal.Detect, journal.Convert)
+		register.Convert("pe", pe.Detect, pe.Convert)
+	}
+
+	if !cli.Raw {
+		register.Format("fox", fox.Detect, fox.Format)
 		register.Format("json", json.Detect, json.Format)
-		register.Format("pe", pe.Detect, pe.Format)
 	}
 
 	cli.Heaps = heapset.New(args, &heapset.Options{

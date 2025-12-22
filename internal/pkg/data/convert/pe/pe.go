@@ -14,7 +14,7 @@ func Detect(b []byte) bool {
 	return data.HasMagic(b, 0, []byte(Magic))
 }
 
-func Format(b []byte, _ int) ([]byte, error) {
+func Convert(b []byte) ([]byte, error) {
 	p, err := pe.NewBytes(b, new(pe.Options))
 
 	if err != nil {
