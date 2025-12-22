@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fox"
 	"github.com/fatih/color"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -35,7 +36,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fox"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"

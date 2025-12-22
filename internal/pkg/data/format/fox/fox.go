@@ -3,41 +3,18 @@ package fox
 import (
 	"bytes"
 	"fmt"
-	"regexp"
 	"strings"
-
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
 )
 
-const Head = "<FOX"
-const Tail = "XOF>"
-
-var cut = regexp.MustCompile(`^\s*[{}],?$`)
-var rep = strings.NewReplacer(
-	`  "`, `  `,
-	`":`, `:`,
-)
+var Head = []byte("<")
+var Tail = []byte(">")
 
 func Detect(b []byte) bool {
-	s := string(b)
-	return strings.HasPrefix(s, Head) && strings.HasSuffix(s, Tail)
+	return bytes.HasPrefix(b, Head) && bytes.HasSuffix(b, Tail)
 }
 
 func Format(b []byte) []byte {
-	buf := bytes.NewBuffer(nil)
-	res := json.Format(Unwrap(b))
-
-	for i, line := range strings.Split(string(res), "\n") {
-		if !cut.MatchString(line) {
-			if i > 1 {
-				buf.WriteRune('\n')
-			}
-
-			buf.WriteString(trim(line))
-		}
-	}
-
-	return buf.Bytes()
+	return Indent(b)
 }
 
 func FromString(s string) string {
@@ -48,19 +25,74 @@ func FromBytes(b []byte) []byte {
 	return []byte(fmt.Sprintf("%s%s%s\n", Head, b, Tail))
 }
 
-func Unwrap(b []byte) []byte {
-	s := string(b)
-	s = strings.TrimPrefix(s, Head)
-	s = strings.TrimSuffix(s, Tail)
-	return []byte(s)
+func Indent(b []byte) []byte {
+	buf := bytes.NewBuffer(nil)
+
+	b = bytes.TrimPrefix(b, Head)
+	b = bytes.TrimSuffix(b, Tail)
+
+	var numQuote int
+	var numCurly int
+	var numSquare int
+
+	var lastSlash bool
+	var lastBreak bool
+	var nextCurly bool
+	var nextSquare bool
+
+	for i, c := range b {
+		if i > 0 {
+			lastSlash = b[i-1] == '\\'
+			lastBreak = b[i-1] == '\n'
+		}
+
+		if i < len(b)-1 {
+			nextCurly = b[i+1] == '}'
+			nextSquare = b[i+1] == ']'
+		}
+
+		// literal char
+		if numQuote%2 > 0 && (c != '"' || lastSlash) {
+			buf.WriteByte(c)
+			continue
+		}
+
+		switch c {
+		case '{':
+			numCurly += 1
+			if numCurly+numSquare > 1 && !lastBreak && !nextCurly {
+				buf.WriteByte('\n')
+				buf.WriteString(tab(numCurly + numSquare))
+			}
+		case '}':
+			numCurly -= 1
+		case '[':
+			numSquare += 1
+			if numCurly+numSquare > 1 && !lastBreak && !nextSquare {
+				buf.WriteByte('\n')
+				buf.WriteString(tab(numCurly + numSquare))
+			}
+		case ']':
+			numSquare -= 1
+		case ':':
+			buf.WriteByte(' ')
+		case ',':
+			if !lastBreak {
+				buf.WriteByte('\n')
+				buf.WriteString(tab(numCurly + numSquare))
+			}
+		case '"':
+			numQuote += 1
+		case ' ':
+			// skip spaces
+		default:
+			buf.WriteByte(c)
+		}
+	}
+
+	return buf.Bytes()
 }
 
-func trim(s string) string {
-	s = strings.TrimSuffix(s[2:], " {")
-	s = strings.TrimSuffix(s, "\":")
-	s = strings.TrimPrefix(s, "\"")
-
-	s = rep.Replace(s)
-
-	return s
+func tab(e int) string {
+	return strings.Repeat("· ", e-1)
 }

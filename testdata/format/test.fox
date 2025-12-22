@@ -1,1 +1,1 @@
-<FOX{"Foo": {"Bar": 123}}XOF>
+<{"Foo": {"Bar":[123,"Say: \"Hello,\" World\""]}}>
