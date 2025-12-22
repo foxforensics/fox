@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/0xrawsec/golang-evtx/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fox"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fson"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
@@ -38,7 +38,7 @@ func Convert(b []byte) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 
 	for e := range r.Events() {
-		_, err := buf.Write(fox.FromBytes(evtx.ToJSON(e)))
+		_, err := buf.Write(fson.FromBytes(evtx.ToJSON(e)))
 
 		if err != nil {
 			log.Println(err)

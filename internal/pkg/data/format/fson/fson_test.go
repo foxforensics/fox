@@ -1,4 +1,4 @@
-package fox
+package fson
 
 import (
 	"strings"
@@ -7,7 +7,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "format/test.fox"
+const file = "format/fox.fson"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
@@ -40,7 +40,7 @@ func TestFormat(t *testing.T) {
 
 	lines := strings.Split(string(buf), "\n")
 
-	if len(lines) != 4 {
+	if len(lines) != 3 {
 		t.Fatal("invalid length")
 	}
 }

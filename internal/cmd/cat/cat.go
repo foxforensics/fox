@@ -37,9 +37,9 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 			if !cli.NoLine && l.Nr == buffer.Sep {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(buffer.Sep))
 			} else if !cli.NoLine {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Nr), s)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Nr), text.Auto(s))
 			} else {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", s)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Auto(s))
 			}
 		}
 	}

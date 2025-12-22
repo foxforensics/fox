@@ -7,7 +7,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fox"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fson"
 	"github.com/fatih/color"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -152,7 +152,7 @@ func (cli *Globals) Load(args []string) *heapset.HeapSet {
 	}
 
 	if !cli.Raw {
-		register.Format("fox", fox.Detect, fox.Format)
+		register.Format("fson", fson.Detect, fson.Format)
 		register.Format("json", json.Detect, json.Format)
 	}
 

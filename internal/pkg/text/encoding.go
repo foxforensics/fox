@@ -21,13 +21,15 @@ const (
 	PDI = 0x2069
 )
 
+const termW = 78
+
 func Header(s string) string {
 	var sb strings.Builder
 
 	w, _, err := term.GetSize(0)
 
 	if err != nil {
-		w = 78 // default width
+		w = termW // default width
 	}
 
 	l := strings.Repeat("─", w-2)
