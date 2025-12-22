@@ -23,6 +23,16 @@ const (
 
 const termW = 78
 
+func Line() string {
+	w, _, err := term.GetSize(0)
+
+	if err != nil {
+		w = termW // default width
+	}
+
+	return strings.Repeat("─", w)
+}
+
 func Header(s string) string {
 	var sb strings.Builder
 
