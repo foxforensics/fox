@@ -8,6 +8,8 @@ import (
 )
 
 const (
+	LF  = 0x0A
+	CR  = 0x0D
 	SP  = 0x20
 	DEL = 0x7E
 	LRE = 0x202A

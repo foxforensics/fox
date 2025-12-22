@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
 func Detect(b []byte) bool {
@@ -63,8 +63,9 @@ func Format(b []byte) []byte {
 		}
 	}
 
-	buf.WriteByte('\n')
-	buf.WriteString(buffer.Sep)
+	// add object separator
+	buf.WriteByte(text.LF)
+	buf.WriteByte(text.CR)
 
 	return buf.Bytes()
 }

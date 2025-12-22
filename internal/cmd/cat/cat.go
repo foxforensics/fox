@@ -34,7 +34,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 				s = text.MarkMatch(s, cli.Filter)
 			}
 
-			if !cli.NoLine && (l.Nr == buffer.Sep || l.Str == buffer.Sep) {
+			if !cli.NoLine && (l.Nr == buffer.Sep || l.Str == string(rune(text.CR))) {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Line()))
 			} else if !cli.NoLine {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Nr), text.Auto(s))
