@@ -10,11 +10,12 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
-const File = "text/bible.txt"
-const Text = "FOX123XOF"
+const Large = "text/bible.txt"
+const Small = "fox.txt"
+const Input = "FOX123XOF"
 
 func BenchmarkSum(b *testing.B) {
-	buf := Fixture(File)
+	buf := Fixture(Small)
 
 	b.ResetTimer()
 
@@ -24,37 +25,44 @@ func BenchmarkSum(b *testing.B) {
 }
 
 func TestSum(t *testing.T) {
-	file := Fixture(File)
-	text := []byte(Text)
+	large := Fixture(Large)
+	small := Fixture(Small)
+	input := []byte(Input)
 
 	for _, tt := range []struct {
 		buf []byte
 		imp string
 		sum string
 	}{
-		{file, types.ADLER32, "77e8f18a"},
-		{file, types.CRC32C, "6e164f51"},
-		{file, types.CRC32IEEE, "6de95d61"},
-		{file, types.CRC64ECMA, "1c10bfee4250c76f"},
-		{file, types.CRC64ISO, "37c0210d10e905f2"},
-		{file, types.PE, "aac24600"},
-		{text, types.LM, "74ac61daa7e79d69482bc9e3e9caf5a9"},
-		{text, types.NT, "0b2bee3bac7bddeae69d63d53c0b68f3"},
-		{file, types.MD2, "aceb3e20d985564d17838fc437744843"},
-		{file, types.MD4, "fbb9a5a610458386e0ff2bdb4dea1076"},
-		{file, types.MD5, "f7ebcc3119549346b871212958dbc203"},
-		{file, types.MD6, "7abba14b23ea4438d2009118fe9d1befed73ba7420b5b7952fa8cd3c1a6ce62a"},
-		{file, types.SHA1, "7763c40e323d9d57fc151cf9732dc4d5a07eaebf"},
-		{file, types.SHA256, "61a54c7611855e09266732d923e64819273baf71b65bbb7c50249083e5b655fd"},
-		{file, types.SHA3, "3429b00349d4dae6b707647747c8f3f9c819fb2ed8087fe435a6d126"},
-		{file, types.SHA3224, "3429b00349d4dae6b707647747c8f3f9c819fb2ed8087fe435a6d126"},
-		{file, types.SHA3256, "96b1fbd188e128c79eb5e4c3436b47785f2894187c2545d9db1dea6580ab5679"},
-		{file, types.SHA3384, "273e6a839c571c724ad2d071889c23d2184387e1ed7e891d80e74a5a80b12f15393d26ec1abbe34dc85025402833de92"},
-		{file, types.SHA3512, "5ce1d00eaf6da7409d009a3c242597559dc3cd2a0b41d5be9d2c86ae9709b66edeff0465fbdfca0432496ad0f3d839a4d3bf1d039a4161e3910d58d39d52e930"},
-		{file, types.SSDEEP, "49152:LkD0m3lNkRAA4Ml/Mo3hdWoPPwXj3NfhrZChJl7v6ih7T87/MvwFLSMyJTszqBPh:t"},
-		{file, types.TLSH, "T12526a757e784133b1b620334620ea5d9f31ac43e7676ce30585ee03e2356c7996b9be8"},
-		{file, types.XXH3, "996653bb371ee4a1"},
-		{file, types.XXH64, "6047f571a76ec9bb"},
+		{small, types.ADLER32, "6b0a131c"},
+		{small, types.BLAKE2S256, "35622f6446178515ba503412f31eb768b092d878acbe6bf422b3ee47cf0558e7"},
+		{small, types.BLAKE2B256, "adb735516f5c008b29e3313869311096fe671bd2bd5f199b1a49ce579e0f0bd2"},
+		{small, types.BLAKE2B384, "879b983993f559354807d61b7cdf00c310c093bbb904eb43db9db2b49a83e8a07512d5f24299e458b5374291b23a9f86"},
+		{small, types.BLAKE2B512, "6805b54f9ad456d6a217624fa0c992108a35cf52f35b9d7f617533b50804bf08b2af20653469b3b76acc799bd3c905919cc958084179adf2b1475493d5cd1810"},
+		{small, types.BLAKE3256, "68aa491620394f724284e35b51551a21ab715f0c38f85cf8ba837233d34ae4a6"},
+		{small, types.BLAKE3512, "68aa491620394f724284e35b51551a21ab715f0c38f85cf8ba837233d34ae4a646914037b62a958cc6f769865ea235ae326f8cc4e7eb7010102dfd0d72652d9a"},
+		{small, types.CRC32C, "afb3f887"},
+		{small, types.CRC32IEEE, "7ab53d60"},
+		{small, types.CRC64ECMA, "df2fc66f2c50575f"},
+		{small, types.CRC64ISO, "66747f552337d269"},
+		{small, types.PE, "bcb10000"},
+		{input, types.LM, "74ac61daa7e79d69482bc9e3e9caf5a9"},
+		{input, types.NT, "0b2bee3bac7bddeae69d63d53c0b68f3"},
+		{small, types.MD2, "9e49ada9a2ccafdafffff50137351626"},
+		{small, types.MD4, "faedf7d245748f2939593258a5e96875"},
+		{small, types.MD5, "7fe307fda20e805d110b35bcc1f31167"},
+		{small, types.MD6, "599f033e751832ce908f22a3b0b0bf316a77f1553bc4c24146caf9fa6b235854"},
+		{small, types.SHA1, "b11b92d927f2eb66f0aa17266f7348c0cdfd1105"},
+		{small, types.SHA256, "b7e664f9009f84aa056fc78008fe24f33bd45795c407162a78b0fd4c6c2e2d08"},
+		{small, types.SHA3, "96c5ca5658d7a04cb844539bcab4c2ebe503bc16c41f79ba207ab011"},
+		{small, types.SHA3224, "96c5ca5658d7a04cb844539bcab4c2ebe503bc16c41f79ba207ab011"},
+		{small, types.SHA3256, "40ec86016388c549a4a4954a068989b2b757f6488dce0f1cd4a558ee550129fe"},
+		{small, types.SHA3384, "66f3c9e7d5c888ada9e8fc37994eb468239a31f2694e4aa8450c7eecf2803d9ef385f6c632b0a9b66452032e29ffefbb"},
+		{small, types.SHA3512, "794a82f57c8448a5221c8cac462541092f2ef198df3d41edbf5f4ea6f19fdf26f98c37a82eec8be367547822aa5f90e23e2b5f9d26be9f9ee6fb0b654de918e1"},
+		{large, types.SSDEEP, "49152:LkD0m3lNkRAA4Ml/Mo3hdWoPPwXj3NfhrZChJl7v6ih7T87/MvwFLSMyJTszqBPh:t"},
+		{large, types.TLSH, "T12526a757e784133b1b620334620ea5d9f31ac43e7676ce30585ee03e2356c7996b9be8"},
+		{small, types.XXH3, "50b2cde07882a633"},
+		{small, types.XXH64, "d2ff231ddefb0bd0"},
 	} {
 		t.Run(tt.imp, func(t *testing.T) {
 			sum, err := Sum(tt.imp, tt.buf)

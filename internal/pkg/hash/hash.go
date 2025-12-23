@@ -19,8 +19,11 @@ import (
 	"github.com/htruong/go-md2"
 	"github.com/pedroalbanese/md6"
 	"github.com/zeebo/xxh3"
+	"golang.org/x/crypto/blake2b"
+	"golang.org/x/crypto/blake2s"
 	"golang.org/x/crypto/md4"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/blake3"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/lm"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/nt"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/pe"
@@ -46,6 +49,18 @@ func Sum(t string, b []byte) (string, error) {
 	switch strings.ToLower(t) {
 	case types.ADLER32:
 		imp = adler32.New()
+	case types.BLAKE2B256:
+		imp, _ = blake2b.New256(nil)
+	case types.BLAKE2B384:
+		imp, _ = blake2b.New384(nil)
+	case types.BLAKE2B512:
+		imp, _ = blake2b.New512(nil)
+	case types.BLAKE2S256:
+		imp, _ = blake2s.New256(nil)
+	case types.BLAKE3256:
+		imp = blake3.New256()
+	case types.BLAKE3512:
+		imp = blake3.New512()
 	case types.CRC32C:
 		imp = crc32.New(crc32.MakeTable(crc32.Castagnoli))
 	case types.CRC32IEEE:

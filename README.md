@@ -1,4 +1,4 @@
-![fox](assets/fox_logo.png "fox")
+![fox](assets/logo.png "logo")
 
 The Forensic Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 
@@ -79,7 +79,7 @@ Compression formats:
 > Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
 
 Cryptographic hashes:
-> MD2, MD4, MD5, MD6, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
+> BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, MD2, MD4, MD5, MD6, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
 
 Performance hashes:
 > XXH64, XXH3

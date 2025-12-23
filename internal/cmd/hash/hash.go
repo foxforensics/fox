@@ -24,6 +24,9 @@ Flags:
 Examples:
   $ fox hash -Tmd5,sha1 files.7z
 
+Cryptographic hashes (BLAKE family):
+  BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
+
 Cryptographic hashes (SHA family):
   SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
 
