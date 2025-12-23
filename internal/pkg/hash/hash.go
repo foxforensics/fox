@@ -132,7 +132,7 @@ func Sum(t string, b []byte) (string, error) {
 	case types.MD6:
 		imp = md6.New256()
 	case types.MURMUR3:
-		imp = murmur3.New64()
+		imp = murmur3.New64() // MURMUR3F
 	case types.SHA1:
 		imp = sha1.New()
 	case types.SHA256:

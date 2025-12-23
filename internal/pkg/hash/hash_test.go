@@ -53,7 +53,7 @@ func TestSum(t *testing.T) {
 		{small, types.MD4, "faedf7d245748f2939593258a5e96875"},
 		{small, types.MD5, "7fe307fda20e805d110b35bcc1f31167"},
 		{small, types.MD6, "599f033e751832ce908f22a3b0b0bf316a77f1553bc4c24146caf9fa6b235854"},
-		{small, types.MURMUR3, ""},
+		{small, types.MURMUR3, "785ae97135fcdbc8"},
 		{small, types.SHA1, "b11b92d927f2eb66f0aa17266f7348c0cdfd1105"},
 		{small, types.SHA256, "b7e664f9009f84aa056fc78008fe24f33bd45795c407162a78b0fd4c6c2e2d08"},
 		{small, types.SHA3, "96c5ca5658d7a04cb844539bcab4c2ebe503bc16c41f79ba207ab011"},
