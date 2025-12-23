@@ -20,6 +20,7 @@ import (
 	"github.com/glaslos/tlsh"
 	"github.com/htruong/go-md2"
 	"github.com/pedroalbanese/md6"
+	"github.com/spaolacci/murmur3"
 	"github.com/zeebo/xxh3"
 	"golang.org/x/crypto/blake2b"
 	"golang.org/x/crypto/blake2s"
@@ -53,6 +54,7 @@ var Algorithms = []string{
 	"md4",
 	"md5",
 	"md6",
+	"murmur3",
 	"sha1",
 	"sha256",
 	"sha3",
@@ -129,6 +131,8 @@ func Sum(t string, b []byte) (string, error) {
 		imp = md5.New()
 	case types.MD6:
 		imp = md6.New256()
+	case types.MURMUR3:
+		imp = murmur3.New64()
 	case types.SHA1:
 		imp = sha1.New()
 	case types.SHA256:

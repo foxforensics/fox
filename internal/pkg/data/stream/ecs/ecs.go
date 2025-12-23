@@ -3,10 +3,11 @@
 package ecs
 
 import (
-	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"time"
+
+	"github.com/twmb/murmur3"
 
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
@@ -103,7 +104,7 @@ func (ecs Ecs) Write(e *event.Event) (int64, int64, error) {
 	ecs.Event.Severity = int64(e.Severity)
 	ecs.Event.Ingested = time.Now().UTC()
 	ecs.Event.Original = cef
-	ecs.Event.Hash = fmt.Sprintf("%x", sha256.Sum256([]byte(cef)))
+	ecs.Event.Hash = fmt.Sprintf("%x", murmur3.StringSum64(cef))
 
 	ecs.Labels = make(map[string]any)
 

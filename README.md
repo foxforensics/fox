@@ -82,7 +82,7 @@ Cryptographic hashes:
 > BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, MD2, MD4, MD5, MD6, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
 
 Performance hashes:
-> FNV-1, FNV-1a, XXH64, XXH3
+> FNV-1, FNV-1a, Murmur3, XXH64, XXH3
 
 Similarity hashes:
 > SSDeep, TLSH

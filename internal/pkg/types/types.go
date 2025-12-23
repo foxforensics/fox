@@ -21,6 +21,7 @@ const (
 	MD4        = "md4"
 	MD5        = "md5"
 	MD6        = "md6"
+	MURMUR3    = "murmur3"
 	SHA1       = "sha1"
 	SHA256     = "sha256"
 	SHA3       = "sha3"

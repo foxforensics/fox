@@ -37,7 +37,7 @@ Cryptographic hashes (MD family):
   MD2, MD4, MD5, MD6
 
 Performance hashes:
-  FNV-1, FNV-1A, XXH64, XXH3
+  FNV-1, FNV-1A, MURMUR3, XXH64, XXH3
 
 Similarity hashes:
   SSDEEP, TLSH
