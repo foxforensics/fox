@@ -12,6 +12,8 @@ const (
 	CRC32IEEE  = "crc32-ieee"
 	CRC64ECMA  = "crc64-ecma"
 	CRC64ISO   = "crc64-iso"
+	FNV1       = "fnv-1"
+	FNV1A      = "fnv-1a"
 	PE         = "pe"
 	LM         = "lm"
 	NT         = "nt"

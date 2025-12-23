@@ -11,6 +11,8 @@ import (
 	"hash/adler32"
 	"hash/crc32"
 	"hash/crc64"
+	"hash/fnv"
+	"slices"
 	"strings"
 
 	"github.com/cespare/xxhash"
@@ -42,6 +44,8 @@ var Algorithms = []string{
 	"crc32-ieee",
 	"crc64-ecma",
 	"crc64-iso",
+	"fnv-1",
+	"fnv-1a",
 	"pe",
 	"lm",
 	"nt",
@@ -62,23 +66,23 @@ var Algorithms = []string{
 	"xxh3",
 }
 
-func Secure(t string) bool {
-	switch strings.ToLower(t) {
-	case types.BLAKE2S256:
-		fallthrough
-	case types.BLAKE2B256, types.BLAKE2B384, types.BLAKE2B512:
-		fallthrough
-	case types.BLAKE3256, types.BLAKE3512:
-		fallthrough
-	case types.SHA256:
-		fallthrough
-	case types.SHA3:
-		fallthrough
-	case types.SHA3224, types.SHA3256, types.SHA3384, types.SHA3512:
-		return true
-	default:
-		return false
-	}
+var secure = []string{
+	"blake2s-256",
+	"blake2b-256",
+	"blake2b-384",
+	"blake2b-512",
+	"blake3-256",
+	"blake3-512",
+	"sha256",
+	"sha3",
+	"sha3-224",
+	"sha3-256",
+	"sha3-384",
+	"sha3-512",
+}
+
+func IsSecure(t string) bool {
+	return slices.Contains(secure, strings.ToLower(t))
 }
 
 func Sum(t string, b []byte) (string, error) {
@@ -107,6 +111,10 @@ func Sum(t string, b []byte) (string, error) {
 		imp = crc64.New(crc64.MakeTable(crc64.ECMA))
 	case types.CRC64ISO:
 		imp = crc64.New(crc64.MakeTable(crc64.ISO))
+	case types.FNV1:
+		imp = fnv.New128()
+	case types.FNV1A:
+		imp = fnv.New128a()
 	case types.PE:
 		imp = pe.New()
 	case types.LM:

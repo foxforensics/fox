@@ -3,6 +3,7 @@
 package ecs
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -11,7 +12,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
-	"github.com/zeebo/xxh3"
 )
 
 const version = "9.1.0"
@@ -103,7 +103,7 @@ func (ecs Ecs) Write(e *event.Event) (int64, int64, error) {
 	ecs.Event.Severity = int64(e.Severity)
 	ecs.Event.Ingested = time.Now().UTC()
 	ecs.Event.Original = cef
-	ecs.Event.Hash = fmt.Sprintf("%x", xxh3.HashString(cef))
+	ecs.Event.Hash = fmt.Sprintf("%x", sha256.Sum256([]byte(cef)))
 
 	ecs.Labels = make(map[string]any)
 

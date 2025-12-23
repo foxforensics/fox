@@ -64,15 +64,15 @@ type Globals struct {
 	After   uint   `short:"A"`
 
 	// disable
-	Raw       bool `short:"r"`
-	Quiet     bool `short:"q"`
-	NoFile    bool `long:"no-file"`
-	NoLine    bool `long:"no-line"`
-	NoColor   bool `long:"no-color"`
-	NoDeflate bool `long:"no-deflate"`
-	NoExtract bool `long:"no-extract"`
-	NoConvert bool `long:"no-convert"`
-	NoWarning bool `long:"no-warning"`
+	Raw        bool `short:"r"`
+	Quiet      bool `short:"q"`
+	NoFile     bool `long:"no-file"`
+	NoLine     bool `long:"no-line"`
+	NoColor    bool `long:"no-color"`
+	NoDeflate  bool `long:"no-deflate"`
+	NoExtract  bool `long:"no-extract"`
+	NoConvert  bool `long:"no-convert"`
+	NoWarnings bool `long:"no-warnings"`
 
 	// standard
 	Help    bool
@@ -102,7 +102,7 @@ func (cli *Globals) Load(args []string) *heapset.HeapSet {
 		cli.NoDeflate = true
 		cli.NoExtract = true
 		cli.NoConvert = true
-		cli.NoWarning = true
+		cli.NoWarnings = true
 	}
 
 	if len(cli.File) > 0 {

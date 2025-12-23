@@ -37,7 +37,7 @@ Cryptographic hashes (MD family):
   MD2, MD4, MD5, MD6
 
 Performance hashes:
-  XXH64, XXH3
+  FNV-1, FNV-1A, XXH64, XXH3
 
 Similarity hashes:
   SSDEEP, TLSH
@@ -74,7 +74,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	for _, typ := range cmd.Type {
-		if !hash.Secure(typ) && !cli.NoWarning {
+		if !hash.IsSecure(typ) && !cli.NoWarnings {
 			log.Printf("used algorithm %s is not cryptically secure!\n", typ)
 		}
 
