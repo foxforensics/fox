@@ -72,6 +72,7 @@ type Globals struct {
 	NoDeflate bool `long:"no-deflate"`
 	NoExtract bool `long:"no-extract"`
 	NoConvert bool `long:"no-convert"`
+	NoWarning bool `long:"no-warning"`
 
 	// standard
 	Help    bool
@@ -101,6 +102,7 @@ func (cli *Globals) Load(args []string) *heapset.HeapSet {
 		cli.NoDeflate = true
 		cli.NoExtract = true
 		cli.NoConvert = true
+		cli.NoWarning = true
 	}
 
 	if len(cli.File) > 0 {

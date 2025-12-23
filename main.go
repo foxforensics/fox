@@ -85,6 +85,7 @@ Disable:
       --no-deflate         don't deflate automatically
       --no-extract         don't extract automatically
       --no-convert         don't convert automatically
+      --no-warning         don't show any warnings
 
 Standard:
   -d, --dry-run            prints only the found filenames

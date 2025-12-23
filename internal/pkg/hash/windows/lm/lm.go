@@ -3,6 +3,7 @@ package lm
 
 import (
 	"crypto/des"
+	"errors"
 	"hash"
 	"log"
 	"strings"
@@ -16,6 +17,8 @@ const (
 type LM struct {
 	sum []byte
 }
+
+var ErrInputSize = errors.New("input size to large")
 
 func New() hash.Hash {
 	return new(LM)
@@ -35,7 +38,7 @@ func (h *LM) Reset() {
 
 func (h *LM) Write(b []byte) (n int, err error) {
 	if len(b) > block {
-		log.Fatalln("input size to large")
+		return 0, ErrInputSize
 	}
 
 	h.Reset()

@@ -30,6 +30,38 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
+var Algorithms = []string{
+	"adler32",
+	"blake2s-256",
+	"blake2b-256",
+	"blake2b-384",
+	"blake2b-512",
+	"blake3-256",
+	"blake3-512",
+	"crc32-c",
+	"crc32-ieee",
+	"crc64-ecma",
+	"crc64-iso",
+	"pe",
+	"lm",
+	"nt",
+	"md2",
+	"md4",
+	"md5",
+	"md6",
+	"sha1",
+	"sha256",
+	"sha3",
+	"sha3-224",
+	"sha3-256",
+	"sha3-384",
+	"sha3-512",
+	"ssdeep",
+	"tlsh",
+	"xxh64",
+	"xxh3",
+}
+
 func Secure(t string) bool {
 	switch strings.ToLower(t) {
 	case types.BLAKE2S256:

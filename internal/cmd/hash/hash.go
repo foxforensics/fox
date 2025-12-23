@@ -6,6 +6,8 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/alecthomas/kong"
+
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
@@ -18,6 +20,7 @@ Prints file hashes and checksums.
 fox hash [FLAGS ...] <PATHS ...>
 
 Flags:
+  -a, --all                use all available algorithms
   -T, --type=ALGO,...      use algorithms (default SHA256)
   -F, --find=HASH,...      show only files that match
 
@@ -47,9 +50,18 @@ Checksums:
 `)
 
 type Hash struct {
+	All   bool     `short:"a"`
 	Type  []string `short:"T" sep:"," default:"SHA256"`
 	Find  []string `short:"F" sep:","`
 	Paths []string `arg:"" type:"path" optional:""`
+}
+
+func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+	if cmd.All {
+		cmd.Type = hash.Algorithms
+	}
+
+	return nil
 }
 
 func (cmd *Hash) Run(cli *cli.Globals) error {
@@ -62,7 +74,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	for _, typ := range cmd.Type {
-		if !hash.Secure(typ) {
+		if !hash.Secure(typ) && !cli.NoWarning {
 			log.Printf("used algorithm %s is not cryptically secure!\n", typ)
 		}
 
