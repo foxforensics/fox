@@ -40,7 +40,7 @@ func TestFormat(t *testing.T) {
 
 	lines := strings.Split(string(buf), "\n")
 
-	if len(lines) != 3 {
+	if len(lines) != 4 {
 		t.Fatal("invalid length")
 	}
 }

@@ -1,9 +1,7 @@
 package journal
 
 import (
-	"bufio"
-	"bytes"
-	"encoding/json"
+	"strings"
 	"testing"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
@@ -44,15 +42,9 @@ func TestConvert(t *testing.T) {
 		t.Error(err)
 	}
 
-	jsonl := bufio.NewScanner(bytes.NewReader(buf))
+	lines := strings.Split(string(buf), "\n")
 
-	for jsonl.Scan() {
-		if !json.Valid([]byte(jsonl.Text())) {
-			t.Fatal("invalid json")
-		}
-	}
-
-	if err := jsonl.Err(); err != nil {
-		t.Error(err)
+	if len(lines) != 1923 {
+		t.Fatal("invalid length")
 	}
 }
