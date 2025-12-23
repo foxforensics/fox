@@ -32,6 +32,12 @@ import (
 
 func Secure(t string) bool {
 	switch strings.ToLower(t) {
+	case types.BLAKE2S256:
+		fallthrough
+	case types.BLAKE2B256, types.BLAKE2B384, types.BLAKE2B512:
+		fallthrough
+	case types.BLAKE3256, types.BLAKE3512:
+		fallthrough
 	case types.SHA256:
 		fallthrough
 	case types.SHA3:
