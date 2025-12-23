@@ -8,7 +8,7 @@ import (
 )
 
 // Tabs from fox structured object notation
-var tab = regexp.MustCompile(`^(·\s)+\S+ `)
+var tab = regexp.MustCompile(`^(·\s)+\w+ `)
 
 type Colored func(...any) string
 
