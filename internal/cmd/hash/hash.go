@@ -20,7 +20,7 @@ Prints file hashes and checksums.
 fox hash [FLAGS ...] <PATHS ...>
 
 Flags:
-  -a, --all                use all available algorithms
+  -a, --all                use algorithms (all)
   -T, --type=ALGO,...      use algorithms (default SHA256)
   -F, --find=HASH,...      show only files that match
 
