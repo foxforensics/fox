@@ -15,33 +15,6 @@ type String struct {
 	Str string
 }
 
-func (h *Heap) Entropy(m, x float64) (float64, bool) {
-	var a [256]float64
-	var v float64
-
-	for _, b := range h.mmap {
-		a[b]++
-	}
-
-	l := float64(len(h.MMap()))
-
-	for i := range 256 {
-		if a[i] != 0 {
-			f := a[i] / l
-			v -= f * math.Log2(f)
-		}
-	}
-
-	v /= 8
-
-	// heap filtered
-	if v < m || v > x {
-		return 0, false
-	}
-
-	return v, true
-}
-
 func (h *Heap) Strings(m, x uint, w int, s []string, f bool) <-chan String {
 	var ch = make(chan String, types.Size)
 	var db *text.Strings
@@ -98,4 +71,26 @@ func (h *Heap) Strings(m, x uint, w int, s []string, f bool) <-chan String {
 	go carve()
 
 	return ch
+}
+
+func (h *Heap) Entropy(block []byte) float64 {
+	var a [256]float64
+	var v float64
+
+	for _, b := range block {
+		a[b]++
+	}
+
+	l := float64(len(block))
+
+	for i := range 256 {
+		if a[i] != 0 {
+			f := a[i] / l
+			v -= f * math.Log2(f)
+		}
+	}
+
+	v /= 8
+
+	return v
 }
