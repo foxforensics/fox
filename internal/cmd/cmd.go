@@ -55,7 +55,7 @@ type Globals struct {
 	Pass  string `short:"p"`
 
 	// file writer
-	File string `short:"f"`
+	File string `short:"f" xor:"file,quiet"`
 
 	// line filter
 	Regex   string `short:"e"`
@@ -65,7 +65,7 @@ type Globals struct {
 
 	// disable
 	Raw        bool `short:"r"`
-	Quiet      bool `short:"q"`
+	Quiet      bool `short:"q" xor:"file,quiet"`
 	NoFile     bool `long:"no-file"`
 	NoLine     bool `long:"no-line"`
 	NoColor    bool `long:"no-color"`
