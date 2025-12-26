@@ -22,19 +22,18 @@ type Heap struct {
 
 	Name string     // heap name
 	Type types.Heap // heap type
+	Size int64      // heap size
 
 	mmap mmap.MMap // memory map
 	smap smap.SMap // string map
-
-	size int64 // file size
 }
 
 func New(ctx *Context, m mmap.MMap) *Heap {
 	h := &Heap{
 		Name: ctx.Name,
 		Type: ctx.Type,
+		Size: int64(len(m)),
 		mmap: m,
-		size: int64(len(m)),
 	}
 
 	// reduce mmap
@@ -61,18 +60,6 @@ func (h *Heap) SMap() smap.SMap {
 	return h.smap
 }
 
-func (h *Heap) Size() int64 {
-	h.RLock()
-	defer h.RUnlock()
-	return h.size
-}
-
-func (h *Heap) Len() int {
-	h.RLock()
-	defer h.RUnlock()
-	return len(h.smap)
-}
-
 func (h *Heap) String() string {
 	switch h.Type {
 	case types.Stdin:
@@ -81,8 +68,8 @@ func (h *Heap) String() string {
 		return "stdout"
 	case types.Stderr:
 		return "stderr"
-	case types.String:
-		return "string"
+	case types.Defined:
+		return "input"
 	default:
 		return h.Name
 	}
@@ -95,9 +82,9 @@ func (h *Heap) Discard() {
 		_ = h.mmap.Unmap()
 	}
 
+	h.Size = 0
 	h.mmap = nil
 	h.smap = nil
-	h.size = 0
 
 	h.Unlock()
 

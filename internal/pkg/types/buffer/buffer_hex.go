@@ -24,7 +24,7 @@ func Hex(h *heap.Heap, tail uint, mode string) *HexBuffer {
 	var off uint
 
 	if tail > 0 {
-		off = max(uint(h.Size())-tail, 0)
+		off = max(uint(h.Size)-tail, 0)
 	}
 
 	go hexStream(buf, mode, h.MMap(), off)

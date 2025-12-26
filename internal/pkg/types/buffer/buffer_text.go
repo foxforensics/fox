@@ -24,7 +24,7 @@ type TextBuffer struct {
 func Text(h *heap.Heap) *TextBuffer {
 	var buf = &TextBuffer{
 		make(chan *TextLine, types.Size),
-		uint(math.Log10(float64(h.Len()))) + 1,
+		uint(math.Log10(float64(len(h.SMap())))) + 1,
 	}
 
 	go textStream(buf, h.SMap().Render())
