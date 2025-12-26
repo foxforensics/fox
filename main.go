@@ -105,7 +105,7 @@ Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
 Example: Show the MBR in canonical hex
-  $ fox hex -mc -hc512 disk.bin
+  $ fox hex -hc512 disk.bin
 
 Example: Hunt down suspicious events
   $ fox hunt -sxv ./**/*.dd
