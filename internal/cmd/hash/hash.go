@@ -34,7 +34,7 @@ Cryptographic hashes (BLAKE family):
   BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
 
 Cryptographic hashes (SHA family):
-  SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
+  SHA1, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
 
 Cryptographic hashes (MD family):
   MD2, MD4, MD5, MD6
@@ -88,7 +88,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 
 		for _, typ := range cmd.Type {
 			if !hash.IsSecure(typ) && !cli.NoWarnings {
-				log.Printf("used algorithm %s is not cryptically secure!\n", typ)
+				log.Printf("warning: algorithm %s is not secure!\n", typ)
 			}
 
 			sum, err := hash.Sum(typ, h.MMap())

@@ -1,4 +1,4 @@
-package hunt
+package hunter
 
 import (
 	"database/sql"

@@ -5,6 +5,7 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha3"
+	"crypto/sha512"
 	"errors"
 	"fmt"
 	"hash"
@@ -57,6 +58,8 @@ var Algorithms = []string{
 	"murmur3",
 	"sha1",
 	"sha256",
+	"sha384",
+	"sha512",
 	"sha3",
 	"sha3-224",
 	"sha3-256",
@@ -76,6 +79,8 @@ var secure = []string{
 	"blake3-256",
 	"blake3-512",
 	"sha256",
+	"sha384",
+	"sha512",
 	"sha3",
 	"sha3-224",
 	"sha3-256",
@@ -137,6 +142,8 @@ func Sum(t string, b []byte) (string, error) {
 		imp = sha1.New()
 	case types.SHA256:
 		imp = sha256.New()
+	case types.SHA512:
+		imp = sha512.New()
 	case types.SHA3:
 		fallthrough
 	case types.SHA3224:
