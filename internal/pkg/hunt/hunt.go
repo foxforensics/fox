@@ -14,7 +14,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
 
 const Level = 8
@@ -31,7 +31,7 @@ type Options struct {
 	Verbose    int
 }
 
-func Hunt(hs *heapset.HeapSet, opt *Options) <-chan *event.Event {
+func Hunt(heaps <-chan *heap.Heap, opt *Options) <-chan *event.Event {
 	var wg sync.WaitGroup
 
 	ch := make(chan *event.Event, types.Size)
@@ -40,9 +40,9 @@ func Hunt(hs *heapset.HeapSet, opt *Options) <-chan *event.Event {
 		ch = sort(ch)
 	}
 
-	wg.Add(2 * hs.Len())
+	for h := range heaps {
+		wg.Add(2)
 
-	for _, h := range hs.Get() {
 		if opt.Verbose > 0 {
 			log.Printf("hunt: parsing heap %s\n", h.String())
 		}
@@ -72,6 +72,8 @@ func Hunt(hs *heapset.HeapSet, opt *Options) <-chan *event.Event {
 				}
 			}
 		}(ch)
+
+		h.Discard() // TODO: wg only for heap, cmd option for more heaps parallel
 	}
 
 	// wait to close
