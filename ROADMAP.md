@@ -20,4 +20,10 @@
   * https://people.cs.umass.edu/~liberato/courses/2019-spring-compsci365/lecture-notes/04-carving-strings-and-unicode/
 
 ## 5. Ideas
+* Add Fortigate Firewall log parser?
+* Add macOS trace3 log parser?
 * Add Heatmap to hex command?
+* Add specs
+  * `Fox Unified Event Format`
+  * `Fox Unified Event Storage`
+  * `Fox Chain of Custody Receipt`
