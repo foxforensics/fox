@@ -11,8 +11,6 @@ const file = "deflate/fox.Z"
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
 
-	b.ResetTimer()
-
 	for b.Loop() {
 		_ = Detect(buf)
 	}
@@ -20,8 +18,6 @@ func BenchmarkDetect(b *testing.B) {
 
 func BenchmarkDeflate(b *testing.B) {
 	buf := data.Fixture(file)
-
-	b.ResetTimer()
 
 	for b.Loop() {
 		_, _ = Deflate(buf)

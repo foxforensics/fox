@@ -12,8 +12,6 @@ const file = "archive/fox.rpm"
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
 
-	b.ResetTimer()
-
 	for b.Loop() {
 		_ = Detect(buf)
 	}
@@ -21,8 +19,6 @@ func BenchmarkDetect(b *testing.B) {
 
 func BenchmarkExtract(b *testing.B) {
 	buf := data.Fixture(file)
-
-	b.ResetTimer()
 
 	for b.Loop() {
 		Extract(buf, "", "")

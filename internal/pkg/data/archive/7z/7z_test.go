@@ -13,8 +13,6 @@ const file2 = "archive/fox.enc.7z"
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file1)
 
-	b.ResetTimer()
-
 	for b.Loop() {
 		_ = Detect(buf)
 	}
@@ -22,8 +20,6 @@ func BenchmarkDetect(b *testing.B) {
 
 func BenchmarkExtract(b *testing.B) {
 	buf := data.Fixture(file1)
-
-	b.ResetTimer()
 
 	for b.Loop() {
 		Extract(buf, "", "")

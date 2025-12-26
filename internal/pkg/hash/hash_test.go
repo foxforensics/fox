@@ -17,8 +17,6 @@ const Input = "FOX123XOF"
 func BenchmarkSum(b *testing.B) {
 	buf := Fixture(Small)
 
-	b.ResetTimer()
-
 	for b.Loop() {
 		_, _ = Sum(types.SHA256, buf)
 	}

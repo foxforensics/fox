@@ -13,8 +13,6 @@ const file = "format/fox.json"
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
 
-	b.ResetTimer()
-
 	for b.Loop() {
 		_ = Detect(buf)
 	}
@@ -22,8 +20,6 @@ func BenchmarkDetect(b *testing.B) {
 
 func BenchmarkFormat(b *testing.B) {
 	buf := data.Fixture(file)
-
-	b.ResetTimer()
 
 	for b.Loop() {
 		_ = Format(buf)
