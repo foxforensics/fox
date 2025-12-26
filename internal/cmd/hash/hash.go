@@ -21,11 +21,14 @@ fox hash [FLAGS ...] <PATHS ...>
 
 Flags:
   -a, --all                use algorithms (all)
-  -T, --type=ALGO,...      use algorithms (default SHA256)
+  -T, --type=ALGO,...      use algorithms (default: SHA256)
   -F, --find=HASH,...      show only files that match
 
-Examples:
+Example:
   $ fox hash -Tmd5,sha1 files.7z
+
+Remark:
+  Results will be grouped by path, if more than one algorithm is specified.
 
 Cryptographic hashes (BLAKE family):
   BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
@@ -70,19 +73,24 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	hs := cli.Load(cmd.Paths)
+	// compatibility mode
+	if len(cmd.Type) == 1 {
+		cli.NoFile = true
+	}
+
+	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
-	for _, typ := range cmd.Type {
-		if !hash.IsSecure(typ) && !cli.NoWarnings {
-			log.Printf("used algorithm %s is not cryptically secure!\n", typ)
+	for h := range ch {
+		if !cli.NoFile {
+			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
-		if len(cmd.Type) > 1 {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(strings.ToUpper(typ))))
-		}
+		for _, typ := range cmd.Type {
+			if !hash.IsSecure(typ) && !cli.NoWarnings {
+				log.Printf("used algorithm %s is not cryptically secure!\n", typ)
+			}
 
-		for _, h := range hs.Get() {
 			sum, err := hash.Sum(typ, h.MMap())
 
 			if err != nil {
@@ -91,10 +99,15 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			}
 
 			if len(cmd.Find) == 0 || slices.Contains(cmd.Find, sum) {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(h))
+				if len(cmd.Type) > 1 {
+					_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(strings.ToUpper(typ)))
+				} else {
+					_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(h.Name))
+				}
 			}
 		}
-	}
 
+		h.Discard()
+	}
 	return nil
 }

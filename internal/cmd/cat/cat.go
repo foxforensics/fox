@@ -19,11 +19,11 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 		return errors.New("path required")
 	}
 
-	hs := cli.Load(cmd.Paths)
+	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
-	for _, h := range hs.Get() {
-		if (hs.Len() > 1 || cli.Verbose > 0) && !cli.NoFile {
+	for h := range ch {
+		if !cli.NoFile {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
@@ -42,6 +42,8 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Auto(s))
 			}
 		}
+
+		h.Discard()
 	}
 
 	return nil

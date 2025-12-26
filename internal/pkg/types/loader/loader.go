@@ -1,4 +1,4 @@
-package heapset
+package loader
 
 import (
 	"bufio"
@@ -7,14 +7,14 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"sort"
+	"slices"
 	"strings"
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
+	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/edsrzf/mmap-go"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
@@ -26,87 +26,71 @@ const stdin = "-"
 type Options struct {
 	Limit    *types.Limits
 	Filter   *types.Filters
+	Queue    uint
 	Input    string
 	Password string
 	Verbose  int
 }
 
-type HeapSet struct {
+type Loader struct {
 	sync.RWMutex
-	opts  *Options     // set options
-	heaps []*heap.Heap // set heaps
+	opts  *Options
+	paths []string
+	size  int64
+	ch    chan *heap.Heap
 }
 
-func New(paths []string, opts *Options) *HeapSet {
-	hs := HeapSet{opts: opts}
-
-	if isPiped(os.Stdin) {
-		paths = append(paths, stdin)
+func New(opts *Options) *Loader {
+	return &Loader{
+		opts: opts,
+		ch:   make(chan *heap.Heap, opts.Queue),
 	}
+}
 
-	if len(opts.Input) > 0 {
-		hs.addInput([]byte(opts.Input))
-	}
+func (l *Loader) Load(paths []string) <-chan *heap.Heap {
+	go func() {
+		defer close(l.ch)
 
-	for _, path := range paths {
-		if path == stdin {
-			hs.addStdin()
-			return &hs
+		if isFilePiped(os.Stdin) {
+			paths = append(paths, stdin)
 		}
 
-		path, part := data.SplitPart(path)
-
-		_, err := os.Stat(path)
-
-		if errors.Is(err, os.ErrNotExist) {
-			log.Printf("looked for %s\n", path)
+		if len(l.opts.Input) > 0 {
+			l.createFromInput([]byte(l.opts.Input))
 		}
 
-		hs.loadPath(path, part)
+		for _, path := range paths {
+			if path == stdin {
+				l.createFromStdin()
+				break
+			}
+
+			path, part := data.SplitPart(path)
+
+			_, err := os.Stat(path)
+
+			if l.opts.Verbose > 0 && errors.Is(err, os.ErrNotExist) {
+				log.Printf("looked for %s\n", path)
+			}
+
+			l.loadPath(path, part)
+		}
+	}()
+
+	return l.ch
+}
+
+func (l *Loader) Exit() {
+	l.RLock()
+
+	if l.opts.Verbose > 0 {
+		log.Printf("size %s\n", text.Humanize(l.size))
 	}
 
-	return &hs
+	l.RUnlock()
 }
 
-func (hs *HeapSet) Len() int {
-	hs.RLock()
-	defer hs.RUnlock()
-	return len(hs.heaps)
-}
-
-func (hs *HeapSet) Get() []*heap.Heap {
-	hs.RLock()
-	defer hs.RUnlock()
-
-	r := hs.heaps[:]
-
-	sort.SliceStable(r, func(i, j int) bool {
-		return r[i].Name < r[j].Name
-	})
-
-	return r
-}
-
-func (hs *HeapSet) Discard() {
-	var n int64
-
-	hs.Lock()
-
-	for _, h := range hs.heaps {
-		n += h.Size()
-		h.Discard()
-	}
-
-	hs.heaps = hs.heaps[:0]
-
-	hs.Unlock()
-
-	if hs.opts.Verbose > 0 {
-		log.Printf("size %s\n", text.Humanize(n))
-	}
-}
-
-func (hs *HeapSet) loadPath(path, part string) {
+func (l *Loader) loadPath(path, part string) {
 	match, err := doublestar.FilepathGlob(path)
 
 	if err != nil {
@@ -128,9 +112,9 @@ func (hs *HeapSet) loadPath(path, part string) {
 
 		go func() {
 			if fi.IsDir() {
-				hs.loadDir(path, part)
+				l.loadDir(path, part)
 			} else {
-				hs.loadFile(path, part)
+				l.loadFile(path, part)
 			}
 			wg.Done()
 		}()
@@ -139,7 +123,7 @@ func (hs *HeapSet) loadPath(path, part string) {
 	wg.Wait()
 }
 
-func (hs *HeapSet) loadDir(path, part string) {
+func (l *Loader) loadDir(path, part string) {
 	dir, err := os.ReadDir(path)
 
 	if err != nil {
@@ -154,7 +138,7 @@ func (hs *HeapSet) loadDir(path, part string) {
 			wg.Add(1)
 
 			go func() {
-				hs.loadFile(filepath.Join(path, f.Name()), part)
+				l.loadFile(filepath.Join(path, f.Name()), part)
 				wg.Done()
 			}()
 		}
@@ -163,7 +147,7 @@ func (hs *HeapSet) loadDir(path, part string) {
 	wg.Wait()
 }
 
-func (hs *HeapSet) loadFile(path, part string) {
+func (l *Loader) loadFile(path, part string) {
 	f, err := os.OpenFile(path, os.O_RDONLY, 0x400)
 
 	if err != nil {
@@ -184,7 +168,7 @@ func (hs *HeapSet) loadFile(path, part string) {
 
 	// empty files will cause issues
 	if fi.Size() == 0 {
-		hs.addData(path, []byte{})
+		l.createFromData(path, []byte{})
 		return
 	}
 
@@ -195,38 +179,38 @@ func (hs *HeapSet) loadFile(path, part string) {
 		return
 	}
 
-	hs.process(path, part, b, false)
+	l.processData(path, part, b, false)
 }
 
-func (hs *HeapSet) process(path, part string, b []byte, data bool) {
+func (l *Loader) processData(path, part string, b []byte, data bool) {
 	var ok bool
 
 	// 1. deflate data
-	if b, ok = hs.deflate(b); ok {
+	if b, ok = l.deflateData(b); ok {
 		data = true
 	}
 
 	// 2. extract data
-	if hs.extract(path, part, b) {
+	if l.extractData(path, part, b) {
 		return
 	}
 
 	// 3. format data
-	if b, ok = hs.format(b); ok {
+	if b, ok = l.formatData(b); ok {
 		data = true
 	}
 
 	// filter for specific streams
 	if strings.Contains(path, part) {
 		if data {
-			hs.addData(path, b)
+			l.createFromData(path, b)
 		} else {
-			hs.addFile(path, b)
+			l.createFromFile(path, b)
 		}
 	}
 }
 
-func (hs *HeapSet) extract(path, part string, b []byte) bool {
+func (l *Loader) extractData(path, part string, b []byte) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Println("archive corrupt or password wrong")
@@ -236,21 +220,21 @@ func (hs *HeapSet) extract(path, part string, b []byte) bool {
 
 	for _, a := range register.Archives {
 		if a.Detect(b) {
-			if hs.opts.Verbose > 1 {
+			if l.opts.Verbose > 1 {
 				log.Printf("archive detected %s\n", a.Name)
 			}
 
 			var wg sync.WaitGroup
 
-			for _, e := range a.Extract(b, path, hs.opts.Password) {
+			for _, e := range a.Extract(b, path, l.opts.Password) {
 				wg.Add(1)
 
 				go func() {
-					if hs.opts.Verbose > 2 {
+					if l.opts.Verbose > 2 {
 						log.Printf("stream detected %s\n", e.Path)
 					}
 
-					hs.process(e.Path, part, e.Data, true)
+					l.processData(e.Path, part, e.Data, true)
 
 					wg.Done()
 				}()
@@ -265,10 +249,10 @@ func (hs *HeapSet) extract(path, part string, b []byte) bool {
 	return false
 }
 
-func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
+func (l *Loader) deflateData(b []byte) ([]byte, bool) {
 	for _, d := range register.Deflates {
 		if d.Detect(b) {
-			if hs.opts.Verbose > 1 {
+			if l.opts.Verbose > 1 {
 				log.Printf("deflate detected %s\n", d.Name)
 			}
 
@@ -285,10 +269,10 @@ func (hs *HeapSet) deflate(b []byte) ([]byte, bool) {
 	return b, false
 }
 
-func (hs *HeapSet) format(b []byte) ([]byte, bool) {
+func (l *Loader) formatData(b []byte) ([]byte, bool) {
 	for _, c := range register.Converts {
 		if c.Detect(b) {
-			if hs.opts.Verbose > 1 {
+			if l.opts.Verbose > 1 {
 				log.Printf("convert detected %s\n", c.Name)
 			}
 
@@ -305,32 +289,32 @@ func (hs *HeapSet) format(b []byte) ([]byte, bool) {
 	return b, false
 }
 
-func (hs *HeapSet) addFile(path string, b []byte) {
-	hs.addHeap(path, types.Regular, b)
+func (l *Loader) createFromFile(path string, b []byte) {
+	l.createHeap(path, types.Regular, b)
 
-	if hs.opts.Verbose > 1 {
+	if l.opts.Verbose > 1 {
 		log.Printf("loaded heap from file %s\n", path)
 	}
 }
 
-func (hs *HeapSet) addData(name string, b []byte) {
-	hs.addHeap(name, types.Deflate, b)
+func (l *Loader) createFromData(name string, b []byte) {
+	l.createHeap(name, types.Deflate, b)
 
-	if hs.opts.Verbose > 1 {
+	if l.opts.Verbose > 1 {
 		log.Printf("loaded heap from data %s\n", name)
 	}
 }
 
-func (hs *HeapSet) addInput(b []byte) {
-	hs.addHeap("input", types.String, b)
+func (l *Loader) createFromInput(b []byte) {
+	l.createHeap("input", types.Defined, b)
 
-	if hs.opts.Verbose > 1 {
+	if l.opts.Verbose > 1 {
 		log.Println("loaded heap from input")
 	}
 }
 
-func (hs *HeapSet) addStdin() {
-	if !isPiped(os.Stdin) {
+func (l *Loader) createFromStdin() {
+	if !isFilePiped(os.Stdin) {
 		log.Fatalln("stdin not open")
 	}
 
@@ -340,34 +324,32 @@ func (hs *HeapSet) addStdin() {
 		log.Fatalln(err)
 	}
 
-	hs.addHeap(stdin, types.Stdin, buf)
+	l.createHeap(stdin, types.Stdin, buf)
 
-	if hs.opts.Verbose > 1 {
+	if l.opts.Verbose > 1 {
 		log.Println("loaded heap from stdin")
 	}
 }
 
-func (hs *HeapSet) addHeap(s string, t types.Heap, b []byte) {
-	hs.Lock()
-	defer hs.Unlock()
+func (l *Loader) createHeap(n string, t types.Heap, b []byte) {
+	l.Lock()
+	defer l.Unlock()
 
-	for _, h := range hs.heaps {
-		if h.Name == s {
-			return // already loaded
-		}
+	if slices.Contains(l.paths, n) {
+		return // already loaded
 	}
 
-	hs.heaps = append(hs.heaps, heap.New(
-		&heap.Context{
-			Name:   s,
-			Type:   t,
-			Limit:  hs.opts.Limit,
-			Filter: hs.opts.Filter,
-		}, b,
-	))
+	l.paths = append(l.paths, n)
+	l.size += int64(len(b))
+	l.ch <- heap.New(&heap.Context{
+		Name:   n,
+		Type:   t,
+		Limit:  l.opts.Limit,
+		Filter: l.opts.Filter,
+	}, b)
 }
 
-func isPiped(f *os.File) bool {
+func isFilePiped(f *os.File) bool {
 	fi, err := f.Stat()
 
 	if err != nil {

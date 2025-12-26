@@ -18,14 +18,14 @@ Prints file text contents.
 fox text [FLAGS ...] <PATHS ...>
 
 Flags:
-  -m, --min=NUMBER         minimum string length (default 3)
-  -x, --max=NUMBER         maximal string length (default 256)
+  -m, --min=NUMBER         minimum string length (default: 3)
+  -x, --max=NUMBER         maximal string length (default: 256)
   -w, --wtf[=LEVEL]        show string classifications (w/ww/www)
   -F, --find=CLASS,...     show only strings with class(es)
   -1, --first              show only strings first class
   -P, --print              show only classification list
 
-Examples:
+Example:
   $ fox text -rw sample.exe
 `)
 
@@ -74,11 +74,11 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	hs := cli.Load(cmd.Paths)
+	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
-	for _, h := range hs.Get() {
-		if (hs.Len() > 1 || cli.Verbose > 0) && !cli.NoFile {
+	for h := range ch {
+		if !cli.NoFile {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
@@ -97,6 +97,8 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", s.Str)
 			}
 		}
+
+		h.Discard()
 	}
 
 	return nil

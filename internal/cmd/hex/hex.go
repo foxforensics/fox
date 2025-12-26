@@ -19,7 +19,7 @@ fox hex [FLAGS ...] <PATHS ...>
 Flags:
   -m, --mode=<c|hd|xxd>    use compatible mode for output
 
-Examples:
+Example:
   $ fox hex -mc -hc512 disk.bin
 `)
 
@@ -34,7 +34,7 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	hs := cli.Load(cmd.Paths)
+	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
 	var tail uint
@@ -43,8 +43,8 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 		tail = cli.Bytes
 	}
 
-	for _, h := range hs.Get() {
-		if (hs.Len() > 1 || cli.Verbose > 0) && !cli.NoFile {
+	for h := range ch {
+		if !cli.NoFile {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
@@ -73,6 +73,8 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 			lastHex, wasCut = l.Hex, false
 		}
+
+		h.Discard()
 	}
 
 	return nil

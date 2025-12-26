@@ -41,7 +41,7 @@ Alias:
   -L, --logstash           alias for -E -uhttp://localhost:8080
   -S, --splunk             alias for -H -uhttp://localhost:8088/...
 
-Examples:
+Example:
   $ fox hunt -sxv ./**/*.dd
 `)
 
@@ -117,7 +117,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	cli.NoConvert = true // force
 
-	hs := cli.Load(cmd.Paths)
+	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
 	if cli.Verbose > 0 {
@@ -149,7 +149,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	cnt := 0
 
-	for e := range hunt.Hunt(hs, &hunt.Options{
+	for e := range hunt.Hunt(ch, &hunt.Options{
 		Sort:       cmd.Sort,
 		Extensions: cmd.Ext,
 		Verbose:    cli.Verbose,

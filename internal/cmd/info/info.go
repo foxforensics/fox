@@ -19,10 +19,10 @@ fox info [FLAGS ...] <PATHS ...>
 
 Flags:
   -b, --block=SIZE         block size for calculations
-  -m, --min=DECIMAL        minimum entropy value (default 0.0)
-  -x, --max=DECIMAL        maximal entropy value (default 1.0)
+  -m, --min=DECIMAL        minimum entropy value (default: 0.0)
+  -x, --max=DECIMAL        maximal entropy value (default: 1.0)
 
-Examples:
+Example:
   $ fox info -m0.9 ./**/*
 `)
 
@@ -47,19 +47,20 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	hs := cli.Load(cmd.Paths)
+	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
-	for _, h := range hs.Get() {
+	for h := range ch {
 		var n = cmd.Block
 		var off int
 
 		if n == 0 {
-			n = h.Size()
+			n = h.Size
 		}
 
-		if h.Size() == 0 {
+		if h.Size == 0 {
 			_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s\n", 0, 0, 0.0, text.Hide(h.String()))
+			h.Discard()
 			continue
 		}
 
@@ -86,6 +87,8 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 
 			off += b
 		}
+
+		h.Discard()
 	}
 
 	return nil
