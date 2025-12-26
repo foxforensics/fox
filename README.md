@@ -21,7 +21,7 @@ go install github.com/cuhsat/fox/v4@latest
 * Hunt mode
   * Built-in file carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
-  * Built-in translations of over 51600 Event IDs
+  * Built-in translation of over 51600 Event IDs
   * Built-in warning of critical system events
   * Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [ECS](https://www.elastic.co/docs/reference/ecs) format
   * Save as `JSON`, `JSON Lines` or `SQLite3`
@@ -44,7 +44,7 @@ $ fox -eWinlogon ./**/*.evtx
 
 Show the MBR in canonical hex:
 ```console
-$ fox hex -mc -hc512 disk.bin
+$ fox hex -hc512 disk.bin
 ```
 
 List files with high entropy:
@@ -79,7 +79,7 @@ Compression formats:
 > Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
 
 Cryptographic hashes:
-> BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, MD2, MD4, MD5, MD6, SHA1, SHA256, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
+> BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, MD2, MD4, MD5, MD6, SHA1, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
 
 Performance hashes:
 > FNV-1, FNV-1a, Murmur3, XXH64, XXH3
