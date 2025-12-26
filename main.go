@@ -4,7 +4,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"runtime"
 	"runtime/debug"
+	"strconv"
 	"strings"
 	"time"
 
@@ -45,9 +47,10 @@ var long = strings.TrimSpace(`
 |   __|  |  |  >    <     |   _   |  | |  |   '  |  |
 |  |   \ '--' /  /\  \    |  | |  |  '-'  |  |\  |  |
 '--'    '----'--'  '--'   '--' '--'-------'--' '-'--'
-The Forensic Swiss Army Knife %s
+The Forensic Swiss Army Knife %s <foxhunt.wtf>
 
-fox [MODE] [FLAGS ...] <PATHS ...>
+Usage:
+  fox [MODE] [FLAGS ...] <PATHS ...>
 
 Modes:
   cat    prints file (default)
@@ -65,7 +68,8 @@ File limits:
 
 File loader:
   -i, --input=STRING       use input in place of file content
-  -p, --pass=PASSWORD      use password for decryption (only 7Z, RAR, ZIP)
+  -Q, --queue=NUMBER       use queue size for file loading (default: CPUs)
+  -P, --pass=PASSWORD      use password for decryption (only 7Z, RAR, ZIP)
 
 File writer:
   -f, --file=FILE          write output to file name (with SHA256)
@@ -85,6 +89,7 @@ Disable:
       --no-deflate         don't deflate automatically
       --no-extract         don't extract automatically
       --no-convert         don't convert automatically
+      --no-receipt         don't write the receipt
       --no-warnings        don't show any warnings
 
 Standard:
@@ -96,16 +101,16 @@ Standard:
 Positional arguments:
   Globbing paths to open or '-' to read from STDIN
 
-Examples: Find occurrences in event logs
+Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
-Examples: Show the MBR in canonical hex
+Example: Show the MBR in canonical hex
   $ fox hex -mc -hc512 disk.bin
 
-Examples: Hunt down suspicious events
+Example: Hunt down suspicious events
   $ fox hunt -sxv ./**/*.dd
 
-Please report bugs to <issue@foxhunt.wtf>
+Type "fox MODE --help" for a more specific help...
 `)
 
 type fox struct {
@@ -114,8 +119,8 @@ type fox struct {
 	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hd"`
 	Info info.Info `cmd:"" aliases:"i,wc"`
 	Text text.Text `cmd:"" aliases:"t,strings"`
-	Hash hash.Hash `cmd:"" aliases:"h,sum"`
-	Hunt hunt.Hunt `cmd:"" aliases:"u"`
+	Hash hash.Hash `cmd:"" aliases:"s,sum"`
+	Hunt hunt.Hunt `cmd:"" aliases:"h"`
 
 	// support flags
 	Version bool
@@ -132,10 +137,12 @@ func main() {
 
 	cli := new(fox)
 	ctx := kong.Parse(cli,
+		kong.NoDefaultHelp(),
 		kong.Name("fox"),
 		kong.DefaultEnvars("FOX"),
-		kong.NoDefaultHelp(),
-	)
+		kong.Vars{
+			"cpus": strconv.Itoa(runtime.NumCPU()),
+		})
 
 	switch {
 	case cli.Version:
