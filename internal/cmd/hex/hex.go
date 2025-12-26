@@ -17,14 +17,14 @@ Prints file in hex format.
 fox hex [FLAGS ...] <PATHS ...>
 
 Flags:
-  -m, --mode=<c|hd|xxd>    use compatible mode for output
+  -m, --mode=<hd|xxd|raw>    use compatible mode for output
 
 Example:
-  $ fox hex -mc -hc512 disk.bin
+  $ fox hex -hc512 disk.bin
 `)
 
 type Hex struct {
-	Mode  string   `short:"m" enum:"c,hd,xxd,raw" default:"raw"`
+	Mode  string   `short:"m" enum:"c,hd,xxd,raw" default:"c"`
 	Paths []string `arg:"" type:"path" optional:""`
 }
 
