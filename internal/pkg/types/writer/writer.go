@@ -30,14 +30,15 @@ Hash: %x SHA256
 type Writer struct {
 	sync.Mutex
 
-	path string
-	file *os.File
+	path    string
+	receipt bool
+	file    *os.File
 }
 
-func New(path string) *Writer {
+func New(path string, receipt bool) *Writer {
 	var err error
 
-	w := Writer{path: path}
+	w := Writer{path: path, receipt: receipt}
 	w.file, err = os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 
 	if err != nil {
@@ -47,16 +48,28 @@ func New(path string) *Writer {
 	return &w
 }
 
+func (w *Writer) Close() error {
+	w.Lock()
+	defer w.Unlock()
+
+	if w.receipt {
+		err := w.WriteReceipt()
+
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	return w.file.Close()
+}
+
 func (w *Writer) Write(p []byte) (n int, err error) {
 	w.Lock()
 	defer w.Unlock()
 	return w.file.Write(p)
 }
 
-func (w *Writer) Close() error {
-	w.Lock()
-	defer w.Unlock()
-
+func (w *Writer) WriteReceipt() error {
 	hst, err := os.Hostname()
 
 	if err != nil {
@@ -87,7 +100,7 @@ func (w *Writer) Close() error {
 		return err
 	}
 
-	err = os.WriteFile(w.path+".cc", []byte(fmt.Sprintf(header,
+	return os.WriteFile(w.path+".cc", []byte(fmt.Sprintf(header,
 		app.Version[1:],
 		time.Now().UTC(),
 		usr.Name,
@@ -97,12 +110,6 @@ func (w *Writer) Close() error {
 		abs,
 		sha256.Sum256(buf),
 	)), 0600)
-
-	if err != nil {
-		return err
-	}
-
-	return w.file.Close()
 }
 
 func getMacAddr() string {

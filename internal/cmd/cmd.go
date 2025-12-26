@@ -7,7 +7,6 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fson"
 	"github.com/fatih/color"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -36,9 +35,11 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fson"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/heapset"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/writer"
 )
@@ -51,8 +52,9 @@ type Globals struct {
 	Bytes uint `short:"c" xor:"lines,bytes"`
 
 	// file loader
+	Queue uint   `short:"Q" default:"${cpus}"`
 	Input string `short:"i"`
-	Pass  string `short:"p"`
+	Pass  string `short:"P"`
 
 	// file writer
 	File string `short:"f" xor:"file,quiet"`
@@ -72,6 +74,7 @@ type Globals struct {
 	NoDeflate  bool `long:"no-deflate"`
 	NoExtract  bool `long:"no-extract"`
 	NoConvert  bool `long:"no-convert"`
+	NoReceipt  bool `long:"no-receipt"`
 	NoWarnings bool `long:"no-warnings"`
 
 	// standard
@@ -79,13 +82,13 @@ type Globals struct {
 	DryRun  bool `short:"d" long:"dry-run"`
 	Verbose int  `short:"v" type:"counter"`
 
-	// bootstrapped
-	Stdout io.WriteCloser   `kong:"-"`
-	Filter *regexp.Regexp   `kong:"-"`
-	Heaps  *heapset.HeapSet `kong:"-"`
+	// bootstrap
+	Stdout io.WriteCloser `kong:"-"`
+	Filter *regexp.Regexp `kong:"-"`
+	Loader *loader.Loader `kong:"-"`
 }
 
-func (cli *Globals) Load(args []string) *heapset.HeapSet {
+func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	if len(cli.Regex) > 0 {
 		cli.Filter = regexp.MustCompile(cli.Regex)
 	}
@@ -107,7 +110,7 @@ func (cli *Globals) Load(args []string) *heapset.HeapSet {
 
 	if len(cli.File) > 0 {
 		cli.NoColor = true
-		cli.Stdout = writer.New(cli.File)
+		cli.Stdout = writer.New(cli.File, !cli.NoReceipt)
 	} else if cli.Quiet {
 		log.SetOutput(io.Discard)
 		cli.Stdout, _ = os.Open(os.DevNull)
@@ -158,7 +161,7 @@ func (cli *Globals) Load(args []string) *heapset.HeapSet {
 		register.Format("json", json.Detect, json.Format)
 	}
 
-	cli.Heaps = heapset.New(args, &heapset.Options{
+	cli.Loader = loader.New(&loader.Options{
 		Limit: &types.Limits{
 			IsHead: cli.Head,
 			IsTail: cli.Tail,
@@ -170,22 +173,23 @@ func (cli *Globals) Load(args []string) *heapset.HeapSet {
 			Before: cli.Before,
 			After:  cli.After,
 		},
+		Queue:    cli.Queue,
 		Input:    cli.Input,
 		Password: cli.Pass,
 		Verbose:  cli.Verbose,
 	})
 
 	if cli.DryRun {
-		for _, h := range cli.Heaps.Get() {
+		for h := range cli.Loader.Load(args) {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", h.Name)
 		}
 
 		// exit early
-		cli.Heaps.Discard()
+		cli.Loader.Exit()
 		os.Exit(0)
 	}
 
-	return cli.Heaps
+	return cli.Loader.Load(args)
 }
 
 func (cli *Globals) Discard() {
@@ -193,5 +197,5 @@ func (cli *Globals) Discard() {
 		_ = cli.Stdout.Close()
 	}
 
-	cli.Heaps.Discard()
+	cli.Loader.Exit()
 }
