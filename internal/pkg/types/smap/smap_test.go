@@ -35,8 +35,6 @@ func BenchmarkMap(b *testing.B) {
 		_ = m.Unmap()
 	}(m)
 
-	b.ResetTimer()
-
 	for b.Loop() {
 		Map(m)
 	}
@@ -58,8 +56,6 @@ func BenchmarkRender(b *testing.B) {
 	}(m)
 
 	s := Map(m)
-
-	b.ResetTimer()
 
 	for b.Loop() {
 		s.Render()
@@ -84,8 +80,6 @@ func BenchmarkGrep(b *testing.B) {
 	s := Map(m)
 
 	re := regexp.MustCompile(".*")
-
-	b.ResetTimer()
 
 	for b.Loop() {
 		s.Grep(re)
