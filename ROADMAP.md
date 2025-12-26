@@ -18,11 +18,6 @@
 ## 4. Optimizations
 * Add Unicode to string carving
   * https://people.cs.umass.edu/~liberato/courses/2019-spring-compsci365/lecture-notes/04-carving-strings-and-unicode/
-* SMap speed
-  * https://dev.to/moseeh_52/efficient-file-reading-in-go-mastering-bufionewscanner-vs-osreadfile-4h05
-  * https://dave.cheney.net/high-performance-json.html
 
 ## 5. Ideas
 * Add Heatmap to hex command?
-* Use reflow algos?
-  * https://github.com/muesli/reflow
