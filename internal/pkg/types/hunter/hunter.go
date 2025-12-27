@@ -8,8 +8,8 @@ import (
 	"maps"
 	"regexp"
 	"slices"
-	"sync"
 
+	"github.com/sourcegraph/conc"
 	"github.com/sourcegraph/conc/pool"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/evtx"
@@ -51,11 +51,11 @@ func (htr *Hunter) Hunt(heaps <-chan *heap.Heap) <-chan *event.Event {
 		p := pool.New().WithMaxGoroutines(htr.opts.Pool)
 
 		for h := range heaps {
-			if htr.opts.Verbose > 0 {
-				log.Printf("hunt: carving heap %s\n", h.String())
-			}
-
 			p.Go(func() {
+				if htr.opts.Verbose > 0 {
+					log.Printf("hunt: carving heap %s\n", h.String())
+				}
+
 				htr.carve(h)
 			})
 		}
@@ -95,18 +95,15 @@ func (htr *Hunter) sort() <-chan *event.Event {
 func (htr *Hunter) carve(h *heap.Heap) {
 	defer h.Discard()
 
-	wg := new(sync.WaitGroup)
-	wg.Add(2)
+	var wg conc.WaitGroup
 
-	go func() {
-		defer wg.Done()
+	wg.Go(func() {
 		htr.carveEvtx(h)
-	}()
+	})
 
-	go func() {
-		defer wg.Done()
+	wg.Go(func() {
 		htr.carveJournal(h)
-	}()
+	})
 
 	wg.Wait()
 }
