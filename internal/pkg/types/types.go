@@ -24,7 +24,6 @@ const (
 	MURMUR3    = "murmur3"
 	SHA1       = "sha1"
 	SHA256     = "sha256"
-	SHA384     = "sha384"
 	SHA512     = "sha512"
 	SHA3       = "sha3"
 	SHA3224    = "sha3-224"

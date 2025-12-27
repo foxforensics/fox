@@ -44,42 +44,65 @@ func New(opts *Options) *Hunter {
 }
 
 func (htr *Hunter) Hunt(heaps <-chan *heap.Heap) <-chan *event.Event {
-	if htr.opts.Sort {
-		htr.events = htr.sort(htr.events)
-	}
-
-	go func(ch chan<- *event.Event) {
+	go func() {
 		for h := range heaps {
 			if htr.opts.Verbose > 0 {
-				log.Printf("hunt: parsing heap %s\n", h.String())
+				log.Printf("hunt: carving heap %s\n", h.String())
 			}
 
-			var wg sync.WaitGroup
-
-			wg.Add(2)
-
-			// hunt Windows Event Logs
-			// hunt Linux Systemd journals
-			go func(ch chan<- *event.Event) {
-				defer wg.Done()
-			}(ch)
-
-			wg.Wait()
-
-			h.Discard()
+			htr.carve(h) // TODO: add worker pool
 		}
 
-		close(ch)
-	}(htr.events)
+		close(htr.events)
+	}()
 
-	return htr.events
+	if htr.opts.Sort {
+		return htr.sort()
+	} else {
+		return htr.events
+	}
 }
 
-func (htr *Hunter) HuntCached(heaps <-chan *heap.Heap) <-chan *event.Event {
-	return htr.events
+func (htr *Hunter) sort() <-chan *event.Event {
+	sorted := make(chan *event.Event, types.Size)
+
+	go func() {
+		cache := make(map[int64]*event.Event)
+
+		for e := range htr.events {
+			cache[e.Time.UnixNano()] = e // TODO: unique key or list
+		}
+
+		for _, k := range slices.Sorted(maps.Keys(cache)) {
+			sorted <- cache[k]
+		}
+
+		close(sorted)
+	}()
+
+	return sorted
 }
 
-func (htr *Hunter) huntEventLogs(h *heap.Heap) {
+func (htr *Hunter) carve(h *heap.Heap) {
+	defer h.Discard()
+
+	wg := new(sync.WaitGroup)
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		htr.carveEvtx(h)
+	}()
+
+	go func() {
+		defer wg.Done()
+		htr.carveJournal(h)
+	}()
+
+	wg.Wait()
+}
+
+func (htr *Hunter) carveEvtx(h *heap.Heap) {
 	r1 := bytes.NewReader(h.MMap())
 	r2 := bytes.NewReader(h.MMap())
 
@@ -90,7 +113,7 @@ func (htr *Hunter) huntEventLogs(h *heap.Heap) {
 	}
 }
 
-func (htr *Hunter) huntJournals(h *heap.Heap) {
+func (htr *Hunter) carveJournal(h *heap.Heap) {
 	r := bytes.NewReader(h.MMap())
 
 	for off := range htr.offset(r, journal.Regex) {
@@ -98,32 +121,6 @@ func (htr *Hunter) huntJournals(h *heap.Heap) {
 			htr.events <- evt
 		}
 	}
-}
-
-func (htr *Hunter) sort(in <-chan *event.Event) chan *event.Event {
-	out := make(chan *event.Event, cap(in))
-
-	print("USE SORT")
-
-	go func(out chan<- *event.Event) {
-		cache := make(map[int64]*event.Event)
-
-		for e := range in {
-			cache[e.Time.UnixNano()] = e
-		}
-
-		print("CACHED")
-
-		for _, k := range slices.Sorted(maps.Keys(cache)) {
-			out <- cache[k]
-		}
-
-		print("SORTED")
-
-		close(out)
-	}(out)
-
-	return out
 }
 
 func (htr *Hunter) offset(rs io.ReadSeeker, re *regexp.Regexp) <-chan int64 {

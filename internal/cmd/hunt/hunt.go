@@ -13,9 +13,9 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/ecs"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/hec"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/raw"
-	"github.com/cuhsat/fox/v4/internal/pkg/hunt"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/hunter"
 )
 
 var Usage = strings.TrimSpace(`
@@ -77,7 +77,7 @@ func (cmd *Hunt) Validate() error {
 
 func (cmd *Hunt) BeforeApply(_ *kong.Kong, _ kong.Vars) error {
 	if len(cmd.Paths) == 0 {
-		cmd.Paths = hunt.Paths
+		cmd.Paths = hunter.Paths
 	}
 
 	return nil
@@ -109,7 +109,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	var sa stream.Streamable
-	var db *hunt.Database
+	var db *hunter.Database
 	var fn text.Colored
 	var tx int64
 	var rx int64
@@ -125,7 +125,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Sqlite {
-		db = hunt.NewDB(types.Database)
+		db = hunter.NewDB(types.Database)
 
 		if cli.Verbose > 0 {
 			log.Printf("hunt: using database %s\n", db)
@@ -149,17 +149,17 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	cnt := 0
 
-	for e := range hunt.Hunt(ch, &hunt.Options{
+	for e := range hunter.New(&hunter.Options{
 		Sort:       cmd.Sort,
 		Extensions: cmd.Ext,
 		Verbose:    cli.Verbose,
-	}) {
-		if cmd.All || e.Severity >= hunt.Level {
+	}).Hunt(ch) {
+		if cmd.All || e.Severity >= hunter.Level {
 			// apply color
 			switch {
 			case cli.Filter != nil:
 				fn = text.MarkMatchFunc(cli.Filter)
-			case cmd.All && e.Severity >= hunt.Level:
+			case cmd.All && e.Severity >= hunter.Level:
 				fn = text.Mark // mark event
 			case cmd.All:
 				fn = text.Hide // hide event

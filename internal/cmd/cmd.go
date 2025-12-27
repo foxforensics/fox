@@ -105,6 +105,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.NoDeflate = true
 		cli.NoExtract = true
 		cli.NoConvert = true
+		cli.NoReceipt = true
 		cli.NoWarnings = true
 	}
 
@@ -120,6 +121,10 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	if cli.NoColor {
 		color.NoColor = true // turn off color package
+	}
+
+	if cli.NoReceipt && !cli.NoWarnings {
+		log.Println("warning: receipts has been disabled!")
 	}
 
 	if !cli.NoDeflate {
