@@ -69,7 +69,7 @@ File limits:
 File loader:
   -i, --input=STRING       use input in place of file content
   -Q, --queue=NUMBER       use queue size for file loading (default: CPUs)
-  -P, --pass=PASSWORD      use password for decryption (only 7Z, RAR, ZIP)
+  -p, --pass=PASSWORD      use password for decryption (only 7Z, RAR, ZIP)
 
 File writer:
   -f, --file=FILE          write output to file name (with SHA256)

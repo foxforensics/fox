@@ -10,6 +10,8 @@ import (
 	"slices"
 	"sync"
 
+	"github.com/sourcegraph/conc/pool"
+
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/evtx"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
@@ -28,6 +30,7 @@ var Paths = []string{
 type Options struct {
 	Sort       bool
 	Extensions int
+	Pool       int
 	Verbose    int
 }
 
@@ -45,13 +48,19 @@ func New(opts *Options) *Hunter {
 
 func (htr *Hunter) Hunt(heaps <-chan *heap.Heap) <-chan *event.Event {
 	go func() {
+		p := pool.New().WithMaxGoroutines(htr.opts.Pool)
+
 		for h := range heaps {
 			if htr.opts.Verbose > 0 {
 				log.Printf("hunt: carving heap %s\n", h.String())
 			}
 
-			htr.carve(h) // TODO: add worker pool
+			p.Go(func() {
+				htr.carve(h)
+			})
 		}
+
+		p.Wait()
 
 		close(htr.events)
 	}()
@@ -106,7 +115,7 @@ func (htr *Hunter) carveEvtx(h *heap.Heap) {
 	r1 := bytes.NewReader(h.MMap())
 	r2 := bytes.NewReader(h.MMap())
 
-	for off := range htr.offset(r1, evtx.Regex) {
+	for off := range htr.findOffset(r1, evtx.Regex) {
 		for evt := range evtx.Carve(r2, off, htr.opts.Extensions) {
 			htr.events <- evt
 		}
@@ -116,14 +125,14 @@ func (htr *Hunter) carveEvtx(h *heap.Heap) {
 func (htr *Hunter) carveJournal(h *heap.Heap) {
 	r := bytes.NewReader(h.MMap())
 
-	for off := range htr.offset(r, journal.Regex) {
+	for off := range htr.findOffset(r, journal.Regex) {
 		for evt := range journal.Carve(h.MMap(), off, htr.opts.Extensions) {
 			htr.events <- evt
 		}
 	}
 }
 
-func (htr *Hunter) offset(rs io.ReadSeeker, re *regexp.Regexp) <-chan int64 {
+func (htr *Hunter) findOffset(rs io.ReadSeeker, re *regexp.Regexp) <-chan int64 {
 	out := make(chan int64, types.Size)
 
 	go func(r *bufio.Reader) {

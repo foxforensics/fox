@@ -54,7 +54,7 @@ type Globals struct {
 	// file loader
 	Queue uint   `short:"Q" default:"${cpus}"`
 	Input string `short:"i"`
-	Pass  string `short:"P"`
+	Pass  string `short:"p"`
 
 	// file writer
 	File string `short:"f" xor:"file,quiet"`

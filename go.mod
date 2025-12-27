@@ -66,6 +66,7 @@ require (
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
 	github.com/secDre4mer/pkcs7 v0.0.0-20240322103146-665324a4461d // indirect
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
+	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/exp v0.0.0-20251209150349-8475f28825e9 // indirect
