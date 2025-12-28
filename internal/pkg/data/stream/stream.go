@@ -3,7 +3,6 @@ package stream
 import (
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"strings"
 
@@ -15,46 +14,36 @@ var userAgent = fmt.Sprintf("fox %s", app.Version)
 var httpClient = new(http.Client)
 
 type Streamable interface {
-	Write(*event.Event) (int64, int64, error)
+	Write(*event.Event) error
 }
 
-type Stream struct {
-	Url string            `json:"-"`
+type Streamer struct {
 	Map map[string]string `json:"-"`
+	Url string            `json:"-"`
 }
 
-func (stm *Stream) Post(body string) (int64, int64, error) {
-	req, err := http.NewRequest("POST", stm.Url, strings.NewReader(body))
+func (str *Streamer) Post(body string) error {
+	req, err := http.NewRequest("POST", str.Url, strings.NewReader(body))
 
 	if err != nil {
-		return 0, 0, err
+		return err
 	}
 
 	req.Header.Add("user-agent", userAgent)
 
-	for k, v := range stm.Map {
+	for k, v := range str.Map {
 		req.Header.Set(k, v)
 	}
 
 	res, err := httpClient.Do(req)
 
 	if err != nil {
-		return 0, 0, err
+		return err
 	}
-
-	tx := req.ContentLength
-
-	buf, err := io.ReadAll(res.Body)
-
-	if err != nil {
-		return tx, 0, err
-	}
-
-	rx := int64(len(buf))
 
 	if res.StatusCode != http.StatusOK {
-		return tx, rx, errors.New(http.StatusText(res.StatusCode))
+		return errors.New(http.StatusText(res.StatusCode))
 	}
 
-	return tx, rx, res.Body.Close()
+	return res.Body.Close()
 }

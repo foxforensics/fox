@@ -8,19 +8,22 @@ import (
 )
 
 type Raw struct {
-	stream.Stream
+	stream.Streamer
 }
 
 func New(url string) Raw {
-	return Raw{stream.Stream{Url: url, Map: map[string]string{
-		"Content-Type": "text/plain",
-	}}}
+	return Raw{stream.Streamer{
+		Url: url,
+		Map: map[string]string{
+			"Content-Type": "text/plain",
+		},
+	}}
 }
 
 func (raw Raw) String() string {
-	return fmt.Sprintf("raw: %s", raw.Url)
+	return fmt.Sprintf("raw @ %s", raw.Url)
 }
 
-func (raw Raw) Write(e *event.Event) (int64, int64, error) {
+func (raw Raw) Write(e *event.Event) error {
 	return raw.Post(e.ToCEF())
 }

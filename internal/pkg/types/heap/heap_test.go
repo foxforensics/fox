@@ -166,17 +166,8 @@ func newCtx() *Context {
 	return &Context{
 		name,
 		types.Regular,
-		&types.Limits{
-			IsHead: false,
-			IsTail: false,
-			Lines:  0,
-			Bytes:  0,
-		},
-		&types.Filters{
-			Regex:  nil,
-			Before: 0,
-			After:  0,
-		},
+		&types.Limits{},
+		&types.Filters{},
 	}
 }
 

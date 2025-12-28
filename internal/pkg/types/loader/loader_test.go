@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
+
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cpio"
@@ -172,17 +173,8 @@ func TestLoadFiles(t *testing.T) {
 
 func newOpts() *Options {
 	return &Options{
-		&types.Limits{
-			IsHead: false,
-			IsTail: false,
-			Lines:  0,
-			Bytes:  0,
-		},
-		&types.Filters{
-			Regex:  nil,
-			Before: 0,
-			After:  0,
-		},
+		&types.Limits{},
+		&types.Filters{},
 		0,
 		"",
 		"",
@@ -190,8 +182,8 @@ func newOpts() *Options {
 	}
 }
 
-func consume(l *Loader, in []string) (out []string) {
-	for h := range l.Load(in) {
+func consume(ldr *Loader, in []string) (out []string) {
+	for h := range ldr.Load(in) {
 		out = append(out, filepath.Base(h.Name))
 		h.Discard()
 	}

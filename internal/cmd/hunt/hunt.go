@@ -3,6 +3,7 @@ package hunt
 import (
 	"fmt"
 	"log"
+	"regexp"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -14,9 +15,11 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/hec"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/raw"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/hunter"
 )
+
+const Limit = 8
 
 var Usage = strings.TrimSpace(`
 Hunt suspicious activities.
@@ -71,6 +74,10 @@ type Hunt struct {
 
 	// paths
 	Paths []string `arg:"" type:"path" optional:""`
+
+	// internal
+	db     *event.Database   `kong:"-"`
+	stream stream.Streamable `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
@@ -87,21 +94,36 @@ func (cmd *Hunt) Validate() error {
 
 func (cmd *Hunt) BeforeApply(_ *kong.Kong, _ kong.Vars) error {
 	if len(cmd.Paths) == 0 {
-		cmd.Paths = hunter.Paths
+		cmd.Paths = hunter.Local
 	}
 
 	return nil
 }
 
 func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+	if cmd.Sqlite {
+		cmd.db = event.NewDB(hunter.Database)
+	}
+
 	if cmd.Logstash {
-		cmd.Url = types.Logstash
+		cmd.Url = ecs.LocalHost
 		cmd.Ecs = true
 	}
 
 	if cmd.Splunk {
-		cmd.Url = types.Splunk
+		cmd.Url = hec.LocalHost
 		cmd.Hec = true
+	}
+
+	if len(cmd.Url) > 0 {
+		switch {
+		case cmd.Hec:
+			cmd.stream = hec.New(cmd.Url, cmd.Auth)
+		case cmd.Ecs:
+			cmd.stream = ecs.New(cmd.Url)
+		default:
+			cmd.stream = raw.New(cmd.Url)
+		}
 	}
 
 	// extensions must be activated
@@ -118,14 +140,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	var sa stream.Streamable
-	var db *hunter.Database
-	var fn text.Colored
-	var tx int64
-	var rx int64
-	var s string
-
-	cli.NoConvert = true // force
+	cli.NoConvert = true // forced
 
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
@@ -138,30 +153,15 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		log.Printf("hunt: using %d worker(s)\n", cmd.Pool)
 	}
 
-	if cmd.Sqlite {
-		db = hunter.NewDB(types.Database)
-
-		if cli.Verbose > 0 {
-			log.Printf("hunt: using database %s\n", db)
-		}
+	if cli.Verbose > 1 && cmd.db != nil {
+		log.Printf("hunt: using database %s\n", cmd.db)
 	}
 
-	if len(cmd.Url) > 0 {
-		switch {
-		case cmd.Hec:
-			sa = hec.New(cmd.Url, cmd.Auth)
-		case cmd.Ecs:
-			sa = ecs.New(cmd.Url)
-		default:
-			sa = raw.New(cmd.Url)
-		}
-
-		if cli.Verbose > 0 {
-			log.Printf("hunt: using schema %s\n", sa)
-		}
+	if cli.Verbose > 1 && cmd.stream != nil {
+		log.Printf("hunt: streaming as %s\n", cmd.stream)
 	}
 
-	cnt := 0
+	var cnt int64
 
 	for e := range hunter.New(&hunter.Options{
 		Sort:       cmd.Sort,
@@ -169,49 +169,31 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		Pool:       cmd.Pool,
 		Verbose:    cli.Verbose,
 	}).Hunt(ch) {
-		if cmd.All || e.Severity >= hunter.Level {
-			// apply color
-			switch {
-			case cli.Filter != nil:
-				fn = text.MarkMatchFunc(cli.Filter)
-			case cmd.All && e.Severity >= hunter.Level:
-				fn = text.Mark // mark event
-			case cmd.All:
-				fn = text.Hide // hide event
-			default:
-				fn = text.Term // reset terminal
-			}
-
-			// apply format
-			switch {
-			case cmd.Jsonl:
-				s = fn(e.ToJSONL())
-			case cmd.Json:
-				s = fn(e.ToJSON())
-			default:
-				s = fn(e.ToCEF())
-			}
-
-			if cli.Filter != nil && !cli.Filter.MatchString(s) {
-				continue // filter event
-			}
-
-			_, _ = fmt.Fprintln(cli.Stdout, s)
-
-			// hook for database
-			if db != nil {
-				db.Persist(e)
-			}
-
-			// hook for stream
-			if sa != nil {
-				td, rd, _ := sa.Write(e)
-				tx += td
-				rx += rd
-			}
-
-			cnt++
+		if !cmd.All && e.Severity < Limit {
+			continue // not severe enough
 		}
+
+		line := cmd.getLine(e, cli.Filter)
+
+		if cli.Filter != nil && !cli.Filter.MatchString(line) {
+			continue // not matched
+		}
+
+		_, _ = fmt.Fprintln(cli.Stdout, line)
+
+		if cmd.db != nil {
+			cmd.db.Upsert(e)
+		}
+
+		if cmd.stream != nil {
+			err := cmd.stream.Write(e)
+
+			if err != nil && cli.Verbose > 0 {
+				log.Println(err)
+			}
+		}
+
+		cnt++
 	}
 
 	if cli.Verbose > 0 {
@@ -222,10 +204,29 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		log.Printf("hunt: found %d event(s)\n", cnt)
 	}
 
-	if cli.Verbose > 2 && tx+rx > 0 {
-		log.Println("hunt: stream tx:", text.Humanize(tx))
-		log.Println("hunt: stream rx:", text.Humanize(rx))
+	return nil
+}
+
+func (cmd *Hunt) getLine(e *event.Event, re *regexp.Regexp) string {
+	var fn text.Colored
+
+	switch {
+	case re != nil:
+		fn = text.MarkMatchFunc(re)
+	case cmd.All && e.Severity >= Limit:
+		fn = text.Mark // mark event
+	case cmd.All:
+		fn = text.Hide // hide event
+	default:
+		fn = text.Term // reset
 	}
 
-	return nil
+	switch {
+	case cmd.Jsonl:
+		return fn(e.ToJSONL())
+	case cmd.Json:
+		return fn(e.ToJSON())
+	default:
+		return fn(e.ToCEF())
+	}
 }

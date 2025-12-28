@@ -1,4 +1,4 @@
-package hunter
+package event
 
 import (
 	"database/sql"
@@ -8,8 +8,6 @@ import (
 	"os"
 
 	_ "modernc.org/sqlite"
-
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
 const schema = `
@@ -84,7 +82,7 @@ func (db *Database) String() string {
 	return db.path
 }
 
-func (db *Database) Persist(evt *event.Event) {
+func (db *Database) Upsert(evt *Event) {
 	res, err := db.sql.Exec(events,
 		evt.Time.UTC(),
 		evt.Host,

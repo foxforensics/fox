@@ -19,9 +19,9 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
 
-const Level = 8
+const Database = "fox.db"
 
-var Paths = []string{
+var Local = []string{
 	"/Windows/System32/winevt/Logs",
 	"/var/log/journal",
 	"/run/log/journal",
@@ -36,14 +36,14 @@ type Options struct {
 
 type Hunter struct {
 	opts   *Options
-	cache  map[int64]*event.Event
+	cache  map[uint64]*event.Event
 	events chan *event.Event
 }
 
 func New(opts *Options) *Hunter {
 	return &Hunter{
 		opts:   opts,
-		cache:  make(map[int64]*event.Event),
+		cache:  make(map[uint64]*event.Event),
 		events: make(chan *event.Event, types.Size),
 	}
 }
@@ -79,7 +79,7 @@ func (htr *Hunter) sort() <-chan *event.Event {
 
 	go func() {
 		for e := range htr.events {
-			htr.cache[e.Time.UnixNano()] = e // TODO: unique key or list
+			htr.cache[e.Hash()] = e
 		}
 
 		for _, k := range slices.Sorted(maps.Keys(htr.cache)) {

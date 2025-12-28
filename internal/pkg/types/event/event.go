@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/zeebo/xxh3"
+
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
@@ -36,6 +38,10 @@ func (evt *Event) Value(keys ...string) string {
 	}
 
 	return ""
+}
+
+func (evt *Event) Hash() uint64 {
+	return xxh3.HashString(evt.ToCEF())
 }
 
 func (evt *Event) ToCEF() string {

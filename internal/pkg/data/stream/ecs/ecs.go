@@ -7,18 +7,18 @@ import (
 	"fmt"
 	"time"
 
+	app "github.com/cuhsat/fox/v4/internal"
 	"github.com/twmb/murmur3"
 
-	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
-const version = "9.1.0"
+const LocalHost = "http://localhost:8080"
 
 type Ecs struct {
-	stream.Stream
+	stream.Streamer
 
 	Ecs struct {
 		Version string `json:"version"`
@@ -57,23 +57,26 @@ type Ecs struct {
 }
 
 func New(url string) Ecs {
-	ecs := Ecs{Stream: stream.Stream{Url: url, Map: map[string]string{
-		"Content-Type": "application/json",
-	}}}
+	ecs := Ecs{Streamer: stream.Streamer{
+		Url: url,
+		Map: map[string]string{
+			"Content-Type": "application/json",
+		},
+	}}
 
-	ecs.Ecs.Version = version
-	ecs.Agent.Type = "fox"
+	ecs.Ecs.Version = "9.1.0"
 	ecs.Agent.Version = app.Version[1:]
+	ecs.Agent.Type = "fox"
 	ecs.Event.Kind = "event"
 
 	return ecs
 }
 
 func (ecs Ecs) String() string {
-	return fmt.Sprintf("ECS: %s", ecs.Url)
+	return fmt.Sprintf("ECS @ %s", ecs.Url)
 }
 
-func (ecs Ecs) Write(e *event.Event) (int64, int64, error) {
+func (ecs Ecs) Write(e *event.Event) error {
 	cef := e.ToCEF()
 
 	ecs.Timestamp = e.Time.UTC()
@@ -115,7 +118,7 @@ func (ecs Ecs) Write(e *event.Event) (int64, int64, error) {
 	buf, err := json.Marshal(ecs)
 
 	if err != nil {
-		return 0, 0, nil
+		return err
 	}
 
 	return ecs.Post(string(buf))

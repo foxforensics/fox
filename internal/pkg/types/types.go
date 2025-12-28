@@ -1,5 +1,7 @@
 package types
 
+const Size = 4096
+
 const (
 	ADLER32    = "adler32"
 	BLAKE2S256 = "blake2s-256"
