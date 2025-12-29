@@ -82,7 +82,7 @@ func (db *Database) String() string {
 	return db.path
 }
 
-func (db *Database) Upsert(evt *Event) {
+func (db *Database) Upsert(evt *Event) error {
 	res, err := db.sql.Exec(events,
 		evt.Time.UTC(),
 		evt.Host,
@@ -93,24 +93,24 @@ func (db *Database) Upsert(evt *Event) {
 	)
 
 	if err != nil {
-		log.Println(err)
-		return
+		return err
 	}
 
 	if len(evt.Extension) > 0 {
 		id, err := res.LastInsertId()
 
 		if err != nil {
-			log.Println(err)
-			return
+			return err
 		}
 
 		for k, v := range maps.All(evt.Extension) {
 			_, err := db.sql.Exec(extensions, id, k, v)
 
 			if err != nil {
-				log.Println(err)
+				return err
 			}
 		}
 	}
+
+	return nil
 }

@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
@@ -76,8 +75,8 @@ type Hunt struct {
 	Paths []string `arg:"" type:"path" optional:""`
 
 	// internal
-	db     *event.Database   `kong:"-"`
-	stream stream.Streamable `kong:"-"`
+	db  *event.Database `kong:"-"`
+	net stream.Streamer `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
@@ -118,11 +117,11 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if len(cmd.Url) > 0 {
 		switch {
 		case cmd.Hec:
-			cmd.stream = hec.New(cmd.Url, cmd.Auth)
+			cmd.net = hec.New(cmd.Url, cmd.Auth)
 		case cmd.Ecs:
-			cmd.stream = ecs.New(cmd.Url)
+			cmd.net = ecs.New(cmd.Url)
 		default:
-			cmd.stream = raw.New(cmd.Url)
+			cmd.net = raw.New(cmd.Url)
 		}
 	}
 
@@ -157,11 +156,11 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		log.Printf("hunt: using database %s\n", cmd.db)
 	}
 
-	if cli.Verbose > 1 && cmd.stream != nil {
-		log.Printf("hunt: streaming as %s\n", cmd.stream)
+	if cli.Verbose > 1 && cmd.net != nil {
+		log.Printf("hunt: streaming as %s\n", cmd.net)
 	}
 
-	var cnt int64
+	var n int64
 
 	for e := range hunter.New(&hunter.Options{
 		Sort:       cmd.Sort,
@@ -173,7 +172,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			continue // not severe enough
 		}
 
-		line := cmd.getLine(e, cli.Filter)
+		line := cmd.format(e, cli.Filter)
 
 		if cli.Filter != nil && !cli.Filter.MatchString(line) {
 			continue // not matched
@@ -181,19 +180,11 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 		_, _ = fmt.Fprintln(cli.Stdout, line)
 
-		if cmd.db != nil {
-			cmd.db.Upsert(e)
-		}
+		cmd.upsert(e)
 
-		if cmd.stream != nil {
-			err := cmd.stream.Write(e)
+		cmd.stream(e)
 
-			if err != nil && cli.Verbose > 0 {
-				log.Println(err)
-			}
-		}
-
-		cnt++
+		n++
 	}
 
 	if cli.Verbose > 0 {
@@ -201,13 +192,13 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("hunt: found %d event(s)\n", cnt)
+		log.Printf("hunt: found %d event(s)\n", n)
 	}
 
 	return nil
 }
 
-func (cmd *Hunt) getLine(e *event.Event, re *regexp.Regexp) string {
+func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp) string {
 	var fn text.Colored
 
 	switch {
@@ -228,5 +219,25 @@ func (cmd *Hunt) getLine(e *event.Event, re *regexp.Regexp) string {
 		return fn(e.ToJSON())
 	default:
 		return fn(e.ToCEF())
+	}
+}
+
+func (cmd *Hunt) upsert(e *event.Event) {
+	if cmd.db != nil {
+		err := cmd.db.Upsert(e)
+
+		if err != nil {
+			log.Println(err)
+		}
+	}
+}
+
+func (cmd *Hunt) stream(e *event.Event) {
+	if cmd.net != nil {
+		err := cmd.net.Stream(e)
+
+		if err != nil {
+			log.Println(err)
+		}
 	}
 }

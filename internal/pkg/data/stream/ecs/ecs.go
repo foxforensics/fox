@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"time"
 
-	app "github.com/cuhsat/fox/v4/internal"
 	"github.com/twmb/murmur3"
 
+	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
@@ -18,8 +18,6 @@ import (
 const LocalHost = "http://localhost:8080"
 
 type Ecs struct {
-	stream.Streamer
-
 	Ecs struct {
 		Version string `json:"version"`
 	} `json:"ecs"`
@@ -54,15 +52,13 @@ type Ecs struct {
 
 	Timestamp time.Time `json:"@timestamp"`
 	Message   string    `json:"message"`
+
+	// internal
+	url string
 }
 
 func New(url string) Ecs {
-	ecs := Ecs{Streamer: stream.Streamer{
-		Url: url,
-		Map: map[string]string{
-			"Content-Type": "application/json",
-		},
-	}}
+	ecs := Ecs{url: url}
 
 	ecs.Ecs.Version = "9.1.0"
 	ecs.Agent.Version = app.Version[1:]
@@ -73,10 +69,10 @@ func New(url string) Ecs {
 }
 
 func (ecs Ecs) String() string {
-	return fmt.Sprintf("ECS @ %s", ecs.Url)
+	return fmt.Sprintf("ECS @ %s", ecs.url)
 }
 
-func (ecs Ecs) Write(e *event.Event) error {
+func (ecs Ecs) Stream(e *event.Event) error {
 	cef := e.ToCEF()
 
 	ecs.Timestamp = e.Time.UTC()
@@ -121,5 +117,7 @@ func (ecs Ecs) Write(e *event.Event) error {
 		return err
 	}
 
-	return ecs.Post(string(buf))
+	return stream.Post(ecs.url, string(buf), map[string]string{
+		"Content-Type": "application/json",
+	})
 }

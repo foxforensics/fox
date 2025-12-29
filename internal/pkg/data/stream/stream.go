@@ -5,37 +5,38 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
-var userAgent = fmt.Sprintf("fox %s", app.Version)
-var httpClient = new(http.Client)
+// statics
+var (
+	agent  = fmt.Sprintf("fox %s", app.Version)
+	client = http.Client{
+		Timeout: time.Second * 30,
+	}
+)
 
-type Streamable interface {
-	Write(*event.Event) error
+type Streamer interface {
+	Stream(*event.Event) error
 }
 
-type Streamer struct {
-	Map map[string]string `json:"-"`
-	Url string            `json:"-"`
-}
-
-func (str *Streamer) Post(body string) error {
-	req, err := http.NewRequest("POST", str.Url, strings.NewReader(body))
+func Post(url, body string, headers map[string]string) error {
+	req, err := http.NewRequest("POST", url, strings.NewReader(body))
 
 	if err != nil {
 		return err
 	}
 
-	req.Header.Add("user-agent", userAgent)
+	req.Header.Add("user-agent", agent)
 
-	for k, v := range str.Map {
+	for k, v := range headers {
 		req.Header.Set(k, v)
 	}
 
-	res, err := httpClient.Do(req)
+	res, err := client.Do(req)
 
 	if err != nil {
 		return err

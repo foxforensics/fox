@@ -15,8 +15,6 @@ import (
 const LocalHost = "http://localhost:8088/services/collector/event/1.0"
 
 type Hec struct {
-	stream.Streamer
-
 	Time       int64          `json:"time"`
 	Host       string         `json:"host,omitempty"`
 	Source     string         `json:"source"`
@@ -24,6 +22,9 @@ type Hec struct {
 	Index      string         `json:"index"`
 	Fields     map[string]any `json:"fields,omitempty"`
 	Event      Event          `json:"event"`
+
+	// internal
+	url, token string
 }
 
 type Event struct {
@@ -32,25 +33,20 @@ type Event struct {
 }
 
 func New(url, token string) Hec {
-	return Hec{
-		Index:      "main",
-		Sourcetype: "_json",
-		Source:     fmt.Sprintf("fox %s", app.Version[1:]),
-		Streamer: stream.Streamer{
-			Url: url,
-			Map: map[string]string{
-				"Content-Type":  "application/json",
-				"Authorization": fmt.Sprintf("Splunk %s", strings.ToLower(token)),
-			},
-		},
-	}
+	hec := Hec{url: url, token: token}
+
+	hec.Index = "main"
+	hec.Sourcetype = "_json"
+	hec.Source = fmt.Sprintf("fox %s", app.Version[1:])
+
+	return hec
 }
 
 func (hec Hec) String() string {
-	return fmt.Sprintf("HEC @ %s", hec.Url)
+	return fmt.Sprintf("HEC @ %s", hec.url)
 }
 
-func (hec Hec) Write(e *event.Event) error {
+func (hec Hec) Stream(e *event.Event) error {
 	hec.Time = e.Time.UTC().UnixMilli()
 	hec.Host = e.Host
 	hec.Event = Event{
@@ -70,7 +66,10 @@ func (hec Hec) Write(e *event.Event) error {
 		return err
 	}
 
-	return hec.Post(string(buf))
+	return stream.Post(hec.url, string(buf), map[string]string{
+		"Content-Type":  "application/json",
+		"Authorization": fmt.Sprintf("Splunk %s", strings.ToLower(hec.token)),
+	})
 }
 
 func toCefName(n int8) string {
