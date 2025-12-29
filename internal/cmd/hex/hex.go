@@ -50,7 +50,7 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 		lastHex, wasCut := "", false
 
-		for l := range buffer.Hex(h, tail, cmd.Mode).Lines {
+		for l := range buffer.Hex(h, tail, cmd.Mode, cli.Profile).Lines {
 			// cut similar lines for better readability
 			if l.Hex == lastHex && cmd.Mode != types.Raw {
 				if !wasCut {

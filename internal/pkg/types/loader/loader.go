@@ -26,9 +26,9 @@ const stdin = "-"
 type Options struct {
 	Limit    *types.Limits
 	Filter   *types.Filters
-	Queue    uint
 	Input    string
 	Password string
+	Profile  int
 	Verbose  int
 }
 
@@ -43,7 +43,7 @@ type Loader struct {
 func New(opts *Options) *Loader {
 	return &Loader{
 		opts:  opts,
-		heaps: make(chan *heap.Heap, opts.Queue),
+		heaps: make(chan *heap.Heap, opts.Profile),
 	}
 }
 

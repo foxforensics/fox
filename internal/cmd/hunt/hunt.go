@@ -33,9 +33,6 @@ Flags:
   -J, --jsonl              show logs as JSON lines
   -D, --sqlite             save logs to SQLite3 DB (very slow)
 
-Worker:
-  -P, --pool=SIZE          use worker pool size (default: CPUs)
-
 Stream:
   -u, --url=SERVER         stream events to server address
   -T, --auth=TOKEN         stream events using auth token
@@ -58,9 +55,6 @@ type Hunt struct {
 	Jsonl  bool `short:"J" xor:"json,jsonl"`
 	Sqlite bool `short:"D"`
 
-	// worker
-	Pool int `short:"P" default:"${cpus}"`
-
 	// stream
 	Url  string `short:"u"`
 	Auth string `short:"T"`
@@ -80,10 +74,6 @@ type Hunt struct {
 }
 
 func (cmd *Hunt) Validate() error {
-	if cmd.Pool < 1 {
-		log.Fatalln("pool to small")
-	}
-
 	if cmd.Hec && len(cmd.Auth) == 0 {
 		log.Fatalln("auth required")
 	}
@@ -149,7 +139,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("hunt: using %d worker(s)\n", cmd.Pool)
+		log.Printf("hunt: using %d worker(s)\n", cli.Profile)
 	}
 
 	if cli.Verbose > 1 && cmd.db != nil {
@@ -165,7 +155,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	for e := range hunter.New(&hunter.Options{
 		Sort:       cmd.Sort,
 		Extensions: cmd.Ext,
-		Pool:       cmd.Pool,
+		Profile:    cli.Profile,
 		Verbose:    cli.Verbose,
 	}).Hunt(ch) {
 		if !cmd.All && e.Severity < Limit {

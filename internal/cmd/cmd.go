@@ -52,11 +52,10 @@ type Globals struct {
 	Bytes uint `short:"c" xor:"lines,bytes"`
 
 	// file loader
-	Queue uint   `short:"Q" default:"${cpus}"`
 	Input string `short:"i"`
 	Pass  string `short:"p"`
 
-	// file writer
+	// file output
 	File string `short:"f" xor:"file,quiet"`
 
 	// line filter
@@ -64,6 +63,9 @@ type Globals struct {
 	Context uint   `short:"C"`
 	Before  uint   `short:"B"`
 	After   uint   `short:"A"`
+
+	// profile
+	Profile int `short:"P" default:"${cores}"`
 
 	// disable
 	Raw        bool `short:"r"`
@@ -117,6 +119,10 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.Stdout, _ = os.Open(os.DevNull)
 	} else {
 		cli.Stdout = os.Stdout
+	}
+
+	if cli.Profile <= 0 {
+		cli.Profile = 1 // must be at least one
 	}
 
 	if cli.NoColor {
@@ -178,9 +184,9 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 			Before: cli.Before,
 			After:  cli.After,
 		},
-		Queue:    cli.Queue,
 		Input:    cli.Input,
 		Password: cli.Pass,
+		Profile:  cli.Profile,
 		Verbose:  cli.Verbose,
 	})
 

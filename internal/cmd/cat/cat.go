@@ -27,7 +27,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
-		for l := range buffer.Text(h).Lines {
+		for l := range buffer.Text(h, cli.Profile).Lines {
 			s := l.Str
 
 			if cli.Filter != nil && l.Nr != buffer.Sep {

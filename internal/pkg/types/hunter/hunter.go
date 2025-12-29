@@ -14,7 +14,6 @@ import (
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/evtx"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/journal"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
@@ -30,7 +29,7 @@ var Local = []string{
 type Options struct {
 	Sort       bool
 	Extensions int
-	Pool       int
+	Profile    int
 	Verbose    int
 }
 
@@ -44,13 +43,13 @@ func New(opts *Options) *Hunter {
 	return &Hunter{
 		opts:   opts,
 		cache:  make(map[uint64]*event.Event),
-		events: make(chan *event.Event, types.Size),
+		events: make(chan *event.Event, opts.Profile*1024),
 	}
 }
 
 func (htr *Hunter) Hunt(heaps <-chan *heap.Heap) <-chan *event.Event {
 	go func() {
-		p := pool.New().WithMaxGoroutines(htr.opts.Pool)
+		p := pool.New().WithMaxGoroutines(htr.opts.Profile)
 
 		for h := range heaps {
 			p.Go(func() {
@@ -75,7 +74,7 @@ func (htr *Hunter) Hunt(heaps <-chan *heap.Heap) <-chan *event.Event {
 }
 
 func (htr *Hunter) sort() <-chan *event.Event {
-	sorted := make(chan *event.Event, types.Size)
+	sorted := make(chan *event.Event, cap(htr.events))
 
 	go func() {
 		for e := range htr.events {
@@ -113,7 +112,7 @@ func (htr *Hunter) carveEvtx(h *heap.Heap) {
 	r2 := bytes.NewReader(h.MMap())
 
 	for off := range htr.findOffset(r1, evtx.Regex) {
-		for evt := range evtx.Carve(r2, off, htr.opts.Extensions) {
+		for evt := range evtx.Carve(r2, off, htr.opts.Extensions, cap(htr.events)) {
 			htr.events <- evt
 		}
 	}
@@ -123,14 +122,14 @@ func (htr *Hunter) carveJournal(h *heap.Heap) {
 	r := bytes.NewReader(h.MMap())
 
 	for off := range htr.findOffset(r, journal.Regex) {
-		for evt := range journal.Carve(h.MMap(), off, htr.opts.Extensions) {
+		for evt := range journal.Carve(h.MMap(), off, htr.opts.Extensions, cap(htr.events)) {
 			htr.events <- evt
 		}
 	}
 }
 
 func (htr *Hunter) findOffset(rs io.ReadSeeker, re *regexp.Regexp) <-chan int64 {
-	out := make(chan int64, types.Size)
+	out := make(chan int64, 64*htr.opts.Profile)
 
 	go func(r *bufio.Reader) {
 		var lst, off int64

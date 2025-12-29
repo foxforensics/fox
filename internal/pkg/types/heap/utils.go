@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 type String struct {
@@ -15,8 +14,8 @@ type String struct {
 	Str string
 }
 
-func (h *Heap) Strings(m, x uint, w int, s []string, f bool) <-chan String {
-	var ch = make(chan String, types.Size)
+func (h *Heap) Strings(m, x uint, w int, s []string, f bool, p int) <-chan String {
+	var ch = make(chan String, p*64)
 	var db *text.Strings
 	var buf []byte
 	var off int

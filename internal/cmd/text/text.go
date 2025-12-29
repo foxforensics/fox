@@ -88,6 +88,7 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			cmd.Wtf,
 			cmd.Find,
 			cmd.First,
+			cli.Profile,
 		) {
 			if !cli.NoLine && cmd.Wtf > 0 {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s  %s\n", text.Hide(s.Off), s.Str, text.Hide(s.Cls))

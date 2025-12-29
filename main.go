@@ -67,18 +67,20 @@ File limits:
   -c, --bytes=NUMBER       number of bytes
 
 File loader:
-  -i, --input=STRING       use input in place of file content
-  -Q, --queue=NUMBER       use queue size for file loading (default: CPUs)
-  -p, --pass=PASSWORD      use password for decryption (only 7Z, RAR, ZIP)
+  -i, --input=CONTENT      input in place of file content
+  -p, --pass=PASSWORD      password for decryption (7Z, RAR, ZIP)
 
-File writer:
-  -f, --file=FILE          write output to file name (with SHA256)
+File output:
+  -f, --file=FILE          write output to file name with receipt
 
 Line filter:
   -e, --regexp=PATTERN     filter for lines that match pattern
   -C, --context=NUMBER     number of lines surrounding context of match
   -B, --before=NUMBER      number of lines leading context before match
   -A, --after=NUMBER       number of lines trailing context after match
+
+Profile:
+  -P, --profile=CORES      parallel profile to use overall
 
 Disable:
   -r, --raw                don't process files at all
@@ -141,7 +143,7 @@ func main() {
 		kong.Name("fox"),
 		kong.DefaultEnvars("FOX"),
 		kong.Vars{
-			"cpus": strconv.Itoa(runtime.NumCPU()),
+			"cores": strconv.Itoa(runtime.NumCPU()),
 		})
 
 	switch {

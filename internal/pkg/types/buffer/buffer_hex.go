@@ -19,8 +19,8 @@ type HexBuffer struct {
 	Lines chan HexLine
 }
 
-func Hex(h *heap.Heap, tail uint, mode string) *HexBuffer {
-	var buf = &HexBuffer{make(chan HexLine, types.Size)}
+func Hex(h *heap.Heap, tail uint, mode string, p int) *HexBuffer {
+	var buf = &HexBuffer{make(chan HexLine, p*1024)}
 	var off uint
 
 	if tail > 0 {

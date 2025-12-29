@@ -54,8 +54,8 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), err
 }
 
-func Carve(b []byte, off int64, ext int) <-chan *event.Event {
-	ch := make(chan *event.Event, types.Size)
+func Carve(b []byte, off int64, ext, cap int) <-chan *event.Event {
+	ch := make(chan *event.Event, cap)
 
 	f, err := parser.OpenFile(bytes.NewReader(b[off:]))
 
