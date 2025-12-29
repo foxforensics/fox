@@ -175,9 +175,9 @@ func newOpts() *Options {
 	return &Options{
 		&types.Limits{},
 		&types.Filters{},
-		0,
 		"",
 		"",
+		1,
 		0,
 	}
 }
