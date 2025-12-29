@@ -42,7 +42,7 @@ func New(path string, receipt bool) *Writer {
 	w.file, err = os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
 	return &w

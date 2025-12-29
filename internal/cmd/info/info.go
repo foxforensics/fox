@@ -35,7 +35,7 @@ type Info struct {
 
 func (cmd *Info) Validate() error {
 	if cmd.Min > cmd.Max {
-		log.Fatal("invalid range")
+		log.Fatalln("invalid range")
 	}
 
 	return nil

@@ -81,11 +81,11 @@ type Hunt struct {
 
 func (cmd *Hunt) Validate() error {
 	if cmd.Pool < 1 {
-		log.Fatal("pool to small")
+		log.Fatalln("pool to small")
 	}
 
 	if cmd.Hec && len(cmd.Auth) == 0 {
-		log.Fatal("auth required")
+		log.Fatalln("auth required")
 	}
 
 	return nil
