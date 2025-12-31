@@ -195,8 +195,8 @@ func (ldr *Loader) processData(path, part string, b []byte, data bool) {
 		return
 	}
 
-	// 3. format data
-	if b, ok = ldr.formatData(b); ok {
+	// 3. convert data
+	if b, ok = ldr.convertData(b); ok {
 		data = true
 	}
 
@@ -269,7 +269,7 @@ func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
 	return b, false
 }
 
-func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
+func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
 	for _, c := range register.Converts {
 		if c.Detect(b) {
 			if ldr.opts.Verbose > 1 {

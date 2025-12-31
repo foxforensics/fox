@@ -1,13 +1,14 @@
-package evtx
+package journal
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "convert/test.evtx"
+const file = "convert/test.journal"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
@@ -40,7 +41,13 @@ func TestConvert(t *testing.T) {
 
 	lines := strings.Split(string(buf), "\n")
 
-	if len(lines) != 920 {
+	if len(lines) != 1923 {
 		t.Fatal("invalid length")
+	}
+
+	for _, l := range lines {
+		if len(l) > 0 && !json.Valid([]byte(l)) {
+			t.Fatal("invalid json")
+		}
 	}
 }

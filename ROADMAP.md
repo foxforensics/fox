@@ -23,7 +23,6 @@
 ## 5. Ideas
 * Add Fortigate Firewall log parser?
 * Add macOS trace3 log parser?
-* Add Heatmap to hex command?
 * Add specs
   * `Fox Unified Event Format`
   * `Fox Unified Event Storage`

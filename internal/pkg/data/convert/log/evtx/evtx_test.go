@@ -1,13 +1,14 @@
-package fson
+package evtx
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "format/fox.fson"
+const file = "convert/test.evtx"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
@@ -17,11 +18,11 @@ func BenchmarkDetect(b *testing.B) {
 	}
 }
 
-func BenchmarkFormat(b *testing.B) {
+func BenchmarkConvert(b *testing.B) {
 	buf := data.Fixture(file)
 
 	for b.Loop() {
-		_ = Format(buf)
+		_, _ = Convert(buf)
 	}
 }
 
@@ -31,12 +32,22 @@ func TestDetect(t *testing.T) {
 	}
 }
 
-func TestFormat(t *testing.T) {
-	buf := Format(data.Fixture(file))
+func TestConvert(t *testing.T) {
+	buf, err := Convert(data.Fixture(file))
+
+	if err != nil {
+		t.Error(err)
+	}
 
 	lines := strings.Split(string(buf), "\n")
 
-	if len(lines) != 4 {
+	if len(lines) != 920 {
 		t.Fatal("invalid length")
+	}
+
+	for _, l := range lines {
+		if len(l) > 0 && !json.Valid([]byte(l)) {
+			t.Fatal("invalid json")
+		}
 	}
 }

@@ -19,9 +19,10 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/xar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/journal"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/pe"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/exe/elf"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/exe/pe"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bzip2"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/gzip"
@@ -35,7 +36,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fson"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
@@ -162,13 +162,13 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	}
 
 	if !cli.NoConvert {
+		register.Convert("elf", elf.Detect, elf.Convert)
+		register.Convert("pe", pe.Detect, pe.Convert)
 		register.Convert("evtx", evtx.Detect, evtx.Convert)
 		register.Convert("journal", journal.Detect, journal.Convert)
-		register.Convert("pe", pe.Detect, pe.Convert)
 	}
 
 	if !cli.Raw {
-		register.Format("fson", fson.Detect, fson.Format)
 		register.Format("json", json.Detect, json.Format)
 	}
 

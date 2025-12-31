@@ -12,7 +12,6 @@ import (
 	"github.com/0xrawsec/golang-evtx/evtx"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fson"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
@@ -38,12 +37,8 @@ func Convert(b []byte) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 
 	for e := range r.Events() {
-		_, err := buf.Write(fson.FromBytes(evtx.ToJSON(e)))
-
-		if err != nil {
-			log.Println(err)
-			continue
-		}
+		buf.Write(evtx.ToJSON(e))
+		buf.WriteRune('\n')
 	}
 
 	_ = r.Close()

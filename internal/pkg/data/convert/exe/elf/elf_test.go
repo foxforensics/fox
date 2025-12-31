@@ -1,13 +1,13 @@
-package journal
+package elf
 
 import (
-	"strings"
+	"encoding/json"
 	"testing"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "convert/test.journal"
+const file = "convert/fox.elf"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
@@ -38,9 +38,7 @@ func TestConvert(t *testing.T) {
 		t.Error(err)
 	}
 
-	lines := strings.Split(string(buf), "\n")
-
-	if len(lines) != 1923 {
-		t.Fatal("invalid length")
+	if !json.Valid(buf) {
+		t.Fatal("invalid json")
 	}
 }

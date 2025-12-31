@@ -3,7 +3,7 @@
 The Forensic Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 
 ![Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)
-![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/build.yaml?style=for-the-badge&label=build)
+![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)
 ![Commits](https://img.shields.io/github/commit-activity/y/cuhsat/fox.svg?style=for-the-badge&label=commits)
 ![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)
 
@@ -15,7 +15,7 @@ go install github.com/cuhsat/fox/v4@latest
 * Guaranteed read-only access
 * [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
-* Dumping of [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
+* Dumps [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * String carving and classification
 * Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
 * Automatic Chain-of-Custody receipt generation

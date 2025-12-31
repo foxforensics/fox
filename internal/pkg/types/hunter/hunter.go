@@ -9,11 +9,11 @@ import (
 	"regexp"
 	"slices"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
 	"github.com/sourcegraph/conc"
 	"github.com/sourcegraph/conc/pool"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )

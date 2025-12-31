@@ -14,7 +14,6 @@ import (
 	"github.com/Velocidex/ordereddict"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/fson"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
@@ -42,13 +41,8 @@ func Convert(b []byte) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 
 	for l := range j.GetLogs(context.Background()) {
-		s := fmt.Sprintf(`{"Event": %s}`, l.String())
-
-		_, err := buf.WriteString(fson.FromString(s))
-
-		if err != nil {
-			log.Println(err)
-		}
+		buf.WriteString(fmt.Sprintf(`{"Event": %s}`, l.String()))
+		buf.WriteRune('\n')
 	}
 
 	return buf.Bytes(), err

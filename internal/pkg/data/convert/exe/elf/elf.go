@@ -1,21 +1,22 @@
-package pe
+package elf
 
 import (
-	"encoding/json"
+	"log"
+	"strings"
 
-	"github.com/saferwall/pe"
+	"github.com/saferwall/elf"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const Magic = "MZ"
+const Magic = "\x7FELF"
 
 func Detect(b []byte) bool {
 	return data.HasMagic(b, 0, []byte(Magic))
 }
 
 func Convert(b []byte) ([]byte, error) {
-	p, err := pe.NewBytes(b, new(pe.Options))
+	p, err := elf.NewBytes(b)
 
 	if err != nil {
 		return nil, err
@@ -24,8 +25,16 @@ func Convert(b []byte) ([]byte, error) {
 	err = p.Parse()
 
 	if err != nil {
+		log.Printf("warning: %s!\n", err)
+	}
+
+	raw, err := p.DumpRawJSON()
+
+	if err != nil {
 		return nil, err
 	}
 
-	return json.MarshalIndent(p, "", "  ")
+	raw = strings.TrimSuffix(raw, "{}")
+
+	return []byte(raw), nil
 }
