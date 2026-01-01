@@ -73,6 +73,7 @@ type Globals struct {
 	NoFile     bool `long:"no-file"`
 	NoLine     bool `long:"no-line"`
 	NoColor    bool `long:"no-color"`
+	NoPretty   bool `long:"no-pretty"`
 	NoDeflate  bool `long:"no-deflate"`
 	NoExtract  bool `long:"no-extract"`
 	NoConvert  bool `long:"no-convert"`
@@ -168,7 +169,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		register.Convert("journal", journal.Detect, journal.Convert)
 	}
 
-	if !cli.Raw {
+	if !cli.NoPretty {
 		register.Format("json", json.Detect, json.Format)
 	}
 

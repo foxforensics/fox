@@ -88,6 +88,7 @@ Disable:
       --no-file            don't print filenames
       --no-line            don't print line numbers
       --no-color           don't colorize the output
+      --no-pretty          don't prettify the output
       --no-deflate         don't deflate automatically
       --no-extract         don't extract automatically
       --no-convert         don't convert automatically
