@@ -69,7 +69,7 @@ $ fox text -rw sample.exe
 
 Hash the archive contents:
 ```console
-$ fox hash -Tmd5,sha1 files.7z
+$ fox hash -Tssdeep,xxh3 files.7z
 ```
 
 Hunt down suspicious events:
@@ -80,7 +80,7 @@ $ fox hunt -sxv ./**/*.dd
 ## Supports
 
 File formats:
-> evtx, journal, json, jsonl, PE/COFF (.dll, .exe, .sys, ...)
+> evtx, journal, json, jsonl, ELF, PE/COFF (.dll, .exe, .sys, ...)
 
 Archive formats:
 > 7zip, ar, CAB, cpio, RAR, RPM, tar, xar, ZIP

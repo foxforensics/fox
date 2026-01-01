@@ -25,7 +25,7 @@ Flags:
   -F, --find=HASH,...      show only files that match
 
 Example:
-  $ fox hash -Tmd5,sha1 files.7z
+  $ fox hash -Tssdeep,xxh3 files.7z
 
 Remark:
   Results will be grouped by path, if more than one algorithm is specified.
