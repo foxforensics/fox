@@ -70,7 +70,7 @@ var Algorithms = []string{
 	"xxh3",
 }
 
-var secure = []string{
+var isSecure = []string{
 	"blake2s-256",
 	"blake2b-256",
 	"blake2b-384",
@@ -86,14 +86,14 @@ var secure = []string{
 	"sha3-512",
 }
 
-func IsSecure(t string) bool {
-	return slices.Contains(secure, strings.ToLower(t))
+func IsSecure(algo string) bool {
+	return slices.Contains(isSecure, strings.ToLower(algo))
 }
 
-func Sum(t string, b []byte) (string, error) {
+func Sum(algo string, b []byte) (string, error) {
 	var imp hash.Hash
 
-	switch strings.ToLower(t) {
+	switch strings.ToLower(algo) {
 	case types.ADLER32:
 		imp = adler32.New()
 	case types.BLAKE2B256:
@@ -176,7 +176,7 @@ func Sum(t string, b []byte) (string, error) {
 		return "", errors.New("input size to small")
 	}
 
-	switch t {
+	switch algo {
 	case types.SSDEEP:
 		return fmt.Sprintf("%s", b), nil
 	case types.TLSH:

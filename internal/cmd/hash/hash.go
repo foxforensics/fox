@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
@@ -86,12 +85,12 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
-		for _, typ := range cmd.Type {
-			if !hash.IsSecure(typ) && !cli.NoWarnings {
-				log.Printf("warning: algorithm %s is not secure!\n", typ)
+		for _, algo := range cmd.Type {
+			if !hash.IsSecure(algo) && !cli.NoWarnings {
+				log.Printf("warning: algorithm %s is not secure!\n", algo)
 			}
 
-			sum, err := hash.Sum(typ, h.MMap())
+			sum, err := hash.Sum(algo, h.MMap())
 
 			if err != nil {
 				log.Println(err)
@@ -100,7 +99,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 
 			if len(cmd.Find) == 0 || slices.Contains(cmd.Find, sum) {
 				if len(cmd.Type) > 1 {
-					_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(strings.ToUpper(typ)))
+					_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(strings.ToUpper(algo)))
 				} else {
 					_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(h.Name))
 				}
