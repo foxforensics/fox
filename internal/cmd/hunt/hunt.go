@@ -65,7 +65,7 @@ type Hunt struct {
 	Url  string `short:"u"`
 	Auth string `short:"T"`
 	Ecs  bool   `short:"E" xor:"ecs,hec"`
-	Hec  bool   `short:"H" xor:"ecs,hec" and:"hec"`
+	Hec  bool   `short:"H" xor:"ecs,hec"`
 
 	// alias
 	Logstash bool `short:"L" xor:"logstash,splunk"`
