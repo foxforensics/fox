@@ -138,6 +138,7 @@ func TestLoadFiles(t *testing.T) {
 				"misc",
 			},
 			[]string{
+				"eicar",
 				"empty",
 				"mbr.bin",
 				"rnd.bin",
