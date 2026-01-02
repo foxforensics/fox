@@ -105,6 +105,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.NoFile = true
 		cli.NoLine = true
 		cli.NoColor = true
+		cli.NoPretty = true
 		cli.NoDeflate = true
 		cli.NoExtract = true
 		cli.NoConvert = true

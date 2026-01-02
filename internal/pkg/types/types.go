@@ -43,11 +43,9 @@ const (
 	Raw       = "raw"
 )
 
-type Event int
-
 const (
-	Eventlog Event = iota
-	Journal
+	Eventlog = "eventlog"
+	Journal  = "journal"
 )
 
 type Heap int

@@ -7,12 +7,14 @@ import (
 	"log"
 	"maps"
 	"regexp"
+	"slices"
+	"strconv"
 	"time"
 
 	"github.com/0xrawsec/golang-evtx/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
@@ -22,6 +24,15 @@ const (
 )
 
 var Regex = regexp.MustCompile(Chunk)
+
+var system = evtx.Path("/Event/System")
+
+var children = []string{
+	"Guid",
+	"Name",
+	"Value",
+	"DwordVal",
+}
 
 func Detect(b []byte) bool {
 	return data.HasMagic(b, 0, []byte(Magic))
@@ -46,7 +57,7 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func Carve(rs io.ReadSeeker, off int64, ext, cap int) <-chan *event.Event {
+func Carve(rs io.ReadSeeker, off int64, cap int) <-chan *event.Event {
 	ch := make(chan *event.Event, cap)
 
 	chk, err := newChunk(rs, off)
@@ -59,19 +70,8 @@ func Carve(rs io.ReadSeeker, off int64, ext, cap int) <-chan *event.Event {
 
 	go func(chk *evtx.Chunk) {
 		defer close(ch)
-
 		for evt := range chk.Events() {
-			e := newEvent(evt)
-
-			if ext > 0 {
-				addExtLevel1(e, evt)
-			}
-
-			if ext > 1 {
-				addExtLevel2(e, evt)
-			}
-
-			ch <- e
+			ch <- newEvent(evt)
 		}
 	}(chk)
 
@@ -114,85 +114,81 @@ func newChunk(rs io.ReadSeeker, off int64) (*evtx.Chunk, error) {
 }
 
 func newEvent(evt *evtx.GoEvtxMap) *event.Event {
-	var ok bool
-
 	e := event.Event{
-		Time:      evt.TimeCreated().UTC(),
-		Source:    types.Eventlog,
-		Extension: make(map[string]any),
+		Time:     evt.TimeCreated().UTC(),
+		Host:     getString(evt, "/Event/System/Computer"),
+		User:     getString(evt, "/Event/System/Security/UserID"),
+		Sequence: getString(evt, "/Event/System/EventRecordID"),
+		Source:   types.Eventlog,
+		Category: getString(evt, "/Event/System/Channel"),
+		Service:  getString(evt, "/Event/System/Provider/Name"),
+		Fields:   make(map[string]string),
 	}
 
-	hostPath := evtx.Path("/Event/System/Computer")
-	namePath := evtx.Path("/Event/System/Provider/Name")
-
-	provider, _ := evt.GetString(&namePath)
-	e.Host, _ = evt.GetString(&hostPath)
-	e.User, _ = evt.UserID()
-
-	if len(provider) == 0 {
-		provider = "unknown"
+	// fallback service name
+	if len(e.Service) == 0 {
+		e.Service = "unknown"
 	}
 
-	e.Message = fmt.Sprintf("Undescribed event: %s: %d", provider, evt.EventID())
+	// translate event id to message
+	e.Message = fmt.Sprintf("Undescribed event: %s: %d", e.Service, evt.EventID())
 
-	if events, ok := Events[provider]; ok {
+	if events, ok := Events[e.Service]; ok {
 		if message, ok := events[evt.EventID()]; ok {
 			e.Message = message
 		}
 	}
 
-	if e.Severity, ok = Levels[evt.EventID()]; !ok {
-		e.Severity = 0 // unknown
+	// calculate severity from level
+	level := getString(evt, "/Event/System/Level")
+
+	if v, err := strconv.Atoi(level); err == nil {
+		switch v {
+		case 0, 1:
+			e.Severity = 10
+		case 2:
+			e.Severity = 8
+		case 3:
+			e.Severity = 6
+		case 4:
+			e.Severity = 3
+		case 5:
+			e.Severity = 1
+		default:
+			e.Severity = 0
+		}
+	}
+
+	if v, err := evt.GetMap(&system); err == nil {
+		addMapDeep(&e, v, "")
 	}
 
 	return &e
 }
 
-func addExtLevel1(e *event.Event, em *evtx.GoEvtxMap) {
-	e.Extension["rt"] = e.Time
-	e.Extension["shost"] = e.Host
-	e.Extension["suid"] = e.User
-	e.Extension["deviceFacility"] = "eventlog"
-
-	for k, v := range map[string]string{
-		"cat":               "/Event/System/Channel",
-		"spid":              "/Event/System/Execution/ProcessID",
-		"sourceServiceName": "/Event/System/Provider/Name",
-	} {
-		p := evtx.Path(v)
-		if s, err := em.GetString(&p); err == nil {
-			e.Extension[k] = s
-		}
-	}
-}
-
-func addExtLevel2(e *event.Event, em *evtx.GoEvtxMap) {
-	p := evtx.Path("/Event/System")
-
-	evt, err := em.GetMap(&p)
-
-	if err == nil {
-		addMapDeep(e, evt, "")
-	}
-}
-
-func addMapDeep(e *event.Event, em *evtx.GoEvtxMap, r string) {
-	if len(r) > 0 {
-		r += "_"
-	}
-
+func addMapDeep(e *event.Event, em *evtx.GoEvtxMap, p string) {
 	for k, v := range maps.All(*em) {
 		switch v.(type) {
 		case *evtx.GoEvtxMap, evtx.GoEvtxMap:
 			m := v.(evtx.GoEvtxMap)
-			addMapDeep(e, &m, r+k)
+			addMapDeep(e, &m, k)
 
 		case *evtx.UTCTime, evtx.UTCTime:
 			u := v.(evtx.UTCTime)
-			e.Extension[r+k] = fmt.Sprintf("%s", time.Time(u))
+			e.Fields[k] = fmt.Sprintf("%s", time.Time(u))
 
 		default:
-			e.Extension[r+k] = fmt.Sprintf("%v", v)
+			if slices.Contains(children, k) {
+				k = p // use parent as key
+			}
+
+			e.Fields[k] = fmt.Sprintf("%v", v)
 		}
 	}
+}
+
+func getString(em *evtx.GoEvtxMap, path string) string {
+	p := evtx.Path(path)
+	v, _ := em.GetString(&p)
+	return v
 }

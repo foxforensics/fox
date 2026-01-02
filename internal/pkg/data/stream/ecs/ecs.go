@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/twmb/murmur3"
 
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
@@ -59,12 +59,10 @@ type Ecs struct {
 
 func New(url string) Ecs {
 	ecs := Ecs{url: url}
-
 	ecs.Ecs.Version = "9.1.0"
 	ecs.Agent.Version = app.Version[1:]
 	ecs.Agent.Type = "fox"
 	ecs.Event.Kind = "event"
-
 	return ecs
 }
 
@@ -75,39 +73,31 @@ func (ecs Ecs) String() string {
 func (ecs Ecs) Stream(e *event.Event) error {
 	cef := e.ToCEF()
 
+	// basic properties
 	ecs.Timestamp = e.Time.UTC()
 	ecs.Message = e.Message
-
 	ecs.Host.Hostname = e.Host
 	ecs.User.ID = e.User
 
-	switch e.Source {
-
-	// windows specific
-	case types.Eventlog:
-		ecs.Event.Module = "eventlog"
-		ecs.Event.Dataset = "EventLog." + e.Value("System_Channel")
-		ecs.Event.ID = e.Value("System_EventRecordID")
-		ecs.Event.Code = e.Value("System_EventID", "System_EventID_Value")
-		ecs.Event.Provider = e.Value("System_Provider_Name")
-
-	// linux specific
-	case types.Journal:
-		ecs.Event.Module = "journal"
-		ecs.Event.Dataset = e.Value("_COMM")
-		ecs.Event.ID = e.Value("Seq")
-		ecs.Event.Provider = e.Value("_TRANSPORT")
-	}
-
 	// original event
+	ecs.Event.ID = e.Sequence
+	ecs.Event.Module = e.Source
+	ecs.Event.Dataset = fmt.Sprintf("%s.%s", e.Source, e.Category)
+	ecs.Event.Provider = e.Service
 	ecs.Event.Severity = int64(e.Severity)
 	ecs.Event.Ingested = time.Now().UTC()
 	ecs.Event.Original = cef
 	ecs.Event.Hash = fmt.Sprintf("%x", murmur3.StringSum64(cef))
 
+	// os specific
+	if e.Source == types.Eventlog {
+		ecs.Event.Code = e.Fields["EventID"]
+	}
+
+	// add fields
 	ecs.Labels = make(map[string]any)
 
-	for k, v := range e.Extension {
+	for k, v := range e.Fields {
 		ecs.Labels[k] = v
 	}
 

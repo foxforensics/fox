@@ -11,33 +11,25 @@ import (
 	"github.com/zeebo/xxh3"
 
 	"github.com/cuhsat/fox/v4/internal"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 const CEF = "%s %s CEF:1|fox|hunt|%s|100|%s|%d|"
 
 type Event struct {
-	Time      time.Time      `json:"ts"`
-	Host      string         `json:"host,omitempty"`
-	User      string         `json:"user,omitempty"`
-	Message   string         `json:"msg,omitempty"`
-	Severity  int8           `json:"lvl"`
-	Source    types.Event    `json:"src"`
-	Extension map[string]any `json:"ext,omitempty"`
+	Time     time.Time         `json:"time,omitempty"`
+	Host     string            `json:"host,omitempty"`
+	User     string            `json:"user,omitempty"`
+	Message  string            `json:"message,omitempty"`
+	Severity int8              `json:"severity,omitempty"`
+	Sequence string            `json:"sequence,omitempty"`
+	Source   string            `json:"source,omitempty"`
+	Category string            `json:"category,omitempty"`
+	Service  string            `json:"service,omitempty"`
+	Fields   map[string]string `json:"fields,omitempty"`
 }
 
 func (evt *Event) String() string {
 	return evt.ToCEF()
-}
-
-func (evt *Event) Value(keys ...string) string {
-	for _, key := range keys {
-		if val, ok := evt.Extension[key]; ok {
-			return fmt.Sprintf("%v", val)
-		}
-	}
-
-	return ""
 }
 
 func (evt *Event) Hash() uint64 {
@@ -65,14 +57,24 @@ func (evt *Event) ToCEF() string {
 		evt.Severity,
 	))
 
-	for _, k := range slices.Sorted(maps.Keys(evt.Extension)) {
-		if v := evt.Extension[k]; v != nil {
-			s := fmt.Sprintf("%v", v)
+	ext := map[string]any{
+		"rt":         evt.Time,
+		"app":        evt.Source,
+		"cat":        evt.Category,
+		"sproc":      evt.Service,
+		"shost":      evt.Host,
+		"suid":       evt.User,
+		"externalId": evt.Sequence,
+	}
 
-			k = strings.ReplaceAll(k, `=`, `\=`)
-			s = strings.ReplaceAll(s, `=`, `\=`)
+	for _, k := range slices.Sorted(maps.Keys(ext)) {
+		if v := ext[k]; v != nil {
+			if s := fmt.Sprintf("%v", v); len(s) > 0 {
+				k = strings.ReplaceAll(k, `=`, `\=`)
+				s = strings.ReplaceAll(s, `=`, `\=`)
 
-			sb.WriteString(fmt.Sprintf("%s=%s ", k, s))
+				sb.WriteString(fmt.Sprintf("%s=%s ", k, s))
+			}
 		}
 	}
 

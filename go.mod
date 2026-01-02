@@ -9,6 +9,7 @@ require (
 	github.com/andybalholm/brotli v1.2.0
 	github.com/bmatcuk/doublestar/v4 v4.9.1
 	github.com/bodgit/sevenzip v1.6.1
+	github.com/bradleyjkemp/sigma-go v0.6.6
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cespare/xxhash v1.1.0
@@ -27,6 +28,7 @@ require (
 	github.com/nwaples/rardecode/v2 v2.2.2
 	github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4
 	github.com/pierrec/lz4 v2.6.1+incompatible
+	github.com/saferwall/elf v0.3.1
 	github.com/saferwall/pe v1.5.7
 	github.com/secDre4mer/go-cab v0.0.0-20250826110853-e3fbafae92cd
 	github.com/sorairolake/lzip-go v0.3.8
@@ -54,6 +56,10 @@ require (
 
 require (
 	github.com/0xrawsec/golang-utils v1.3.2 // indirect
+	github.com/BobuSumisu/aho-corasick v1.0.3 // indirect
+	github.com/PaesslerAG/gval v1.0.0 // indirect
+	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
+	github.com/alecthomas/participle v0.7.1 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
@@ -65,7 +71,6 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.23 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/saferwall/binstream v0.1.1 // indirect
-	github.com/saferwall/elf v0.3.1 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
 	github.com/secDre4mer/pkcs7 v0.0.0-20240322103146-665324a4461d // indirect
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
@@ -75,6 +80,7 @@ require (
 	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/text v0.32.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/libc v1.67.2 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect

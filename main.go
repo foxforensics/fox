@@ -111,7 +111,7 @@ Example: Show the MBR in canonical hex
   $ fox hex -hc512 disk.bin
 
 Example: Hunt down suspicious events
-  $ fox hunt -sxv ./**/*.dd
+  $ fox hunt -sv ./**/*.dd
 
 Type "fox MODE --help" for a more specific help...
 `)

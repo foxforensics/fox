@@ -1,24 +1,28 @@
 package hunt
 
 import (
+	"context"
 	"fmt"
 	"log"
+	"os"
 	"regexp"
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"github.com/bradleyjkemp/sigma-go"
+	"github.com/bradleyjkemp/sigma-go/evaluator"
+
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/ecs"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/hec"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/raw"
+	"github.com/cuhsat/fox/v4/internal/pkg/hunt"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/hunter"
 )
-
-const Limit = 8
 
 var Usage = strings.TrimSpace(`
 Hunt suspicious activities.
@@ -27,11 +31,13 @@ fox hunt [FLAGS ...] [PATHS ...]
 
 Flags:
   -a, --all                show logs with all severities
-  -x, --ext                show logs with all extensions (slow)
   -s, --sort               show logs sorted by timestamp (slow)
   -j, --json               show logs as JSON objects
   -J, --jsonl              show logs as JSON lines
   -D, --sqlite             save logs to SQLite3 DB (very slow)
+
+Rules:
+  -R, --rule=FILE          filter using a Sigma rule (slow)
 
 Stream:
   -u, --url=SERVER         stream events to server address
@@ -44,16 +50,16 @@ Alias:
   -S, --splunk             alias for -H -uhttp://localhost:8088/...
 
 Example:
-  $ fox hunt -sxv ./**/*.dd
+  $ fox hunt -sv ./**/*.dd
 `)
 
 type Hunt struct {
-	All    bool `short:"a"`
-	Ext    int  `short:"x" type:"counter"`
-	Sort   bool `short:"s"`
-	Json   bool `short:"j" xor:"json,jsonl"`
-	Jsonl  bool `short:"J" xor:"json,jsonl"`
-	Sqlite bool `short:"D"`
+	All    bool   `short:"a"`
+	Sort   bool   `short:"s"`
+	Json   bool   `short:"j" xor:"json,jsonl"`
+	Jsonl  bool   `short:"J" xor:"json,jsonl"`
+	Sqlite bool   `short:"D"`
+	Rule   string `short:"R" sep:"," type:"path"`
 
 	// stream
 	Url  string `short:"u"`
@@ -69,8 +75,9 @@ type Hunt struct {
 	Paths []string `arg:"" type:"path" optional:""`
 
 	// internal
-	db  *event.Database `kong:"-"`
-	net stream.Streamer `kong:"-"`
+	db   *event.Database `kong:"-"`
+	net  stream.Streamer `kong:"-"`
+	rule sigma.Rule      `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
@@ -90,6 +97,10 @@ func (cmd *Hunt) BeforeApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+	var err error
+
+	rule := hunt.Default
+
 	if cmd.Sqlite {
 		cmd.db = event.NewDB(hunter.Database)
 	}
@@ -115,9 +126,22 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		}
 	}
 
-	// extensions must be activated
-	if cmd.Ecs || cmd.Hec {
-		cmd.Ext = 3
+	if len(cmd.Rule) > 0 {
+		rule, err = os.ReadFile(cmd.Rule)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
+	cmd.rule, err = sigma.ParseRule(rule)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if !hunt.IsCompatible(&cmd.rule) {
+		log.Println("warning: rule is not supported!")
 	}
 
 	return nil
@@ -152,17 +176,26 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	var n int64
 
+	var ctx = context.Background()
+	var eva = evaluator.ForRule(cmd.rule)
+
 	for e := range hunter.New(&hunter.Options{
-		Sort:       cmd.Sort,
-		Extensions: cmd.Ext,
-		Profile:    cli.Profile,
-		Verbose:    cli.Verbose,
+		Sort:    cmd.Sort,
+		Profile: cli.Profile,
+		Verbose: cli.Verbose,
 	}).Hunt(ch) {
-		if !cmd.All && e.Severity < Limit {
-			continue // not severe enough
+		res, err := eva.Matches(ctx, e.Fields)
+
+		if err != nil {
+			log.Println(err)
+			continue // not successful
 		}
 
-		line := cmd.format(e, cli.Filter)
+		if !cmd.All && !res.Match {
+			continue // not matched
+		}
+
+		line := cmd.format(e, cli.Filter, res.Match)
 
 		if cli.Filter != nil && !cli.Filter.MatchString(line) {
 			continue // not matched
@@ -188,13 +221,13 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp) string {
+func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp, m bool) string {
 	var fn text.Colored
 
 	switch {
 	case re != nil:
 		fn = text.MarkMatchFunc(re)
-	case cmd.All && e.Severity >= Limit:
+	case cmd.All && m:
 		fn = text.Mark // mark event
 	case cmd.All:
 		fn = text.Hide // hide event

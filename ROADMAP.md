@@ -7,13 +7,7 @@
 * ~~Done~~
 
 ## 3. Features
-* Add Sigma rules to hunt mode
-  * -r, --rules=FILE, []*os.File
-  * event.Match(rules)
-  * Warning for incompatible rules
-  * Built-in rules for Windows and Linux 
-  * https://github.com/bradleyjkemp/sigma-go
-  * https://github.com/goccy/go-yaml
+* ~~Done~~
 
 ## 4. Optimizations
 * Add Unicode to string carving

@@ -18,17 +18,20 @@ CREATE TABLE IF NOT EXISTS Events (
     User TEXT NULL,
 	Message TEXT NULL,
 	Severity INTEGER NOT NULL,
-	Source INTEGER NOT NULL
+	Sequence TEXT NULL,
+	Source TEXT NOT NULL,
+	Category TEXT NULL,
+	Service TEXT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Extensions (
+CREATE TABLE IF NOT EXISTS Fields (
     ID INTEGER PRIMARY KEY,
 	EventID INTEGER REFERENCES Events,
     Key TEXT NOT NULL,
     Value TEXT NULL
 );
 
-CREATE INDEX EventID ON Extensions(EventID);
+CREATE INDEX EventID ON Fields(EventID);
 `
 
 const events = `
@@ -38,12 +41,15 @@ INSERT OR IGNORE INTO Events (
 	User,
 	Message,
 	Severity,
-    Source
-) VALUES (?,?,?,?,?,?);
+	Sequence,
+	Source,
+	Category,
+	Service
+) VALUES (?,?,?,?,?,?,?,?,?);
 `
 
-const extensions = `
-INSERT OR IGNORE INTO Extensions (
+const fields = `
+INSERT OR IGNORE INTO Fields (
 	EventID,	
 	Key,
 	Value
@@ -89,22 +95,25 @@ func (db *Database) Upsert(evt *Event) error {
 		evt.User,
 		evt.Message,
 		evt.Severity,
+		evt.Sequence,
 		evt.Source,
+		evt.Category,
+		evt.Service,
 	)
 
 	if err != nil {
 		return err
 	}
 
-	if len(evt.Extension) > 0 {
+	if len(evt.Fields) > 0 {
 		id, err := res.LastInsertId()
 
 		if err != nil {
 			return err
 		}
 
-		for k, v := range maps.All(evt.Extension) {
-			_, err := db.sql.Exec(extensions, id, k, v)
+		for k, v := range maps.All(evt.Fields) {
+			_, err := db.sql.Exec(fields, id, k, v)
 
 			if err != nil {
 				return err

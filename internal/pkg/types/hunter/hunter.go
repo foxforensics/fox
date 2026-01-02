@@ -27,10 +27,9 @@ var Local = []string{
 }
 
 type Options struct {
-	Sort       bool
-	Extensions int
-	Profile    int
-	Verbose    int
+	Sort    bool
+	Profile int
+	Verbose int
 }
 
 type Hunter struct {
@@ -112,7 +111,7 @@ func (htr *Hunter) carveEvtx(h *heap.Heap) {
 	r2 := bytes.NewReader(h.MMap())
 
 	for off := range htr.findOffset(r1, evtx.Regex) {
-		for evt := range evtx.Carve(r2, off, htr.opts.Extensions, cap(htr.events)) {
+		for evt := range evtx.Carve(r2, off, cap(htr.events)) {
 			htr.events <- evt
 		}
 	}
@@ -122,7 +121,7 @@ func (htr *Hunter) carveJournal(h *heap.Heap) {
 	r := bytes.NewReader(h.MMap())
 
 	for off := range htr.findOffset(r, journal.Regex) {
-		for evt := range journal.Carve(h.MMap(), off, htr.opts.Extensions, cap(htr.events)) {
+		for evt := range journal.Carve(h.MMap(), off, cap(htr.events)) {
 			htr.events <- evt
 		}
 	}

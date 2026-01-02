@@ -1,34 +1,6 @@
 // Package evtx source: https://github.com/Velocidex/evtx-data/tree/master/welm
 package evtx
 
-var Levels = map[int64]int8{
-	1015: 10,
-	1102: 10,
-	1116: 10,
-	1117: 10,
-	1119: 10,
-	4624: 10,
-	4625: 10,
-	4647: 10,
-	4648: 10,
-	4663: 10,
-	4672: 10,
-	4697: 10,
-	4719: 10,
-	4728: 10,
-	4732: 10,
-	4735: 10,
-	4740: 10,
-	4756: 10,
-	4771: 10,
-	4776: 10,
-	4820: 10,
-	4821: 10,
-	4822: 10,
-	4823: 10,
-	4824: 10,
-	4964: 10,
-}
 var Events = map[string]map[int64]string{
 	"AD FS": {
 		100:  "The Federation Service started successfully",

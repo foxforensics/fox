@@ -48,7 +48,7 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), err
 }
 
-func Carve(b []byte, off int64, ext, cap int) <-chan *event.Event {
+func Carve(b []byte, off int64, cap int) <-chan *event.Event {
 	ch := make(chan *event.Event, cap)
 
 	f, err := parser.OpenFile(bytes.NewReader(b[off:]))
@@ -63,19 +63,11 @@ func Carve(b []byte, off int64, ext, cap int) <-chan *event.Event {
 		defer close(ch)
 
 		for evt := range f.GetLogs(context.Background()) {
-			e, r, err := newEvent(evt)
+			e, err := newEvent(evt)
 
 			if err != nil {
 				log.Println(err)
 				continue
-			}
-
-			if ext > 0 {
-				addExtLevel1(e, r)
-			}
-
-			if ext > 1 {
-				addExtLevel2(e, r)
 			}
 
 			ch <- e
@@ -85,26 +77,31 @@ func Carve(b []byte, off int64, ext, cap int) <-chan *event.Event {
 	return ch
 }
 
-func newEvent(od *ordereddict.Dict) (*event.Event, *ordereddict.Dict, error) {
+func newEvent(od *ordereddict.Dict) (*event.Event, error) {
 	var sys, evt *ordereddict.Dict
-
-	e := event.Event{
-		Source:    types.Journal,
-		Extension: make(map[string]any),
-	}
 
 	if v, ok := od.Get("System"); ok {
 		sys = v.(*ordereddict.Dict)
 	} else {
-		return nil, nil, ErrNoSystem
+		return nil, ErrNoSystem
 	}
 
 	if v, ok := od.Get("EventData"); ok {
 		evt = v.(*ordereddict.Dict)
 	} else {
-		return nil, nil, ErrNoEventData
+		return nil, ErrNoEventData
 	}
 
+	e := event.Event{
+		Host:     getString(sys, "_HOSTNAME"),
+		Message:  getString(evt, "MESSAGE"),
+		Source:   types.Journal,
+		Category: getString(sys, "_TRANSPORT"),
+		Service:  getString(sys, "_COMM"),
+		Fields:   make(map[string]string),
+	}
+
+	// get timestamp in order of priority
 	for _, k := range []string{
 		"_SOURCE_REALTIME_TIMESTAMP",
 		"SYSLOG_TIMESTAMP",
@@ -116,48 +113,36 @@ func newEvent(od *ordereddict.Dict) (*event.Event, *ordereddict.Dict, error) {
 		}
 	}
 
-	e.Host, _ = sys.GetString("_HOSTNAME")
-	e.User, _ = sys.GetString("_UID")
-	e.Message, _ = evt.GetString("MESSAGE")
-
 	if len(e.Message) == 0 {
 		e.Message = "Undescribed event"
+	}
+
+	if v, ok := sys.GetInt64("_UID"); ok {
+		e.User = fmt.Sprintf("%v", v)
+	}
+
+	if v, ok := sys.GetInt64("Seq"); ok {
+		e.Sequence = fmt.Sprintf("%v", v)
 	}
 
 	if v, ok := evt.GetInt64("PRIORITY"); ok {
 		e.Severity = 10 - int8(v) // minimum 3
 	}
 
-	r := ordereddict.NewDict()
-	r.MergeFrom(sys)
-	r.MergeFrom(evt)
+	d := ordereddict.NewDict()
+	d.MergeFrom(sys)
+	d.MergeFrom(evt)
 
-	return &e, r, nil
-}
-
-func addExtLevel1(e *event.Event, od *ordereddict.Dict) {
-	e.Extension["rt"] = e.Time
-	e.Extension["shost"] = e.Host
-	e.Extension["suid"] = e.User
-	e.Extension["deviceFacility"] = "systemd"
-
-	for k, v := range map[string]string{
-		"cat":               "_TRANSPORT",
-		"spid":              "_PID",
-		"sourceServiceName": "_COMM",
-	} {
-		if a, ok := od.Get(v); ok {
-			e.Extension[k] = fmt.Sprintf("%v", a)
-		}
-	}
-
-	return
-}
-
-func addExtLevel2(e *event.Event, od *ordereddict.Dict) {
-	for _, i := range od.Items() {
+	for _, i := range d.Items() {
 		if !strings.HasPrefix(i.Key, "(") {
-			e.Extension[i.Key] = fmt.Sprintf("%v", i.Value)
+			e.Fields[i.Key] = fmt.Sprintf("%v", i.Value)
 		}
 	}
+
+	return &e, nil
+}
+
+func getString(od *ordereddict.Dict, path string) string {
+	v, _ := od.GetString(path)
+	return v
 }

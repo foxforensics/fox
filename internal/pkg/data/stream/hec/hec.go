@@ -56,7 +56,7 @@ func (hec Hec) Stream(e *event.Event) error {
 
 	hec.Fields = make(map[string]any)
 
-	for k, v := range e.Extension {
+	for k, v := range e.Fields {
 		hec.Fields[k] = v
 	}
 
