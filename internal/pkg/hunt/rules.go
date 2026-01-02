@@ -1,22 +1,24 @@
 package hunt
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/bradleyjkemp/sigma-go"
 )
 
 var Default = []byte(`
-title: Fox Hunt Windows
-id: f0badbad-ff01-40af-9b83-f1a74aef8174
-description: Detects critical Windows system events
-author: Christian Uhsat [mail@foxhunt.wtf]
-status: stable
+title: Default Rule
 logsource:
-  product: windows
-detection:
+  product: fox
+detection: 
   selection:
-    EventID:
+    - PRIORITY:
+      - 0
+      - 1
+      - 2
+      - 3
+    - EventID:
       - 1015
       - 1102
       - 1116
@@ -43,10 +45,15 @@ detection:
       - 4823
       - 4824
       - 4964
-condition: selection
-level: critical
+  condition: selection
 `)
 
-func IsCompatible(r *sigma.Rule) bool {
-	return strings.ToLower(r.Logsource.Product) == "windows"
+var supported = []string{
+	"fox",
+	"linux",
+	"windows",
+}
+
+func IsSupported(r *sigma.Rule) bool {
+	return slices.Contains(supported, strings.ToLower(r.Logsource.Product))
 }

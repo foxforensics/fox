@@ -1,0 +1,8 @@
+title: Fox Standard Test Rule
+logsource:
+  product: fox
+detection:
+  selection:
+    - EventRecordID: 919
+    - Seq: 2218
+  condition: selection

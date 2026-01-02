@@ -140,7 +140,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		log.Fatalln(err)
 	}
 
-	if !hunt.IsCompatible(&cmd.rule) {
+	if !hunt.IsSupported(&cmd.rule) {
 		log.Println("warning: rule is not supported!")
 	}
 
@@ -170,6 +170,10 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		log.Printf("hunt: using database %s\n", cmd.db)
 	}
 
+	if cli.Verbose > 1 {
+		log.Printf("hunt: using rule \"%s\"\n", cmd.rule.Title)
+	}
+
 	if cli.Verbose > 1 && cmd.net != nil {
 		log.Printf("hunt: streaming as %s\n", cmd.net)
 	}
@@ -177,14 +181,14 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	var n int64
 
 	var ctx = context.Background()
-	var eva = evaluator.ForRule(cmd.rule)
+	var sig = evaluator.ForRule(cmd.rule)
 
 	for e := range hunter.New(&hunter.Options{
 		Sort:    cmd.Sort,
 		Profile: cli.Profile,
 		Verbose: cli.Verbose,
 	}).Hunt(ch) {
-		res, err := eva.Matches(ctx, e.Fields)
+		res, err := sig.Matches(ctx, e.Fields)
 
 		if err != nil {
 			log.Println(err)
@@ -198,7 +202,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		line := cmd.format(e, cli.Filter, res.Match)
 
 		if cli.Filter != nil && !cli.Filter.MatchString(line) {
-			continue // not matched
+			continue // not matched afterward
 		}
 
 		_, _ = fmt.Fprintln(cli.Stdout, line)
