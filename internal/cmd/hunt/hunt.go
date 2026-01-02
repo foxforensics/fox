@@ -18,7 +18,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/ecs"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/hec"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/raw"
-	"github.com/cuhsat/fox/v4/internal/pkg/hunt"
+	"github.com/cuhsat/fox/v4/internal/pkg/rules"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/hunter"
@@ -99,7 +99,7 @@ func (cmd *Hunt) BeforeApply(_ *kong.Kong, _ kong.Vars) error {
 func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
 
-	rule := hunt.Default
+	rule := rules.Default
 
 	if cmd.Sqlite {
 		cmd.db = event.NewDB(hunter.Database)
@@ -140,10 +140,6 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		log.Fatalln(err)
 	}
 
-	if !hunt.IsSupported(&cmd.rule) {
-		log.Println("warning: rule is not supported!")
-	}
-
 	return nil
 }
 
@@ -176,6 +172,10 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	if cli.Verbose > 1 && cmd.net != nil {
 		log.Printf("hunt: streaming as %s\n", cmd.net)
+	}
+
+	if !rules.IsSupported(&cmd.rule) && !cli.NoWarnings {
+		log.Println("warning: rule is not supported!")
 	}
 
 	var n int64

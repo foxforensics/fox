@@ -29,9 +29,9 @@ func TestHunt(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			l := New(newOpts())
+			htr := New(newOpts())
 
-			events := consume(l, fixture(tt.file))
+			events := consume(htr, fixture(tt.file))
 
 			if len(events) != tt.cnt {
 				t.Fatal("invalid count")
@@ -43,7 +43,6 @@ func TestHunt(t *testing.T) {
 func newOpts() *Options {
 	return &Options{
 		true,
-		3,
 		1,
 		0,
 	}

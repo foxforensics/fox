@@ -1,4 +1,4 @@
-package hunt
+package rules
 
 import (
 	"slices"
