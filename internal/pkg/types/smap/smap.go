@@ -7,9 +7,9 @@ import (
 	"runtime"
 	"slices"
 	"strings"
-	"sync"
 
 	"github.com/edsrzf/mmap-go"
+	"github.com/sourcegraph/conc"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
@@ -124,15 +124,12 @@ func apply(fn action, n int) SMap {
 	ch := make(chan String, n)
 
 	go func() {
-		var wg sync.WaitGroup
+		var wg conc.WaitGroup
 
 		for _, c := range chunks(n) {
-			wg.Add(1)
-
-			go func() {
+			wg.Go(func() {
 				fn(ch, c)
-				wg.Done()
-			}()
+			})
 		}
 
 		wg.Wait()

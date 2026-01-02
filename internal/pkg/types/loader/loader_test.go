@@ -9,9 +9,6 @@ import (
 	"testing"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/exe/pe"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
@@ -21,6 +18,9 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/xar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/exe/pe"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bzip2"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/gzip"

@@ -28,10 +28,6 @@ func TestNew(t *testing.T) {
 		t.Fatal("invalid name")
 	}
 
-	if h.Type != types.Regular {
-		t.Fatal("invalid type")
-	}
-
 	if h.Size != size {
 		t.Fatal("invalid size")
 	}
@@ -165,7 +161,6 @@ func TestDiscard(t *testing.T) {
 func newCtx() *Context {
 	return &Context{
 		name,
-		types.Regular,
 		&types.Limits{},
 		&types.Filters{},
 	}

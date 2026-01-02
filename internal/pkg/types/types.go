@@ -47,14 +47,3 @@ const (
 	Eventlog = "eventlog"
 	Journal  = "journal"
 )
-
-type Heap int
-
-const (
-	Stdin Heap = iota
-	Stdout
-	Stderr
-	Regular
-	Deflate
-	Defined
-)

@@ -7,12 +7,7 @@
 * ~~Done~~
 
 ## 3. Features
-* Add upload to external sites
-  * Info mode
-    * Submit files
-    * Submit file hashes
-  * VirusTotal
-    * https://github.com/VirusTotal/vt-go
+* ~~Done~~
 
 ## 4. Optimizations
 * Add Unicode to string carving

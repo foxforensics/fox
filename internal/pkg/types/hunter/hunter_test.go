@@ -51,7 +51,6 @@ func newOpts() *Options {
 func newCtx() *heap.Context {
 	return &heap.Context{
 		Name:   "test",
-		Type:   types.Regular,
 		Limit:  &types.Limits{},
 		Filter: &types.Filters{},
 	}

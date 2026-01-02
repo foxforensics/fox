@@ -12,7 +12,6 @@ import (
 
 type Context struct {
 	Name   string
-	Type   types.Heap
 	Limit  *types.Limits
 	Filter *types.Filters
 }
@@ -20,9 +19,8 @@ type Context struct {
 type Heap struct {
 	sync.RWMutex
 
-	Name string     // heap name
-	Type types.Heap // heap type
-	Size int64      // heap size
+	Name string // heap name
+	Size int64  // heap size
 
 	mmap mmap.MMap // memory map
 	smap smap.SMap // string map
@@ -31,7 +29,6 @@ type Heap struct {
 func New(ctx *Context, m mmap.MMap) *Heap {
 	h := &Heap{
 		Name: ctx.Name,
-		Type: ctx.Type,
 		Size: int64(len(m)),
 		mmap: m,
 	}
@@ -61,26 +58,14 @@ func (h *Heap) SMap() smap.SMap {
 }
 
 func (h *Heap) String() string {
-	switch h.Type {
-	case types.Stdin:
-		return "stdin"
-	case types.Stdout:
-		return "stdout"
-	case types.Stderr:
-		return "stderr"
-	case types.Defined:
-		return "input"
-	default:
-		return h.Name
-	}
+	return h.Name
 }
 
 func (h *Heap) Discard() {
 	h.Lock()
 
-	if h.Type == types.Regular {
-		_ = h.mmap.Unmap()
-	}
+	// try to unmap original area
+	_ = h.mmap.Unmap()
 
 	h.Size = 0
 	h.mmap = nil

@@ -12,9 +12,10 @@ import (
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
-	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/edsrzf/mmap-go"
+	"github.com/sourcegraph/conc"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
@@ -56,12 +57,22 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 		}
 
 		if len(ldr.opts.Input) > 0 {
-			ldr.createFromInput([]byte(ldr.opts.Input))
+			ldr.createHeap("input", []byte(ldr.opts.Input))
 		}
 
 		for _, path := range paths {
 			if path == stdin {
-				ldr.createFromStdin()
+				if !isFilePiped(os.Stdin) {
+					log.Fatalln("stdin not open")
+				}
+
+				buf, err := io.ReadAll(bufio.NewReader(os.Stdin))
+
+				if err != nil {
+					log.Fatalln(err)
+				}
+
+				ldr.createHeap(stdin, buf)
 				break
 			}
 
@@ -98,7 +109,7 @@ func (ldr *Loader) loadPath(path, part string) {
 		return
 	}
 
-	var wg sync.WaitGroup
+	var wg conc.WaitGroup
 
 	for _, path := range match {
 		fi, err := os.Stat(path)
@@ -108,16 +119,13 @@ func (ldr *Loader) loadPath(path, part string) {
 			continue
 		}
 
-		wg.Add(1)
-
-		go func() {
+		wg.Go(func() {
 			if fi.IsDir() {
 				ldr.loadDir(path, part)
 			} else {
 				ldr.loadFile(path, part)
 			}
-			wg.Done()
-		}()
+		})
 	}
 
 	wg.Wait()
@@ -131,16 +139,13 @@ func (ldr *Loader) loadDir(path, part string) {
 		return
 	}
 
-	var wg sync.WaitGroup
+	var wg conc.WaitGroup
 
 	for _, f := range dir {
 		if !f.IsDir() {
-			wg.Add(1)
-
-			go func() {
+			wg.Go(func() {
 				ldr.loadFile(filepath.Join(path, f.Name()), part)
-				wg.Done()
-			}()
+			})
 		}
 	}
 
@@ -168,7 +173,7 @@ func (ldr *Loader) loadFile(path, part string) {
 
 	// empty files will cause issues
 	if fi.Size() == 0 {
-		ldr.createFromData(path, []byte{})
+		ldr.createHeap(path, []byte{})
 		return
 	}
 
@@ -179,16 +184,12 @@ func (ldr *Loader) loadFile(path, part string) {
 		return
 	}
 
-	ldr.processData(path, part, b, false)
+	ldr.processData(path, part, b)
 }
 
-func (ldr *Loader) processData(path, part string, b []byte, data bool) {
-	var ok bool
-
+func (ldr *Loader) processData(path, part string, b []byte) {
 	// 1. deflate data
-	if b, ok = ldr.deflateData(b); ok {
-		data = true
-	}
+	b = ldr.deflateData(b)
 
 	// 2. extract data
 	if ldr.extractData(path, part, b) {
@@ -196,17 +197,11 @@ func (ldr *Loader) processData(path, part string, b []byte, data bool) {
 	}
 
 	// 3. convert data
-	if b, ok = ldr.convertData(b); ok {
-		data = true
-	}
+	b = ldr.convertData(b)
 
 	// filter for specific streams
 	if strings.Contains(path, part) {
-		if data {
-			ldr.createFromData(path, b)
-		} else {
-			ldr.createFromFile(path, b)
-		}
+		ldr.createHeap(path, b)
 	}
 }
 
@@ -224,20 +219,16 @@ func (ldr *Loader) extractData(path, part string, b []byte) bool {
 				log.Printf("archive detected %s\n", a.Name)
 			}
 
-			var wg sync.WaitGroup
+			var wg conc.WaitGroup
 
 			for _, e := range a.Extract(b, path, ldr.opts.Password) {
-				wg.Add(1)
-
-				go func() {
+				wg.Go(func() {
 					if ldr.opts.Verbose > 2 {
 						log.Printf("stream detected %s\n", e.Path)
 					}
 
-					ldr.processData(e.Path, part, e.Data, true)
-
-					wg.Done()
-				}()
+					ldr.processData(e.Path, part, e.Data)
+				})
 			}
 
 			wg.Wait()
@@ -249,7 +240,7 @@ func (ldr *Loader) extractData(path, part string, b []byte) bool {
 	return false
 }
 
-func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
+func (ldr *Loader) deflateData(b []byte) []byte {
 	for _, d := range register.Deflates {
 		if d.Detect(b) {
 			if ldr.opts.Verbose > 1 {
@@ -262,14 +253,14 @@ func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
 				log.Println(err)
 			}
 
-			return r, true
+			return r
 		}
 	}
 
-	return b, false
+	return b
 }
 
-func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
+func (ldr *Loader) convertData(b []byte) []byte {
 	for _, c := range register.Converts {
 		if c.Detect(b) {
 			if ldr.opts.Verbose > 1 {
@@ -282,71 +273,32 @@ func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
 				log.Println(err)
 			}
 
-			return r, true
+			return r
 		}
 	}
 
-	return b, false
+	return b
 }
 
-func (ldr *Loader) createFromFile(path string, b []byte) {
-	ldr.createHeap(path, types.Regular, b)
-
-	if ldr.opts.Verbose > 1 {
-		log.Printf("loaded heap from file %s\n", path)
-	}
-}
-
-func (ldr *Loader) createFromData(name string, b []byte) {
-	ldr.createHeap(name, types.Deflate, b)
-
-	if ldr.opts.Verbose > 1 {
-		log.Printf("loaded heap from data %s\n", name)
-	}
-}
-
-func (ldr *Loader) createFromInput(b []byte) {
-	ldr.createHeap("input", types.Defined, b)
-
-	if ldr.opts.Verbose > 1 {
-		log.Println("loaded heap from input")
-	}
-}
-
-func (ldr *Loader) createFromStdin() {
-	if !isFilePiped(os.Stdin) {
-		log.Fatalln("stdin not open")
-	}
-
-	buf, err := io.ReadAll(bufio.NewReader(os.Stdin))
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	ldr.createHeap(stdin, types.Stdin, buf)
-
-	if ldr.opts.Verbose > 1 {
-		log.Println("loaded heap from stdin")
-	}
-}
-
-func (ldr *Loader) createHeap(n string, t types.Heap, b []byte) {
+func (ldr *Loader) createHeap(s string, b []byte) {
 	ldr.Lock()
 	defer ldr.Unlock()
 
-	if slices.Contains(ldr.paths, n) {
+	if slices.Contains(ldr.paths, s) {
 		return // already loaded
 	}
 
 	ldr.size += int64(len(b))
-	ldr.paths = append(ldr.paths, n)
+	ldr.paths = append(ldr.paths, s)
 	ldr.heaps <- heap.New(&heap.Context{
-		Name:   n,
-		Type:   t,
+		Name:   s,
 		Limit:  ldr.opts.Limit,
 		Filter: ldr.opts.Filter,
 	}, b)
+
+	if ldr.opts.Verbose > 1 {
+		log.Printf("loaded heap %s\n", s)
+	}
 }
 
 func isFilePiped(f *os.File) bool {

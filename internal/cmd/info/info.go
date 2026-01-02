@@ -21,6 +21,7 @@ Flags:
   -b, --block=SIZE         block size for calculations
   -m, --min=DECIMAL        minimum entropy value (default: 0.0)
   -x, --max=DECIMAL        maximal entropy value (default: 1.0)
+  -V, --check=APIKEY       checks file hash using VirusTotal
 
 Example:
   $ fox info -m0.9 ./**/*
@@ -30,6 +31,7 @@ type Info struct {
 	Block int64    `short:"b"`
 	Min   float64  `short:"m" default:"0.0"`
 	Max   float64  `short:"x" default:"1.0"`
+	Check string   `short:"V"`
 	Paths []string `arg:"" name:"path" type:"path" optional:""`
 }
 
