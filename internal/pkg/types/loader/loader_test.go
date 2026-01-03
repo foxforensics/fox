@@ -18,7 +18,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/xar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/exe/pe"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"

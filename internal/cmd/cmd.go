@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pf"
 	"github.com/fatih/color"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -19,8 +20,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/xar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/exe/elf"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/exe/pe"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/elf"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
@@ -168,6 +169,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		register.Convert("pe", pe.Detect, pe.Convert)
 		register.Convert("evtx", evtx.Detect, evtx.Convert)
 		register.Convert("journal", journal.Detect, journal.Convert)
+		register.Convert("pf", pf.Detect, pf.Convert)
 	}
 
 	if !cli.NoPretty {

@@ -87,4 +87,5 @@ require (
 	modernc.org/libc v1.67.4 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
+	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb // indirect
 )

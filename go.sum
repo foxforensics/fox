@@ -532,3 +532,5 @@ modernc.org/token v1.1.0/go.mod h1:UGzOrNV1mAFSEB63lOFHIpNRUVMvYTc6yu1SMY/XTDM=
 rsc.io/binaryregexp v0.2.0/go.mod h1:qTv7/COck+e2FymRvadv62gMdZztPaShugOCi3I+8D8=
 rsc.io/quote/v3 v3.1.0/go.mod h1:yEA65RcK8LyAZtP9Kv3t0HmxON59tX3rD+tICJqUlj0=
 rsc.io/sampler v1.3.0/go.mod h1:T1hPZKmBbMNahiBKFy5HrXp6adAjACjK9JXDnKaTXpA=
+www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb h1:GW6agTdjRKf0mO5ZAivSo09TwqHb2sPoBCXLGSoEUE4=
+www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb/go.mod h1:eAhul/F2+kIBGGEsf8xVq68O5kKwg85x2Rg2I65uVwU=
