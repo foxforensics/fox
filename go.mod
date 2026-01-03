@@ -41,6 +41,7 @@ require (
 	github.com/zeebo/xxh3 v1.0.2
 	golang.org/x/term v0.38.0
 	modernc.org/sqlite v1.42.2
+	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
 require (
@@ -68,7 +69,10 @@ require (
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
+	github.com/olekukonko/tablewriter v0.0.5 // indirect
+	github.com/parsiya/golnk v0.0.0-20251207220015-443df11fe4fb // indirect
 	github.com/pierrec/lz4/v4 v4.1.23 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
@@ -87,5 +91,4 @@ require (
 	modernc.org/libc v1.67.4 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
-	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb // indirect
 )

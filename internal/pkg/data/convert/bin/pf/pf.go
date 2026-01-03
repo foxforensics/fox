@@ -23,11 +23,11 @@ func Detect(b []byte) bool {
 }
 
 func Convert(b []byte) ([]byte, error) {
-	pfi, err := prefetch.LoadPrefetch(bytes.NewReader(b))
+	pi, err := prefetch.LoadPrefetch(bytes.NewReader(b))
 
 	if err != nil {
 		return nil, err
 	}
 
-	return json.MarshalIndent(pfi, "", "  ")
+	return json.MarshalIndent(pi, "", "  ")
 }

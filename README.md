@@ -82,7 +82,7 @@ $ fox hunt -sv ./**/*.dd
 ## Supports
 
 File formats:
-> evtx, journal, json, jsonl, pf, ELF, PE/COFF (dll, exe, sys, ...)
+> evtx, journal, json, jsonl, lnk, pf, ELF, PE/COFF (dll, exe, sys, ...)
 
 Archive formats:
 > 7zip, ar, CAB, cpio, RAR, RPM, tar, xar, ZIP
