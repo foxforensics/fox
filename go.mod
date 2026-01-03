@@ -59,6 +59,7 @@ require (
 	github.com/BobuSumisu/aho-corasick v1.0.3 // indirect
 	github.com/PaesslerAG/gval v1.2.4 // indirect
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
+	github.com/VirusTotal/vt-go v1.1.0 // indirect
 	github.com/alecthomas/participle v0.7.1 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
@@ -76,6 +77,7 @@ require (
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
+	github.com/thedevsaddam/gojsonq/v2 v2.5.2 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect

@@ -13,6 +13,7 @@ import (
 	"hash/crc32"
 	"hash/crc64"
 	"hash/fnv"
+	"log"
 	"slices"
 	"strings"
 
@@ -90,7 +91,17 @@ func IsSecure(algo string) bool {
 	return slices.Contains(isSecure, strings.ToLower(algo))
 }
 
-func Sum(algo string, b []byte) (string, error) {
+func MustSum(algo string, data []byte) string {
+	sum, err := Sum(algo, data)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return sum
+}
+
+func Sum(algo string, data []byte) (string, error) {
 	var imp hash.Hash
 
 	switch strings.ToLower(algo) {
@@ -166,22 +177,22 @@ func Sum(algo string, b []byte) (string, error) {
 
 	imp.Reset()
 
-	if _, err := imp.Write(b); err != nil {
+	if _, err := imp.Write(data); err != nil {
 		return "", err
 	}
 
-	b = imp.Sum(nil)
+	data = imp.Sum(nil)
 
-	if len(b) == 0 {
+	if len(data) == 0 {
 		return "", errors.New("input size to small")
 	}
 
 	switch algo {
 	case types.SSDEEP:
-		return fmt.Sprintf("%s", b), nil
+		return fmt.Sprintf("%s", data), nil
 	case types.TLSH:
-		return fmt.Sprintf("T1%x", b), nil
+		return fmt.Sprintf("T1%x", data), nil
 	default:
-		return fmt.Sprintf("%x", b), nil
+		return fmt.Sprintf("%x", data), nil
 	}
 }

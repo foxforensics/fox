@@ -2,21 +2,11 @@ package stream
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
-	"github.com/cuhsat/fox/v4/internal"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/client"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
-)
-
-// statics
-var (
-	agent  = fmt.Sprintf("fox %s", app.Version)
-	client = http.Client{
-		Timeout: time.Second * 30,
-	}
 )
 
 type Streamer interface {
@@ -30,13 +20,13 @@ func Post(url, body string, headers map[string]string) error {
 		return err
 	}
 
-	req.Header.Add("user-agent", agent)
+	req.Header.Add("user-agent", client.UserAgent)
 
 	for k, v := range headers {
 		req.Header.Set(k, v)
 	}
 
-	res, err := client.Do(req)
+	res, err := client.Default.Do(req)
 
 	if err != nil {
 		return err

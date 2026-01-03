@@ -12,22 +12,23 @@ go install github.com/cuhsat/fox/v4@latest
 ```
 
 ## Features
-* Guaranteed read-only access
+* Read-only access guaranteed
 * [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * String carving and classification
 * Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
-* Automatic Chain-of-Custody receipt generation
-* Hunt mode
+* Automatic *Chain-of-Custody* receipt generation
+* Different modes like **Hunt** mode
   * Built-in file carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * Built-in translation of over 51600 Event IDs
   * Built-in warning of critical system events
-  * Built-in filtering with [Sigma Rules](https://sigmahq.io/)
+  * Filter events with a variety of [Sigma Rules](https://sigmahq.io/)
   * Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) and [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
   * Save as `JSON`, `JSON Lines` or `SQLite3`
 * Supports
+  * File hash check via [VirusTotal](https://www.virustotal.com/) API
   * Over 290 string classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
   * Many popular archive and compression formats
   * Many popular cryptographic, fuzzy and fast hashes
@@ -70,7 +71,7 @@ $ fox text -rw sample.exe
 
 Hash the archive contents:
 ```console
-$ fox hash -Tssdeep,xxh3 files.7z
+$ fox hash -Tssdeep files.7z
 ```
 
 Hunt down suspicious events:
@@ -81,7 +82,7 @@ $ fox hunt -sv ./**/*.dd
 ## Supports
 
 File formats:
-> evtx, journal, json, jsonl, ELF, PE/COFF (.dll, .exe, .sys, ...)
+> evtx, journal, json, jsonl, ELF, PE/COFF (dll, exe, sys, ...)
 
 Archive formats:
 > 7zip, ar, CAB, cpio, RAR, RPM, tar, xar, ZIP

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
@@ -24,7 +25,7 @@ Flags:
   -F, --find=HASH,...      show only files that match
 
 Example:
-  $ fox hash -Tssdeep,xxh3 files.7z
+  $ fox hash -Tssdeep files.7z
 
 Remark:
   Results will be grouped by path, if more than one algorithm is specified.
@@ -71,6 +72,8 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		fmt.Print(Usage)
 		return nil
 	}
+
+	cli.NoConvert = true // forced
 
 	// compatibility mode
 	if len(cmd.Type) == 1 {

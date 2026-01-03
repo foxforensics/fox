@@ -51,7 +51,7 @@ func (hec Hec) Stream(e *event.Event) error {
 	hec.Host = e.Host
 	hec.Event = Event{
 		e.Message,
-		toCefName(e.Severity),
+		toCEF(e.Severity),
 	}
 
 	hec.Fields = make(map[string]any)
@@ -72,7 +72,7 @@ func (hec Hec) Stream(e *event.Event) error {
 	})
 }
 
-func toCefName(n int8) string {
+func toCEF(n int8) string {
 	switch n {
 	case 10, 9:
 		return "CRITICAL"
