@@ -84,6 +84,9 @@ $ fox hunt -sv ./**/*.dd
 File formats:
 > evtx, journal, json, jsonl, lnk, pf, ELF, PE/COFF (dll, exe, sys, ...)
 
+Image formats:
+> EWF-E01, EWF-S01, raw (dd)
+
 Archive formats:
 > 7zip, ar, CAB, cpio, RAR, RPM, tar, xar, ZIP
 

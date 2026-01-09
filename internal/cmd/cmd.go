@@ -39,6 +39,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/image/ewf"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
@@ -176,6 +177,10 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	if !cli.NoPretty {
 		register.Format("json", json.Detect, json.Format)
+	}
+
+	if !cli.Raw {
+		register.Image("ewf", ewf.Detect, ewf.Ingest)
 	}
 
 	cli.Loader = loader.New(&loader.Options{

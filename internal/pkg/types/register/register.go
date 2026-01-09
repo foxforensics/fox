@@ -3,11 +3,18 @@ package register
 import "github.com/cuhsat/fox/v4/internal/pkg/data"
 
 var (
+	Images   []ImageEntry
 	Formats  []FormatEntry
 	Deflates []DeflateEntry
 	Archives []ArchiveEntry
 	Converts []ConvertEntry
 )
+
+type ImageEntry struct {
+	Name   string
+	Detect data.Detect
+	Ingest data.Ingest
+}
 
 type FormatEntry struct {
 	Name   string
@@ -31,6 +38,10 @@ type ConvertEntry struct {
 	Name    string
 	Detect  data.Detect
 	Convert data.Convert
+}
+
+func Image(s string, fn1 data.Detect, fn2 data.Ingest) {
+	Images = append(Images, ImageEntry{s, fn1, fn2})
 }
 
 func Format(s string, fn1 data.Detect, fn2 data.Format) {

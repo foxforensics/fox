@@ -196,7 +196,10 @@ func (ldr *Loader) processData(path, part string, b []byte) {
 		return
 	}
 
-	// 3. convert data
+	// 3a. ingest data
+	b = ldr.ingestData(b)
+
+	// 3b. convert data
 	b = ldr.convertData(b)
 
 	// filter for specific streams
@@ -268,6 +271,26 @@ func (ldr *Loader) convertData(b []byte) []byte {
 			}
 
 			r, err := c.Convert(b)
+
+			if err != nil {
+				log.Println(err)
+			}
+
+			return r
+		}
+	}
+
+	return b
+}
+
+func (ldr *Loader) ingestData(b []byte) []byte {
+	for _, c := range register.Images {
+		if c.Detect(b) {
+			if ldr.opts.Verbose > 1 {
+				log.Printf("image detected %s\n", c.Name)
+			}
+
+			r, err := c.Ingest(b)
 
 			if err != nil {
 				log.Println(err)

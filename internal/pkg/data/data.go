@@ -14,6 +14,8 @@ type Detect func([]byte) bool
 
 type Format func([]byte) []byte
 
+type Ingest func([]byte) ([]byte, error)
+
 type Convert func([]byte) ([]byte, error)
 
 type Deflate func([]byte) ([]byte, error)
