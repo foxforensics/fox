@@ -13,6 +13,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
 
 var Usage = strings.TrimSpace(`
@@ -110,8 +111,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 
 		for block := range slices.Chunk(h.MMap(), int(n)) {
 			l := bytes.Count(block, []byte{'\n'})
-			b := len(block)
-			e := h.Entropy(block)
+			e := heap.Entropy(block)
 
 			// add possibly remaining line
 			if block[len(block)-1] != '\n' {
@@ -123,13 +123,13 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 				start := text.Hide(fmt.Sprintf("@%d", off))
 
 				if cmd.Block > 0 {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s %s\n", l, b, e, title, start)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s %s\n", l, len(block), e, title, start)
 				} else {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s\n", l, b, e, title)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s\n", l, len(block), e, title)
 				}
 			}
 
-			off += b
+			off += len(block)
 		}
 
 		h.Discard()

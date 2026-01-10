@@ -1,6 +1,7 @@
 package heap
 
 import (
+	"math"
 	"runtime"
 	"sync"
 
@@ -45,6 +46,10 @@ func New(ctx *Context, m mmap.MMap) *Heap {
 	return h
 }
 
+func (h *Heap) String() string {
+	return h.Name
+}
+
 func (h *Heap) MMap() mmap.MMap {
 	h.RLock()
 	defer h.RUnlock()
@@ -55,10 +60,6 @@ func (h *Heap) SMap() smap.SMap {
 	h.RLock()
 	defer h.RUnlock()
 	return h.smap
-}
-
-func (h *Heap) String() string {
-	return h.Name
 }
 
 func (h *Heap) Discard() {
@@ -74,4 +75,26 @@ func (h *Heap) Discard() {
 	h.Unlock()
 
 	runtime.GC()
+}
+
+func Entropy(block []byte) float64 {
+	var a [256]float64
+	var v float64
+
+	for _, b := range block {
+		a[b]++
+	}
+
+	l := float64(len(block))
+
+	for i := range 256 {
+		if a[i] != 0 {
+			f := a[i] / l
+			v -= f * math.Log2(f)
+		}
+	}
+
+	v /= 8
+
+	return v
 }

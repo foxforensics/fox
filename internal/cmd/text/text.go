@@ -20,22 +20,30 @@ fox text [FLAGS...] <PATHS...>
 Flags:
   -m, --min=NUMBER         minimum string length (default: 3)
   -x, --max=NUMBER         maximal string length (default: 256)
+  -s, --sort               sort strings alphabetically (slower)
+
+Class:
   -w, --wtf[=LEVEL]        show string classifications (w/ww/www)
-  -F, --find=CLASS,...     show only strings with class(es)
+  -F, --find=CLASS,...     show only strings with classes
   -1, --first              show only strings first class
-  -P, --print              show only classification list
+  -l, --list               show only classification list
 
 Example:
-  $ fox text -rw sample.exe
+  $ fox text -w sample.exe
 `)
 
 type Text struct {
-	Min   uint     `short:"m" default:"3"`
-	Max   uint     `short:"x" default:"256"`
+	Min  uint `short:"m" default:"3"`
+	Max  uint `short:"x" default:"256"`
+	Sort bool `short:"s"`
+
+	// class
 	Wtf   int      `short:"w" type:"counter"`
 	Find  []string `short:"F" sep:","`
 	First bool     `short:"1" and:"first,wtf"`
-	Print bool     `short:"P"`
+	List  bool     `short:"l"`
+
+	// paths
 	Paths []string `arg:"" type:"path" optional:""`
 }
 
@@ -56,7 +64,7 @@ func (cmd *Text) Validate() error {
 }
 
 func (cmd *Text) AfterApply(app *kong.Kong, _ kong.Vars) error {
-	if cmd.Print {
+	if cmd.List {
 		for _, cls := range text.GetClasses(3) {
 			fmt.Printf("%s\n", cls)
 		}
@@ -69,10 +77,12 @@ func (cmd *Text) AfterApply(app *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Text) Run(cli *cli.Globals) error {
-	if cli.Help || (len(cmd.Paths) == 0 && !cmd.Print) {
+	if cli.Help || (len(cmd.Paths) == 0 && !cmd.List) {
 		fmt.Print(Usage)
 		return nil
 	}
+
+	cli.NoConvert = true // forced
 
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
@@ -82,14 +92,15 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
-		for s := range h.Strings(
-			cmd.Min,
-			cmd.Max,
-			cmd.Wtf,
-			cmd.Find,
-			cmd.First,
-			cli.Profile,
-		) {
+		for s := range text.NewCarver(&text.Options{
+			Min:     cmd.Min,
+			Max:     cmd.Max,
+			Sort:    cmd.Sort,
+			Wtf:     cmd.Wtf,
+			Find:    cmd.Find,
+			First:   cmd.First,
+			Profile: cli.Profile,
+		}).Carve(h.MMap()) {
 			if !cli.NoLine && cmd.Wtf > 0 {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s  %s\n", text.Hide(s.Off), s.Str, text.Hide(s.Cls))
 			} else if !cli.NoLine {

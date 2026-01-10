@@ -66,7 +66,7 @@ $ fox info -m0.9 ./**/*
 
 Find ASCII strings in binaries:
 ```console
-$ fox text -rw sample.exe
+$ fox text -w sample.exe
 ```
 
 Hash the archive contents:
