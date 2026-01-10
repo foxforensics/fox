@@ -15,7 +15,7 @@ import (
 var Usage = strings.TrimSpace(`
 Prints file text contents.
 
-fox text [FLAGS ...] <PATHS ...>
+fox text [FLAGS...] <PATHS...>
 
 Flags:
   -m, --min=NUMBER         minimum string length (default: 3)

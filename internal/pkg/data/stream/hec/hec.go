@@ -37,7 +37,7 @@ func New(url, token string) Hec {
 
 	hec.Index = "main"
 	hec.Sourcetype = "_json"
-	hec.Source = fmt.Sprintf("fox %s", app.Version[1:])
+	hec.Source = fmt.Sprintf("fox %s", app.Version)
 
 	return hec
 }

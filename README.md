@@ -1,6 +1,6 @@
 ![fox](assets/logo.png "logo")
 
-The Forensic Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
+The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 
 ![Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)
 ![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)
@@ -36,18 +36,16 @@ go install github.com/cuhsat/fox/v4@latest
   * Many popular cryptographic, fuzzy and fast hashes
 
 ## Usage
-Type `fox --help` for more help:
+Use `fox --help` to show the full help:
 ```console
-Usage:
-  fox [MODE] [FLAGS ...] <PATHS ...>
+Usage: fox [MODE] [FLAGS...] <PATHS...>
 
-Modes:
-  cat    prints file (default)
-  hex    prints file in hex format
-  info   prints file infos and entropy
-  text   prints file text contents
-  hash   prints file hashes and checksums
-  hunt   hunt suspicious activities
+ cat    prints file (default mode)
+ hex    prints file in hex format
+ info   prints file infos and entropy
+ text   prints file text contents
+ hash   prints file hashes and checksums
+ hunt   hunt suspicious activities
 ```
 
 ## Examples

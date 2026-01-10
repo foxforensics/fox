@@ -22,35 +22,29 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
 
-// Short usage
 var short = strings.TrimSpace(`
-The Forensic Swiss Army Knife %s
+Usage: fox [MODE] [FLAGS...] <PATHS...>
 
-Usage:
-  fox [MODE] [FLAGS ...] <PATHS ...>
+ cat    prints file (default mode)
+ hex    prints file in hex format
+ info   prints file infos and entropy
+ text   prints file text contents
+ hash   prints file hashes and checksums
+ hunt   hunt suspicious activities
 
-Modes:
-  cat    prints file (default)
-  hex    prints file in hex format
-  info   prints file infos and entropy
-  text   prints file text contents
-  hash   prints file hashes and checksums
-  hunt   hunt suspicious activities
-
-Type "fox --help" for more help...
+Use "fox --help" to show the full help.
 `)
 
-// Long usage
 var long = strings.TrimSpace(`
 .-------.----.--.  .--.   .--. .--.--. .--.-. .--.-----.
 |   ___/ .__. \  \/  /    |  |_|  |  | |  |  \|  |   _/
 |   __|  |  |  >    <     |   _   |  | |  |   '  |  |
 |  |   \ '--' /  /\  \    |  | |  |  '-'  |  |\  |  |
 '--'    '----'--'  '--'   '--' '--'-------'--' '-'--'
-The Forensic Swiss Army Knife %s <foxhunt.wtf>
+The Forensic Examiners Swiss Army Knife (%s)
 
 Usage:
-  fox [MODE] [FLAGS ...] <PATHS ...>
+  fox [MODE] [FLAGS...] <PATHS...>
 
 Modes:
   cat    prints file (default)
@@ -103,7 +97,7 @@ Standard:
       --help               prints this help message
 
 Positional arguments:
-  Globbing paths to open or '-' to read from STDIN
+  Globbing paths to open or '-' to also read from STDIN
 
 Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
@@ -114,7 +108,7 @@ Example: Show the MBR in canonical hex
 Example: Hunt down suspicious events
   $ fox hunt -sv ./**/*.dd
 
-Type "fox MODE --help" for a more specific help...
+Use "fox MODE --help" to show more help on a specific mode.
 `)
 
 type fox struct {
@@ -154,7 +148,7 @@ func main() {
 	case (cli.Help && ctx.Command() == "cat") || ctx.Error != nil:
 		fmt.Printf(long, app.Version)
 	case len(ctx.Args) == 0:
-		fmt.Printf(short, app.Version)
+		fmt.Println(short)
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())

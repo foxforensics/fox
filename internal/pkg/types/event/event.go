@@ -52,7 +52,7 @@ func (evt *Event) ToCEF() string {
 	sb.WriteString(fmt.Sprintf(CEF,
 		evt.Time.Format("Jan 02 2006 15:04:05.000"),
 		evt.Host,
-		app.Version[1:],
+		app.Version,
 		msg,
 		evt.Severity,
 	))

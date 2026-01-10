@@ -18,7 +18,7 @@ import (
 var Usage = strings.TrimSpace(`
 Prints file infos and entropy.
 
-fox info [FLAGS ...] <PATHS ...>
+fox info [FLAGS...] <PATHS...>
 
 Flags:
   -b, --block=SIZE         block size for calculations

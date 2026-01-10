@@ -27,7 +27,7 @@ import (
 var Usage = strings.TrimSpace(`
 Hunt suspicious activities.
 
-fox hunt [FLAGS ...] [PATHS ...]
+fox hunt [FLAGS...] [PATHS...]
 
 Flags:
   -a, --all                show logs with all severities

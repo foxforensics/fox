@@ -101,7 +101,7 @@ func (w *Writer) WriteReceipt() error {
 	}
 
 	return os.WriteFile(w.path+".cc", []byte(fmt.Sprintf(header,
-		app.Version[1:],
+		app.Version,
 		time.Now().UTC(),
 		usr.Name,
 		usr.Username,

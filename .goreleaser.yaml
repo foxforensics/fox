@@ -61,7 +61,7 @@ nfpms:
   - vendor: fox
     homepage: https://foxhunt.wtf
     maintainer: Christian Uhsat <mail@foxhunt.wtf>
-    description: The Forensic Swiss Army Knife.
+    description: The Forensic Examiners Swiss Army Knife.
     license: GPL-3.0
     formats:
       - archlinux

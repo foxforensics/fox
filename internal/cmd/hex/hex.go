@@ -14,7 +14,7 @@ import (
 var Usage = strings.TrimSpace(`
 Prints file in hex format.
 
-fox hex [FLAGS ...] <PATHS ...>
+fox hex [FLAGS...] <PATHS...>
 
 Flags:
   -m, --mode=<hd|xxd|raw>    use compatible mode for output
