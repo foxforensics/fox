@@ -85,11 +85,9 @@ github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWR
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
-github.com/clipperhouse/stringish v0.1.1 h1:+NSqMOr3GR6k1FdRhhnXrLfztGzuG+VuFDfatpWHKCs=
-github.com/clipperhouse/stringish v0.1.1/go.mod h1:v/WhFtE1q0ovMta2+m+UbpZ+2/HEXNWYXQgCt4hdOzA=
-github.com/clipperhouse/uax29/v2 v2.3.0 h1:SNdx9DVUqMoBuBoW3iLOj4FQv3dN5mDtuqwuhIGpJy4=
-github.com/clipperhouse/uax29/v2 v2.3.0/go.mod h1:Wn1g7MK6OoeDT0vL+Q0SQLDz/KpfsVRgg6W7ihQeh4g=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
+github.com/cuhsat/golnk v0.0.0-20260110131643-40d5a2a12f90 h1:f95KeFdluAb3IYlPsH1zMcGzyIkt41XoFSLK0vOc2/g=
+github.com/cuhsat/golnk v0.0.0-20260110131643-40d5a2a12f90/go.mod h1:/6+90PllXvm3/5pVH/7KY2cVNXKubfabc+UgrGuTmlc=
 github.com/cuhsat/zip v0.5.2 h1:f2kc2LMDILj+2om9HRQGOsQZ+/9tcxcXIjQwmO/vhpY=
 github.com/cuhsat/zip v0.5.2/go.mod h1:OTpHqp8GdP+FKwH9za1Pjscu8ytzxLDhSVYyaIac0DM=
 github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28 h1:p4HankWrVzrgRE/xUIcLmPk6PFKC4VA+cgAWhUTXUqo=
@@ -185,9 +183,6 @@ github.com/mattn/go-isatty v0.0.8/go.mod h1:Iq45c/XA43vh69/j3iqttzPXn0bhXyGjM0Hd
 github.com/mattn/go-isatty v0.0.9/go.mod h1:YNRxwqDuOph6SZLI9vUUz6OYw3QyUt7WiY2yME+cCiQ=
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
-github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
-github.com/mattn/go-runewidth v0.0.19 h1:v++JhqYnZuu5jSKrk9RbgF5v4CGUjqRfBm05byFGLdw=
-github.com/mattn/go-runewidth v0.0.19/go.mod h1:XBkDxAl56ILZc9knddidhrOlY5R/pDhgLpndooCuJAs=
 github.com/minio/minlz v1.0.1 h1:OUZUzXcib8diiX+JYxyRLIdomyZYzHct6EShOKtQY2A=
 github.com/minio/minlz v1.0.1/go.mod h1:qT0aEB35q79LLornSzeDH75LBf3aH1MV+jB5w9Wasec=
 github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da h1:Iu5QFXIMK/YrHJ0NgUnK0rqYTTyb0ldt/rqNenAj39U=
@@ -196,10 +191,6 @@ github.com/ncruces/go-strftime v1.0.0 h1:HMFp8mLCTPp341M/ZnA4qaf7ZlsbTc+miZjCLOF
 github.com/ncruces/go-strftime v1.0.0/go.mod h1:Fwc5htZGVVkseilnfgOVb9mKy6w1naJmn9CehxcKcls=
 github.com/nwaples/rardecode/v2 v2.2.2 h1:/5oL8dzYivRM/tqX9VcTSWfbpwcbwKG1QtSJr3b3KcU=
 github.com/nwaples/rardecode/v2 v2.2.2/go.mod h1:7uz379lSxPe6j9nvzxUZ+n7mnJNgjsRNb6IbvGVHRmw=
-github.com/olekukonko/tablewriter v0.0.5 h1:P2Ga83D34wi1o9J6Wh1mRuqd4mF/x/lgBS7N7AbDhec=
-github.com/olekukonko/tablewriter v0.0.5/go.mod h1:hPp6KlRPjbx+hW8ykQs1w3UBbZlj6HuIJcUGPhkA7kY=
-github.com/parsiya/golnk v0.0.0-20251207220015-443df11fe4fb h1:z93DSibWqAmA9jfBwC3I8xGmohbRmVou2FKtJd4q/1Q=
-github.com/parsiya/golnk v0.0.0-20251207220015-443df11fe4fb/go.mod h1:A24WXUol4NXZlK8grjh/CsZnPlimfwaQFt5PQsqS27s=
 github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4 h1:T10NNFGRLmLuOKm+d0Xrb4mZWxjHRCLLXqUrB8bdT5A=
 github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4/go.mod h1:SnCwEQNkRaJCqW/jmXTc+lS/yeUtoT+fJh/uczEj4MU=
 github.com/pierrec/lz4 v2.6.1+incompatible h1:9UY3+iC23yxF0UfGaYrGplQ+79Rg+h/q9FV9ix19jjM=

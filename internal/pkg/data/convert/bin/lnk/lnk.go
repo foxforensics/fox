@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/parsiya/golnk"
+	"github.com/cuhsat/golnk"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )

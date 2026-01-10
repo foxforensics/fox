@@ -15,6 +15,7 @@ require (
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cespare/xxhash v1.1.0
+	github.com/cuhsat/golnk v0.0.0-20260110131643-40d5a2a12f90
 	github.com/cuhsat/zip v0.5.2
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/edsrzf/mmap-go v1.2.0
@@ -28,7 +29,6 @@ require (
 	github.com/minio/minlz v1.0.1
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
 	github.com/nwaples/rardecode/v2 v2.2.2
-	github.com/parsiya/golnk v0.0.0-20251207220015-443df11fe4fb
 	github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4
 	github.com/pierrec/lz4 v2.6.1+incompatible
 	github.com/saferwall/elf v0.3.1
@@ -66,17 +66,13 @@ require (
 	github.com/alecthomas/repr v0.5.2 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
-	github.com/clipperhouse/stringish v0.1.1 // indirect
-	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-runewidth v0.0.19 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
-	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pierrec/lz4/v4 v4.1.23 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
