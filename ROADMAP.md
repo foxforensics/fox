@@ -17,7 +17,9 @@
 ## 5. Ideas
 * Add Fortigate Firewall log parser?
 * Add macOS trace3 log parser?
-* Add specs
+* Add Shellbag parser?
+* Add Jumplist parser?
+* Add specs?
   * `Fox Unified Event Format`
   * `Fox Unified Event Storage`
   * `Fox Chain of Custody Receipt`

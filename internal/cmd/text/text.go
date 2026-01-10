@@ -10,6 +10,7 @@ import (
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/text/carver"
 )
 
 var Usage = strings.TrimSpace(`
@@ -52,20 +53,12 @@ func (cmd *Text) Validate() error {
 		log.Fatalln("invalid range")
 	}
 
-	if len(cmd.Find) > 0 {
-		cmd.Wtf = 3
-		cmd.First = false
-		for i := range cmd.Find {
-			cmd.Find[i] = strings.ToLower(cmd.Find[i])
-		}
-	}
-
 	return nil
 }
 
 func (cmd *Text) AfterApply(app *kong.Kong, _ kong.Vars) error {
 	if cmd.List {
-		for _, cls := range text.GetClasses(3) {
+		for _, cls := range carver.Classes(3) {
 			fmt.Printf("%s\n", cls)
 		}
 
@@ -92,7 +85,7 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
-		for s := range text.NewCarver(&text.Options{
+		for s := range carver.New(&carver.Options{
 			Min:     cmd.Min,
 			Max:     cmd.Max,
 			Sort:    cmd.Sort,
@@ -102,9 +95,9 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			Profile: cli.Profile,
 		}).Carve(h.MMap()) {
 			if !cli.NoLine && cmd.Wtf > 0 {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s  %s\n", text.Hide(s.Off), s.Str, text.Hide(s.Cls))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s  %s\n", text.Hide(s.Adr), s.Str, text.Hide(s.Cls))
 			} else if !cli.NoLine {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", text.Hide(s.Off), s.Str)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", text.Hide(s.Adr), s.Str)
 			} else {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", s.Str)
 			}
