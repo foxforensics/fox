@@ -27,6 +27,7 @@ const stdin = "-"
 type Options struct {
 	Limit    *types.Limits
 	Filter   *types.Filters
+	File     string
 	Input    string
 	Password string
 	Profile  int
@@ -49,6 +50,24 @@ func New(opts *Options) *Loader {
 }
 
 func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
+	if len(ldr.opts.File) > 0 {
+		b, err := os.ReadFile(ldr.opts.File)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		lines := strings.Split(strings.TrimSpace(string(b)), "\n")
+
+		if ldr.opts.Verbose > 0 {
+			for _, l := range lines {
+				log.Printf("add path %s \n", l)
+			}
+		}
+
+		paths = append(paths, lines...)
+	}
+
 	go func() {
 		defer close(ldr.heaps)
 

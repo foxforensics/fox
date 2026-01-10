@@ -55,11 +55,12 @@ type Globals struct {
 	Bytes uint `short:"c" xor:"lines,bytes"`
 
 	// file loader
-	Input string `short:"i"`
 	Pass  string `short:"p"`
+	Input string `short:"i"`
+	File  string `short:"f" type:"path"`
 
-	// file output
-	File string `short:"f" xor:"file,quiet"`
+	// line output
+	Out string `short:"o" xor:"out,quiet"`
 
 	// line filter
 	Regex   string `short:"e"`
@@ -72,7 +73,7 @@ type Globals struct {
 
 	// disable
 	Raw        bool `short:"r"`
-	Quiet      bool `short:"q" xor:"file,quiet"`
+	Quiet      bool `short:"q" xor:"out,quiet"`
 	NoFile     bool `long:"no-file"`
 	NoLine     bool `long:"no-line"`
 	NoColor    bool `long:"no-color"`
@@ -116,9 +117,9 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.NoWarnings = true
 	}
 
-	if len(cli.File) > 0 {
+	if len(cli.Out) > 0 {
 		cli.NoColor = true
-		cli.Stdout = writer.New(cli.File, !cli.NoReceipt)
+		cli.Stdout = writer.New(cli.Out, !cli.NoReceipt)
 	} else if cli.Quiet {
 		log.SetOutput(io.Discard)
 		cli.Stdout, _ = os.Open(os.DevNull)
@@ -195,6 +196,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 			Before: cli.Before,
 			After:  cli.After,
 		},
+		File:     cli.File,
 		Input:    cli.Input,
 		Password: cli.Pass,
 		Profile:  cli.Profile,
@@ -215,7 +217,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 }
 
 func (cli *Globals) Discard() {
-	if len(cli.File) > 0 {
+	if len(cli.Out) > 0 {
 		_ = cli.Stdout.Close()
 	}
 

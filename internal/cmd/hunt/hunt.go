@@ -88,14 +88,6 @@ func (cmd *Hunt) Validate() error {
 	return nil
 }
 
-func (cmd *Hunt) BeforeApply(_ *kong.Kong, _ kong.Vars) error {
-	if len(cmd.Paths) == 0 {
-		cmd.Paths = hunter.Local
-	}
-
-	return nil
-}
-
 func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
 
@@ -147,6 +139,10 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	if cli.Help {
 		fmt.Print(Usage)
 		return nil
+	}
+
+	if len(cmd.Paths)+len(cli.File) == 0 {
+		cmd.Paths = hunter.Local
 	}
 
 	cli.NoConvert = true // forced

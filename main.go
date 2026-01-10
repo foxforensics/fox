@@ -67,11 +67,12 @@ File limits:
   -c, --bytes=NUMBER       number of bytes
 
 File loader:
-  -i, --input=CONTENT      input in place of file content
   -p, --pass=PASSWORD      password for decryption (7Z, RAR, ZIP)
+  -i, --input=CONTENT      read input as file content
+  -f, --file=FILE          read paths from file
 
-File output:
-  -f, --file=FILE          write output to file name with receipt
+Line output:
+  -o, --out=FILE           write all output to receipted file
 
 Line filter:
   -e, --regexp=PATTERN     filter for lines that match pattern
