@@ -17,9 +17,11 @@ go install github.com/cuhsat/fox/v4@latest
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * String carving and classification
 * Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
+* Dump Windows Shortcut and Prefetch file artifacts
 * Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
 * Automatic *Chain-of-Custody* receipt generation
 * Different modes like **Hunt** mode
+  * Built-in support for [EnCase EWF](https://www.loc.gov/preservation/digital/formats/fdd/fdd000408.shtml) and raw (`dd`) images
   * Built-in file carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * Built-in translation of over 51600 Event IDs
