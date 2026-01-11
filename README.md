@@ -64,7 +64,7 @@ List files with high entropy:
 $ fox info -m0.9 ./**/*
 ```
 
-Find ASCII strings in binaries:
+Find strings in binaries:
 ```console
 $ fox text -w sample.exe
 ```

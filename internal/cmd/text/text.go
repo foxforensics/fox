@@ -19,7 +19,7 @@ Prints file text contents.
 fox text [FLAGS...] <PATHS...>
 
 Flags:
-  -m, --min=NUMBER         minimum string length (default: 3)
+  -m, --min=NUMBER         minimum string length (default: 6)
   -x, --max=NUMBER         maximal string length (default: 256)
   -s, --sort               sort strings alphabetically (slower)
 
@@ -34,7 +34,7 @@ Example:
 `)
 
 type Text struct {
-	Min  uint `short:"m" default:"3"`
+	Min  uint `short:"m" default:"6"`
 	Max  uint `short:"x" default:"256"`
 	Sort bool `short:"s"`
 

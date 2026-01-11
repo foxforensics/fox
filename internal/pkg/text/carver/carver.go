@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"slices"
 	"strings"
-
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"unicode"
+	"unicode/utf8"
 )
 
 type Options struct {
@@ -42,21 +42,48 @@ func New(opts *Options) *Carver {
 }
 
 func (cvr *Carver) Carve(block []byte) <-chan *String {
-	go func() {
-		var b []byte
-		var c byte
-		var o int
+	stream := make(chan byte)
 
-		for o, c = range block {
-			if c >= text.SP && c <= text.DEL {
-				b = append(b, c)
-			} else {
-				cvr.flush(o, b)
-				b = b[:0]
+	go func() {
+		for _, b := range block {
+			stream <- b
+		}
+
+		close(stream)
+	}()
+
+	go func() {
+		var off, i, l int
+		var buf []rune
+
+		cp := make([]byte, 4)
+
+		for b := range stream {
+			cp[0], off, i = b, off+1, 1
+
+			// fill remaining bytes
+			for ; i < bytes(b); i++ {
+				if b, ok := <-stream; ok {
+					cp[i], off = b, off+1
+				} else {
+					break
+				}
+			}
+
+			// convert code point to rune
+			r, _ := utf8.DecodeRune(cp[:i])
+
+			// append rune to buffer or flush
+			if r != utf8.RuneError && unicode.IsPrint(r) {
+				buf, l = append(buf, r), l+i
+			} else if len(buf) > 0 {
+				cvr.flush(max(off-l-1, 0), buf)
+				buf, l = buf[:0], 0
 			}
 		}
 
-		cvr.flush(o, b)
+		cvr.flush(max(off-l-1, 0), buf)
+
 		close(cvr.ch)
 	}()
 
@@ -67,13 +94,12 @@ func (cvr *Carver) Carve(block []byte) <-chan *String {
 	}
 }
 
-func (cvr *Carver) flush(off int, buf []byte) {
+func (cvr *Carver) flush(off int, buf []rune) {
 	str := string(buf)
 
 	v := uint(len(strings.TrimSpace(str)))
 
 	if v >= cvr.opts.Min && v <= cvr.opts.Max {
-		off = max(off-(len(buf)+1), 0)
 		adr := fmt.Sprintf("%08x", off)
 		cls := ""
 
@@ -136,4 +162,19 @@ func contains(a, b []string) bool {
 	}
 
 	return false
+}
+
+func bytes(b byte) int {
+	switch {
+	default:
+		return 1
+	case b&0x80 == 0:
+		return 1
+	case b&0xE0 == 0xC0:
+		return 2
+	case b&0xF0 == 0xE0:
+		return 3
+	case b&0xF8 == 0xF0:
+		return 4
+	}
 }

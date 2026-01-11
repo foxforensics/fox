@@ -68,7 +68,7 @@ func buildDB(level int) database {
 				[]string{"UNC"},
 			},
 			{
-				regexp.MustCompile("[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*"),
+				regexp.MustCompile("^(?:https?://)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*"),
 				[]string{"URL"},
 			},
 			{

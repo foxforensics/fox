@@ -10,9 +10,7 @@
 * ~~Done~~
 
 ## 4. Optimizations
-* Add Unicode to string carving
-  * https://github.com/cuhsat/strings/blob/v0.1.0/main.go
-  * https://people.cs.umass.edu/~liberato/courses/2019-spring-compsci365/lecture-notes/04-carving-strings-and-unicode/
+* ~~Done~~
 
 ## 5. Ideas
 * Add Fortigate Firewall log parser?
