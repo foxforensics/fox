@@ -19,9 +19,10 @@ Prints file text contents.
 fox text [FLAGS...] <PATHS...>
 
 Flags:
-  -m, --min=NUMBER         minimum string length (default: 6)
+  -m, --min=NUMBER         minimum string length (default: 3)
   -x, --max=NUMBER         maximal string length (default: 256)
-  -s, --sort               sort strings alphabetically (slower)
+  -a, --ascii              show only strings with ASCII encoding
+  -s, --sort               sort strings alphabetically
 
 Class:
   -w, --wtf[=LEVEL]        show string classifications (w/ww/www)
@@ -34,9 +35,10 @@ Example:
 `)
 
 type Text struct {
-	Min  uint `short:"m" default:"6"`
-	Max  uint `short:"x" default:"256"`
-	Sort bool `short:"s"`
+	Min   uint `short:"m" default:"3"`
+	Max   uint `short:"x" default:"256"`
+	Ascii bool `short:"a"`
+	Sort  bool `short:"s"`
 
 	// class
 	Wtf   int      `short:"w" type:"counter"`
@@ -88,6 +90,7 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 		for s := range carver.New(&carver.Options{
 			Min:     cmd.Min,
 			Max:     cmd.Max,
+			Ascii:   cmd.Ascii,
 			Sort:    cmd.Sort,
 			Wtf:     cmd.Wtf,
 			Find:    cmd.Find,

@@ -11,6 +11,7 @@ import (
 type Options struct {
 	Min     uint
 	Max     uint
+	Ascii   bool
 	Sort    bool
 	Wtf     int
 	Find    []string
@@ -62,11 +63,13 @@ func (cvr *Carver) Carve(block []byte) <-chan *String {
 			cp[0], off, i = b, off+1, 1
 
 			// fill remaining bytes
-			for ; i < bytes(b); i++ {
-				if b, ok := <-stream; ok {
-					cp[i], off = b, off+1
-				} else {
-					break
+			if !cvr.opts.Ascii {
+				for ; i < bytes(b); i++ {
+					if b, ok := <-stream; ok {
+						cp[i], off = b, off+1
+					} else {
+						break
+					}
 				}
 			}
 

@@ -20,10 +20,6 @@ func (db database) Search(s string) (cls []string) {
 		}
 	}
 
-	if len(cls) == 0 {
-		cls = []string{"String"}
-	}
-
 	return
 }
 
@@ -68,7 +64,7 @@ func buildDB(level int) database {
 				[]string{"UNC"},
 			},
 			{
-				regexp.MustCompile("^(?:https?://)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*"),
+				regexp.MustCompile("(?:https?://)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*"),
 				[]string{"URL"},
 			},
 			{
@@ -131,7 +127,7 @@ func buildDB(level int) database {
 			},
 			{
 				regexp.MustCompile(`4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11}`),
-				[]string{"CC"},
+				[]string{"Credit Card"},
 			},
 		}...)
 	}
