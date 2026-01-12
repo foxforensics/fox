@@ -1,6 +1,6 @@
 ![fox](assets/logo.png "logo")
 
-The Forensic Examiners Swiss Army Knife. Fox is a small and smart cli tool, providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
+The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 
 ![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)
 ![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)
