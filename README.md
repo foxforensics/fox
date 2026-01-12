@@ -23,7 +23,7 @@ go install github.com/cuhsat/fox/v4@latest
 * Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
 * Integral *Chain-of-Custody* receipt generation
 * Many popular archive and compression formats
-* Many popular cryptographic, fuzzy and fast hashes
+* Many popular cryptographic, fuzzy, image and fast hashes
 * Special Hunt mode
   * Built-in support for [EnCase EWF](https://www.loc.gov/preservation/digital/formats/fdd/fdd000408.shtml) and raw images
   * Built-in file carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
@@ -96,6 +96,9 @@ Similarity hashes:
 
 Windows hashes:
 > LM, NT, PE
+
+Image hashes:
+> aHash, dHash, pHash
 
 Checksums:
 > Adler32, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO

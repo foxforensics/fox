@@ -29,6 +29,7 @@ import (
 	"golang.org/x/crypto/md4"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/blake3"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/others/image"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/lm"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/nt"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/pe"
@@ -36,55 +37,58 @@ import (
 )
 
 var Algorithms = []string{
-	"adler32",
-	"blake2s-256",
-	"blake2b-256",
-	"blake2b-384",
-	"blake2b-512",
-	"blake3-256",
-	"blake3-512",
-	"crc32-c",
-	"crc32-ieee",
-	"crc64-ecma",
-	"crc64-iso",
-	"fnv-1",
-	"fnv-1a",
-	"pe",
-	"lm",
-	"nt",
-	"md2",
-	"md4",
-	"md5",
-	"md6",
-	"murmur3",
-	"sha1",
-	"sha256",
-	"sha512",
-	"sha3",
-	"sha3-224",
-	"sha3-256",
-	"sha3-384",
-	"sha3-512",
-	"ssdeep",
-	"tlsh",
-	"xxh64",
-	"xxh3",
+	types.ADLER32,
+	types.AHASH,
+	types.BLAKE2S256,
+	types.BLAKE2B256,
+	types.BLAKE2B384,
+	types.BLAKE2B512,
+	types.BLAKE3256,
+	types.BLAKE3512,
+	types.CRC32C,
+	types.CRC32IEEE,
+	types.CRC64ECMA,
+	types.CRC64ISO,
+	types.DHASH,
+	types.FNV1,
+	types.FNV1A,
+	types.LM,
+	types.MD2,
+	types.MD4,
+	types.MD5,
+	types.MD6,
+	types.MURMUR3,
+	types.NT,
+	types.PE,
+	types.PHASH,
+	types.SHA1,
+	types.SHA256,
+	types.SHA512,
+	types.SHA3,
+	types.SHA3224,
+	types.SHA3256,
+	types.SHA3384,
+	types.SHA3512,
+	types.SSDEEP,
+	types.TLSH,
+	types.XXH64,
+	types.XXH3,
 }
 
 var secure = []string{
-	"blake2s-256",
-	"blake2b-256",
-	"blake2b-384",
-	"blake2b-512",
-	"blake3-256",
-	"blake3-512",
-	"sha256",
-	"sha512",
-	"sha3",
-	"sha3-224",
-	"sha3-256",
-	"sha3-384",
-	"sha3-512",
+	types.BLAKE2S256,
+	types.BLAKE2B256,
+	types.BLAKE2B384,
+	types.BLAKE2B512,
+	types.BLAKE3256,
+	types.BLAKE3512,
+	types.SHA256,
+	types.SHA512,
+	types.SHA3,
+	types.SHA3224,
+	types.SHA3256,
+	types.SHA3384,
+	types.SHA3512,
 }
 
 func IsSecure(algo string) bool {
@@ -107,6 +111,8 @@ func Sum(algo string, data []byte) (string, error) {
 	switch strings.ToLower(algo) {
 	case types.ADLER32:
 		imp = adler32.New()
+	case types.AHASH:
+		imp = image.NewAHash()
 	case types.BLAKE2B256:
 		imp, _ = blake2b.New256(nil)
 	case types.BLAKE2B384:
@@ -127,16 +133,14 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = crc64.New(crc64.MakeTable(crc64.ECMA))
 	case types.CRC64ISO:
 		imp = crc64.New(crc64.MakeTable(crc64.ISO))
+	case types.DHASH:
+		imp = image.NewDHash()
 	case types.FNV1:
 		imp = fnv.New128()
 	case types.FNV1A:
 		imp = fnv.New128a()
-	case types.PE:
-		imp = pe.New()
 	case types.LM:
 		imp = lm.New()
-	case types.NT:
-		imp = nt.New()
 	case types.MD2:
 		imp = md2.New()
 	case types.MD4:
@@ -147,6 +151,12 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = md6.New256()
 	case types.MURMUR3:
 		imp = murmur3.New64() // MURMUR3F
+	case types.NT:
+		imp = nt.New()
+	case types.PE:
+		imp = pe.New()
+	case types.PHASH:
+		imp = image.NewPHash()
 	case types.SHA1:
 		imp = sha1.New()
 	case types.SHA256:

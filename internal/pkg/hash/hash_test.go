@@ -12,6 +12,7 @@ import (
 
 const Large = "text/bible.txt"
 const Small = "fox.txt"
+const Image = "misc/fox.jpg"
 const Input = "FOX123XOF"
 
 func BenchmarkSum(b *testing.B) {
@@ -25,6 +26,7 @@ func BenchmarkSum(b *testing.B) {
 func TestSum(t *testing.T) {
 	large := Fixture(Large)
 	small := Fixture(Small)
+	image := Fixture(Image)
 	input := []byte(Input)
 
 	for _, tt := range []struct {
@@ -33,6 +35,7 @@ func TestSum(t *testing.T) {
 		sum string
 	}{
 		{small, types.ADLER32, "6b0a131c"},
+		{image, types.AHASH, "ffefc7c7c3c1c3ff"},
 		{small, types.BLAKE2S256, "35622f6446178515ba503412f31eb768b092d878acbe6bf422b3ee47cf0558e7"},
 		{small, types.BLAKE2B256, "adb735516f5c008b29e3313869311096fe671bd2bd5f199b1a49ce579e0f0bd2"},
 		{small, types.BLAKE2B384, "879b983993f559354807d61b7cdf00c310c093bbb904eb43db9db2b49a83e8a07512d5f24299e458b5374291b23a9f86"},
@@ -43,15 +46,17 @@ func TestSum(t *testing.T) {
 		{small, types.CRC32IEEE, "7ab53d60"},
 		{small, types.CRC64ECMA, "df2fc66f2c50575f"},
 		{small, types.CRC64ISO, "66747f552337d269"},
+		{image, types.DHASH, "180c0e1e1f171b19"},
 		{small, types.FNV1, "847595167a564758d45f1ac5f7b7fad0"},
 		{small, types.FNV1A, "8e1fbe2b2d87d680249d1d1135695632"},
 		{input, types.LM, "74ac61daa7e79d69482bc9e3e9caf5a9"},
-		{input, types.NT, "0b2bee3bac7bddeae69d63d53c0b68f3"},
 		{small, types.MD2, "9e49ada9a2ccafdafffff50137351626"},
 		{small, types.MD4, "faedf7d245748f2939593258a5e96875"},
 		{small, types.MD5, "7fe307fda20e805d110b35bcc1f31167"},
 		{small, types.MD6, "599f033e751832ce908f22a3b0b0bf316a77f1553bc4c24146caf9fa6b235854"},
 		{small, types.MURMUR3, "785ae97135fcdbc8"},
+		{input, types.NT, "0b2bee3bac7bddeae69d63d53c0b68f3"},
+		{image, types.PHASH, "b193ce6c9c666c31"},
 		{small, types.SHA1, "b11b92d927f2eb66f0aa17266f7348c0cdfd1105"},
 		{small, types.SHA256, "b7e664f9009f84aa056fc78008fe24f33bd45795c407162a78b0fd4c6c2e2d08"},
 		{small, types.SHA512, "1d34da51ac535e741e1e555bf80a1f4ca784225e1c443ceb6244e624b5548c9892f4b59a9e3776f8843f65b28cde99e9419eb09506feb3c00da9b11e844b58fe"},

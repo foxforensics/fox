@@ -46,6 +46,9 @@ Similarity hashes:
 Windows hashes:
   LM, NT, PE
 
+Image hashes:
+  AHASH, DHASH, PHASH
+
 Checksums:
   ADLER32, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 `)
