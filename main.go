@@ -112,7 +112,7 @@ Example: List high entropy files
   $ fox info -m0.9 ./**/*
 
 Example: Test suspicious file
-  $ fox test -l sample.exe
+  $ fox test sample.exe
 
 Example: Show strings in binary
   $ fox text -w sample.exe

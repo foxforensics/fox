@@ -11,11 +11,13 @@ type Colored func(...any) string
 
 var Mark = white.SprintFunc()
 var Hide = black.SprintFunc()
+var Warn = alert.SprintFunc()
 var Term = reset.SprintFunc()
 
 var white = color.New(color.FgHiWhite)
 var black = color.New(color.FgHiBlack)
 var match = color.New(color.FgHiBlue)
+var alert = color.New(color.FgHiRed)
 var reset = color.New(color.Reset)
 
 func MarkMatch(s string, re *regexp.Regexp) string {

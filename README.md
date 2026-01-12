@@ -53,7 +53,7 @@ $ fox info -m0.9 ./**/*
 
 Test a suspicious file:
 ```console
-$ fox test -l sample.exe
+$ fox test sample.exe
 ```
 
 Show strings in binary:
