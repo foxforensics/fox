@@ -19,6 +19,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
 	"github.com/cuhsat/fox/v4/internal/cmd/info"
+	"github.com/cuhsat/fox/v4/internal/cmd/test"
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
 
@@ -28,6 +29,7 @@ Usage: fox [MODE] [FLAGS...] <PATHS...>
  cat    prints file (default mode)
  hex    prints file in hex format
  info   prints file infos and entropy
+ test   prints file test results
  text   prints file text contents
  hash   prints file hashes and checksums
  hunt   hunt suspicious activities
@@ -50,6 +52,7 @@ Modes:
   cat    prints file (default)
   hex    prints file in hex format
   info   prints file infos and entropy
+  test   prints file test results
   text   prints file text contents
   hash   prints file hashes and checksums
   hunt   hunt suspicious activities
@@ -108,6 +111,9 @@ Example: Show MBR in canonical hex
 Example: List high entropy files
   $ fox info -m0.9 ./**/*
 
+Example: Test suspicious file
+  $ fox test -l sample.exe
+
 Example: Show strings in binary
   $ fox text -w sample.exe
 
@@ -125,9 +131,10 @@ type fox struct {
 	Cat  cat.Cat   `cmd:"" aliases:"c,less,more" default:"withargs"`
 	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hd"`
 	Info info.Info `cmd:"" aliases:"i,wc"`
-	Text text.Text `cmd:"" aliases:"t,strings"`
-	Hash hash.Hash `cmd:"" aliases:"s,sum"`
-	Hunt hunt.Hunt `cmd:"" aliases:"h"`
+	Test test.Test `cmd:"" aliases:"t,check"`
+	Text text.Text `cmd:"" aliases:"s,strings"`
+	Hash hash.Hash `cmd:"" aliases:"h,sum"`
+	Hunt hunt.Hunt `cmd:"" aliases:"u"`
 
 	// support flags
 	Version bool

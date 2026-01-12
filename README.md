@@ -12,14 +12,18 @@ go install github.com/cuhsat/fox/v4@latest
 ```
 
 ## Features
-* Read-only access restricted
+* Restricted Read-only access
 * [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
-* String carving and classification
+* String carving and classification with
+* Over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
+* Dump Windows Shortcut and Prefetch files
 * Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
-* Dump Windows Shortcut and Prefetch file artifacts
+* Check files by hash via the [VirusTotal](https://www.virustotal.com/) API
 * Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
-* Automatic *Chain-of-Custody* receipt generation
+* Integral *Chain-of-Custody* receipt generation
+* Many popular archive and compression formats
+* Many popular cryptographic, fuzzy and fast hashes
 * Special Hunt mode
   * Built-in support for [EnCase EWF](https://www.loc.gov/preservation/digital/formats/fdd/fdd000408.shtml) and raw images
   * Built-in file carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
@@ -29,11 +33,7 @@ go install github.com/cuhsat/fox/v4@latest
   * Filter events with [Sigma Rules](https://sigmahq.io/) syntax
   * Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) and [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
   * Save as `JSON`, `JSON Lines` or `SQLite3`
-* Supports
-  * File hash check via [VirusTotal](https://www.virustotal.com/) API
-  * Over 290 string classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
-  * Many popular archive and compression formats
-  * Many popular cryptographic, fuzzy and fast hashes
+
 
 ## Examples
 Find occurrences in event logs:
@@ -49,6 +49,11 @@ $ fox hex -hc512 disk.bin
 List files with high entropy:
 ```console
 $ fox info -m0.9 ./**/*
+```
+
+Test a suspicious file:
+```console
+$ fox test -l sample.exe
 ```
 
 Show strings in binary:
