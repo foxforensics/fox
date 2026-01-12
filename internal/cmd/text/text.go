@@ -24,9 +24,9 @@ Flags:
   -a, --ascii              show only strings with ASCII encoding
   -s, --sort               sort strings alphabetically
 
-Class:
+Classes:
   -w, --wtf[=LEVEL]        show string classifications (w/ww/www)
-  -F, --find=CLASS,...     show only strings with classes
+  -F, --find=CLASS,...     show only strings that match class(es)
   -1, --first              show only strings first class
   -l, --list               show only classification list
 
@@ -53,6 +53,10 @@ type Text struct {
 func (cmd *Text) Validate() error {
 	if cmd.Min > cmd.Max {
 		log.Fatalln("invalid range")
+	}
+
+	if (len(cmd.Find) > 0 || cmd.First) && cmd.Wtf == 0 {
+		log.Fatalln("wtf required")
 	}
 
 	return nil
@@ -87,7 +91,7 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
-		for s := range carver.New(&carver.Options{
+		for l := range carver.New(&carver.Options{
 			Min:     cmd.Min,
 			Max:     cmd.Max,
 			Ascii:   cmd.Ascii,
@@ -97,12 +101,18 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			First:   cmd.First,
 			Profile: cli.Profile,
 		}).Carve(h.MMap()) {
+			if cli.Filter != nil && !cli.Filter.MatchString(l.Str) {
+				continue // not matched afterward
+			}
+
+			l.Str = text.MarkMatch(l.Str, cli.Filter)
+
 			if !cli.NoLine && cmd.Wtf > 0 {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s  %s\n", text.Hide(s.Adr), s.Str, text.Hide(s.Cls))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s  %s\n", text.Hide(l.Adr), l.Str, text.Hide(l.Cls))
 			} else if !cli.NoLine {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", text.Hide(s.Adr), s.Str)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", text.Hide(l.Adr), l.Str)
 			} else {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", s.Str)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", l.Str)
 			}
 		}
 

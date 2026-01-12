@@ -20,6 +20,10 @@ func Detect(b []byte) bool {
 func Extract(b []byte, root, _ string) (e []data.Stream) {
 	r, err := xar.NewReader(nop(bytes.NewReader(b)), int64(len(b)))
 
+	defer func() {
+		_ = r.Close()
+	}()
+
 	if err != nil {
 		log.Println(err)
 		return

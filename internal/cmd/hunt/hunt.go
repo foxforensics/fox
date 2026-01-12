@@ -11,6 +11,7 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
@@ -40,17 +41,17 @@ Rules:
   -R, --rule=FILE          filter using a Sigma rule (slow)
 
 Stream:
-  -u, --url=SERVER         stream events to server address
+  -U, --url=SERVER         stream events to server address
   -T, --auth=TOKEN         stream events using auth token
   -E, --ecs                use ECS schema for streaming
   -H, --hec                use HEC schema for streaming
 
 Alias:
-  -L, --logstash           alias for -E -uhttp://localhost:8080
-  -S, --splunk             alias for -H -uhttp://localhost:8088/...
+  -L, --logstash           alias for -E -Uhttp://localhost:8080
+  -S, --splunk             alias for -H -Uhttp://localhost:8088/...
 
 Example:
-  $ fox hunt -sv ./**/*.dd
+  $ fox hunt -sv ./**/*.E01
 `)
 
 type Hunt struct {
@@ -62,7 +63,7 @@ type Hunt struct {
 	Rule   string `short:"R" sep:"," type:"path"`
 
 	// stream
-	Url  string `short:"u"`
+	Url  string `short:"U"`
 	Auth string `short:"T"`
 	Ecs  bool   `short:"E" xor:"ecs,hec"`
 	Hec  bool   `short:"H" xor:"ecs,hec"`
@@ -149,6 +150,8 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
+
+	defer cmd.discard(cli)
 
 	if cli.Verbose > 0 {
 		log.Println("hunt: started")
@@ -258,6 +261,16 @@ func (cmd *Hunt) upsert(e *event.Event) {
 func (cmd *Hunt) stream(e *event.Event) {
 	if cmd.net != nil {
 		err := cmd.net.Stream(e)
+
+		if err != nil {
+			log.Println(err)
+		}
+	}
+}
+
+func (cmd *Hunt) discard(cli *cli.Globals) {
+	if cmd.db != nil && !cli.NoReceipt {
+		err := receipt.Generate(hunter.Database)
 
 		if err != nil {
 			log.Println(err)

@@ -89,6 +89,12 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 				res, err = vt.GetLabel(sum, cmd.VtKey)
 			}
 
+			if cli.Filter != nil && !cli.Filter.MatchString(res) {
+				continue // not matched afterward
+			}
+
+			res = text.MarkMatch(res, cli.Filter)
+
 			if err == nil {
 				_, _ = fmt.Fprintln(cli.Stdout, res)
 			} else {
@@ -120,7 +126,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 
 			if e >= cmd.Min && e <= cmd.Max {
 				title := text.Hide(h.String())
-				start := text.Hide(fmt.Sprintf("@%d", off))
+				start := text.Hide(fmt.Sprintf("(@%d)", off))
 
 				if cmd.Block > 0 {
 					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s %s\n", l, len(block), e, title, start)

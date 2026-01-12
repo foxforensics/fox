@@ -67,9 +67,9 @@ func (htr *Hunter) Hunt(heaps <-chan *heap.Heap) <-chan *event.Event {
 
 	if htr.opts.Sort {
 		return htr.sort()
-	} else {
-		return htr.events
 	}
+
+	return htr.events
 }
 
 func (htr *Hunter) sort() <-chan *event.Event {

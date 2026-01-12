@@ -92,9 +92,9 @@ func (cvr *Carver) Carve(block []byte) <-chan *String {
 
 	if cvr.opts.Sort {
 		return cvr.sort()
-	} else {
-		return cvr.ch
 	}
+
+	return cvr.ch
 }
 
 func (cvr *Carver) flush(off int, buf []rune) {
@@ -117,7 +117,7 @@ func (cvr *Carver) flush(off int, buf []rune) {
 			// format classes
 			if !cvr.opts.First {
 				cls = strings.Join(v, ", ")
-			} else {
+			} else if len(v) > 0 {
 				cls = v[0]
 			}
 		}
@@ -137,9 +137,9 @@ func (cvr *Carver) sort() <-chan *String {
 		slices.SortStableFunc(cvr.cache, func(a, b *String) int {
 			if a.Str != b.Str {
 				return strings.Compare(a.Str, b.Str)
-			} else {
-				return a.off - b.off
 			}
+
+			return a.off - b.off
 		})
 
 		for _, s := range cvr.cache {

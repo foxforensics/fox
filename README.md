@@ -1,8 +1,8 @@
 ![fox](assets/logo.png "logo")
 
-The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
+The Forensic Examiners Swiss Army Knife. Fox is a small and smart cli tool, providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 
-![Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)
+![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)
 ![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)
 ![Commits](https://img.shields.io/github/commit-activity/y/cuhsat/fox.svg?style=for-the-badge&label=commits)
 ![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)
@@ -12,7 +12,7 @@ go install github.com/cuhsat/fox/v4@latest
 ```
 
 ## Features
-* Read-only access guaranteed
+* Read-only access restricted
 * [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * String carving and classification
@@ -26,7 +26,7 @@ go install github.com/cuhsat/fox/v4@latest
   * Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * Built-in translation of over 51600 Event IDs
   * Built-in warning of critical system events
-  * Filter events with a variety of [Sigma Rules](https://sigmahq.io/)
+  * Filter events with [Sigma Rules](https://sigmahq.io/) syntax
   * Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) and [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
   * Save as `JSON`, `JSON Lines` or `SQLite3`
 * Supports
@@ -34,19 +34,6 @@ go install github.com/cuhsat/fox/v4@latest
   * Over 290 string classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
   * Many popular archive and compression formats
   * Many popular cryptographic, fuzzy and fast hashes
-
-## Usage
-Use `fox --help` to show the full help:
-```console
-Usage: fox [MODE] [FLAGS...] <PATHS...>
-
- cat    prints file (default mode)
- hex    prints file in hex format
- info   prints file infos and entropy
- text   prints file text contents
- hash   prints file hashes and checksums
- hunt   hunt suspicious activities
-```
 
 ## Examples
 Find occurrences in event logs:
@@ -64,19 +51,19 @@ List files with high entropy:
 $ fox info -m0.9 ./**/*
 ```
 
-Find strings in binaries:
+Show strings in binary:
 ```console
 $ fox text -w sample.exe
 ```
 
 Hash the archive contents:
 ```console
-$ fox hash -Tssdeep files.7z
+$ fox hash -uTLSH files.7z
 ```
 
 Hunt down suspicious events:
 ```console
-$ fox hunt -sv ./**/*.dd
+$ fox hunt -sv ./**/*.E01
 ```
 
 ## Supports
@@ -109,6 +96,7 @@ Checksums:
 > Adler32, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 ## Disclaimer
-This code was developed without the use of AI tooling and therefor does not contain any AI generated code or documentation. Furthermore, this code does not contain, employ or utilize AI tooling in any other form. All data processed will not be shared with third parties under any circumstances.
+*This code was developed without the use of AI tooling and therefor does not contain any AI generated code or documentation. Furthermore, this code does not contain, employ or utilize AI tooling in any other form. All data processed will not be shared with third parties under any circumstances.*
 
+---
 🦊 is released under the [GPL-3.0](LICENSE.md).

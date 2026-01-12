@@ -150,9 +150,9 @@ func sort(ch <-chan String) SMap {
 	slices.SortStableFunc(s, func(a, b String) int {
 		if a.Grp != b.Grp {
 			return int(a.Grp - b.Grp)
-		} else {
-			return int(a.Nr - b.Nr)
 		}
+
+		return int(a.Nr - b.Nr)
 	})
 
 	return s

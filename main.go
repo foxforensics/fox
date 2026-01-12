@@ -62,11 +62,11 @@ File limits:
 
 File loader:
   -p, --pass=PASSWORD      password for decryption (7Z, RAR, ZIP)
-  -i, --input=CONTENT      read input as file content
-  -f, --file=FILE          read paths from file
+  -f, --file=FILENAME      read extra paths from file
+  -i, --input=TEXT         read input instead of file
 
 Line output:
-  -o, --out=FILE           write all output to receipted file
+  -o, --output=FILE        write all output to receipted file
 
 Line filter:
   -e, --regexp=PATTERN     filter for lines that match pattern
@@ -102,11 +102,20 @@ Positional arguments:
 Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
-Example: Show the MBR in canonical hex
+Example: Show MBR in canonical hex
   $ fox hex -hc512 disk.bin
 
+Example: List high entropy files
+  $ fox info -m0.9 ./**/*
+
+Example: Show strings in binary
+  $ fox text -w sample.exe
+
+Example: Hash archive contents
+  $ fox hash -uTLSH files.7z
+
 Example: Hunt down suspicious events
-  $ fox hunt -sv ./**/*.dd
+  $ fox hunt -sv ./**/*.E01
 
 Use "fox MODE --help" to show more help on a specific mode.
 `)

@@ -71,7 +71,7 @@ var Algorithms = []string{
 	"xxh3",
 }
 
-var isSecure = []string{
+var secure = []string{
 	"blake2s-256",
 	"blake2b-256",
 	"blake2b-384",
@@ -88,7 +88,7 @@ var isSecure = []string{
 }
 
 func IsSecure(algo string) bool {
-	return slices.Contains(isSecure, strings.ToLower(algo))
+	return slices.Contains(secure, strings.ToLower(algo))
 }
 
 func MustSum(algo string, data []byte) string {

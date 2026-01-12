@@ -3,7 +3,6 @@ package hash
 import (
 	"fmt"
 	"log"
-	"slices"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -20,12 +19,11 @@ Prints file hashes and checksums.
 fox hash [FLAGS...] <PATHS...>
 
 Flags:
-  -a, --all                use algorithms (all)
-  -T, --type=ALGO,...      use algorithms (default: SHA256)
-  -F, --find=HASH,...      show only files that match
+  -u, --use=ALGORITHM,...  use algorithms (default: SHA256)
+  -a, --all                all algorithms
 
 Example:
-  $ fox hash -Tssdeep files.7z
+  $ fox hash -uTLSH files.7z
 
 Remark:
   Results will be grouped by path, if more than one algorithm is specified.
@@ -53,15 +51,14 @@ Checksums:
 `)
 
 type Hash struct {
+	Use   []string `short:"u" sep:"," default:"SHA256"`
 	All   bool     `short:"a"`
-	Type  []string `short:"T" sep:"," default:"SHA256"`
-	Find  []string `short:"F" sep:","`
 	Paths []string `arg:"" type:"path" optional:""`
 }
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if cmd.All {
-		cmd.Type = hash.Algorithms
+		cmd.Use = hash.Algorithms
 	}
 
 	return nil
@@ -76,7 +73,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 	cli.NoConvert = true // forced
 
 	// compatibility mode
-	if len(cmd.Type) == 1 {
+	if len(cmd.Use) == 1 {
 		cli.NoFile = true
 	}
 
@@ -88,9 +85,9 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
-		for _, algo := range cmd.Type {
+		for _, algo := range cmd.Use {
 			if !hash.IsSecure(algo) && !cli.NoWarnings {
-				log.Printf("warning: algorithm %s is not secure!\n", algo)
+				log.Printf("warning: %s is not a cryptographic secure algorithm!\n", algo)
 			}
 
 			sum, err := hash.Sum(algo, h.MMap())
@@ -100,12 +97,16 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				continue
 			}
 
-			if len(cmd.Find) == 0 || slices.Contains(cmd.Find, sum) {
-				if len(cmd.Type) > 1 {
-					_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(strings.ToUpper(algo)))
-				} else {
-					_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(h.Name))
-				}
+			if cli.Filter != nil && !cli.Filter.MatchString(sum) {
+				continue // not matched afterward
+			}
+
+			sum = text.MarkMatch(sum, cli.Filter)
+
+			if len(cmd.Use) > 1 {
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(strings.ToUpper(algo)))
+			} else {
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(h.Name))
 			}
 		}
 

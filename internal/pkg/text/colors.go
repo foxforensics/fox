@@ -19,6 +19,10 @@ var match = color.New(color.FgHiBlue)
 var reset = color.New(color.Reset)
 
 func MarkMatch(s string, re *regexp.Regexp) string {
+	if re == nil {
+		return s // no regex, no match
+	}
+
 	return marker.Mark(s, marker.MatchRegexp(re), match)
 }
 

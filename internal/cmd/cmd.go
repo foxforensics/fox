@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 	"github.com/fatih/color"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -44,7 +45,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/writer"
 )
 
 type Globals struct {
@@ -96,6 +96,28 @@ type Globals struct {
 }
 
 func (cli *Globals) Load(args []string) <-chan *heap.Heap {
+	var err error
+
+	switch {
+	// file with receipt
+	case len(cli.Output) > 0:
+		cli.NoColor = true
+		cli.Stdout, err = os.OpenFile(cli.Output, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+	// disabled
+	case cli.Quiet:
+		log.SetOutput(io.Discard)
+		cli.Stdout, _ = os.Open(os.DevNull)
+
+	// stdout
+	default:
+		cli.Stdout = os.Stdout
+	}
+
 	if len(cli.Regex) > 0 {
 		cli.Filter = regexp.MustCompile(cli.Regex)
 	}
@@ -115,16 +137,6 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.NoConvert = true
 		cli.NoReceipt = true
 		cli.NoWarnings = true
-	}
-
-	if len(cli.Output) > 0 {
-		cli.NoColor = true
-		cli.Stdout = writer.New(cli.Output, !cli.NoReceipt)
-	} else if cli.Quiet {
-		log.SetOutput(io.Discard)
-		cli.Stdout, _ = os.Open(os.DevNull)
-	} else {
-		cli.Stdout = os.Stdout
 	}
 
 	if cli.Profile <= 0 {
@@ -219,6 +231,14 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 func (cli *Globals) Discard() {
 	if len(cli.Output) > 0 {
 		_ = cli.Stdout.Close()
+
+		if !cli.NoReceipt {
+			err := receipt.Generate(cli.Output)
+
+			if err != nil {
+				log.Println(err)
+			}
+		}
 	}
 
 	cli.Loader.Exit()

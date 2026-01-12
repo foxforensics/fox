@@ -51,6 +51,12 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 		lastHex, wasCut := "", false
 
 		for l := range buffer.Hex(h, tail, cmd.Mode, cli.Profile).Lines {
+			if cli.Filter != nil && !cli.Filter.MatchString(l.Hex) {
+				continue // not matched afterward
+			}
+
+			l.Hex = text.MarkMatch(l.Hex, cli.Filter)
+
 			// cut similar lines for better readability
 			if l.Hex == lastHex && cmd.Mode != types.Raw {
 				if !wasCut {

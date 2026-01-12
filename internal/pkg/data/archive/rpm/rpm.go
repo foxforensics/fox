@@ -54,6 +54,13 @@ func Extract(b []byte, root, _ string) (e []data.Stream) {
 		log.Printf("%s not supported\n", v)
 	}
 
+	// prevent resource leaks
+	if r, ok := r1.(*gzip.Reader); ok {
+		defer func() {
+			_ = r.Close()
+		}()
+	}
+
 	if err != nil {
 		log.Println(err)
 		return
