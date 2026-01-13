@@ -29,7 +29,7 @@ import (
 	"golang.org/x/crypto/md4"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/blake3"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/others/image"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/special/image"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/lm"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/nt"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/pe"
