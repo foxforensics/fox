@@ -1,4 +1,4 @@
-package virus
+package vt
 
 import (
 	"bytes"
@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"maps"
+	"net/url"
 	"slices"
 	"strings"
 
@@ -28,10 +29,24 @@ type Entry struct {
 	Result string
 }
 
-func Test(sum, key string) ([]Entry, error) {
+func TestIp(ip, key string) ([]Entry, error) {
+	return request(vt.URL("ip_addresses/%s", ip), key)
+}
+
+func TestUrl(url, key string) ([]Entry, error) {
+	return request(vt.URL("urls/%s", url), key)
+}
+
+func TestHash(sum, key string) ([]Entry, error) {
+	return request(vt.URL("files/%s", sum), key)
+}
+
+func request(url *url.URL, key string) ([]Entry, error) {
 	var e []Entry
 
-	obj, err := api(key).GetObject(vt.URL("files/%s", sum))
+	api := vt.NewClient(key, vt.WithHTTPClient(client.Default))
+
+	obj, err := api.GetObject(url)
 
 	if err != nil {
 		if strings.HasSuffix(err.Error(), "not found") {
@@ -70,10 +85,6 @@ func Test(sum, key string) ([]Entry, error) {
 	}
 
 	return e, nil
-}
-
-func api(key string) *vt.Client {
-	return vt.NewClient(key, vt.WithHTTPClient(client.Default))
 }
 
 func trace(obj *vt.Object) error {
