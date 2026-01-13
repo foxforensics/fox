@@ -13,6 +13,7 @@
 * ~~Done~~
 
 ## 5. Ideas
+* Add exit status for found activities
 * Add Fortigate Firewall log parser?
 * Add macOS trace3 log parser?
 * Add Shellbag parser?
