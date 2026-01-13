@@ -22,8 +22,8 @@ fox test [FLAGS...] [PATHS...]
 
 Flags:
   -k, --key=APIKEY         Set key for VirusTotal API
-  -U, --url=URL            Test suspicious URL
-  -I, --ip=IP              Test suspicious IP
+  -U, --url=URL,...        Test suspicious URL
+  -I, --ip=IP,...          Test suspicious IP
 
 Example:
   $ fox test sample.exe
@@ -31,8 +31,8 @@ Example:
 
 type Test struct {
 	Key   string   `short:"k"`
-	Url   string   `short:"U"`
-	Ip    string   `short:"I"`
+	Url   []string `short:"U" sep:","`
+	Ip    []string `short:"I" sep:","`
 	Paths []string `arg:"" name:"path" type:"path" optional:""`
 }
 
@@ -59,14 +59,14 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
-	if len(cmd.Ip) > 0 {
-		res, err := vt.TestIp(cmd.Ip, cmd.Key)
-		cmd.output(cli, res, err, cmd.Ip)
+	for _, v := range cmd.Ip {
+		res, err := vt.TestIp(v, cmd.Key)
+		cmd.output(cli, res, err, v)
 	}
 
-	if len(cmd.Url) > 0 {
-		res, err := vt.TestUrl(base64.StdEncoding.EncodeToString([]byte(cmd.Url)), cmd.Key)
-		cmd.output(cli, res, err, cmd.Url)
+	for _, v := range cmd.Url {
+		res, err := vt.TestUrl(base64.StdEncoding.EncodeToString([]byte(v)), cmd.Key)
+		cmd.output(cli, res, err, v)
 	}
 
 	for h := range ch {
