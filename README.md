@@ -19,7 +19,7 @@ go install github.com/cuhsat/fox/v4@latest
 * Over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
 * Dump Windows Shortcut and Prefetch files
 * Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
-* Check files by hash via the [VirusTotal](https://www.virustotal.com/) API
+* Check IPs, URLs and file hashes via the [VirusTotal API](https://www.virustotal.com/)
 * Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
 * Integral *Chain-of-Custody* receipt generation
 * Many popular archive and compression formats
