@@ -90,16 +90,16 @@ func (cmd *Test) output(cli *cli.Globals, res []vt.Entry, err error, h string) {
 	n := int(math.Log10(float64(len(res)))) + 1
 
 	for i, r := range res {
-		nr := fmt.Sprintf("%0*d", n, i+1)
+		nr := fmt.Sprintf("%0*d  ", n, i+1)
 
 		if r.Alert {
 			r.Result = text.Warn(r.Result)
 		}
 
 		if !cli.NoLine {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s %s %s\n", text.Hide(nr), r.Result, text.Hide(r.Engine))
+			_, _ = fmt.Fprintf(cli.Stdout, "%s%s  %s\n", text.Hide(nr), r.Result, text.Hide(r.Engine))
 		} else {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", r.Result, text.Hide(r.Engine))
+			_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", r.Result, text.Hide(r.Engine))
 		}
 	}
 }
