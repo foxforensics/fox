@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"hash"
 	"image"
+	"log"
 
 	_ "image/gif"
 	_ "image/jpeg"
@@ -13,41 +14,33 @@ import (
 	"github.com/corona10/goimagehash"
 )
 
-const (
-	ahash Kind = iota
-	dhash
-	phash
-)
-
-type Kind int
-
 type Hash struct {
-	Base *goimagehash.ImageHash
-	Kind Kind
+	base *goimagehash.ImageHash
+	kind goimagehash.Kind
 }
 
 func NewAHash() hash.Hash {
-	return &Hash{Kind: ahash}
+	return &Hash{kind: goimagehash.AHash}
 }
 
 func NewDHash() hash.Hash {
-	return &Hash{Kind: dhash}
+	return &Hash{kind: goimagehash.DHash}
 }
 
 func NewPHash() hash.Hash {
-	return &Hash{Kind: phash}
+	return &Hash{kind: goimagehash.PHash}
 }
 
 func (h *Hash) BlockSize() int {
-	return h.Base.Bits() / 8
+	return h.base.Bits() / 8
 }
 
 func (h *Hash) Size() int {
-	return h.Base.Bits() / 8
+	return h.base.Bits() / 8
 }
 
 func (h *Hash) Reset() {
-	h.Base = nil
+	h.base = goimagehash.NewImageHash(0, h.kind)
 }
 
 func (h *Hash) Write(b []byte) (n int, err error) {
@@ -57,13 +50,15 @@ func (h *Hash) Write(b []byte) (n int, err error) {
 		return 0, err
 	}
 
-	switch h.Kind {
-	case ahash:
-		h.Base, err = goimagehash.AverageHash(img)
-	case dhash:
-		h.Base, err = goimagehash.DifferenceHash(img)
-	case phash:
-		h.Base, err = goimagehash.PerceptionHash(img)
+	switch h.kind {
+	case goimagehash.AHash:
+		h.base, err = goimagehash.AverageHash(img)
+	case goimagehash.DHash:
+		h.base, err = goimagehash.DifferenceHash(img)
+	case goimagehash.PHash:
+		h.base, err = goimagehash.PerceptionHash(img)
+	default:
+		log.Fatalln("unknown kind")
 	}
 
 	if err != nil {
@@ -76,7 +71,7 @@ func (h *Hash) Write(b []byte) (n int, err error) {
 func (h *Hash) Sum(_ []byte) []byte {
 	b := make([]byte, h.Size())
 
-	binary.BigEndian.PutUint64(b, h.Base.GetHash())
+	binary.BigEndian.PutUint64(b, h.base.GetHash())
 
 	return b
 }
