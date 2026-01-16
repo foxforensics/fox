@@ -14,6 +14,7 @@ const (
 	CRC64ECMA  = "crc64-ecma"
 	CRC64ISO   = "crc64-iso"
 	DHASH      = "dhash"
+	FLETCHER4  = "fletcher-4"
 	FNV1       = "fnv-1"
 	FNV1A      = "fnv-1a"
 	LM         = "lm"

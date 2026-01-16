@@ -101,7 +101,7 @@ Image specific:
 > aHash, dHash, pHash
 
 Checksums:
-> Adler32, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+> Adler32, Fletcher-4, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 ## Disclaimer
 *This code was developed without the use of AI tooling and therefor does not contain any AI generated code or documentation. Furthermore, this code does not contain, employ or utilize AI tooling in any other form. All data processed will not be shared with third parties under any circumstances.*

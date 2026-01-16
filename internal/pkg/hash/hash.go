@@ -24,6 +24,7 @@ import (
 	"github.com/pedroalbanese/md6"
 	"github.com/spaolacci/murmur3"
 	"github.com/zeebo/xxh3"
+	"go.solidsystem.no/fletcher4"
 	"golang.org/x/crypto/blake2b"
 	"golang.org/x/crypto/blake2s"
 	"golang.org/x/crypto/md4"
@@ -32,7 +33,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/blake3"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/shake"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/xxh"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/special/image"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/image"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/lm"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/nt"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/pe"
@@ -53,6 +54,7 @@ var Algorithms = []string{
 	types.CRC64ECMA,
 	types.CRC64ISO,
 	types.DHASH,
+	types.FLETCHER4,
 	types.FNV1,
 	types.FNV1A,
 	types.LM,
@@ -145,6 +147,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = crc64.New(crc64.MakeTable(crc64.ISO))
 	case types.DHASH:
 		imp = image.NewDHash()
+	case types.FLETCHER4:
+		imp = fletcher4.New()
 	case types.FNV1:
 		imp = fnv.New128()
 	case types.FNV1A:

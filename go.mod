@@ -15,6 +15,7 @@ require (
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cespare/xxhash v1.1.0
+	github.com/corona10/goimagehash v1.1.0
 	github.com/cuhsat/golnk v0.0.0-20260110131643-40d5a2a12f90
 	github.com/cuhsat/zip v0.5.2
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
@@ -66,7 +67,6 @@ require (
 	github.com/alecthomas/repr v0.5.2 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
-	github.com/corona10/goimagehash v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -84,6 +84,7 @@ require (
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2 // indirect
+	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
