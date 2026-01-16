@@ -25,7 +25,9 @@ const (
 	NT         = "nt"
 	PE         = "pe"
 	PHASH      = "phash"
+	RIPEMD160  = "ripemd-160"
 	SHA1       = "sha1"
+	SHA224     = "sha224"
 	SHA256     = "sha256"
 	SHA512     = "sha512"
 	SHA3       = "sha3"
@@ -33,10 +35,13 @@ const (
 	SHA3256    = "sha3-256"
 	SHA3384    = "sha3-384"
 	SHA3512    = "sha3-512"
+	SHAKE128   = "shake128"
+	SHAKE256   = "shake256"
 	SSDEEP     = "ssdeep"
 	TLSH       = "tlsh"
-	XXH64      = "xxh64"
 	XXH3       = "xxh3"
+	XXH32      = "xxh32"
+	XXH64      = "xxh64"
 )
 
 const (

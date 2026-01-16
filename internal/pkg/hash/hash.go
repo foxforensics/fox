@@ -27,8 +27,11 @@ import (
 	"golang.org/x/crypto/blake2b"
 	"golang.org/x/crypto/blake2s"
 	"golang.org/x/crypto/md4"
+	"golang.org/x/crypto/ripemd160"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/blake3"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/shake"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/xxh"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/special/image"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/lm"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/nt"
@@ -61,6 +64,9 @@ var Algorithms = []string{
 	types.NT,
 	types.PE,
 	types.PHASH,
+	types.RIPEMD160,
+	types.SHAKE128,
+	types.SHAKE256,
 	types.SHA1,
 	types.SHA256,
 	types.SHA512,
@@ -71,8 +77,9 @@ var Algorithms = []string{
 	types.SHA3512,
 	types.SSDEEP,
 	types.TLSH,
-	types.XXH64,
 	types.XXH3,
+	types.XXH32,
+	types.XXH64,
 }
 
 var secure = []string{
@@ -82,6 +89,9 @@ var secure = []string{
 	types.BLAKE2B512,
 	types.BLAKE3256,
 	types.BLAKE3512,
+	types.RIPEMD160,
+	types.SHAKE128,
+	types.SHAKE256,
 	types.SHA256,
 	types.SHA512,
 	types.SHA3,
@@ -157,8 +167,12 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = pe.New()
 	case types.PHASH:
 		imp = image.NewPHash()
+	case types.RIPEMD160:
+		imp = ripemd160.New()
 	case types.SHA1:
 		imp = sha1.New()
+	case types.SHA224:
+		imp = sha256.New224()
 	case types.SHA256:
 		imp = sha256.New()
 	case types.SHA512:
@@ -173,12 +187,18 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = sha3.New384()
 	case types.SHA3512:
 		imp = sha3.New512()
+	case types.SHAKE128:
+		imp = shake.New128()
+	case types.SHAKE256:
+		imp = shake.New256()
 	case types.SSDEEP:
 		imp = ssdeep.New()
 	case types.TLSH:
 		imp = tlsh.New()
 	case types.XXH3:
 		imp = xxh3.New()
+	case types.XXH32:
+		imp = xxh.New()
 	case types.XXH64:
 		imp = xxhash.New()
 	default:

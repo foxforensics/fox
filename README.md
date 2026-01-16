@@ -74,10 +74,10 @@ $ fox hunt -sv ./**/*.E01
 ## Supports
 
 File formats:
-> evtx, journal, json, jsonl, lnk, pf, ELF, PE/COFF (dll, exe, sys, ...)
+> evtx, journal, json, jsonl, lnk, pf, ELF, PE/COFF
 
 Image formats:
-> EWF-E01, EWF-S01, raw (dd)
+> EWF-E01, EWF-S01, raw
 
 Archive formats:
 > 7zip, ar, CAB, cpio, RAR, RPM, tar, xar, ZIP
@@ -86,18 +86,18 @@ Compression formats:
 > Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
 
 Cryptographic hashes:
-> BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, MD2, MD4, MD5, MD6, SHA1, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
+> BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, MD2, MD4, MD5, MD6, RIPEMD-160, SHAKE128, SHAKE256, SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
 
 Performance hashes:
-> FNV-1, FNV-1a, Murmur3, XXH64, XXH3
+> FNV-1, FNV-1a, Murmur3, XXH32, XXH64, XXH3
 
 Similarity hashes:
 > SSDeep, TLSH
 
-Windows hashes:
-> LM, NT, PE
+Windows specific:
+> LM, NT, PE Checksum
 
-Image hashes:
+Image specific:
 > aHash, dHash, pHash
 
 Checksums:
