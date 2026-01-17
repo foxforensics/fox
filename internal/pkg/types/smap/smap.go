@@ -8,7 +8,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/edsrzf/mmap-go"
+	"github.com/cuhsat/mmap-go"
 	"github.com/sourcegraph/conc"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"

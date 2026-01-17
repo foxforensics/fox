@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/edsrzf/mmap-go"
+	"github.com/cuhsat/mmap-go"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
