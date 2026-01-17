@@ -9,7 +9,7 @@ require (
 	github.com/VirusTotal/vt-go v1.1.0
 	github.com/alecthomas/kong v1.13.0
 	github.com/andybalholm/brotli v1.2.0
-	github.com/bmatcuk/doublestar/v4 v4.9.1
+	github.com/bmatcuk/doublestar/v4 v4.9.2
 	github.com/bodgit/sevenzip v1.6.1
 	github.com/bradleyjkemp/sigma-go v0.6.6
 	github.com/cavaliergopher/cpio v1.0.1
@@ -25,7 +25,7 @@ require (
 	github.com/glaslos/ssdeep v0.4.0
 	github.com/glaslos/tlsh v0.4.0
 	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f
-	github.com/klauspost/compress v1.18.2
+	github.com/klauspost/compress v1.18.3
 	github.com/korylprince/goxar v0.1.2
 	github.com/minio/minlz v1.0.1
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
@@ -33,7 +33,7 @@ require (
 	github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4
 	github.com/pierrec/lz4 v2.6.1+incompatible
 	github.com/saferwall/elf v0.3.1
-	github.com/saferwall/pe v1.5.7
+	github.com/saferwall/pe v1.5.8
 	github.com/secDre4mer/go-cab v0.0.0-20250826110853-e3fbafae92cd
 	github.com/sorairolake/lzip-go v0.3.8
 	github.com/sourcegraph/conc v0.3.0
@@ -43,7 +43,7 @@ require (
 	github.com/zeebo/blake3 v0.2.4
 	github.com/zeebo/xxh3 v1.0.2
 	golang.org/x/term v0.39.0
-	modernc.org/sqlite v1.43.0
+	modernc.org/sqlite v1.44.1
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
@@ -55,7 +55,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
-	golang.org/x/crypto v0.46.0
+	golang.org/x/crypto v0.47.0
 )
 
 require (
@@ -75,7 +75,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
-	github.com/pierrec/lz4/v4 v4.1.23 // indirect
+	github.com/pierrec/lz4/v4 v4.1.24 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
@@ -86,12 +86,12 @@ require (
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2 // indirect
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
-	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
+	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
+	golang.org/x/exp v0.0.0-20260112195511-716be5621a96 // indirect
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/text v0.33.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	modernc.org/libc v1.67.4 // indirect
+	modernc.org/libc v1.67.6 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
 	www.velocidex.com/golang/go-ntfs v0.2.0 // indirect
