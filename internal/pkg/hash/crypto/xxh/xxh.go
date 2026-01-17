@@ -17,28 +17,28 @@ const (
 	prime1minus = uint32((-int64(prime1)) & primeMask)                  // 1640531535
 )
 
-// XXH32 represents an xxhash32 object with seed 0.
-type XXH32 struct {
+// XXH represents an xxhash32 object with seed 0.
+type XXH struct {
 	v        [4]uint32
 	totalLen uint64
 	buf      [16]byte
 	bufused  int
 }
 
-// New returns a new XXH32 struct.
-func New() *XXH32 {
-	return new(XXH32)
+// New returns a new XXH struct.
+func New() *XXH {
+	return new(XXH)
 }
 
 // Sum appends the current hash to b and returns the resulting slice.
 // It does not change the underlying hash state.
-func (xxh *XXH32) Sum(b []byte) []byte {
+func (xxh *XXH) Sum(b []byte) []byte {
 	h32 := xxh.Sum32()
 	return append(b, byte(h32>>24), byte(h32>>16), byte(h32>>8), byte(h32))
 }
 
 // Reset resets the Hash to its initial state.
-func (xxh *XXH32) Reset() {
+func (xxh *XXH) Reset() {
 	xxh.v[0] = prime1plus2
 	xxh.v[1] = prime2
 	xxh.v[2] = 0
@@ -48,18 +48,18 @@ func (xxh *XXH32) Reset() {
 }
 
 // Size returns the number of bytes returned by Sum().
-func (xxh *XXH32) Size() int {
+func (xxh *XXH) Size() int {
 	return 4
 }
 
 // BlockSize gives the minimum number of bytes accepted by Write().
-func (xxh *XXH32) BlockSize() int {
+func (xxh *XXH) BlockSize() int {
 	return 1
 }
 
 // Write adds input bytes to the Hash.
 // It never returns an error.
-func (xxh *XXH32) Write(input []byte) (int, error) {
+func (xxh *XXH) Write(input []byte) (int, error) {
 	if xxh.totalLen == 0 {
 		xxh.Reset()
 	}
@@ -113,7 +113,7 @@ func update(v *[4]uint32, buf *[16]byte, input []byte) {
 }
 
 // Sum32 returns the 32 bits Hash value.
-func (xxh *XXH32) Sum32() uint32 {
+func (xxh *XXH) Sum32() uint32 {
 	h32 := uint32(xxh.totalLen)
 	if h32 >= 16 {
 		h32 += rol1(xxh.v[0]) + rol7(xxh.v[1]) + rol12(xxh.v[2]) + rol18(xxh.v[3])
