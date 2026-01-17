@@ -8,7 +8,7 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/edsrzf/mmap-go"
+	"github.com/cuhsat/mmap-go"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
@@ -27,26 +27,19 @@ type Heap struct {
 	Size int64  // heap size
 
 	mmap mmap.MMap // memory map
-	smap smap.SMap // string map
+
+	limit  *types.Limits  // smap limit
+	filter *types.Filters // smap filter
 }
 
 func New(ctx *Context, m mmap.MMap) *Heap {
-	h := &Heap{
-		Name: ctx.Name,
-		Size: int64(len(m)),
-		mmap: m,
+	return &Heap{
+		Name:   ctx.Name,
+		Size:   int64(len(m)),
+		mmap:   ctx.Limit.ReduceMMap(m),
+		limit:  ctx.Limit,
+		filter: ctx.Filter,
 	}
-
-	// reduce mmap
-	h.mmap = ctx.Limit.ReduceMMap(h.mmap)
-
-	// reduce smap
-	h.smap = ctx.Limit.ReduceSMap(smap.Map(h.mmap))
-
-	// filter smap
-	h.smap = ctx.Filter.FilterSMap(h.smap)
-
-	return h
 }
 
 func (h *Heap) String() string {
@@ -61,8 +54,15 @@ func (h *Heap) MMap() mmap.MMap {
 
 func (h *Heap) SMap() smap.SMap {
 	h.RLock()
-	defer h.RUnlock()
-	return h.smap
+
+	s := smap.Map(h.mmap)
+
+	h.RUnlock()
+
+	s = h.limit.ReduceSMap(s)
+	s = h.filter.FilterSMap(s)
+
+	return s
 }
 
 func (h *Heap) Discard() {
@@ -77,7 +77,6 @@ func (h *Heap) Discard() {
 
 	h.Size = 0
 	h.mmap = nil
-	h.smap = nil
 
 	h.Unlock()
 

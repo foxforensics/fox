@@ -150,12 +150,6 @@ func TestDiscard(t *testing.T) {
 	if m != nil {
 		t.Fatal("mmap not nil")
 	}
-
-	s := h.SMap()
-
-	if s != nil {
-		t.Fatal("smap not nil")
-	}
 }
 
 func newCtx() *Context {
