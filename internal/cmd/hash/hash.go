@@ -93,7 +93,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 
 		for _, algo := range cmd.Use {
 			if !hash.IsSecure(algo) && !cli.NoWarnings {
-				log.Printf("warning: %s is not a cryptographic secure algorithm!\n", algo)
+				log.Printf("warning: %s is not a cryptographically secure algorithm!\n", algo)
 			}
 
 			sum, err := hash.Sum(algo, h.MMap())
