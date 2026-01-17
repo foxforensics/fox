@@ -196,6 +196,8 @@ func (ldr *Loader) loadFile(path, part string) {
 		return
 	}
 
+	// TODO: Lock small files?
+
 	b, err := mmap.Map(f, mmap.RDONLY, 0)
 
 	if err != nil {

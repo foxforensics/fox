@@ -1,9 +1,12 @@
 package heap
 
 import (
+	"errors"
+	"log"
 	"math"
 	"runtime"
 	"sync"
+	"syscall"
 
 	"github.com/edsrzf/mmap-go"
 
@@ -66,7 +69,11 @@ func (h *Heap) Discard() {
 	h.Lock()
 
 	// try to unmap original area
-	_ = h.mmap.Unmap()
+	err := h.mmap.Unmap()
+
+	if err != nil && !errors.Is(err, syscall.EINVAL) {
+		log.Println(err)
+	}
 
 	h.Size = 0
 	h.mmap = nil
