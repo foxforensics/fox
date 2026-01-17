@@ -107,8 +107,8 @@ func (htr *Hunter) carve(h *heap.Heap) {
 }
 
 func (htr *Hunter) carveEvtx(h *heap.Heap) {
-	r1 := bytes.NewReader(h.MMap())
-	r2 := bytes.NewReader(h.MMap())
+	r1 := bytes.NewReader(h.Bytes())
+	r2 := bytes.NewReader(h.Bytes())
 
 	for off := range htr.findOffset(r1, evtx.Regex) {
 		for evt := range evtx.Carve(r2, off, cap(htr.events)) {
@@ -118,10 +118,10 @@ func (htr *Hunter) carveEvtx(h *heap.Heap) {
 }
 
 func (htr *Hunter) carveJournal(h *heap.Heap) {
-	r := bytes.NewReader(h.MMap())
+	r := bytes.NewReader(h.Bytes())
 
 	for off := range htr.findOffset(r, journal.Regex) {
-		for evt := range journal.Carve(h.MMap(), off, cap(htr.events)) {
+		for evt := range journal.Carve(h.Bytes(), off, cap(htr.events)) {
 			htr.events <- evt
 		}
 	}

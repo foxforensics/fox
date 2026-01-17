@@ -69,7 +69,7 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 	}
 
 	for h := range ch {
-		res, err := vt.TestHash(hash.MustSum(types.SHA256, h.MMap()), cmd.Key)
+		res, err := vt.TestHash(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
 		cmd.output(cli, res, err, h.String())
 		h.Discard()
 	}

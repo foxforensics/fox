@@ -27,11 +27,11 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
-		for l := range buffer.Text(h, cli.Profile).Lines {
+		for l := range buffer.Text(h, cli).Lines {
 			s := l.Str
 
-			if cli.Filter != nil && l.Nr != buffer.Sep {
-				s = text.MarkMatch(s, cli.Filter)
+			if cli.Regexp != nil && l.Nr != buffer.Sep {
+				s = text.MarkMatch(s, cli.Regexp)
 			}
 
 			if !cli.NoLine && l.Nr == buffer.Sep {

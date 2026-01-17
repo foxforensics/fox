@@ -337,9 +337,8 @@ func (ldr *Loader) createHeap(s string, b []byte) {
 	ldr.size += int64(len(b))
 	ldr.paths = append(ldr.paths, s)
 	ldr.heaps <- heap.New(&heap.Context{
-		Name:   s,
-		Limit:  ldr.opts.Limit,
-		Filter: ldr.opts.Filter,
+		Name:  s,
+		Limit: ldr.opts.Limit,
 	}, b)
 
 	if ldr.opts.Verbose > 1 {

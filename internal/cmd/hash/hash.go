@@ -96,18 +96,18 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				log.Printf("warning: %s is not a cryptographically secure algorithm!\n", algo)
 			}
 
-			sum, err := hash.Sum(algo, h.MMap())
+			sum, err := hash.Sum(algo, h.Bytes())
 
 			if err != nil {
 				log.Println(err)
 				continue
 			}
 
-			if cli.Filter != nil && !cli.Filter.MatchString(sum) {
+			if cli.Regexp != nil && !cli.Regexp.MatchString(sum) {
 				continue // not matched afterward
 			}
 
-			sum = text.MarkMatch(sum, cli.Filter)
+			sum = text.MarkMatch(sum, cli.Regexp)
 
 			if len(cmd.Use) > 1 {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(strings.ToUpper(algo)))

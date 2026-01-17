@@ -100,12 +100,12 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			Find:    cmd.Find,
 			First:   cmd.First,
 			Profile: cli.Profile,
-		}).Carve(h.MMap()) {
-			if cli.Filter != nil && !cli.Filter.MatchString(l.Str) {
+		}).Carve(h.Bytes()) {
+			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Str) {
 				continue // not matched afterward
 			}
 
-			l.Str = text.MarkMatch(l.Str, cli.Filter)
+			l.Str = text.MarkMatch(l.Str, cli.Regexp)
 
 			if !cli.NoLine && cmd.Wtf > 0 {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s  %s\n", text.Hide(l.Adr), l.Str, text.Hide(l.Cls))

@@ -11,34 +11,25 @@ import (
 	"github.com/cuhsat/go-mmap"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
 
 type Context struct {
-	Name   string
-	Limit  *types.Limits
-	Filter *types.Filters
+	Name  string
+	Limit *types.Limits
 }
 
 type Heap struct {
 	sync.RWMutex
-
-	Name string // heap name
-	Size int64  // heap size
-
+	Name string    // heap name
+	Size int64     // heap size
 	mmap mmap.MMap // memory map
-
-	limit  *types.Limits  // smap limit
-	filter *types.Filters // smap filter
 }
 
 func New(ctx *Context, m mmap.MMap) *Heap {
 	return &Heap{
-		Name:   ctx.Name,
-		Size:   int64(len(m)),
-		mmap:   ctx.Limit.ReduceMMap(m),
-		limit:  ctx.Limit,
-		filter: ctx.Filter,
+		Name: ctx.Name,
+		Size: int64(len(m)),
+		mmap: ctx.Limit.ReduceMMap(m),
 	}
 }
 
@@ -46,23 +37,10 @@ func (h *Heap) String() string {
 	return h.Name
 }
 
-func (h *Heap) MMap() mmap.MMap {
+func (h *Heap) Bytes() []byte {
 	h.RLock()
 	defer h.RUnlock()
 	return h.mmap
-}
-
-func (h *Heap) SMap() smap.SMap {
-	h.RLock()
-
-	s := smap.Map(h.mmap)
-
-	h.RUnlock()
-
-	s = h.limit.ReduceSMap(s)
-	s = h.filter.FilterSMap(s)
-
-	return s
 }
 
 func (h *Heap) Discard() {

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	cli "github.com/cuhsat/fox/v4/internal/cmd"
+
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
@@ -19,15 +21,15 @@ type HexBuffer struct {
 	Lines chan HexLine
 }
 
-func Hex(h *heap.Heap, tail uint, mode string, p int) *HexBuffer {
-	var hb = &HexBuffer{make(chan HexLine, p*1024)}
+func Hex(h *heap.Heap, cli *cli.Globals, mode string) *HexBuffer {
+	var hb = &HexBuffer{make(chan HexLine, cli.Profile*1024)}
 	var off uint
 
-	if tail > 0 {
-		off = max(uint(h.Size)-tail, 0)
+	if cli.Bytes > 0 {
+		off = max(uint(h.Size)-cli.Bytes, 0)
 	}
 
-	go hexStream(hb, mode, h.MMap(), off)
+	go hexStream(hb, mode, h.Bytes(), off)
 
 	return hb
 }

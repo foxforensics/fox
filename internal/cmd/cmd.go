@@ -7,7 +7,6 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 	"github.com/fatih/color"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -44,6 +43,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
 
@@ -92,8 +92,10 @@ type Globals struct {
 
 	// bootstrap
 	Stdout io.WriteCloser `kong:"-"`
-	Filter *regexp.Regexp `kong:"-"`
+	Regexp *regexp.Regexp `kong:"-"`
 	Loader *loader.Loader `kong:"-"`
+	Filter *types.Filters `kong:"-"`
+	Limit  *types.Limits  `kong:"-"`
 }
 
 func (cli *Globals) Load(args []string) <-chan *heap.Heap {
@@ -120,12 +122,25 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	}
 
 	if len(cli.Regex) > 0 {
-		cli.Filter = regexp.MustCompile(cli.Regex)
+		cli.Regexp = regexp.MustCompile(cli.Regex)
 	}
 
 	if cli.Context > 0 {
 		cli.Before = cli.Context
 		cli.After = cli.Context
+	}
+
+	cli.Limit = &types.Limits{
+		IsHead: cli.Head,
+		IsTail: cli.Tail,
+		Lines:  cli.Lines,
+		Bytes:  cli.Bytes,
+	}
+
+	cli.Filter = &types.Filters{
+		Regex:  cli.Regexp,
+		Before: cli.Before,
+		After:  cli.After,
 	}
 
 	if cli.Raw {
@@ -199,17 +214,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	}
 
 	cli.Loader = loader.New(&loader.Options{
-		Limit: &types.Limits{
-			IsHead: cli.Head,
-			IsTail: cli.Tail,
-			Lines:  cli.Lines,
-			Bytes:  cli.Bytes,
-		},
-		Filter: &types.Filters{
-			Regex:  cli.Filter,
-			Before: cli.Before,
-			After:  cli.After,
-		},
+		Limit:    cli.Limit,
+		Filter:   cli.Filter,
 		File:     cli.File,
 		Input:    cli.Input,
 		Password: cli.Pass,

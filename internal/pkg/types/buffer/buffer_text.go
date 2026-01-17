@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 
+	cli "github.com/cuhsat/fox/v4/internal/cmd"
+
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
@@ -20,11 +22,13 @@ type TextBuffer struct {
 	Pad   uint
 }
 
-func Text(h *heap.Heap, p int) *TextBuffer {
-	s := h.SMap()
+func Text(h *heap.Heap, cli *cli.Globals) *TextBuffer {
+	s := smap.Map(h.Bytes())
+	s = cli.Limit.ReduceSMap(s)
+	s = cli.Filter.FilterSMap(s)
 
 	tb := &TextBuffer{
-		make(chan *TextLine, p*1024),
+		make(chan *TextLine, cli.Profile*1024),
 		uint(math.Log10(float64(len(s)))) + 1,
 	}
 

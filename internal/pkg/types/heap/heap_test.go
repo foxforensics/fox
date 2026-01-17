@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"regexp"
 	"runtime"
 	"testing"
 
@@ -15,10 +14,7 @@ const (
 	file  = "text/bible.txt"
 	name  = "test"
 	size  = 4633983
-	count = 31107
 	bytes = 1024
-	lines = 3
-	grep  = 152
 )
 
 func TestNew(t *testing.T) {
@@ -32,12 +28,8 @@ func TestNew(t *testing.T) {
 		t.Fatal("invalid size")
 	}
 
-	if len(h.MMap()) != size {
-		t.Fatal("invalid mmap len")
-	}
-
-	if len(h.SMap()) != count {
-		t.Fatal("invalid smap len")
+	if len(h.Bytes()) != size {
+		t.Fatal("invalid bytes len")
 	}
 }
 
@@ -48,20 +40,8 @@ func TestNewLimitHeadBytes(t *testing.T) {
 
 	h := New(ctx, fixture(file))
 
-	if len(h.MMap()) != bytes {
-		t.Fatal("invalid mmap len")
-	}
-}
-
-func TestNewLimitHeadLines(t *testing.T) {
-	ctx := newCtx()
-	ctx.Limit.IsHead = true
-	ctx.Limit.Lines = lines
-
-	h := New(ctx, fixture(file))
-
-	if len(h.SMap()) != lines {
-		t.Fatal("invalid smap len")
+	if len(h.Bytes()) != bytes {
+		t.Fatal("invalid bytes len")
 	}
 }
 
@@ -72,60 +52,16 @@ func TestNewLimitTailBytes(t *testing.T) {
 
 	h := New(ctx, fixture(file))
 
-	if len(h.MMap()) != bytes {
-		t.Fatal("invalid mmap len")
+	if len(h.Bytes()) != bytes {
+		t.Fatal("invalid bytes len")
 	}
 }
 
-func TestNewLimitTailLines(t *testing.T) {
-	ctx := newCtx()
-	ctx.Limit.IsTail = true
-	ctx.Limit.Lines = lines
-
-	h := New(ctx, fixture(file))
-
-	if len(h.SMap()) != lines {
-		t.Fatal("invalid smap len")
-	}
-}
-
-func TestNewFilter(t *testing.T) {
-	ctx := newCtx()
-	ctx.Filter.Regex = regexp.MustCompile("salvation")
-
-	h := New(ctx, fixture(file))
-
-	if len(h.SMap()) != grep {
-		t.Fatal("invalid smap len")
-	}
-}
-
-func TestNewFilterContext(t *testing.T) {
-	ctx := newCtx()
-	ctx.Filter.Regex = regexp.MustCompile("salvation")
-	ctx.Filter.Before = 1
-	ctx.Filter.After = 1
-
-	h := New(ctx, fixture(file))
-
-	if len(h.SMap()) != grep*3 {
-		t.Fatal("invalid smap len")
-	}
-}
-
-func TestMMap(t *testing.T) {
+func TestBytes(t *testing.T) {
 	h := New(newCtx(), fixture(file))
 
-	if h.MMap() == nil {
-		t.Fatal("mmap nil")
-	}
-}
-
-func TestSMap(t *testing.T) {
-	h := New(newCtx(), fixture(file))
-
-	if h.SMap() == nil {
-		t.Fatal("smap nil")
+	if h.Bytes() == nil {
+		t.Fatal("bytes nil")
 	}
 }
 
@@ -145,10 +81,10 @@ func TestDiscard(t *testing.T) {
 		t.Fatal("invalid size")
 	}
 
-	m := h.MMap()
+	m := h.Bytes()
 
 	if m != nil {
-		t.Fatal("mmap not nil")
+		t.Fatal("bytes not nil")
 	}
 }
 
@@ -156,7 +92,6 @@ func newCtx() *Context {
 	return &Context{
 		name,
 		&types.Limits{},
-		&types.Filters{},
 	}
 }
 

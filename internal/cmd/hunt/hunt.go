@@ -198,9 +198,9 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			continue // not matched
 		}
 
-		line := cmd.format(e, cli.Filter, res.Match)
+		line := cmd.format(e, cli.Regexp, res.Match)
 
-		if cli.Filter != nil && !cli.Filter.MatchString(line) {
+		if cli.Regexp != nil && !cli.Regexp.MatchString(line) {
 			continue // not matched afterward
 		}
 

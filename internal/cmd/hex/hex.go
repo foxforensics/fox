@@ -37,12 +37,6 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
-	var tail uint
-
-	if cli.Tail {
-		tail = cli.Bytes
-	}
-
 	for h := range ch {
 		if !cli.NoFile {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
@@ -50,12 +44,12 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 		lastHex, wasCut := "", false
 
-		for l := range buffer.Hex(h, tail, cmd.Mode, cli.Profile).Lines {
-			if cli.Filter != nil && !cli.Filter.MatchString(l.Hex) {
+		for l := range buffer.Hex(h, cli, cmd.Mode).Lines {
+			if cli.Filter != nil && !cli.Regexp.MatchString(l.Hex) {
 				continue // not matched afterward
 			}
 
-			l.Hex = text.MarkMatch(l.Hex, cli.Filter)
+			l.Hex = text.MarkMatch(l.Hex, cli.Regexp)
 
 			// cut similar lines for better readability
 			if l.Hex == lastHex && cmd.Mode != types.Raw {

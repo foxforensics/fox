@@ -67,7 +67,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 			continue
 		}
 
-		for block := range slices.Chunk(h.MMap(), int(n)) {
+		for block := range slices.Chunk(h.Bytes(), int(n)) {
 			l := bytes.Count(block, []byte{'\n'})
 			e := heap.Entropy(block)
 
