@@ -16,8 +16,8 @@ require (
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cespare/xxhash v1.1.0
 	github.com/corona10/goimagehash v1.1.0
-	github.com/cuhsat/go-lnk v0.0.0-20260117174812-be25bfcb58df
-	github.com/cuhsat/go-mmap v0.0.0-20260117175000-86f437cd2fe1
+	github.com/cuhsat/go-lnk v0.1.0
+	github.com/cuhsat/go-mmap v0.1.0
 	github.com/cuhsat/go-zip v0.5.3
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/fatih/color v1.18.0
