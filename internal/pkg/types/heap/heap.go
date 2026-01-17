@@ -8,7 +8,7 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/cuhsat/mmap-go"
+	"github.com/cuhsat/go-mmap"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"

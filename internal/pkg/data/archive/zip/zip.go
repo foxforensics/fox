@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/cuhsat/zip/pkg/zip"
+	"github.com/cuhsat/go-zip/pkg/zip"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )

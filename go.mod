@@ -1,6 +1,6 @@
 module github.com/cuhsat/fox/v4
 
-go 1.25.5
+go 1.25.6
 
 require (
 	github.com/0xrawsec/golang-evtx v1.2.9
@@ -16,9 +16,9 @@ require (
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cespare/xxhash v1.1.0
 	github.com/corona10/goimagehash v1.1.0
-	github.com/cuhsat/golnk v0.0.0-20260110131643-40d5a2a12f90
-	github.com/cuhsat/mmap-go v0.0.0-20260117033832-67e1ac69655c
-	github.com/cuhsat/zip v0.5.2
+	github.com/cuhsat/go-lnk v0.0.0-20260117174812-be25bfcb58df
+	github.com/cuhsat/go-mmap v0.0.0-20260117175000-86f437cd2fe1
+	github.com/cuhsat/go-zip v0.5.3
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/fatih/color v1.18.0
 	github.com/flanglet/kanzi-go/v2 v2.4.0
