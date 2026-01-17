@@ -45,7 +45,7 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 		lastHex, wasCut := "", false
 
 		for l := range buffer.Hex(h, cli, cmd.Mode).Lines {
-			if cli.Filter != nil && !cli.Regexp.MatchString(l.Hex) {
+			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Hex) {
 				continue // not matched afterward
 			}
 

@@ -13,11 +13,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
-type Context struct {
-	Name  string
-	Limit *types.Limits
-}
-
 type Heap struct {
 	sync.RWMutex
 	Name string    // heap name
@@ -25,11 +20,11 @@ type Heap struct {
 	mmap mmap.MMap // memory map
 }
 
-func New(ctx *Context, m mmap.MMap) *Heap {
+func New(s string, m mmap.MMap, l *types.Limits) *Heap {
 	return &Heap{
-		Name: ctx.Name,
+		Name: s,
 		Size: int64(len(m)),
-		mmap: ctx.Limit.ReduceMMap(m),
+		mmap: l.ReduceMMap(m),
 	}
 }
 

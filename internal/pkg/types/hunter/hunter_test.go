@@ -48,15 +48,8 @@ func newOpts() *Options {
 	}
 }
 
-func newCtx() *heap.Context {
-	return &heap.Context{
-		Name:  "test",
-		Limit: &types.Limits{},
-	}
-}
-
 func consume(htr *Hunter, b []byte) (out []*event.Event) {
-	h := heap.New(newCtx(), b)
+	h := heap.New("test", b, new(types.Limits))
 
 	ch := make(chan *heap.Heap, 1)
 	ch <- h

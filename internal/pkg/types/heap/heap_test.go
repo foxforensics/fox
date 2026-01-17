@@ -18,7 +18,7 @@ const (
 )
 
 func TestNew(t *testing.T) {
-	h := New(newCtx(), fixture(file))
+	h := New(name, fixture(file), new(types.Limits))
 
 	if h.Name != name {
 		t.Fatal("invalid name")
@@ -34,11 +34,10 @@ func TestNew(t *testing.T) {
 }
 
 func TestNewLimitHeadBytes(t *testing.T) {
-	ctx := newCtx()
-	ctx.Limit.IsHead = true
-	ctx.Limit.Bytes = bytes
-
-	h := New(ctx, fixture(file))
+	h := New(name, fixture(file), &types.Limits{
+		IsHead: true,
+		Bytes:  bytes,
+	})
 
 	if len(h.Bytes()) != bytes {
 		t.Fatal("invalid bytes len")
@@ -46,11 +45,10 @@ func TestNewLimitHeadBytes(t *testing.T) {
 }
 
 func TestNewLimitTailBytes(t *testing.T) {
-	ctx := newCtx()
-	ctx.Limit.IsTail = true
-	ctx.Limit.Bytes = bytes
-
-	h := New(ctx, fixture(file))
+	h := New(name, fixture(file), &types.Limits{
+		IsTail: true,
+		Bytes:  bytes,
+	})
 
 	if len(h.Bytes()) != bytes {
 		t.Fatal("invalid bytes len")
@@ -58,7 +56,7 @@ func TestNewLimitTailBytes(t *testing.T) {
 }
 
 func TestBytes(t *testing.T) {
-	h := New(newCtx(), fixture(file))
+	h := New(name, fixture(file), new(types.Limits))
 
 	if h.Bytes() == nil {
 		t.Fatal("bytes nil")
@@ -66,7 +64,7 @@ func TestBytes(t *testing.T) {
 }
 
 func TestString(t *testing.T) {
-	h := New(newCtx(), fixture(file))
+	h := New(name, fixture(file), new(types.Limits))
 
 	if h.String() != name {
 		t.Fatal("string invalid")
@@ -74,7 +72,7 @@ func TestString(t *testing.T) {
 }
 
 func TestDiscard(t *testing.T) {
-	h := New(newCtx(), fixture(file))
+	h := New(name, fixture(file), new(types.Limits))
 	h.Discard()
 
 	if h.Size > 0 {
@@ -85,13 +83,6 @@ func TestDiscard(t *testing.T) {
 
 	if m != nil {
 		t.Fatal("bytes not nil")
-	}
-}
-
-func newCtx() *Context {
-	return &Context{
-		name,
-		&types.Limits{},
 	}
 }
 
