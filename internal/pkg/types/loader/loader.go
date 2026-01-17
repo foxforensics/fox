@@ -12,7 +12,7 @@ import (
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
-	"github.com/edsrzf/mmap-go"
+	"github.com/cuhsat/mmap-go"
 	"github.com/sourcegraph/conc"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
@@ -196,13 +196,15 @@ func (ldr *Loader) loadFile(path, part string) {
 		return
 	}
 
-	// TODO: Lock small files?
-
 	b, err := mmap.Map(f, mmap.RDONLY, 0)
 
 	if err != nil {
 		log.Println(err)
 		return
+	}
+
+	if ldr.opts.Verbose > 2 {
+		log.Printf("mapped file %s\n", path)
 	}
 
 	ldr.processData(path, part, b)
