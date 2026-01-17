@@ -21,22 +21,24 @@ type TextBuffer struct {
 }
 
 func Text(h *heap.Heap, p int) *TextBuffer {
-	var buf = &TextBuffer{
+	s := h.SMap()
+
+	tb := &TextBuffer{
 		make(chan *TextLine, p*1024),
-		uint(math.Log10(float64(len(h.SMap())))) + 1,
+		uint(math.Log10(float64(len(s)))) + 1,
 	}
 
-	go textStream(buf, h.SMap().Render())
+	go textStream(tb, s.Render())
 
-	return buf
+	return tb
 }
 
 func textLine(nr, str string, grp uint) *TextLine {
 	return &TextLine{nr, grp, str}
 }
 
-func textStream(buf *TextBuffer, s smap.SMap) {
-	defer close(buf.Lines)
+func textStream(tb *TextBuffer, s smap.SMap) {
+	defer close(tb.Lines)
 
 	var numSep uint = 0
 	var numGrp uint = 1
@@ -46,14 +48,14 @@ func textStream(buf *TextBuffer, s smap.SMap) {
 
 		// insert context separator
 		if tmpGrp != str.Grp && numGrp > 1 {
-			buf.Lines <- textLine(Sep, "", str.Grp)
+			tb.Lines <- textLine(Sep, "", str.Grp)
 			numGrp = 1
 			numSep++
 		}
 
 		// build line
-		buf.Lines <- textLine(
-			fmt.Sprintf("%0*d ", buf.Pad, str.Nr),
+		tb.Lines <- textLine(
+			fmt.Sprintf("%0*d ", tb.Pad, str.Nr),
 			text.Sanitize(str.Str),
 			str.Grp,
 		)
