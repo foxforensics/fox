@@ -17,9 +17,9 @@ require (
 	github.com/cespare/xxhash v1.1.0
 	github.com/corona10/goimagehash v1.1.0
 	github.com/cuhsat/golnk v0.0.0-20260110131643-40d5a2a12f90
+	github.com/cuhsat/mmap-go v0.0.0-20260117033832-67e1ac69655c
 	github.com/cuhsat/zip v0.5.2
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
-	github.com/edsrzf/mmap-go v1.2.0
 	github.com/fatih/color v1.18.0
 	github.com/flanglet/kanzi-go/v2 v2.4.0
 	github.com/glaslos/ssdeep v0.4.0
@@ -42,6 +42,7 @@ require (
 	github.com/ulikunitz/xz v0.5.15
 	github.com/zeebo/blake3 v0.2.4
 	github.com/zeebo/xxh3 v1.0.2
+	go.solidsystem.no/fletcher4 v0.2.0
 	golang.org/x/term v0.39.0
 	modernc.org/sqlite v1.44.1
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
@@ -69,6 +70,7 @@ require (
 	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
+	github.com/edsrzf/mmap-go v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
@@ -84,7 +86,6 @@ require (
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2 // indirect
-	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/exp v0.0.0-20260112195511-716be5621a96 // indirect
