@@ -27,22 +27,22 @@ func Text(h *heap.Heap, cli *cli.Globals) *TextBuffer {
 	s = cli.Limit.ReduceSMap(s)
 	s = cli.Filter.FilterSMap(s)
 
-	tb := &TextBuffer{
+	buf := &TextBuffer{
 		make(chan *TextLine, cli.Profile*1024),
 		uint(math.Log10(float64(len(s)))) + 1,
 	}
 
-	go textStream(tb, s.Render())
+	go textStream(buf, s.Render())
 
-	return tb
+	return buf
 }
 
 func textLine(nr, str string, grp uint) *TextLine {
 	return &TextLine{nr, grp, str}
 }
 
-func textStream(tb *TextBuffer, s smap.SMap) {
-	defer close(tb.Lines)
+func textStream(buf *TextBuffer, s smap.SMap) {
+	defer close(buf.Lines)
 
 	var numSep uint = 0
 	var numGrp uint = 1
@@ -52,14 +52,14 @@ func textStream(tb *TextBuffer, s smap.SMap) {
 
 		// insert context separator
 		if tmpGrp != str.Grp && numGrp > 1 {
-			tb.Lines <- textLine(Sep, "", str.Grp)
+			buf.Lines <- textLine(Sep, "", str.Grp)
 			numGrp = 1
 			numSep++
 		}
 
 		// build line
-		tb.Lines <- textLine(
-			fmt.Sprintf("%0*d ", tb.Pad, str.Nr),
+		buf.Lines <- textLine(
+			fmt.Sprintf("%0*d ", buf.Pad, str.Nr),
 			text.Sanitize(str.Str),
 			str.Grp,
 		)

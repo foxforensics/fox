@@ -22,31 +22,31 @@ type HexBuffer struct {
 }
 
 func Hex(h *heap.Heap, cli *cli.Globals, mode string) *HexBuffer {
-	var hb = &HexBuffer{make(chan HexLine, cli.Profile*1024)}
+	var buf = &HexBuffer{make(chan HexLine, cli.Profile*1024)}
 	var off uint
 
-	if cli.Bytes > 0 {
+	if cli.Tail {
 		off = max(uint(h.Size)-cli.Bytes, 0)
 	}
 
-	go hexStream(hb, mode, h.Bytes(), off)
+	go hexStream(buf, mode, h.Bytes(), off)
 
-	return hb
+	return buf
 }
 
-func hexStream(hb *HexBuffer, mode string, b []byte, off uint) {
-	defer close(hb.Lines)
+func hexStream(buf *HexBuffer, mode string, b []byte, off uint) {
+	defer close(buf.Lines)
 
 	for i := 0; i < len(b); i += 16 {
 		switch mode {
 		case types.Canonical:
-			hb.Lines <- fmtCanonical(b, i, off)
+			buf.Lines <- fmtCanonical(b, i, off)
 		case types.Hexdump:
-			hb.Lines <- fmtHexdump(b, i, off)
+			buf.Lines <- fmtHexdump(b, i, off)
 		case types.Xxd:
-			hb.Lines <- fmtXxd(b, i, off)
+			buf.Lines <- fmtXxd(b, i, off)
 		case types.Raw:
-			hb.Lines <- fmtRaw(b, i, off)
+			buf.Lines <- fmtRaw(b, i, off)
 		}
 	}
 }
