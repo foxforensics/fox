@@ -35,19 +35,19 @@ go install github.com/cuhsat/fox/v4@latest
   * Save as `JSON`, `JSON Lines` or `SQLite3`
 
 ---
-### NAME
+NAME
 ```
 fox - The Forensic Examiners Swiss Army Knife
 ```
-### SYNOPSIS
+SYNOPSIS
 ```
 fox [mode] [flags...] <paths...>
 ```
-### DESCRIPTION
+DESCRIPTION
 ```
 Provides many useful features to leverage the forensic examination process.
 ```
-### MODES
+MODES
 ```
 cat    prints file (default)
 
@@ -63,7 +63,7 @@ hash   prints file hashes and checksums
 
 hunt   hunt suspicious activities
 ```
-### FILE LIMITS
+FILE LIMITS
 ```
 -h, --head
        limit head of file by ...
@@ -77,7 +77,7 @@ hunt   hunt suspicious activities
 -c, --bytes=NUMBER
        number of bytes
 ```
-### FILE LOADER
+FILE LOADER
 ```
 -p, --pass=PASSWORD
        password for decryption (7Z, RAR, ZIP)
@@ -88,12 +88,12 @@ hunt   hunt suspicious activities
 -i, --input=TEXT
        read input instead of file
 ```
-### LINE OUTPUT
+LINE OUTPUT
 ```
 -o, --output=FILE
        write all output to receipted file
 ```
-### LINE FILTER
+LINE FILTER
 ```
 -e, --regexp=PATTERN
        filter for lines that match pattern
@@ -107,12 +107,12 @@ hunt   hunt suspicious activities
 -A, --after=NUMBER
        number of lines trailing context after match
 ```
-### PROFILE
+PROFILE
 ```
 -P, --profile=CORES
        parallel profile to use overall
 ```
-### DISABLE
+DISABLE
 ```
 -r, --raw
        don't process files at all
@@ -147,7 +147,7 @@ hunt   hunt suspicious activities
     --no-warnings
        don't show any warnings
 ```
-### STANDARD
+STANDARD
 ```
 -d, --dry-run
        prints only the found filenames
@@ -161,51 +161,51 @@ hunt   hunt suspicious activities
     --help
        prints this help message
 ```
-### POSITIONAL ARGUMENTS
+POSITIONAL ARGUMENTS
 ```
 Globbing paths to open or '-' to also read from STDIN.
 ```
-### FILE FORMATS
+FILE FORMATS
 ```
 evtx, journal, json, jsonl, lnk, pf, ELF, PE/COFF
 ```
-### IMAGE FORMATS
+IMAGE FORMATS
 ```
 EWF-E01, EWF-S01, raw
 ```
-### ARCHIVE FORMATS
+ARCHIVE FORMATS
 ```
 7zip, ar, CAB, cpio, RAR, RPM, tar, xar, ZIP
 ```
-### COMPRESSION FORMATS
+COMPRESSION FORMATS
 ```
 Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
 ```
-### CRYPTOGRAPHIC HASHES
+CRYPTOGRAPHIC HASHES
 ```
 BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, MD2, MD4, MD5, MD6, RIPEMD-160, SHAKE128, SHAKE256, SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
 ```
-### PERFORMANCE HASHES
+PERFORMANCE HASHES
 ```
 FNV-1, FNV-1a, Murmur3, XXH32, XXH64, XXH3
 ```
-### SIMILARITY HASHES
+SIMILARITY HASHES
 ```
 SSDeep, TLSH
 ```
-### WINDOWS SPECIFIC
+WINDOWS SPECIFIC
 ```
 LM, NT, PE Checksum
 ```
-### IMAGE SPECIFIC
+IMAGE SPECIFIC
 ```
 aHash, dHash, pHash
 ```
-### CHECKSUMS
+CHECKSUMS
 ```
 Adler32, Fletcher-4, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 ```
-### EXAMPLES
+EXAMPLES
 ```
 $ fox -eWinlogon ./**/*.evtx
        Find occurrences in event logs
@@ -228,16 +228,16 @@ $ fox hash -uTLSH files.7z
 $ fox hunt -sv ./**/*.E01
        Hunt down suspicious events
 ```
-### BUGS
+BUGS
 ```
 Please submit any issues with fox to the project's bug tracker:
 https://github.com/cuhsat/fox/issues
 ```
-### WWW
+WWW
 ```
 https://foxhunt.wtf
 ```
-### SEE ALSO
+SEE ALSO
 ```
 cat(1), grep(1), head(1), tail(1), hexdump(1), strings(1), wc(1)
 ```
