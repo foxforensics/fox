@@ -25,16 +25,16 @@ go install github.com/cuhsat/fox/v4@latest
 * Many popular archive and compression formats
 * Many popular cryptographic, fuzzy, image and fast hashes
 * Special Hunt mode
-  * Built-in support for [EnCase EWF](https://www.loc.gov/preservation/digital/formats/fdd/fdd000408.shtml) and raw images
-  * Built-in file carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
-  * Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
+  * Built-in support for [EnCase EWF](https://www.loc.gov/preservation/digital/formats/fdd/fdd000408.shtml) and raw `dd` images
+  * Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
+  * Built-in Super Timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * Built-in translation of over 51600 Event IDs
   * Built-in warning of critical system events
   * Filter events with [Sigma Rules](https://sigmahq.io/) syntax
   * Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) and [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
   * Save as `JSON`, `JSON Lines` or `SQLite3`
 
----
+## Manual
 NAME
 ```
 fox - The Forensic Examiners Swiss Army Knife
@@ -243,7 +243,7 @@ cat(1), grep(1), head(1), tail(1), hexdump(1), strings(1), wc(1)
 ```
 ---
 
-*Disclaimer: This code was developed without the use of AI tooling and therefor does not contain any AI generated code or documentation. Furthermore, this code does not contain, employ or utilize AI tools in any other form. All data processed will not be shared with third parties under any circumstances.*
+*Disclaimer: This code was developed without the use of AI tooling and therefor does not contain any AI generated code, test or documentation. Furthermore, this code does not contain, employ or utilize AI tools in any other form. All data processed will not be shared with third parties except otherwise explicitly stated and user permitted.*
 
 ---
 🦊 is released under the [GPL-3.0](LICENSE.md)
