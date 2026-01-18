@@ -5,13 +5,15 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/pbnjay/memory"
+
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
 )
 
-const memLimit = 1024 * 1024 * 1024 * 4 // 4gb
+const limit = 0.95
 
 type Cat struct {
 	Paths []string `arg:"" type:"path" optional:""`
@@ -25,11 +27,11 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
-	for h := range ch {
-		if !cli.NoWarnings && h.Size > memLimit {
-			log.Println("warning: file size may cause swapping!")
-		}
+	if !cli.NoWarnings && float32(memory.FreeMemory()/memory.TotalMemory()) > limit {
+		log.Println("warning: low memory may cause swapping!")
+	}
 
+	for h := range ch {
 		if !cli.NoFile {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
