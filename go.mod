@@ -44,7 +44,7 @@ require (
 	github.com/zeebo/xxh3 v1.0.2
 	go.solidsystem.no/fletcher4 v0.2.0
 	golang.org/x/term v0.39.0
-	modernc.org/sqlite v1.44.1
+	modernc.org/sqlite v1.44.2
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
@@ -77,7 +77,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
-	github.com/pierrec/lz4/v4 v4.1.24 // indirect
+	github.com/pierrec/lz4/v4 v4.1.25 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
