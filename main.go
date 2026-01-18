@@ -77,8 +77,8 @@ Line filter:
   -B, --before=NUMBER      number of lines leading context before match
   -A, --after=NUMBER       number of lines trailing context after match
 
-Profile:
-  -P, --profile=CORES      parallel profile to use overall
+Parallel:
+  -P, --parallel=CORES     parallel processing profile
 
 Disable:
   -r, --raw                don't process files at all
