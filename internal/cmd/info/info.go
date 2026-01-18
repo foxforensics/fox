@@ -28,7 +28,7 @@ Example:
 `)
 
 type Info struct {
-	Block int64    `short:"b"`
+	Block uint64   `short:"b"`
 	Min   float64  `short:"m" default:"0.0"`
 	Max   float64  `short:"x" default:"1.0"`
 	Paths []string `arg:"" name:"path" type:"path" optional:""`
