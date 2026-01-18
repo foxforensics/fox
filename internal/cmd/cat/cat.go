@@ -11,7 +11,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
 )
 
-const warn = 1024 * 1024 * 1024 * 4 // 4gb
+const memLimit = 1024 * 1024 * 1024 * 4 // 4gb
 
 type Cat struct {
 	Paths []string `arg:"" type:"path" optional:""`
@@ -26,8 +26,8 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	for h := range ch {
-		if !cli.NoWarnings && h.Size > warn {
-			log.Println("warning: deflated size may cause swapping!")
+		if !cli.NoWarnings && h.Size > memLimit {
+			log.Println("warning: file size may cause swapping!")
 		}
 
 		if !cli.NoFile {
