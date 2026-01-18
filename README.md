@@ -76,7 +76,7 @@ fox [mode] [flags...] <paths...>
 ```
 DESCRIPTION
 ```
-Provides many useful features to leverage the forensic examination process.
+Fox provides many useful features to leverage your forensic examination process.
 ```
 MODES
 ```
@@ -138,10 +138,10 @@ LINE FILTER
 -A, --after=NUMBER
        number of lines trailing context after match
 ```
-PROFILE
+PARALLEL
 ```
--P, --profile=CORES
-       parallel profile to use overall
+-P, --parallel=CORES
+       parallel processing profile
 ```
 DISABLE
 ```
