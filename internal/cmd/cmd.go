@@ -45,6 +45,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
 
 type Globals struct {
@@ -232,6 +233,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.Loader.Exit()
 		os.Exit(0)
 	}
+
+	smap.Chunks = cli.Profile
 
 	return cli.Loader.Load(args)
 }

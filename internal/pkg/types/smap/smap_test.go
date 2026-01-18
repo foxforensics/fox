@@ -120,7 +120,7 @@ func TestRender(t *testing.T) {
 
 func TestGrep(t *testing.T) {
 	f, m, err := fixture("text/bible.txt")
-	v := "Authorized King James Version\n"
+	v := "Authorized King James Version"
 
 	if err != nil {
 		t.Fatal(err)
@@ -137,7 +137,7 @@ func TestGrep(t *testing.T) {
 		t.Fatal("wrong length")
 	}
 
-	if s.String() != v {
+	if string(s[0].Bytes) != v {
 		t.Fatal("wrong string")
 	}
 }

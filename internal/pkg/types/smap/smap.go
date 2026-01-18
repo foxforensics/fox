@@ -4,25 +4,21 @@ import (
 	"bufio"
 	"bytes"
 	"regexp"
-	"runtime"
 	"slices"
 
-	"github.com/cuhsat/go-mmap"
 	"github.com/sourcegraph/conc"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
 
-const size = 1024 * 1024 * 4 // 4mb
+var Chunks = 2 // default
 
-var (
-	sep = []byte("\n")
-	tab = []byte{'\t'}
-	exp = []byte("  ")
-)
+var sep = []byte("\n")
+var tab = []byte{'\t'}
+var exp = []byte("  ")
 
-type action func(ch chan<- String, c *chunk)
+type action func(chan<- String, []String)
 
 type SMap []String
 
@@ -32,18 +28,11 @@ type String struct {
 	Bytes []byte // string data
 }
 
-type chunk struct {
-	min uint // chunk start
-	max uint // chunk end
-}
-
-func Map(m mmap.MMap) SMap {
-	s := make(SMap, 0)
-
-	r := bufio.NewReaderSize(bytes.NewReader(m), size)
+func Map(m []byte) (s SMap) {
+	r := bufio.NewReader(bytes.NewReader(m))
 
 	for {
-		b, _, err := r.ReadLine()
+		b, err := r.ReadBytes('\n')
 
 		if err != nil {
 			break
@@ -51,11 +40,11 @@ func Map(m mmap.MMap) SMap {
 
 		s = append(s, String{
 			Line:  uint(len(s)) + 1,
-			Bytes: bytes.Clone(b),
+			Bytes: b,
 		})
 	}
 
-	return s
+	return
 }
 
 func (s SMap) Format() data.Format {
@@ -75,53 +64,38 @@ func (s SMap) Format() data.Format {
 func (s SMap) Render() SMap {
 	fn := s.Format() // check only first line
 
-	return apply(func(ch chan<- String, c *chunk) {
-		for _, s := range s[c.min:c.max] {
+	return s.do(func(ch chan<- String, chk []String) {
+		for _, str := range chk {
 			if fn == nil {
-				ch <- String{s.Line, s.Group, bytes.ReplaceAll(s.Bytes, tab, exp)}
+				ch <- String{str.Line, str.Group, bytes.ReplaceAll(str.Bytes, tab, exp)}
 				continue
 			}
 
-			for b := range bytes.SplitSeq(fn(s.Bytes), sep) {
-				ch <- String{s.Line, s.Group, b}
+			for b := range bytes.SplitSeq(fn(str.Bytes), sep) {
+				ch <- String{str.Line, str.Group, b}
 			}
 		}
-	}, len(s))
+	})
 }
 
 func (s SMap) Grep(re *regexp.Regexp) SMap {
-	return apply(func(ch chan<- String, c *chunk) {
-		for _, str := range s[c.min:c.max] {
+	return s.do(func(ch chan<- String, chk []String) {
+		for _, str := range chk {
 			if re.Match(str.Bytes) {
 				ch <- str
 			}
 		}
-	}, len(s))
+	})
 }
 
-func chunks(n int) (c []*chunk) {
-	m := min(runtime.NumCPU(), n)
-
-	for i := range m {
-		c = append(c, &chunk{
-			min: uint(i * n / m),
-			max: uint(((i + 1) * n) / m),
-		})
-	}
-
-	return
-}
-
-func apply(fn action, n int) SMap {
-	ch := make(chan String, n)
+func (s SMap) do(fn action) SMap {
+	ch := make(chan String, len(s))
 
 	go func() {
 		var wg conc.WaitGroup
 
-		for _, c := range chunks(n) {
-			wg.Go(func() {
-				fn(ch, c)
-			})
+		for chk := range slices.Chunk(s, Chunks) {
+			wg.Go(func() { fn(ch, chk) })
 		}
 
 		wg.Wait()
@@ -133,7 +107,7 @@ func apply(fn action, n int) SMap {
 }
 
 func sort(ch <-chan String) SMap {
-	s := make(SMap, 0)
+	s := make(SMap, 0, len(ch))
 
 	for str := range ch {
 		s = append(s, str)
