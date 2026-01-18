@@ -6,7 +6,6 @@ import (
 	"regexp"
 	"runtime"
 	"slices"
-	"strings"
 
 	"github.com/cuhsat/go-mmap"
 	"github.com/sourcegraph/conc"
@@ -59,17 +58,6 @@ func Map(m mmap.MMap) SMap {
 	return s
 }
 
-func (s SMap) String() string {
-	var sb strings.Builder
-
-	for _, str := range s {
-		sb.Write(str.Bytes)
-		sb.WriteRune('\n')
-	}
-
-	return sb.String()
-}
-
 func (s SMap) Format() data.Format {
 	if len(s) > 0 && len(register.Formats) > 0 {
 		b := s[0].Bytes
@@ -103,9 +91,9 @@ func (s SMap) Render() SMap {
 
 func (s SMap) Grep(re *regexp.Regexp) SMap {
 	return apply(func(ch chan<- String, c *chunk) {
-		for _, s := range s[c.min:c.max] {
-			if re.Match(s.Bytes) {
-				ch <- s
+		for _, str := range s[c.min:c.max] {
+			if re.Match(str.Bytes) {
+				ch <- str
 			}
 		}
 	}, len(s))
