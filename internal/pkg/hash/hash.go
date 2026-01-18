@@ -33,6 +33,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/blake3"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/shake"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/xxh"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/imphash"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/image"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/lm"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/nt"
@@ -57,6 +58,7 @@ var Algorithms = []string{
 	types.FLETCHER4,
 	types.FNV1,
 	types.FNV1A,
+	types.IMPHASH,
 	types.LM,
 	types.MD2,
 	types.MD4,
@@ -153,6 +155,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = fnv.New128()
 	case types.FNV1A:
 		imp = fnv.New128a()
+	case types.IMPHASH:
+		imp = imphash.New()
 	case types.LM:
 		imp = lm.New()
 	case types.MD2:

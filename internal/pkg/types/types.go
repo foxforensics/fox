@@ -17,6 +17,7 @@ const (
 	FLETCHER4  = "fletcher-4"
 	FNV1       = "fnv-1"
 	FNV1A      = "fnv-1a"
+	IMPHASH    = "imphash"
 	LM         = "lm"
 	MD2        = "md2"
 	MD4        = "md4"

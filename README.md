@@ -11,7 +11,7 @@ The Forensic Examiners Swiss Army Knife. Providing many useful features to lever
 go install github.com/cuhsat/fox/v4@latest
 ```
 
-## Key Features
+## Features
 * Restricted Read-only access
 * [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
@@ -191,7 +191,7 @@ FNV-1, FNV-1a, Murmur3, XXH32, XXH64, XXH3
 ```
 SIMILARITY HASHES
 ```
-SSDeep, TLSH
+ImpHash, SSDeep, TLSH
 ```
 WINDOWS SPECIFIC
 ```
@@ -243,7 +243,7 @@ cat(1), grep(1), head(1), tail(1), hexdump(1), strings(1), wc(1)
 ```
 ---
 
-*Disclaimer: This code was developed without the use of AI tooling and therefor does not contain any AI generated code, test or documentation. Furthermore, this code does not contain, employ or utilize AI tools in any other form. All data processed will not be shared with third parties except otherwise explicitly stated and user permitted.*
+*Disclaimer: This code was developed without the use of AI tooling and therefor does not contain any AI generated code, test or documentation. Furthermore, this code does not contain, employ or utilize AI tools in any other form. All data processed will not be shared with third parties except otherwise explicitly stated and permitted by the user.*
 
 ---
 🦊 is released under the [GPL-3.0](LICENSE.md)
