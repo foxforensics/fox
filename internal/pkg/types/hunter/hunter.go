@@ -1,12 +1,9 @@
 package hunter
 
 import (
-	"bufio"
 	"bytes"
-	"io"
 	"log"
 	"maps"
-	"regexp"
 	"slices"
 
 	"github.com/sourcegraph/conc"
@@ -107,46 +104,47 @@ func (htr *Hunter) carve(h *heap.Heap) {
 }
 
 func (htr *Hunter) carveEvtx(h *heap.Heap) {
-	r1 := bytes.NewReader(h.Bytes())
-	r2 := bytes.NewReader(h.Bytes())
+	r := bytes.NewReader(h.Bytes())
 
-	for off := range htr.findOffset(r1, evtx.Regex) {
-		for evt := range evtx.Carve(r2, off, cap(htr.events)) {
+	for off := range htr.findOffset(h.Bytes(), evtx.Chunk) {
+		for evt := range evtx.Carve(r, off, cap(htr.events)) {
 			htr.events <- evt
 		}
 	}
 }
 
 func (htr *Hunter) carveJournal(h *heap.Heap) {
-	r := bytes.NewReader(h.Bytes())
-
-	for off := range htr.findOffset(r, journal.Regex) {
+	for off := range htr.findOffset(h.Bytes(), journal.Magic) {
 		for evt := range journal.Carve(h.Bytes(), off, cap(htr.events)) {
 			htr.events <- evt
 		}
 	}
 }
 
-func (htr *Hunter) findOffset(rs io.ReadSeeker, re *regexp.Regexp) <-chan int64 {
-	out := make(chan int64, 64*htr.opts.Profile)
+func (htr *Hunter) findOffset(b, p []byte) <-chan int {
+	out := make(chan int, 64*htr.opts.Profile)
 
-	go func(r *bufio.Reader) {
-		var lst, off int64
+	go func() {
+		var off, idx int
 
-		for loc := re.FindReaderIndex(r); loc != nil; loc = re.FindReaderIndex(r) {
-			cur, _ := rs.Seek(0, io.SeekCurrent)
-			off = lst + int64(loc[0])
-			lst = cur - int64(r.Buffered())
+		for {
+			idx = bytes.Index(b[off:], p)
 
-			out <- off
+			if idx == -1 {
+				break
+			}
+
+			out <- off + idx
 
 			if htr.opts.Verbose > 2 {
-				log.Printf("hunt: parsing offset 0x%08x\n", off)
+				log.Printf("hunt: parsing offset 0x%08x\n", off+idx)
 			}
+
+			off += idx + len(p)
 		}
 
 		close(out)
-	}(bufio.NewReader(rs))
+	}()
 
 	return out
 }

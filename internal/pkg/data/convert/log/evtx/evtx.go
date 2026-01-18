@@ -6,24 +6,19 @@ import (
 	"io"
 	"log"
 	"maps"
-	"regexp"
 	"slices"
 	"strconv"
 	"time"
 
 	"github.com/0xrawsec/golang-evtx/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
-const (
-	Magic = evtx.EvtxMagic
-	Chunk = evtx.ChunkMagic
-)
-
-var Regex = regexp.MustCompile(Chunk)
+var Magic = []byte(evtx.EvtxMagic)
+var Chunk = []byte(evtx.ChunkMagic)
 
 var system = evtx.Path("/Event/System")
 
@@ -35,7 +30,7 @@ var children = []string{
 }
 
 func Detect(b []byte) bool {
-	return data.HasMagic(b, 0, []byte(Magic))
+	return data.HasMagic(b, 0, Magic)
 }
 
 func Convert(b []byte) ([]byte, error) {
@@ -57,10 +52,10 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func Carve(rs io.ReadSeeker, off int64, cap int) <-chan *event.Event {
+func Carve(rs io.ReadSeeker, off int, cap int) <-chan *event.Event {
 	ch := make(chan *event.Event, cap)
 
-	chk, err := newChunk(rs, off)
+	chk, err := newChunk(rs, int64(off))
 
 	if err != nil {
 		defer close(ch)

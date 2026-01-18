@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"regexp"
 	"strings"
 	"time"
 
@@ -18,9 +17,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
-const Magic = "LPKSHHRH"
-
-var Regex = regexp.MustCompile(Magic)
+var Magic = []byte("LPKSHHRH")
 
 var (
 	ErrNoSystem    = errors.New("journal has no System section")
@@ -28,7 +25,7 @@ var (
 )
 
 func Detect(b []byte) bool {
-	return data.HasMagic(b, 0, []byte(Magic))
+	return data.HasMagic(b, 0, Magic)
 }
 
 func Convert(b []byte) ([]byte, error) {
@@ -48,7 +45,7 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), err
 }
 
-func Carve(b []byte, off int64, cap int) <-chan *event.Event {
+func Carve(b []byte, off int, cap int) <-chan *event.Event {
 	ch := make(chan *event.Event, cap)
 
 	f, err := parser.OpenFile(bytes.NewReader(b[off:]))
