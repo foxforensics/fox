@@ -69,8 +69,8 @@ type Globals struct {
 	Before  uint   `short:"B"`
 	After   uint   `short:"A"`
 
-	// profile
-	Profile int `short:"P" default:"${cores}"`
+	// parallel
+	Parallel int `short:"P" default:"${cores}"`
 
 	// disable
 	Raw        bool `short:"r"`
@@ -157,8 +157,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.NoWarnings = true
 	}
 
-	if cli.Profile <= 0 {
-		cli.Profile = 1 // must be at least one
+	if cli.Parallel <= 0 {
+		cli.Parallel = 1 // must be at least one
 	}
 
 	if cli.NoColor {
@@ -220,7 +220,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		File:     cli.File,
 		Input:    cli.Input,
 		Password: cli.Pass,
-		Profile:  cli.Profile,
+		Parallel: cli.Parallel,
 		Verbose:  cli.Verbose,
 	})
 
@@ -234,7 +234,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		os.Exit(0)
 	}
 
-	smap.Chunks = cli.Profile
+	smap.Chunks = cli.Parallel
 
 	return cli.Loader.Load(args)
 }
