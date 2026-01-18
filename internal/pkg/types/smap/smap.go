@@ -32,7 +32,7 @@ func Map(m []byte) (s SMap) {
 	r := bufio.NewReader(bytes.NewReader(m))
 
 	for {
-		b, err := r.ReadBytes('\n')
+		b, _, err := r.ReadLine()
 
 		if err != nil {
 			break
@@ -40,7 +40,7 @@ func Map(m []byte) (s SMap) {
 
 		s = append(s, String{
 			Line:  uint(len(s)) + 1,
-			Bytes: b,
+			Bytes: bytes.Clone(b),
 		})
 	}
 
