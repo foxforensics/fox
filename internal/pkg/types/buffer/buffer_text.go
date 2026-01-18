@@ -28,7 +28,7 @@ func Text(h *heap.Heap, cli *cli.Globals) *TextBuffer {
 	s = cli.Filter.FilterSMap(s)
 
 	buf := &TextBuffer{
-		make(chan *TextLine, cli.Profile*1024),
+		make(chan *TextLine, cli.Parallel*1024),
 		uint(math.Log10(float64(len(s)))) + 1,
 	}
 

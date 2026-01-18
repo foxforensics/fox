@@ -16,14 +16,14 @@ import (
 type Heap struct {
 	sync.RWMutex
 	Name string    // heap name
-	Size int64     // heap size
+	Size uint64    // heap size
 	mmap mmap.MMap // memory map
 }
 
 func New(s string, m mmap.MMap, l *types.Limits) *Heap {
 	return &Heap{
 		Name: s,
-		Size: int64(len(m)),
+		Size: uint64(len(m)),
 		mmap: l.ReduceMMap(m),
 	}
 }

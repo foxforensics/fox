@@ -24,9 +24,9 @@ var Local = []string{
 }
 
 type Options struct {
-	Sort    bool
-	Profile int
-	Verbose int
+	Sort     bool
+	Parallel int
+	Verbose  int
 }
 
 type Hunter struct {
@@ -39,13 +39,13 @@ func New(opts *Options) *Hunter {
 	return &Hunter{
 		opts:   opts,
 		cache:  make(map[uint64]*event.Event),
-		events: make(chan *event.Event, opts.Profile*1024),
+		events: make(chan *event.Event, opts.Parallel*1024),
 	}
 }
 
 func (htr *Hunter) Hunt(heaps <-chan *heap.Heap) <-chan *event.Event {
 	go func() {
-		p := pool.New().WithMaxGoroutines(htr.opts.Profile)
+		p := pool.New().WithMaxGoroutines(htr.opts.Parallel)
 
 		for h := range heaps {
 			p.Go(func() {
@@ -122,7 +122,7 @@ func (htr *Hunter) carveJournal(h *heap.Heap) {
 }
 
 func (htr *Hunter) findOffset(b, p []byte) <-chan int {
-	out := make(chan int, 64*htr.opts.Profile)
+	out := make(chan int, 64*htr.opts.Parallel)
 
 	go func() {
 		var off, idx int

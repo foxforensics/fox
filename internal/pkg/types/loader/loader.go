@@ -30,7 +30,7 @@ type Options struct {
 	File     string
 	Input    string
 	Password string
-	Profile  int
+	Parallel int
 	Verbose  int
 }
 
@@ -45,7 +45,7 @@ type Loader struct {
 func New(opts *Options) *Loader {
 	return &Loader{
 		opts:  opts,
-		heaps: make(chan *heap.Heap, opts.Profile),
+		heaps: make(chan *heap.Heap, opts.Parallel),
 	}
 }
 

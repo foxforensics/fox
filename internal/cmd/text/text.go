@@ -92,14 +92,14 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 		}
 
 		for l := range carver.New(&carver.Options{
-			Min:     cmd.Min,
-			Max:     cmd.Max,
-			Ascii:   cmd.Ascii,
-			Sort:    cmd.Sort,
-			Wtf:     cmd.Wtf,
-			Find:    cmd.Find,
-			First:   cmd.First,
-			Profile: cli.Profile,
+			Min:      cmd.Min,
+			Max:      cmd.Max,
+			Ascii:    cmd.Ascii,
+			Sort:     cmd.Sort,
+			Wtf:      cmd.Wtf,
+			Find:     cmd.Find,
+			First:    cmd.First,
+			Parallel: cli.Parallel,
 		}).Carve(h.Bytes()) {
 			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Str) {
 				continue // not matched afterward
