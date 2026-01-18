@@ -12,9 +12,9 @@ import (
 )
 
 type TextLine struct {
-	Nr  string
-	Grp uint
-	Str string
+	Line   string
+	Group  uint
+	String string
 }
 
 type TextBuffer struct {
@@ -32,16 +32,12 @@ func Text(h *heap.Heap, cli *cli.Globals) *TextBuffer {
 		uint(math.Log10(float64(len(s)))) + 1,
 	}
 
-	go textStream(buf, s.Render())
+	go streamText(buf, s.Render())
 
 	return buf
 }
 
-func textLine(nr, str string, grp uint) *TextLine {
-	return &TextLine{nr, grp, str}
-}
-
-func textStream(buf *TextBuffer, s smap.SMap) {
+func streamText(buf *TextBuffer, s smap.SMap) {
 	defer close(buf.Lines)
 
 	var numSep uint = 0
@@ -51,20 +47,20 @@ func textStream(buf *TextBuffer, s smap.SMap) {
 	for _, str := range s {
 
 		// insert context separator
-		if tmpGrp != str.Grp && numGrp > 1 {
-			buf.Lines <- textLine(Sep, "", str.Grp)
+		if tmpGrp != str.Group && numGrp > 1 {
+			buf.Lines <- &TextLine{Sep, str.Group, ""}
 			numGrp = 1
 			numSep++
 		}
 
 		// build line
-		buf.Lines <- textLine(
-			fmt.Sprintf("%0*d ", buf.Pad, str.Nr),
-			text.Sanitize(str.Str),
-			str.Grp,
-		)
+		buf.Lines <- &TextLine{
+			fmt.Sprintf("%0*d ", buf.Pad, str.Line),
+			str.Group,
+			text.Sanitize(string(str.Bytes)),
+		}
 
-		tmpGrp = str.Grp
+		tmpGrp = str.Group
 		numGrp++
 	}
 }

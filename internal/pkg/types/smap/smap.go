@@ -17,16 +17,20 @@ import (
 
 const size = 1024 * 1024 * 4 // 4mb
 
-var sep = []byte("\n")
+var (
+	sep = []byte("\n")
+	tab = []byte{'\t'}
+	exp = []byte("  ")
+)
 
 type action func(ch chan<- String, c *chunk)
 
 type SMap []String
 
 type String struct {
-	Nr  uint   // string nr
-	Grp uint   // string group
-	Str string // string data
+	Line  uint   // string line
+	Group uint   // string group
+	Bytes []byte // string data
 }
 
 type chunk struct {
@@ -47,8 +51,8 @@ func Map(m mmap.MMap) SMap {
 		}
 
 		s = append(s, String{
-			Nr:  uint(len(s)) + 1,
-			Str: string(b),
+			Line:  uint(len(s)) + 1,
+			Bytes: bytes.Clone(b),
 		})
 	}
 
@@ -59,7 +63,7 @@ func (s SMap) String() string {
 	var sb strings.Builder
 
 	for _, str := range s {
-		sb.WriteString(str.Str)
+		sb.Write(str.Bytes)
 		sb.WriteRune('\n')
 	}
 
@@ -68,7 +72,7 @@ func (s SMap) String() string {
 
 func (s SMap) Format() data.Format {
 	if len(s) > 0 && len(register.Formats) > 0 {
-		b := []byte(s[0].Str)
+		b := s[0].Bytes
 
 		for _, f := range register.Formats {
 			if f.Detect(b) {
@@ -86,12 +90,12 @@ func (s SMap) Render() SMap {
 	return apply(func(ch chan<- String, c *chunk) {
 		for _, s := range s[c.min:c.max] {
 			if fn == nil {
-				ch <- String{s.Nr, s.Grp, expand(s.Str, "  ")}
+				ch <- String{s.Line, s.Group, bytes.ReplaceAll(s.Bytes, tab, exp)}
 				continue
 			}
 
-			for b := range bytes.SplitSeq(fn([]byte(s.Str)), sep) {
-				ch <- String{s.Nr, s.Grp, string(b)}
+			for b := range bytes.SplitSeq(fn(s.Bytes), sep) {
+				ch <- String{s.Line, s.Group, b}
 			}
 		}
 	}, len(s))
@@ -100,7 +104,7 @@ func (s SMap) Render() SMap {
 func (s SMap) Grep(re *regexp.Regexp) SMap {
 	return apply(func(ch chan<- String, c *chunk) {
 		for _, s := range s[c.min:c.max] {
-			if re.MatchString(s.Str) {
+			if re.Match(s.Bytes) {
 				ch <- s
 			}
 		}
@@ -148,16 +152,12 @@ func sort(ch <-chan String) SMap {
 	}
 
 	slices.SortStableFunc(s, func(a, b String) int {
-		if a.Grp != b.Grp {
-			return int(a.Grp - b.Grp)
+		if a.Group != b.Group {
+			return int(a.Group - b.Group)
 		}
 
-		return int(a.Nr - b.Nr)
+		return int(a.Line - b.Line)
 	})
 
 	return s
-}
-
-func expand(s, t string) string {
-	return strings.ReplaceAll(s, "\t", t)
 }

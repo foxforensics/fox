@@ -45,14 +45,14 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 		lastHex, wasCut := "", false
 
 		for l := range buffer.Hex(h, cli, cmd.Mode).Lines {
-			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Hex) {
+			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Values) {
 				continue // not matched afterward
 			}
 
-			l.Hex = text.MarkMatch(l.Hex, cli.Regexp)
+			l.Values = text.MarkMatch(l.Values, cli.Regexp)
 
 			// cut similar lines for better readability
-			if l.Hex == lastHex && cmd.Mode != types.Raw {
+			if l.Values == lastHex && cmd.Mode != types.Raw {
 				if !wasCut {
 					wasCut = true
 					_, _ = fmt.Fprintln(cli.Stdout, text.Hide("*"))
@@ -62,16 +62,16 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 			switch cmd.Mode {
 			case types.Canonical:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s%s\n", text.Hide(l.Nr), l.Hex, text.Hide(l.Str))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s%s\n", text.Hide(l.Offset), l.Values, text.Hide(l.String))
 			case types.Hexdump:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Nr), l.Hex)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Offset), l.Values)
 			case types.Xxd:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %-16s\n", text.Hide(l.Nr), l.Hex, text.Hide(l.Str))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %-16s\n", text.Hide(l.Offset), l.Values, text.Hide(l.String))
 			case types.Raw:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", l.Hex)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", l.Values)
 			}
 
-			lastHex, wasCut = l.Hex, false
+			lastHex, wasCut = l.Values, false
 		}
 
 		h.Discard()

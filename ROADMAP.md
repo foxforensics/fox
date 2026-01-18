@@ -10,9 +10,7 @@
 * ~~Done~~
 
 ## 4. Optimizations
-* Optimize for files larger than memory
-  * Remove SMap 
-  * Hunt search optimize
+* ~~Done~~
 
 ## 5. Ideas
 * Add Fortigate Firewall log parser?

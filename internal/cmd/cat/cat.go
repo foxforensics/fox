@@ -28,18 +28,18 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 		}
 
 		for l := range buffer.Text(h, cli).Lines {
-			s := l.Str
+			s := l.String
 
-			if cli.Regexp != nil && l.Nr != buffer.Sep {
+			if cli.Regexp != nil && l.Line != buffer.Sep {
 				s = text.MarkMatch(s, cli.Regexp)
 			}
 
-			if !cli.NoLine && l.Nr == buffer.Sep {
+			if !cli.NoLine && l.Line == buffer.Sep {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Line()))
-			} else if l.Nr == buffer.Sep {
+			} else if l.Line == buffer.Sep {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide("--"))
 			} else if !cli.NoLine {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Nr), s)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Line), s)
 			} else {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", s)
 			}

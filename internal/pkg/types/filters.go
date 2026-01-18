@@ -26,16 +26,16 @@ func (f *Filters) FilterSMap(s smap.SMap) smap.SMap {
 	r := make(smap.SMap, 0, len(v))
 
 	for grp, str := range v {
-		for _, b := range (s)[max((str.Nr-1)-f.Before, 0) : str.Nr-1] {
-			b.Grp = uint(grp + 1)
+		for _, b := range (s)[max((str.Line-1)-f.Before, 0) : str.Line-1] {
+			b.Group = uint(grp + 1)
 			r = append(r, b)
 		}
 
-		str.Grp = uint(grp + 1)
+		str.Group = uint(grp + 1)
 		r = append(r, str)
 
-		for _, a := range (s)[str.Nr:min(str.Nr+f.After, uint(len(s)))] {
-			a.Grp = uint(grp + 1)
+		for _, a := range (s)[str.Line:min(str.Line+f.After, uint(len(s)))] {
+			a.Group = uint(grp + 1)
 			r = append(r, a)
 		}
 	}

@@ -12,9 +12,9 @@ import (
 )
 
 type HexLine struct {
-	Nr  string
-	Hex string
-	Str string
+	Offset string
+	Values string
+	String string
 }
 
 type HexBuffer struct {
@@ -29,12 +29,12 @@ func Hex(h *heap.Heap, cli *cli.Globals, mode string) *HexBuffer {
 		off = max(uint(h.Size)-cli.Bytes, 0)
 	}
 
-	go hexStream(buf, mode, h.Bytes(), off)
+	go streamHex(buf, mode, h.Bytes(), off)
 
 	return buf
 }
 
-func hexStream(buf *HexBuffer, mode string, b []byte, off uint) {
+func streamHex(buf *HexBuffer, mode string, b []byte, off uint) {
 	defer close(buf.Lines)
 
 	for i := 0; i < len(b); i += 16 {
