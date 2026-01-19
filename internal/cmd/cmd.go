@@ -31,6 +31,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/kanzi"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lz4"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzip"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzo"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzw"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/minlz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/s2"
@@ -88,6 +89,7 @@ type Globals struct {
 
 	// standard
 	Help    bool
+	Less    bool `short:"l"`
 	DryRun  bool `short:"d" long:"dry-run"`
 	Verbose int  `short:"v" type:"counter"`
 
@@ -176,6 +178,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		register.Deflate("kanzi", kanzi.Detect, kanzi.Deflate)
 		register.Deflate("lz4", lz4.Detect, lz4.Deflate)
 		register.Deflate("lzip", lzip.Detect, lzip.Deflate)
+		register.Deflate("lzo", lzo.Detect, lzo.Deflate)
 		register.Deflate("lzw", lzw.Detect, lzw.Deflate)
 		register.Deflate("minlz", minlz.Detect, minlz.Deflate)
 		register.Deflate("s2", s2.Detect, s2.Deflate)
@@ -222,6 +225,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		Password: cli.Pass,
 		Parallel: cli.Parallel,
 		Verbose:  cli.Verbose,
+		Warning:  !cli.NoWarnings,
 	})
 
 	if cli.DryRun {

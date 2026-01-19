@@ -13,6 +13,7 @@ import (
 
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/cuhsat/go-mmap"
+	"github.com/pbnjay/memory"
 	"github.com/sourcegraph/conc"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
@@ -23,6 +24,7 @@ import (
 )
 
 const stdin = "-"
+const limit = 0.95
 
 type Options struct {
 	Limit    *types.Limits
@@ -32,6 +34,7 @@ type Options struct {
 	Password string
 	Parallel int
 	Verbose  int
+	Warning  bool
 }
 
 type Loader struct {
@@ -104,6 +107,10 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 			}
 
 			ldr.loadPath(path, part)
+		}
+
+		if ldr.opts.Warning && float32(memory.FreeMemory()/memory.TotalMemory()) > limit {
+			log.Println("warning: low memory may cause swapping!")
 		}
 	}()
 
