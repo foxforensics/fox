@@ -30,6 +30,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/gzip"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/kanzi"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lz4"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzfse"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzip"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzo"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzw"
@@ -179,6 +180,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		register.Deflate("lz4", lz4.Detect, lz4.Deflate)
 		register.Deflate("lzip", lzip.Detect, lzip.Deflate)
 		register.Deflate("lzo", lzo.Detect, lzo.Deflate)
+		register.Deflate("lzfse", lzfse.Detect, lzfse.Deflate)
 		register.Deflate("lzw", lzw.Detect, lzw.Deflate)
 		register.Deflate("minlz", minlz.Detect, minlz.Deflate)
 		register.Deflate("s2", s2.Detect, s2.Deflate)
