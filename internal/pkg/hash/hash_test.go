@@ -73,6 +73,7 @@ func TestSum(t *testing.T) {
 		{small, types.SHA3256, "40ec86016388c549a4a4954a068989b2b757f6488dce0f1cd4a558ee550129fe"},
 		{small, types.SHA3384, "66f3c9e7d5c888ada9e8fc37994eb468239a31f2694e4aa8450c7eecf2803d9ef385f6c632b0a9b66452032e29ffefbb"},
 		{small, types.SHA3512, "794a82f57c8448a5221c8cac462541092f2ef198df3d41edbf5f4ea6f19fdf26f98c37a82eec8be367547822aa5f90e23e2b5f9d26be9f9ee6fb0b654de918e1"},
+		{small, types.SIPHASH, "013834802422bbba"},
 		{small, types.SM3, "c86bb17e03669e27465dbb74c5e8c98035e899414697ab3a31f31345d0ccc2c6"},
 		{large, types.SSDEEP, "49152:LkD0m3lNkRAA4Ml/Mo3hdWoPPwXj3NfhrZChJl7v6ih7T87/MvwFLSMyJTszqBPh:t"},
 		{large, types.TLSH, "T12526a757e784133b1b620334620ea5d9f31ac43e7676ce30585ee03e2356c7996b9be8"},

@@ -18,6 +18,7 @@ import (
 	"strings"
 
 	"github.com/cespare/xxhash"
+	"github.com/dchest/siphash"
 	"github.com/glaslos/ssdeep"
 	"github.com/glaslos/tlsh"
 	"github.com/htruong/go-md2"
@@ -80,6 +81,7 @@ var Algorithms = []string{
 	types.SHA3256,
 	types.SHA3384,
 	types.SHA3512,
+	types.SIPHASH,
 	types.SM3,
 	types.SSDEEP,
 	types.TLSH,
@@ -171,7 +173,7 @@ func Sum(algo string, data []byte) (string, error) {
 	case types.MD6:
 		imp = md6.New256()
 	case types.MURMUR3:
-		imp = murmur3.New64() // MURMUR3F
+		imp = murmur3.New64() // Murmur3f
 	case types.NT:
 		imp = nt.New()
 	case types.PE:
@@ -202,6 +204,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = shake.New128()
 	case types.SHAKE256:
 		imp = shake.New256()
+	case types.SIPHASH:
+		imp = siphash.New(make([]byte, 16)) // SipHash-2-4 with zero key
 	case types.SM3:
 		imp = sm3.New()
 	case types.SSDEEP:

@@ -38,10 +38,10 @@ Cryptographic hashes (MD family):
   MD2, MD4, MD5, MD6
 
 Cryptographic hashes (other):
-  RIPEMD-160, SHAKE128, SHAKE256
+  RIPEMD-160, SHAKE128, SHAKE256, SM3
 
 Performance hashes:
-  FNV-1, FNV-1A, MURMUR3, XXH32, XXH64, XXH3
+  FNV-1, FNV-1A, MURMUR3, SIPHASH, XXH32, XXH64, XXH3
 
 Similarity hashes:
   IMPHASH, SSDEEP, TLSH
