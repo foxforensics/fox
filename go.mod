@@ -30,8 +30,10 @@ require (
 	github.com/minio/minlz v1.0.1
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
 	github.com/nwaples/rardecode/v2 v2.2.2
+	github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58
 	github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4
 	github.com/pierrec/lz4 v2.6.1+incompatible
+	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
 	github.com/saferwall/elf v0.3.1
 	github.com/saferwall/pe v1.5.8
 	github.com/secDre4mer/go-cab v0.0.0-20250826110853-e3fbafae92cd
@@ -77,7 +79,6 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
-	github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58 // indirect
 	github.com/pierrec/lz4/v4 v4.1.25 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
