@@ -23,6 +23,7 @@ import (
 	"github.com/htruong/go-md2"
 	"github.com/pedroalbanese/md6"
 	"github.com/spaolacci/murmur3"
+	"github.com/tjfoc/gmsm/v2/sm3"
 	"github.com/zeebo/xxh3"
 	"go.solidsystem.no/fletcher4"
 	"golang.org/x/crypto/blake2b"
@@ -79,6 +80,7 @@ var Algorithms = []string{
 	types.SHA3256,
 	types.SHA3384,
 	types.SHA3512,
+	types.SM3,
 	types.SSDEEP,
 	types.TLSH,
 	types.XXH3,
@@ -103,6 +105,7 @@ var secure = []string{
 	types.SHA3256,
 	types.SHA3384,
 	types.SHA3512,
+	types.SM3,
 }
 
 func IsSecure(algo string) bool {
@@ -199,6 +202,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = shake.New128()
 	case types.SHAKE256:
 		imp = shake.New256()
+	case types.SM3:
+		imp = sm3.New()
 	case types.SSDEEP:
 		imp = ssdeep.New()
 	case types.TLSH:

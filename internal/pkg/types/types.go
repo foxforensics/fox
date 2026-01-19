@@ -39,6 +39,7 @@ const (
 	SHA3512    = "sha3-512"
 	SHAKE128   = "shake128"
 	SHAKE256   = "shake256"
+	SM3        = "sm3"
 	SSDEEP     = "ssdeep"
 	TLSH       = "tlsh"
 	XXH3       = "xxh3"

@@ -89,6 +89,7 @@ require (
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2 // indirect
+	github.com/tjfoc/gmsm/v2 v2.0.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/exp v0.0.0-20260112195511-716be5621a96 // indirect
