@@ -40,6 +40,7 @@ type Options struct {
 type Loader struct {
 	sync.RWMutex
 	opts  *Options
+	open  int64
 	size  int64
 	paths []string
 	heaps chan *heap.Heap
@@ -107,6 +108,10 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 			}
 
 			ldr.loadPath(path, part)
+		}
+
+		if ldr.open == 0 {
+			log.Fatalln("file not found")
 		}
 
 		if ldr.opts.Warning && float32(memory.FreeMemory()/memory.TotalMemory()) > limit {
@@ -341,6 +346,7 @@ func (ldr *Loader) createHeap(s string, b []byte) {
 		return // already loaded
 	}
 
+	ldr.open += 1
 	ldr.size += int64(len(b))
 	ldr.paths = append(ldr.paths, s)
 	ldr.heaps <- heap.New(s, b, ldr.opts.Limit)
