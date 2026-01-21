@@ -45,13 +45,13 @@ Archive Formats
 > 7zip, ar, CAB, cpio, RAR, RPM, tar, xar, ZIP
 
 Compression Formats
-> Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
+> Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZFSE, LZO, LZVN, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
 
 Cryptographic Hashes
-> BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, MD2, MD4, MD5, MD6, RIPEMD-160, SHAKE128, SHAKE256, SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
+> BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, MD2, MD4, MD5, MD6, RIPEMD-160, SHAKE128, SHAKE256, SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512, SM3
 
 Performance Hashes
-> FNV-1, FNV-1a, Murmur3, XXH32, XXH64, XXH3
+> FNV-1, FNV-1a, Murmur3, SipHash, XXH32, XXH64, XXH3
 
 Similarity Hashes
 > ImpHash, SSDeep, TLSH
@@ -180,6 +180,9 @@ DISABLE
 ```
 STANDARD
 ```
+-l, --less
+       prints only one page at a time
+
 -d, --dry-run
        prints only the found filenames
 

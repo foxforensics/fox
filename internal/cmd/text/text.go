@@ -28,7 +28,7 @@ Classes:
   -w, --wtf[=LEVEL]        show string classifications (w/ww/www)
   -F, --find=CLASS,...     show only strings that match class(es)
   -1, --first              show only strings first class
-  -l, --list               show only classification list
+  -L, --list               show only classification list
 
 Example:
   $ fox text -w sample.exe
@@ -44,7 +44,7 @@ type Text struct {
 	Wtf   int      `short:"w" type:"counter"`
 	Find  []string `short:"F" sep:","`
 	First bool     `short:"1" and:"first,wtf"`
-	List  bool     `short:"l"`
+	List  bool     `short:"L"`
 
 	// paths
 	Paths []string `arg:"" type:"path" optional:""`

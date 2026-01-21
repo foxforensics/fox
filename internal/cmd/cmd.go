@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/types/pager"
 	"github.com/fatih/color"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -59,7 +60,7 @@ type Globals struct {
 
 	// file loader
 	Pass  string `short:"p"`
-	File  string `short:"f" type:"path"`
+	File  string `short:"f" xor:"less,file" type:"path"`
 	Input string `short:"i"`
 
 	// line output
@@ -90,7 +91,7 @@ type Globals struct {
 
 	// standard
 	Help    bool
-	Less    bool `short:"l"`
+	Less    bool `short:"l" xor:"less,file"`
 	DryRun  bool `short:"d" long:"dry-run"`
 	Verbose int  `short:"v" type:"counter"`
 
@@ -110,6 +111,14 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	case len(cli.Output) > 0:
 		cli.NoColor = true
 		cli.Stdout, err = os.OpenFile(cli.Output, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+	// pager
+	case cli.Less:
+		cli.Stdout, err = pager.New()
 
 		if err != nil {
 			log.Fatalln(err)
