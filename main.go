@@ -60,7 +60,7 @@ Modes:
 File limits:
   -h, --head               limit head of file by ...
   -t, --tail               limit tail of file by ...
-  -n, --lines=NUMBER       number of lines
+  -l, --lines=NUMBER       number of lines
   -c, --bytes=NUMBER       number of bytes
 
 File loader:
@@ -94,7 +94,7 @@ Disable:
       --no-warnings        don't show any warnings
 
 Standard:
-  -l, --less               prints only one page at a time
+  -m, --more               prints only one page at a time
   -d, --dry-run            prints only the found filenames
   -v, --verbose[=LEVEL]    prints more details (v/vv/vvv)
       --version            prints the version number
@@ -110,7 +110,7 @@ Example: Show MBR in canonical hex
   $ fox hex -hc512 disk.bin
 
 Example: List high entropy files
-  $ fox info -m0.9 ./**/*
+  $ fox info -n0.9 ./**/*
 
 Example: Test suspicious file
   $ fox test sample.exe

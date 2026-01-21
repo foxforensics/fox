@@ -7,7 +7,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types/pager"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
 	"github.com/fatih/color"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -22,7 +22,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/elf"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/lnk"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pf"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
@@ -35,6 +34,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzip"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzo"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzw"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/lzx"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/minlz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/s2"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/snappy"
@@ -46,6 +46,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/pager"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
@@ -60,7 +61,7 @@ type Globals struct {
 
 	// file loader
 	Pass  string `short:"p"`
-	File  string `short:"f" xor:"less,file" type:"path"`
+	File  string `short:"f" xor:"more,file" type:"path"`
 	Input string `short:"i"`
 
 	// line output
@@ -91,7 +92,7 @@ type Globals struct {
 
 	// standard
 	Help    bool
-	Less    bool `short:"l" xor:"less,file"`
+	More    bool `short:"m" xor:"more,file"`
 	DryRun  bool `short:"d" long:"dry-run"`
 	Verbose int  `short:"v" type:"counter"`
 
@@ -117,8 +118,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		}
 
 	// pager
-	case cli.Less:
-		cli.Stdout, err = pager.New()
+	case cli.More:
+		cli.Stdout, err = pager.New(cli.Quiet)
 
 		if err != nil {
 			log.Fatalln(err)
@@ -191,6 +192,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		register.Deflate("lzo", lzo.Detect, lzo.Deflate)
 		register.Deflate("lzfse", lzfse.Detect, lzfse.Deflate)
 		register.Deflate("lzw", lzw.Detect, lzw.Deflate)
+		register.Deflate("lzx", lzx.Detect, lzx.Deflate)
 		register.Deflate("minlz", minlz.Detect, minlz.Deflate)
 		register.Deflate("s2", s2.Detect, s2.Deflate)
 		register.Deflate("snappy", snappy.Detect, snappy.Deflate)

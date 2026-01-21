@@ -7,9 +7,17 @@ import (
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
+
+const (
+	Canonical HexMode = iota
+	Hexdump
+	Xxd
+	Raw
+)
+
+type HexMode int
 
 type HexLine struct {
 	Offset string
@@ -21,7 +29,7 @@ type HexBuffer struct {
 	Lines chan HexLine
 }
 
-func Hex(h *heap.Heap, cli *cli.Globals, mode string) *HexBuffer {
+func Hex(h *heap.Heap, cli *cli.Globals, mode HexMode) *HexBuffer {
 	var buf = &HexBuffer{make(chan HexLine, cli.Parallel*1024)}
 	var off uint
 
@@ -34,18 +42,18 @@ func Hex(h *heap.Heap, cli *cli.Globals, mode string) *HexBuffer {
 	return buf
 }
 
-func streamHex(buf *HexBuffer, mode string, b []byte, off uint) {
+func streamHex(buf *HexBuffer, mode HexMode, b []byte, off uint) {
 	defer close(buf.Lines)
 
 	for i := 0; i < len(b); i += 16 {
 		switch mode {
-		case types.Canonical:
+		case Canonical:
 			buf.Lines <- fmtCanonical(b, i, off)
-		case types.Hexdump:
+		case Hexdump:
 			buf.Lines <- fmtHexdump(b, i, off)
-		case types.Xxd:
+		case Xxd:
 			buf.Lines <- fmtXxd(b, i, off)
-		case types.Raw:
+		case Raw:
 			buf.Lines <- fmtRaw(b, i, off)
 		}
 	}
@@ -73,7 +81,7 @@ func fmtCanonical(b []byte, i int, off uint) HexLine {
 	return HexLine{
 		fmt.Sprintf("%08x", off+uint(i)),
 		fmt.Sprintf("%-*s", 50, hex.String()),
-		fmt.Sprintf("|%-16s|", text.ToAscii(str.String())),
+		fmt.Sprintf("|%-16s|", escape(text.ToAscii(str.String()))),
 	}
 }
 
@@ -119,7 +127,7 @@ func fmtXxd(b []byte, i int, off uint) HexLine {
 	return HexLine{
 		fmt.Sprintf("%08x:", off+uint(i)),
 		fmt.Sprintf("%-*s", 40, hex.String()),
-		text.ToAscii(str.String()),
+		escape(text.ToAscii(str.String())),
 	}
 }
 
@@ -135,4 +143,8 @@ func fmtRaw(b []byte, i int, _ uint) HexLine {
 	}
 
 	return HexLine{"", hex.String(), ""}
+}
+
+func escape(s string) string {
+	return strings.ReplaceAll(s, "%", "%%")
 }

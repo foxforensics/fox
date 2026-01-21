@@ -49,13 +49,6 @@ const (
 )
 
 const (
-	Canonical = "c"
-	Hexdump   = "hd"
-	Xxd       = "xxd"
-	Raw       = "raw"
-)
-
-const (
 	Eventlog = "eventlog"
 	Journal  = "journal"
 )

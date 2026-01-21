@@ -20,7 +20,7 @@ go install github.com/cuhsat/fox/v4@latest
 * Dump Windows Shortcut and Prefetch files
 * Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * Check IPs, URLs and file hashes via the [VirusTotal API](https://www.virustotal.com/)
-* Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
+* Integral `grep`, `head`, `tail`, `hexdump`, `wc`, `more` like abilities
 * Integral *Chain-of-Custody* receipt generation
 * Many popular archive and compression formats
 * Many popular cryptographic, fuzzy, image and fast hashes
@@ -102,7 +102,7 @@ FILE LIMITS
 -t, --tail
        limit tail of file by ...
 
--n, --lines=NUMBER
+-l, --lines=NUMBER
        number of lines
 
 -c, --bytes=NUMBER
@@ -180,7 +180,7 @@ DISABLE
 ```
 STANDARD
 ```
--l, --less
+-m, --more
        prints only one page at a time
 
 -d, --dry-run
@@ -207,7 +207,7 @@ $ fox -eWinlogon ./**/*.evtx
 $ fox hex -hc512 disk.bin
        Show MBR in canonical hex
 
-$ fox info -m0.9 ./**/*
+$ fox info -n0.9 ./**/*
        List high entropy files
 
 $ fox test sample.exe
@@ -233,7 +233,7 @@ https://foxhunt.wtf
 ```
 SEE ALSO
 ```
-cat(1), grep(1), head(1), tail(1), hexdump(1), strings(1), wc(1)
+cat(1), grep(1), head(1), tail(1), hexdump(1), strings(1), wc(1), more(1)
 ```
 ---
 

@@ -7,7 +7,6 @@ import (
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
 )
 
@@ -17,21 +16,37 @@ Prints file in hex format.
 fox hex [FLAGS...] <PATHS...>
 
 Flags:
-  -m, --mode=<hd|xxd|raw>    use compatible mode for output
+  -H, --hexdump              format output like hexdump
+  -X, --xxd                  format output like xxd
+  -R, --raw                  don't format the output
 
 Example:
   $ fox hex -hc512 disk.bin
 `)
 
 type Hex struct {
-	Mode  string   `short:"m" enum:"c,hd,xxd,raw" default:"c"`
-	Paths []string `arg:"" type:"path" optional:""`
+	Hexdump bool     `short:"H" xor:"hexdump,xxd,raw"`
+	Xxd     bool     `short:"X" xor:"hexdump,xxd,raw"`
+	Raw     bool     `short:"R" xor:"hexdump,xxd,raw"`
+	Paths   []string `arg:"" type:"path" optional:""`
 }
 
 func (cmd *Hex) Run(cli *cli.Globals) error {
 	if cli.Help || len(cmd.Paths) == 0 {
 		fmt.Print(Usage)
 		return nil
+	}
+
+	var mode buffer.HexMode
+
+	if cmd.Hexdump {
+		mode = buffer.Hexdump
+	} else if cmd.Xxd {
+		mode = buffer.Xxd
+	} else if cmd.Raw {
+		mode = buffer.Raw
+	} else {
+		mode = buffer.Canonical
 	}
 
 	ch := cli.Load(cmd.Paths)
@@ -44,7 +59,7 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 		lastHex, wasCut := "", false
 
-		for l := range buffer.Hex(h, cli, cmd.Mode).Lines {
+		for l := range buffer.Hex(h, cli, mode).Lines {
 			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Values) {
 				continue // not matched afterward
 			}
@@ -52,7 +67,7 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 			l.Values = text.MarkMatch(l.Values, cli.Regexp)
 
 			// cut similar lines for better readability
-			if l.Values == lastHex && cmd.Mode != types.Raw {
+			if l.Values == lastHex && !cmd.Raw {
 				if !wasCut {
 					wasCut = true
 					_, _ = fmt.Fprintln(cli.Stdout, text.Hide("*"))
@@ -60,14 +75,14 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 				continue
 			}
 
-			switch cmd.Mode {
-			case types.Canonical:
+			switch mode {
+			case buffer.Canonical:
 				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s%s\n", text.Hide(l.Offset), l.Values, text.Hide(l.String))
-			case types.Hexdump:
+			case buffer.Hexdump:
 				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Offset), l.Values)
-			case types.Xxd:
+			case buffer.Xxd:
 				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %-16s\n", text.Hide(l.Offset), l.Values, text.Hide(l.String))
-			case types.Raw:
+			case buffer.Raw:
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", l.Values)
 			}
 

@@ -20,16 +20,16 @@ fox info [FLAGS...] <PATHS...>
 
 Flags:
   -b, --block=SIZE         block size for calculations
-  -m, --min=DECIMAL        minimum entropy value (default: 0.0)
+  -n, --min=DECIMAL        minimum entropy value (default: 0.0)
   -x, --max=DECIMAL        maximal entropy value (default: 1.0)
 
 Example:
-  $ fox info -m0.9 ./**/*
+  $ fox info -n0.9 ./**/*
 `)
 
 type Info struct {
 	Block uint64   `short:"b"`
-	Min   float64  `short:"m" default:"0.0"`
+	Min   float64  `short:"n" default:"0.0"`
 	Max   float64  `short:"x" default:"1.0"`
 	Paths []string `arg:"" name:"path" type:"path" optional:""`
 }
