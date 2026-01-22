@@ -31,31 +31,35 @@ type HexBuffer struct {
 
 func Hex(h *heap.Heap, cli *cli.Globals, mode HexMode) *HexBuffer {
 	var buf = &HexBuffer{make(chan HexLine, cli.Profile*1024)}
-	var off uint
+	var delta int
 
-	go streamHex(buf, mode, h.Bytes(), off)
+	if cli.Tail {
+		delta = cli.Limit.Offset.Bytes
+	}
+
+	go streamHex(buf, mode, h.Bytes(), delta)
 
 	return buf
 }
 
-func streamHex(buf *HexBuffer, mode HexMode, b []byte, off uint) {
+func streamHex(buf *HexBuffer, mode HexMode, b []byte, d int) {
 	defer close(buf.Lines)
 
 	for i := 0; i < len(b); i += 16 {
 		switch mode {
 		case Canonical:
-			buf.Lines <- fmtCanonical(b, i, off)
+			buf.Lines <- fmtCanonical(b, i, d)
 		case Hexdump:
-			buf.Lines <- fmtHexdump(b, i, off)
+			buf.Lines <- fmtHexdump(b, i, d)
 		case Xxd:
-			buf.Lines <- fmtXxd(b, i, off)
+			buf.Lines <- fmtXxd(b, i, d)
 		case Raw:
-			buf.Lines <- fmtRaw(b, i, off)
+			buf.Lines <- fmtRaw(b, i, d)
 		}
 	}
 }
 
-func fmtCanonical(b []byte, i int, off uint) HexLine {
+func fmtCanonical(b []byte, i int, d int) HexLine {
 	var hex strings.Builder
 	var str strings.Builder
 
@@ -67,7 +71,7 @@ func fmtCanonical(b []byte, i int, off uint) HexLine {
 		hex.WriteString(fmt.Sprintf("%02x", b[i+j]))
 		str.WriteString(fmt.Sprintf("%c", b[i+j]))
 
-		if uint(j+1)%8 == 0 {
+		if j+1%8 == 0 {
 			hex.WriteString("  ")
 		} else {
 			hex.WriteString(" ")
@@ -75,13 +79,13 @@ func fmtCanonical(b []byte, i int, off uint) HexLine {
 	}
 
 	return HexLine{
-		fmt.Sprintf("%08x", off+uint(i)),
+		fmt.Sprintf("%08x", d+i),
 		fmt.Sprintf("%-*s", 50, hex.String()),
 		fmt.Sprintf("|%-16s|", escape(text.ToAscii(str.String()))),
 	}
 }
 
-func fmtHexdump(b []byte, i int, off uint) HexLine {
+func fmtHexdump(b []byte, i int, d int) HexLine {
 	var hex strings.Builder
 
 	for j := range 16 {
@@ -91,19 +95,19 @@ func fmtHexdump(b []byte, i int, off uint) HexLine {
 
 		hex.WriteString(fmt.Sprintf("%02x", b[i+j]))
 
-		if uint(j+1)%2 == 0 {
+		if j+1%2 == 0 {
 			hex.WriteString(" ")
 		}
 	}
 
 	return HexLine{
-		fmt.Sprintf("%07x", off+uint(i)),
+		fmt.Sprintf("%07x", d+i),
 		fmt.Sprintf("%-*s", 50, hex.String()),
 		"",
 	}
 }
 
-func fmtXxd(b []byte, i int, off uint) HexLine {
+func fmtXxd(b []byte, i int, d int) HexLine {
 	var hex strings.Builder
 	var str strings.Builder
 
@@ -115,19 +119,19 @@ func fmtXxd(b []byte, i int, off uint) HexLine {
 		hex.WriteString(fmt.Sprintf("%02x", b[i+j]))
 		str.WriteString(fmt.Sprintf("%c", b[i+j]))
 
-		if uint(j+1)%2 == 0 {
+		if j+1%2 == 0 {
 			hex.WriteString(" ")
 		}
 	}
 
 	return HexLine{
-		fmt.Sprintf("%08x:", off+uint(i)),
+		fmt.Sprintf("%08x:", d+i),
 		fmt.Sprintf("%-*s", 40, hex.String()),
 		escape(text.ToAscii(str.String())),
 	}
 }
 
-func fmtRaw(b []byte, i int, _ uint) HexLine {
+func fmtRaw(b []byte, i int, _ int) HexLine {
 	var hex strings.Builder
 
 	for j := range 16 {

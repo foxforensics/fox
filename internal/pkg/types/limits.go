@@ -9,6 +9,10 @@ type Limits struct {
 	IsTail bool // is tail limit
 	Bytes  uint // bytes count
 	Lines  uint // lines count
+	Offset struct {
+		Bytes int
+		Lines int
+	}
 }
 
 func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
@@ -20,6 +24,7 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 
 	if l.IsTail && l.Bytes > 0 {
 		a = max(len(m)-int(l.Bytes), 0)
+		l.Offset.Bytes = a
 	}
 
 	if l.IsHead && l.Lines > 0 {
@@ -35,9 +40,9 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 	}
 
 	if l.IsTail && l.Lines > 0 {
-		i := b - 1
+		i, n := b-1, 0
 
-		for n := 0; i > a && n < int(l.Lines); i-- {
+		for ; i > a && n < int(l.Lines); i-- {
 			if m[i-1] == CR {
 				n++
 			}
@@ -46,8 +51,10 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 		a = max(i, a)
 
 		if a > 0 {
-			a++ // skip line break
+			a++ // skip linebreak
 		}
+
+		l.Offset.Lines = n
 	}
 
 	return m[a:b]

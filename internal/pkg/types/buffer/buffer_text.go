@@ -25,17 +25,22 @@ type TextBuffer struct {
 func Text(h *heap.Heap, cli *cli.Globals) *TextBuffer {
 	s := cli.Filter.Filter(smap.Map(h.Bytes()))
 
-	buf := &TextBuffer{
+	var buf = &TextBuffer{
 		make(chan *TextLine, cli.Profile*1024),
 		uint(math.Log10(float64(len(s)))) + 1,
 	}
+	var delta int
 
-	go streamText(buf, s.Render())
+	if cli.Tail {
+		delta = cli.Limit.Offset.Lines
+	}
+
+	go streamText(buf, s.Render(), delta)
 
 	return buf
 }
 
-func streamText(buf *TextBuffer, s smap.SMap) {
+func streamText(buf *TextBuffer, s smap.SMap, d int) {
 	defer close(buf.Lines)
 
 	var numSep uint = 0
@@ -53,7 +58,7 @@ func streamText(buf *TextBuffer, s smap.SMap) {
 
 		// build line
 		buf.Lines <- &TextLine{
-			fmt.Sprintf("%0*d ", buf.Pad, str.Line),
+			fmt.Sprintf("%0*d ", buf.Pad, uint(d)+str.Line),
 			str.Group,
 			text.Sanitize(string(str.Bytes)),
 		}
