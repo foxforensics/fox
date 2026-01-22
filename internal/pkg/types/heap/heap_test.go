@@ -20,6 +20,8 @@ const (
 func TestNew(t *testing.T) {
 	h := New(name, fixture(file), new(types.Limits))
 
+	defer h.Discard()
+
 	if h.Name != name {
 		t.Fatal("invalid name")
 	}
@@ -39,6 +41,8 @@ func TestNewLimitHeadBytes(t *testing.T) {
 		Bytes:  bytes,
 	})
 
+	defer h.Discard()
+
 	if len(h.Bytes()) != bytes {
 		t.Fatal("invalid bytes len")
 	}
@@ -50,6 +54,8 @@ func TestNewLimitTailBytes(t *testing.T) {
 		Bytes:  bytes,
 	})
 
+	defer h.Discard()
+
 	if len(h.Bytes()) != bytes {
 		t.Fatal("invalid bytes len")
 	}
@@ -58,6 +64,8 @@ func TestNewLimitTailBytes(t *testing.T) {
 func TestBytes(t *testing.T) {
 	h := New(name, fixture(file), new(types.Limits))
 
+	defer h.Discard()
+
 	if h.Bytes() == nil {
 		t.Fatal("bytes nil")
 	}
@@ -65,6 +73,8 @@ func TestBytes(t *testing.T) {
 
 func TestString(t *testing.T) {
 	h := New(name, fixture(file), new(types.Limits))
+
+	defer h.Discard()
 
 	if h.String() != name {
 		t.Fatal("string invalid")
@@ -83,6 +93,16 @@ func TestDiscard(t *testing.T) {
 
 	if m != nil {
 		t.Fatal("bytes not nil")
+	}
+}
+
+func TestEntropy(t *testing.T) {
+	h := New(name, fixture(file), new(types.Limits))
+
+	defer h.Discard()
+
+	if Entropy(h.Bytes()) != 0.5758916753281705 {
+		t.Fatal("entropy wrong")
 	}
 }
 
