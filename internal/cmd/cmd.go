@@ -53,32 +53,25 @@ import (
 )
 
 type Globals struct {
-	// file limits
-	Head  bool `short:"h" xor:"head,tail"`
-	Tail  bool `short:"t" xor:"head,tail"`
-	Lines uint `short:"n" xor:"lines,bytes"`
-	Bytes uint `short:"c" xor:"lines,bytes"`
+	// loader flags
+	File     string `short:"f" type:"path"`
+	Input    string `short:"i"`
+	Output   string `short:"o" xor:"output,quiet,more"`
+	Password string `short:"p"`
 
-	// file loader
-	Pass  string `short:"p"`
-	File  string `short:"f" xor:"more,file" type:"path"`
-	Input string `short:"i"`
+	// filter flags
+	Head  bool   `short:"h" xor:"head,tail"`
+	Tail  bool   `short:"t" xor:"head,tail"`
+	Lines uint   `short:"l" xor:"lines,bytes"`
+	Bytes uint   `short:"c" xor:"lines,bytes"`
+	Regex string `short:"e"`
 
-	// line output
-	Output string `short:"o" xor:"output,quiet"`
+	// profile flags
+	Profile int `short:"P" default:"${cores}"`
 
-	// line filter
-	Regex   string `short:"e"`
-	Context uint   `short:"C"`
-	Before  uint   `short:"B"`
-	After   uint   `short:"A"`
-
-	// parallel
-	Parallel int `short:"P" default:"${cores}"`
-
-	// disable
+	// disable flags
 	Raw        bool `short:"r"`
-	Quiet      bool `short:"q" xor:"output,quiet"`
+	Quiet      bool `short:"q" xor:"output,quiet,more"`
 	NoFile     bool `long:"no-file"`
 	NoLine     bool `long:"no-line"`
 	NoColor    bool `long:"no-color"`
@@ -90,13 +83,13 @@ type Globals struct {
 	NoReceipt  bool `long:"no-receipt"`
 	NoWarnings bool `long:"no-warnings"`
 
-	// standard
+	// standard flags
 	Help    bool
-	More    bool `short:"m" xor:"more,file"`
+	More    bool `short:"m" xor:"output,quiet,more"`
 	DryRun  bool `short:"d" long:"dry-run"`
 	Verbose int  `short:"v" type:"counter"`
 
-	// bootstrap
+	// internal
 	Stdout io.WriteCloser `kong:"-"`
 	Regexp *regexp.Regexp `kong:"-"`
 	Loader *loader.Loader `kong:"-"`
@@ -139,22 +132,15 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.Regexp = regexp.MustCompile(cli.Regex)
 	}
 
-	if cli.Context > 0 {
-		cli.Before = cli.Context
-		cli.After = cli.Context
-	}
-
 	cli.Limit = &types.Limits{
 		IsHead: cli.Head,
 		IsTail: cli.Tail,
-		Lines:  cli.Lines,
 		Bytes:  cli.Bytes,
+		Lines:  cli.Lines,
 	}
 
 	cli.Filter = &types.Filters{
-		Regex:  cli.Regexp,
-		Before: cli.Before,
-		After:  cli.After,
+		Regex: cli.Regexp,
 	}
 
 	if cli.Raw {
@@ -170,8 +156,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.NoWarnings = true
 	}
 
-	if cli.Parallel <= 0 {
-		cli.Parallel = 1 // must be at least one
+	if cli.Profile <= 0 {
+		cli.Profile = 1 // must be at least one
 	}
 
 	if cli.NoColor {
@@ -235,8 +221,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		Filter:   cli.Filter,
 		File:     cli.File,
 		Input:    cli.Input,
-		Password: cli.Pass,
-		Parallel: cli.Parallel,
+		Password: cli.Password,
+		Parallel: cli.Profile,
 		Verbose:  cli.Verbose,
 		DoWarn:   !cli.NoWarnings,
 	})
@@ -251,7 +237,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		os.Exit(0)
 	}
 
-	smap.Chunks = cli.Parallel
+	smap.Chunks = cli.Profile
 
 	return cli.Loader.Load(args)
 }

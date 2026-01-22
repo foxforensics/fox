@@ -158,7 +158,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("hunt: using %d worker(s)\n", cli.Parallel)
+		log.Printf("hunt: using %d worker(s)\n", cli.Profile)
 	}
 
 	if cli.Verbose > 1 && cmd.db != nil {
@@ -184,7 +184,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	for e := range hunter.New(&hunter.Options{
 		Sort:     cmd.Sort,
-		Parallel: cli.Parallel,
+		Parallel: cli.Profile,
 		Verbose:  cli.Verbose,
 	}).Hunt(ch) {
 		res, err := sig.Matches(ctx, e.Fields)

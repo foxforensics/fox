@@ -14,7 +14,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints file infos and entropy.
+Prints infos and entropy.
 
 fox info [FLAGS...] <PATHS...>
 
@@ -43,7 +43,7 @@ func (cmd *Info) Validate() error {
 }
 
 func (cmd *Info) Run(cli *cli.Globals) error {
-	if cli.Help || len(cmd.Paths) == 0 {
+	if cli.Help || len(cmd.Paths)+len(cli.File) == 0 {
 		fmt.Print(Usage)
 		return nil
 	}

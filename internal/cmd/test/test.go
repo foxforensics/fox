@@ -15,7 +15,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints file test results.
+Prints test results.
 
 fox test [FLAGS...] [PATHS...]
 
@@ -35,18 +35,14 @@ type Test struct {
 	Paths []string `arg:"" name:"path" type:"path" optional:""`
 }
 
-func (cmd *Test) Validate() error {
-	if len(cmd.Key) == 0 {
-		log.Fatalln("key required")
-	}
-
-	return nil
-}
-
 func (cmd *Test) Run(cli *cli.Globals) error {
-	if cli.Help || len(cmd.Paths)+len(cmd.Ip)+len(cmd.Url) == 0 {
+	if cli.Help || len(cmd.Paths)+len(cli.File)+len(cmd.Ip)+len(cmd.Url) == 0 {
 		fmt.Print(Usage)
 		return nil
+	}
+
+	if len(cmd.Key) == 0 {
+		log.Fatalln("key required")
 	}
 
 	if cli.Verbose > 2 {

@@ -26,12 +26,12 @@ import (
 var short = strings.TrimSpace(`
 Usage: fox [MODE] [FLAGS...] <PATHS...>
 
- cat    prints file (default mode)
- hex    prints file in hex format
- info   prints file infos and entropy
- test   prints file test results
- text   prints file text contents
- hash   prints file hashes and checksums
+ cat    prints contents (default mode)
+ hex    prints contents in hex format
+ info   prints infos and entropy
+ test   prints test results
+ text   prints text contents
+ hash   prints hashes and checksums
  hunt   hunt suspicious activities
 
 Use "fox --help" to show the full help.
@@ -49,38 +49,31 @@ Usage:
   fox [MODE] [FLAGS...] <PATHS...>
 
 Modes:
-  cat    prints file (default)
-  hex    prints file in hex format
-  info   prints file infos and entropy
-  test   prints file test results
-  text   prints file text contents
-  hash   prints file hashes and checksums
+  cat    prints contents (default mode)
+  hex    prints contents in hex format
+  info   prints infos and entropy
+  test   prints test results
+  text   prints text contents
+  hash   prints hashes and checksums
   hunt   hunt suspicious activities
 
-File limits:
-  -h, --head               limit head of file by ...
-  -t, --tail               limit tail of file by ...
-  -l, --lines=NUMBER       number of lines
-  -c, --bytes=NUMBER       number of bytes
-
-File loader:
-  -p, --pass=PASSWORD      password for decryption (7Z, RAR, ZIP)
-  -f, --file=FILENAME      read extra paths from file
+Loader flags:
+  -f, --file=FILE          read extra paths from file
   -i, --input=TEXT         read input instead of file
+  -o, --output=FILE        write output to receipted file
+  -p, --password=TEXT      archive password (7Z, RAR, ZIP)
 
-Line output:
-  -o, --output=FILE        write all output to receipted file
+Filter flags:
+  -h, --head               limit head of file by...
+  -t, --tail               limit tail of file by...
+  -c, --bytes=NUMBER       number of bytes
+  -l, --lines=NUMBER       number of lines
+  -e, --regexp=PATTERN     filter lines with pattern
 
-Line filter:
-  -e, --regexp=PATTERN     filter for lines that match pattern
-  -C, --context=NUMBER     number of lines surrounding context of match
-  -B, --before=NUMBER      number of lines leading context before match
-  -A, --after=NUMBER       number of lines trailing context after match
+Profile flags:
+  -P, --profile=CORES      parallel processing profile
 
-Parallel:
-  -P, --parallel=CORES     parallel processing profile
-
-Disable:
+Disable flags:
   -r, --raw                don't process files at all
   -q, --quiet              don't print anything
       --no-file            don't print filenames
@@ -93,7 +86,7 @@ Disable:
       --no-receipt         don't write the receipt
       --no-warnings        don't show any warnings
 
-Standard:
+Standard flags:
   -m, --more               prints pagewise (press SPACE or Q)
   -d, --dry-run            prints only the found filenames
   -v, --verbose[=LEVEL]    prints more details (v/vv/vvv)
@@ -106,20 +99,8 @@ Positional arguments:
 Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
-Example: Show MBR in canonical hex
-  $ fox hex -hc512 disk.bin
-
-Example: List high entropy files
-  $ fox info -n0.9 ./**/*
-
-Example: Test suspicious file
-  $ fox test sample.exe
-
 Example: Show strings in binary
   $ fox text -w sample.exe
-
-Example: Hash archive contents
-  $ fox hash -uTLSH files.7z
 
 Example: Hunt down suspicious events
   $ fox hunt -sv ./**/*.E01
@@ -162,7 +143,7 @@ func main() {
 	switch {
 	case cli.Version:
 		fmt.Printf("fox %s\n", app.Version)
-	case (cli.Help && ctx.Command() == "cat") || ctx.Error != nil:
+	case len(ctx.Args) > 0 && ctx.Args[0] == "--help" || ctx.Error != nil:
 		fmt.Printf(long, app.Version)
 	case len(ctx.Args) == 0:
 		fmt.Println(short)

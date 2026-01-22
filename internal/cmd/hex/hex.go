@@ -11,14 +11,14 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints file in hex format.
+Prints contents in hex format.
 
 fox hex [FLAGS...] <PATHS...>
 
 Flags:
-  -H, --hexdump              format output like hexdump
-  -X, --xxd                  format output like xxd
-  -R, --raw                  don't format the output
+  -H, --hexdump            format output like hexdump
+  -X, --xxd                format output like xxd
+  -R, --raw                don't format the output
 
 Example:
   $ fox hex -hc512 disk.bin
@@ -32,20 +32,21 @@ type Hex struct {
 }
 
 func (cmd *Hex) Run(cli *cli.Globals) error {
-	if cli.Help || len(cmd.Paths) == 0 {
+	if cli.Help || len(cmd.Paths)+len(cli.File) == 0 {
 		fmt.Print(Usage)
 		return nil
 	}
 
 	var mode buffer.HexMode
 
-	if cmd.Hexdump {
+	switch {
+	case cmd.Hexdump:
 		mode = buffer.Hexdump
-	} else if cmd.Xxd {
+	case cmd.Xxd:
 		mode = buffer.Xxd
-	} else if cmd.Raw {
+	case cmd.Raw:
 		mode = buffer.Raw
-	} else {
+	default:
 		mode = buffer.Canonical
 	}
 

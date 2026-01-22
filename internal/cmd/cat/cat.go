@@ -1,8 +1,10 @@
 package cat
 
 import (
-	"errors"
 	"fmt"
+	"strings"
+
+	"github.com/alecthomas/kong"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
@@ -10,16 +12,48 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
 )
 
+var Usage = strings.TrimSpace(`
+Prints contents.
+
+fox cat [FLAGS...] <PATHS...>
+
+Flags:
+  -C, --context=NUMBER     lines surrounding context of a match
+  -B, --before=NUMBER      lines leading context before a match
+  -A, --after=NUMBER       lines trailing context after a match
+
+Example:
+  $ fox -eWinlogon ./**/*.evtx
+`)
+
 type Cat struct {
-	Paths []string `arg:"" type:"path" optional:""`
+	Context uint     `short:"C"`
+	Before  uint     `short:"B"`
+	After   uint     `short:"A"`
+	Paths   []string `arg:"" type:"path" optional:""`
+}
+
+func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+	if cmd.Context > 0 {
+		cmd.Before = cmd.Context
+		cmd.After = cmd.Context
+	}
+
+	return nil
 }
 
 func (cmd *Cat) Run(cli *cli.Globals) error {
-	if len(cmd.Paths) == 0 {
-		return errors.New("path required")
+	if cli.Help || len(cmd.Paths)+len(cli.File) == 0 {
+		fmt.Print(Usage)
+		return nil
 	}
 
 	ch := cli.Load(cmd.Paths)
+
+	// apply command specific context
+	cli.Filter.Before = cmd.Before
+	cli.Filter.After = cmd.After
+
 	defer cli.Discard()
 
 	for h := range ch {

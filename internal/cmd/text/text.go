@@ -14,7 +14,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints file text contents.
+Prints text contents.
 
 fox text [FLAGS...] <PATHS...>
 
@@ -76,7 +76,7 @@ func (cmd *Text) AfterApply(app *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Text) Run(cli *cli.Globals) error {
-	if cli.Help || (len(cmd.Paths) == 0 && !cmd.List) {
+	if cli.Help || (len(cmd.Paths)+len(cli.File) == 0 && !cmd.List) {
 		fmt.Print(Usage)
 		return nil
 	}
@@ -99,7 +99,7 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			Wtf:      cmd.Wtf,
 			Find:     cmd.Find,
 			First:    cmd.First,
-			Parallel: cli.Parallel,
+			Parallel: cli.Profile,
 		}).Carve(h.Bytes()) {
 			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Str) {
 				continue // not matched afterward

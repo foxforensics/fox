@@ -80,70 +80,57 @@ Fox provides many useful features to leverage your forensic examination process.
 ```
 MODES
 ```
-cat    prints file (default)
+cat    prints contents (default mode)
 
-hex    prints file in hex format
+hex    prints contents in hex format
 
-info   prints file infos and entropy
+info   prints infos and entropy
 
-test   prints file test results
+test   prints test results
 
-text   prints file text contents
+text   prints text contents
 
-hash   prints file hashes and checksums
+hash   prints hashes and checksums
 
 hunt   hunt suspicious activities
 ```
-FILE LIMITS
+LOADER FLAGS
 ```
--h, --head
-       limit head of file by ...
-
--t, --tail
-       limit tail of file by ...
-
--l, --lines=NUMBER
-       number of lines
-
--c, --bytes=NUMBER
-       number of bytes
-```
-FILE LOADER
-```
--p, --pass=PASSWORD
-       password for decryption (7Z, RAR, ZIP)
-
--f, --file=FILENAME
+-f, --file=FILE
        read extra paths from file
 
 -i, --input=TEXT
        read input instead of file
-```
-LINE OUTPUT
-```
+
 -o, --output=FILE
-       write all output to receipted file
+       write output to receipted file
+
+-p, --password=TEXT
+       archive password (7Z, RAR, ZIP)
 ```
-LINE FILTER
+FILTER FLAGS
 ```
+-h, --head
+       limit head of file by...
+
+-t, --tail
+       limit tail of file by...
+
+-c, --bytes=NUMBER
+       number of bytes
+
+-l, --lines=NUMBER
+       number of lines
+
 -e, --regexp=PATTERN
-       filter for lines that match pattern
-
--C, --context=NUMBER
-       number of lines surrounding context of match
-
--B, --before=NUMBER
-       number of lines leading context before match
-
--A, --after=NUMBER
-       number of lines trailing context after match
+       filter lines with pattern
 ```
-PARALLEL
+PROFILE FLAGS
 ```
--P, --parallel=CORES
+-P, --profile=CORES
        parallel processing profile
 ```
-DISABLE
+DISABLE FLAGS
 ```
 -r, --raw
        don't process files at all
@@ -178,7 +165,7 @@ DISABLE
     --no-warnings
        don't show any warnings
 ```
-STANDARD
+STANDARD FLAGS
 ```
 -m, --more
        prints only one page at a time
