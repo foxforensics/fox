@@ -118,7 +118,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	// pager
 	case cli.More:
-		cli.Stdout, err = pager.New(cli.Quiet)
+		cli.Stdout, err = pager.New()
 
 		if err != nil {
 			log.Fatalln(err)

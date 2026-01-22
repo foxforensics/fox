@@ -8,20 +8,15 @@ import (
 
 	"github.com/mattn/go-runewidth"
 	"golang.org/x/term"
-
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
-const help = "Press space to continue, 'q' to quit."
-
 type Pager struct {
-	quiet bool
-	width int
 	limit int
+	width int
 	level int
 }
 
-func New(quiet bool) (*Pager, error) {
+func New() (*Pager, error) {
 	w, h, err := term.GetSize(0)
 
 	if err != nil {
@@ -29,9 +24,8 @@ func New(quiet bool) (*Pager, error) {
 	}
 
 	return &Pager{
-		quiet: quiet,
+		limit: w * (h - 1),
 		width: w,
-		limit: w * h,
 	}, nil
 }
 
@@ -45,17 +39,17 @@ func (p *Pager) Write(b []byte) (int, error) {
 	s := string(b)
 
 	for _, r := range []rune(s) {
-		p.level += runewidth.RuneWidth(r)
-		page.WriteRune(r)
-
-		if p.level >= (p.limit - p.width) {
+		if p.level >= p.limit {
 			_, _ = fmt.Fprintf(os.Stdout, page.String())
 
 			p.level = 0
 			page.Reset()
 
-			p.pause()
+			pause()
 		}
+
+		p.level += runewidth.RuneWidth(r)
+		page.WriteRune(r)
 	}
 
 	// add remaining line
@@ -68,12 +62,7 @@ func (p *Pager) Write(b []byte) (int, error) {
 	return len(b), nil
 }
 
-func (p *Pager) pause() {
-	if !p.quiet {
-		print(text.Hide(help))
-		defer print(strings.Repeat("\b", len(help)) + "\033")
-	}
-
+func pause() {
 	fd := int(os.Stdin.Fd())
 
 	fs, err := term.MakeRaw(fd)
