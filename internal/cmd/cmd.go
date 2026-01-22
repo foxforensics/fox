@@ -7,7 +7,6 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
 	"github.com/fatih/color"
 
 	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -15,6 +14,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cpio"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/iso"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/rar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/rpm"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
@@ -22,6 +22,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/elf"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/lnk"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pf"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
@@ -203,6 +204,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		register.Archive("ar", ar.Detect, ar.Extract)
 		register.Archive("cab", cab.Detect, cab.Extract)
 		register.Archive("cpio", cpio.Detect, cpio.Extract)
+		register.Archive("iso", iso.Detect, iso.Extract)
 		register.Archive("rar", rar.Detect, rar.Extract)
 		register.Archive("rpm", rpm.Detect, rpm.Extract)
 		register.Archive("szip", szip.Detect, szip.Extract)

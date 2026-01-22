@@ -59,6 +59,8 @@ github.com/bradleyjkemp/cupaloy/v2 v2.6.0 h1:knToPYa2xtfg42U3I6punFEjaGFKWQRXJwj
 github.com/bradleyjkemp/cupaloy/v2 v2.6.0/go.mod h1:bm7JXdkRd4BHJk9HpwqAI8BoAY1lps46Enkdqw6aRX0=
 github.com/bradleyjkemp/sigma-go v0.6.6 h1:3TMVFtSSDw1aeiyoTO3BDoOd5VDrsHEOmujPvgnoq8s=
 github.com/bradleyjkemp/sigma-go v0.6.6/go.mod h1:xtOGppg3DSArqCJNBDrczOf++x/RC6v3bV4N6PwDszk=
+github.com/c4milo/gotoolkit v0.0.0-20190525173301-67483a18c17a h1:+uvtaGSLJh0YpLLHCQ9F+UVGy4UOS542hsjj8wBjvH0=
+github.com/c4milo/gotoolkit v0.0.0-20190525173301-67483a18c17a/go.mod h1:txokOny9wavBtq2PWuHmj1P+eFwpCsj+gQeNNANChfU=
 github.com/cavaliergopher/cpio v1.0.1 h1:KQFSeKmZhv0cr+kawA3a0xTQCU4QxXF1vhU7P7av2KM=
 github.com/cavaliergopher/cpio v1.0.1/go.mod h1:pBdaqQjnvXxdS/6CvNDwIANIFSP0xRKI16PX4xejRQc=
 github.com/cavaliergopher/rpm v1.3.0 h1:UHX46sasX8MesUXXQ+UbkFLUX4eUWTlEcX8jcnRBIgI=
@@ -134,6 +136,8 @@ github.com/hashicorp/golang-lru/v2 v2.0.7 h1:a+bsQ5rvGLjzHuww6tVxozPZFVghXaHOwFs
 github.com/hashicorp/golang-lru/v2 v2.0.7/go.mod h1:QeFd9opnmA6QUJc5vARoKUSoFhyfM2/ZepoAG6RGpeM=
 github.com/hexops/gotextdiff v1.0.3 h1:gitA9+qJrrTCsiCl7+kh75nPqQt1cx4ZkudSTLoUqJM=
 github.com/hexops/gotextdiff v1.0.3/go.mod h1:pSWU5MAI3yDq+fZBTazCSJysOMbxWL1BSow5/V2vxeg=
+github.com/hooklift/iso9660 v1.0.0 h1:GYN0ejrqTl1qtB+g+ics7xxWHp7J2B1zmr25O9EyG3c=
+github.com/hooklift/iso9660 v1.0.0/go.mod h1:sOC47ru8lB0DlU0EZ7BJ0KCP5rDqOvx0c/5K5ADm8H0=
 github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f h1:GcDipGuLklPyATFZtZcwsN4WFCBhQdRsVoJL1vDLp64=
 github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f/go.mod h1:uMYyN0e+BBSemEoe2Ys7jLGs6DIV9zc6Sj8gTHK1XOI=
 github.com/klauspost/compress v1.18.3 h1:9PJRvfbmTabkOX8moIpXPbMMbYN60bWImDDU7L+/6zw=
