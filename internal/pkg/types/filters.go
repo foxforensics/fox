@@ -12,7 +12,7 @@ type Filters struct {
 	After  uint           // lines after
 }
 
-func (f *Filters) FilterSMap(s smap.SMap) smap.SMap {
+func (f *Filters) Filter(s smap.SMap) smap.SMap {
 	if f.Regex == nil {
 		return s // not filtered
 	}

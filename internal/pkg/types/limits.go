@@ -1,46 +1,54 @@
 package types
 
-import (
-	"github.com/cuhsat/go-mmap"
+import "github.com/cuhsat/go-mmap"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
-)
+const CR = '\n'
 
 type Limits struct {
 	IsHead bool // is head limit
 	IsTail bool // is tail limit
-	Lines  uint // lines count
 	Bytes  uint // bytes count
+	Lines  uint // lines count
 }
 
-func (l *Limits) ReduceMMap(m mmap.MMap) mmap.MMap {
+func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
+	var a, b = 0, len(m)
+
 	if l.IsHead && l.Bytes > 0 {
-		r := make(mmap.MMap, min(l.Bytes, uint(len(m))))
-		copy(r, m[:len(r)])
-		return r
+		b = min(int(l.Bytes), b)
 	}
 
 	if l.IsTail && l.Bytes > 0 {
-		r := make(mmap.MMap, min(uint(len(m)), l.Bytes))
-		copy(r, m[max(len(m)-len(r), 0):])
-		return r
+		a = max(len(m)-int(l.Bytes), 0)
 	}
 
-	return m
-}
-
-func (l *Limits) ReduceSMap(s smap.SMap) smap.SMap {
 	if l.IsHead && l.Lines > 0 {
-		r := make(smap.SMap, min(l.Lines, uint(len(s))))
-		copy(r, s[:len(r)])
-		return r
+		i := a
+
+		for n := 0; i < b && n < int(l.Lines); i++ {
+			if m[i] == CR {
+				n++
+			}
+		}
+
+		b = min(i, b)
 	}
 
 	if l.IsTail && l.Lines > 0 {
-		r := make(smap.SMap, min(uint(len(s)), l.Lines))
-		copy(r, s[max(len(s)-len(r), 0):])
-		return r
+		i := b - 1
+
+		for n := 0; i > a && n < int(l.Lines); i-- {
+			if m[i-1] == CR {
+				n++
+			}
+		}
+
+		a = max(i, a)
+
+		if a > 0 {
+			a++ // skip line break
+		}
 	}
 
-	return s
+	return m[a:b]
 }
