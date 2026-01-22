@@ -24,7 +24,7 @@ func New(s string, m mmap.MMap, l *types.Limits) *Heap {
 	return &Heap{
 		Name: s,
 		Size: uint64(len(m)),
-		mmap: l.ReduceMMap(m),
+		mmap: l.Reduce(m),
 	}
 }
 

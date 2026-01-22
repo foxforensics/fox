@@ -30,12 +30,8 @@ type HexBuffer struct {
 }
 
 func Hex(h *heap.Heap, cli *cli.Globals, mode HexMode) *HexBuffer {
-	var buf = &HexBuffer{make(chan HexLine, cli.Parallel*1024)}
+	var buf = &HexBuffer{make(chan HexLine, cli.Profile*1024)}
 	var off uint
-
-	if cli.Tail {
-		off = max(uint(h.Size)-cli.Bytes, 0)
-	}
 
 	go streamHex(buf, mode, h.Bytes(), off)
 
