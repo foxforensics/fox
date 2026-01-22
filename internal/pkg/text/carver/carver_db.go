@@ -56,16 +56,16 @@ func buildDB(level int) database {
 				[]string{"MAC"},
 			},
 			{
-				regexp.MustCompile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"),
-				[]string{"Mail"},
+				regexp.MustCompile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}"),
+				[]string{"EMail"},
 			},
 			{
-				regexp.MustCompile(`\\\\[a-z0-9 %._-]+\\[a-z0-9 $%._-]+`),
+				regexp.MustCompile(`\\\\[a-zA-Z0-9 %._-]+\\[a-zA-Z0-9 $%._-]+`),
 				[]string{"UNC"},
 			},
 			{
-				regexp.MustCompile("(?:https?://)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*"),
-				[]string{"URL"},
+				regexp.MustCompile("[a-zA-Z][a-zA-Z0-9+\\-.]*://([a-zA-Z0-9\\-._~%!$&'()*+,;=]+@)?([a-zA-Z0-9\\-._~%]+|\\[[a-fA-F0-9:.]+]|\\[v[a-fA-F0-9][a-zA-Z0-9\\-._~%!$&'()*+,;=:]+])(:[0-9]+)?(/[a-zA-Z0-9\\-._~%!$&'()*+,;=:@]+)*/?(\\?[a-zA-Z0-9\\-._~%!$&'()*+,;=:@/?]*)?(#[a-zA-Z0-9\\-._~%!$&'()*+,;=:@/?]*)?"),
+				[]string{"URL"}, // according to RFC 3986
 			},
 			{
 				regexp.MustCompile("[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}"),
@@ -80,12 +80,12 @@ func buildDB(level int) database {
 				[]string{"BitLocker"},
 			},
 			{
-				regexp.MustCompile("(HK??|HKEY_[A-Z_]+)\\\\([A-Za-z0-9]+\\\\+)+[A-Za-z0-9]+"),
+				regexp.MustCompile(`(HK..|HKEY_[A-Z_]+|\\Registry)\\([a-zA-Z0-9]+\\+)+[a-zA-Z0-9]+`),
 				[]string{"Registry"},
 			},
 			{
 				regexp.MustCompile(`(?:""?[a-zA-Z]:|\\+[^/:*?<>|]+\\+[^/:*?<>|]*)\\+(?:[^/:*?<>|]+\\+)*\w([^/:*?<>|])*`),
-				[]string{"Windows"},
+				[]string{"Windows"}, // https://www.fileside.app/blog/2023-03-17_windows-file-paths/
 			},
 		}...)
 	}
