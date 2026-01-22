@@ -94,7 +94,7 @@ Disable:
       --no-warnings        don't show any warnings
 
 Standard:
-  -m, --more               prints only one page at a time
+  -m, --more               prints pagewise (press SPACE or Q)
   -d, --dry-run            prints only the found filenames
   -v, --verbose[=LEVEL]    prints more details (v/vv/vvv)
       --version            prints the version number

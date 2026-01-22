@@ -34,7 +34,7 @@ type Options struct {
 	Password string
 	Parallel int
 	Verbose  int
-	Warning  bool
+	DoWarn   bool
 }
 
 type Loader struct {
@@ -74,10 +74,6 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 	go func() {
 		defer close(ldr.heaps)
 
-		if isFilePiped(os.Stdin) {
-			paths = append(paths, stdin)
-		}
-
 		if len(ldr.opts.Input) > 0 {
 			ldr.createHeap("input", []byte(ldr.opts.Input))
 		}
@@ -109,7 +105,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 			ldr.loadPath(path, part)
 		}
 
-		if ldr.opts.Warning && float32(memory.FreeMemory()/memory.TotalMemory()) > limit {
+		if ldr.opts.DoWarn && float32(memory.FreeMemory()/memory.TotalMemory()) > limit {
 			log.Println("warning: low memory may cause swapping!")
 		}
 	}()

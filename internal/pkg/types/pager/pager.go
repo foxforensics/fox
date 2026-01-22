@@ -1,6 +1,7 @@
 package pager
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -9,6 +10,8 @@ import (
 	"github.com/mattn/go-runewidth"
 	"golang.org/x/term"
 )
+
+const enotty = "inappropriate ioctl for device"
 
 type Pager struct {
 	limit int
@@ -20,7 +23,11 @@ func New() (*Pager, error) {
 	w, h, err := term.GetSize(0)
 
 	if err != nil {
-		return nil, err
+		if err.Error() == enotty {
+			return nil, errors.New("can't use - with -m")
+		} else {
+			return nil, err
+		}
 	}
 
 	return &Pager{
