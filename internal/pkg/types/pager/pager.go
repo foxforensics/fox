@@ -47,7 +47,7 @@ func (p *Pager) Write(b []byte) (int, error) {
 
 	for _, r := range []rune(s) {
 		if p.level >= p.limit {
-			_, _ = fmt.Fprintf(os.Stdout, page.String())
+			_, _ = fmt.Fprint(os.Stdout, page.String())
 
 			p.level = 0
 			page.Reset()
@@ -64,7 +64,7 @@ func (p *Pager) Write(b []byte) (int, error) {
 		p.level += p.width - (runewidth.StringWidth(s) % p.width)
 	}
 
-	_, _ = fmt.Fprintf(os.Stdout, page.String())
+	_, _ = fmt.Fprint(os.Stdout, page.String())
 
 	return len(b), nil
 }
