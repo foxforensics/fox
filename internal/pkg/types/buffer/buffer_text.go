@@ -29,6 +29,7 @@ func Text(h *heap.Heap, cli *cli.Globals) *TextBuffer {
 		make(chan *TextLine, cli.Profile*1024),
 		uint(math.Log10(float64(len(s)))) + 1,
 	}
+
 	var delta int
 
 	if cli.Tail {

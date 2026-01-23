@@ -1,6 +1,10 @@
 package types
 
-import "github.com/cuhsat/go-mmap"
+import (
+	"bytes"
+
+	"github.com/cuhsat/go-mmap"
+)
 
 const CR = '\n'
 
@@ -24,7 +28,9 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 
 	if l.IsTail && l.Bytes > 0 {
 		a = max(len(m)-int(l.Bytes), 0)
+
 		l.Offset.Bytes = a
+		l.Offset.Lines = count(m) - count(m[a:])
 	}
 
 	if l.IsHead && l.Lines > 0 {
@@ -54,8 +60,23 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 			a++ // skip linebreak
 		}
 
-		l.Offset.Lines = n
+		if i == 0 {
+			n++ // add first line
+		}
+
+		l.Offset.Bytes = a
+		l.Offset.Lines = count(m) - n
 	}
 
 	return m[a:b]
+}
+
+func count(m mmap.MMap) int {
+	v := bytes.Count(m, []byte{CR})
+
+	if m[len(m)-1] != CR {
+		v++
+	}
+
+	return v
 }
