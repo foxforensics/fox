@@ -53,21 +53,25 @@ import (
 )
 
 type Globals struct {
-	// loader flags
-	File     string `short:"f" type:"path"`
-	Input    string `short:"i"`
-	Output   string `short:"o" xor:"output,quiet,more"`
-	Password string `short:"p"`
+	// file flags
+	File   string `short:"f" type:"path"`
+	Input  string `short:"i"`
+	Output string `short:"o" xor:"output,quiet,more"`
+
+	// limit flags
+	Head  bool `short:"h" xor:"head,tail"`
+	Tail  bool `short:"t" xor:"head,tail"`
+	Lines uint `short:"l" xor:"lines,bytes"`
+	Bytes uint `short:"c" xor:"lines,bytes"`
 
 	// filter flags
-	Head  bool   `short:"h" xor:"head,tail"`
-	Tail  bool   `short:"t" xor:"head,tail"`
-	Lines uint   `short:"l" xor:"lines,bytes"`
-	Bytes uint   `short:"c" xor:"lines,bytes"`
 	Regex string `short:"e"`
 
+	// crypto flags
+	Password string `short:"p"`
+
 	// profile flags
-	Profile int `short:"P" default:"${cores}"`
+	Profile int `short:"P" default:"${cpus}"`
 
 	// disable flags
 	Raw        bool `short:"r"`

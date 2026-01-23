@@ -43,7 +43,7 @@ func (cmd *Info) Validate() error {
 }
 
 func (cmd *Info) Run(cli *cli.Globals) error {
-	if cli.Help || len(cmd.Paths)+len(cli.File) == 0 {
+	if len(cmd.Paths)+len(cli.File) == 0 {
 		fmt.Print(Usage)
 		return nil
 	}

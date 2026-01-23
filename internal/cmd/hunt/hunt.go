@@ -11,7 +11,6 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
@@ -23,6 +22,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/hunter"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 )
 
 var Usage = strings.TrimSpace(`
@@ -137,11 +137,6 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Hunt) Run(cli *cli.Globals) error {
-	if cli.Help {
-		fmt.Print(Usage)
-		return nil
-	}
-
 	if len(cmd.Paths)+len(cli.File) == 0 {
 		cmd.Paths = hunter.Local
 	}

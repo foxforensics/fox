@@ -16,6 +16,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd"
 	"github.com/cuhsat/fox/v4/internal/cmd/cat"
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
+	"github.com/cuhsat/fox/v4/internal/cmd/help"
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
 	"github.com/cuhsat/fox/v4/internal/cmd/info"
@@ -23,21 +24,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
 
-var short = strings.TrimSpace(`
-Usage: fox [MODE] [FLAGS...] <PATHS...>
-
- cat    prints contents (default mode)
- hex    prints contents in hex format
- info   prints infos and entropy
- test   prints test results
- text   prints text contents
- hash   prints hashes and checksums
- hunt   hunt suspicious activities
-
-Use "fox --help" to show the full help.
-`)
-
-var long = strings.TrimSpace(`
+var Usage = strings.TrimSpace(`
 .-------.----.--.  .--.   .--. .--.--. .--.-. .--.-----.
 |   ___/ .__. \  \/  /    |  |_|  |  | |  |  \|  |   _/
 |   __|  |  |  >    <     |   _   |  | |  |   '  |  |
@@ -57,21 +44,25 @@ Modes:
   hash   prints hashes and checksums
   hunt   hunt suspicious activities
 
-Loader flags:
+File flags:
   -f, --file=FILE          read extra paths from file
   -i, --input=TEXT         read input instead of file
   -o, --output=FILE        write output to receipted file
-  -p, --password=TEXT      archive password (7Z, RAR, ZIP)
 
-Filter flags:
+Limit flags:
   -h, --head               limit head of file by...
   -t, --tail               limit tail of file by...
   -c, --bytes=NUMBER       number of bytes
   -l, --lines=NUMBER       number of lines
-  -e, --regexp=PATTERN     filter lines with pattern
+
+Filter flags:
+  -e, --regexp=PATTERN     filter lines by pattern
+
+Crypto flags: 
+  -p, --password=TEXT      archive password (7Z, RAR, ZIP)
 
 Profile flags:
-  -P, --profile=CORES      parallel processing profile
+  -P, --profile=CPUS       parallel processing profile
 
 Disable flags:
   -r, --raw                don't process files at all
@@ -105,7 +96,7 @@ Example: Show strings in binary
 Example: Hunt down suspicious events
   $ fox hunt -sv ./**/*.E01
 
-Use "fox MODE --help" to show more help on a specific mode.
+Use "fox help MODE" to show more help on a specific mode.
 `)
 
 type fox struct {
@@ -117,6 +108,7 @@ type fox struct {
 	Text text.Text `cmd:"" aliases:"s,strings"`
 	Hash hash.Hash `cmd:"" aliases:"h,sum"`
 	Hunt hunt.Hunt `cmd:"" aliases:"u"`
+	Help help.Help `cmd:"" hidden:""`
 
 	// support flags
 	Version bool
@@ -137,16 +129,16 @@ func main() {
 		kong.Name("fox"),
 		kong.DefaultEnvars("FOX"),
 		kong.Vars{
-			"cores": strconv.Itoa(runtime.NumCPU()),
+			"cpus": strconv.Itoa(runtime.NumCPU()),
 		})
 
 	switch {
 	case cli.Version:
 		fmt.Printf("fox %s\n", app.Version)
-	case len(ctx.Args) > 0 && ctx.Args[0] == "--help" || ctx.Error != nil:
-		fmt.Printf(long, app.Version)
-	case len(ctx.Args) == 0:
-		fmt.Println(short)
+	case cli.Globals.Help, ctx.Command() == "help":
+		fallthrough
+	case len(ctx.Args) == 0, ctx.Error != nil:
+		fmt.Printf(Usage, app.Version)
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())

@@ -71,7 +71,7 @@ func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Hash) Run(cli *cli.Globals) error {
-	if cli.Help || len(cmd.Paths)+len(cli.File) == 0 {
+	if len(cmd.Paths)+len(cli.File) == 0 {
 		fmt.Print(Usage)
 		return nil
 	}

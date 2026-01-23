@@ -76,7 +76,7 @@ func (cmd *Text) AfterApply(app *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Text) Run(cli *cli.Globals) error {
-	if cli.Help || (len(cmd.Paths)+len(cli.File) == 0 && !cmd.List) {
+	if len(cmd.Paths)+len(cli.File) == 0 && !cmd.List {
 		fmt.Print(Usage)
 		return nil
 	}

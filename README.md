@@ -94,7 +94,7 @@ hash   prints hashes and checksums
 
 hunt   hunt suspicious activities
 ```
-LOADER FLAGS
+FILE FLAGS
 ```
 -f, --file=FILE
        read extra paths from file
@@ -104,11 +104,8 @@ LOADER FLAGS
 
 -o, --output=FILE
        write output to receipted file
-
--p, --password=TEXT
-       archive password (7Z, RAR, ZIP)
 ```
-FILTER FLAGS
+LIMIT FLAGS
 ```
 -h, --head
        limit head of file by...
@@ -121,13 +118,20 @@ FILTER FLAGS
 
 -l, --lines=NUMBER
        number of lines
-
+```
+FILTER FLAGS
+```
 -e, --regexp=PATTERN
-       filter lines with pattern
+       filter lines by pattern
+```
+CRYPTO FLAGS
+```
+-p, --password=TEXT
+       archive password (7Z, RAR, ZIP)
 ```
 PROFILE FLAGS
 ```
--P, --profile=CORES
+-P, --profile=CPUS
        parallel processing profile
 ```
 DISABLE FLAGS
