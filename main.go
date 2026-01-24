@@ -77,8 +77,8 @@ Disable flags:
       --no-warnings        don't show any warnings
 
 Standard flags:
-  -p, --pause              prints pagewise (press SPACE or Q)
-  -d, --dry-run            prints only the found filenames
+  -d, --dry-run            prints only the found files
+  -p, --pause=COUNT        prints lines and pauses after
   -v, --verbose[=LEVEL]    prints more details (v/vv/vvv)
       --version            prints the version number
       --help               prints this help message

@@ -147,15 +147,15 @@ Disable Flags
 Standard Flags
 --------------
 
-**-p, --pause**
-
-:   Prints only one page at a time.
-
 **-d, --dry-run**
 
-:   Prints only the found filenames.
+:   Prints only the found files.
 
-**-v, --verbose**=[_level_]
+**-p, --pause**=_count_
+
+:   Prints lines and pauses after.
+
+**-v, --verbose**[=_level_]
 
 :   Prints more details (v/vv/vvv).
 

@@ -7,32 +7,34 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mattn/go-runewidth"
 	"golang.org/x/term"
 )
 
 const enotty = "inappropriate ioctl for device"
+const escape = 0x1B
 
 type Pager struct {
 	limit int
-	width int
-	level int
+	count int
 }
 
-func New() (*Pager, error) {
-	w, h, err := term.GetSize(0)
+func New(limit int) (*Pager, error) {
+	_, h, err := term.GetSize(0)
 
 	if err != nil {
 		if err.Error() == enotty {
-			return nil, errors.New("can't use - with -m")
-		} else {
-			return nil, err
+			err = errors.New("can't use - with pause")
 		}
+
+		return nil, err
+	}
+
+	if limit == 0 {
+		limit = h
 	}
 
 	return &Pager{
-		limit: w * (h - 1),
-		width: w,
+		limit: limit,
 	}, nil
 }
 
@@ -41,30 +43,16 @@ func (p *Pager) Close() error {
 }
 
 func (p *Pager) Write(b []byte) (int, error) {
-	var page strings.Builder
-
-	s := string(b)
-
-	for _, r := range []rune(s) {
-		if p.level >= p.limit {
-			_, _ = fmt.Fprint(os.Stdout, page.String())
-
-			p.level = 0
-			page.Reset()
-
+	for _, s := range strings.SplitAfter(string(b), "\n") {
+		if p.count == p.limit {
+			p.count = 0
 			pause()
 		}
 
-		p.level += runewidth.RuneWidth(r)
-		page.WriteRune(r)
-	}
+		p.count++
 
-	// add remaining line
-	if b[len(b)-1] == '\n' {
-		p.level += p.width - (runewidth.StringWidth(s) % p.width)
+		_, _ = fmt.Fprint(os.Stdout, s)
 	}
-
-	_, _ = fmt.Fprint(os.Stdout, page.String())
 
 	return len(b), nil
 }
@@ -85,11 +73,11 @@ func pause() {
 		_, _ = os.Stdin.Read(key)
 
 		switch key[0] {
-		case 'q':
+		case escape, 'c', 'q':
 			_ = term.Restore(fd, fs)
 			os.Exit(0)
 
-		case ' ':
+		default:
 			_ = term.Restore(fd, fs)
 			return
 		}

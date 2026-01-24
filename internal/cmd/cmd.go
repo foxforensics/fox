@@ -89,8 +89,8 @@ type Globals struct {
 
 	// standard flags
 	Help    bool
-	Pause   bool `short:"p" xor:"out,quiet,pause"`
 	DryRun  bool `short:"d" long:"dry-run"`
+	Pause   int  `short:"p" default:"-1" xor:"out,quiet,pause"`
 	Verbose int  `short:"v" type:"counter"`
 
 	// internal
@@ -114,9 +114,9 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 			log.Fatalln(err)
 		}
 
-	// use pager
-	case cli.Pause:
-		cli.Stdout, err = pager.New()
+	// use simple pager
+	case cli.Pause >= 0:
+		cli.Stdout, err = pager.New(cli.Pause)
 
 		if err != nil {
 			log.Fatalln(err)

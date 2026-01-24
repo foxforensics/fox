@@ -1,4 +1,4 @@
-![fox](assets/img/logo.png "fox")
+[![fox](assets/img/logo.png "fox")](https://foxhunt.wtf)
 
 The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 
@@ -168,11 +168,11 @@ DISABLE FLAGS
 ```
 STANDARD FLAGS
 ```
--p, --pause
-       prints only one page at a time
-
 -d, --dry-run
-       prints only the found filenames
+       prints only the found files
+
+-p, --pause=COUNT
+       prints lines and pauses after
 
 -v, --verbose[=LEVEL]
        prints more details (v/vv/vvv)
