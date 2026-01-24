@@ -33,7 +33,7 @@ go.work.sum
 *.dd
 
 # Databases
-*.db
+*.sqlite
 
 # Profiling
 *.pprof

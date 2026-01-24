@@ -185,7 +185,7 @@ STANDARD FLAGS
 ```
 POSITIONAL ARGUMENTS
 ```
-Globbing paths to open or '-' to also read from STDIN.
+Globbing paths to open or '-' to read from STDIN.
 ```
 EXAMPLES
 ```

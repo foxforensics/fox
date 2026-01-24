@@ -15,7 +15,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
 
-const Database = "fox.db"
+const Database = "hunt.sqlite"
 
 var Local = []string{
 	"/Windows/System32/winevt/Logs",

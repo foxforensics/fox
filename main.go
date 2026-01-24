@@ -84,7 +84,7 @@ Standard flags:
       --help               prints this help message
 
 Positional arguments:
-  Globbing paths to open or '-' to also read from STDIN
+  Globbing paths to open or '-' to read from STDIN
 
 Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
@@ -95,7 +95,8 @@ Example: Show strings in binary
 Example: Hunt down suspicious events
   $ fox hunt -sv ./**/*.E01
 
-Use "fox help MODE" to show more help on a specific mode.
+For more information please visit: https://foxhunt.wtf
+Type "fox help <MODE>" to show help on a specific mode.
 `)
 
 type fox struct {
