@@ -30,7 +30,7 @@ type HexBuffer struct {
 }
 
 func Hex(h *heap.Heap, cli *cli.Globals, mode HexMode) *HexBuffer {
-	var buf = &HexBuffer{make(chan HexLine, cli.Profile*1024)}
+	var buf = &HexBuffer{make(chan HexLine, cli.Parallel*1024)}
 	var delta int
 
 	if cli.Tail {

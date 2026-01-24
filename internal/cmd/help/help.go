@@ -19,8 +19,8 @@ var usage = map[string]string{
 	"cat":  cat.Usage,
 	"hex":  hex.Usage,
 	"info": info.Usage,
-	"test": test.Usage,
 	"text": text.Usage,
+	"test": test.Usage,
 	"hash": hash.Usage,
 	"hunt": hunt.Usage,
 }

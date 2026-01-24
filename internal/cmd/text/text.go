@@ -76,7 +76,7 @@ func (cmd *Text) AfterApply(app *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Text) Run(cli *cli.Globals) error {
-	if len(cmd.Paths)+len(cli.File) == 0 && !cmd.List {
+	if len(cmd.Paths)+len(cli.Paths) == 0 && !cmd.List {
 		fmt.Print(Usage)
 		return nil
 	}
@@ -99,7 +99,7 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			Wtf:      cmd.Wtf,
 			Find:     cmd.Find,
 			First:    cmd.First,
-			Parallel: cli.Profile,
+			Parallel: cli.Parallel,
 		}).Carve(h.Bytes()) {
 			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Str) {
 				continue // not matched afterward

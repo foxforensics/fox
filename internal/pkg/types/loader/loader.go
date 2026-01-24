@@ -29,8 +29,7 @@ const limit = 0.95
 type Options struct {
 	Limit    *types.Limits
 	Filter   *types.Filters
-	File     string
-	Input    string
+	Paths    string
 	Password string
 	Parallel int
 	Verbose  int
@@ -53,30 +52,24 @@ func New(opts *Options) *Loader {
 }
 
 func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
-	if len(ldr.opts.File) > 0 {
-		b, err := os.ReadFile(ldr.opts.File)
+	if len(ldr.opts.Paths) > 0 {
+		b, err := os.ReadFile(ldr.opts.Paths)
 
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		lines := strings.Split(strings.TrimSpace(string(b)), "\n")
+		paths = strings.Split(strings.TrimSpace(string(b)), "\n")
 
 		if ldr.opts.Verbose > 0 {
-			for _, l := range lines {
+			for _, l := range paths {
 				log.Printf("add path %s \n", l)
 			}
 		}
-
-		paths = append(paths, lines...)
 	}
 
 	go func() {
 		defer close(ldr.heaps)
-
-		if len(ldr.opts.Input) > 0 {
-			ldr.createHeap("input", []byte(ldr.opts.Input))
-		}
 
 		for _, path := range paths {
 			if path == stdin {

@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/alecthomas/kong"
+	"github.com/cuhsat/fox/v4/internal/cmd/text"
 
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/cmd"
@@ -21,7 +22,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
 	"github.com/cuhsat/fox/v4/internal/cmd/info"
 	"github.com/cuhsat/fox/v4/internal/cmd/test"
-	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
 
 var Usage = strings.TrimSpace(`
@@ -36,18 +36,17 @@ Usage:
   fox [MODE] [FLAGS...] <PATHS...>
 
 Modes:
-  cat    prints contents (default mode)
-  hex    prints contents in hex format
-  info   prints infos and entropy
-  test   prints test results
-  text   prints text contents
-  hash   prints hashes and checksums
-  hunt   hunt suspicious activities
+  (c) cat     prints contents (default mode)
+  (x) hex     prints contents in hex format
+  (i) info    prints infos and entropy
+  (t) text    prints text contents
+  (s) test    prints test results
+  (h) hash    prints hashes and checksums
+  (u) hunt    hunt suspicious activities
 
 File flags:
-  -f, --file=FILE          read extra paths from file
-  -i, --input=TEXT         read input instead of file
-  -o, --output=FILE        write output to receipted file
+  -i, --in=FILE            read paths from file
+  -o, --out=FILE           write output to file (receipted)
 
 Limit flags:
   -h, --head               limit head of file by...
@@ -56,13 +55,13 @@ Limit flags:
   -l, --lines=NUMBER       number of lines
 
 Filter flags:
-  -e, --regexp=PATTERN     filter lines by pattern
+  -e, --regexp=PATTERN     filter output by pattern
 
 Crypto flags: 
   -p, --password=TEXT      archive password (7Z, RAR, ZIP)
 
 Profile flags:
-  -P, --profile=CPUS       parallel processing profile
+  -P, --parallel=CPUS      parallel processing usage
 
 Disable flags:
   -r, --raw                don't process files at all
@@ -78,7 +77,7 @@ Disable flags:
       --no-warnings        don't show any warnings
 
 Standard flags:
-  -m, --more               prints pagewise (press SPACE or Q)
+  -m, --pause              prints pagewise (press SPACE or Q)
   -d, --dry-run            prints only the found filenames
   -v, --verbose[=LEVEL]    prints more details (v/vv/vvv)
       --version            prints the version number
@@ -102,10 +101,10 @@ Use "fox help MODE" to show more help on a specific mode.
 type fox struct {
 	// command modes
 	Cat  cat.Cat   `cmd:"" aliases:"c,less,more" default:"withargs"`
-	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hd"`
+	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hexdump"`
 	Info info.Info `cmd:"" aliases:"i,wc"`
-	Test test.Test `cmd:"" aliases:"t,check"`
-	Text text.Text `cmd:"" aliases:"s,strings"`
+	Text text.Text `cmd:"" aliases:"t,strings"`
+	Test test.Test `cmd:"" aliases:"s,check"`
 	Hash hash.Hash `cmd:"" aliases:"h,sum"`
 	Hunt hunt.Hunt `cmd:"" aliases:"u"`
 	Help help.Help `cmd:"" hidden:""`

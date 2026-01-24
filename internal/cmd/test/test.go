@@ -36,7 +36,7 @@ type Test struct {
 }
 
 func (cmd *Test) Run(cli *cli.Globals) error {
-	if len(cmd.Paths)+len(cli.File)+len(cmd.Ip)+len(cmd.Url) == 0 {
+	if len(cmd.Paths)+len(cli.Paths)+len(cmd.Ip)+len(cmd.Url) == 0 {
 		fmt.Print(Usage)
 		return nil
 	}

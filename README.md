@@ -86,9 +86,9 @@ hex    prints contents in hex format
 
 info   prints infos and entropy
 
-test   prints test results
-
 text   prints text contents
+
+test   prints test results
 
 hash   prints hashes and checksums
 
@@ -96,14 +96,11 @@ hunt   hunt suspicious activities
 ```
 FILE FLAGS
 ```
--f, --file=FILE
-       read extra paths from file
+-i, --in=FILE
+       read paths from file
 
--i, --input=TEXT
-       read input instead of file
-
--o, --output=FILE
-       write output to receipted file
+-o, --out=FILE
+       write output to file (receipted)
 ```
 LIMIT FLAGS
 ```
@@ -122,7 +119,7 @@ LIMIT FLAGS
 FILTER FLAGS
 ```
 -e, --regexp=PATTERN
-       filter lines by pattern
+       filter output by pattern
 ```
 CRYPTO FLAGS
 ```
@@ -131,8 +128,8 @@ CRYPTO FLAGS
 ```
 PROFILE FLAGS
 ```
--P, --profile=CPUS
-       parallel processing profile
+-P, --parallel=CPUS
+       parallel processing usage
 ```
 DISABLE FLAGS
 ```
@@ -171,7 +168,7 @@ DISABLE FLAGS
 ```
 STANDARD FLAGS
 ```
--m, --more
+-m, --pause
        prints only one page at a time
 
 -d, --dry-run
@@ -201,11 +198,11 @@ $ fox hex -hc512 disk.bin
 $ fox info -n0.9 ./**/*
        List high entropy files
 
-$ fox test sample.exe
-       Test suspicious file
-
 $ fox text -w sample.exe
        Show strings in binary
+
+$ fox test sample.exe
+       Test suspicious file
 
 $ fox hash -uTLSH files.7z
        Hash archive contents

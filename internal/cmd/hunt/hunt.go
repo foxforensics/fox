@@ -137,7 +137,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Hunt) Run(cli *cli.Globals) error {
-	if len(cmd.Paths)+len(cli.File) == 0 {
+	if len(cmd.Paths)+len(cli.Paths) == 0 {
 		cmd.Paths = hunter.Local
 	}
 
@@ -153,7 +153,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("hunt: using %d worker(s)\n", cli.Profile)
+		log.Printf("hunt: using %d worker(s)\n", cli.Parallel)
 	}
 
 	if cli.Verbose > 1 && cmd.db != nil {
@@ -179,7 +179,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	for e := range hunter.New(&hunter.Options{
 		Sort:     cmd.Sort,
-		Parallel: cli.Profile,
+		Parallel: cli.Parallel,
 		Verbose:  cli.Verbose,
 	}).Hunt(ch) {
 		res, err := sig.Matches(ctx, e.Fields)

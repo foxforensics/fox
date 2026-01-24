@@ -54,9 +54,8 @@ import (
 
 type Globals struct {
 	// file flags
-	File   string `short:"f" type:"path"`
-	Input  string `short:"i"`
-	Output string `short:"o" xor:"output,quiet,more"`
+	Paths string `short:"i" long:"in" type:"path"`
+	File  string `short:"o" long:"out" xor:"out,quiet,pause"`
 
 	// limit flags
 	Head  bool `short:"h" xor:"head,tail"`
@@ -71,11 +70,11 @@ type Globals struct {
 	Password string `short:"p"`
 
 	// profile flags
-	Profile int `short:"P" default:"${cpus}"`
+	Parallel int `short:"P" default:"${cpus}"`
 
 	// disable flags
 	Raw        bool `short:"r"`
-	Quiet      bool `short:"q" xor:"output,quiet,more"`
+	Quiet      bool `short:"q" xor:"out,quiet,pause"`
 	NoFile     bool `long:"no-file"`
 	NoLine     bool `long:"no-line"`
 	NoColor    bool `long:"no-color"`
@@ -89,7 +88,7 @@ type Globals struct {
 
 	// standard flags
 	Help    bool
-	More    bool `short:"m" xor:"output,quiet,more"`
+	Pause   bool `short:"m" xor:"out,quiet,pause"`
 	DryRun  bool `short:"d" long:"dry-run"`
 	Verbose int  `short:"v" type:"counter"`
 
@@ -106,16 +105,16 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	switch {
 	// file with receipt
-	case len(cli.Output) > 0:
+	case len(cli.File) > 0:
 		cli.NoColor = true
-		cli.Stdout, err = os.OpenFile(cli.Output, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
+		cli.Stdout, err = os.OpenFile(cli.File, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
 
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-	// pager
-	case cli.More:
+	// use pager
+	case cli.Pause:
 		cli.Stdout, err = pager.New()
 
 		if err != nil {
@@ -160,8 +159,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.NoWarnings = true
 	}
 
-	if cli.Profile <= 0 {
-		cli.Profile = 1 // must be at least one
+	if cli.Parallel <= 0 {
+		cli.Parallel = 1 // must be at least one
 	}
 
 	if cli.NoColor {
@@ -223,10 +222,9 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	cli.Loader = loader.New(&loader.Options{
 		Limit:    cli.Limit,
 		Filter:   cli.Filter,
-		File:     cli.File,
-		Input:    cli.Input,
+		Paths:    cli.Paths,
 		Password: cli.Password,
-		Parallel: cli.Profile,
+		Parallel: cli.Parallel,
 		Verbose:  cli.Verbose,
 		DoWarn:   !cli.NoWarnings,
 	})
@@ -241,17 +239,17 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		os.Exit(0)
 	}
 
-	smap.Chunks = cli.Profile
+	smap.Chunks = cli.Parallel
 
 	return cli.Loader.Load(args)
 }
 
 func (cli *Globals) Discard() {
-	if len(cli.Output) > 0 {
+	if len(cli.File) > 0 {
 		_ = cli.Stdout.Close()
 
 		if !cli.NoReceipt {
-			err := receipt.Generate(cli.Output)
+			err := receipt.Generate(cli.File)
 
 			if err != nil {
 				log.Println(err)
