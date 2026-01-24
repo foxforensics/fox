@@ -1,4 +1,4 @@
-% FOX(1) Version 4 | Fox Documentation
+% FOX TEST(1) Version 4 | Fox Documentation
 
 NAME
 ====
@@ -48,6 +48,18 @@ EXAMPLES
 fox test sample.exe
 
 :   Tests suspicious file.
+
+BUGS
+====
+
+Please submit any issues with fox to the project's bug tracker:
+<_https://github.com/cuhsat/fox/issues_>
+
+WWW
+===
+
+Please visit the project's homepage at:
+<_https://foxhunt.wtf_>
 
 SEE ALSO
 ========

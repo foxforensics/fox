@@ -1,4 +1,4 @@
-% FOX(1) Version 4 | Fox Documentation
+% FOX HEX(1) Version 4 | Fox Documentation
 
 NAME
 ====
@@ -41,6 +41,18 @@ EXAMPLES
 fox hex -hc512 disk.bin
 
 :   Shows MBR in canonical hex.
+
+BUGS
+====
+
+Please submit any issues with fox to the project's bug tracker:
+<_https://github.com/cuhsat/fox/issues_>
+
+WWW
+===
+
+Please visit the project's homepage at:
+<_https://foxhunt.wtf_>
 
 SEE ALSO
 ========

@@ -20,7 +20,7 @@ go install github.com/cuhsat/fox/v4@latest
 * Dump Windows Shortcut and Prefetch files
 * Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * Check IPs, URLs and file hashes via the [VirusTotal API](https://www.virustotal.com/)
-* Integral `grep`, `head`, `tail`, `more`, `hexdump`, `wc` like abilities
+* Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
 * Integral *Chain-of-Custody* receipt generation
 * Many popular archive and compression formats
 * Many popular cryptographic, fuzzy, image and fast hashes
@@ -222,7 +222,7 @@ https://foxhunt.wtf
 ```
 SEE ALSO
 ```
-cat(1), grep(1), head(1), tail(1), more(1), hexdump(1), strings(1), wc(1)
+cat(1), grep(1), head(1), tail(1), hexdump(1), strings(1), wc(1)
 ```
 ---
 

@@ -1,4 +1,4 @@
-% FOX(1) Version 4 | Fox Documentation
+% FOX CAT(1) Version 4 | Fox Documentation
 
 NAME
 ====
@@ -42,7 +42,19 @@ fox -eWinlogon ./**/*.evtx
 
 :   Finds occurrences in event logs.
 
+BUGS
+====
+
+Please submit any issues with fox to the project's bug tracker:
+<_https://github.com/cuhsat/fox/issues_>
+
+WWW
+===
+
+Please visit the project's homepage at:
+<_https://foxhunt.wtf_>
+
 SEE ALSO
 ========
 
-**fox(1)**, **cat(1)**, **less(1)**, **grep(1)**
+**fox(1)**, **cat(1)**, **grep(1)**, **less(1)**

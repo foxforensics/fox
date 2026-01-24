@@ -1,4 +1,4 @@
-% FOX(1) Version 4 | Fox Documentation
+% FOX TEXT(1) Version 4 | Fox Documentation
 
 NAME
 ====
@@ -64,6 +64,18 @@ EXAMPLES
 fox text -w sample.exe
 
 :   Shows strings in binary.
+
+BUGS
+====
+
+Please submit any issues with fox to the project's bug tracker:
+<_https://github.com/cuhsat/fox/issues_>
+
+WWW
+===
+
+Please visit the project's homepage at:
+<_https://foxhunt.wtf_>
 
 SEE ALSO
 ========
