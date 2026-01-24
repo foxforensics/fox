@@ -47,9 +47,9 @@ Shows MBR in canonical hex:
 $ fox hex -hc512 disk.bin
 ```
 
-Lists high entropy files:
+Finds high entropy files:
 ```console
-$ fox info -n0.9 ./**/*
+$ fox find -n0.9 ./**/*
 ```
 
 Shows strings in binary:

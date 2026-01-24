@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Prints text contents.
+Prints file text contents.
 
 FLAGS
 =====

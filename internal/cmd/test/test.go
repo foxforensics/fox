@@ -15,7 +15,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints test results.
+Prints file test results.
 
 fox test [FLAGS...] [PATHS...]
 

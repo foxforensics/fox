@@ -1,4 +1,4 @@
-package info
+package find
 
 import (
 	"bytes"
@@ -14,9 +14,9 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints infos and entropy.
+Prints file infos and entropy.
 
-fox info [FLAGS...] <PATHS...>
+fox find [FLAGS...] <PATHS...>
 
 Flags:
   -b, --block=SIZE         block size for calculations
@@ -24,17 +24,17 @@ Flags:
   -x, --max=VALUE          maximal entropy value (default: 1.0)
 
 Examples:
-  $ fox info -n0.9 ./**/*
+  $ fox find -n0.9 ./**/*
 `)
 
-type Info struct {
+type Find struct {
 	Block uint64   `short:"b"`
 	Min   float64  `short:"n" default:"0.0"`
 	Max   float64  `short:"x" default:"1.0"`
 	Paths []string `arg:"" name:"path" type:"path" optional:""`
 }
 
-func (cmd *Info) Validate() error {
+func (cmd *Find) Validate() error {
 	if cmd.Min > cmd.Max {
 		log.Fatalln("invalid range")
 	}
@@ -42,7 +42,7 @@ func (cmd *Info) Validate() error {
 	return nil
 }
 
-func (cmd *Info) Run(cli *cli.Globals) error {
+func (cmd *Find) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
 		fmt.Print(Usage)
 		return nil

@@ -14,7 +14,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints hashes and checksums.
+Prints file hashes and checksums.
 
 fox hash [FLAGS...] <PATHS...>
 

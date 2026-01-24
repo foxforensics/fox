@@ -14,7 +14,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints text contents.
+Prints file text contents.
 
 fox text [FLAGS...] <PATHS...>
 

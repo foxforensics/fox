@@ -11,7 +11,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints contents in hex format.
+Prints file contents in hex format.
 
 fox hex [FLAGS...] <PATHS...>
 

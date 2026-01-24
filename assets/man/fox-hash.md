@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Prints hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified.
+Prints file hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified.
 
 FLAGS
 =====

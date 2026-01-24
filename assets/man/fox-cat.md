@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Prints contents.
+Prints file contents.
 
 FLAGS
 =====

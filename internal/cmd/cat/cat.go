@@ -13,7 +13,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints contents.
+Prints file contents.
 
 fox cat [FLAGS...] <PATHS...>
 

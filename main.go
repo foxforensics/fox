@@ -11,17 +11,17 @@ import (
 	"time"
 
 	"github.com/alecthomas/kong"
-	"github.com/cuhsat/fox/v4/internal/cmd/text"
 
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/cmd"
 	"github.com/cuhsat/fox/v4/internal/cmd/cat"
+	"github.com/cuhsat/fox/v4/internal/cmd/find"
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
 	"github.com/cuhsat/fox/v4/internal/cmd/help"
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
-	"github.com/cuhsat/fox/v4/internal/cmd/info"
 	"github.com/cuhsat/fox/v4/internal/cmd/test"
+	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
 
 var Usage = strings.TrimSpace(`
@@ -36,12 +36,12 @@ Usage:
   fox [MODE] [FLAGS...] <PATHS...>
 
 Modes:
-  (c) cat     prints contents (default mode)
-  (x) hex     prints contents in hex format
-  (i) info    prints infos and entropy
-  (t) text    prints text contents
-  (s) test    prints test results
-  (h) hash    prints hashes and checksums
+  (c) cat     prints file contents (default mode)
+  (x) hex     prints file contents in hex format
+  (f) find    prints file infos and entropy
+  (t) text    prints file text contents
+  (s) test    prints file test results
+  (h) hash    prints file hashes and checksums
   (u) hunt    hunts suspicious activities
 
 File flags:
@@ -102,7 +102,7 @@ type fox struct {
 	// command modes
 	Cat  cat.Cat   `cmd:"" aliases:"c,less,more" default:"withargs"`
 	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hexdump"`
-	Info info.Info `cmd:"" aliases:"i,wc"`
+	Find find.Find `cmd:"" aliases:"f,wc"`
 	Text text.Text `cmd:"" aliases:"t,strings"`
 	Test test.Test `cmd:"" aliases:"s,check"`
 	Hash hash.Hash `cmd:"" aliases:"h,sum"`

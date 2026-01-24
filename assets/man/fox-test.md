@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Prints test results.
+Prints file test results. A VirusTotal API key is required.
 
 FLAGS
 =====

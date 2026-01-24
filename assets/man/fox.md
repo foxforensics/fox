@@ -20,27 +20,27 @@ MODES
 
 cat
 
-:   Prints contents (default mode).
+:   Prints file contents (default mode).
 
 hex
 
-:   Prints contents in hex format.
+:   Prints file contents in hex format.
 
-info
+find
 
-:   Prints infos and entropy.
+:   Prints file infos and entropy.
 
 text
 
-:   Prints text contents.
+:   Prints file text contents.
 
 test
 
-:   Prints test results.
+:   Prints file test results.
 
 hash
 
-:   Prints hashes and checksums.
+:   Prints file hashes and checksums.
 
 hunt
 
@@ -186,9 +186,9 @@ fox hex -hc512 disk.bin
 
 :   Shows MBR in canonical hex.
 
-fox info -n0.9 ./**/*
+fox find -n0.9 ./**/*
 
-:   Lists high entropy files
+:   Finds high entropy files.
 
 fox text -w sample.exe
 
