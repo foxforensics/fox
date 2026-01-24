@@ -1,11 +1,11 @@
-![fox](assets/logo.png "fox")
+![fox](assets/img/logo.png "fox")
 
 The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 
-![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)
-![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)
-![Commits](https://img.shields.io/github/commit-activity/y/cuhsat/fox.svg?style=for-the-badge&label=commits)
-![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)
+[![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
+[![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/cuhsat/fox/actions)
+[![Commits](https://img.shields.io/github/commit-activity/y/cuhsat/fox.svg?style=for-the-badge&label=commits)](https://github.com/cuhsat/fox/commits/main/)
+[![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
 
 ```console
 go install github.com/cuhsat/fox/v4@latest
@@ -105,10 +105,10 @@ FILE FLAGS
 LIMIT FLAGS
 ```
 -h, --head
-       limit head of file by...
+       limit head of file by bytes or lines.
 
 -t, --tail
-       limit tail of file by...
+       limit tail of file by bytes of lines.
 
 -c, --bytes=NUMBER
        number of bytes
@@ -124,7 +124,7 @@ FILTER FLAGS
 CRYPTO FLAGS
 ```
 -p, --password=TEXT
-       archive password (7Z, RAR, ZIP)
+       archive password (only for 7Z, RAR, ZIP)
 ```
 PROFILE FLAGS
 ```
@@ -217,6 +217,7 @@ https://github.com/cuhsat/fox/issues
 ```
 WWW
 ```
+Please visit the project's homepage at:
 https://foxhunt.wtf
 ```
 SEE ALSO

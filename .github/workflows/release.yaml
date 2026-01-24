@@ -21,6 +21,8 @@ jobs:
         uses: anchore/sbom-action/download-syft@v0
       - name: Setup Cosign
         uses: sigstore/cosign-installer@v3
+      - name: Setup Pandoc
+        uses: pandoc/actions/setup@v1
       - name: Setup Go
         uses: actions/setup-go@v5
       - name: Run GoReleaser
