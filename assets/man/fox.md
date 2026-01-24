@@ -147,7 +147,7 @@ Disable Flags
 Standard Flags
 --------------
 
-**-m, --pause**
+**-p, --pause**
 
 :   Prints only one page at a time.
 
