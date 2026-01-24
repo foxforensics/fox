@@ -22,7 +22,7 @@ Flags:
   -B, --before=NUMBER      lines leading context before a match
   -A, --after=NUMBER       lines trailing context after a match
 
-Example:
+Examples:
   $ fox -eWinlogon ./**/*.evtx
 `)
 

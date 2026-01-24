@@ -92,23 +92,23 @@ test   prints test results
 
 hash   prints hashes and checksums
 
-hunt   hunt suspicious activities
+hunt   hunts suspicious activities
 ```
 FILE FLAGS
 ```
 -i, --in=FILE
-       read paths from file
+       reads paths from file
 
 -o, --out=FILE
-       write output to file (receipted)
+       writes output to file (receipted)
 ```
 LIMIT FLAGS
 ```
 -h, --head
-       limit head of file by bytes or lines.
+       limits head of file by bytes or lines.
 
 -t, --tail
-       limit tail of file by bytes of lines.
+       limits tail of file by bytes of lines.
 
 -c, --bytes=NUMBER
        number of bytes
@@ -119,17 +119,17 @@ LIMIT FLAGS
 FILTER FLAGS
 ```
 -e, --regexp=PATTERN
-       filter output by pattern
+       filters output by pattern
 ```
-CRYPTO FLAGS
+ARCHIVE FLAGS
 ```
--p, --password=TEXT
-       archive password (only for 7Z, RAR, ZIP)
+-P, --password=TEXT
+       uses archive password (only for 7Z, RAR, ZIP)
 ```
 PROFILE FLAGS
 ```
--P, --parallel=CPUS
-       parallel processing usage
+-T, --threads=CORES
+       uses parallel threads
 ```
 DISABLE FLAGS
 ```
@@ -168,7 +168,7 @@ DISABLE FLAGS
 ```
 STANDARD FLAGS
 ```
--m, --pause
+-p, --pause
        prints only one page at a time
 
 -d, --dry-run
@@ -190,25 +190,25 @@ Globbing paths to open or '-' to read from STDIN.
 EXAMPLES
 ```
 $ fox -eWinlogon ./**/*.evtx
-       Find occurrences in event logs
+       Finds occurrences in event logs
 
 $ fox hex -hc512 disk.bin
-       Show MBR in canonical hex
+       Shows MBR in canonical hex
 
 $ fox info -n0.9 ./**/*
-       List high entropy files
+       Lists high entropy files
 
 $ fox text -w sample.exe
-       Show strings in binary
+       Shows strings in binary
 
 $ fox test sample.exe
-       Test suspicious file
+       Tests suspicious file
 
 $ fox hash -uTLSH files.7z
-       Hash archive contents
+       Hashes archive contents
 
 $ fox hunt -sv ./**/*.E01
-       Hunt down suspicious events
+       Hunts down suspicious events
 ```
 BUGS
 ```

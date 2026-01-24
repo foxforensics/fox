@@ -42,26 +42,26 @@ Modes:
   (t) text    prints text contents
   (s) test    prints test results
   (h) hash    prints hashes and checksums
-  (u) hunt    hunt suspicious activities
+  (u) hunt    hunts suspicious activities
 
 File flags:
-  -i, --in=FILE            read paths from file
-  -o, --out=FILE           write output to file (receipted)
+  -i, --in=FILE            reads paths from file
+  -o, --out=FILE           writes output to file (receipted)
 
 Limit flags:
-  -h, --head               limit head of file by...
-  -t, --tail               limit tail of file by...
+  -h, --head               limits head of file by...
+  -t, --tail               limits tail of file by...
   -c, --bytes=NUMBER       number of bytes
   -l, --lines=NUMBER       number of lines
 
 Filter flags:
-  -e, --regexp=PATTERN     filter output by pattern
+  -e, --regexp=PATTERN     filters output by pattern
 
-Crypto flags: 
-  -p, --password=TEXT      archive password (7Z, RAR, ZIP)
+Archive flags: 
+  -P, --password=TEXT      uses archive password (7Z, RAR, ZIP)
 
 Profile flags:
-  -P, --parallel=CPUS      parallel processing usage
+  -T, --threads=CORES      uses parallel threads
 
 Disable flags:
   -r, --raw                don't process files at all
@@ -77,7 +77,7 @@ Disable flags:
       --no-warnings        don't show any warnings
 
 Standard flags:
-  -m, --pause              prints pagewise (press SPACE or Q)
+  -p, --pause              prints pagewise (press SPACE or Q)
   -d, --dry-run            prints only the found filenames
   -v, --verbose[=LEVEL]    prints more details (v/vv/vvv)
       --version            prints the version number
@@ -86,13 +86,13 @@ Standard flags:
 Positional arguments:
   Globbing paths to open or '-' to read from STDIN
 
-Example: Find occurrences in event logs
+Example: Finds occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
-Example: Show strings in binary
+Example: Shows strings in binary
   $ fox text -w sample.exe
 
-Example: Hunt down suspicious events
+Example: Hunts down suspicious events
   $ fox hunt -sv ./**/*.E01
 
 For more information please visit: https://foxhunt.wtf
@@ -129,7 +129,7 @@ func main() {
 		kong.Name("fox"),
 		kong.DefaultEnvars("FOX"),
 		kong.Vars{
-			"cpus": strconv.Itoa(runtime.NumCPU()),
+			"cores": strconv.Itoa(runtime.NumCPU()),
 		})
 
 	switch {

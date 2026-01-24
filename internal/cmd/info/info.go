@@ -20,10 +20,10 @@ fox info [FLAGS...] <PATHS...>
 
 Flags:
   -b, --block=SIZE         block size for calculations
-  -n, --min=DECIMAL        minimum entropy value (default: 0.0)
-  -x, --max=DECIMAL        maximal entropy value (default: 1.0)
+  -n, --min=VALUE          minimum entropy value (default: 0.0)
+  -x, --max=VALUE          maximal entropy value (default: 1.0)
 
-Example:
+Examples:
   $ fox info -n0.9 ./**/*
 `)
 

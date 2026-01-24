@@ -19,18 +19,18 @@ Prints text contents.
 fox text [FLAGS...] <PATHS...>
 
 Flags:
-  -n, --min=NUMBER         minimum string length (default: 3)
-  -x, --max=NUMBER         maximal string length (default: 256)
-  -a, --ascii              show only strings with ASCII encoding
-  -s, --sort               sort strings alphabetically
+  -n, --min=LENGTH         minimum string length (default: 3)
+  -x, --max=LENGTH         maximal string length (default: 256)
+  -a, --ascii              shows only strings with ASCII encoding
+  -s, --sort               sorts strings alphabetically
 
 Classes:
-  -w, --wtf[=LEVEL]        show string classifications (w/ww/www)
-  -F, --find=CLASS,...     show only strings that match class(es)
-  -1, --first              show only strings first class
-  -L, --list               show only classification list
+  -w, --wtf[=LEVEL]        shows string classifications (w/ww/www)
+  -F, --find=CLASS,...     shows only strings that match class(es)
+  -1, --first              shows only strings first class
+  -L, --list               shows only classification list
 
-Example:
+Examples:
   $ fox text -w sample.exe
 `)
 
@@ -99,7 +99,7 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			Wtf:      cmd.Wtf,
 			Find:     cmd.Find,
 			First:    cmd.First,
-			Parallel: cli.Parallel,
+			Parallel: cli.Threads,
 		}).Carve(h.Bytes()) {
 			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Str) {
 				continue // not matched afterward

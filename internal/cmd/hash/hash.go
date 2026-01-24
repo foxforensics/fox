@@ -19,13 +19,13 @@ Prints hashes and checksums.
 fox hash [FLAGS...] <PATHS...>
 
 Flags:
-  -u, --use=ALGORITHM,...  use algorithms (default: SHA256)
-  -a, --all                all algorithms
+  -u, --use=ALGORITHM,...  uses algorithm (default: SHA256)
+  -a, --all                uses all algorithms
 
-Example:
+Examples:
   $ fox hash -uTLSH files.7z
 
-Remark:
+Remarks:
   Results will be grouped by path, if more than one algorithm is specified.
 
 Cryptographic hashes (BLAKE family):

@@ -16,11 +16,11 @@ Prints contents in hex format.
 fox hex [FLAGS...] <PATHS...>
 
 Flags:
-  -H, --hexdump            format output like hexdump
-  -X, --xxd                format output like xxd
+  -H, --hexdump            formats output like hexdump
+  -X, --xxd                formats output like xxd
   -R, --raw                don't format the output
 
-Example:
+Examples:
   $ fox hex -hc512 disk.bin
 `)
 

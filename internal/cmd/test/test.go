@@ -20,11 +20,11 @@ Prints test results.
 fox test [FLAGS...] [PATHS...]
 
 Flags:
-  -k, --key=APIKEY         Set key for VirusTotal API
-  -U, --url=URL,...        Test suspicious URL
-  -I, --ip=IP,...          Test suspicious IP
+  -k, --key=APIKEY         Sets VirusTotal API key
+  -U, --url=URL,...        Tests suspicious URL
+  -I, --ip=IP,...          Tests suspicious IP
 
-Example:
+Examples:
   $ fox test sample.exe
 `)
 

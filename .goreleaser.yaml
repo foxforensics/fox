@@ -38,6 +38,13 @@ archives:
         formats: [zip]
     files:
       - fox.1
+      - fox-cat.1
+      - fox-hex.1
+      - fox-info.1
+      - fox-text.1
+      - fox-test.1
+      - fox-hash.1
+      - fox-hunt.1
       - README.md
       - LICENSE.md
       - SECURITY.md

@@ -31,26 +31,26 @@ Hunt suspicious activities.
 fox hunt [FLAGS...] [PATHS...]
 
 Flags:
-  -a, --all                show logs with all severities
-  -s, --sort               show logs sorted by timestamp (slow)
-  -j, --json               show logs as JSON objects
-  -J, --jsonl              show logs as JSON lines
-  -D, --sqlite             save logs to SQLite3 DB (very slow)
+  -a, --all                shows logs with all severities
+  -s, --sort               shows logs sorted by timestamp (slow)
+  -j, --json               shows logs as JSON objects
+  -J, --jsonl              shows logs as JSON lines
+  -D, --sqlite             saves logs to SQLite3 DB (very slow)
 
 Rules:
-  -R, --rule=FILE          filter using a Sigma rule (slow)
+  -R, --rule=FILE          filters using a Sigma rule file (slow)
 
 Stream:
-  -U, --url=SERVER         stream events to server address
-  -T, --auth=TOKEN         stream events using auth token
-  -E, --ecs                use ECS schema for streaming
-  -H, --hec                use HEC schema for streaming
+  -U, --url=SERVER         streams events to server address
+  -A, --auth=TOKEN         streams events using auth token
+  -E, --ecs                uses ECS schema for streaming
+  -H, --hec                uses HEC schema for streaming
 
-Alias:
+Aliases:
   -L, --logstash           alias for -E -Uhttp://localhost:8080
   -S, --splunk             alias for -H -Uhttp://localhost:8088/...
 
-Example:
+Examples:
   $ fox hunt -sv ./**/*.E01
 `)
 
@@ -64,7 +64,7 @@ type Hunt struct {
 
 	// stream
 	Url  string `short:"U"`
-	Auth string `short:"T"`
+	Auth string `short:"A"`
 	Ecs  bool   `short:"E" xor:"ecs,hec"`
 	Hec  bool   `short:"H" xor:"ecs,hec"`
 
@@ -153,7 +153,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("hunt: using %d worker(s)\n", cli.Parallel)
+		log.Printf("hunt: using %d worker(s)\n", cli.Threads)
 	}
 
 	if cli.Verbose > 1 && cmd.db != nil {
@@ -179,7 +179,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	for e := range hunter.New(&hunter.Options{
 		Sort:     cmd.Sort,
-		Parallel: cli.Parallel,
+		Parallel: cli.Threads,
 		Verbose:  cli.Verbose,
 	}).Hunt(ch) {
 		res, err := sig.Matches(ctx, e.Fields)

@@ -67,11 +67,11 @@ type Globals struct {
 	// filter flags
 	Regex string `short:"e"`
 
-	// crypto flags
-	Password string `short:"p"`
+	// archive flags
+	Password string `short:"P"`
 
 	// profile flags
-	Parallel int `short:"P" default:"${cpus}"`
+	Threads int `short:"T" default:"${cores}"`
 
 	// disable flags
 	Raw        bool `short:"r"`
@@ -89,7 +89,7 @@ type Globals struct {
 
 	// standard flags
 	Help    bool
-	Pause   bool `short:"m" xor:"out,quiet,pause"`
+	Pause   bool `short:"p" xor:"out,quiet,pause"`
 	DryRun  bool `short:"d" long:"dry-run"`
 	Verbose int  `short:"v" type:"counter"`
 
@@ -160,8 +160,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.NoWarnings = true
 	}
 
-	if cli.Parallel <= 0 {
-		cli.Parallel = 1 // must be at least one
+	if cli.Threads <= 0 {
+		cli.Threads = 1 // must be at least one
 	}
 
 	if cli.NoColor {
@@ -226,7 +226,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		Filter:   cli.Filter,
 		Paths:    cli.Paths,
 		Password: cli.Password,
-		Parallel: cli.Parallel,
+		Parallel: cli.Threads,
 		Verbose:  cli.Verbose,
 		DoWarn:   !cli.NoWarnings,
 	})
@@ -241,7 +241,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		os.Exit(0)
 	}
 
-	smap.Chunks = cli.Parallel
+	smap.Chunks = cli.Threads
 
 	return cli.Loader.Load(args)
 }
