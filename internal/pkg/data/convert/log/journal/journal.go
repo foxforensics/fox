@@ -42,7 +42,7 @@ func Convert(b []byte) ([]byte, error) {
 		buf.WriteRune('\n')
 	}
 
-	return buf.Bytes(), err
+	return buf.Bytes(), nil
 }
 
 func Carve(b []byte, off int, cap int) <-chan *event.Event {
