@@ -73,23 +73,6 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestLoadInput(t *testing.T) {
-	opts := newOpts()
-	opts.Input = "Test"
-
-	l := New(opts)
-
-	paths := consume(l, []string{})
-
-	if len(paths) != 1 {
-		t.Fatal("invalid count")
-	}
-
-	if paths[0] != "input" {
-		t.Fatal("invalid path")
-	}
-}
-
 func TestLoadFiles(t *testing.T) {
 	for _, tt := range []struct {
 		name string
@@ -180,7 +163,6 @@ func newOpts() *Options {
 	return &Options{
 		&types.Limits{},
 		&types.Filters{},
-		"",
 		"",
 		"",
 		1,
