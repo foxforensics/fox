@@ -6,6 +6,13 @@ before:
     - go mod tidy
     - go mod download
     - pandoc -s -t man assets/man/fox.md -o fox.1
+    - pandoc -s -t man assets/man/fox-cat.md -o fox-cat.1
+    - pandoc -s -t man assets/man/fox-hex.md -o fox-hex.1
+    - pandoc -s -t man assets/man/fox-info.md -o fox-info.1
+    - pandoc -s -t man assets/man/fox-text.md -o fox-text.1
+    - pandoc -s -t man assets/man/fox-test.md -o fox-test.1
+    - pandoc -s -t man assets/man/fox-hash.md -o fox-hash.1
+    - pandoc -s -t man assets/man/fox-hunt.md -o fox-hunt.1
 
 builds:
   - env:
@@ -80,5 +87,33 @@ nfpms:
           mode: 0644
       - src: ./fox.1
         dst: /usr/share/man/man1/fox.1
+        file_info:
+          mode: 0644
+      - src: ./fox-cat.1
+        dst: /usr/share/man/man1/fox-cat.1
+        file_info:
+          mode: 0644
+      - src: ./fox-hex.1
+        dst: /usr/share/man/man1/fox-hex.1
+        file_info:
+          mode: 0644
+      - src: ./fox-info.1
+        dst: /usr/share/man/man1/fox-info.1
+        file_info:
+          mode: 0644
+      - src: ./fox-text.1
+        dst: /usr/share/man/man1/fox-text.1
+        file_info:
+          mode: 0644
+      - src: ./fox-test.1
+        dst: /usr/share/man/man1/fox-test.1
+        file_info:
+          mode: 0644
+      - src: ./fox-hash.1
+        dst: /usr/share/man/man1/fox-hash.1
+        file_info:
+          mode: 0644
+      - src: ./fox-hunt.1
+        dst: /usr/share/man/man1/fox-hunt.1
         file_info:
           mode: 0644

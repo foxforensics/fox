@@ -49,9 +49,6 @@ hunt
 FLAGS
 =====
 
-File Flags
-----------
-
 **-i, --in**=_file_
 
 :   Read paths from file.
@@ -224,11 +221,6 @@ WWW
 
 Please visit the project's homepage at:
 <_https://foxhunt.wtf_>
-
-AUTHOR
-======
-
-Christian Uhsat <fox at foxhunt dot wtf>
 
 SEE ALSO
 ========

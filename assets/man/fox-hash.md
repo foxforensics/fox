@@ -1,0 +1,83 @@
+% FOX(1) Version 4 | Fox Documentation
+
+NAME
+====
+
+**fox** — The Forensic Examiners Swiss Army Knife
+
+SYNOPSIS
+========
+
+| **fox** **hash** \[_flags_ ...] \[_paths_ ...]
+
+DESCRIPTION
+===========
+
+Prints hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified.
+
+FLAGS
+=====
+
+**-u, --use**=_algorithm_,...
+
+:   Use algorithms (default: SHA256).
+
+**-a, --all**
+
+:   All algorithms.
+
+POSITIONAL ARGUMENTS
+====================
+
+Globbing paths to open or '-' to read from **STDIN(4)**.
+
+ALGORITHMS
+==========
+
+Cryptographic hashes (BLAKE family)
+
+:   BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
+
+Cryptographic hashes (SHA family)
+
+:   SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
+
+Cryptographic hashes (MD family)
+
+:   MD2, MD4, MD5, MD6
+
+Cryptographic hashes (other)
+
+:   RIPEMD-160, SHAKE128, SHAKE256, SM3
+
+Performance hashes
+
+:   FNV-1, FNV-1A, MURMUR3, SIPHASH, XXH32, XXH64, XXH3
+
+Similarity hashes
+
+:   IMPHASH, SSDEEP, TLSH
+
+Windows specific
+
+:   LM, NT, PE Checksum
+
+Image specific
+
+:   AHASH, DHASH, PHASH
+
+Checksums
+
+:   ADLER32, FLETCHER-4, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+
+EXAMPLES
+========
+
+fox hash -uTLSH files.7z
+
+:   Hash archive contents.
+
+SEE ALSO
+========
+
+**fox(1)**
