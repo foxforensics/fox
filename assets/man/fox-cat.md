@@ -20,15 +20,15 @@ FLAGS
 
 **-C, --context**=_number_
 
-:   Lines surrounding context of a match.
+:   _Number_ of lines surrounding context of a match.
 
 **-B, --before**=_number_
 
-:   Lines leading context before a match.
+:   _Number_ of lines leading context before a match.
 
 **-A, --after**=_number_
 
-:   Lines trailing context after a match.
+:   _Number_ of lines trailing context after a match.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -40,9 +40,9 @@ EXAMPLES
 
 fox -eWinlogon ./**/*.evtx
 
-:   Find occurrences in event logs.
+:   Finds occurrences in event logs.
 
 SEE ALSO
 ========
 
-**fox(1)**
+**fox(1)**, **cat(1)**, **less(1)**, **grep(1)**

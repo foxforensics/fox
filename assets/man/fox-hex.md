@@ -20,11 +20,11 @@ FLAGS
 
 **-H, --hexdump**
 
-:   Format output like **hexdump**.
+:   Formats output like **hexdump**.
 
 **-X, --xxd**
 
-:   Format output like **xxd**.
+:   Formats output like **xxd**.
 
 **-R, --raw**
 
@@ -40,7 +40,7 @@ EXAMPLES
 
 fox hex -hc512 disk.bin
 
-:   Show MBR in canonical hex.
+:   Shows MBR in canonical hex.
 
 SEE ALSO
 ========

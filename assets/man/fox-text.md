@@ -18,40 +18,40 @@ Prints text contents.
 FLAGS
 =====
 
-**-n, --min**=_number_
+**-n, --min**=_length_
 
-:   Minimum string length (default: 3).
+:   Minimum string _length_ (default: **3**).
 
-**-x, --max**=_number_
+**-x, --max**=_length_
 
-:   Maximal string length (default: 256).
+:   Maximal string _length_ (default: **256**).
 
 **-a, --ascii**
 
-:   Show only strings with ASCII encoding.
+:   Shows only strings with ASCII encoding.
 
 **-s, --sort**
 
-:   Sort strings alphabetically.
+:   Sorts strings alphabetically.
 
 CLASSES
 =======
 
 **-w, --wtf**[=_level_]
 
-:   Show string classifications (w/ww/www).
+:   Shows string classifications (w/ww/www).
 
 **-F, --find**=_class_,...
 
-:   Show only strings that match class(es).
+:   Shows only strings that match _class_(es).
 
 **-1, --first**
 
-:   Show only strings first class.
+:   Shows only strings first class.
 
 **-l, --list**
 
-:   Show only classification list.
+:   Shows only classification list.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -63,9 +63,9 @@ EXAMPLES
 
 fox text -w sample.exe
 
-:   Show strings in binary.
+:   Shows strings in binary.
 
 SEE ALSO
 ========
 
-**fox(1)**
+**fox(1)**, **strings(1)**

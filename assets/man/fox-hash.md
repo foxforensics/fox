@@ -20,11 +20,11 @@ FLAGS
 
 **-u, --use**=_algorithm_,...
 
-:   Use algorithms (default: SHA256).
+:   Uses _algorithm_ (default: **SHA256**).
 
 **-a, --all**
 
-:   All algorithms.
+:   Uses all algorithms.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -75,7 +75,7 @@ EXAMPLES
 
 fox hash -uTLSH files.7z
 
-:   Hash archive contents.
+:   Hashes archive contents.
 
 SEE ALSO
 ========

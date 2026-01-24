@@ -20,15 +20,15 @@ FLAGS
 
 **-k, --key**=_apikey_
 
-:   Set key for **VirusTotal** API.
+:   Sets **VirusTotal** API _key_.
 
 **-U, --url**=_url_,...
 
-:   Test suspicious URL.
+:   Tests suspicious _url_.
 
 **-I, --ip**=_ip_,...
 
-:   Test suspicious IP.
+:   Tests suspicious _ip_.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -47,7 +47,7 @@ EXAMPLES
 
 fox test sample.exe
 
-:   Test suspicious file.
+:   Tests suspicious file.
 
 SEE ALSO
 ========

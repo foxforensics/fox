@@ -20,15 +20,15 @@ FLAGS
 
 **-b, --block**=_size_
 
-:   Block size for calculations.
+:   Block _size_ for calculations.
 
-**-n, --min**=_decimal_
+**-n, --min**=_value_
 
-:   Minimum entropy value (default: 0.0).
+:   Minimum entropy _value_ (default: **0.0**).
 
-**-x, --max**=_decimal_
+**-x, --max**=_value_
 
-:   Maximal entropy value (default: 1.0).
+:   Maximal entropy _value_ (default: **1.0**).
 
 POSITIONAL ARGUMENTS
 ====================
@@ -40,9 +40,9 @@ EXAMPLES
 
 fox info -n0.9 ./**/*
 
-:   List high entropy files
+:   Lists high entropy files
 
 SEE ALSO
 ========
 
-**fox(1)**
+**fox(1)**, **wc(1)**

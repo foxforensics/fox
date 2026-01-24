@@ -13,56 +13,56 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Hunt suspicious activities.
+Hunts suspicious activities.
 
 FLAGS
 =====
 
 **-a, --all**
 
-:   Show logs with all severities.
+:   Shows logs with all severities.
 
 **-s, --sort**
 
-:   Show logs sorted by timestamp (slow).
+:   Shows logs sorted by timestamp (slow).
 
 **-j, --json**
 
-:   Show logs as JSON objects.
+:   Shows logs as JSON objects.
 
 **-J, --jsonl**
 
-:   Show logs as JSON lines.
+:   Shows logs as JSON lines.
 
 **-D, --sqlite**
 
-:   Save logs to SQLite3 DB (very slow).
+:   Saves logs to SQLite3 DB (very slow).
 
 Rule Flags
 ----------
 
 **-R, --rule**=_file_
 
-:   Filter using a Sigma rule (slow).
+:   Filters using a Sigma rule _file_ (slow).
 
 Stream Flags
 ------------
 
 **-U, --url**=_server_
 
-:   Stream events to _server_ address.
+:   Streams events to _server_ address.
 
-**-T, --auth**=_token_
+**-A, --auth**=_token_
 
-:   Stream events using auth _token_.
+:   Streams events using auth _token_.
 
 **-E, --ecs**
 
-:   Use **ECS** schema for streaming.
+:   Uses **ECS** schema for streaming.
 
 **-H, --hec**
 
-:   Use **HEC** schema for streaming.
+:   Uses **HEC** schema for streaming.
 
 ALIASES
 =======
@@ -85,7 +85,7 @@ EXAMPLES
 
 fox hunt -sv ./**/*.E01
 
-:   Hunt down suspicious events.
+:   Hunts down suspicious events.
 
 SEE ALSO
 ========

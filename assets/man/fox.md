@@ -44,29 +44,29 @@ hash
 
 hunt
 
-:   Hunt suspicious activities.
+:   Hunts suspicious activities.
 
 FLAGS
 =====
 
 **-i, --in**=_file_
 
-:   Read paths from file.
+:   Reads paths from _file_.
 
 **-o, --out**=_file_
 
-:   Write output to file (receipted).
+:   Writes output to _file_ (receipted).
 
 Limit Flags
 -----------
 
 **-h, --head**
 
-:   Limit head of file by **bytes** or **lines**.
+:   Limits head of file by **bytes** or **lines**.
 
 **-t, --tail**
 
-:   Limit tail of file by **bytes** or **lines**.
+:   Limits tail of file by **bytes** or **lines**.
 
 **-c, --bytes**=_number_
 
@@ -81,21 +81,21 @@ Filter Flags
 
 **-e, --regexp**=_pattern_
 
-:   Filter output by _pattern_.
+:   Filters output by _pattern_.
 
 Crypto Flags
 ------------
 
-**-p, --password**=_password_
+**-P, --password**=_password_
 
-:   Archive _password_ (only for _7Z_, _RAR_, _ZIP_).
+:   Uses archive _password_ (only for **7Z**, **RAR**, **ZIP**).
 
 Profile Flags
 -------------
 
-**-P, --parallel**=_cpus_
+**-T, --threads**=_cores_
 
-:   Parallel processing usage.
+:   Uses parallel threads.
 
 Disable Flags
 -------------
@@ -184,31 +184,31 @@ EXAMPLES
 
 fox -eWinlogon ./**/*.evtx
 
-:   Find occurrences in event logs.
+:   Finds occurrences in event logs.
 
 fox hex -hc512 disk.bin
 
-:   Show MBR in canonical hex.
+:   Shows MBR in canonical hex.
 
 fox info -n0.9 ./**/*
 
-:   List high entropy files
+:   Lists high entropy files
 
 fox text -w sample.exe
 
-:   Show strings in binary.
+:   Shows strings in binary.
 
 fox test sample.exe
 
-:   Test suspicious file.
+:   Tests suspicious file.
 
 fox hash -uTLSH files.7z
 
-:   Hash archive contents.
+:   Hashes archive contents.
 
 fox hunt -sv ./**/*.E01
 
-:   Hunt down suspicious events.
+:   Hunts down suspicious events.
 
 BUGS
 ====
