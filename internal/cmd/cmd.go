@@ -47,7 +47,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/pager"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
@@ -56,7 +55,7 @@ import (
 type Globals struct {
 	// file flags
 	Paths string `short:"i" long:"in" type:"path"`
-	File  string `short:"o" long:"out" xor:"out,quiet,pause"`
+	File  string `short:"o" long:"out" xor:"out,quiet"`
 
 	// limit flags
 	Head  bool `short:"h" xor:"head,tail"`
@@ -75,7 +74,7 @@ type Globals struct {
 
 	// disable flags
 	Raw        bool `short:"r"`
-	Quiet      bool `short:"q" xor:"out,quiet,pause"`
+	Quiet      bool `short:"q" xor:"out,quiet"`
 	NoFile     bool `long:"no-file"`
 	NoLine     bool `long:"no-line"`
 	NoColor    bool `long:"no-color"`
@@ -90,7 +89,6 @@ type Globals struct {
 	// standard flags
 	Help    bool
 	DryRun  bool `short:"d" long:"dry-run"`
-	Pause   int  `short:"p" default:"-1" xor:"out,quiet,pause"`
 	Verbose int  `short:"v" type:"counter"`
 
 	// internal
@@ -109,14 +107,6 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	case len(cli.File) > 0:
 		cli.NoColor = true
 		cli.Stdout, err = os.OpenFile(cli.File, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
-
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-	// use simple pager
-	case cli.Pause >= 0:
-		cli.Stdout, err = pager.New(cli.Pause)
 
 		if err != nil {
 			log.Fatalln(err)

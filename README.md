@@ -171,9 +171,6 @@ STANDARD FLAGS
 -d, --dry-run
        prints only the found files
 
--p, --pause=COUNT
-       prints lines and pauses after
-
 -v, --verbose[=LEVEL]
        prints more details (v/vv/vvv)
 

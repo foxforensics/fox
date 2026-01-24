@@ -151,10 +151,6 @@ Standard Flags
 
 :   Prints only the found files.
 
-**-p, --pause**=_count_
-
-:   Prints lines and pauses after.
-
 **-v, --verbose**[=_level_]
 
 :   Prints more details (v/vv/vvv).
