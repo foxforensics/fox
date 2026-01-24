@@ -42,7 +42,7 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 	}
 
 	if len(cmd.Key) == 0 {
-		log.Fatalln("key required")
+		log.Fatalln("VirusTotal API key required")
 	}
 
 	if cli.Verbose > 2 {
