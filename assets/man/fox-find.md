@@ -30,6 +30,13 @@ FLAGS
 
 :   Maximal entropy _value_ (default: **1.0**).
 
+Format Flags
+------------
+
+**-h, --human**
+
+:   Format size in human-readable units.
+
 POSITIONAL ARGUMENTS
 ====================
 

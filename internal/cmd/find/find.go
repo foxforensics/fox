@@ -23,14 +23,22 @@ Flags:
   -n, --min=VALUE          minimum entropy value (default: 0.0)
   -x, --max=VALUE          maximal entropy value (default: 1.0)
 
+Format Flags:
+  -H, --human              format size in human-readable units
+
 Examples:
   $ fox find -n0.9 ./**/*
 `)
 
 type Find struct {
-	Block uint64   `short:"b"`
-	Min   float64  `short:"n" default:"0.0"`
-	Max   float64  `short:"x" default:"1.0"`
+	Block uint64  `short:"b"`
+	Min   float64 `short:"n" default:"0.0"`
+	Max   float64 `short:"x" default:"1.0"`
+
+	// format
+	Human bool `short:"H"`
+
+	// paths
 	Paths []string `arg:"" name:"path" type:"path" optional:""`
 }
 
@@ -77,13 +85,18 @@ func (cmd *Find) Run(cli *cli.Globals) error {
 			}
 
 			if e >= cmd.Min && e <= cmd.Max {
+				size := fmt.Sprintf("%10db", len(block))
 				title := text.Hide(h.String())
-				start := text.Hide(fmt.Sprintf("(@%d)", off))
+				start := text.Hide(fmt.Sprintf("@%d", off))
+
+				if cmd.Human {
+					size = text.Humanize(int64(len(block)))
+				}
 
 				if cmd.Block > 0 {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s %s\n", l, len(block), e, title, start)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %s  %.10fe  %s %s\n", l, size, e, title, start)
 				} else {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s\n", l, len(block), e, title)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %s  %.10fe  %s\n", l, size, e, title)
 				}
 			}
 
