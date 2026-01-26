@@ -83,7 +83,7 @@ Filter Flags
 
 :   Filters output by _pattern_.
 
-Crypto Flags
+Archive Flags
 ------------
 
 **-P, --password**=_password_
