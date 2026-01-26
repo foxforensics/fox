@@ -16,14 +16,15 @@ type Options struct {
 	Wtf      int
 	Find     []string
 	First    bool
+	Decimal  bool
 	Parallel int
 }
 
 type String struct {
-	off int
-	Adr string
-	Cls string
-	Str string
+	off     int
+	Address string
+	Class   string
+	Value   string
 }
 
 type Carver struct {
@@ -103,9 +104,16 @@ func (cvr *Carver) flush(off int, buf []rune) {
 	v := uint(len(strings.TrimSpace(str)))
 
 	if v >= cvr.opts.Min && v <= cvr.opts.Max {
-		adr := fmt.Sprintf("%08x", off)
-		cls := ""
+		var adr, cls string
 
+		// format address
+		if cvr.opts.Decimal {
+			adr = fmt.Sprintf("%08d", off)
+		} else {
+			adr = fmt.Sprintf("%08x", off)
+		}
+
+		// append class
 		if cvr.opts.Wtf > 0 {
 			v := cvr.db.Search(str)
 
@@ -135,8 +143,8 @@ func (cvr *Carver) sort() <-chan *String {
 		}
 
 		slices.SortStableFunc(cvr.cache, func(a, b *String) int {
-			if a.Str != b.Str {
-				return strings.Compare(a.Str, b.Str)
+			if a.Value != b.Value {
+				return strings.Compare(a.Value, b.Value)
 			}
 
 			return a.off - b.off

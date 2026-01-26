@@ -1,8 +1,12 @@
 package buffer
 
 import (
+	"bytes"
 	"fmt"
+	"log"
 	"math"
+
+	"github.com/alecthomas/chroma/v2/quick"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
@@ -10,6 +14,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
+
+const limit = 1024 * 1024
 
 type TextLine struct {
 	Line   string
@@ -22,33 +28,48 @@ type TextBuffer struct {
 	Pad   uint
 }
 
+type TextContext struct {
+	SMap  smap.SMap
+	Delta int
+}
+
 func Text(h *heap.Heap, cli *cli.Globals) *TextBuffer {
-	s := cli.Filter.Filter(smap.Map(h.Bytes()))
+	b := h.Bytes()
+
+	if len(b) > limit {
+		log.Printf("warning: disabled colorize for files > %s", text.Humanize(limit))
+	} else if !cli.NoColor {
+		b = colorize(b)
+	}
+
+	s := cli.Filter.Filter(smap.Map(b))
 
 	var buf = &TextBuffer{
 		make(chan *TextLine, cli.Threads*1024),
 		uint(math.Log10(float64(len(s)))) + 1,
 	}
 
-	var delta int
-
-	if cli.Tail {
-		delta = cli.Limit.Offset.Lines
+	var ctx = &TextContext{
+		SMap: s.Render(),
 	}
 
-	go streamText(buf, s.Render(), delta)
+	if cli.Tail {
+		ctx.Delta = cli.Limit.Offset.Lines
+	}
+
+	go streamText(buf, ctx)
 
 	return buf
 }
 
-func streamText(buf *TextBuffer, s smap.SMap, d int) {
+func streamText(buf *TextBuffer, ctx *TextContext) {
 	defer close(buf.Lines)
 
 	var numSep uint = 0
 	var numGrp uint = 1
 	var tmpGrp uint = 0
 
-	for _, str := range s {
+	for _, str := range ctx.SMap {
 
 		// insert context separator
 		if tmpGrp != str.Group && numGrp > 1 {
@@ -59,7 +80,7 @@ func streamText(buf *TextBuffer, s smap.SMap, d int) {
 
 		// build line
 		buf.Lines <- &TextLine{
-			fmt.Sprintf("%0*d ", buf.Pad, uint(d)+str.Line),
+			fmt.Sprintf("%0*d ", buf.Pad, uint(ctx.Delta)+str.Line),
 			str.Group,
 			text.Sanitize(string(str.Bytes)),
 		}
@@ -67,4 +88,16 @@ func streamText(buf *TextBuffer, s smap.SMap, d int) {
 		tmpGrp = str.Group
 		numGrp++
 	}
+}
+
+func colorize(b []byte) []byte {
+	var buf bytes.Buffer
+
+	err := quick.Highlight(&buf, string(b), "", "terminal256", "monokai")
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return buf.Bytes()
 }

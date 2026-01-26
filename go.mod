@@ -8,6 +8,7 @@ require (
 	github.com/Velocidex/go-journalctl v0.0.0-20250902002606-881a5f66df10
 	github.com/VirusTotal/vt-go v1.1.0
 	github.com/aixiansheng/lzfse v0.2.4
+	github.com/alecthomas/chroma/v2 v2.23.1
 	github.com/alecthomas/kong v1.13.0
 	github.com/andybalholm/brotli v1.2.0
 	github.com/bmatcuk/doublestar/v4 v4.9.2
@@ -75,6 +76,7 @@ require (
 	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/c4milo/gotoolkit v0.0.0-20190525173301-67483a18c17a // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
+	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/edsrzf/mmap-go v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect

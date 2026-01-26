@@ -16,7 +16,7 @@ var Term = reset.SprintFunc()
 
 var white = color.New(color.FgHiWhite)
 var black = color.New(color.FgHiBlack)
-var match = color.New(color.FgHiBlue)
+var match = color.New(color.BgBlue)
 var alert = color.New(color.FgHiRed)
 var reset = color.New(color.Reset)
 
