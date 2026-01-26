@@ -30,6 +30,13 @@ FLAGS
 
 :   Don't format the output.
 
+Format Flags
+------------
+
+**-D, --decimal**
+
+:   Format addresses as decimals.
+
 POSITIONAL ARGUMENTS
 ====================
 

@@ -24,11 +24,14 @@ Flags:
   -a, --ascii              shows only strings with ASCII encoding
   -s, --sort               sorts strings alphabetically
 
-Classes:
+Class Flags:
   -w, --wtf[=LEVEL]        shows string classifications (w/ww/www)
   -F, --find=CLASS,...     shows only strings that match class(es)
   -1, --first              shows only strings first class
   -L, --list               shows only classification list
+
+Format Flags:
+  -D, --decimal            format addresses as decimals
 
 Examples:
   $ fox text -w sample.exe
@@ -45,6 +48,9 @@ type Text struct {
 	Find  []string `short:"F" sep:","`
 	First bool     `short:"1" and:"first,wtf"`
 	List  bool     `short:"L"`
+
+	// format
+	Decimal bool `short:"D"`
 
 	// paths
 	Paths []string `arg:"" type:"path" optional:""`
@@ -99,20 +105,21 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			Wtf:      cmd.Wtf,
 			Find:     cmd.Find,
 			First:    cmd.First,
+			Decimal:  cmd.Decimal,
 			Parallel: cli.Threads,
 		}).Carve(h.Bytes()) {
-			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Str) {
+			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Value) {
 				continue // not matched afterward
 			}
 
-			l.Str = text.MarkMatch(l.Str, cli.Regexp)
+			l.Value = text.MarkMatch(l.Value, cli.Regexp)
 
 			if !cli.NoLine && cmd.Wtf > 0 {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s  %s\n", text.Hide(l.Adr), l.Str, text.Hide(l.Cls))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s  %s\n", text.Hide(l.Address), l.Value, text.Hide(l.Class))
 			} else if !cli.NoLine {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", text.Hide(l.Adr), l.Str)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", text.Hide(l.Address), l.Value)
 			} else {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", l.Str)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", l.Value)
 			}
 		}
 

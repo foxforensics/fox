@@ -34,8 +34,8 @@ FLAGS
 
 :   Sorts strings alphabetically.
 
-CLASSES
-=======
+Class Flags
+-----------
 
 **-w, --wtf**[=_level_]
 
@@ -52,6 +52,13 @@ CLASSES
 **-l, --list**
 
 :   Shows only classification list.
+
+Format Flags
+------------
+
+**-D, --decimal**
+
+:   Format addresses as decimals.
 
 POSITIONAL ARGUMENTS
 ====================

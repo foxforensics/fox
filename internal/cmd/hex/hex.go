@@ -20,15 +20,23 @@ Flags:
   -X, --xxd                formats output like xxd
   -R, --raw                don't format the output
 
+Format Flags:
+  -D, --decimal            format addresses as decimals
+
 Examples:
   $ fox hex -hc512 disk.bin
 `)
 
 type Hex struct {
-	Hexdump bool     `short:"H" xor:"hexdump,xxd,raw"`
-	Xxd     bool     `short:"X" xor:"hexdump,xxd,raw"`
-	Raw     bool     `short:"R" xor:"hexdump,xxd,raw"`
-	Paths   []string `arg:"" type:"path" optional:""`
+	Hexdump bool `short:"H" xor:"hexdump,xxd,raw"`
+	Xxd     bool `short:"X" xor:"hexdump,xxd,raw"`
+	Raw     bool `short:"R" xor:"hexdump,xxd,raw"`
+
+	// format
+	Decimal bool `short:"D"`
+
+	// paths
+	Paths []string `arg:"" type:"path" optional:""`
 }
 
 func (cmd *Hex) Run(cli *cli.Globals) error {
@@ -60,7 +68,9 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 		lastHex, wasCut := "", false
 
-		for l := range buffer.Hex(h, cli, mode).Lines {
+		for l := range buffer.Hex(h, cli, &buffer.HexContext{
+			Mode: mode, Decimal: cmd.Decimal,
+		}).Lines {
 			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Values) {
 				continue // not matched afterward
 			}
@@ -78,11 +88,11 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 			switch mode {
 			case buffer.Canonical:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s%s\n", text.Hide(l.Offset), l.Values, text.Hide(l.String))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s%s\n", text.Hide(l.Address), l.Values, text.Hide(l.String))
 			case buffer.Hexdump:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Offset), l.Values)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Address), l.Values)
 			case buffer.Xxd:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %-16s\n", text.Hide(l.Offset), l.Values, text.Hide(l.String))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %-16s\n", text.Hide(l.Address), l.Values, text.Hide(l.String))
 			case buffer.Raw:
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", l.Values)
 			}
