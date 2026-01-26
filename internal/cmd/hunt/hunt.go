@@ -35,12 +35,12 @@ Flags:
   -s, --sort               shows logs sorted by timestamp (slow)
   -j, --json               shows logs as JSON objects
   -J, --jsonl              shows logs as JSON lines
-  -D, --sqlite             saves logs to SQLite3 DB (very slow)
+  -Q, --sqlite             saves logs to SQLite3 DB (very slow)
 
-Rules:
+Rule Flags:
   -R, --rule=FILE          filters using a Sigma rule file (slow)
 
-Stream:
+Stream Flags:
   -U, --url=SERVER         streams events to server address
   -A, --auth=TOKEN         streams events using auth token
   -E, --ecs                uses ECS schema for streaming
@@ -59,7 +59,7 @@ type Hunt struct {
 	Sort   bool   `short:"s"`
 	Json   bool   `short:"j" xor:"json,jsonl"`
 	Jsonl  bool   `short:"J" xor:"json,jsonl"`
-	Sqlite bool   `short:"D"`
+	Sqlite bool   `short:"Q"`
 	Rule   string `short:"R" sep:"," type:"path"`
 
 	// stream

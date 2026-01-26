@@ -34,7 +34,7 @@ FLAGS
 
 :   Shows logs as JSON lines.
 
-**-D, --sqlite**
+**-Q, --sqlite**
 
 :   Saves logs to SQLite3 DB (very slow).
 
