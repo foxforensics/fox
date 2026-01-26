@@ -2,6 +2,9 @@ package types
 
 import (
 	"bytes"
+	"log"
+	"strconv"
+	"strings"
 
 	"github.com/cuhsat/go-mmap"
 )
@@ -16,6 +19,15 @@ type Limits struct {
 	Offset struct {
 		Bytes int
 		Lines int
+	}
+}
+
+func NewLimits(h, t bool, b, l string) *Limits {
+	return &Limits{
+		IsHead: h,
+		IsTail: t,
+		Bytes:  convert(b),
+		Lines:  convert(l),
 	}
 }
 
@@ -69,6 +81,32 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 	}
 
 	return m[a:b]
+}
+
+func convert(s string) uint {
+	var val uint64
+	var err error
+
+	if len(s) == 0 {
+		return 0
+	}
+
+	s = strings.ToLower(s)
+
+	switch {
+	case strings.HasPrefix(s, "0x"):
+		val, err = strconv.ParseUint(s[2:], 16, 0)
+	case strings.HasPrefix(s, "#"):
+		val, err = strconv.ParseUint(s[1:], 16, 0)
+	default:
+		val, err = strconv.ParseUint(s, 10, 0)
+	}
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return uint(val)
 }
 
 func count(m mmap.MMap) int {

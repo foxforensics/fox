@@ -58,10 +58,10 @@ type Globals struct {
 	File  string `short:"o" long:"out" xor:"out,quiet"`
 
 	// limit flags
-	Head  bool `short:"h" xor:"head,tail"`
-	Tail  bool `short:"t" xor:"head,tail"`
-	Lines uint `short:"l" xor:"lines,bytes"`
-	Bytes uint `short:"c" xor:"lines,bytes"`
+	Head  bool   `short:"h" xor:"head,tail"`
+	Tail  bool   `short:"t" xor:"head,tail"`
+	Lines string `short:"l" xor:"lines,bytes"`
+	Bytes string `short:"c" xor:"lines,bytes"`
 
 	// filter flags
 	Regex string `short:"e"`
@@ -126,12 +126,12 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.Regexp = regexp.MustCompile(cli.Regex)
 	}
 
-	cli.Limit = &types.Limits{
-		IsHead: cli.Head,
-		IsTail: cli.Tail,
-		Bytes:  cli.Bytes,
-		Lines:  cli.Lines,
-	}
+	cli.Limit = types.NewLimits(
+		cli.Head,
+		cli.Tail,
+		cli.Bytes,
+		cli.Lines,
+	)
 
 	cli.Filter = &types.Filters{
 		Regex: cli.Regexp,
