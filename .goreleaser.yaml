@@ -126,18 +126,18 @@ nfpms:
           mode: 0644
 
 homebrew_casks:
-  - name: fox
+  - url:
+      verified: github.com/cuhsat/homebrew-fox/
+    name: "fox"
+    description: "Forensic Examiners Swiss Army Knife"
+    homepage: "https://foxhunt.wtf/"
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
     repository:
       owner: cuhsat
       name: homebrew-fox
       branch: main
       token: "{{ .Env.HOMEBREW_TOKEN }}"
-    url:
-      verified: github.com/cuhsat/homebrew-fox/
     directory: Casks
-    homepage: https://foxhunt.wtf
-    description: The Forensic Examiners Swiss Army Knife.
     license: GPL-3.0
     manpages:
       - fox.1
