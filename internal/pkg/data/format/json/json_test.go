@@ -36,7 +36,7 @@ func TestFormat(t *testing.T) {
 	buf := Format(data.Fixture(file))
 
 	if !json.Valid(buf) {
-		t.Fatal("invalid json")
+		t.Fatal("invalid format")
 	}
 
 	lines := strings.Split(string(buf), "\n")

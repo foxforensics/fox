@@ -7,14 +7,10 @@ import (
 	"slices"
 
 	"github.com/sourcegraph/conc"
-
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
 )
 
-var Pretty = true // default
-var Chunks = 2    // default
+var Chunks = 2 // default
 
-var sep = []byte{'\n'}
 var tab = []byte{'\t'}
 var exp = []byte("  ")
 
@@ -48,20 +44,9 @@ func Map(m []byte) (s SMap) {
 }
 
 func (s SMap) Render() SMap {
-	// the json lines formatting is crucial and therefor built-in,
-	// it is solely based on the first line for performance reasons
-	jsonl := json.Detect(s[0].Bytes)
-
 	return s.do(func(ch chan<- String, chk []String) {
 		for _, str := range chk {
-			if !Pretty || !jsonl {
-				ch <- String{str.Line, str.Group, bytes.ReplaceAll(str.Bytes, tab, exp)}
-				continue
-			}
-
-			for b := range bytes.SplitSeq(json.Format(str.Bytes), sep) {
-				ch <- String{str.Line, str.Group, b}
-			}
+			ch <- String{str.Line, str.Group, bytes.ReplaceAll(str.Bytes, tab, exp)}
 		}
 	})
 }

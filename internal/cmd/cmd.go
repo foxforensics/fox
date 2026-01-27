@@ -7,8 +7,6 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/color"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
 	_color "github.com/fatih/color"
 
 	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -44,6 +42,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/jsonl"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/image/ewf"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
@@ -206,10 +206,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	if !cli.NoPretty {
 		register.Format("json", json.Detect, json.Format)
-	}
-
-	if !cli.NoColor {
-		register.Format("color", color.Detect, color.Format)
+		register.Format("jsonl", jsonl.Detect, jsonl.Format)
 	}
 
 	if !cli.Raw {
@@ -236,7 +233,6 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		os.Exit(0)
 	}
 
-	smap.Pretty = !cli.NoPretty
 	smap.Chunks = cli.Threads
 
 	return cli.Loader.Load(args)

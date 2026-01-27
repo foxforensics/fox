@@ -3,11 +3,8 @@ package json
 import (
 	"bytes"
 	"encoding/json"
-)
 
-const (
-	prefix = ""
-	indent = "  "
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format"
 )
 
 func Detect(b []byte) bool {
@@ -16,7 +13,7 @@ func Detect(b []byte) bool {
 
 func Format(b []byte) []byte {
 	buf := bytes.NewBuffer(nil)
-	err := json.Indent(buf, b, prefix, indent)
+	err := json.Indent(buf, b, format.Prefix, format.Indent)
 
 	if err != nil {
 		return b

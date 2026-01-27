@@ -193,7 +193,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			continue // not matched
 		}
 
-		line := cmd.format(e, cli.Regexp, res.Match)
+		line := cmd.format(e, cli.Regexp)
 
 		if cli.Regexp != nil && !cli.Regexp.MatchString(line) {
 			continue // not matched afterward
@@ -219,28 +219,23 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp, m bool) string {
-	var fn text.Colored
-
-	switch {
-	case re != nil:
-		fn = text.MarkMatchFunc(re)
-	case cmd.All && m:
-		fn = text.Mark // mark event
-	case cmd.All:
-		fn = text.Hide // hide event
-	default:
-		fn = text.Term // reset
-	}
+func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp) string {
+	var line string
 
 	switch {
 	case cmd.Jsonl:
-		return fn(e.ToJSONL())
+		line = text.ColorizeAs(e.ToJSONL(), "json")
 	case cmd.Json:
-		return fn(e.ToJSON())
+		line = text.ColorizeAs(e.ToJSON(), "json")
 	default:
-		return fn(e.ToCEF())
+		line = e.ToCEF()
 	}
+
+	if re != nil {
+		line = text.MarkMatch(line, re)
+	}
+
+	return line
 }
 
 func (cmd *Hunt) upsert(e *event.Event) {

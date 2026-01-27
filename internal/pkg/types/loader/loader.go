@@ -83,7 +83,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 					log.Fatalln(err)
 				}
 
-				ldr.createHeap(stdin, buf)
+				ldr.createHeap("STDIN", buf)
 				break
 			}
 
@@ -226,6 +226,9 @@ func (ldr *Loader) processData(path, part string, b []byte) {
 	// 3b. convert data
 	b = ldr.convertData(b)
 
+	// 4. format data
+	b = ldr.formatData(b)
+
 	// filter for specific streams
 	if strings.Contains(path, part) {
 		ldr.createHeap(path, b)
@@ -301,6 +304,20 @@ func (ldr *Loader) convertData(b []byte) []byte {
 			}
 
 			return r
+		}
+	}
+
+	return b
+}
+
+func (ldr *Loader) formatData(b []byte) []byte {
+	for _, c := range register.Formats {
+		if c.Detect(b) {
+			if ldr.opts.Verbose > 1 {
+				log.Printf("format detected %s\n", c.Name)
+			}
+
+			return c.Format(b)
 		}
 	}
 

@@ -88,7 +88,7 @@ func request(url *url.URL, key string) ([]Entry, error) {
 }
 
 func trace(obj *vt.Object) error {
-	var buf bytes.Buffer
+	buf := bytes.NewBuffer(nil)
 
 	if !Trace {
 		return nil
@@ -100,7 +100,7 @@ func trace(obj *vt.Object) error {
 		return err
 	}
 
-	err = json.Indent(&buf, b, "", "  ")
+	err = json.Indent(buf, b, "", "  ")
 
 	if err != nil {
 		return err

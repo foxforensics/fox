@@ -8,7 +8,6 @@ import (
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
 
@@ -29,19 +28,17 @@ type TextContext struct {
 }
 
 func Text(h *heap.Heap, cli *cli.Globals, ctx *TextContext) *TextBuffer {
-	b := h.Bytes()
+	var last uint
 
-	for _, f := range register.Formats {
-		if f.Detect(b) {
-			b = f.Format(b)
-		}
+	ctx.SMap = cli.Filter.Filter(smap.Map(text.Colorize(h.Bytes()))).Render()
+
+	if len(ctx.SMap) > 0 {
+		last = ctx.SMap[len(ctx.SMap)-1].Line
 	}
-
-	ctx.SMap = cli.Filter.Filter(smap.Map(b)).Render()
 
 	var buf = &TextBuffer{
 		make(chan *TextLine, cli.Threads*1024),
-		uint(math.Log10(float64(len(ctx.SMap)))) + 1,
+		uint(math.Log10(float64(last))) + 1,
 	}
 
 	if cli.Tail {

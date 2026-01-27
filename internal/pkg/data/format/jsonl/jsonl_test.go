@@ -1,4 +1,4 @@
-package color
+package jsonl
 
 import (
 	"strings"
@@ -7,7 +7,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "format/fox.go"
+const file = "format/fox.jsonl"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)
@@ -36,7 +36,7 @@ func TestFormat(t *testing.T) {
 
 	lines := strings.Split(string(buf), "\n")
 
-	if len(lines) != 10 {
+	if len(lines) != 16 {
 		t.Fatal("invalid length")
 	}
 }

@@ -1,24 +1,25 @@
 package text
 
 import (
+	"bytes"
 	"regexp"
+	"strings"
 
+	"github.com/alecthomas/chroma/v2/lexers"
+	"github.com/alecthomas/chroma/v2/quick"
 	"github.com/cyucelen/marker"
 	"github.com/fatih/color"
 )
 
-type Colored func(...any) string
+const Lexer = "json"
+const Style = "monokai"
 
-var Mark = white.SprintFunc()
 var Hide = black.SprintFunc()
 var Warn = alert.SprintFunc()
-var Term = reset.SprintFunc()
 
-var white = color.New(color.FgHiWhite)
 var black = color.New(color.FgHiBlack)
 var match = color.New(color.BgBlue)
 var alert = color.New(color.FgHiRed)
-var reset = color.New(color.Reset)
 
 func MarkMatch(s string, re *regexp.Regexp) string {
 	if re == nil {
@@ -28,8 +29,42 @@ func MarkMatch(s string, re *regexp.Regexp) string {
 	return marker.Mark(s, marker.MatchRegexp(re), match)
 }
 
-func MarkMatchFunc(re *regexp.Regexp) Colored {
-	return func(a ...any) string {
-		return MarkMatch(a[0].(string), re)
+func ColorizeAs(s, l string) string {
+	var sb strings.Builder
+
+	if color.NoColor {
+		return s
 	}
+
+	err := quick.Highlight(&sb, s, l, "terminal256", Style)
+
+	if err != nil {
+		return s
+	}
+
+	return sb.String()
+}
+
+func Colorize(b []byte) []byte {
+	if color.NoColor {
+		return b
+	}
+
+	s := string(b)
+
+	lexer := Lexer // use fallback
+
+	if l := lexers.Analyse(s); l != nil {
+		lexer = l.Config().Name
+	}
+
+	buf := bytes.NewBuffer(nil)
+
+	err := quick.Highlight(buf, s, lexer, "terminal256", Style)
+
+	if err != nil {
+		return b
+	}
+
+	return buf.Bytes()
 }
