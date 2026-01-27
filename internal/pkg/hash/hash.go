@@ -17,11 +17,13 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/RyuaNerin/go-krypto/has160"
 	"github.com/cespare/xxhash"
 	"github.com/dchest/siphash"
 	"github.com/glaslos/ssdeep"
 	"github.com/glaslos/tlsh"
 	"github.com/htruong/go-md2"
+	"github.com/jzelinskie/whirlpool"
 	"github.com/pedroalbanese/md6"
 	"github.com/spaolacci/murmur3"
 	"github.com/tjfoc/gmsm/v2/sm3"
@@ -60,6 +62,7 @@ var Algorithms = []string{
 	types.FLETCHER4,
 	types.FNV1,
 	types.FNV1A,
+	types.HAS160,
 	types.IMPHASH,
 	types.LM,
 	types.MD2,
@@ -85,6 +88,7 @@ var Algorithms = []string{
 	types.SM3,
 	types.SSDEEP,
 	types.TLSH,
+	types.WHIRLPOOL,
 	types.XXH3,
 	types.XXH32,
 	types.XXH64,
@@ -108,6 +112,7 @@ var secure = []string{
 	types.SHA3384,
 	types.SHA3512,
 	types.SM3,
+	types.WHIRLPOOL,
 }
 
 func IsSecure(algo string) bool {
@@ -160,6 +165,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = fnv.New128()
 	case types.FNV1A:
 		imp = fnv.New128a()
+	case types.HAS160:
+		imp = has160.New()
 	case types.IMPHASH:
 		imp = imphash.New()
 	case types.LM:
@@ -212,6 +219,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = ssdeep.New()
 	case types.TLSH:
 		imp = tlsh.New()
+	case types.WHIRLPOOL:
+		imp = whirlpool.New()
 	case types.XXH3:
 		imp = xxh3.New()
 	case types.XXH32:
