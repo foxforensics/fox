@@ -40,7 +40,7 @@ EXAMPLES
 
 fox -eWinlogon ./**/*.evtx
 
-:   Finds occurrences in event logs.
+:   Find occurrences in event logs.
 
 BUGS
 ====

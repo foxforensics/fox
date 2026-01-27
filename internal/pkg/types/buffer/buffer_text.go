@@ -1,21 +1,16 @@
 package buffer
 
 import (
-	"bytes"
 	"fmt"
-	"log"
 	"math"
-
-	"github.com/alecthomas/chroma/v2/quick"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
-
-const limit = 1024 * 1024
 
 type TextLine struct {
 	Line   string
@@ -33,24 +28,20 @@ type TextContext struct {
 	Delta int
 }
 
-func Text(h *heap.Heap, cli *cli.Globals) *TextBuffer {
+func Text(h *heap.Heap, cli *cli.Globals, ctx *TextContext) *TextBuffer {
 	b := h.Bytes()
 
-	if len(b) > limit {
-		log.Printf("warning: disabled colorize for files > %s", text.Humanize(limit))
-	} else if !cli.NoColor {
-		b = colorize(b)
+	for _, f := range register.Formats {
+		if f.Detect(b) {
+			b = f.Format(b)
+		}
 	}
 
-	s := cli.Filter.Filter(smap.Map(b))
+	ctx.SMap = cli.Filter.Filter(smap.Map(b)).Render()
 
 	var buf = &TextBuffer{
 		make(chan *TextLine, cli.Threads*1024),
-		uint(math.Log10(float64(len(s)))) + 1,
-	}
-
-	var ctx = &TextContext{
-		SMap: s.Render(),
+		uint(math.Log10(float64(len(ctx.SMap)))) + 1,
 	}
 
 	if cli.Tail {
@@ -88,16 +79,4 @@ func streamText(buf *TextBuffer, ctx *TextContext) {
 		tmpGrp = str.Group
 		numGrp++
 	}
-}
-
-func colorize(b []byte) []byte {
-	var buf bytes.Buffer
-
-	err := quick.Highlight(&buf, string(b), "", "terminal256", "monokai")
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return buf.Bytes()
 }

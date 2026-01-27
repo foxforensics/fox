@@ -75,7 +75,7 @@ EXAMPLES
 
 fox hash -uTLSH files.7z
 
-:   Hashes archive contents.
+:   Hash archive contents.
 
 BUGS
 ====

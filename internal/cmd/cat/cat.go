@@ -27,10 +27,12 @@ Examples:
 `)
 
 type Cat struct {
-	Context uint     `short:"C"`
-	Before  uint     `short:"B"`
-	After   uint     `short:"A"`
-	Paths   []string `arg:"" type:"path" optional:""`
+	Context uint `short:"C"`
+	Before  uint `short:"B"`
+	After   uint `short:"A"`
+
+	// paths
+	Paths []string `arg:"" type:"path" optional:""`
 }
 
 func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
@@ -61,7 +63,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
-		for l := range buffer.Text(h, cli).Lines {
+		for l := range buffer.Text(h, cli, new(buffer.TextContext)).Lines {
 			s := l.String
 
 			if cli.Regexp != nil && l.Line != buffer.Sep {

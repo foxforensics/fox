@@ -85,13 +85,13 @@ Standard flags:
 Positional arguments:
   Globbing paths to open or '-' to read from STDIN
 
-Example: Finds occurrences in event logs
+Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
-Example: Shows strings in binary
-  $ fox text -w sample.exe
+Example: Show strings in binary
+  $ fox text -w ioc.exe
 
-Example: Hunts down suspicious events
+Example: Hunt down suspicious events
   $ fox hunt -sv ./**/*.E01
 
 For more information please visit: https://foxhunt.wtf

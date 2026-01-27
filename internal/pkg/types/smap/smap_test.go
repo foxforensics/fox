@@ -9,16 +9,7 @@ import (
 	"testing"
 
 	"github.com/cuhsat/go-mmap"
-
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
-
-func TestMain(m *testing.M) {
-	register.Format("json", json.Detect, json.Format)
-
-	os.Exit(m.Run())
-}
 
 func BenchmarkMap(b *testing.B) {
 	f, m, err := fixture("text/bible.txt")
@@ -37,28 +28,6 @@ func BenchmarkMap(b *testing.B) {
 
 	for b.Loop() {
 		Map(m)
-	}
-}
-
-func BenchmarkRender(b *testing.B) {
-	f, m, err := fixture("text/bible.txt")
-
-	if err != nil {
-		b.Fatal(err)
-	}
-
-	defer func(f *os.File) {
-		_ = f.Close()
-	}(f)
-
-	defer func(m mmap.MMap) {
-		_ = m.Unmap()
-	}(m)
-
-	s := Map(m)
-
-	for b.Loop() {
-		s.Render()
 	}
 }
 
@@ -95,23 +64,6 @@ func TestMap(t *testing.T) {
 
 	if len(Map(m)) != 31107 {
 		t.Fatal("wrong size")
-	}
-
-	_ = m.Unmap()
-	_ = f.Close()
-}
-
-func TestRender(t *testing.T) {
-	f, m, err := fixture("format/fox.jsonl")
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	s := Map(m).Render()
-
-	if len(s) != 15 {
-		t.Fatal("wrong length")
 	}
 
 	_ = m.Unmap()

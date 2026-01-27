@@ -34,7 +34,7 @@ Format Flags:
   -D, --decimal            format addresses as decimals
 
 Examples:
-  $ fox text -w sample.exe
+  $ fox text -w ioc.exe
 `)
 
 type Text struct {

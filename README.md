@@ -22,6 +22,7 @@ go install github.com/cuhsat/fox/v4@latest
 * Check IPs, URLs and file hashes via the [VirusTotal API](https://www.virustotal.com/)
 * Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
 * Integral *Chain-of-Custody* receipt generation
+* Integral syntax highlighting for languages and formats 
 * Many popular archive and compression formats
 * Many popular cryptographic, fuzzy, image and fast hashes
 * Complete with [man pages](assets/man/) for every mode
@@ -37,37 +38,37 @@ go install github.com/cuhsat/fox/v4@latest
 
 ## Examples
 
-Finds occurrences in event logs:
+Find occurrences in event logs:
 ```console
 $ fox -eWinlogon ./**/*.evtx
 ```
 
-Shows MBR in canonical hex:
+Show MBR in canonical hex:
 ```console
 $ fox hex -hc512 disk.bin
 ```
 
-Finds high entropy files:
+Find high entropy files:
 ```console
 $ fox find -n0.9 ./**/*
 ```
 
-Shows strings in binary:
+Show strings in binary:
 ```console
-$ fox text -w sample.exe
+$ fox text -w ioc.exe
 ```
 
-Tests suspicious file:
+Test a suspicious file:
 ```console
-$ fox test sample.exe
+$ fox test ioc.exe
 ```
 
-Hashes archive contents:
+Hash archive contents:
 ```console
 $ fox hash -uTLSH files.7z
 ```
 
-Hunts down suspicious events:
+Hunt down suspicious events:
 ```console
 $ fox hunt -sv ./**/*.E01
 ```

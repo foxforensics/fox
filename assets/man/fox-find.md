@@ -47,7 +47,7 @@ EXAMPLES
 
 fox find -n0.9 ./**/*
 
-:   Finds high entropy files
+:   Find high entropy files
 
 BUGS
 ====

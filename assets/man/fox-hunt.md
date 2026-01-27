@@ -85,7 +85,7 @@ EXAMPLES
 
 fox hunt -sv ./**/*.E01
 
-:   Hunts down suspicious events.
+:   Hunt down suspicious events.
 
 BUGS
 ====

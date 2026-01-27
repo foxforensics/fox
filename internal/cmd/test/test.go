@@ -25,7 +25,7 @@ Flags:
   -I, --ip=IP,...          Tests suspicious IP
 
 Examples:
-  $ fox test sample.exe
+  $ fox test ioc.exe
 `)
 
 type Test struct {

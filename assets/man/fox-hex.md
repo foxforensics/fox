@@ -47,7 +47,7 @@ EXAMPLES
 
 fox hex -hc512 disk.bin
 
-:   Shows MBR in canonical hex.
+:   Show MBR in canonical hex.
 
 BUGS
 ====

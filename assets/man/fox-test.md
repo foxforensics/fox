@@ -45,9 +45,9 @@ ENVIRONMENT
 EXAMPLES
 ========
 
-fox test sample.exe
+fox test ioc.exe
 
-:   Tests suspicious file.
+:   Test a suspicious file.
 
 BUGS
 ====

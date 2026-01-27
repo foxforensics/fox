@@ -68,9 +68,9 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox text -w sample.exe
+fox text -w ioc.exe
 
-:   Shows strings in binary.
+:   Show strings in binary.
 
 BUGS
 ====

@@ -7,9 +7,11 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/fatih/color"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/color"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
+	_color "github.com/fatih/color"
 
-	szip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
+	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
@@ -42,7 +44,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/image/ewf"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
@@ -155,7 +156,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	}
 
 	if cli.NoColor {
-		color.NoColor = true // turn off color package
+		_color.NoColor = true // turn off color package
 	}
 
 	if cli.NoReceipt && !cli.NoWarnings {
@@ -187,7 +188,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		register.Archive("iso", iso.Detect, iso.Extract)
 		register.Archive("rar", rar.Detect, rar.Extract)
 		register.Archive("rpm", rpm.Detect, rpm.Extract)
-		register.Archive("szip", szip.Detect, szip.Extract)
+		register.Archive("7z", _zip.Detect, _zip.Extract)
 		register.Archive("tar", tar.Detect, tar.Extract)
 		register.Archive("xar", xar.Detect, xar.Extract)
 		register.Archive("zip", zip.Detect, zip.Extract)
@@ -205,6 +206,10 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	if !cli.NoPretty {
 		register.Format("json", json.Detect, json.Format)
+	}
+
+	if !cli.NoColor {
+		register.Format("color", color.Detect, color.Format)
 	}
 
 	if !cli.Raw {
@@ -231,6 +236,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		os.Exit(0)
 	}
 
+	smap.Pretty = !cli.NoPretty
 	smap.Chunks = cli.Threads
 
 	return cli.Loader.Load(args)

@@ -180,31 +180,31 @@ EXAMPLES
 
 fox -eWinlogon ./**/*.evtx
 
-:   Finds occurrences in event logs.
+:   Find occurrences in event logs.
 
 fox hex -hc512 disk.bin
 
-:   Shows MBR in canonical hex.
+:   Show MBR in canonical hex.
 
 fox find -n0.9 ./**/*
 
-:   Finds high entropy files.
+:   Find high entropy files.
 
-fox text -w sample.exe
+fox text -w ioc.exe
 
-:   Shows strings in binary.
+:   Show strings in binary.
 
-fox test sample.exe
+fox test ioc.exe
 
-:   Tests suspicious file.
+:   Test a suspicious file.
 
 fox hash -uTLSH files.7z
 
-:   Hashes archive contents.
+:   Hash archive contents.
 
 fox hunt -sv ./**/*.E01
 
-:   Hunts down suspicious events.
+:   Hunt down suspicious events.
 
 BUGS
 ====
