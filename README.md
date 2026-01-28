@@ -7,8 +7,14 @@ The Forensic Examiners Swiss Army Knife. Providing many useful features to lever
 [![Commits](https://img.shields.io/github/commit-activity/y/cuhsat/fox.svg?style=for-the-badge&label=commits)](https://github.com/cuhsat/fox/commits/main/)
 [![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
 
-```console
+**Get it on Linux:**
+```bash
 go install github.com/cuhsat/fox/v4@latest
+```
+
+**Get it on macOS:**
+```bash
+brew install cuhsat/fox/fox
 ```
 
 ## Features
@@ -21,8 +27,8 @@ go install github.com/cuhsat/fox/v4@latest
 * Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * Check IPs, URLs and file hashes via the [VirusTotal API](https://www.virustotal.com/)
 * Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
+* Integral syntax highlighting for many different formats
 * Integral *Chain-of-Custody* receipt generation
-* Integral syntax highlighting for languages and formats 
 * Many popular archive and compression formats
 * Many popular cryptographic, fuzzy, image and fast hashes
 * Complete with [man pages](assets/man/) for every mode
@@ -39,37 +45,37 @@ go install github.com/cuhsat/fox/v4@latest
 ## Examples
 
 Find occurrences in event logs:
-```console
+```bash
 $ fox -eWinlogon ./**/*.evtx
 ```
 
 Show MBR in canonical hex:
-```console
+```bash
 $ fox hex -hc512 disk.bin
 ```
 
 Find high entropy files:
-```console
+```bash
 $ fox find -n0.9 ./**/*
 ```
 
 Show strings in binary:
-```console
+```bash
 $ fox text -w ioc.exe
 ```
 
 Test a suspicious file:
-```console
+```bash
 $ fox test ioc.exe
 ```
 
 Hash archive contents:
-```console
+```bash
 $ fox hash -uTLSH files.7z
 ```
 
 Hunt down suspicious events:
-```console
+```bash
 $ fox hunt -sv ./**/*.E01
 ```
 

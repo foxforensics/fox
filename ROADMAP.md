@@ -16,7 +16,6 @@
 * Add macOS trace3 log parser?
 * Add Shellbag parser?
 * Add Jumplist parser?
-* Add brew support?
 * Add specs?
   * `Fox Unified Event Format`
   * `Fox Unified Event Storage`
