@@ -21,7 +21,7 @@ func BenchmarkFormat(b *testing.B) {
 	buf := data.Fixture(file)
 
 	for b.Loop() {
-		_ = Format(buf)
+		_, _ = Format(buf)
 	}
 }
 
@@ -32,7 +32,11 @@ func TestDetect(t *testing.T) {
 }
 
 func TestFormat(t *testing.T) {
-	buf := Format(data.Fixture(file))
+	buf, err := Format(data.Fixture(file))
+
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	lines := strings.Split(string(buf), "\n")
 

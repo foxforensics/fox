@@ -21,26 +21,26 @@ func Detect(b []byte) bool {
 	return json.Valid(line)
 }
 
-func Format(b []byte) []byte {
+func Format(b []byte) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 
 	r := bufio.NewReader(bytes.NewReader(b))
 
 	for {
-		b, _, err := r.ReadLine()
+		line, _, err := r.ReadLine()
 
 		if err != nil {
 			break
 		}
 
-		err = json.Indent(buf, b, format.Prefix, format.Indent)
+		err = json.Indent(buf, line, format.Prefix, format.Indent)
 
 		if err != nil {
-			break
+			buf.Write(line)
 		}
 
 		buf.WriteByte('\n')
 	}
 
-	return buf.Bytes()
+	return buf.Bytes(), nil
 }

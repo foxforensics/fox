@@ -317,7 +317,13 @@ func (ldr *Loader) formatData(b []byte) []byte {
 				log.Printf("format detected %s\n", c.Name)
 			}
 
-			return c.Format(b)
+			r, err := c.Format(b)
+
+			if err != nil {
+				log.Println(err)
+			}
+
+			return r
 		}
 	}
 

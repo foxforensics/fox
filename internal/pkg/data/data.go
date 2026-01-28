@@ -12,7 +12,7 @@ type Stream struct {
 
 type Detect func([]byte) bool
 
-type Format func([]byte) []byte
+type Format func([]byte) ([]byte, error)
 
 type Ingest func([]byte) ([]byte, error)
 
