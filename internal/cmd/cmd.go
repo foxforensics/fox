@@ -21,6 +21,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/xar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/elf"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/ese"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/lnk"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pf"
@@ -196,6 +197,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	if !cli.NoConvert {
 		register.Convert("elf", elf.Detect, elf.Convert)
+		register.Convert("ese", ese.Detect, ese.Convert)
 		register.Convert("lnk", lnk.Detect, lnk.Convert)
 		register.Convert("pe", pe.Detect, pe.Convert)
 		register.Convert("pf", pf.Detect, pf.Convert)
