@@ -87,7 +87,7 @@ func (cmd *Find) Run(cli *cli.Globals) error {
 			if e >= cmd.Min && e <= cmd.Max {
 				size := fmt.Sprintf("%10db", len(block))
 				title := text.Hide(h.String())
-				start := text.Hide(fmt.Sprintf("@%d", off))
+				start := text.Hide(fmt.Sprintf("@ 0x%x", off))
 
 				if cmd.Human {
 					size = text.Humanize(int64(len(block)))
