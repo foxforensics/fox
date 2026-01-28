@@ -137,6 +137,12 @@ homebrew_casks:
       name: homebrew-fox
       branch: main
       token: "{{ .Env.HOMEBREW_TOKEN }}"
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/fox"]
+          end
     directory: Casks
     license: GPL-3.0
     manpages:
