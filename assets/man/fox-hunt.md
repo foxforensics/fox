@@ -38,12 +38,16 @@ FLAGS
 
 :   Saves logs to SQLite3 DB (very slow).
 
-Rule Flags
-----------
+Filter Flags
+------------
 
 **-R, --rule**=_file_
 
 :   Filters using a Sigma rule _file_ (slow).
+
+**-u, --uniq**=_factor_
+
+:   Filters using uniqueness _factor_ (slow).
 
 Stream Flags
 ------------
@@ -102,4 +106,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**fox(1)**
+**fox(1)**, **uniq(1)**

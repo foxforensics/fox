@@ -11,6 +11,7 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
+	"github.com/cuhsat/fox/v4/internal/pkg/text/unique"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
@@ -37,8 +38,9 @@ Flags:
   -J, --jsonl              shows logs as JSON lines
   -Q, --sqlite             saves logs to SQLite3 DB (very slow)
 
-Rule Flags:
+Filter Flags:
   -R, --rule=FILE          filters using a Sigma rule file (slow)
+  -u, --uniq=FACTOR        filters using uniqueness factor (slow)
 
 Stream Flags:
   -U, --url=SERVER         streams events to server address
@@ -55,12 +57,15 @@ Examples:
 `)
 
 type Hunt struct {
-	All    bool   `short:"a"`
-	Sort   bool   `short:"s"`
-	Json   bool   `short:"j" xor:"json,jsonl"`
-	Jsonl  bool   `short:"J" xor:"json,jsonl"`
-	Sqlite bool   `short:"Q"`
-	Rule   string `short:"R" sep:"," type:"path"`
+	All    bool `short:"a"`
+	Sort   bool `short:"s"`
+	Json   bool `short:"j" xor:"json,jsonl"`
+	Jsonl  bool `short:"J" xor:"json,jsonl"`
+	Sqlite bool `short:"Q"`
+
+	// filter
+	Rule string  `short:"R" type:"path"`
+	Uniq float64 `short:"u"`
 
 	// stream
 	Url  string `short:"U"`
@@ -76,9 +81,10 @@ type Hunt struct {
 	Paths []string `arg:"" type:"path" optional:""`
 
 	// internal
-	db   *event.Database `kong:"-"`
-	net  stream.Streamer `kong:"-"`
-	rule sigma.Rule      `kong:"-"`
+	db     *event.Database `kong:"-"`
+	net    stream.Streamer `kong:"-"`
+	rule   sigma.Rule      `kong:"-"`
+	unique *unique.Unique  `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
@@ -131,6 +137,10 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 	if err != nil {
 		log.Fatalln(err)
+	}
+
+	if cmd.Uniq > 0 {
+		cmd.unique = unique.New(cmd.Uniq)
 	}
 
 	return nil
@@ -189,6 +199,10 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			continue // not successful
 		}
 
+		if cmd.unique != nil && !cmd.unique.IsUnique(e.String()) {
+			continue // not unique
+		}
+
 		if !cmd.All && !res.Match {
 			continue // not matched
 		}
@@ -199,7 +213,9 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			continue // not matched afterward
 		}
 
-		_, _ = fmt.Fprintln(cli.Stdout, line)
+		if !cmd.Sqlite {
+			_, _ = fmt.Fprintln(cli.Stdout, line)
+		}
 
 		cmd.upsert(e)
 

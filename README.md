@@ -40,6 +40,7 @@ brew install cuhsat/fox/fox
   * Built-in translation of over 51600 event ids
   * Built-in warning of critical system events
   * Filter events with [Sigma Rules](https://sigmahq.io/) syntax
+  * Filter anomalies using Levenshtein distance
   * Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) and [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
   * Save as `JSON`, `JSON Lines` or `SQLite3`
 

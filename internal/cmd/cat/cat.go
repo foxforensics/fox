@@ -9,6 +9,7 @@ import (
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/text/unique"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
 )
 
@@ -18,24 +19,37 @@ Prints file contents.
 fox cat [FLAGS...] <PATHS...>
 
 Flags:
-  -C, --context=NUMBER     lines surrounding context of a match
-  -B, --before=NUMBER      lines leading context before a match
-  -A, --after=NUMBER       lines trailing context after a match
+  -u, --uniq=FACTOR        uniqueness factor (slow)
+
+Filter flags:
+  -C, --context=LINES      lines surrounding context of a match
+  -B, --before=LINES       lines leading context before a match
+  -A, --after=LINES        lines trailing context after a match
 
 Examples:
   $ fox -eWinlogon ./**/*.evtx
 `)
 
 type Cat struct {
+	Uniq float64 `short:"u"`
+
+	// filter
 	Context uint `short:"C"`
 	Before  uint `short:"B"`
 	After   uint `short:"A"`
 
 	// paths
 	Paths []string `arg:"" type:"path" optional:""`
+
+	// internal
+	unique *unique.Unique `kong:"-"`
 }
 
 func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+	if cmd.Uniq > 0 {
+		cmd.unique = unique.New(cmd.Uniq)
+	}
+
 	if cmd.Context > 0 {
 		cmd.Before = cmd.Context
 		cmd.After = cmd.Context
@@ -65,6 +79,10 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 
 		for l := range buffer.Text(h, cli, new(buffer.TextContext)).Lines {
 			s := l.String
+
+			if cmd.unique != nil && !cmd.unique.IsUnique(s) {
+				continue // not unique
+			}
 
 			if cli.Regexp != nil && l.Line != buffer.Sep {
 				s = text.MarkMatch(s, cli.Regexp)

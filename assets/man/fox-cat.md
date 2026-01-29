@@ -18,17 +18,24 @@ Prints file contents.
 FLAGS
 =====
 
-**-C, --context**=_number_
+**-u, --uniq**=_factor_
 
-:   _Number_ of lines surrounding context of a match.
+:   Uniqueness _factor_ (slow).
 
-**-B, --before**=_number_
+Filter Flags
+------------
 
-:   _Number_ of lines leading context before a match.
+**-C, --context**=_lines_
 
-**-A, --after**=_number_
+:   _Lines_ surrounding context of a match.
 
-:   _Number_ of lines trailing context after a match.
+**-B, --before**=_lines_
+
+:   _Lines_ leading context before a match.
+
+**-A, --after**=_lines_
+
+:   _Lines_ trailing context after a match.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -57,4 +64,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**fox(1)**, **cat(1)**, **grep(1)**, **less(1)**
+**fox(1)**, **cat(1)**, **grep(1)**, **uniq(1)**
