@@ -19,7 +19,7 @@ func Convert(b []byte) ([]byte, error) {
 	p, err := elf.NewBytes(b)
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	err = p.Parse()
@@ -31,7 +31,7 @@ func Convert(b []byte) ([]byte, error) {
 	raw, err := p.DumpRawJSON()
 
 	if err != nil {
-		return nil, err
+		return []byte(raw), err
 	}
 
 	raw = strings.TrimSuffix(raw, "{}")

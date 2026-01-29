@@ -26,7 +26,7 @@ func Convert(b []byte) ([]byte, error) {
 	pi, err := prefetch.LoadPrefetch(bytes.NewReader(b))
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	return json.MarshalIndent(pi, "", "  ")

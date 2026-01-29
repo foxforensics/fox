@@ -50,7 +50,7 @@ func Deflate(b []byte) ([]byte, error) {
 		blk, err := lzo.Decompress1X(r, cl, ul)
 
 		if err != nil {
-			return nil, err
+			return buf.Bytes(), err
 		}
 
 		buf.Write(blk)

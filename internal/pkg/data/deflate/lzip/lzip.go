@@ -19,7 +19,7 @@ func Deflate(b []byte) ([]byte, error) {
 	r, err := lzip.NewReader(bytes.NewReader(b))
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	return io.ReadAll(r)

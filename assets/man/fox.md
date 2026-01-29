@@ -124,6 +124,10 @@ Disable Flags
 
 :   Don't prettify the output.
 
+**--no-strict**
+
+:   Don't stop on parser errors.
+
 **--no-deflate**
 
 :   Don't deflate automatically.

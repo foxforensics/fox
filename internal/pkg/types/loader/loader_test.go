@@ -168,6 +168,7 @@ func newOpts() *Options {
 		1,
 		0,
 		false,
+		false,
 	}
 }
 

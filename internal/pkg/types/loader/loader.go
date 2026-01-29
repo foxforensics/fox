@@ -33,7 +33,8 @@ type Options struct {
 	Password string
 	Parallel int
 	Verbose  int
-	DoWarn   bool
+	Strict   bool
+	Warnings bool
 }
 
 type Loader struct {
@@ -98,7 +99,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 			ldr.loadPath(path, part)
 		}
 
-		if ldr.opts.DoWarn && float32(memory.FreeMemory()/memory.TotalMemory()) > limit {
+		if ldr.opts.Warnings && float32(memory.FreeMemory()/memory.TotalMemory()) > limit {
 			log.Println("warning: low memory may cause swapping!")
 		}
 	}()
@@ -281,6 +282,10 @@ func (ldr *Loader) deflateData(b []byte) []byte {
 
 			if err != nil {
 				log.Println(err)
+
+				if ldr.opts.Strict {
+					r = b // ignore partly result
+				}
 			}
 
 			return r
@@ -301,6 +306,10 @@ func (ldr *Loader) convertData(b []byte) []byte {
 
 			if err != nil {
 				log.Println(err)
+
+				if ldr.opts.Strict {
+					r = b // ignore partly result
+				}
 			}
 
 			return r
@@ -321,6 +330,10 @@ func (ldr *Loader) formatData(b []byte) []byte {
 
 			if err != nil {
 				log.Println(err)
+
+				if ldr.opts.Strict {
+					r = b // ignore partly result
+				}
 			}
 
 			return r
@@ -341,6 +354,10 @@ func (ldr *Loader) ingestData(b []byte) []byte {
 
 			if err != nil {
 				log.Println(err)
+
+				if ldr.opts.Strict {
+					r = b // ignore partly result
+				}
 			}
 
 			return r

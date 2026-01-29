@@ -17,7 +17,7 @@ func Format(b []byte) ([]byte, error) {
 	err := json.Indent(buf, b, format.Prefix, format.Indent)
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	return buf.Bytes(), nil

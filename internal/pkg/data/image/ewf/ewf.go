@@ -18,13 +18,13 @@ func Ingest(b []byte) ([]byte, error) {
 	vol, err := parser.OpenEWFFile(nil, bytes.NewReader(b))
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	buf := make([]byte, vol.ChunkSize*vol.NumberOfChunks)
 
 	if _, err = vol.ReadAt(buf, 0); err != nil {
-		return nil, err
+		return b, err
 	}
 
 	return buf, nil

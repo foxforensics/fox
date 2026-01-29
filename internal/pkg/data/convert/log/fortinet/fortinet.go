@@ -62,13 +62,13 @@ func Convert(b []byte) ([]byte, error) {
 		if errors.Is(err, io.EOF) {
 			break
 		} else if err != nil {
-			return nil, err
+			return buf.Bytes(), err
 		}
 
 		d, err := deflate(l)
 
 		if err != nil {
-			return nil, err
+			return buf.Bytes(), err
 		}
 
 		buf.Write(d)
@@ -78,7 +78,7 @@ func Convert(b []byte) ([]byte, error) {
 		if errors.Is(err, io.EOF) {
 			break
 		} else if err != nil {
-			return nil, err
+			return buf.Bytes(), err
 		}
 	}
 

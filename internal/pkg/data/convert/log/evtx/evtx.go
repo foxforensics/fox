@@ -37,7 +37,7 @@ func Convert(b []byte) ([]byte, error) {
 	r, err := evtx.New(bytes.NewReader(b))
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	buf := bytes.NewBuffer(nil)

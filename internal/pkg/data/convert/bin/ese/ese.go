@@ -21,13 +21,13 @@ func Convert(b []byte) ([]byte, error) {
 	ctx, err := parser.NewESEContext(bytes.NewReader(b))
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	ctl, err := parser.ReadCatalog(ctx)
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	for _, t := range ctl.Tables.Keys() {
@@ -45,7 +45,7 @@ func Convert(b []byte) ([]byte, error) {
 
 			return nil
 		}); err != nil {
-			return nil, err
+			return buf.Bytes(), err
 		}
 	}
 

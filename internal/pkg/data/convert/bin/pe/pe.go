@@ -27,13 +27,13 @@ func Convert(b []byte) ([]byte, error) {
 	}()
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	err = p.Parse()
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	for _, a := range p.Anomalies {

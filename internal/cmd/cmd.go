@@ -81,6 +81,7 @@ type Globals struct {
 	NoLine     bool `long:"no-line"`
 	NoColor    bool `long:"no-color"`
 	NoPretty   bool `long:"no-pretty"`
+	NoStrict   bool `long:"no-strict"`
 	NoMapping  bool `long:"no-mapping"`
 	NoDeflate  bool `long:"no-deflate"`
 	NoExtract  bool `long:"no-extract"`
@@ -144,6 +145,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.NoLine = true
 		cli.NoColor = true
 		cli.NoPretty = true
+		cli.NoStrict = true
 		cli.NoMapping = true
 		cli.NoDeflate = true
 		cli.NoExtract = true
@@ -222,7 +224,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		Password: cli.Password,
 		Parallel: cli.Threads,
 		Verbose:  cli.Verbose,
-		DoWarn:   !cli.NoWarnings,
+		Strict:   cli.NoStrict,
+		Warnings: cli.NoWarnings,
 	})
 
 	if cli.DryRun {

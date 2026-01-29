@@ -19,7 +19,7 @@ func Deflate(b []byte) ([]byte, error) {
 	r, err := kio.NewReader(io.NopCloser(bytes.NewReader(b)), 4)
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	defer func(r io.Closer) {

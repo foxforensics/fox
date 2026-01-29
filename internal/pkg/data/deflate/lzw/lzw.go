@@ -27,7 +27,7 @@ func Deflate(b []byte) ([]byte, error) {
 
 	// ignore errors for faulty compress files
 	if !errors.Is(err, io.ErrUnexpectedEOF) {
-		return nil, err
+		return buf, err
 	}
 
 	return buf, nil
