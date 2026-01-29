@@ -71,6 +71,7 @@ require (
 	github.com/PaesslerAG/gval v1.2.4 // indirect
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
 	github.com/RyuaNerin/go-krypto v1.3.0 // indirect
+	github.com/agnivade/levenshtein v1.2.1 // indirect
 	github.com/alecthomas/participle v0.7.1 // indirect
 	github.com/alecthomas/repr v0.5.2 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
