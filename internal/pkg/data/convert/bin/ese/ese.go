@@ -2,7 +2,6 @@ package ese
 
 import (
 	"bytes"
-	"encoding/json"
 
 	"github.com/Velocidex/ordereddict"
 	"www.velocidex.com/golang/go-ese/parser"
@@ -17,7 +16,7 @@ func Detect(b []byte) bool {
 }
 
 func Convert(b []byte) ([]byte, error) {
-	buf := bytes.NewBuffer(b)
+	buf := bytes.NewBuffer(nil)
 
 	ctx, err := parser.NewESEContext(bytes.NewReader(b))
 
@@ -33,21 +32,16 @@ func Convert(b []byte) ([]byte, error) {
 
 	for _, t := range ctl.Tables.Keys() {
 		if err = ctl.DumpTable(t, func(row *ordereddict.Dict) error {
+			row.Set("table", t)
+
 			b, err := row.MarshalJSON()
 
 			if err != nil {
 				return err
 			}
 
-			// sanity check
-			if json.Valid(b) {
-				buf.Write(b)
-				buf.WriteByte('\n')
-
-				println(string(b))
-			} else {
-				return nil
-			}
+			buf.Write(b)
+			buf.WriteByte('\n')
 
 			return nil
 		}); err != nil {
