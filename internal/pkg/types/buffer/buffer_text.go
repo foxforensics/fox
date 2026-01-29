@@ -30,6 +30,9 @@ type TextContext struct {
 func Text(h *heap.Heap, cli *cli.Globals, ctx *TextContext) *TextBuffer {
 	var last uint
 
+	// TODO: give color hint from file ending
+	// h.Name
+
 	ctx.SMap = cli.Filter.Filter(smap.Map(text.Colorize(h.Bytes()))).Render()
 
 	if len(ctx.SMap) > 0 {

@@ -52,6 +52,7 @@ func Colorize(b []byte) []byte {
 
 	s := string(b)
 
+	// TODO: use white list for json syntax from convert
 	lexer := Lexer // use fallback
 
 	if l := lexers.Analyse(s); l != nil {
