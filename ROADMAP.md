@@ -13,6 +13,15 @@
 * ~~Done~~
 
 ## 5. Ideas
+* Add fast uniqueness for 1.0 with XXH3
+* Add CEF syntax highlighting (pygments)
+* Add pager for output like moor
+  * https://github.com/walles/moor
+* Add LZXPRESS to own ESE fork?
+    * https://forensics.wiki/compression/#lzxpress
+    * https://github.com/Velocidex/go-prefetch/blob/master/lzxpress.go
+    * https://github.com/fox-it/dissect.util/tree/main/dissect/util/compression
+* Add LZNT1 deflate (magic bytes?)
 * Add macOS trace3 log parser?
 * Add Shellbag parser?
 * Add Jumplist parser?
