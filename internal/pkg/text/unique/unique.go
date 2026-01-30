@@ -29,13 +29,12 @@ func ByHash() *Hash {
 func (u *Hash) IsUnique(s string) bool {
 	h := xxh3.HashString(s)
 
-	_, ok := u.cache[h]
-
-	if !ok {
+	if _, ok := u.cache[h]; !ok {
 		u.cache[h] = null{}
+		return true
 	}
 
-	return !ok
+	return false
 }
 
 func ByDistance(limit float64) *Distance {
@@ -46,11 +45,12 @@ func ByDistance(limit float64) *Distance {
 }
 
 func (u *Distance) IsUnique(s string) bool {
-	for _, e := range u.lines {
-		d := levenshtein.ComputeDistance(e, s)
+	for i := len(u.lines) - 1; i >= 0; i-- {
+		l := u.lines[i]
+		d := levenshtein.ComputeDistance(l, s)
 
 		// normalize distance
-		if float64(d)/(float64(len(s)+len(e))) <= u.limit {
+		if float64(d)/(float64(len(s)+len(l))) <= u.limit {
 			return false
 		}
 	}
