@@ -7,12 +7,13 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 const Large = "text/bible.txt"
 const Small = "fox.txt"
-const PeBin = "convert/fox.exe"
+const PeBin = "convert/fox.exe.xz"
 const Image = "misc/fox.jpg"
 const Input = "FOX123XOF"
 
@@ -105,6 +106,16 @@ func Fixture(name string) []byte {
 	}
 
 	buf, err := os.ReadFile(filepath.Join(filepath.Dir(c), "../../../testdata", name))
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if !xz.Detect(buf) {
+		return buf
+	}
+
+	buf, err = xz.Deflate(buf)
 
 	if err != nil {
 		log.Fatalln(err)

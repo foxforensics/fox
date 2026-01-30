@@ -7,6 +7,7 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
@@ -20,11 +21,11 @@ func TestHunt(t *testing.T) {
 	}{
 		{
 			"EventLogs",
-			"convert/test.evtx",
+			"convert/test.evtx.xz",
 			919,
 		}, {
 			"Journals",
-			"convert/test.journal",
+			"convert/test.journal.xz",
 			1922,
 		},
 	} {
@@ -74,11 +75,21 @@ func fixture(file string) []byte {
 		log.Fatalln("runtime error")
 	}
 
-	b, err := os.ReadFile(filepath.Join(filepath.Dir(c), dir, file))
+	buf, err := os.ReadFile(filepath.Join(filepath.Dir(c), dir, file))
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	return b
+	if !xz.Detect(buf) {
+		return buf
+	}
+
+	buf, err = xz.Deflate(buf)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return buf
 }

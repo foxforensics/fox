@@ -9,7 +9,7 @@ import (
 const file = "deflate/fox.xz"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := data.Fixture(file)
+	buf := data.FixtureRaw(file)
 
 	for b.Loop() {
 		_ = Detect(buf)
@@ -17,7 +17,7 @@ func BenchmarkDetect(b *testing.B) {
 }
 
 func BenchmarkDeflate(b *testing.B) {
-	buf := data.Fixture(file)
+	buf := data.FixtureRaw(file)
 
 	for b.Loop() {
 		_, _ = Deflate(buf)
@@ -25,13 +25,13 @@ func BenchmarkDeflate(b *testing.B) {
 }
 
 func TestDetect(t *testing.T) {
-	if !Detect(data.Fixture(file)) {
+	if !Detect(data.FixtureRaw(file)) {
 		t.Fatal("not detected")
 	}
 }
 
 func TestDeflate(t *testing.T) {
-	buf, err := Deflate(data.Fixture(file))
+	buf, err := Deflate(data.FixtureRaw(file))
 
 	if err != nil {
 		t.Error(err)

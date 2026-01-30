@@ -17,7 +17,7 @@ func Assert(b []byte) bool {
 	return bytes.Equal(b, Fixture(Sample))
 }
 
-func Fixture(name string) []byte {
+func FixtureRaw(name string) []byte {
 	const dir = "../../../testdata"
 
 	_, c, _, ok := runtime.Caller(0)
@@ -31,6 +31,12 @@ func Fixture(name string) []byte {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+	return buf
+}
+
+func Fixture(name string) []byte {
+	buf := FixtureRaw(name)
 
 	if !HasMagic(buf, 0, []byte{
 		0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00,
