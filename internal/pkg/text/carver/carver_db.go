@@ -57,7 +57,7 @@ func buildDB(level int) database {
 			},
 			{
 				regexp.MustCompile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}"),
-				[]string{"EMail"},
+				[]string{"Mail"},
 			},
 			{
 				regexp.MustCompile(`\\\\[a-zA-Z0-9 %._-]+\\[a-zA-Z0-9 $%._-]+`),

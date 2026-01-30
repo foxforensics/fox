@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	_color "github.com/fatih/color"
 
 	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -80,6 +81,7 @@ type Globals struct {
 	NoFile     bool `long:"no-file"`
 	NoLine     bool `long:"no-line"`
 	NoColor    bool `long:"no-color"`
+	NoSyntax   bool `long:"no-syntax"`
 	NoPretty   bool `long:"no-pretty"`
 	NoStrict   bool `long:"no-strict"`
 	NoMapping  bool `long:"no-mapping"`
@@ -126,6 +128,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	}
 
 	if len(cli.Regex) > 0 {
+		cli.NoSyntax = true
 		cli.Regexp = regexp.MustCompile(cli.Regex)
 	}
 
@@ -144,6 +147,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.NoFile = true
 		cli.NoLine = true
 		cli.NoColor = true
+		cli.NoSyntax = true
 		cli.NoPretty = true
 		cli.NoStrict = true
 		cli.NoMapping = true
@@ -159,7 +163,12 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	}
 
 	if cli.NoColor {
+		cli.NoSyntax = true
 		_color.NoColor = true // turn off color package
+	}
+
+	if cli.NoSyntax {
+		text.NoSyntax = true // turn off syntax highlighting
 	}
 
 	if cli.NoReceipt && !cli.NoWarnings {

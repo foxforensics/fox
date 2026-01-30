@@ -157,7 +157,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Dist > 0 {
-		cli.NoColor = true
+		cli.NoSyntax = true
 	}
 
 	cli.NoConvert = true // forced

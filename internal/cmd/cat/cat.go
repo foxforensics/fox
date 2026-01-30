@@ -77,7 +77,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Dist > 0 {
-		cli.NoColor = true
+		cli.NoSyntax = true
 	}
 
 	ch := cli.Load(cmd.Paths)

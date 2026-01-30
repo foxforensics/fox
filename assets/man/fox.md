@@ -120,6 +120,10 @@ Disable Flags
 
 :   Don't colorize the output.
 
+**--no-syntax**
+
+:   Don't colorize the syntax.
+
 **--no-pretty**
 
 :   Don't prettify the output.
@@ -170,7 +174,7 @@ Standard Flags
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**.
+Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths inside archives, use the archive:file notation. 
 
 ENVIRONMENT
 ===========

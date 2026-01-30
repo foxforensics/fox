@@ -1,6 +1,6 @@
 # Manuals
 
-List of commands:
+List of (sub)-commands:
 
 * [`fox`](fox.md)
 * [`fox cat`](fox-cat.md)

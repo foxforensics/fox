@@ -11,29 +11,35 @@ import (
 	"github.com/fatih/color"
 )
 
-const Lexer = "plain"
+const Lexer = "text"
 const Style = "monokai"
 
-var Hide = black.SprintFunc()
-var Warn = alert.SprintFunc()
+var NoSyntax = false
 
-var black = color.New(color.FgHiBlack)
-var match = color.New(color.BgBlue)
-var alert = color.New(color.FgHiRed)
+var (
+	Hide = black.SprintFunc()
+	Warn = alert.SprintFunc()
+)
+
+var (
+	black = color.New(color.FgHiBlack)
+	match = color.New(color.FgHiBlue)
+	alert = color.New(color.FgHiRed)
+)
 
 var mapping = map[string]string{
-	"elf":     "json",
-	"exe":     "json",
 	"dll":     "json",
-	"sys":     "json",
+	"elf":     "json",
 	"ese":     "json",
 	"evtx":    "json",
+	"exe":     "json",
 	"journal": "json",
-	"lnk":     "json",
-	"pf":      "json",
 	"json":    "json",
 	"jsonl":   "json",
-	"txt":     "plain",
+	"lnk":     "json",
+	"pf":      "json",
+	"sys":     "json",
+	"txt":     "text",
 }
 
 func MarkMatch(s string, re *regexp.Regexp) string {
@@ -45,11 +51,11 @@ func MarkMatch(s string, re *regexp.Regexp) string {
 }
 
 func ColorizeStringAs(s, lexer string) string {
-	var sb strings.Builder
-
-	if color.NoColor {
+	if NoSyntax {
 		return s
 	}
+
+	var sb strings.Builder
 
 	err := quick.Highlight(&sb, s, lexer, "terminal256", Style)
 
@@ -61,11 +67,11 @@ func ColorizeStringAs(s, lexer string) string {
 }
 
 func ColorizeAs(b []byte, lexer string) []byte {
-	buf := bytes.NewBuffer(nil)
-
-	if color.NoColor {
+	if NoSyntax {
 		return b
 	}
+
+	buf := bytes.NewBuffer(nil)
 
 	err := quick.Highlight(buf, string(b), lexer, "terminal256", Style)
 
@@ -77,6 +83,10 @@ func ColorizeAs(b []byte, lexer string) []byte {
 }
 
 func Colorize(b []byte, hint string) []byte {
+	if NoSyntax {
+		return b
+	}
+
 	var lexer string
 
 	if v, ok := mapping[hint]; ok {
@@ -85,6 +95,10 @@ func Colorize(b []byte, hint string) []byte {
 		lexer = l.Config().Name
 	} else {
 		lexer = Lexer // use fallback
+	}
+
+	if lexer == "text" {
+		return b
 	}
 
 	return ColorizeAs(b, lexer)

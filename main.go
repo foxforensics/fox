@@ -69,6 +69,7 @@ Disable flags:
       --no-file            don't print filenames
       --no-line            don't print line numbers
       --no-color           don't colorize the output
+      --no-syntax          don't colorize the syntax
       --no-pretty          don't prettify the output
       --no-strict          don't stop on parser errors
       --no-deflate         don't deflate automatically

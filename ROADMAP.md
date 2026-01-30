@@ -15,7 +15,9 @@
 ## 5. Ideas
 * Add animated console image to README
 * Add CEF syntax highlighting (pygments)
-* Add pager for output like moor
+* Add different endpoints for test
+  * https://github.com/woanware/lookuper
+* Add pager for output like moor?
   * https://github.com/walles/moor
 * Add LZXPRESS to own ESE fork?
     * https://forensics.wiki/compression/#lzxpress
