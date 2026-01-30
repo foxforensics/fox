@@ -1,29 +1,61 @@
 package unique
 
-import "github.com/agnivade/levenshtein"
+import (
+	"github.com/agnivade/levenshtein"
+	"github.com/zeebo/xxh3"
+)
 
-type Unique struct {
-	limit float64
-	cache map[string]struct{}
+type Unique interface {
+	IsUnique(string) bool
 }
 
-func New(limit float64) *Unique {
-	return &Unique{
-		limit: limit,
-		cache: make(map[string]struct{}),
+type null struct{}
+
+type Hash struct {
+	cache map[uint64]null
+}
+
+type Distance struct {
+	limit float64
+	lines []string
+}
+
+func ByHash() *Hash {
+	return &Hash{
+		cache: make(map[uint64]null),
 	}
 }
 
-func (ls *Unique) IsUnique(s string) bool {
-	for e := range ls.cache {
+func (u *Hash) IsUnique(s string) bool {
+	h := xxh3.HashString(s)
+
+	_, ok := u.cache[h]
+
+	if !ok {
+		u.cache[h] = null{}
+	}
+
+	return !ok
+}
+
+func ByDistance(limit float64) *Distance {
+	return &Distance{
+		limit: limit,
+		lines: make([]string, 0),
+	}
+}
+
+func (u *Distance) IsUnique(s string) bool {
+	for _, e := range u.lines {
 		d := levenshtein.ComputeDistance(e, s)
 
 		// normalize distance
-		if float64(d)/(float64(len(s)+len(e))) <= ls.limit {
+		if float64(d)/(float64(len(s)+len(e))) <= u.limit {
 			return false
 		}
 	}
 
-	ls.cache[s] = struct{}{}
+	u.lines = append(u.lines, s)
+
 	return true
 }

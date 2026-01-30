@@ -26,6 +26,10 @@ FLAGS
 
 :   Shows logs sorted by timestamp (slow).
 
+**-u, --uniq**
+
+:   Shows logs that are unique.
+
 **-j, --json**
 
 :   Shows logs as JSON objects.
@@ -43,11 +47,11 @@ Filter Flags
 
 **-R, --rule**=_file_
 
-:   Filters using a Sigma rule _file_ (slow).
+:   Filters using Sigma Rules _file_ (slow).
 
-**-u, --uniq**=_factor_
+**-D, --dist**=_length_
 
-:   Filters using uniqueness _factor_ (slow).
+:   Filters using Levenshtein distance (slow).
 
 Stream Flags
 ------------

@@ -18,10 +18,12 @@ Prints file contents.
 
 fox cat [FLAGS...] <PATHS...>
 
-Flags:
-  -u, --uniq=FACTOR        uniqueness factor (slow)
+Filter Flags:
+  -u, --uniq               filters output by unique hash (XXH3)
+  -D, --dist=LENGTH        filters output by Levenshtein distance (slow)
+  -e, --regexp=PATTERN     filters output by regular expression
 
-Filter flags:
+RegExp flags:
   -C, --context=LINES      lines surrounding context of a match
   -B, --before=LINES       lines leading context before a match
   -A, --after=LINES        lines trailing context after a match
@@ -31,9 +33,11 @@ Examples:
 `)
 
 type Cat struct {
-	Uniq float64 `short:"u"`
-
 	// filter
+	Uniq bool    `short:"u" xor:"uniq,dist"`
+	Dist float64 `short:"D" xor:"uniq,dist"`
+
+	// regexp
 	Context uint `short:"C"`
 	Before  uint `short:"B"`
 	After   uint `short:"A"`
@@ -42,12 +46,15 @@ type Cat struct {
 	Paths []string `arg:"" type:"path" optional:""`
 
 	// internal
-	unique *unique.Unique `kong:"-"`
+	uniq unique.Unique `kong:"-"`
 }
 
 func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
-	if cmd.Uniq > 0 {
-		cmd.unique = unique.New(cmd.Uniq)
+	switch {
+	case cmd.Uniq:
+		cmd.uniq = unique.ByHash()
+	case cmd.Dist > 0:
+		cmd.uniq = unique.ByDistance(cmd.Dist)
 	}
 
 	if cmd.Context > 0 {
@@ -62,6 +69,10 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
 		fmt.Print(Usage)
 		return nil
+	}
+
+	if cmd.Dist > 0 {
+		cli.NoColor = true
 	}
 
 	ch := cli.Load(cmd.Paths)
@@ -80,7 +91,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 		for l := range buffer.Text(h, cli, new(buffer.TextContext)).Lines {
 			s := l.String
 
-			if cmd.unique != nil && !cmd.unique.IsUnique(s) {
+			if cmd.uniq != nil && !cmd.uniq.IsUnique(s) {
 				continue // not unique
 			}
 

@@ -18,11 +18,19 @@ Prints file contents.
 FLAGS
 =====
 
-**-u, --uniq**=_factor_
+**-u, --uniq**
 
-:   Uniqueness _factor_ (slow).
+:   Filters output by unique hash (**XXH3**).
 
-Filter Flags
+**-D, --dist**=_length_
+
+:   Filters output by Levenshtein distance (slow).
+
+**-e, --regexp**=_pattern_
+
+:   Filters output by regular expression.
+
+RegExp Flags
 ------------
 
 **-C, --context**=_lines_

@@ -11,7 +11,6 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
-	"github.com/cuhsat/fox/v4/internal/pkg/text/unique"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
@@ -21,6 +20,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/raw"
 	"github.com/cuhsat/fox/v4/internal/pkg/rules"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/text/unique"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/hunter"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
@@ -34,13 +34,14 @@ fox hunt [FLAGS...] [PATHS...]
 Flags:
   -a, --all                shows logs with all severities
   -s, --sort               shows logs sorted by timestamp (slow)
+  -u, --uniq               shows logs that are unique 
   -j, --json               shows logs as JSON objects
   -J, --jsonl              shows logs as JSON lines
   -Q, --sqlite             saves logs to SQLite3 DB (very slow)
 
 Filter Flags:
-  -R, --rule=FILE          filters using a Sigma rule file (slow)
-  -u, --uniq=FACTOR        filters using uniqueness factor (slow)
+  -R, --rule=FILE          filters using Sigma Rules file (slow)
+  -D, --dist=LENGTH        filters using Levenshtein distance (slow)
 
 Stream Flags:
   -U, --url=SERVER         streams events to server address
@@ -59,13 +60,14 @@ Examples:
 type Hunt struct {
 	All    bool `short:"a"`
 	Sort   bool `short:"s"`
+	Uniq   bool `short:"u" xor:"uniq,dist"`
 	Json   bool `short:"j" xor:"json,jsonl"`
 	Jsonl  bool `short:"J" xor:"json,jsonl"`
 	Sqlite bool `short:"Q"`
 
 	// filter
 	Rule string  `short:"R" type:"path"`
-	Uniq float64 `short:"u"`
+	Dist float64 `short:"D" xor:"uniq,dist"`
 
 	// stream
 	Url  string `short:"U"`
@@ -81,10 +83,10 @@ type Hunt struct {
 	Paths []string `arg:"" type:"path" optional:""`
 
 	// internal
-	db     *event.Database `kong:"-"`
-	net    stream.Streamer `kong:"-"`
-	rule   sigma.Rule      `kong:"-"`
-	unique *unique.Unique  `kong:"-"`
+	db   *event.Database `kong:"-"`
+	net  stream.Streamer `kong:"-"`
+	rule sigma.Rule      `kong:"-"`
+	uniq unique.Unique   `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
@@ -99,6 +101,13 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
 
 	rule := rules.Default
+
+	switch {
+	case cmd.Uniq:
+		cmd.uniq = unique.ByHash()
+	case cmd.Dist > 0:
+		cmd.uniq = unique.ByDistance(cmd.Dist)
+	}
 
 	if cmd.Sqlite {
 		cmd.db = event.NewDB(hunter.Database)
@@ -139,16 +148,16 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		log.Fatalln(err)
 	}
 
-	if cmd.Uniq > 0 {
-		cmd.unique = unique.New(cmd.Uniq)
-	}
-
 	return nil
 }
 
 func (cmd *Hunt) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
 		cmd.Paths = hunter.Local
+	}
+
+	if cmd.Dist > 0 {
+		cli.NoColor = true
 	}
 
 	cli.NoConvert = true // forced
@@ -199,7 +208,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			continue // not successful
 		}
 
-		if cmd.unique != nil && !cmd.unique.IsUnique(e.String()) {
+		if cmd.uniq != nil && !cmd.uniq.IsUnique(e.String()) {
 			continue // not unique
 		}
 

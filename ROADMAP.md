@@ -13,7 +13,7 @@
 * ~~Done~~
 
 ## 5. Ideas
-* Add fast uniqueness for 1.0 with XXH3
+* Add animated console image to README
 * Add CEF syntax highlighting (pygments)
 * Add pager for output like moor
   * https://github.com/walles/moor
@@ -25,7 +25,7 @@
 * Add macOS trace3 log parser?
 * Add Shellbag parser?
 * Add Jumplist parser?
-* Add specs?
+* Add specs to manpages?
   * `Fox Unified Event Format`
   * `Fox Unified Event Storage`
   * `Fox Chain of Custody Receipt`
