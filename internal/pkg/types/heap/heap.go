@@ -41,7 +41,8 @@ func (h *Heap) Bytes() []byte {
 }
 
 func (h *Heap) Type() string {
-	return strings.TrimPrefix(filepath.Ext(h.Name), ".")
+	part := strings.Split(filepath.Base(h.Name), ".")
+	return part[min(1, len(part)-1)]
 }
 
 func (h *Heap) Discard() {
