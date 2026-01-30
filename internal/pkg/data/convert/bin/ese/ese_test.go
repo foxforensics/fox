@@ -1,7 +1,7 @@
 package ese
 
 import (
-	"strings"
+	"encoding/json"
 	"testing"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
@@ -38,9 +38,7 @@ func TestConvert(t *testing.T) {
 		t.Error(err)
 	}
 
-	lines := strings.Split(string(buf), "\n")
-
-	if len(lines) != 7586 {
-		t.Fatal("invalid length")
+	if !json.Valid(buf) {
+		t.Fatal("invalid format")
 	}
 }

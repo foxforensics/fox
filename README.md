@@ -23,7 +23,7 @@ brew install cuhsat/fox/fox
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * String carving and automatic classification
 * With over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
-* Dump Active Directory database files
+* Dump Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * Dump Windows shortcut and prefetch files
 * Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * Check IPs, URLs and file hashes via the [VirusTotal API](https://www.virustotal.com/)
@@ -83,7 +83,7 @@ $ fox hunt -sv ./**/*.E01
 
 ## Supports
 File Formats
-> evtx, journal, json, jsonl, lnk, pf, ELF, ESE, PE/COFF
+> evtx, journal, json, jsonl, lnk, pf, ELF, ESE/EDB, PE/COFF
 
 Image Formats
 > EWF-E01, EWF-S01, raw
