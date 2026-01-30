@@ -8,7 +8,7 @@ import (
 
 const pass = "test"
 const file1 = "archive/fox.zip"
-const file2 = "archive/fox.enc.zip"
+const file2 = "archive/fox.crypt.zip"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file1)
