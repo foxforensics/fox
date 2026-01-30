@@ -18,22 +18,24 @@ Prints file contents.
 
 fox cat [FLAGS...] <PATHS...>
 
-Filter Flags:
-  -u, --uniq               filters output by unique hash (XXH3)
-  -D, --dist=LENGTH        filters output by Levenshtein distance (slow)
-  -e, --regexp=PATTERN     filters output by regular expression
+Flags:
+  -u, --uniq               filters by unique hash (XXH3)
+  -D, --dist=LENGTH        filters by Levenshtein distance (slow)
+  -e, --regexp=PATTERN     filters by regular expression
 
-RegExp flags:
-  -C, --context=LINES      lines surrounding context of a match
-  -B, --before=LINES       lines leading context before a match
-  -A, --after=LINES        lines trailing context after a match
+RegExp Flags:
+  -C, --context=LINES      lines surrounding a match
+  -B, --before=LINES       lines leading before a match
+  -A, --after=LINES        lines trailing after a match
+
+Syntax Flags
+  -S, --syntax=TYPE        force syntax highlighting type
 
 Examples:
   $ fox -eWinlogon ./**/*.evtx
 `)
 
 type Cat struct {
-	// filter
 	Uniq bool    `short:"u" xor:"uniq,dist"`
 	Dist float64 `short:"D" xor:"uniq,dist"`
 
@@ -41,6 +43,9 @@ type Cat struct {
 	Context uint `short:"C"`
 	Before  uint `short:"B"`
 	After   uint `short:"A"`
+
+	// syntax
+	Syntax string `short:"S"`
 
 	// paths
 	Paths []string `arg:"" type:"path" optional:""`
@@ -88,7 +93,9 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
-		for l := range buffer.Text(h, cli, new(buffer.TextContext)).Lines {
+		for l := range buffer.Text(h, cli, &buffer.TextContext{
+			Syntax: cmd.Syntax,
+		}).Lines {
 			s := l.String
 
 			if cmd.uniq != nil && !cmd.uniq.IsUnique(s) {

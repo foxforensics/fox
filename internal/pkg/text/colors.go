@@ -11,7 +11,7 @@ import (
 	"github.com/fatih/color"
 )
 
-const Lexer = "json"
+const Lexer = "plain"
 const Style = "monokai"
 
 var Hide = black.SprintFunc()
@@ -21,6 +21,21 @@ var black = color.New(color.FgHiBlack)
 var match = color.New(color.BgBlue)
 var alert = color.New(color.FgHiRed)
 
+var mapping = map[string]string{
+	"elf":     "json",
+	"exe":     "json",
+	"dll":     "json",
+	"sys":     "json",
+	"ese":     "json",
+	"evtx":    "json",
+	"journal": "json",
+	"lnk":     "json",
+	"pf":      "json",
+	"json":    "json",
+	"jsonl":   "json",
+	"txt":     "plain",
+}
+
 func MarkMatch(s string, re *regexp.Regexp) string {
 	if re == nil {
 		return s // no regex, no match
@@ -29,14 +44,14 @@ func MarkMatch(s string, re *regexp.Regexp) string {
 	return marker.Mark(s, marker.MatchRegexp(re), match)
 }
 
-func ColorizeAs(s, l string) string {
+func ColorizeStringAs(s, lexer string) string {
 	var sb strings.Builder
 
 	if color.NoColor {
 		return s
 	}
 
-	err := quick.Highlight(&sb, s, l, "terminal256", Style)
+	err := quick.Highlight(&sb, s, lexer, "terminal256", Style)
 
 	if err != nil {
 		return s
@@ -45,27 +60,32 @@ func ColorizeAs(s, l string) string {
 	return sb.String()
 }
 
-func Colorize(b []byte) []byte {
+func ColorizeAs(b []byte, lexer string) []byte {
+	buf := bytes.NewBuffer(nil)
+
 	if color.NoColor {
 		return b
 	}
 
-	s := string(b)
-
-	// TODO: use white list for json syntax from convert
-	lexer := Lexer // use fallback
-
-	if l := lexers.Analyse(s); l != nil {
-		lexer = l.Config().Name
-	}
-
-	buf := bytes.NewBuffer(nil)
-
-	err := quick.Highlight(buf, s, lexer, "terminal256", Style)
+	err := quick.Highlight(buf, string(b), lexer, "terminal256", Style)
 
 	if err != nil {
 		return b
 	}
 
 	return buf.Bytes()
+}
+
+func Colorize(b []byte, hint string) []byte {
+	var lexer string
+
+	if v, ok := mapping[hint]; ok {
+		lexer = v // use type mapping
+	} else if l := lexers.Analyse(string(b)); l != nil {
+		lexer = l.Config().Name
+	} else {
+		lexer = Lexer // use fallback
+	}
+
+	return ColorizeAs(b, lexer)
 }

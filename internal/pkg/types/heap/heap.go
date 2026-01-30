@@ -4,7 +4,9 @@ import (
 	"errors"
 	"log"
 	"math"
+	"path/filepath"
 	"runtime"
+	"strings"
 	"sync"
 	"syscall"
 
@@ -36,6 +38,10 @@ func (h *Heap) Bytes() []byte {
 	h.RLock()
 	defer h.RUnlock()
 	return h.mmap
+}
+
+func (h *Heap) Type() string {
+	return strings.TrimPrefix(filepath.Ext(h.Name), ".")
 }
 
 func (h *Heap) Discard() {

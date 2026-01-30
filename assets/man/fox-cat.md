@@ -20,30 +20,37 @@ FLAGS
 
 **-u, --uniq**
 
-:   Filters output by unique hash (**XXH3**).
+:   Filters by unique hash (**XXH3**).
 
 **-D, --dist**=_length_
 
-:   Filters output by Levenshtein distance (slow).
+:   Filters by Levenshtein distance (slow).
 
 **-e, --regexp**=_pattern_
 
-:   Filters output by regular expression.
+:   Filters by regular expression.
 
 RegExp Flags
 ------------
 
 **-C, --context**=_lines_
 
-:   _Lines_ surrounding context of a match.
+:   _Lines_ surrounding a match.
 
 **-B, --before**=_lines_
 
-:   _Lines_ leading context before a match.
+:   _Lines_ leading before a match.
 
 **-A, --after**=_lines_
 
-:   _Lines_ trailing context after a match.
+:   _Lines_ trailing after a match.
+
+Syntax Flags
+------------
+
+**-S, --syntax**=_type_
+
+:   Force syntax highlighting _type_.
 
 POSITIONAL ARGUMENTS
 ====================

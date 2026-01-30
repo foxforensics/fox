@@ -23,17 +23,21 @@ type TextBuffer struct {
 }
 
 type TextContext struct {
-	SMap  smap.SMap
-	Delta int
+	SMap   smap.SMap
+	Delta  int
+	Syntax string
 }
 
 func Text(h *heap.Heap, cli *cli.Globals, ctx *TextContext) *TextBuffer {
 	var last uint
 
-	// TODO: give color hint from file ending
-	// h.Name
+	if len(ctx.Syntax) > 0 {
+		ctx.SMap = smap.Map(text.ColorizeAs(h.Bytes(), ctx.Syntax))
+	} else {
+		ctx.SMap = smap.Map(text.Colorize(h.Bytes(), h.Type()))
+	}
 
-	ctx.SMap = cli.Filter.Filter(smap.Map(text.Colorize(h.Bytes()))).Render()
+	ctx.SMap = cli.Filter.Filter(ctx.SMap).Render()
 
 	if len(ctx.SMap) > 0 {
 		last = ctx.SMap[len(ctx.SMap)-1].Line

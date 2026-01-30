@@ -249,9 +249,9 @@ func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp) string {
 
 	switch {
 	case cmd.Jsonl:
-		line = text.ColorizeAs(e.ToJSONL(), "json")
+		line = text.ColorizeStringAs(e.ToJSONL(), "json")
 	case cmd.Json:
-		line = text.ColorizeAs(e.ToJSON(), "json")
+		line = text.ColorizeStringAs(e.ToJSON(), "json")
 	default:
 		line = e.ToCEF()
 	}
