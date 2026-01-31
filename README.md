@@ -7,6 +7,8 @@ The Forensic Examiners Swiss Army Knife. Providing many useful features to lever
 [![Commits](https://img.shields.io/github/commit-activity/y/cuhsat/fox.svg?style=for-the-badge&label=commits)](https://github.com/cuhsat/fox/commits/main/)
 [![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
 
+![term](assets/img/term.png "term")
+
 **Get it on Linux:**
 ```bash
 go install github.com/cuhsat/fox/v4@latest
