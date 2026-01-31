@@ -24,6 +24,12 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
 
+var Short = strings.TrimSpace(`
+Usage: fox [MODE] [FLAGS...] <PATHS...>
+
+Use "fox help" to see the full help.
+`)
+
 var Usage = strings.TrimSpace(`
 .-------.----.--.  .--.   .--. .--.--. .--.-. .--.-----.
 |   ___/ .__. \  \/  /    |  |_|  |  | |  |  \|  |   _/
@@ -97,7 +103,7 @@ Example: Hunt down suspicious events
   $ fox hunt -sv ./**/*.E01
 
 For more information please visit: https://foxhunt.wtf
-Type "fox help <MODE>" to show help on a specific mode.
+Use "fox help <MODE>" to see help on a specific mode.
 `)
 
 type fox struct {
@@ -137,9 +143,9 @@ func main() {
 	case cli.Version:
 		fmt.Printf("fox %s\n", app.Version)
 	case cli.Globals.Help, ctx.Command() == "help":
-		fallthrough
-	case len(ctx.Args) == 0, ctx.Error != nil:
 		fmt.Printf(Usage, app.Version)
+	case len(ctx.Args) == 0, ctx.Error != nil:
+		fmt.Println(Short)
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())
