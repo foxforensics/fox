@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Prints file text contents.
+Prints file text contents by carving the file(s). This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====

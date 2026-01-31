@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Prints file hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified.
+Prints file hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified. This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====

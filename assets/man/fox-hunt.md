@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Hunts suspicious activities.
+Hunts suspicious activities by carving events from file(s). This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====

@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Prints file test results. A VirusTotal API key is required.
+Prints file test results. A VirusTotal API key is required. This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====
