@@ -17,6 +17,10 @@ const (
 	colLdapName = "ATTm131532"
 )
 
+var (
+	sparse = "{\"table\":\"%s\",\"rows\":[\n%s\n]}"
+)
+
 func Detect(b []byte) bool {
 	return data.HasMagic(b, 4, []byte{
 		0xEF, 0xCD, 0xAB, 0x89,
@@ -52,12 +56,12 @@ func Convert(b []byte) ([]byte, error) {
 			return nil
 		})
 
-		rows := bytes.Join(json, []byte{','})
+		rows := bytes.Join(json, []byte(",\n"))
 
-		buf.WriteString(rep.Replace(fmt.Sprintf(`{"table":"%s","rows":[%s]}`, table, rows)))
+		buf.WriteString(rep.Replace(fmt.Sprintf(sparse, table, rows)))
 
 		if i < ctl.Tables.Len()-1 {
-			buf.WriteByte(',')
+			buf.WriteString(",\n")
 		}
 	}
 
