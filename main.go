@@ -15,11 +15,11 @@ import (
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/cmd"
 	"github.com/cuhsat/fox/v4/internal/cmd/cat"
-	"github.com/cuhsat/fox/v4/internal/cmd/find"
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
 	"github.com/cuhsat/fox/v4/internal/cmd/help"
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
+	"github.com/cuhsat/fox/v4/internal/cmd/list"
 	"github.com/cuhsat/fox/v4/internal/cmd/test"
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
@@ -38,7 +38,7 @@ Usage:
 Modes:
   (c) cat     prints file contents (default mode)
   (x) hex     prints file contents in hex format
-  (f) find    prints file infos and entropy
+  (l) list    prints file infos and entropy
   (t) text    prints file text contents
   (s) test    prints file test results
   (h) hash    prints file hashes and checksums
@@ -90,8 +90,8 @@ Positional arguments:
 Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
-Example: Show strings in binary
-  $ fox text -w ioc.exe
+Example: List high entropy files
+  $ fox list -n0.9 ./**/*
 
 Example: Hunt down suspicious events
   $ fox hunt -sv ./**/*.E01
@@ -104,7 +104,7 @@ type fox struct {
 	// command modes
 	Cat  cat.Cat   `cmd:"" aliases:"c,less,more" default:"withargs"`
 	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hexdump"`
-	Find find.Find `cmd:"" aliases:"f,wc"`
+	List list.List `cmd:"" aliases:"l,ls,wc"`
 	Text text.Text `cmd:"" aliases:"t,strings"`
 	Test test.Test `cmd:"" aliases:"s,check"`
 	Hash hash.Hash `cmd:"" aliases:"h,sum"`

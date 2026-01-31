@@ -26,7 +26,7 @@ hex
 
 :   Prints file contents in hex format.
 
-find
+list
 
 :   Prints file infos and entropy.
 
@@ -194,9 +194,9 @@ fox hex -hc512 disk.bin
 
 :   Show MBR in canonical hex.
 
-fox find -n0.9 ./**/*
+fox list -n0.9 ./**/*
 
-:   Find high entropy files.
+:   List high entropy files.
 
 fox text -w ioc.exe
 

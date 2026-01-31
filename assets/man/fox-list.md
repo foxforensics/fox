@@ -1,4 +1,4 @@
-% FOX FIND(1) Version 4 | Fox Documentation
+% FOX LIST(1) Version 4 | Fox Documentation
 
 NAME
 ====
@@ -8,7 +8,7 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **find** \[_flags_ ...] \[_paths_ ...]
+| **fox** **list** \[_flags_ ...] \[_paths_ ...]
 
 DESCRIPTION
 ===========
@@ -45,9 +45,9 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox find -n0.9 ./**/*
+fox list -n0.9 ./**/*
 
-:   Find high entropy files
+:   List high entropy files
 
 BUGS
 ====

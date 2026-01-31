@@ -58,9 +58,9 @@ Show MBR in canonical hex:
 $ fox hex -hc512 disk.bin
 ```
 
-Find high entropy files:
+List high entropy files:
 ```bash
-$ fox find -n0.9 ./**/*
+$ fox list -n0.9 ./**/*
 ```
 
 Show strings in binary:

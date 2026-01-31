@@ -1,4 +1,4 @@
-package find
+package list
 
 import (
 	"bytes"
@@ -16,7 +16,7 @@ import (
 var Usage = strings.TrimSpace(`
 Prints file infos and entropy.
 
-fox find [FLAGS...] <PATHS...>
+fox list [FLAGS...] <PATHS...>
 
 Flags:
   -b, --block=SIZE         block size for calculations
@@ -27,10 +27,10 @@ Format Flags:
   -H, --human              format size in human-readable units
 
 Examples:
-  $ fox find -n0.9 ./**/*
+  $ fox list -n0.9 ./**/*
 `)
 
-type Find struct {
+type List struct {
 	Block uint64  `short:"b"`
 	Min   float64 `short:"n" default:"0.0"`
 	Max   float64 `short:"x" default:"1.0"`
@@ -42,7 +42,7 @@ type Find struct {
 	Paths []string `arg:"" name:"path" type:"path" optional:""`
 }
 
-func (cmd *Find) Validate() error {
+func (cmd *List) Validate() error {
 	if cmd.Min > cmd.Max {
 		log.Fatalln("invalid range")
 	}
@@ -50,7 +50,7 @@ func (cmd *Find) Validate() error {
 	return nil
 }
 
-func (cmd *Find) Run(cli *cli.Globals) error {
+func (cmd *List) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
 		fmt.Print(Usage)
 		return nil

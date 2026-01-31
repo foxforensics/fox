@@ -7,10 +7,10 @@ import (
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/cmd/cat"
-	"github.com/cuhsat/fox/v4/internal/cmd/find"
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
+	"github.com/cuhsat/fox/v4/internal/cmd/list"
 	"github.com/cuhsat/fox/v4/internal/cmd/test"
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
@@ -18,7 +18,7 @@ import (
 var usage = map[string]string{
 	"cat":  cat.Usage,
 	"hex":  hex.Usage,
-	"find": find.Usage,
+	"list": list.Usage,
 	"text": text.Usage,
 	"test": test.Usage,
 	"hash": hash.Usage,
