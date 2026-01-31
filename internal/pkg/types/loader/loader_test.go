@@ -121,14 +121,10 @@ func TestLoadFiles(t *testing.T) {
 		}, {
 			"Directory",
 			[]string{
-				"misc",
+				"rules",
 			},
 			[]string{
-				"eicar",
-				"empty",
-				"fox.jpg",
-				"mbr.bin",
-				"rnd.bin",
+				"test.yml",
 			},
 		}, {
 			"Globbing",
