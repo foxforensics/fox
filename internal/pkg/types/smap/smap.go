@@ -9,6 +9,8 @@ import (
 	"github.com/sourcegraph/conc"
 )
 
+const Size = 1024 * 1025 * 4 // 4m
+
 var Chunks = 2 // default
 
 var tab = []byte{'\t'}
@@ -25,7 +27,7 @@ type String struct {
 }
 
 func Map(m []byte) (s SMap) {
-	r := bufio.NewReader(bytes.NewReader(m))
+	r := bufio.NewReaderSize(bytes.NewReader(m), Size)
 
 	for {
 		b, _, err := r.ReadLine()
