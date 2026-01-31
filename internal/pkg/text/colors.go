@@ -11,14 +11,23 @@ import (
 	"github.com/fatih/color"
 )
 
+// Lexer default
 const Lexer = "text"
+
+// Style default
 const Style = "monokai"
 
 var NoSyntax = false
 
 var (
+	HexZero = color.HiBlackString
+	HexLow  = color.HiWhiteString
+	HexHigh = color.WhiteString
+)
+
+var (
 	Hide = black.SprintFunc()
-	Warn = alert.SprintFunc()
+	Rise = alert.SprintFunc()
 )
 
 var (
@@ -40,14 +49,6 @@ var mapping = map[string]string{
 	"pf":      "json",
 	"sys":     "json",
 	"txt":     "text",
-}
-
-func MarkMatch(s string, re *regexp.Regexp) string {
-	if re == nil {
-		return s // no regex, no match
-	}
-
-	return marker.Mark(s, marker.MatchRegexp(re), match)
 }
 
 func ColorizeStringAs(s, lexer string) string {
@@ -102,4 +103,12 @@ func Colorize(b []byte, hint string) []byte {
 	}
 
 	return ColorizeAs(b, lexer)
+}
+
+func MarkMatch(s string, re *regexp.Regexp) string {
+	if re == nil {
+		return s // no regex, no match
+	}
+
+	return marker.Mark(s, marker.MatchRegexp(re), match)
 }

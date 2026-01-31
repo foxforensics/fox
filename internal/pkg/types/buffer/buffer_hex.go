@@ -73,30 +73,39 @@ func fmtCanonical(ctx *HexContext) HexLine {
 	var hex strings.Builder
 	var str strings.Builder
 
-	for j := range 16 {
-		if ctx.Index+j >= len(ctx.Data) {
-			break
-		}
-
-		hex.WriteString(fmt.Sprintf("%02x", ctx.Data[ctx.Index+j]))
-		str.WriteString(fmt.Sprintf("%c", ctx.Data[ctx.Index+j]))
-
-		if j+1%8 == 0 {
-			hex.WriteString("  ")
-		} else {
-			hex.WriteString(" ")
-		}
-	}
-
 	if ctx.Decimal {
 		adr = fmt.Sprintf("%08d", ctx.Delta+ctx.Index)
 	} else {
 		adr = fmt.Sprintf("%08x", ctx.Delta+ctx.Index)
 	}
 
+	var l int
+	for j := range 16 {
+		if ctx.Index+j >= len(ctx.Data) {
+			break
+		}
+
+		hex.WriteString(fmtHex(ctx.Data[ctx.Index+j]))
+		l += 2
+
+		if (j+1)%8 == 0 {
+			hex.WriteString("  ")
+			l += 2
+		} else {
+			hex.WriteByte(' ')
+			l++
+		}
+
+		str.WriteString(fmt.Sprintf("%c", ctx.Data[ctx.Index+j]))
+	}
+
+	if l < 50 {
+		hex.WriteString(strings.Repeat(" ", 50-l))
+	}
+
 	return HexLine{
 		adr,
-		fmt.Sprintf("%-*s", 50, hex.String()),
+		hex.String(),
 		fmt.Sprintf("|%-16s|", text.ToAscii(str.String())),
 	}
 }
@@ -105,22 +114,22 @@ func fmtHexdump(ctx *HexContext) HexLine {
 	var adr string
 	var hex strings.Builder
 
+	if ctx.Decimal {
+		adr = fmt.Sprintf("%07d", ctx.Delta+ctx.Index)
+	} else {
+		adr = fmt.Sprintf("%07x", ctx.Delta+ctx.Index)
+	}
+
 	for j := range 16 {
 		if ctx.Index+j >= len(ctx.Data) {
 			break
 		}
 
-		hex.WriteString(fmt.Sprintf("%02x", ctx.Data[ctx.Index+j]))
+		hex.WriteString(fmtHex(ctx.Data[ctx.Index+j]))
 
-		if j+1%2 == 0 {
-			hex.WriteString(" ")
+		if (j+1)%2 == 0 {
+			hex.WriteByte(' ')
 		}
-	}
-
-	if ctx.Decimal {
-		adr = fmt.Sprintf("%07d", ctx.Delta+ctx.Index)
-	} else {
-		adr = fmt.Sprintf("%07x", ctx.Delta+ctx.Index)
 	}
 
 	return HexLine{adr, fmt.Sprintf("%-*s", 50, hex.String()), ""}
@@ -131,28 +140,36 @@ func fmtXxd(ctx *HexContext) HexLine {
 	var hex strings.Builder
 	var str strings.Builder
 
-	for j := range 16 {
-		if ctx.Index+j >= len(ctx.Data) {
-			break
-		}
-
-		hex.WriteString(fmt.Sprintf("%02x", ctx.Data[ctx.Index+j]))
-		str.WriteString(fmt.Sprintf("%c", ctx.Data[ctx.Index+j]))
-
-		if j+1%2 == 0 {
-			hex.WriteString(" ")
-		}
-	}
-
 	if ctx.Decimal {
 		adr = fmt.Sprintf("%08d:", ctx.Delta+ctx.Index)
 	} else {
 		adr = fmt.Sprintf("%08x:", ctx.Delta+ctx.Index)
 	}
 
+	var l int
+	for j := range 16 {
+		if ctx.Index+j >= len(ctx.Data) {
+			break
+		}
+
+		hex.WriteString(fmtHex(ctx.Data[ctx.Index+j]))
+		l += 2
+
+		if (j+1)%2 == 0 {
+			hex.WriteByte(' ')
+			l++
+		}
+
+		str.WriteString(fmt.Sprintf("%c", ctx.Data[ctx.Index+j]))
+	}
+
+	if l < 40 {
+		hex.WriteString(strings.Repeat(" ", 40-l))
+	}
+
 	return HexLine{
 		adr,
-		fmt.Sprintf("%-*s", 40, hex.String()),
+		hex.String(),
 		text.ToAscii(str.String()),
 	}
 }
@@ -165,8 +182,22 @@ func fmtRaw(ctx *HexContext) HexLine {
 			break
 		}
 
-		hex.WriteString(fmt.Sprintf("%02x ", ctx.Data[ctx.Index+j]))
+		hex.WriteString(fmtHex(ctx.Data[ctx.Index+j]))
+		hex.WriteByte(' ')
 	}
 
 	return HexLine{"", hex.String(), ""}
+}
+
+func fmtHex(b byte) string {
+	s := fmt.Sprintf("%02x", b)
+
+	switch {
+	case b == 0:
+		return text.HexZero(s)
+	case b < 0x20:
+		return text.HexLow(s)
+	default:
+		return text.HexHigh(s)
+	}
 }

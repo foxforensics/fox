@@ -84,7 +84,7 @@ func (cmd *Test) output(cli *cli.Globals, res []vt.Entry, err error, h string) {
 
 	for _, r := range res {
 		if r.Alert {
-			r.Result = text.Warn(r.Result)
+			r.Result = text.Rise(r.Result)
 		}
 
 		_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", r.Result, text.Hide(r.Engine))
