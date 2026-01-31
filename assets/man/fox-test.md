@@ -18,17 +18,24 @@ Prints file test results. A VirusTotal API key is required. This mode enforces t
 FLAGS
 =====
 
-**-k, --key**=_apikey_
+**-D, --domain**=_domain_,...
 
-:   Sets **VirusTotal** API _key_.
+:   Tests suspicious _domain(s)_.
 
 **-U, --url**=_url_,...
 
-:   Tests suspicious _url_.
+:   Tests suspicious _url(s)_.
 
 **-I, --ip**=_ip_,...
 
-:   Tests suspicious _ip_.
+:   Tests suspicious _ip(s)_.
+
+Required
+--------
+
+**-k, --key**=_apikey_
+
+:   Sets **VirusTotal** _api key_.
 
 POSITIONAL ARGUMENTS
 ====================

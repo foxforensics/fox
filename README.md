@@ -28,7 +28,7 @@ brew install cuhsat/fox/fox
 * Dump Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * Dump Windows shortcut and prefetch files
 * Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
-* Check IPs, URLs and file hashes via the [VirusTotal API](https://www.virustotal.com/)
+* Check IPs, URLs, Domains and files via the [VirusTotal API](https://www.virustotal.com/)
 * Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
 * Integral syntax highlighting for many different formats
 * Integral *Chain-of-Custody* receipt generation

@@ -11,10 +11,10 @@ import (
 	"github.com/fatih/color"
 )
 
-// Lexer default
+// Lexer (default)
 const Lexer = "text"
 
-// Style default
+// Style (default)
 const Style = "monokai"
 
 var NoSyntax = false
@@ -26,14 +26,10 @@ var (
 )
 
 var (
-	Hide = black.SprintFunc()
-	Rise = alert.SprintFunc()
-)
-
-var (
-	black = color.New(color.FgHiBlack)
-	match = color.New(color.FgHiBlue)
-	alert = color.New(color.FgHiRed)
+	Hide = color.New(color.FgHiBlack).SprintFunc()
+	Warn = color.New(color.FgHiRed).SprintFunc()
+	Bold = color.New(color.Bold).SprintFunc()
+	Mark = color.New(color.FgHiBlue)
 )
 
 var mapping = map[string]string{
@@ -110,5 +106,5 @@ func MarkMatch(s string, re *regexp.Regexp) string {
 		return s // no regex, no match
 	}
 
-	return marker.Mark(s, marker.MatchRegexp(re), match)
+	return marker.Mark(s, marker.MatchRegexp(re), Mark)
 }
