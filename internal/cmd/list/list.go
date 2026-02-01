@@ -85,7 +85,7 @@ func (cmd *List) Run(cli *cli.Globals) error {
 			}
 
 			if e >= cmd.Min && e <= cmd.Max {
-				size := fmt.Sprintf("%10db", len(block))
+				size := fmt.Sprintf("%db", len(block))
 				title := text.Hide(h.String())
 				start := text.Hide(fmt.Sprintf("@ 0x%x", off))
 
@@ -94,9 +94,9 @@ func (cmd *List) Run(cli *cli.Globals) error {
 				}
 
 				if cmd.Block > 0 {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %s  %.10fe  %s %s\n", l, size, e, title, start)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10s  %.10fe  %s %s\n", l, size, e, title, start)
 				} else {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %s  %.10fe  %s\n", l, size, e, title)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10s  %.10fe  %s\n", l, size, e, title)
 				}
 			}
 
