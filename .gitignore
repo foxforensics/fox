@@ -29,8 +29,10 @@ go.work.sum
 # COC receipts
 *.cc
 
-# Raw images
+# Test images
 *.dd
+*.vhdx
+*.vmdk
 
 # Databases
 *.sqlite
