@@ -84,7 +84,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 					log.Fatalln(err)
 				}
 
-				ldr.createHeap("STDIN", buf)
+				ldr.createHeap(buf, "STDIN", "")
 				break
 			}
 
@@ -194,7 +194,7 @@ func (ldr *Loader) loadFile(path, part string) {
 
 	// empty files will cause issues
 	if fi.Size() == 0 {
-		ldr.createHeap(path, []byte{})
+		ldr.createHeap([]byte{}, path, "")
 		return
 	}
 
@@ -213,8 +213,10 @@ func (ldr *Loader) loadFile(path, part string) {
 }
 
 func (ldr *Loader) processData(path, part string, b []byte) {
+	var hint string
+
 	// 1. deflate data
-	b = ldr.deflateData(b)
+	b, _ = ldr.deflateData(b)
 
 	// 2. extract data
 	if ldr.extractData(path, part, b) {
@@ -222,17 +224,27 @@ func (ldr *Loader) processData(path, part string, b []byte) {
 	}
 
 	// 3a. ingest data
-	b = ldr.ingestData(b)
+	b, _ = ldr.ingestData(b)
 
 	// 3b. convert data
-	b = ldr.convertData(b)
+	b, ok := ldr.convertData(b)
+
+	// default conversion format
+	if ok {
+		hint = "json"
+	}
 
 	// 4. format data
-	b = ldr.formatData(b)
+	b, ok = ldr.formatData(b)
+
+	// only formating style
+	if ok {
+		hint = "json"
+	}
 
 	// filter for specific streams
 	if strings.Contains(path, part) {
-		ldr.createHeap(path, b)
+		ldr.createHeap(b, path, hint)
 	}
 }
 
@@ -271,7 +283,7 @@ func (ldr *Loader) extractData(path, part string, b []byte) bool {
 	return false
 }
 
-func (ldr *Loader) deflateData(b []byte) []byte {
+func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
 	for _, d := range register.Deflates {
 		if d.Detect(b) {
 			if ldr.opts.Verbose > 1 {
@@ -288,14 +300,14 @@ func (ldr *Loader) deflateData(b []byte) []byte {
 				}
 			}
 
-			return r
+			return r, true
 		}
 	}
 
-	return b
+	return b, false
 }
 
-func (ldr *Loader) convertData(b []byte) []byte {
+func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
 	for _, c := range register.Converts {
 		if c.Detect(b) {
 			if ldr.opts.Verbose > 1 {
@@ -312,14 +324,14 @@ func (ldr *Loader) convertData(b []byte) []byte {
 				}
 			}
 
-			return r
+			return r, true
 		}
 	}
 
-	return b
+	return b, false
 }
 
-func (ldr *Loader) formatData(b []byte) []byte {
+func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 	for _, c := range register.Formats {
 		if c.Detect(b) {
 			if ldr.opts.Verbose > 1 {
@@ -336,14 +348,14 @@ func (ldr *Loader) formatData(b []byte) []byte {
 				}
 			}
 
-			return r
+			return r, true
 		}
 	}
 
-	return b
+	return b, false
 }
 
-func (ldr *Loader) ingestData(b []byte) []byte {
+func (ldr *Loader) ingestData(b []byte) ([]byte, bool) {
 	for _, c := range register.Images {
 		if c.Detect(b) {
 			if ldr.opts.Verbose > 1 {
@@ -360,27 +372,27 @@ func (ldr *Loader) ingestData(b []byte) []byte {
 				}
 			}
 
-			return r
+			return r, true
 		}
 	}
 
-	return b
+	return b, false
 }
 
-func (ldr *Loader) createHeap(s string, b []byte) {
+func (ldr *Loader) createHeap(b []byte, path, hint string) {
 	ldr.Lock()
 	defer ldr.Unlock()
 
-	if slices.Contains(ldr.paths, s) {
+	if slices.Contains(ldr.paths, path) {
 		return // already loaded
 	}
 
 	ldr.size += int64(len(b))
-	ldr.paths = append(ldr.paths, s)
-	ldr.heaps <- heap.New(s, b, ldr.opts.Limit)
+	ldr.paths = append(ldr.paths, path)
+	ldr.heaps <- heap.New(path, hint, b, ldr.opts.Limit)
 
 	if ldr.opts.Verbose > 1 {
-		log.Printf("loaded heap %s\n", s)
+		log.Printf("loaded heap %s\n", path)
 	}
 }
 

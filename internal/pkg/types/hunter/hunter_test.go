@@ -50,7 +50,7 @@ func newOpts() *Options {
 }
 
 func consume(htr *Hunter, b []byte) (out []*event.Event) {
-	h := heap.New("test", b, new(types.Limits))
+	h := heap.New("test", "", b, new(types.Limits))
 
 	ch := make(chan *heap.Heap, 1)
 	ch <- h

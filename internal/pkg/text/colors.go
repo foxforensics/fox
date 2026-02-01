@@ -32,21 +32,6 @@ var (
 	Mark = color.New(color.FgHiBlue)
 )
 
-var mapping = map[string]string{
-	"dll":     "json",
-	"elf":     "json",
-	"ese":     "json",
-	"evtx":    "json",
-	"exe":     "json",
-	"journal": "json",
-	"json":    "json",
-	"jsonl":   "json",
-	"lnk":     "json",
-	"pf":      "json",
-	"sys":     "json",
-	"txt":     "text",
-}
-
 func ColorizeStringAs(s, lexer string) string {
 	if NoSyntax {
 		return s
@@ -86,8 +71,8 @@ func Colorize(b []byte, hint string) []byte {
 
 	var lexer string
 
-	if v, ok := mapping[hint]; ok {
-		lexer = v // use type mapping
+	if len(hint) > 0 {
+		lexer = hint // use type hinting
 	} else if l := lexers.Analyse(string(b)); l != nil {
 		lexer = l.Config().Name
 	} else {

@@ -34,7 +34,7 @@ func Text(h *heap.Heap, cli *cli.Globals, ctx *TextContext) *TextBuffer {
 	if len(ctx.Syntax) > 0 {
 		ctx.SMap = smap.Map(text.ColorizeAs(h.Bytes(), ctx.Syntax))
 	} else {
-		ctx.SMap = smap.Map(text.Colorize(h.Bytes(), h.Type()))
+		ctx.SMap = smap.Map(text.Colorize(h.Bytes(), h.Hint))
 	}
 
 	ctx.SMap = cli.Filter.Filter(ctx.SMap).Render()

@@ -13,12 +13,13 @@ import (
 const (
 	file  = "text/bible.txt"
 	name  = "test"
+	hint  = "text"
 	size  = 4633983
 	bytes = 1024
 )
 
 func TestNew(t *testing.T) {
-	h := New(name, fixture(file), new(types.Limits))
+	h := New(name, hint, fixture(file), new(types.Limits))
 
 	defer h.Discard()
 
@@ -36,7 +37,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestNewLimitHeadBytes(t *testing.T) {
-	h := New(name, fixture(file), &types.Limits{
+	h := New(name, hint, fixture(file), &types.Limits{
 		IsHead: true,
 		Bytes:  bytes,
 	})
@@ -49,7 +50,7 @@ func TestNewLimitHeadBytes(t *testing.T) {
 }
 
 func TestNewLimitTailBytes(t *testing.T) {
-	h := New(name, fixture(file), &types.Limits{
+	h := New(name, hint, fixture(file), &types.Limits{
 		IsTail: true,
 		Bytes:  bytes,
 	})
@@ -62,7 +63,7 @@ func TestNewLimitTailBytes(t *testing.T) {
 }
 
 func TestBytes(t *testing.T) {
-	h := New(name, fixture(file), new(types.Limits))
+	h := New(name, hint, fixture(file), new(types.Limits))
 
 	defer h.Discard()
 
@@ -72,7 +73,7 @@ func TestBytes(t *testing.T) {
 }
 
 func TestString(t *testing.T) {
-	h := New(name, fixture(file), new(types.Limits))
+	h := New(name, hint, fixture(file), new(types.Limits))
 
 	defer h.Discard()
 
@@ -82,7 +83,7 @@ func TestString(t *testing.T) {
 }
 
 func TestDiscard(t *testing.T) {
-	h := New(name, fixture(file), new(types.Limits))
+	h := New(name, hint, fixture(file), new(types.Limits))
 	h.Discard()
 
 	if h.Size > 0 {
@@ -97,7 +98,7 @@ func TestDiscard(t *testing.T) {
 }
 
 func TestEntropy(t *testing.T) {
-	h := New(name, fixture(file), new(types.Limits))
+	h := New(name, hint, fixture(file), new(types.Limits))
 
 	defer h.Discard()
 

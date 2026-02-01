@@ -4,9 +4,7 @@ import (
 	"errors"
 	"log"
 	"math"
-	"path/filepath"
 	"runtime"
-	"strings"
 	"sync"
 	"syscall"
 
@@ -18,13 +16,15 @@ import (
 type Heap struct {
 	sync.RWMutex
 	Name string    // heap name
+	Hint string    // heap hint
 	Size uint64    // heap size
 	mmap mmap.MMap // memory map
 }
 
-func New(s string, m mmap.MMap, l *types.Limits) *Heap {
+func New(name, hint string, m mmap.MMap, l *types.Limits) *Heap {
 	return &Heap{
-		Name: s,
+		Name: name,
+		Hint: hint,
 		Size: uint64(len(m)),
 		mmap: l.Reduce(m),
 	}
@@ -38,11 +38,6 @@ func (h *Heap) Bytes() []byte {
 	h.RLock()
 	defer h.RUnlock()
 	return h.mmap
-}
-
-func (h *Heap) Type() string {
-	part := strings.Split(filepath.Base(h.Name), ".")
-	return part[min(1, len(part)-1)]
 }
 
 func (h *Heap) Discard() {
