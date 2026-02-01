@@ -36,7 +36,7 @@ brew install cuhsat/fox/fox
 * Many popular cryptographic, fuzzy, image and fast hashes
 * Complete with [man pages](assets/man) for every mode
 * Special Hunt mode
-  * Built-in support for [EnCase EWF](https://www.loc.gov/preservation/digital/formats/fdd/fdd000408.shtml), [VHDX](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-vhdx/83e061f8-f6e2-4de1-91bd-5d518a43d477) and raw `dd` images
+  * Built-in support for [EnCase EWF](https://www.loc.gov/preservation/digital/formats/fdd/fdd000408.shtml), [VHDX](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-vhdx/83e061f8-f6e2-4de1-91bd-5d518a43d477), [VMDK](https://code.vmware.com/web/sdk/6.7/vddk) and raw `dd` images
   * Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * Built-in translation of over 51600 event ids
@@ -88,7 +88,7 @@ File Formats
 > evtx, journal, json, jsonl, lnk, pf, ELF, ESE/EDB, PE/COFF
 
 Image Formats
-> EWF-E01, EWF-S01, raw, VHDX
+> dd/raw, EWF-E01, EWF-S01, VHDX, VMDK
 
 Archive Formats
 > 7zip, ar, CAB, CPIO, ISO, RAR, RPM, tar, xar, ZIP
