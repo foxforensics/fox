@@ -115,6 +115,7 @@ func request(url *url.URL, key string) (*Result, error) {
 
 	if err != nil {
 		if strings.HasSuffix(err.Error(), "not found") {
+			res.Label = "unknown"
 			return res, nil
 		}
 
