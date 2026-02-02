@@ -1,7 +1,4 @@
-<style>
-:root {
-  color-scheme: light dark;
-}
+<style>:root {color-scheme: light dark;}
 
 @media (prefers-color-scheme: light) {
   #logo {
