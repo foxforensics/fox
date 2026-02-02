@@ -1,5 +1,4 @@
 [![fox](assets/img/logo.png "fox")](https://foxhunt.wtf)
-
 The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 
 [![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
@@ -8,7 +7,6 @@ The Forensic Examiners Swiss Army Knife. Providing many useful features to lever
 [![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
 
 ![term](assets/img/term.png "fox hunt mode in action")
-</div>
 
 **Get it on Linux**
 ```bash
@@ -37,7 +35,6 @@ brew install cuhsat/fox/fox
 * Many popular cryptographic, fuzzy, image and fast hashes
 * Complete with [man pages](assets/man) for every mode
 * Special Hunt mode
-  * Built-in support for [EnCase EWF](https://www.loc.gov/preservation/digital/formats/fdd/fdd000408.shtml), [VHDX](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-vhdx/83e061f8-f6e2-4de1-91bd-5d518a43d477), [VMDK](https://code.vmware.com/web/sdk/6.7/vddk) and raw `dd` images
   * Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * Built-in translation of over 51600 event ids
@@ -81,15 +78,12 @@ $ fox hash -uTLSH files.7z
 
 Hunt down suspicious events:
 ```bash
-$ fox hunt -sv ./**/*.E01
+$ fox hunt -sv ./**/*.dd
 ```
 
 ## Supports
 File Formats
 > evtx, journal, json, jsonl, lnk, pf, ELF, ESE/EDB, PE/COFF
-
-Image Formats
-> dd/raw, EWF-E01, EWF-S01, VHDX, VMDK
 
 Archive Formats
 > 7zip, ar, CAB, CPIO, ISO, RAR, RPM, tar, xar, ZIP
