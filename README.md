@@ -1,4 +1,25 @@
-[![fox](assets/img/logo.png "fox")](https://foxhunt.wtf)
+<style>
+:root {
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: light) {
+  #logo {
+    content: url("assets/img/logo.png")
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  #logo {
+    content: url("assets/img/logo.png")
+  }
+}
+</style>
+
+<div id="header" style="text-align: center">
+<a href="https://foxhunt.wtf">
+  <img id="logo" src="" alt="fox" />
+</a>
 
 The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 
@@ -7,7 +28,8 @@ The Forensic Examiners Swiss Army Knife. Providing many useful features to lever
 [![Commits](https://img.shields.io/github/commit-activity/y/cuhsat/fox.svg?style=for-the-badge&label=commits)](https://github.com/cuhsat/fox/commits/main/)
 [![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
 
-![term](assets/img/term.png "term")
+![term](assets/img/term.png "fox hunt mode in action")
+</div>
 
 **Get it on Linux**
 ```bash
