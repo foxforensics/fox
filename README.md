@@ -1,7 +1,4 @@
-<div id="header" style="text-align: center">
-<a href="https://foxhunt.wtf">
-  <img id="logo" src="assets/img/logo.png" alt="fox" />
-</a>
+[![fox](assets/img/logo.png "fox")](https://foxhunt.wtf)
 
 The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 
