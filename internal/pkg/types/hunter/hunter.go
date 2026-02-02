@@ -31,14 +31,14 @@ type Options struct {
 
 type Hunter struct {
 	opts   *Options
-	cache  map[uint64]*event.Event
+	cache  map[string]*event.Event
 	events chan *event.Event
 }
 
 func New(opts *Options) *Hunter {
 	return &Hunter{
 		opts:   opts,
-		cache:  make(map[uint64]*event.Event),
+		cache:  make(map[string]*event.Event),
 		events: make(chan *event.Event, opts.Parallel*1024),
 	}
 }
@@ -74,7 +74,7 @@ func (htr *Hunter) sort() <-chan *event.Event {
 
 	go func() {
 		for e := range htr.events {
-			htr.cache[e.Hash()] = e
+			htr.cache[e.SortKey()] = e
 		}
 
 		for _, k := range slices.Sorted(maps.Keys(htr.cache)) {

@@ -8,8 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zeebo/xxh3"
-
 	"github.com/cuhsat/fox/v4/internal"
 )
 
@@ -32,8 +30,8 @@ func (evt *Event) String() string {
 	return evt.ToCEF()
 }
 
-func (evt *Event) Hash() uint64 {
-	return xxh3.HashString(evt.ToCEF())
+func (evt *Event) SortKey() string {
+	return fmt.Sprintf("%s %s", evt.Time.String(), evt.Host)
 }
 
 func (evt *Event) ToCEF() string {
