@@ -25,7 +25,8 @@ import (
 )
 
 var Short = strings.TrimSpace(`
-Usage: fox [MODE] [FLAGS...] <PATHS...>
+fox v%s
+fox [MODE] [FLAGS...] <PATHS...>
 
 Use "fox help" to see the full help.
 `)
@@ -145,7 +146,7 @@ func main() {
 	case cli.Globals.Help, ctx.Command() == "help":
 		fmt.Printf(Usage, app.Version)
 	case len(ctx.Args) == 0, ctx.Error != nil:
-		fmt.Println(Short)
+		fmt.Printf(Short, app.Version)
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())
