@@ -21,7 +21,7 @@ var NoSyntax = false
 
 var (
 	HexZero = color.HiBlackString
-	HexLow  = color.HiWhiteString
+	HexLow  = color.WhiteString
 	HexHigh = color.WhiteString
 )
 
