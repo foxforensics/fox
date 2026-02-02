@@ -40,4 +40,8 @@ func TestIngest(t *testing.T) {
 	if len(buf) == 0 {
 		t.Fatal("not ingested")
 	}
+
+	if buf[510] != 0x55 || buf[511] != 0xAA {
+		t.Fatal("mbr not found")
+	}
 }
