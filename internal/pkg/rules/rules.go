@@ -8,7 +8,7 @@ import (
 )
 
 var Default = []byte(`
-title: Fox Standard Rule
+title: Critical Events
 logsource:
   product: fox
 detection: 
