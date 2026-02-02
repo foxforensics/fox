@@ -31,8 +31,6 @@ go.work.sum
 
 # Test images
 *.dd
-*.vhdx
-*.vmdk
 
 # Databases
 *.sqlite

@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Hunts suspicious activities by carving events from file(s). This mode enforces the **--no-convert** flag.
+Hunts suspicious activities by carving events from file(s). This mode enforces the **--no-extract**, **--no-deflate** and **--no-convert** flags.
 
 FLAGS
 =====
@@ -91,7 +91,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox hunt -sv ./**/*.E01
+fox hunt -sv ./**/*.dd
 
 :   Hunt down suspicious events.
 

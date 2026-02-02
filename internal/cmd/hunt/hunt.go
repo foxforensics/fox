@@ -54,7 +54,7 @@ Aliases:
   -S, --splunk             alias for -H -Uhttp://localhost:8088/...
 
 Examples:
-  $ fox hunt -sv ./**/*.E01
+  $ fox hunt -sv ./**/*.dd
 `)
 
 type Hunt struct {
@@ -160,6 +160,8 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		cli.NoSyntax = true
 	}
 
+	cli.NoExtract = true // forced
+	cli.NoDeflate = true // forced
 	cli.NoConvert = true // forced
 
 	ch := cli.Load(cmd.Paths)

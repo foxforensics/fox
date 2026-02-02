@@ -218,10 +218,7 @@ func (ldr *Loader) processData(path, part string, b []byte) {
 		return
 	}
 
-	// 3a. ingest data
-	b, _ = ldr.ingestData(b)
-
-	// 3b. convert data
+	// 3. convert data
 	b, ok := ldr.convertData(b)
 
 	// default conversion format
@@ -334,30 +331,6 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 			}
 
 			r, err := c.Format(b)
-
-			if err != nil {
-				log.Println(err)
-
-				if ldr.opts.Strict {
-					r = b // ignore partly result
-				}
-			}
-
-			return r, true
-		}
-	}
-
-	return b, false
-}
-
-func (ldr *Loader) ingestData(b []byte) ([]byte, bool) {
-	for _, c := range register.Images {
-		if c.Detect(b) {
-			if ldr.opts.Verbose > 1 {
-				log.Printf("image detected %s\n", c.Name)
-			}
-
-			r, err := c.Ingest(b)
 
 			if err != nil {
 				log.Println(err)

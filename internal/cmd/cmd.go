@@ -45,9 +45,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/format/jsonl"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/image/ewf"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/image/vhdx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/image/vmdk"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
@@ -222,12 +219,6 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	if !cli.NoPretty {
 		register.Format("json", json.Detect, json.Format)
 		register.Format("jsonl", jsonl.Detect, jsonl.Format)
-	}
-
-	if !cli.Raw {
-		register.Image("ewf", ewf.Detect, ewf.Ingest)
-		register.Image("vhdx", vhdx.Detect, vhdx.Ingest)
-		register.Image("vmdk", vmdk.Detect, vmdk.Ingest)
 	}
 
 	cli.Loader = loader.New(&loader.Options{

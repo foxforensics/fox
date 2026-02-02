@@ -2,34 +2,17 @@ package mmap
 
 import (
 	"errors"
-	"io"
 	"log"
 	"os"
 	"syscall"
 
-	"github.com/edsrzf/mmap-go"
+	"github.com/cuhsat/go-mmap"
 )
 
 type MMap mmap.MMap
 
 func Map(f *os.File) MMap {
 	m, err := mmap.Map(f, mmap.RDONLY, 0)
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return (MMap)(m)
-}
-
-func Remap(r io.ReaderAt, size int) MMap {
-	m, err := mmap.MapRegion(nil, size, mmap.RDWR, mmap.ANON, 0)
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	_, err = r.ReadAt(m, 0)
 
 	if err != nil {
 		log.Fatalln(err)

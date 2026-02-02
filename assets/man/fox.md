@@ -210,7 +210,7 @@ fox hash -uTLSH files.7z
 
 :   Hash archive contents.
 
-fox hunt -sv ./**/*.E01
+fox hunt -sv ./**/*.dd
 
 :   Hunt down suspicious events.
 
