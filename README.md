@@ -1,21 +1,6 @@
-<style>:root {color-scheme: light dark;}
-
-@media (prefers-color-scheme: light) {
-  #logo {
-    content: url("assets/img/logo.png")
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  #logo {
-    content: url("assets/img/logo.png")
-  }
-}
-</style>
-
 <div id="header" style="text-align: center">
 <a href="https://foxhunt.wtf">
-  <img id="logo" src="" alt="fox" />
+  <img id="logo" src="assets/img/logo.png" alt="fox" />
 </a>
 
 The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
