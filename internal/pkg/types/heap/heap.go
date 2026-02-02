@@ -1,16 +1,12 @@
 package heap
 
 import (
-	"errors"
-	"log"
 	"math"
 	"runtime"
 	"sync"
-	"syscall"
-
-	"github.com/cuhsat/go-mmap"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/mmap"
 )
 
 type Heap struct {
@@ -43,12 +39,7 @@ func (h *Heap) Bytes() []byte {
 func (h *Heap) Discard() {
 	h.Lock()
 
-	// try to unmap original area
-	err := h.mmap.Unmap()
-
-	if err != nil && !errors.Is(err, syscall.EINVAL) {
-		log.Println(err)
-	}
+	mmap.Unmap(h.mmap)
 
 	h.Size = 0
 	h.mmap = nil

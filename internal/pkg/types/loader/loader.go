@@ -12,7 +12,6 @@ import (
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
-	"github.com/cuhsat/go-mmap"
 	"github.com/pbnjay/memory"
 	"github.com/sourcegraph/conc"
 
@@ -20,6 +19,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/mmap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
 
@@ -198,12 +198,7 @@ func (ldr *Loader) loadFile(path, part string) {
 		return
 	}
 
-	b, err := mmap.Map(f, mmap.RDONLY, 0)
-
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	b := mmap.Map(f)
 
 	if ldr.opts.Verbose > 2 {
 		log.Printf("mapped file %s\n", path)

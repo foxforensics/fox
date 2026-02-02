@@ -6,6 +6,7 @@ import (
 	"github.com/Velocidex/go-ewf/parser"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/mmap"
 )
 
 func Detect(b []byte) bool {
@@ -21,11 +22,9 @@ func Ingest(b []byte) ([]byte, error) {
 		return b, err
 	}
 
-	buf := make([]byte, vol.ChunkSize*vol.NumberOfChunks)
+	buf := mmap.Remap(vol, int(vol.ChunkSize*vol.NumberOfChunks))
 
-	if _, err = vol.ReadAt(buf, 0); err != nil {
-		return b, err
-	}
+	mmap.Unmap(b)
 
 	return buf, nil
 }
