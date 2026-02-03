@@ -43,7 +43,7 @@ func TestHunt(t *testing.T) {
 
 func newOpts() *Options {
 	return &Options{
-		true,
+		false,
 		1,
 		0,
 	}
