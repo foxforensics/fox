@@ -34,7 +34,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zlib"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/image/ewf"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
@@ -67,8 +66,6 @@ func TestMain(m *testing.M) {
 	register.Convert("evtx", evtx.Detect, evtx.Convert)
 	register.Convert("journal", journal.Detect, journal.Convert)
 	register.Convert("pe", pe.Detect, pe.Convert)
-
-	register.Image("ewf", ewf.Detect, ewf.Ingest)
 
 	os.Exit(m.Run())
 }
