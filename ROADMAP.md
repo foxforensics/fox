@@ -14,6 +14,7 @@
 
 ## 5. Ideas
 * Add animated console image to README
+  * https://docs.asciinema.org/manual/cli/
 * Add CEF syntax highlighting (pygments)
 * Add different endpoints for test
   * https://github.com/woanware/lookuper
