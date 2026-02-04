@@ -17,9 +17,7 @@ const (
 	colLdapName = "ATTm131532"
 )
 
-var (
-	sparse = "{\"table\":\"%s\",\"rows\":[\n%s\n]}"
-)
+var sparse = "{\"table\":\"%s\",\"rows\":[\n%s\n]}"
 
 func Detect(b []byte) bool {
 	return data.HasMagic(b, 4, []byte{
