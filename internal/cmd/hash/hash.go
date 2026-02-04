@@ -19,11 +19,11 @@ Prints file hashes and checksums.
 fox hash [FLAGS...] <PATHS...>
 
 Flags:
-  -u, --use=ALGORITHM,...  uses algorithm (default: SHA256)
+  -A, --algo=NAME,...      uses algorithm(s) (default: SHA256)
   -a, --all                uses all algorithms
 
 Examples:
-  $ fox hash -uTLSH files.7z
+  $ fox hash -Amd5 files.7z
 
 Remarks:
   Results will be grouped by path, if more than one algorithm is specified.
@@ -44,7 +44,7 @@ Performance hashes:
   FNV-1, FNV-1A, MURMUR3, SIPHASH, XXH32, XXH64, XXH3
 
 Similarity hashes:
-  IMPHASH, SSDEEP, TLSH
+  IMPHASH-0, IMPHASH, SSDEEP, TLSH
 
 Windows specific:
   LM, NT, PE Checksum
@@ -53,18 +53,18 @@ Image specific:
   AHASH, DHASH, PHASH
 
 Checksums:
-  ADLER32, FLETCHER-4, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+  ADLER32, FLETCHER4, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 `)
 
 type Hash struct {
-	Use   []string `short:"u" sep:"," default:"SHA256"`
+	Algo  []string `short:"A" sep:"," default:"SHA256"`
 	All   bool     `short:"a"`
 	Paths []string `arg:"" type:"path" optional:""`
 }
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if cmd.All {
-		cmd.Use = hash.Algorithms
+		cmd.Algo = hash.Algorithms
 	}
 
 	return nil
@@ -79,7 +79,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 	cli.NoConvert = true // forced
 
 	// compatibility mode
-	if len(cmd.Use) == 1 {
+	if len(cmd.Algo) == 1 {
 		cli.NoFile = true
 	}
 
@@ -91,7 +91,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h.String())))
 		}
 
-		for _, algo := range cmd.Use {
+		for _, algo := range cmd.Algo {
 			if !hash.IsSecure(algo) && !cli.NoWarnings {
 				log.Printf("warning: %s is not a cryptographically secure algorithm!\n", algo)
 			}
@@ -109,7 +109,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 
 			sum = text.MarkMatch(sum, cli.Regexp)
 
-			if len(cmd.Use) > 1 {
+			if len(cmd.Algo) > 1 {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(strings.ToUpper(algo)))
 			} else {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Hide(h.Name))

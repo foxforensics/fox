@@ -206,7 +206,7 @@ fox test ioc.exe
 
 :   Test a suspicious file.
 
-fox hash -uTLSH files.7z
+fox hash -Amd5 files.7z
 
 :   Hash archive contents.
 

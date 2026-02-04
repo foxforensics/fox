@@ -18,9 +18,9 @@ Prints file hashes and checksums. Results will be grouped by path, if more than 
 FLAGS
 =====
 
-**-u, --use**=_algorithm_,...
+**-A, --algo**=_name_,...
 
-:   Uses _algorithm_ (default: **SHA256**).
+:   Uses algorithm(s) (default: **SHA256**).
 
 **-a, --all**
 
@@ -56,7 +56,7 @@ Performance hashes
 
 Similarity hashes
 
-:   IMPHASH, SSDEEP, TLSH
+:   IMPHASH-0, IMPHASH, SSDEEP, TLSH
 
 Windows specific
 
@@ -68,12 +68,12 @@ Image specific
 
 Checksums
 
-:   ADLER32, FLETCHER-4, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+:   ADLER32, FLETCHER4, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 EXAMPLES
 ========
 
-fox hash -uTLSH files.7z
+fox hash -Amd5 files.7z
 
 :   Hash archive contents.
 
