@@ -33,6 +33,7 @@ brew install cuhsat/fox/fox
 * Many popular cryptographic, fuzzy, image and fast hashes
 * Complete with [man pages](assets/man) for every mode
 * Special Hunt mode
+  * Built-in support for [EnCase EWF](https://www.loc.gov/preservation/digital/formats/fdd/fdd000408.shtml), [VHDX](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-vhdx/83e061f8-f6e2-4de1-91bd-5d518a43d477), [VMDK](https://code.vmware.com/web/sdk/6.7/vddk) and raw disks
   * Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * Built-in translation of over 51600 event ids
@@ -46,42 +47,45 @@ brew install cuhsat/fox/fox
 
 Find occurrences in event logs:
 ```bash
-$ fox -eWinlogon ./**/*.evtx
+fox -eWinlogon ./**/*.evtx
 ```
 
 Show MBR in canonical hex:
 ```bash
-$ fox hex -hc512 disk.bin
+fox hex -hc512 disk.bin
 ```
 
 List high entropy files:
 ```bash
-$ fox list -n0.9 ./**/*
+fox list -n0.9 ./**/*
 ```
 
 Show strings in binary:
 ```bash
-$ fox text -w ioc.exe
+fox text -w ioc.exe
 ```
 
 Test a suspicious file:
 ```bash
-$ fox test ioc.exe
+fox test ioc.exe
 ```
 
 Hash archive contents:
 ```bash
-$ fox hash -uTLSH files.7z
+fox hash -Amd5 files.7z
 ```
 
 Hunt down suspicious events:
 ```bash
-$ fox hunt -sv ./**/*.dd
+fox hunt -sv ./**/*.dd
 ```
 
 ## Supports
 File Formats
 > evtx, journal, json, jsonl, lnk, pf, ELF, ESE/EDB, PE/COFF
+
+Disk Formats
+> dd/raw, EWF-E01, EWF-S01, VHD, VHDX, VMDK
 
 Archive Formats
 > 7zip, ar, CAB, CPIO, ISO, RAR, RPM, tar, xar, ZIP
@@ -96,7 +100,7 @@ Performance Hashes
 > FNV-1, FNV-1a, Murmur3, SipHash, XXH32, XXH64, XXH3
 
 Similarity Hashes
-> ImpHash, SSDeep, TLSH
+> ImpHash-0, ImpHash, SSDeep, TLSH
 
 Windows Specific
 > LM, NT, PE Checksum  
@@ -105,7 +109,7 @@ Image Specific
 > aHash, dHash, pHash
 
 Checksums
-> Adler32, Fletcher-4, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+> Adler32, Fletcher4, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 ---
 
