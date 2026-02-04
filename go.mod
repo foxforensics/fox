@@ -5,7 +5,10 @@ go 1.25.6
 require (
 	github.com/0xrawsec/golang-evtx v1.2.9
 	github.com/RyuaNerin/go-krypto v1.3.0
+	github.com/Velocidex/go-ewf v0.0.0-20240210123447-97dc81b7d8c3
 	github.com/Velocidex/go-journalctl v0.0.0-20250902002606-881a5f66df10
+	github.com/Velocidex/go-vhdx v0.0.0-20250511013458-5cba970cdeda
+	github.com/Velocidex/go-vmdk v0.0.0-20250505140221-bd4633ce2fbf
 	github.com/VirusTotal/vt-go v1.1.0
 	github.com/agnivade/levenshtein v1.2.1
 	github.com/aixiansheng/lzfse v0.2.4
@@ -106,4 +109,5 @@ require (
 	modernc.org/libc v1.67.7 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
+	www.velocidex.com/golang/go-ntfs v0.2.0 // indirect
 )

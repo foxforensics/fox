@@ -25,6 +25,7 @@ import (
 
 const stdin = "-"
 const limit = 0.95
+const peek = 8
 
 type Options struct {
 	Limit    *types.Limits
@@ -84,7 +85,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 					log.Fatalln(err)
 				}
 
-				ldr.createHeap(buf, "STDIN", "")
+				ldr.createData("STDIN", "", uint64(len(buf)), buf)
 				break
 			}
 
@@ -194,17 +195,85 @@ func (ldr *Loader) loadFile(path, part string) {
 
 	// empty files will cause issues
 	if fi.Size() == 0 {
-		ldr.createHeap([]byte{}, path, "")
+		ldr.createData(path, "", 0, []byte{})
 		return
 	}
 
-	b := mmap.Map(f)
+	if ldr.processFile(path) {
+		return
+	}
+
+	m := mmap.Map(f)
 
 	if ldr.opts.Verbose > 2 {
 		log.Printf("mapped file %s\n", path)
 	}
 
-	ldr.processData(path, part, b)
+	ldr.processData(path, part, m)
+}
+
+func (ldr *Loader) peekFile(path string) []byte {
+	b := make([]byte, peek)
+
+	f, err := os.Open(path)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	r := io.LimitReader(f, peek)
+
+	_, err = r.Read(b)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	err = f.Close()
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return b
+}
+
+func (ldr *Loader) processFile(path string) bool {
+	b := ldr.peekFile(path) // peek at file header
+
+	for _, e := range register.Readers {
+		if e.Detect(b) {
+			if ldr.opts.Verbose > 1 {
+				log.Printf("disk detected %s\n", e.Name)
+			}
+
+			f, err := os.Open(path)
+
+			if err != nil {
+				log.Println(err)
+				break
+			}
+
+			s, err := f.Stat()
+
+			if err != nil {
+				log.Println(err)
+				break
+			}
+
+			r, err := e.Reader(f)
+
+			if err != nil {
+				log.Println(err)
+				break
+			}
+
+			ldr.createFile(path, "", uint64(s.Size()), f, r)
+			return true
+		}
+	}
+
+	return false
 }
 
 func (ldr *Loader) processData(path, part string, b []byte) {
@@ -236,7 +305,7 @@ func (ldr *Loader) processData(path, part string, b []byte) {
 
 	// filter for specific streams
 	if strings.Contains(path, part) {
-		ldr.createHeap(b, path, hint)
+		ldr.createData(path, hint, uint64(len(b)), b)
 	}
 }
 
@@ -276,13 +345,13 @@ func (ldr *Loader) extractData(path, part string, b []byte) bool {
 }
 
 func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
-	for _, d := range register.Deflates {
-		if d.Detect(b) {
+	for _, e := range register.Deflates {
+		if e.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("deflate detected %s\n", d.Name)
+				log.Printf("deflate detected %s\n", e.Name)
 			}
 
-			r, err := d.Deflate(b)
+			r, err := e.Deflate(b)
 
 			if err != nil {
 				log.Println(err)
@@ -300,13 +369,13 @@ func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
 }
 
 func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
-	for _, c := range register.Converts {
-		if c.Detect(b) {
+	for _, e := range register.Converts {
+		if e.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("convert detected %s\n", c.Name)
+				log.Printf("convert detected %s\n", e.Name)
 			}
 
-			r, err := c.Convert(b)
+			r, err := e.Convert(b)
 
 			if err != nil {
 				log.Println(err)
@@ -324,13 +393,13 @@ func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
 }
 
 func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
-	for _, c := range register.Formats {
-		if c.Detect(b) {
+	for _, e := range register.Formats {
+		if e.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("format detected %s\n", c.Name)
+				log.Printf("format detected %s\n", e.Name)
 			}
 
-			r, err := c.Format(b)
+			r, err := e.Format(b)
 
 			if err != nil {
 				log.Println(err)
@@ -347,7 +416,15 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 	return b, false
 }
 
-func (ldr *Loader) createHeap(b []byte, path, hint string) {
+func (ldr *Loader) createData(path, hint string, size uint64, b []byte) {
+	ldr.createHeap(path, size, heap.FromData(path, hint, size, b, ldr.opts.Limit))
+}
+
+func (ldr *Loader) createFile(path, hint string, size uint64, f *os.File, r io.ReaderAt) {
+	ldr.createHeap(path, size, heap.FromFile(path, hint, size, f, r))
+}
+
+func (ldr *Loader) createHeap(path string, size uint64, h *heap.Heap) {
 	ldr.Lock()
 	defer ldr.Unlock()
 
@@ -355,9 +432,9 @@ func (ldr *Loader) createHeap(b []byte, path, hint string) {
 		return // already loaded
 	}
 
-	ldr.size += int64(len(b))
+	ldr.size += int64(size)
 	ldr.paths = append(ldr.paths, path)
-	ldr.heaps <- heap.New(path, hint, b, ldr.opts.Limit)
+	ldr.heaps <- h
 
 	if ldr.opts.Verbose > 1 {
 		log.Printf("loaded heap %s\n", path)

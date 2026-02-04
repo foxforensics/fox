@@ -14,6 +14,9 @@ import (
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/ewf"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/vhdx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/vmdk"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/ecs"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/hec"
@@ -24,6 +27,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/hunter"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
 
 var Usage = strings.TrimSpace(`
@@ -38,6 +42,9 @@ Flags:
   -j, --json               shows logs as JSON objects
   -J, --jsonl              shows logs as JSON lines
   -Q, --sqlite             saves logs to SQLite3 DB (very slow)
+
+Hunter Flags:
+  -b, --block=SIZE         block size for event carving
 
 Filter Flags:
   -R, --rule=FILE          filters using Sigma Rules file (slow)
@@ -64,6 +71,9 @@ type Hunt struct {
 	Json   bool `short:"j" xor:"json,jsonl"`
 	Jsonl  bool `short:"J" xor:"json,jsonl"`
 	Sqlite bool `short:"Q"`
+
+	// hunter
+	Block uint `short:"b" default:"65536"`
 
 	// filter
 	Rule string  `short:"R" type:"path"`
@@ -100,7 +110,7 @@ func (cmd *Hunt) Validate() error {
 func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
 
-	rule := rules.Default
+	hunter.Block = int(cmd.Block)
 
 	switch {
 	case cmd.Uniq:
@@ -134,6 +144,8 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		}
 	}
 
+	rule := rules.Default
+
 	if len(cmd.Rule) > 0 {
 		rule, err = os.ReadFile(cmd.Rule)
 
@@ -158,6 +170,12 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	if cmd.Dist > 0 {
 		cli.NoSyntax = true
+	}
+
+	if !cli.Raw {
+		register.Reader("ewf", ewf.Detect, ewf.Reader)
+		register.Reader("vhdx", vhdx.Detect, vhdx.Reader)
+		register.Reader("vmdk", vmdk.Detect, vmdk.Reader)
 	}
 
 	cli.NoExtract = true // forced

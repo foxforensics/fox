@@ -2,6 +2,8 @@ package hunter
 
 import (
 	"bytes"
+	"errors"
+	"io"
 	"log"
 	"maps"
 	"slices"
@@ -17,6 +19,7 @@ import (
 
 const Database = "hunt.sqlite"
 
+var Block = 4096 * 16 // NTFS block size multiple
 var Local = []string{
 	"/Windows/System32/winevt/Logs",
 	"/var/log/journal",
@@ -104,47 +107,64 @@ func (htr *Hunter) carve(h *heap.Heap) {
 }
 
 func (htr *Hunter) carveEvtx(h *heap.Heap) {
-	r := bytes.NewReader(h.Bytes())
+	sr := io.NewSectionReader(h.Reader(), 0, int64(h.Size))
 
-	for off := range htr.findOffset(h.Bytes(), evtx.Chunk) {
-		for evt := range evtx.Carve(r, off, cap(htr.events)) {
+	for off := range htr.findOffset(h, evtx.Chunk) {
+		for evt := range evtx.Carve(sr, off, cap(htr.events)) {
 			htr.events <- evt
 		}
 	}
 }
 
 func (htr *Hunter) carveJournal(h *heap.Heap) {
-	for off := range htr.findOffset(h.Bytes(), journal.Magic) {
-		for evt := range journal.Carve(h.Bytes(), off, cap(htr.events)) {
+	sr := io.NewSectionReader(h.Reader(), 0, int64(h.Size))
+
+	for off := range htr.findOffset(h, journal.Magic) {
+		for evt := range journal.Carve(sr, off, cap(htr.events)) {
 			htr.events <- evt
 		}
 	}
 }
 
-func (htr *Hunter) findOffset(b, p []byte) <-chan int {
-	out := make(chan int, 64*htr.opts.Parallel)
+func (htr *Hunter) findOffset(h *heap.Heap, seq []byte) <-chan int64 {
+	out := make(chan int64, 64*htr.opts.Parallel)
 
-	go func() {
-		var off, idx int
+	go func(r io.ReaderAt, n uint64) {
+		var off, idx int64
 
-		for {
-			idx = bytes.Index(b[off:], p)
+		blk := make([]byte, Block)
 
-			if idx == -1 {
+		for off < int64(n) {
+			n, err := r.ReadAt(blk, off)
+
+			if errors.Is(err, io.EOF) {
 				break
 			}
 
-			out <- off + idx
-
-			if htr.opts.Verbose > 2 {
-				log.Printf("hunt: parsing offset 0x%08x\n", off+idx)
+			if err != nil {
+				log.Println(err)
 			}
 
-			off += idx + len(p)
+			idx = int64(bytes.Index(blk, seq))
+
+			if idx == -1 {
+				off += int64(n)
+				continue
+			}
+
+			off += idx
+
+			out <- off
+
+			if htr.opts.Verbose > 2 {
+				log.Printf("hunt: found at offset 0x%08x\n", off)
+			}
+
+			off += int64(len(seq))
 		}
 
 		close(out)
-	}()
+	}(h.Reader(), h.Size)
 
 	return out
 }

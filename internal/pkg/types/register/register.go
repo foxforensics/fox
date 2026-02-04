@@ -3,11 +3,18 @@ package register
 import "github.com/cuhsat/fox/v4/internal/pkg/data"
 
 var (
+	Readers  []ReaderEntry
 	Formats  []FormatEntry
 	Deflates []DeflateEntry
 	Archives []ArchiveEntry
 	Converts []ConvertEntry
 )
+
+type ReaderEntry struct {
+	Name   string
+	Detect data.Detect
+	Reader data.Reader
+}
 
 type FormatEntry struct {
 	Name   string
@@ -31,6 +38,10 @@ type ConvertEntry struct {
 	Name    string
 	Detect  data.Detect
 	Convert data.Convert
+}
+
+func Reader(s string, fn1 data.Detect, fn2 data.Reader) {
+	Readers = append(Readers, ReaderEntry{s, fn1, fn2})
 }
 
 func Format(s string, fn1 data.Detect, fn2 data.Format) {

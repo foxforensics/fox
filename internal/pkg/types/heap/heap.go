@@ -1,7 +1,10 @@
 package heap
 
 import (
+	"bytes"
+	"io"
 	"math"
+	"os"
 	"runtime"
 	"sync"
 
@@ -11,18 +14,32 @@ import (
 
 type Heap struct {
 	sync.RWMutex
-	Name string    // heap name
-	Hint string    // heap hint
-	Size uint64    // heap size
-	mmap mmap.MMap // memory map
+
+	Name string // heap name
+	Hint string // heap hint
+	Size uint64 // heap size
+
+	m mmap.MMap   // memory map
+	f *os.File    // file handle
+	r io.ReaderAt // file reader
 }
 
-func New(name, hint string, m mmap.MMap, l *types.Limits) *Heap {
+func FromData(name, hint string, size uint64, m mmap.MMap, l *types.Limits) *Heap {
 	return &Heap{
 		Name: name,
 		Hint: hint,
-		Size: uint64(len(m)),
-		mmap: l.Reduce(m),
+		Size: size,
+		m:    l.Reduce(m),
+	}
+}
+
+func FromFile(name, hint string, size uint64, f *os.File, r io.ReaderAt) *Heap {
+	return &Heap{
+		Name: name,
+		Hint: hint,
+		Size: size,
+		f:    f,
+		r:    r,
 	}
 }
 
@@ -30,19 +47,40 @@ func (h *Heap) String() string {
 	return h.Name
 }
 
+func (h *Heap) Reader() io.ReaderAt {
+	h.RLock()
+	defer h.RUnlock()
+
+	if h.f != nil {
+		return h.r
+	}
+
+	return bytes.NewReader(h.m)
+}
+
 func (h *Heap) Bytes() []byte {
 	h.RLock()
 	defer h.RUnlock()
-	return h.mmap
+	return h.m
 }
 
 func (h *Heap) Discard() {
 	h.Lock()
 
-	mmap.Unmap(h.mmap)
+	// unmap memory
+	if h.m != nil {
+		mmap.Unmap(h.m)
+		h.m = nil
+	}
+
+	// close file
+	if h.f != nil {
+		_ = h.f.Close()
+		h.f = nil
+		h.r = nil
+	}
 
 	h.Size = 0
-	h.mmap = nil
 
 	h.Unlock()
 

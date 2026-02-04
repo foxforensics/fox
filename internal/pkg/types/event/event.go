@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/zeebo/xxh3"
+
 	"github.com/cuhsat/fox/v4/internal"
 )
 
@@ -27,11 +29,15 @@ type Event struct {
 }
 
 func (evt *Event) String() string {
-	return evt.ToCEF()
+	return fmt.Sprintf("%s:%s:%s",
+		evt.Host,
+		evt.Message,
+		evt.Sequence,
+	)
 }
 
 func (evt *Event) SortKey() string {
-	return fmt.Sprintf("%s %s", evt.Time.String(), evt.Host)
+	return fmt.Sprintf("%d-%d", evt.Time.UnixNano(), xxh3.HashString(evt.String()))
 }
 
 func (evt *Event) ToCEF() string {

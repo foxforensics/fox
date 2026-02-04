@@ -42,6 +42,13 @@ FLAGS
 
 :   Saves logs to SQLite3 DB (very slow).
 
+Hunter Flags
+------------
+
+**-b, --block**=_size_
+
+:   Block _size_ for event carving.
+
 Filter Flags
 ------------
 
