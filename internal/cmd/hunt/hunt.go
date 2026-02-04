@@ -31,7 +31,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Hunts suspicious activities.
+Hunts suspicious events.
 
 fox hunt [FLAGS...] [PATHS...]
 

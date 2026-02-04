@@ -18,10 +18,10 @@ import (
 var usage = map[string]string{
 	"cat":  cat.Usage,
 	"hex":  hex.Usage,
-	"list": list.Usage,
 	"text": text.Usage,
-	"test": test.Usage,
 	"hash": hash.Usage,
+	"list": list.Usage,
+	"test": test.Usage,
 	"hunt": hunt.Usage,
 }
 

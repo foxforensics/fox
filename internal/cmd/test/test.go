@@ -15,17 +15,17 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints file test results.
+Tests suspicious files.
 
-fox test [FLAGS...] [PATHS...]
+fox test [FLAGS...] PATHS...
 
 Flags:
-  -D, --domain=NAME,...    Tests suspicious domain(s)
-  -U, --url=URL,...        Tests suspicious url(s)
-  -I, --ip=IP,...          Tests suspicious ip(s)
+  -D, --domain             File(s) contains domains
+  -U, --url                File(s) contains urls
+  -I, --ip                 File(s) contains ips
 
 Required:
-  -k, --key=APIKEY         Sets VirusTotal API key
+  -k, --key=APIKEY         VirusTotal API key
 
 Examples:
   $ fox test ioc.exe
@@ -33,14 +33,16 @@ Examples:
 
 type Test struct {
 	Key    string   `short:"k"`
-	Domain []string `short:"D" sep:","`
-	Url    []string `short:"U" sep:","`
-	Ip     []string `short:"I" sep:","`
-	Paths  []string `arg:"" name:"path" type:"path" optional:""`
+	Domain bool     `short:"D" xor:"domain,url,ip"`
+	Url    bool     `short:"U" xor:"domain,url,ip"`
+	Ip     bool     `short:"I" xor:"domain,url,ip"`
+	Paths  []string `arg:"" type:"path" optional:""`
 }
 
 func (cmd *Test) Run(cli *cli.Globals) error {
-	if len(cmd.Paths)+len(cli.Paths)+len(cmd.Ip)+len(cmd.Url)+len(cmd.Domain) == 0 {
+	var alert bool
+
+	if len(cmd.Paths) == 0 {
 		fmt.Print(Usage)
 		return nil
 	}
@@ -58,38 +60,56 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
-	for _, v := range cmd.Ip {
-		res, err := vt.TestIp(v, cmd.Key)
-		cmd.output(cli, res, err, v)
-	}
-
-	for _, v := range cmd.Url {
-		res, err := vt.TestUrl(base64.StdEncoding.EncodeToString([]byte(v)), cmd.Key)
-		cmd.output(cli, res, err, v)
-	}
-
-	for _, v := range cmd.Domain {
-		res, err := vt.TestDomain(v, cmd.Key)
-		cmd.output(cli, res, err, v)
-	}
-
 	for h := range ch {
-		res, err := vt.TestFileHash(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
-		cmd.output(cli, res, err, h.String())
+		if !(cmd.Domain || cmd.Url || cmd.Ip) {
+			res, err := vt.TestFileHash(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
+			alert = alert || cmd.output(cli, res, err, h.String())
+		} else {
+			var res *vt.Result
+			var err error
+
+			for _, v := range strings.Split(string(h.Bytes()), "\n") {
+				if len(v) == 0 {
+					continue
+				}
+
+				switch {
+				case cmd.Domain:
+					res, err = vt.TestDomain(v, cmd.Key)
+				case cmd.Url:
+					res, err = vt.TestUrl(base64.StdEncoding.EncodeToString([]byte(v)), cmd.Key)
+				case cmd.Ip:
+					res, err = vt.TestIp(v, cmd.Key)
+				}
+
+				if err != nil {
+					log.Println(err)
+				}
+
+				if res != nil {
+					alert = alert || cmd.output(cli, res, err, v)
+				}
+			}
+		}
+
 		h.Discard()
+	}
+
+	if alert {
+		cli.Exit(3)
 	}
 
 	return nil
 }
 
-func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) {
+func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) bool {
 	if !cli.NoFile {
 		_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h)))
 	}
 
 	if err != nil {
 		log.Println(err)
-		return
+		return false
 	}
 
 	_, _ = fmt.Fprint(cli.Stdout, "VirusTotal:\n\n")
@@ -113,4 +133,6 @@ func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) {
 	}
 
 	_, _ = fmt.Fprintf(cli.Stdout, "  (%d of %d) %s\n\n", res.Bad, res.All, text.Bold(res.Label))
+
+	return res.Alert
 }

@@ -13,29 +13,29 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Prints file test results. A VirusTotal API key is required. This mode enforces the **--no-convert** flag.
+Tests suspicious files. A VirusTotal API key is required for this. This mode enforces the **--no-convert** flag. This mode will return **3** as exit code, if any test returns at least one alerting result.
 
 FLAGS
 =====
 
-**-D, --domain**=_domain_,...
+**-D, --domain**
 
-:   Tests suspicious _domain(s)_.
+:   File(s) contains _domains_.
 
-**-U, --url**=_url_,...
+**-U, --url**
 
-:   Tests suspicious _url(s)_.
+:   File(s) contains _urls_.
 
-**-I, --ip**=_ip_,...
+**-I, --ip**
 
-:   Tests suspicious _ip(s)_.
+:   File(s) contains _ips_.
 
 Required
 --------
 
 **-k, --key**=_apikey_
 
-:   Sets **VirusTotal** _api key_.
+:   **VirusTotal** _api key_.
 
 POSITIONAL ARGUMENTS
 ====================

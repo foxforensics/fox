@@ -8,10 +8,10 @@ before:
     - pandoc -s -t man assets/man/fox.md -o fox.1
     - pandoc -s -t man assets/man/fox-cat.md -o fox-cat.1
     - pandoc -s -t man assets/man/fox-hex.md -o fox-hex.1
-    - pandoc -s -t man assets/man/fox-list.md -o fox-list.1
     - pandoc -s -t man assets/man/fox-text.md -o fox-text.1
-    - pandoc -s -t man assets/man/fox-test.md -o fox-test.1
     - pandoc -s -t man assets/man/fox-hash.md -o fox-hash.1
+    - pandoc -s -t man assets/man/fox-list.md -o fox-list.1
+    - pandoc -s -t man assets/man/fox-test.md -o fox-test.1
     - pandoc -s -t man assets/man/fox-hunt.md -o fox-hunt.1
 
 builds:
@@ -40,10 +40,10 @@ archives:
       - fox.1
       - fox-cat.1
       - fox-hex.1
-      - fox-list.1
       - fox-text.1
-      - fox-test.1
       - fox-hash.1
+      - fox-list.1
+      - fox-test.1
       - fox-hunt.1
       - README.md
       - LICENSE.md
@@ -104,20 +104,20 @@ nfpms:
         dst: /usr/share/man/man1/fox-hex.1
         file_info:
           mode: 0644
-      - src: ./fox-list.1
-        dst: /usr/share/man/man1/fox-list.1
-        file_info:
-          mode: 0644
       - src: ./fox-text.1
         dst: /usr/share/man/man1/fox-text.1
         file_info:
           mode: 0644
-      - src: ./fox-test.1
-        dst: /usr/share/man/man1/fox-test.1
-        file_info:
-          mode: 0644
       - src: ./fox-hash.1
         dst: /usr/share/man/man1/fox-hash.1
+        file_info:
+          mode: 0644
+      - src: ./fox-list.1
+        dst: /usr/share/man/man1/fox-list.1
+        file_info:
+          mode: 0644
+      - src: ./fox-test.1
+        dst: /usr/share/man/man1/fox-test.1
         file_info:
           mode: 0644
       - src: ./fox-hunt.1
@@ -149,8 +149,8 @@ homebrew_casks:
       - fox.1
       - fox-cat.1
       - fox-hex.1
-      - fox-list.1
       - fox-text.1
-      - fox-test.1
       - fox-hash.1
+      - fox-list.1
+      - fox-test.1
       - fox-hunt.1

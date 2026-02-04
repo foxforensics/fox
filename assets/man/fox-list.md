@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Prints file infos and entropy. This mode enforces the **--no-convert** flag.
+Lists file infos and entropy. This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====

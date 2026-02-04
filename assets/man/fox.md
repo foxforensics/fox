@@ -20,31 +20,31 @@ MODES
 
 cat
 
-:   Prints file contents (default mode).
+:   Shows file contents (default mode).
 
 hex
 
-:   Prints file contents in hex format.
-
-list
-
-:   Prints file infos and entropy.
+:   Shows file contents in hex format.
 
 text
 
-:   Prints file text contents.
-
-test
-
-:   Prints file test results.
+:   Shows file contained strings.
 
 hash
 
-:   Prints file hashes and checksums.
+:   Shows file hashes and checksums.
+
+list
+
+:   Lists file infos and entropy.
+
+test
+
+:   Tests suspicious files.
 
 hunt
 
-:   Hunts suspicious activities.
+:   Hunts suspicious events.
 
 FLAGS
 =====
@@ -194,21 +194,21 @@ fox hex -hc512 disk.bin
 
 :   Show MBR in canonical hex.
 
-fox list -n0.9 ./**/*
-
-:   List high entropy files.
-
 fox text -w ioc.exe
 
 :   Show strings in binary.
 
-fox test ioc.exe
-
-:   Test a suspicious file.
-
 fox hash -Amd5 files.7z
 
 :   Hash archive contents.
+
+fox list -n0.9 ./**/*
+
+:   List high entropy files.
+
+fox test ioc.exe
+
+:   Test a suspicious file.
 
 fox hunt -sv ./**/*.dd
 

@@ -46,37 +46,37 @@ brew install cuhsat/fox/fox
 ## Examples
 
 Find occurrences in event logs:
-```bash
+```console
 fox -eWinlogon ./**/*.evtx
 ```
 
 Show MBR in canonical hex:
-```bash
+```console
 fox hex -hc512 disk.bin
 ```
 
-List high entropy files:
-```bash
-fox list -n0.9 ./**/*
-```
-
 Show strings in binary:
-```bash
+```console
 fox text -w ioc.exe
 ```
 
-Test a suspicious file:
-```bash
-fox test ioc.exe
-```
-
 Hash archive contents:
-```bash
+```console
 fox hash -Amd5 files.7z
 ```
 
+List high entropy files:
+```console
+fox list -n0.9 ./**/*
+```
+
+Test a suspicious file:
+```console
+fox test ioc.exe
+```
+
 Hunt down suspicious events:
-```bash
+```console
 fox hunt -sv ./**/*.dd
 ```
 

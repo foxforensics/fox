@@ -247,6 +247,12 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	return cli.Loader.Load(args)
 }
 
+func (cli *Globals) Exit(code int) {
+	cli.Discard()
+
+	os.Exit(code)
+}
+
 func (cli *Globals) Discard() {
 	if len(cli.File) > 0 {
 		_ = cli.Stdout.Close()

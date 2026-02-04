@@ -43,13 +43,13 @@ Usage:
   fox [MODE] [FLAGS...] <PATHS...>
 
 Modes:
-  (c) cat     prints file contents (default mode)
-  (x) hex     prints file contents in hex format
-  (l) list    prints file infos and entropy
-  (t) text    prints file text contents
-  (s) test    prints file test results
-  (h) hash    prints file hashes and checksums
-  (u) hunt    hunts suspicious activities
+  (c) cat      shows file contents (default mode)
+  (x) hex      shows file contents in hex format
+  (t) text     shows file contained strings
+  (a) hash     shows file hashes and checksums
+  (l) list     lists file infos and entropy
+  (s) test     tests suspicious files
+  (u) hunt     hunts suspicious events
 
 File flags:
   -i, --in=FILE            reads paths from file
@@ -111,12 +111,12 @@ type fox struct {
 	// command modes
 	Cat  cat.Cat   `cmd:"" aliases:"c,less,more" default:"withargs"`
 	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hexdump"`
-	List list.List `cmd:"" aliases:"l,ls,wc"`
 	Text text.Text `cmd:"" aliases:"t,strings"`
+	Hash hash.Hash `cmd:"" aliases:"a,sum"`
+	List list.List `cmd:"" aliases:"l,ls,wc"`
 	Test test.Test `cmd:"" aliases:"s,check"`
-	Hash hash.Hash `cmd:"" aliases:"h,sum"`
 	Hunt hunt.Hunt `cmd:"" aliases:"u"`
-	Help help.Help `cmd:"" hidden:""`
+	Help help.Help `cmd:"" aliases:"h" hidden:""`
 
 	// support flags
 	Version bool

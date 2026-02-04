@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Prints file contents in hex format.
+Shows file contents in hex format.
 
 FLAGS
 =====
