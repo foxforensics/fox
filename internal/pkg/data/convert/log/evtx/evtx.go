@@ -52,10 +52,10 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func Carve(rs io.ReadSeeker, off int, cap int) <-chan *event.Event {
+func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 	ch := make(chan *event.Event, cap)
 
-	chk, err := newChunk(rs, int64(off))
+	chk, err := newChunk(sr, off)
 
 	if err != nil {
 		defer close(ch)
@@ -73,15 +73,15 @@ func Carve(rs io.ReadSeeker, off int, cap int) <-chan *event.Event {
 	return ch
 }
 
-func newChunk(rs io.ReadSeeker, off int64) (*evtx.Chunk, error) {
+func newChunk(sr *io.SectionReader, off int64) (*evtx.Chunk, error) {
 	evtx.SetModeCarving(true)
-	evtx.GoToSeeker(rs, off)
+	evtx.GoToSeeker(sr, off)
 
 	chk := evtx.NewChunk()
 	chk.Offset = off
 	chk.Data = make([]byte, evtx.ChunkSize)
 
-	if _, err := rs.Read(chk.Data); err != nil {
+	if _, err := sr.Read(chk.Data); err != nil {
 		return nil, err
 	}
 

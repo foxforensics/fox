@@ -3,7 +3,11 @@
 // https://en.wikipedia.org/wiki/List_of_file_signatures
 package data
 
-import "bytes"
+import (
+	"bytes"
+	"io"
+	"os"
+)
 
 type Stream struct {
 	Path string // Stream path
@@ -21,6 +25,8 @@ type Convert func([]byte) ([]byte, error)
 type Deflate func([]byte) ([]byte, error)
 
 type Extract func([]byte, string, string) []Stream
+
+type Reader func(*os.File) (io.ReaderAt, error)
 
 func HasMagic(b []byte, off int, m []byte) bool {
 	if len(b) < off+len(m) {

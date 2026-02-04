@@ -7,7 +7,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
-const file = "convert/test.pf.xz"
+const file = "convert/test.pf"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := data.Fixture(file)

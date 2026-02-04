@@ -17,7 +17,7 @@ func Assert(b []byte) bool {
 	return bytes.Equal(b, Fixture(Sample))
 }
 
-func FixtureRaw(name string) []byte {
+func FixturePath(name string) string {
 	const dir = "../../../testdata"
 
 	_, c, _, ok := runtime.Caller(0)
@@ -26,7 +26,11 @@ func FixtureRaw(name string) []byte {
 		log.Fatalln("runtime error")
 	}
 
-	buf, err := os.ReadFile(filepath.Join(filepath.Dir(c), dir, name))
+	return filepath.Join(filepath.Dir(c), dir, name)
+}
+
+func FixtureRaw(name string) []byte {
+	buf, err := os.ReadFile(FixturePath(name))
 
 	if err != nil {
 		log.Fatalln(err)

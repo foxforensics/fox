@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"strings"
 	"time"
@@ -45,10 +46,18 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func Carve(b []byte, off int, cap int) <-chan *event.Event {
+func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 	ch := make(chan *event.Event, cap)
 
-	f, err := parser.OpenFile(bytes.NewReader(b[off:]))
+	_, err := sr.Seek(off, io.SeekStart)
+
+	if err != nil {
+		defer close(ch)
+		log.Println(err)
+		return ch
+	}
+
+	f, err := parser.OpenFile(sr)
 
 	if err != nil {
 		defer close(ch)
