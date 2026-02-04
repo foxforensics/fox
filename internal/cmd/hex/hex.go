@@ -41,7 +41,7 @@ type Hex struct {
 
 func (cmd *Hex) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
-		fmt.Print(Usage)
+		fmt.Println(Usage)
 		return nil
 	}
 

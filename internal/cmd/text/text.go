@@ -83,7 +83,7 @@ func (cmd *Text) AfterApply(app *kong.Kong, _ kong.Vars) error {
 
 func (cmd *Text) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 && !cmd.List {
-		fmt.Print(Usage)
+		fmt.Println(Usage)
 		return nil
 	}
 

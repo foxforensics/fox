@@ -25,10 +25,9 @@ import (
 )
 
 var Short = strings.TrimSpace(`
-fox v%s
-fox [MODE] [FLAGS...] <PATHS...>
+Usage: fox [MODE] [FLAGS...] <PATHS...>
 
-Use "fox help" to see the full help.
+Use the manual or "fox help".
 `)
 
 var Usage = strings.TrimSpace(`
@@ -142,11 +141,11 @@ func main() {
 
 	switch {
 	case cli.Version:
-		fmt.Printf("fox %s\n", app.Version)
+		fmt.Printf("fox %s\n", res.Version)
 	case cli.Globals.Help, ctx.Command() == "help":
-		fmt.Printf(Usage, app.Version)
+		fmt.Println(fmt.Sprintf(Usage, res.Version))
 	case len(ctx.Args) == 0, ctx.Error != nil:
-		fmt.Printf(Short, app.Version)
+		fmt.Println(Short)
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())

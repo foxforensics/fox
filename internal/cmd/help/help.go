@@ -31,7 +31,7 @@ type Help struct {
 
 func (cmd *Help) Run(_ *cli.Globals) error {
 	if v, ok := usage[strings.ToLower(cmd.Mode)]; ok {
-		fmt.Print(v)
+		fmt.Println(v)
 	}
 
 	return nil

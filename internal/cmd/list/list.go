@@ -52,7 +52,7 @@ func (cmd *List) Validate() error {
 
 func (cmd *List) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
-		fmt.Print(Usage)
+		fmt.Println(Usage)
 		return nil
 	}
 

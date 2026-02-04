@@ -43,7 +43,7 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 	var alert bool
 
 	if len(cmd.Paths) == 0 {
-		fmt.Print(Usage)
+		fmt.Println(Usage)
 		return nil
 	}
 

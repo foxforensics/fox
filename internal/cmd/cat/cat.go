@@ -72,7 +72,7 @@ func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 func (cmd *Cat) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
-		fmt.Print(Usage)
+		fmt.Println(Usage)
 		return nil
 	}
 

@@ -60,7 +60,7 @@ type Ecs struct {
 func New(url string) Ecs {
 	ecs := Ecs{url: url}
 	ecs.Ecs.Version = "9.1.0"
-	ecs.Agent.Version = app.Version
+	ecs.Agent.Version = res.Version
 	ecs.Agent.Type = "fox"
 	ecs.Event.Kind = "event"
 	return ecs
