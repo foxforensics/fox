@@ -7,13 +7,12 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/xz"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 const Large = "text/bible.txt"
 const Small = "fox.txt"
-const PeBin = "convert/fox.exe.xz"
+const PeBin = "convert/fox.exe"
 const Image = "misc/fox.jpg"
 const Input = "FOX123XOF"
 
@@ -55,6 +54,7 @@ func TestSum(t *testing.T) {
 		{small, types.FNV1A, "8e1fbe2b2d87d680249d1d1135695632"},
 		{small, types.HAS160, "e58d5cfe11171951799249e751e3bafecbf4d4a8"},
 		{pebin, types.IMPHASH, "d42595b695fc008ef2c56aabd8efd68e"},
+		{pebin, types.IMPHASH0, "e76ebde493cf72a6f596a2c046a67080"},
 		{input, types.LM, "74ac61daa7e79d69482bc9e3e9caf5a9"},
 		{small, types.MD2, "9e49ada9a2ccafdafffff50137351626"},
 		{small, types.MD4, "faedf7d245748f2939593258a5e96875"},
@@ -106,16 +106,6 @@ func Fixture(name string) []byte {
 	}
 
 	buf, err := os.ReadFile(filepath.Join(filepath.Dir(c), "../../../testdata", name))
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	if !xz.Detect(buf) {
-		return buf
-	}
-
-	buf, err = xz.Deflate(buf)
 
 	if err != nil {
 		log.Fatalln(err)

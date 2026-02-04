@@ -64,6 +64,7 @@ var Algorithms = []string{
 	types.FNV1A,
 	types.HAS160,
 	types.IMPHASH,
+	types.IMPHASH0,
 	types.LM,
 	types.MD2,
 	types.MD4,
@@ -169,6 +170,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = has160.New()
 	case types.IMPHASH:
 		imp = imphash.New()
+	case types.IMPHASH0:
+		imp = imphash.NewStable()
 	case types.LM:
 		imp = lm.New()
 	case types.MD2:

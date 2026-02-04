@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"hash"
+	"slices"
 	"strings"
 
 	intern "github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
@@ -16,11 +17,16 @@ import (
 var ErrNotSupported = errors.New("file type not supported")
 
 type ImpHash struct {
-	v []string
+	sort bool
+	imp  []string
 }
 
 func New() hash.Hash {
-	return new(ImpHash)
+	return &ImpHash{sort: false}
+}
+
+func NewStable() hash.Hash {
+	return &ImpHash{sort: true}
 }
 
 func (h *ImpHash) BlockSize() int {
@@ -32,7 +38,7 @@ func (h *ImpHash) Size() int {
 }
 
 func (h *ImpHash) Reset() {
-	h.v = h.v[:0]
+	h.imp = h.imp[:0]
 }
 
 func (h *ImpHash) Write(b []byte) (n int, err error) {
@@ -56,6 +62,10 @@ func (h *ImpHash) Write(b []byte) (n int, err error) {
 		return 0, err
 	}
 
+	if h.sort {
+		slices.Sort(iat)
+	}
+
 	rep := strings.NewReplacer(".dll", "", ".ocx", "", ".sys", "")
 
 	for _, e := range iat {
@@ -65,14 +75,14 @@ func (h *ImpHash) Write(b []byte) (n int, err error) {
 
 		p := strings.Split(rep.Replace(strings.ToLower(e)), ":")
 
-		h.v = append(h.v, fmt.Sprintf("%s.%s", p[1], p[0]))
+		h.imp = append(h.imp, fmt.Sprintf("%s.%s", p[1], p[0]))
 	}
 
 	return len(b), nil
 }
 
 func (h *ImpHash) Sum(_ []byte) []byte {
-	sum := md5.Sum([]byte(strings.Join(h.v, ",")))
+	sum := md5.Sum([]byte(strings.Join(h.imp, ",")))
 
 	return sum[:]
 }
