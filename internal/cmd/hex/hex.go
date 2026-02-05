@@ -24,7 +24,7 @@ Format Flags:
   -D, --decimal            format addresses as decimals
 
 Examples:
-  $ fox hex -hc512 disk.bin
+  $ fox hex -hc512 disk.dd
 `)
 
 type Hex struct {

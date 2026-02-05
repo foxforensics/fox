@@ -45,7 +45,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox hex -hc512 disk.bin
+fox hex -hc512 disk.dd
 
 :   Show MBR in canonical hex.
 

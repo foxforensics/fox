@@ -53,7 +53,7 @@ fox -eWinlogon ./**/*.evtx
 
 Show MBR in canonical hex:
 ```console
-fox hex -hc512 disk.bin
+fox hex -hc512 disk.dd
 ```
 
 Show strings in binary:
