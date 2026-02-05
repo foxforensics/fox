@@ -44,7 +44,7 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.25
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
 	github.com/saferwall/elf v0.3.1
-	github.com/saferwall/pe v1.5.8
+	github.com/saferwall/pe v1.5.9
 	github.com/secDre4mer/go-cab v0.0.0-20250826110853-e3fbafae92cd
 	github.com/sorairolake/lzip-go v0.3.8
 	github.com/sourcegraph/conc v0.3.0
@@ -78,6 +78,7 @@ require (
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
 	github.com/alecthomas/participle v0.7.1 // indirect
 	github.com/alecthomas/repr v0.5.2 // indirect
+	github.com/ayoubfaouzi/pkcs7 v0.2.2 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/c4milo/gotoolkit v0.0.0-20190525173301-67483a18c17a // indirect

@@ -65,6 +65,8 @@ github.com/andybalholm/brotli v1.2.0 h1:ukwgCxwYrmACq68yiUqwIWnGY0cTPox/M94sVwTo
 github.com/andybalholm/brotli v1.2.0/go.mod h1:rzTDkvFWvIrjDXZHkuS16NPggd91W3kUSvPlQ1pLaKY=
 github.com/arbovm/levenshtein v0.0.0-20160628152529-48b4e1c0c4d0 h1:jfIu9sQUG6Ig+0+Ap1h4unLjW6YQJpKZVmUzxsD4E/Q=
 github.com/arbovm/levenshtein v0.0.0-20160628152529-48b4e1c0c4d0/go.mod h1:t2tdKJDJF9BV14lnkjHmOQgcvEKgtqs5a1N3LNdJhGE=
+github.com/ayoubfaouzi/pkcs7 v0.2.2 h1:TDxAqfoE0Am130tiwmBnIOU8pjfof5+0MW8u7vEZcM0=
+github.com/ayoubfaouzi/pkcs7 v0.2.2/go.mod h1:u1EPWZOeIdVRo6C0/FVjB91Nsletw+8vZeAaAmeyJvQ=
 github.com/bmatcuk/doublestar/v4 v4.10.0 h1:zU9WiOla1YA122oLM6i4EXvGW62DvKZVxIe6TYWexEs=
 github.com/bmatcuk/doublestar/v4 v4.10.0/go.mod h1:xBQ8jztBU6kakFMg+8WGxn0c6z1fTSPVIjEY1Wr7jzc=
 github.com/bodgit/plumbing v1.3.0 h1:pf9Itz1JOQgn7vEOE7v7nlEfBykYqvUYioC61TwWCFU=
@@ -215,6 +217,8 @@ github.com/saferwall/elf v0.3.1 h1:dYe2pr/eFeXbkQRvNbF508td3fKJK2BQcqMTos+T4vc=
 github.com/saferwall/elf v0.3.1/go.mod h1:OnS8yoEjdNplZw1257VOJHfrOyK6H3HgnxeQOy6VO3c=
 github.com/saferwall/pe v1.5.8 h1:7kou/oAJelN3GAn6lJxv/9z67yuD09IAXlGSwct4skc=
 github.com/saferwall/pe v1.5.8/go.mod h1:mJx+PuptmNpoPFBNhWs/uDMFL/kTHVZIkg0d4OUJFbQ=
+github.com/saferwall/pe v1.5.9 h1:iFD9h46ip3Vaf5inCrxzlvP1myUcw9NSkgt4XVbwklY=
+github.com/saferwall/pe v1.5.9/go.mod h1:zZh3Ib7L0MLPPlBneXUH/IVG5aTNXi8BQ3YkE7TaAVE=
 github.com/sebdah/goldie v1.0.0 h1:9GNhIat69MSlz/ndaBg48vl9dF5fI+NBB6kfOxgfkMc=
 github.com/sebdah/goldie v1.0.0/go.mod h1:jXP4hmWywNEwZzhMuv2ccnqTSFpuq8iyQhtQdkkZBH4=
 github.com/secDre4mer/go-cab v0.0.0-20250826110853-e3fbafae92cd h1:/vpc4sAP5kjB/q0f5KPxEUnEejjlVTPCp9vIe75JqPE=
