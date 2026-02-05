@@ -1,12 +1,10 @@
 package heap
 
 import (
-	"log"
 	"os"
-	"path/filepath"
-	"runtime"
 	"testing"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/test"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
@@ -19,7 +17,7 @@ const (
 )
 
 func TestFromData(t *testing.T) {
-	h := FromData(name, hint, size, fixtureData(file), new(types.Limits))
+	h := FromData(name, hint, size, test.Fixture(file), new(types.Limits))
 
 	defer h.Discard()
 
@@ -37,7 +35,7 @@ func TestFromData(t *testing.T) {
 }
 
 func TestFromFile(t *testing.T) {
-	f, err := os.Open(fixtureFile(file))
+	f, err := os.Open(test.FixtureFile(file))
 
 	if err != nil {
 		t.Fatal(err)
@@ -61,7 +59,7 @@ func TestFromFile(t *testing.T) {
 }
 
 func TestNewLimitHeadBytes(t *testing.T) {
-	h := FromData(name, hint, size, fixtureData(file), &types.Limits{
+	h := FromData(name, hint, size, test.Fixture(file), &types.Limits{
 		IsHead: true,
 		Bytes:  page,
 	})
@@ -74,7 +72,7 @@ func TestNewLimitHeadBytes(t *testing.T) {
 }
 
 func TestNewLimitTailBytes(t *testing.T) {
-	h := FromData(name, hint, size, fixtureData(file), &types.Limits{
+	h := FromData(name, hint, size, test.Fixture(file), &types.Limits{
 		IsTail: true,
 		Bytes:  page,
 	})
@@ -87,7 +85,7 @@ func TestNewLimitTailBytes(t *testing.T) {
 }
 
 func TestBytes(t *testing.T) {
-	h := FromData(name, hint, size, fixtureData(file), new(types.Limits))
+	h := FromData(name, hint, size, test.Fixture(file), new(types.Limits))
 
 	defer h.Discard()
 
@@ -97,7 +95,7 @@ func TestBytes(t *testing.T) {
 }
 
 func TestString(t *testing.T) {
-	h := FromData(name, hint, size, fixtureData(file), new(types.Limits))
+	h := FromData(name, hint, size, test.Fixture(file), new(types.Limits))
 
 	defer h.Discard()
 
@@ -107,7 +105,7 @@ func TestString(t *testing.T) {
 }
 
 func TestDiscard(t *testing.T) {
-	h := FromData(name, hint, size, fixtureData(file), new(types.Limits))
+	h := FromData(name, hint, size, test.Fixture(file), new(types.Limits))
 	h.Discard()
 
 	if h.Size > 0 {
@@ -122,33 +120,11 @@ func TestDiscard(t *testing.T) {
 }
 
 func TestEntropy(t *testing.T) {
-	h := FromData(name, hint, size, fixtureData(file), new(types.Limits))
+	h := FromData(name, hint, size, test.Fixture(file), new(types.Limits))
 
 	defer h.Discard()
 
 	if Entropy(h.Bytes()) != 0.5758916753281705 {
 		t.Fatal("entropy wrong")
 	}
-}
-
-func fixtureFile(name string) string {
-	const dir = "../../../../testdata"
-
-	_, c, _, ok := runtime.Caller(0)
-
-	if !ok {
-		log.Fatalln("runtime error")
-	}
-
-	return filepath.Join(filepath.Dir(c), dir, name)
-}
-
-func fixtureData(name string) []byte {
-	buf, err := os.ReadFile(fixtureFile(name))
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return buf
 }

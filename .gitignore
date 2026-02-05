@@ -26,6 +26,9 @@ go.work.sum
 # IDEs
 .idea/
 
+# Local tests
+*/local/
+
 # COC receipts
 *.cc
 

@@ -4,13 +4,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
 const file = "archive/fox.rpm"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := data.Fixture(file)
+	buf := test.Fixture(file)
 
 	for b.Loop() {
 		_ = Detect(buf)
@@ -18,7 +18,7 @@ func BenchmarkDetect(b *testing.B) {
 }
 
 func BenchmarkExtract(b *testing.B) {
-	buf := data.Fixture(file)
+	buf := test.Fixture(file)
 
 	for b.Loop() {
 		Extract(buf, "", "")
@@ -26,23 +26,23 @@ func BenchmarkExtract(b *testing.B) {
 }
 
 func TestDetect(t *testing.T) {
-	if !Detect(data.Fixture(file)) {
+	if !Detect(test.Fixture(file)) {
 		t.Fatal("not detected")
 	}
 }
 
 func TestExtract(t *testing.T) {
-	e := Extract(data.Fixture(file), "", "")
+	e := Extract(test.Fixture(file), "", "")
 
 	if len(e) != 1 {
 		t.Fatal("invalid entry count")
 	}
 
-	if !strings.HasSuffix(e[0].Path, data.Sample) {
+	if !strings.HasSuffix(e[0].Path, test.Sample) {
 		t.Fatal("invalid entry path")
 	}
 
-	if !data.Assert(e[0].Data) {
+	if !test.Assert(e[0].Data) {
 		t.Fatal("invalid entry data")
 	}
 }

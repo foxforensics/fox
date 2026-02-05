@@ -1,3 +1,3 @@
 package res
 
-const Version = "4.35.1"
+const Version = "4.36.0"

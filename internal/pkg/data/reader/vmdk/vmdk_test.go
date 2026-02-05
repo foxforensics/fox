@@ -5,13 +5,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
-const file = "hunt/nist.vmdk"
+const file = "hunt/test.vmdk.zst"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := data.Fixture(file)
+	buf := test.Fixture(file)
 
 	for b.Loop() {
 		_ = Detect(buf)
@@ -19,7 +19,17 @@ func BenchmarkDetect(b *testing.B) {
 }
 
 func BenchmarkReader(b *testing.B) {
-	f, err := os.Open(data.FixturePath(file))
+	s := test.FixtureDeflate(file)
+
+	defer func() {
+		_ = os.Remove(s)
+	}()
+
+	f, err := os.Open(s)
+
+	defer func() {
+		_ = f.Close()
+	}()
 
 	if err != nil {
 		b.Fatal(err)
@@ -33,13 +43,13 @@ func BenchmarkReader(b *testing.B) {
 }
 
 func TestDetect(t *testing.T) {
-	if !Detect(data.Fixture(file)) {
+	if !Detect(test.Fixture(file)) {
 		t.Fatal("not detected")
 	}
 }
 
 func TestReader(t *testing.T) {
-	f, err := os.Open(data.FixturePath(file))
+	f, err := os.Open(test.FixtureDeflate(file))
 
 	defer func() {
 		_ = f.Close()

@@ -1,14 +1,13 @@
 package loader
 
 import (
-	"log"
 	"os"
 	"path/filepath"
-	"runtime"
 	"slices"
 	"testing"
 
 	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
+	"github.com/cuhsat/fox/v4/internal/pkg/test"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
@@ -160,7 +159,7 @@ func TestLoadFiles(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			l := New(newOpts())
 
-			paths := consume(l, fixture(tt.in))
+			paths := consume(l, test.FixtureDir(tt.in))
 
 			if len(paths) != len(tt.out) {
 				t.Fatal("invalid count")
@@ -195,20 +194,4 @@ func consume(ldr *Loader, in []string) (out []string) {
 	slices.Sort(out)
 
 	return out
-}
-
-func fixture(in []string) (out []string) {
-	const dir = "../../../../testdata"
-
-	_, c, _, ok := runtime.Caller(0)
-
-	if !ok {
-		log.Fatalln("runtime error")
-	}
-
-	for _, path := range in {
-		out = append(out, filepath.Join(filepath.Dir(c), dir, path))
-	}
-
-	return
 }

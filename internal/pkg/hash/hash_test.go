@@ -1,23 +1,22 @@
 package hash
 
 import (
-	"log"
-	"os"
-	"path/filepath"
-	"runtime"
 	"testing"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/test"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
-const Large = "text/bible.txt"
-const Small = "fox.txt"
-const PeBin = "convert/fox.exe"
-const Image = "misc/fox.jpg"
-const Input = "FOX123XOF"
+const (
+	Large = "text/bible.txt"
+	Small = "fox.txt"
+	PeBin = "convert/fox.exe.zst"
+	Image = "misc/fox.jpg"
+	Input = "FOX123XOF"
+)
 
 func BenchmarkSum(b *testing.B) {
-	buf := Fixture(Small)
+	buf := test.Fixture(Small)
 
 	for b.Loop() {
 		_, _ = Sum(types.SHA256, buf)
@@ -25,10 +24,10 @@ func BenchmarkSum(b *testing.B) {
 }
 
 func TestSum(t *testing.T) {
-	large := Fixture(Large)
-	small := Fixture(Small)
-	pebin := Fixture(PeBin)
-	image := Fixture(Image)
+	large := test.Fixture(Large)
+	small := test.Fixture(Small)
+	pebin := test.Fixture(PeBin)
+	image := test.Fixture(Image)
 	input := []byte(Input)
 
 	for _, tt := range []struct {
@@ -96,20 +95,4 @@ func TestSum(t *testing.T) {
 			}
 		})
 	}
-}
-
-func Fixture(name string) []byte {
-	_, c, _, ok := runtime.Caller(0)
-
-	if !ok {
-		log.Fatalln("runtime error")
-	}
-
-	buf, err := os.ReadFile(filepath.Join(filepath.Dir(c), "../../../testdata", name))
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return buf
 }
