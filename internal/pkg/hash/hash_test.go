@@ -55,6 +55,8 @@ func TestSum(t *testing.T) {
 		{pebin, types.IMPHASH, "d42595b695fc008ef2c56aabd8efd68e"},
 		{pebin, types.IMPHASH0, "e76ebde493cf72a6f596a2c046a67080"},
 		{input, types.LM, "74ac61daa7e79d69482bc9e3e9caf5a9"},
+		{small, types.LSH256, "32be26fe3aab949b3682a6bd77028f9ffe9338fe605a7e7fd45c6a1dfa2c8585"},
+		{small, types.LSH512, "06d60a9e8abba640bc989578af921ef1e13d333a6d017422fb45fff8611bd8321aaad2b25514877ad4a33ca3b5800f8e349dbf906d97999f9538dbfe0c075dec"},
 		{small, types.MD2, "9e49ada9a2ccafdafffff50137351626"},
 		{small, types.MD4, "faedf7d245748f2939593258a5e96875"},
 		{small, types.MD5, "7fe307fda20e805d110b35bcc1f31167"},

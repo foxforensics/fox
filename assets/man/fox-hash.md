@@ -48,7 +48,7 @@ Cryptographic hashes (MD family)
 
 Cryptographic hashes (other)
 
-:   HAS-160, RIPEMD-160, SHAKE128, SHAKE256, SM3, WHIRLPOOL
+:   HAS-160, LSH-256, LSH-512, RIPEMD-160, SHAKE128, SHAKE256, SM3, WHIRLPOOL
 
 Performance hashes
 
@@ -56,7 +56,7 @@ Performance hashes
 
 Similarity hashes
 
-:   IMPHASH-0, IMPHASH, SSDEEP, TLSH
+:   IMPHASH0, IMPHASH, SSDEEP, TLSH
 
 Windows specific
 

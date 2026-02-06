@@ -95,13 +95,13 @@ Compression Formats
 > Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZFSE, LZO, LZVN, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
 
 Cryptographic Hashes
-> BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, HAS-160, MD2, MD4, MD5, MD6, RIPEMD-160, SHAKE128, SHAKE256, SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512, SM3, Whirlpool
+> BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, HAS-160, LSH-256, LSH-512, MD2, MD4, MD5, MD6, RIPEMD-160, SHAKE128, SHAKE256, SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512, SM3, Whirlpool
 
 Performance Hashes
 > FNV-1, FNV-1a, Murmur3, SipHash, XXH32, XXH64, XXH3
 
 Similarity Hashes
-> ImpHash-0, ImpHash, SSDeep, TLSH
+> ImpHash0, ImpHash, SSDeep, TLSH
 
 Windows Specific
 > LM, NT, PE Checksum  

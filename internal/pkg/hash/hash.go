@@ -17,8 +17,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/RyuaNerin/go-krypto/has160"
 	"github.com/cespare/xxhash"
+	"github.com/cuhsat/go-krypto/has160"
+	"github.com/cuhsat/go-krypto/lsh256"
+	"github.com/cuhsat/go-krypto/lsh512"
 	"github.com/dchest/siphash"
 	"github.com/glaslos/ssdeep"
 	"github.com/glaslos/tlsh"
@@ -65,6 +67,8 @@ var Algorithms = []string{
 	types.HAS160,
 	types.IMPHASH,
 	types.IMPHASH0,
+	types.LSH256,
+	types.LSH512,
 	types.LM,
 	types.MD2,
 	types.MD4,
@@ -102,6 +106,8 @@ var secure = []string{
 	types.BLAKE2B512,
 	types.BLAKE3256,
 	types.BLAKE3512,
+	types.LSH256,
+	types.LSH512,
 	types.RIPEMD160,
 	types.SHAKE128,
 	types.SHAKE256,
@@ -174,6 +180,10 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = imphash.NewStable()
 	case types.LM:
 		imp = lm.New()
+	case types.LSH256:
+		imp = lsh256.New()
+	case types.LSH512:
+		imp = lsh512.New()
 	case types.MD2:
 		imp = md2.New()
 	case types.MD4:

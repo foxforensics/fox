@@ -38,13 +38,13 @@ Cryptographic hashes (MD family):
   MD2, MD4, MD5, MD6
 
 Cryptographic hashes (other):
-  HAS-160, RIPEMD-160, SHAKE128, SHAKE256, SM3, WHIRLPOOL
+  HAS-160, LSH-256, LSH-512, RIPEMD-160, SHAKE128, SHAKE256, SM3, WHIRLPOOL
 
 Performance hashes:
   FNV-1, FNV-1A, MURMUR3, SIPHASH, XXH32, XXH64, XXH3
 
 Similarity hashes:
-  IMPHASH-0, IMPHASH, SSDEEP, TLSH
+  IMPHASH0, IMPHASH, SSDEEP, TLSH
 
 Windows specific:
   LM, NT, PE Checksum

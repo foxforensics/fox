@@ -4,7 +4,6 @@ go 1.25.6
 
 require (
 	github.com/0xrawsec/golang-evtx v1.2.9
-	github.com/RyuaNerin/go-krypto v1.3.0
 	github.com/Velocidex/go-ewf v0.0.0-20240210123447-97dc81b7d8c3
 	github.com/Velocidex/go-journalctl v0.0.0-20250902002606-881a5f66df10
 	github.com/Velocidex/go-vhdx v0.0.0-20250511013458-5cba970cdeda
@@ -22,6 +21,7 @@ require (
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cespare/xxhash v1.1.0
 	github.com/corona10/goimagehash v1.1.0
+	github.com/cuhsat/go-krypto v0.2.1
 	github.com/cuhsat/go-lnk v0.1.0
 	github.com/cuhsat/go-mmap v0.1.0
 	github.com/cuhsat/go-zip v0.5.3
@@ -96,7 +96,6 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
-	github.com/secDre4mer/pkcs7 v0.0.0-20240322103146-665324a4461d // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
