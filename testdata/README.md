@@ -1,5 +1,5 @@
 # Fox Standard Test Pattern
-Author: Christian Uhsat <mail@foxhunt.wtf>
+Author: Christian Uhsat <christian@uhsat.de>
 
 ## Abstract
 The Fox Standard Test Pattern (*FSTP*) was developed to provide a distinct pattern for debugging in text and hex mode. It has characterful technical and visual properties, combined with a small size of 64 bytes, that is still compressible.
