@@ -12,16 +12,16 @@ import (
 	"strings"
 	"time"
 
-	app "github.com/cuhsat/fox/v4/internal"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
 var header = strings.TrimSpace(`
-FOX CHAIN OF CUSTODY RECEIPT %s
-Time: %s
-User: %s (%s)
-Host: %s (%s)
-Path: %s
-Hash: %x SHA256
+FILE │ %s
+─────┼─────────────────────────────────────────────────────────────────
+TIME │ %s
+USER │ %s
+HOST │ %s
+HASH │ %s
 `)
 
 func Generate(path string) error {
@@ -49,16 +49,16 @@ func Generate(path string) error {
 		return err
 	}
 
-	return os.WriteFile(path+".cc", []byte(fmt.Sprintf(header,
-		app.Version,
-		time.Now().UTC(),
-		usr.Name,
-		usr.Username,
-		hst,
-		macAddr(),
+	box := text.Block(75, strings.Split(fmt.Sprintf(header,
+		//app.Version,
 		abs,
-		sha256.Sum256(buf),
-	)), 0600)
+		pad(time.Now().UTC().String()),
+		pad(fmt.Sprintf("%s (%s)", usr.Name, usr.Username)),
+		pad(fmt.Sprintf("%s (%s)", hst, macAddr())),
+		fmt.Sprintf("%x", sha256.Sum256(buf)),
+	), "\n")...) + "\n"
+
+	return os.WriteFile(path+".cc", []byte(box), 0600)
 }
 
 func macAddr() string {
@@ -73,4 +73,8 @@ func macAddr() string {
 	}
 
 	return ""
+}
+
+func pad(s string) string {
+	return fmt.Sprintf("%s %s", s, strings.Repeat(".", 63-len(s)))
 }

@@ -104,7 +104,7 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 
 func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) bool {
 	if !cli.NoFile {
-		_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Header(h)))
+		_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Title(h)))
 	}
 
 	if err != nil {

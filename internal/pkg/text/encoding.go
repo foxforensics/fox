@@ -21,31 +21,25 @@ const (
 	PDI = 0x2069
 )
 
-const termW = 78
-
 func Line() string {
-	w, _, err := term.GetSize(0)
-
-	if err != nil {
-		w = termW // default width
-	}
-
-	return strings.Repeat("─", w)
+	return strings.Repeat("─", width())
 }
 
-func Header(s string) string {
+func Title(line string) string {
+	return Block(width(), line)
+}
+
+func Block(w int, lines ...string) string {
 	var sb strings.Builder
-
-	w, _, err := term.GetSize(0)
-
-	if err != nil {
-		w = termW // default width
-	}
 
 	l := strings.Repeat("─", w-2)
 
 	sb.WriteString(fmt.Sprintf("┌%s┐\n", l))
-	sb.WriteString(fmt.Sprintf("│ %-*s │\n", w-4, s))
+
+	for _, line := range lines {
+		sb.WriteString(fmt.Sprintf("│ %-*s │\n", w-4, line))
+	}
+
 	sb.WriteString(fmt.Sprintf("└%s┘", l))
 
 	return sb.String()
@@ -95,4 +89,14 @@ func Humanize(i int64) string {
 	}
 
 	return fmt.Sprintf("%.1f%c", float64(i)/float64(d), "kmgtpezyrq"[e])
+}
+
+func width() int {
+	w, _, err := term.GetSize(0)
+
+	if err != nil {
+		w = 78 // default term width
+	}
+
+	return w
 }
