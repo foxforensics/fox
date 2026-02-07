@@ -49,7 +49,7 @@ Class Flags
 
 :   Shows only strings first class.
 
-**-l, --list**
+**-L, --list**
 
 :   Shows only classification list.
 
