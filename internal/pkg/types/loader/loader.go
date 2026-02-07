@@ -247,6 +247,10 @@ func (ldr *Loader) processFile(path string) bool {
 				log.Printf("disk detected %s\n", e.Name)
 			}
 
+			if ldr.opts.Warnings && e.Name == "ewf" {
+				log.Println("warning: ewf support is experimental!")
+			}
+
 			f, err := os.Open(path)
 
 			if err != nil {
