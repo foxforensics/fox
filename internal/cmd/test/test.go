@@ -62,6 +62,7 @@ func (cmd *Test) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	case len(cmd.One) > 0:
 		v, _ := hex.DecodeString(Key1)
 		cmd.Key = string(xxtea.Decrypt(v, []byte(cmd.One)))
+
 	case len(cmd.Two) > 0:
 		v, _ := hex.DecodeString(Key2)
 		cmd.Key = string(xxtea.Decrypt(v, []byte(cmd.Two)))

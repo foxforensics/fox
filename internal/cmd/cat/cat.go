@@ -23,12 +23,12 @@ Flags:
   -D, --dist=LENGTH        filters by Levenshtein distance (slow)
   -e, --regexp=PATTERN     filters by regular expression
 
-RegExp Flags:
+RegExp flags:
   -C, --context=LINES      lines surrounding a match
   -B, --before=LINES       lines leading before a match
   -A, --after=LINES        lines trailing after a match
 
-Syntax Flags
+Syntax flags
   -S, --syntax=TYPE        force syntax highlighting type
 
 Examples:

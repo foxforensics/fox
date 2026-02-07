@@ -23,7 +23,7 @@ Flags:
   -n, --min=VALUE          minimum entropy value (default: 0.0)
   -x, --max=VALUE          maximal entropy value (default: 1.0)
 
-Format Flags:
+Format flags:
   -H, --human              format size in human-readable units
 
 Examples:

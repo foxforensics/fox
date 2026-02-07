@@ -24,13 +24,13 @@ Flags:
   -a, --ascii              shows only strings with ASCII encoding
   -s, --sort               sorts strings alphabetically
 
-Class Flags:
+Class flags:
   -w, --wtf[=LEVEL]        shows string classifications (w/ww/www)
   -F, --find=CLASS,...     shows only strings that match class(es)
   -1, --first              shows only strings first class
   -L, --list               shows only classification list
 
-Format Flags:
+Format flags:
   -D, --decimal            format addresses as decimals
 
 Examples:

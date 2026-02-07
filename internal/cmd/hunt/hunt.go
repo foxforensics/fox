@@ -43,14 +43,14 @@ Flags:
   -J, --jsonl              shows logs as JSON lines
   -Q, --sqlite             saves logs to SQLite3 DB (very slow)
 
-Hunter Flags:
+Hunter flags:
   -b, --block=SIZE         block size for event carving
 
-Filter Flags:
+Filter flags:
   -R, --rule=FILE          filters using Sigma Rules file (slow)
   -D, --dist=LENGTH        filters using Levenshtein distance (slow)
 
-Stream Flags:
+Stream flags:
   -U, --url=SERVER         streams events to server address
   -A, --auth=TOKEN         streams events using auth token
   -E, --ecs                uses ECS schema for streaming

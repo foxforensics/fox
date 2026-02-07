@@ -20,7 +20,7 @@ Flags:
   -X, --xxd                formats output like xxd
   -R, --raw                don't format the output
 
-Format Flags:
+Format flags:
   -D, --decimal            format addresses as decimals
 
 Examples:
