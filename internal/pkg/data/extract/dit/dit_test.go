@@ -1,6 +1,7 @@
 package dit
 
 import (
+	"bytes"
 	"testing"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/extract"
@@ -8,6 +9,7 @@ import (
 )
 
 const file = "ntds/ntds.dit.zst"
+const dump = "ntds/dump.txt"
 
 func BenchmarkExtract(b *testing.B) {
 	buf := test.Fixture(file)
@@ -18,6 +20,8 @@ func BenchmarkExtract(b *testing.B) {
 }
 
 func TestExtract(t *testing.T) {
+	var buf bytes.Buffer
+
 	rec, err := Extract(test.Fixture(file), extract.BootKey)
 
 	if err != nil {
@@ -29,6 +33,11 @@ func TestExtract(t *testing.T) {
 	}
 
 	for _, r := range rec {
-		println(r.String())
+		buf.WriteString(r.String())
+		buf.WriteByte('\n')
+	}
+
+	if !bytes.Equal(buf.Bytes(), test.Fixture(dump)) {
+		t.Fatal("wrong hashes")
 	}
 }

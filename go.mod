@@ -24,7 +24,6 @@ require (
 	github.com/cuhsat/go-krypto v0.2.1
 	github.com/cuhsat/go-lnk v0.1.0
 	github.com/cuhsat/go-mmap v0.1.0
-	github.com/cuhsat/go-secretsdump v0.4.4
 	github.com/cuhsat/go-zip v0.5.3
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/dchest/siphash v1.2.3
@@ -107,7 +106,6 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/exp v0.0.0-20260112195511-716be5621a96 // indirect
-	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/sys v0.41.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/libc v1.67.7 // indirect

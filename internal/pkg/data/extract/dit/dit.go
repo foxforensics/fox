@@ -42,15 +42,8 @@ var emptyLm = []byte{0xAA, 0xD3, 0xB4, 0x35, 0xB5, 0x14, 0x04, 0xEE, 0xAA, 0xD3,
 
 var errStop = errors.New("stop")
 
-type adPek struct {
-	key []byte
-}
-
-type adHash struct {
-	key []byte
-	buf []byte
-}
-
+type Pek []byte
+type Hash []byte
 type Record struct {
 	User string
 	Rid  uint32
@@ -58,14 +51,12 @@ type Record struct {
 	Lm   string
 }
 
-func newPek(b, bk []byte) *adPek {
+func newPek(b, bk []byte) Pek {
 	var key []byte
 
 	if len(b) != 76 {
 		log.Fatalln("invalid pek data")
 	}
-
-	println(fmt.Sprintf("PEK Header: %x", b[:8]))
 
 	buf := b[8:] // skip header
 
@@ -87,40 +78,39 @@ func newPek(b, bk []byte) *adPek {
 		log.Fatalln("invalid pek length")
 	}
 
-	return &adPek{
-		key: key,
-	}
+	return key
 }
 
-func newHash(b, d, k, k1, k2 []byte) *adHash {
+func newHash(b, d, k, k1, k2 []byte) Hash {
 	if len(b) == 0 {
-		return &adHash{
-			key: nil,
-			buf: d,
-		}
+		return d
 	}
 
 	if len(b) != 40 {
 		log.Fatalln("invalid hash data")
 	}
 
-	b = b[8:] // skip header
+	buf := b[8:] // skip header
 
-	key := deriveMd5(b[:16], k, 1)
-	buf := decryptRc4(b[16:], key)
+	switch b[0] {
+	case 0x13:
+		// TODO: AES
 
-	return &adHash{
-		key: key,
-		buf: decryptDes(buf, k1, k2),
+	default:
+		key := deriveMd5(buf[:16], k, 1)
+		buf = decryptRc4(buf[16:], key)
+		buf = decryptDes(buf, k1, k2)
 	}
+
+	return buf
 }
 
-func (p *adPek) String() string {
-	return hex.EncodeToString(p.key)
+func (v Pek) String() string {
+	return hex.EncodeToString(v)
 }
 
-func (h *adHash) String() string {
-	return hex.EncodeToString(h.buf)
+func (v Hash) String() string {
+	return hex.EncodeToString(v)
 }
 
 func (r *Record) String() string {
@@ -149,15 +139,12 @@ func Extract(b, bootkey []byte) ([]Record, error) {
 
 	pek := newPek(getBytes(ctl, attPek), bootkey)
 
-	// 422b3e51e46cdd802a6af7b3c0498d75
-	println(fmt.Sprintf("PEK: %s", pek.String()))
-
 	_ = ctl.DumpTable("datatable", func(row *ordereddict.Dict) error {
 		if v, ok := row.Get(attAcc); ok && v != nil {
 			t, _ := row.GetInt64(attTyp)
 
 			if slices.Contains(types, t) {
-				rec, err := newRecord(row, v.(string), pek.key)
+				rec, err := newRecord(row, v.(string), pek)
 
 				if err != nil {
 					log.Println(err)

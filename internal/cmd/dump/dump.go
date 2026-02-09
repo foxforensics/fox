@@ -1,16 +1,13 @@
 package dump
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"regexp"
 	"strings"
 
-	"github.com/cuhsat/go-secretsdump/pkg/ntds"
-
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
+	ad "github.com/cuhsat/fox/v4/internal/pkg/data/extract/dit"
 	sys "github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
@@ -65,32 +62,29 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	reg := <-ch
 	defer reg.Discard()
 
+	key, err := sys.BootKey(reg.Reader())
+
+	if err != nil {
+		return err
+	}
+
 	// print bootkey and exit early
 	if cmd.Bootkey {
-		key, err := sys.BootKey(reg.Reader())
-
-		if err == nil {
-			_, _ = fmt.Fprintln(cli.Stdout, fmt.Sprintf("%x", key))
-		}
-
-		return err
+		_, _ = fmt.Fprintln(cli.Stdout, fmt.Sprintf("%x", key))
+		return nil
 	}
 
 	dit := <-ch
 	defer dit.Discard()
 
-	dump, err := ntds.New(
-		bytes.NewReader(reg.Bytes()),
-		bytes.NewReader(dit.Bytes()),
-		len(dit.Bytes()),
-	)
+	rec, err := ad.Extract(dit.Bytes(), key)
 
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
-	for c := range dump {
-		line := cmd.format(&c, cli.Regexp)
+	for _, r := range rec {
+		line := cmd.format(&r, cli.Regexp)
 
 		if cli.Regexp != nil && !cli.Regexp.MatchString(line) {
 			continue // not matched afterward
@@ -102,22 +96,22 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func (cmd *Dump) format(c *ntds.Credentials, re *regexp.Regexp) string {
+func (cmd *Dump) format(r *ad.Record, re *regexp.Regexp) string {
 	var line string
 
 	switch {
 	case cmd.Jsonl:
-		b, _ := json.MarshalIndent(c, "", "  ")
+		b, _ := json.MarshalIndent(r, "", "  ")
 		line = text.ColorizeStringAs(string(b), "json")
 	case cmd.Json:
-		b, _ := json.Marshal(c)
+		b, _ := json.Marshal(r)
 		line = text.ColorizeStringAs(string(b), "json")
 	case cmd.Nt:
-		line = c.Nt
+		line = r.Nt
 	case cmd.Lm:
-		line = c.Lm
+		line = r.Lm
 	default:
-		line = c.String()
+		line = r.String()
 	}
 
 	if re != nil {
