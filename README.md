@@ -27,11 +27,11 @@ brew install cuhsat/fox/fox
 * [x] Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * [x] String carving and automatic classification
 * [x] With over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
-* [x] Dump (live) Active Directory [NTLM](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes
 * [x] Dump Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * [x] Dump Windows shortcut and prefetch files
 * [x] Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * [x] Check IPs, URLs, Domains and files via the [VirusTotal API](https://www.virustotal.com/)
+* [x] Extract NTLM hashes from [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) databases
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
 * [x] Integral syntax highlighting for many different formats
 * [x] Integral *Chain-of-Custody* receipt generation
