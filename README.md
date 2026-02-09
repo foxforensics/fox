@@ -1,7 +1,6 @@
 [![fox](assets/img/logo.png "fox")](https://foxhunt.dev)
 
 <div align="center">
-<br/>
 The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
 <br/>
 <br/>
