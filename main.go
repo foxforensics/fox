@@ -15,6 +15,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/cmd"
 	"github.com/cuhsat/fox/v4/internal/cmd/cat"
+	"github.com/cuhsat/fox/v4/internal/cmd/dump"
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
 	"github.com/cuhsat/fox/v4/internal/cmd/help"
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
@@ -47,6 +48,7 @@ Modes:
   (t) text     shows file contained strings
   (a) hash     shows file hashes and checksums
   (l) list     lists file infos and entropy
+  (d) dump     dumps sensitive data
   (s) test     tests suspicious files
   (u) hunt     hunts suspicious events
 
@@ -113,6 +115,7 @@ type fox struct {
 	Text text.Text `cmd:"" aliases:"t,strings"`
 	Hash hash.Hash `cmd:"" aliases:"a,sum"`
 	List list.List `cmd:"" aliases:"l,ls,wc"`
+	Dump dump.Dump `cmd:"" aliases:"d"`
 	Test test.Test `cmd:"" aliases:"s,check"`
 	Hunt hunt.Hunt `cmd:"" aliases:"u"`
 	Help help.Help `cmd:"" aliases:"h" hidden:""`

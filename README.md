@@ -23,6 +23,7 @@ brew install cuhsat/fox/fox
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * String carving and automatic classification
 * With over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
+* Dump Active Directory [NTLM](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes fast
 * Dump Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * Dump Windows shortcut and prefetch files
 * Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
@@ -69,6 +70,11 @@ fox hash -Amd5 files.7z
 List high entropy files:
 ```console
 fox list -n0.9 ./**/*
+```
+
+Dump NTLM hashes:
+```console
+fox dump ntds.dit system
 ```
 
 Test a suspicious file:
