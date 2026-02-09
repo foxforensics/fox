@@ -8,7 +8,7 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **dump** system ntds.dit
+| **fox** **dump** **system** \[**ntds.dit**]
 
 DESCRIPTION
 ===========
@@ -18,10 +18,6 @@ Dumps sensitive data from files. This mode enforces the **--no-convert** flag.
 FLAGS
 =====
 
-**-V, --vss**
-
-:   Dumps data using a Volume Shadow Copy (VSS). Using this flag **WILL ALTER THE FILESYSTEM** and requires a manual confirmation. You have been warned.
-
 **-j, --json**
 
 :   Shows data as JSON objects.
@@ -30,13 +26,23 @@ FLAGS
 
 :   Shows data as JSON lines.
 
+Registry Flags
+--------------
+
+**-K, --bootkey**
+
+:   Extracts only the bootkey.
+
+Active Directory Flags
+----------------------
+
 **--nt**
 
-:   Shows only the NT hashes.
+:   Extracts only the **NT** hashes.
 
 **--lm**
 
-:   Shows only the LM hashes.
+:   Extracts only the **LM** hashes.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -60,7 +66,7 @@ WWW
 ===
 
 Please visit the project's homepage at:
-<_https://foxhunt.wtf_>
+<_https://foxhunt.dev_>
 
 SEE ALSO
 ========

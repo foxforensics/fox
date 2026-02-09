@@ -104,7 +104,7 @@ Example: List high entropy files
 Example: Hunt down suspicious events
   $ fox hunt -sv ./**/*.dd
 
-For more information please visit: https://foxhunt.wtf
+For more information please visit: https://foxhunt.dev
 Use "fox help <MODE>" to see help on a specific mode.
 `)
 

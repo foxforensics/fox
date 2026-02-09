@@ -1,77 +1,74 @@
 package dump
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
-	"os"
 	"regexp"
 	"strings"
 
 	"github.com/cuhsat/go-secretsdump/pkg/ntds"
-	//"github.com/mxk/go-vss"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
+	registry "github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
+
+var Usage = strings.TrimSpace(`
+Dumps sensitive data.
+
+fox dump [FLAGS...] system [ntds.dit]
+
+Flags:
+  -j, --json               dumps data as JSON objects
+  -J, --jsonl              dumps data as JSON lines
+
+Registry flags:
+  -K, --bootkey            extracts only the bootkey
+
+Active Directory flags:
+  -N, --nt                 extracts only the NT hashes
+  -L, --lm                 extracts only the LM hashes
+
+Examples:
+  $ fox dump system ntds.dit
+`)
 
 type Hash struct {
 	Nt string `json:"nt,omitempty"`
 	Lm string `json:"lm,omitempty"`
 }
 
-var Usage = strings.TrimSpace(`
-Dumps sensitive data.
-
-fox dump [FLAGS...] system ntds.dit
-
-Flags:
-  -V, --vss                dumps data using a Volume Shadow Copy (VSS)
-  -j, --json               dumps data as JSON objects
-  -J, --jsonl              dumps data as JSON lines
-  -N, --nt                 shows only the NT hashes
-  -L, --lm                 shows only the LM hashes
-
-Examples:
-  $ fox dump system ntds.dit
-`)
-
-const agree = "I understand"
-
 type Dump struct {
-	Vss   bool `short:"V"`
-	Yes   bool `hidden:""`
 	Json  bool `short:"j" xor:"json,jsonl"`
 	Jsonl bool `short:"J" xor:"json,jsonl"`
-	Nt    bool `long:"nt" xor:"nt,lm"` // hashcat -m 1000 / john --format=NT
-	Lm    bool `long:"lm" xor:"nt,lm"` // hashcat -m 3000 / john --format=LM
+
+	// registry flags
+	Bootkey bool `short:"K"`
+
+	// active directory flags
+	Nt bool `short:"N" long:"nt" xor:"nt,lm"` // hashcat -m 1000 / john --format=NT
+	Lm bool `short:"L" long:"lm" xor:"nt,lm"` // hashcat -m 3000 / john --format=LM
 
 	// paths
 	Paths []string `arg:"" type:"path" optional:""`
 }
 
-func (cmd *Dump) Validate() error {
-	if cmd.Vss && !cmd.Yes {
-		log.Println(text.Warn("USING VSS WILL ALTER THE FILESYSTEM!!"))
-		log.Println(text.Warn(fmt.Sprintf("PLEASE TYPE '%s' TO PROCEED", agree)))
-
-		input := bufio.NewScanner(os.Stdin)
-		input.Scan()
-
-		if input.Text() != agree {
-			return errors.New("aborted")
-		}
+func (cmd *Hash) String() string {
+	switch {
+	case len(cmd.Nt) > 0:
+		return cmd.Nt
+	case len(cmd.Lm) > 0:
+		return cmd.Lm
+	default:
+		return "" // error
 	}
-
-	return nil
 }
 
 func (cmd *Dump) Run(cli *cli.Globals) error {
-	if len(cmd.Paths) != 2 {
+	if len(cmd.Paths) < 2 || (len(cmd.Paths) < 1 && cmd.Bootkey) {
 		fmt.Println(Usage)
 		return nil
 	}
@@ -82,7 +79,21 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	reg := <-ch
+	defer reg.Discard()
+
+	// print bootkey and exit early
+	if cmd.Bootkey {
+		key, err := registry.BootKey(reg.Reader())
+
+		if err == nil {
+			_, _ = fmt.Fprintln(cli.Stdout, fmt.Sprintf("%x", key))
+		}
+
+		return err
+	}
+
 	dit := <-ch
+	defer dit.Discard()
 
 	dump, err := ntds.New(
 		bytes.NewReader(reg.Bytes()),
@@ -104,36 +115,36 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		_, _ = fmt.Fprintln(cli.Stdout, line)
 	}
 
-	reg.Discard()
-	dit.Discard()
-
 	return nil
 }
 
-func (cmd *Dump) format(c *ntds.Credentials, re *regexp.Regexp) string {
-	var line string
-	var data any = c
-
+func (cmd *Dump) convert(c *ntds.Credentials) any {
 	switch {
 	case cmd.Nt:
-		data = Hash{Nt: c.Nt}
+		return Hash{Nt: c.Nt}
 	case cmd.Lm:
-		data = Hash{Lm: c.Lm}
+		return Hash{Lm: c.Lm}
+	default:
+		return c
 	}
+}
+
+func (cmd *Dump) format(v any, re *regexp.Regexp) string {
+	var line string
 
 	switch {
 	case cmd.Jsonl:
-		b, _ := json.MarshalIndent(data, "", "  ")
+		b, _ := json.MarshalIndent(v, "", "  ")
 		line = text.ColorizeStringAs(string(b), "json")
 	case cmd.Json:
-		b, _ := json.Marshal(data)
+		b, _ := json.Marshal(v)
 		line = text.ColorizeStringAs(string(b), "json")
 	case cmd.Nt:
-		line = c.Nt
+		line = fmt.Sprint(v)
 	case cmd.Lm:
-		line = c.Lm
+		line = fmt.Sprint(v)
 	default:
-		line = c.String()
+		line = fmt.Sprint(v)
 	}
 
 	if re != nil {
@@ -142,15 +153,3 @@ func (cmd *Dump) format(c *ntds.Credentials, re *regexp.Regexp) string {
 
 	return line
 }
-
-/*
-func (cmd *Dump) shadow(drv string) (dir string, err error) {
-	dir = filepath.Join(os.TempDir(), "fox")
-
-	if _, err = os.Stat(dir); !os.IsNotExist(err) {
-		return "", errors.New("directory already exists")
-	}
-
-	err = vss.CreateLink(dir, drv)
-}
-*/
