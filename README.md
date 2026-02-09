@@ -123,7 +123,7 @@ Checksums
 
 ---
 
-*Disclaimer: This code was developed without the use of AI tooling and therefor does not contain any AI generated code, test or documentation. Furthermore, this code does not contain, employ or utilize AI tools in any other form. All data processed will not be shared with third parties except otherwise explicitly stated and permitted by the user.*
+*Disclaimer: This code was developed without the use of AI tooling and therefor does not contain any AI generated code, test nor documentation. Furthermore, this code does not contain, employ or utilize AI tools in any other form. All data processed will not be shared with third parties.*
 
 ---
 🦊 is released under the [GPL-3.0](LICENSE.md)
