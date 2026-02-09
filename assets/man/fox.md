@@ -229,4 +229,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**cat(1)**, **grep(1)**, **head(1)**, **tail(1)**, **hexdump(1)**, **strings(1)**, **wc(1)**
+**cat(1)**, **grep(1)**, **head(1)**, **tail(1)**, **uniq(1)**, **wc(1)**, **hexdump(1)**, **strings(1)**

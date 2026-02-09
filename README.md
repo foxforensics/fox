@@ -1,3 +1,4 @@
+
 [![fox](assets/img/logo.png "fox")](https://foxhunt.wtf)
 
 The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
@@ -23,12 +24,12 @@ brew install cuhsat/fox/fox
 * Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * String carving and automatic classification
 * With over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
-* Dump Active Directory [NTLM](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes fast
+* Dump (live) Active Directory [NTLM](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes
 * Dump Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * Dump Windows shortcut and prefetch files
 * Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * Check IPs, URLs, Domains and files via the [VirusTotal API](https://www.virustotal.com/)
-* Integral `grep`, `head`, `tail`, `hexdump`, `wc` like abilities
+* Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
 * Integral syntax highlighting for many different formats
 * Integral *Chain-of-Custody* receipt generation
 * Many popular archive and compression formats
@@ -74,7 +75,7 @@ fox list -n0.9 ./**/*
 
 Dump NTLM hashes:
 ```console
-fox dump ntds.dit system
+fox dump system ntds.dit
 ```
 
 Test a suspicious file:

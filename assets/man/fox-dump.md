@@ -8,7 +8,7 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **dump** ntds.dit system
+| **fox** **dump** system ntds.dit
 
 DESCRIPTION
 ===========
@@ -46,7 +46,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox dump ntds.dit system
+fox dump system ntds.dit
 
 :   Dump NTLM hashes
 

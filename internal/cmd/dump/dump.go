@@ -27,7 +27,7 @@ type Hash struct {
 var Usage = strings.TrimSpace(`
 Dumps sensitive data.
 
-fox dump [FLAGS...] ntds.dit system
+fox dump [FLAGS...] system ntds.dit
 
 Flags:
   -V, --vss                dumps data using a Volume Shadow Copy (VSS)
@@ -37,7 +37,7 @@ Flags:
   -L, --lm                 shows only the LM hashes
 
 Examples:
-  $ fox dump ntds.dit system
+  $ fox dump system ntds.dit
 `)
 
 const agree = "I understand"
@@ -81,8 +81,8 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
-	dit := <-ch
 	reg := <-ch
+	dit := <-ch
 
 	dump, err := ntds.New(
 		bytes.NewReader(reg.Bytes()),
@@ -104,8 +104,8 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		_, _ = fmt.Fprintln(cli.Stdout, line)
 	}
 
-	dit.Discard()
 	reg.Discard()
+	dit.Discard()
 
 	return nil
 }
