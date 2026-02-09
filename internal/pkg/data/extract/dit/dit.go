@@ -1,8 +1,13 @@
-// Package dit based on: https://www.exploit-db.com/docs/english/18244-active-domain-offline-hash-dump-&-forensic-analysis.pdf
+// Package dit based on:
+// - https://www.exploit-db.com/docs/english/18244-active-domain-offline-hash-dump-&-forensic-analysis.pdf
+// - https://github.com/C-Sto/gosecretsdump/blob/master/pkg/ditreader/crypto.go
+// - https://github.com/Dionach/NtdsAudit/blob/master/src/NtdsAudit/NTCrypto.cs
 package dit
 
 import (
 	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
 	"crypto/des"
 	"crypto/md5"
 	"crypto/rc4"
@@ -39,7 +44,6 @@ var errStop = errors.New("stop")
 
 type adPek struct {
 	key []byte
-	buf []byte
 }
 
 type adHash struct {
@@ -48,24 +52,43 @@ type adHash struct {
 }
 
 type Record struct {
-	Username string
-	Rid      uint32
-	Nt       string
-	Lm       string
+	User string
+	Rid  uint32
+	Nt   string
+	Lm   string
 }
 
-func newPek(b, k []byte) *adPek {
+func newPek(b, bk []byte) *adPek {
+	var key []byte
+
 	if len(b) != 76 {
 		log.Fatalln("invalid pek data")
 	}
 
-	b = b[8:] // skip header
+	println(fmt.Sprintf("PEK Header: %x", b[:8]))
 
-	key := deriveMd5(b[:16], k, 1000)
+	buf := b[8:] // skip header
+
+	switch b[0] {
+	case 0x03: // 2016
+		key = decryptAes(buf[16:], bk, buf[:16])
+		key = key[4:20]
+
+	case 0x02: // 2000
+		key = deriveMd5(buf[:16], bk, 1000)
+		key = decryptRc4(buf[16:], key)
+		key = key[36:]
+
+	default:
+		// plain text?
+	}
+
+	if len(key) != 16 {
+		log.Fatalln("invalid pek length")
+	}
 
 	return &adPek{
 		key: key,
-		buf: decryptRc4(b[16:], key),
 	}
 }
 
@@ -93,7 +116,7 @@ func newHash(b, d, k, k1, k2 []byte) *adHash {
 }
 
 func (p *adPek) String() string {
-	return hex.EncodeToString(p.buf)
+	return hex.EncodeToString(p.key)
 }
 
 func (h *adHash) String() string {
@@ -102,7 +125,7 @@ func (h *adHash) String() string {
 
 func (r *Record) String() string {
 	return fmt.Sprintf("%s:%d:%s:%s:::",
-		r.Username,
+		r.User,
 		r.Rid,
 		r.Lm,
 		r.Nt,
@@ -126,12 +149,15 @@ func Extract(b, bootkey []byte) ([]Record, error) {
 
 	pek := newPek(getBytes(ctl, attPek), bootkey)
 
+	// 422b3e51e46cdd802a6af7b3c0498d75
+	println(fmt.Sprintf("PEK: %s", pek.String()))
+
 	_ = ctl.DumpTable("datatable", func(row *ordereddict.Dict) error {
 		if v, ok := row.Get(attAcc); ok && v != nil {
 			t, _ := row.GetInt64(attTyp)
 
 			if slices.Contains(types, t) {
-				rec, err := newRecord(row, v.(string), pek.buf)
+				rec, err := newRecord(row, v.(string), pek.key)
 
 				if err != nil {
 					log.Println(err)
@@ -150,16 +176,15 @@ func Extract(b, bootkey []byte) ([]Record, error) {
 }
 
 func newRecord(row *ordereddict.Dict, usr string, pek []byte) (*Record, error) {
-	sid := getRowBytes(row, attSid)
+	rid := extractRid(getRowBytes(row, attSid))
 
-	rid := extractRid(sid)
 	k1, k2 := deriveKey(rid)
 
 	return &Record{
-		Username: usr,
-		Rid:      rid,
-		Nt:       newHash(getRowBytes(row, attNt), emptyNt, pek, k1, k2).String(),
-		Lm:       newHash(getRowBytes(row, attLm), emptyLm, pek, k1, k2).String(),
+		User: usr,
+		Rid:  rid,
+		Nt:   newHash(getRowBytes(row, attNt), emptyNt, pek, k1, k2).String(),
+		Lm:   newHash(getRowBytes(row, attLm), emptyLm, pek, k1, k2).String(),
 	}, nil
 }
 
@@ -201,36 +226,51 @@ func extractRid(sid []byte) uint32 {
 }
 
 func decryptDes(b, k1, k2 []byte) []byte {
-	var r []byte
+	var p []byte
 
-	b1 := make([]byte, 8)
-	b2 := make([]byte, 8)
+	p1 := make([]byte, 8)
+	p2 := make([]byte, 8)
 
-	d1, err := des.NewCipher(k1)
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	d1.Decrypt(b1, b[:8])
-
-	r = append(r, b1...)
-
-	d2, err := des.NewCipher(k2)
+	c1, err := des.NewCipher(k1)
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	d2.Decrypt(b2, b[8:])
+	c1.Decrypt(p1, b[:8])
 
-	r = append(r, b2...)
+	p = append(p, p1...)
 
-	return r
+	c2, err := des.NewCipher(k2)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	c2.Decrypt(p2, b[8:])
+
+	p = append(p, p2...)
+
+	return p
+}
+
+func decryptAes(b, k, v []byte) []byte {
+	p := make([]byte, len(b))
+
+	c, err := aes.NewCipher(k)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	d := cipher.NewCBCDecrypter(c, v)
+	d.CryptBlocks(p, b)
+
+	return p
 }
 
 func decryptRc4(b, k []byte) []byte {
-	r := make([]byte, len(b))
+	p := make([]byte, len(b))
 
 	c, err := rc4.NewCipher(k)
 
@@ -238,19 +278,19 @@ func decryptRc4(b, k []byte) []byte {
 		log.Fatalln(err)
 	}
 
-	c.XORKeyStream(r, b)
+	c.XORKeyStream(p, b)
 
-	return r
+	return p
 }
 
 func deriveMd5(b, k []byte, n int) []byte {
 	r := make([]byte, 16)
 
 	h := md5.New()
-	h.Sum(k)
+	h.Write(k)
 
 	for i := 0; i < n; i++ {
-		h.Sum(b)
+		h.Write(b)
 	}
 
 	s := h.Sum(nil)
@@ -265,27 +305,34 @@ func deriveKey(rid uint32) (k1, k2 []byte) {
 
 	binary.LittleEndian.PutUint32(k, rid)
 
-	b1 := []byte{k[0], k[1], k[2], k[3], k[0], k[1], k[2]}
-	b2 := []byte{k[3], k[0], k[1], k[2], k[3], k[0], k[1]}
+	b1 := []byte{
+		k[0], k[1], k[2], k[3],
+		k[0], k[1], k[2],
+	}
+
+	b2 := []byte{
+		k[3], k[0], k[1], k[2],
+		k[3], k[0], k[1],
+	}
 
 	return transformKey(b1), transformKey(b2)
 }
 
-func transformKey(k []byte) []byte {
-	var b []byte
+func transformKey(b []byte) []byte {
+	var key []byte
 
-	b = append(b, k[0]>>0x01)
-	b = append(b, ((k[0]&0x01)<<6)|k[1]>>2)
-	b = append(b, ((k[1]&0x03)<<5)|k[2]>>3)
-	b = append(b, ((k[2]&0x07)<<4)|k[3]>>4)
-	b = append(b, ((k[3]&0x0f)<<3)|k[4]>>5)
-	b = append(b, ((k[4]&0x1f)<<2)|k[5]>>6)
-	b = append(b, ((k[5]&0x3f)<<1)|k[6]>>7)
-	b = append(b, k[6]&0x7f)
+	key = append(key, b[0]>>0x01)
+	key = append(key, ((b[0]&0x01)<<6)|b[1]>>2)
+	key = append(key, ((b[1]&0x03)<<5)|b[2]>>3)
+	key = append(key, ((b[2]&0x07)<<4)|b[3]>>4)
+	key = append(key, ((b[3]&0x0f)<<3)|b[4]>>5)
+	key = append(key, ((b[4]&0x1f)<<2)|b[5]>>6)
+	key = append(key, ((b[5]&0x3f)<<1)|b[6]>>7)
+	key = append(key, b[6]&0x7f)
 
 	for i := 0; i < 8; i++ {
-		b[i] = (b[i] << 1) & 0xfe
+		key[i] = (key[i] << 1) & 0xfe
 	}
 
-	return b
+	return key
 }

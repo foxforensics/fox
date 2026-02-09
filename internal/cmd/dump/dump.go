@@ -11,7 +11,7 @@ import (
 	"github.com/cuhsat/go-secretsdump/pkg/ntds"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
-	registry "github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
+	sys "github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
@@ -36,35 +36,19 @@ Examples:
   $ fox dump system ntds.dit
 `)
 
-type Hash struct {
-	Nt string `json:"nt,omitempty"`
-	Lm string `json:"lm,omitempty"`
-}
-
 type Dump struct {
-	Json  bool `short:"j" xor:"json,jsonl"`
-	Jsonl bool `short:"J" xor:"json,jsonl"`
+	Json  bool `short:"j" xor:"json,jsonl,nt,lm"`
+	Jsonl bool `short:"J" xor:"json,jsonl,nt,lm"`
 
 	// registry flags
 	Bootkey bool `short:"K"`
 
 	// active directory flags
-	Nt bool `short:"N" long:"nt" xor:"nt,lm"` // hashcat -m 1000 / john --format=NT
-	Lm bool `short:"L" long:"lm" xor:"nt,lm"` // hashcat -m 3000 / john --format=LM
+	Nt bool `short:"N" long:"nt" xor:"json,jsonl,nt,lm"` // hashcat -m 1000 / john --format=NT
+	Lm bool `short:"L" long:"lm" xor:"json,jsonl,nt,lm"` // hashcat -m 3000 / john --format=LM
 
 	// paths
 	Paths []string `arg:"" type:"path" optional:""`
-}
-
-func (cmd *Hash) String() string {
-	switch {
-	case len(cmd.Nt) > 0:
-		return cmd.Nt
-	case len(cmd.Lm) > 0:
-		return cmd.Lm
-	default:
-		return "" // error
-	}
 }
 
 func (cmd *Dump) Run(cli *cli.Globals) error {
@@ -83,7 +67,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 
 	// print bootkey and exit early
 	if cmd.Bootkey {
-		key, err := registry.BootKey(reg.Reader())
+		key, err := sys.BootKey(reg.Reader())
 
 		if err == nil {
 			_, _ = fmt.Fprintln(cli.Stdout, fmt.Sprintf("%x", key))
@@ -118,33 +102,22 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func (cmd *Dump) convert(c *ntds.Credentials) any {
-	switch {
-	case cmd.Nt:
-		return Hash{Nt: c.Nt}
-	case cmd.Lm:
-		return Hash{Lm: c.Lm}
-	default:
-		return c
-	}
-}
-
-func (cmd *Dump) format(v any, re *regexp.Regexp) string {
+func (cmd *Dump) format(c *ntds.Credentials, re *regexp.Regexp) string {
 	var line string
 
 	switch {
 	case cmd.Jsonl:
-		b, _ := json.MarshalIndent(v, "", "  ")
+		b, _ := json.MarshalIndent(c, "", "  ")
 		line = text.ColorizeStringAs(string(b), "json")
 	case cmd.Json:
-		b, _ := json.Marshal(v)
+		b, _ := json.Marshal(c)
 		line = text.ColorizeStringAs(string(b), "json")
 	case cmd.Nt:
-		line = fmt.Sprint(v)
+		line = c.Nt
 	case cmd.Lm:
-		line = fmt.Sprint(v)
+		line = c.Lm
 	default:
-		line = fmt.Sprint(v)
+		line = c.String()
 	}
 
 	if re != nil {
