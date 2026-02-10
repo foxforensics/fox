@@ -150,6 +150,7 @@ func TestLoadFiles(t *testing.T) {
 			},
 			[]string{
 				"bible.txt",
+				"dump.txt",
 				"fox.txt",
 				"nasty.txt",
 				"strings.txt",
