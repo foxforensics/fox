@@ -1,15 +1,15 @@
 package dump
 
 import (
-	"encoding/json"
 	"fmt"
+	"log"
 	"regexp"
 	"strings"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
-	ad "github.com/cuhsat/fox/v4/internal/pkg/data/extract/dit"
-	sys "github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/dit"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
@@ -23,26 +23,26 @@ Flags:
   -J, --jsonl              dumps data as JSON lines
 
 Registry flags:
-  -K, --bootkey            extracts only the bootkey
+  -K, --bootkey            extracts only the host bootkey
 
 Active Directory flags:
-  -N, --nt                 extracts only the NT hashes
-  -L, --lm                 extracts only the LM hashes
+  -L, --lm                 extracts only the LM hashes (hashcat: 3000)
+  -N, --nt                 extracts only the NT hashes (hashcat: 1000)
 
 Examples:
   $ fox dump system ntds.dit
 `)
 
 type Dump struct {
-	Json  bool `short:"j" xor:"json,jsonl,nt,lm"`
-	Jsonl bool `short:"J" xor:"json,jsonl,nt,lm"`
+	Json  bool `short:"j" xor:"json,jsonl,lm,nt"`
+	Jsonl bool `short:"J" xor:"json,jsonl,lm,nt"`
 
 	// registry flags
 	Bootkey bool `short:"K"`
 
 	// active directory flags
-	Nt bool `short:"N" long:"nt" xor:"json,jsonl,nt,lm"` // hashcat -m 1000 / john --format=NT
-	Lm bool `short:"L" long:"lm" xor:"json,jsonl,nt,lm"` // hashcat -m 3000 / john --format=LM
+	Lm bool `short:"L" long:"lm" xor:"json,jsonl,lm,nt"`
+	Nt bool `short:"N" long:"nt" xor:"json,jsonl,lm,nt"`
 
 	// paths
 	Paths []string `arg:"" type:"path" optional:""`
@@ -59,32 +59,35 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
-	reg := <-ch
-	defer reg.Discard()
+	f1 := <-ch
+	defer f1.Discard()
 
-	key, err := sys.BootKey(reg.Reader())
+	key, err := reg.BootKey(f1.Reader())
 
 	if err != nil {
 		return err
 	}
 
-	// print bootkey and exit early
 	if cmd.Bootkey {
 		_, _ = fmt.Fprintln(cli.Stdout, fmt.Sprintf("%x", key))
 		return nil
 	}
 
-	dit := <-ch
-	defer dit.Discard()
+	f2 := <-ch
+	defer f2.Discard()
 
-	rec, err := ad.Extract(dit.Bytes(), key)
+	if cli.Verbose > 0 {
+		log.Println("dump: started")
+	}
+
+	res, err := dit.Extract(f2.Bytes(), key)
 
 	if err != nil {
 		return err
 	}
 
-	for _, r := range rec {
-		line := cmd.format(&r, cli.Regexp)
+	for _, rec := range res {
+		line := cmd.format(&rec, cli.Regexp)
 
 		if cli.Regexp != nil && !cli.Regexp.MatchString(line) {
 			continue // not matched afterward
@@ -93,25 +96,31 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		_, _ = fmt.Fprintln(cli.Stdout, line)
 	}
 
+	if cli.Verbose > 0 {
+		log.Println("dump: finished")
+	}
+
+	if cli.Verbose > 1 {
+		log.Printf("dump: found %d records(s)\n", len(res))
+	}
+
 	return nil
 }
 
-func (cmd *Dump) format(r *ad.Record, re *regexp.Regexp) string {
+func (cmd *Dump) format(rec *dit.Record, re *regexp.Regexp) string {
 	var line string
 
 	switch {
 	case cmd.Jsonl:
-		b, _ := json.MarshalIndent(r, "", "  ")
-		line = text.ColorizeStringAs(string(b), "json")
+		line = text.ColorizeStringAs(rec.ToJSONL(), "json")
 	case cmd.Json:
-		b, _ := json.Marshal(r)
-		line = text.ColorizeStringAs(string(b), "json")
+		line = text.ColorizeStringAs(rec.ToJSON(), "json")
 	case cmd.Nt:
-		line = r.Nt
+		line = rec.Nt
 	case cmd.Lm:
-		line = r.Lm
+		line = rec.Lm
 	default:
-		line = r.String()
+		line = rec.String()
 	}
 
 	if re != nil {

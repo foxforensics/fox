@@ -14,6 +14,7 @@ import (
 	"crypto/rc4"
 	"encoding/binary"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -40,28 +41,40 @@ var types = []int64{
 	0x30000002, // SAM_TRUST_ACCOUNT
 }
 
-// default empty NT hash
-var nt = []byte{0x31, 0xD6, 0xCF, 0xE0, 0xD1, 0x6A, 0xE9, 0x31, 0xB7, 0x3C, 0x59, 0xD7, 0xE0, 0xC0, 0x89, 0xC0}
-
 // default empty LM hash
 var lm = []byte{0xAA, 0xD3, 0xB4, 0x35, 0xB5, 0x14, 0x04, 0xEE, 0xAA, 0xD3, 0xB4, 0x35, 0xB5, 0x14, 0x04, 0xEE}
+
+// default empty NT hash
+var nt = []byte{0x31, 0xD6, 0xCF, 0xE0, 0xD1, 0x6A, 0xE9, 0x31, 0xB7, 0x3C, 0x59, 0xD7, 0xE0, 0xC0, 0x89, 0xC0}
 
 type Pek []byte
 type Hash []byte
 type Record struct {
 	User string
 	Rid  uint32
-	Nt   string
 	Lm   string
+	Nt   string
 }
 
-func (r *Record) String() string {
+func (rec *Record) String() string {
 	return fmt.Sprintf("%s:%d:%s:%s:::",
-		r.User,
-		r.Rid,
-		r.Lm,
-		r.Nt,
+		rec.User,
+		rec.Rid,
+		rec.Lm,
+		rec.Nt,
 	)
+}
+
+func (rec *Record) ToJSON() string {
+	b, _ := json.MarshalIndent(rec, "", "  ")
+
+	return string(b)
+}
+
+func (rec *Record) ToJSONL() string {
+	b, _ := json.Marshal(rec)
+
+	return string(b)
 }
 
 func Extract(b, bootkey []byte) ([]Record, error) {
@@ -165,8 +178,8 @@ func newRecord(row *ordereddict.Dict, usr string, pek []byte) (*Record, error) {
 	return &Record{
 		User: usr,
 		Rid:  rid,
-		Nt:   hex.EncodeToString(newHash(getBytesFromRow(row, ntHash), nt, pek, k1, k2)),
 		Lm:   hex.EncodeToString(newHash(getBytesFromRow(row, lmHash), lm, pek, k1, k2)),
+		Nt:   hex.EncodeToString(newHash(getBytesFromRow(row, ntHash), nt, pek, k1, k2)),
 	}, nil
 }
 
