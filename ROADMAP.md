@@ -35,6 +35,9 @@
   * https://github.com/fox-it/dissect.util/tree/main/dissect/util/compression
 * Add LZNT1 deflate (magic bytes?)
   * https://github.com/Velocidex/go-ntfs/blob/d467c5e7dca0/lznt1.go
+* Add vanity URL?
+  * https://sagikazarmark.hu/blog/vanity-import-paths-in-go/
+  * https://gitea.com/techknowlogick/go-vanity-url
 * Add macOS trace3 log parser?
 * Add Shellbag parser?
 * Add Jumplist parser?
