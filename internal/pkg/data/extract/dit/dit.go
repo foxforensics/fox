@@ -28,6 +28,7 @@ import (
 const (
 	userRow  = "ATTm590045"
 	userSid  = "ATTr589970"
+	userUac  = "ATTj589832"
 	userType = "ATTj590126"
 	ntHash   = "ATTk589914"
 	lmHash   = "ATTk589879"
@@ -35,25 +36,52 @@ const (
 )
 
 // user types
-var types = []int64{
+var userTypes = []int64{
 	0x30000000, // SAM_NORMAL_USER_ACCOUNT
 	0x30000001, // SAM_MACHINE_ACCOUNT
 	0x30000002, // SAM_TRUST_ACCOUNT
 }
 
 // default empty LM hash
-var lm = []byte{0xAA, 0xD3, 0xB4, 0x35, 0xB5, 0x14, 0x04, 0xEE, 0xAA, 0xD3, 0xB4, 0x35, 0xB5, 0x14, 0x04, 0xEE}
+var defaultLm = []byte{0xAA, 0xD3, 0xB4, 0x35, 0xB5, 0x14, 0x04, 0xEE, 0xAA, 0xD3, 0xB4, 0x35, 0xB5, 0x14, 0x04, 0xEE}
 
 // default empty NT hash
-var nt = []byte{0x31, 0xD6, 0xCF, 0xE0, 0xD1, 0x6A, 0xE9, 0x31, 0xB7, 0x3C, 0x59, 0xD7, 0xE0, 0xC0, 0x89, 0xC0}
+var defaultNt = []byte{0x31, 0xD6, 0xCF, 0xE0, 0xD1, 0x6A, 0xE9, 0x31, 0xB7, 0x3C, 0x59, 0xD7, 0xE0, 0xC0, 0x89, 0xC0}
 
 type Pek []byte
+
 type Hash []byte
+
+type Flags struct {
+	Script                       bool `json:"script,omitempty"`
+	AccountDisable               bool `json:"account_disable,omitempty"`
+	HomeDirRequired              bool `json:"home_dir_required,omitempty"`
+	Lockout                      bool `json:"lockout,omitempty"`
+	PasswordNotRequired          bool `json:"password_not_required,omitempty"`
+	EncryptedTextPasswordAllowed bool `json:"encrypted_text_password_allowed,omitempty"`
+	TemporaryDupAccount          bool `json:"temporary_dup_account,omitempty"`
+	NormalAccount                bool `json:"normal_account,omitempty"`
+	InterDomainTrustAccount      bool `json:"inter_domain_trust_account,omitempty"`
+	WorkstationTrustAccount      bool `json:"workstation_trust_account,omitempty"`
+	ServerTrustAccount           bool `json:"server_trust_account,omitempty"`
+	DontExpirePassword           bool `json:"dont_expire_password,omitempty"`
+	MNSLogonAccount              bool `json:"mns_logon_account,omitempty"`
+	SmartCardRequired            bool `json:"smart_card_required,omitempty"`
+	TrustedForDelegation         bool `json:"trusted_for_delegation,omitempty"`
+	NotDelegated                 bool `json:"not_delegated,omitempty"`
+	UseDESOnly                   bool `json:"use_des_only,omitempty"`
+	DontPreAuth                  bool `json:"dont_pre_auth,omitempty"`
+	PasswordExpired              bool `json:"password_expired,omitempty"`
+	TrustedToAuthForDelegation   bool `json:"trusted_to_auth_for_delegation,omitempty"`
+	PartialSecrets               bool `json:"partial_secrets,omitempty"`
+}
+
 type Record struct {
-	User string
-	Rid  uint32
-	Lm   string
-	Nt   string
+	User string `json:"user,omitempty"`
+	Rid  uint32 `json:"rid,omitempty"`
+	Uac  *Flags `json:"uac,omitempty"`
+	Lm   string `json:"lm,omitempty"`
+	Nt   string `json:"nt,omitempty"`
 }
 
 func (rec *Record) String() string {
@@ -77,29 +105,29 @@ func (rec *Record) ToJSONL() string {
 	return string(b)
 }
 
-func Extract(b, bootkey []byte) ([]Record, error) {
+func Extract(b, bootkey []byte) ([]Record, []byte, error) {
 	var r []Record
 
 	ctx, err := parser.NewESEContext(bytes.NewReader(b))
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	ctl, err := parser.ReadCatalog(ctx)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	pek := newPek(getBytesFromCtl(ctl, pek), bootkey)
+	key := newPek(getBytesFromCtl(ctl, pek), bootkey)
 
 	_ = ctl.DumpTable("datatable", func(row *ordereddict.Dict) error {
 		if v, ok := row.Get(userRow); ok && v != nil {
 			t, _ := row.GetInt64(userType)
 
-			if slices.Contains(types, t) {
-				rec, err := newRecord(row, v.(string), pek)
+			if slices.Contains(userTypes, t) {
+				rec, err := newRecord(row, v.(string), key)
 
 				if err != nil {
 					log.Println(err)
@@ -113,22 +141,18 @@ func Extract(b, bootkey []byte) ([]Record, error) {
 		return nil
 	})
 
-	return r, nil
+	return r, key, nil
 }
 
 func newPek(b, bootkey []byte) Pek {
 	var key []byte
-
-	if len(b) != 76 {
-		log.Fatalln("invalid pek data")
-	}
 
 	buf := b[8:] // skip header
 
 	switch b[0] {
 	case 0x03: // 2016
 		key = decryptAes(buf[16:], bootkey, buf[:16])
-		key = key[4:20]
+		key = key[36:52]
 
 	case 0x02: // 2000
 		key = deriveMd5(buf[:16], bootkey, 1000)
@@ -140,7 +164,8 @@ func newPek(b, bootkey []byte) Pek {
 	}
 
 	if len(key) != 16 {
-		log.Fatalln("invalid pek length")
+		log.Println("invalid pek length")
+		return []byte{}
 	}
 
 	return key
@@ -151,35 +176,31 @@ func newHash(b, def, pek, key1, key2 []byte) Hash {
 		return def
 	}
 
-	if len(b) != 40 {
-		log.Fatalln("invalid hash data")
-	}
-
 	buf := b[8:] // skip header
 
 	switch b[0] {
 	case 0x13:
-		// TODO: AES
+		buf = decryptAes(buf[20:36], pek, buf[:16])
 
 	default:
 		key := deriveMd5(buf[:16], pek, 1)
 		buf = decryptRc4(buf[16:], key)
-		buf = decryptDes(buf, key1, key2)
 	}
 
-	return buf
+	return decryptDes(buf, key1, key2)
 }
 
 func newRecord(row *ordereddict.Dict, usr string, pek []byte) (*Record, error) {
 	rid := extractRid(getBytesFromRow(row, userSid))
-
+	uac, _ := row.GetInt64(userUac)
 	k1, k2 := deriveKey(rid)
 
 	return &Record{
 		User: usr,
 		Rid:  rid,
-		Lm:   hex.EncodeToString(newHash(getBytesFromRow(row, lmHash), lm, pek, k1, k2)),
-		Nt:   hex.EncodeToString(newHash(getBytesFromRow(row, ntHash), nt, pek, k1, k2)),
+		Uac:  extractUac(uac),
+		Lm:   hex.EncodeToString(newHash(getBytesFromRow(row, lmHash), defaultLm, pek, k1, k2)),
+		Nt:   hex.EncodeToString(newHash(getBytesFromRow(row, ntHash), defaultNt, pek, k1, k2)),
 	}, nil
 }
 
@@ -214,6 +235,32 @@ func getBytesFromCtl(ctl *parser.Catalog, att string) []byte {
 	return b
 }
 
+func extractUac(v int64) *Flags {
+	return &Flags{
+		Script:                       v|1 == v,
+		AccountDisable:               v|2 == v,
+		HomeDirRequired:              v|8 == v,
+		Lockout:                      v|6 == v,
+		PasswordNotRequired:          v|32 == v,
+		EncryptedTextPasswordAllowed: v|128 == v,
+		TemporaryDupAccount:          v|256 == v,
+		NormalAccount:                v|512 == v,
+		InterDomainTrustAccount:      v|2048 == v,
+		WorkstationTrustAccount:      v|4096 == v,
+		ServerTrustAccount:           v|8192 == v,
+		DontExpirePassword:           v|65536 == v,
+		MNSLogonAccount:              v|131072 == v,
+		SmartCardRequired:            v|262144 == v,
+		TrustedForDelegation:         v|524288 == v,
+		NotDelegated:                 v|1048576 == v,
+		UseDESOnly:                   v|2097152 == v,
+		DontPreAuth:                  v|4194304 == v,
+		PasswordExpired:              v|8388608 == v,
+		TrustedToAuthForDelegation:   v|16777216 == v,
+		PartialSecrets:               v|67108864 == v,
+	}
+}
+
 func extractRid(sid []byte) uint32 {
 	l, s := sid[1], sid[8:]
 
@@ -229,7 +276,8 @@ func decryptDes(b, key1, key2 []byte) []byte {
 	c1, err := des.NewCipher(key1)
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return p
 	}
 
 	c1.Decrypt(p1, b[:8])
@@ -239,7 +287,8 @@ func decryptDes(b, key1, key2 []byte) []byte {
 	c2, err := des.NewCipher(key2)
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return p
 	}
 
 	c2.Decrypt(p2, b[8:])
@@ -255,7 +304,8 @@ func decryptAes(b, key, iv []byte) []byte {
 	c, err := aes.NewCipher(key)
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return p
 	}
 
 	d := cipher.NewCBCDecrypter(c, iv)
@@ -270,7 +320,8 @@ func decryptRc4(b, key []byte) []byte {
 	c, err := rc4.NewCipher(key)
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return p
 	}
 
 	c.XORKeyStream(p, b)

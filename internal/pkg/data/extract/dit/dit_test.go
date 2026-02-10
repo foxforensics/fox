@@ -15,14 +15,14 @@ func BenchmarkExtract(b *testing.B) {
 	buf := test.Fixture(file)
 
 	for b.Loop() {
-		_, _ = Extract(buf, extract.BootKey)
+		_, _, _ = Extract(buf, extract.BootKey)
 	}
 }
 
 func TestExtract(t *testing.T) {
 	var buf bytes.Buffer
 
-	rec, err := Extract(test.Fixture(file), extract.BootKey)
+	rec, key, err := Extract(test.Fixture(file), extract.BootKey)
 
 	if err != nil {
 		t.Error(err)
@@ -30,6 +30,10 @@ func TestExtract(t *testing.T) {
 
 	if len(rec) == 0 {
 		t.Fatal("no records")
+	}
+
+	if len(key) == 0 {
+		t.Fatal("empty key")
 	}
 
 	for _, r := range rec {

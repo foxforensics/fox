@@ -31,16 +31,16 @@ Registry Flags
 
 **-K, --bootkey**
 
-:   Extracts only the host bootkey.
+:   Dumps the host bootkey.
 
 Active Directory Flags
 ----------------------
 
-**--lm**
+**-N, --only-lm**
 
 :   Extracts only the **LM** hashes (hashcat: _3000_).
 
-**--nt**
+**-L, --only-nt**
 
 :   Extracts only the **NT** hashes (hashcat: _1000_).
 

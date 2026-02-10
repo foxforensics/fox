@@ -6,8 +6,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/alecthomas/kong"
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
-
 	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/dit"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
@@ -23,29 +23,38 @@ Flags:
   -J, --jsonl              dumps data as JSON lines
 
 Registry flags:
-  -K, --bootkey            extracts only the host bootkey
+  -K, --bootkey            dumps the host bootkey
 
 Active Directory flags:
-  -L, --lm                 extracts only the LM hashes (hashcat: 3000)
-  -N, --nt                 extracts only the NT hashes (hashcat: 1000)
+  -L, --only-lm            extracts only the LM hashes (hashcat: 3000)
+  -N, --only-nt            extracts only the NT hashes (hashcat: 1000)
 
 Examples:
   $ fox dump system ntds.dit
 `)
 
 type Dump struct {
-	Json  bool `short:"j" xor:"json,jsonl,lm,nt"`
-	Jsonl bool `short:"J" xor:"json,jsonl,lm,nt"`
+	Json  bool `short:"j" xor:"json,jsonl"`
+	Jsonl bool `short:"J" xor:"json,jsonl"`
 
 	// registry flags
 	Bootkey bool `short:"K"`
 
 	// active directory flags
-	Lm bool `short:"L" long:"lm" xor:"json,jsonl,lm,nt"`
-	Nt bool `short:"N" long:"nt" xor:"json,jsonl,lm,nt"`
+	OnlyLm bool `short:"L" long:"only-lm" xor:"only-lm,only-nt"`
+	OnlyNt bool `short:"N" long:"only-nt" xor:"only-lm,only-nt"`
 
 	// paths
 	Paths []string `arg:"" type:"path" optional:""`
+}
+
+func (cmd *Dump) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+	if cmd.OnlyLm || cmd.OnlyNt {
+		cmd.Json = false
+		cmd.Jsonl = false
+	}
+
+	return nil
 }
 
 func (cmd *Dump) Run(cli *cli.Globals) error {
@@ -80,10 +89,14 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		log.Println("dump: started")
 	}
 
-	res, err := dit.Extract(f2.Bytes(), key)
+	res, pek, err := dit.Extract(f2.Bytes(), key)
 
 	if err != nil {
 		return err
+	}
+
+	if cli.Verbose > 1 {
+		log.Printf("dump: PEK %x\n", pek)
 	}
 
 	for _, rec := range res {
@@ -115,9 +128,9 @@ func (cmd *Dump) format(rec *dit.Record, re *regexp.Regexp) string {
 		line = text.ColorizeStringAs(rec.ToJSONL(), "json")
 	case cmd.Json:
 		line = text.ColorizeStringAs(rec.ToJSON(), "json")
-	case cmd.Nt:
+	case cmd.OnlyNt:
 		line = rec.Nt
-	case cmd.Lm:
+	case cmd.OnlyLm:
 		line = rec.Lm
 	default:
 		line = rec.String()
