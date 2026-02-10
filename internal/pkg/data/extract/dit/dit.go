@@ -105,7 +105,7 @@ func (rec *Record) ToJSONL() string {
 	return string(b)
 }
 
-func Extract(b, bootkey []byte) ([]Record, []byte, error) {
+func Extract(b, bootkey []byte) ([]Record, Pek, error) {
 	var r []Record
 
 	ctx, err := parser.NewESEContext(bytes.NewReader(b))
