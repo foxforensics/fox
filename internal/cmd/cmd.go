@@ -69,7 +69,7 @@ type Globals struct {
 	Regex string `short:"e"`
 
 	// archive flags
-	Password string `short:"P"`
+	Password string `short:"p"`
 
 	// profile flags
 	Threads int `short:"T" default:"${cores}"`

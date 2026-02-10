@@ -33,7 +33,7 @@ func TestExtract(t *testing.T) {
 	}
 
 	if len(key) == 0 {
-		t.Fatal("empty key")
+		t.Fatal("ne keys")
 	}
 
 	for _, r := range rec {

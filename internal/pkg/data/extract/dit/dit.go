@@ -15,7 +15,6 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"slices"
@@ -32,7 +31,7 @@ const (
 	userType = "ATTj590126"
 	ntHash   = "ATTk589914"
 	lmHash   = "ATTk589879"
-	pek      = "ATTk590689"
+	pekBin   = "ATTk590689"
 )
 
 // user types
@@ -105,7 +104,7 @@ func (rec *Record) ToJSONL() string {
 	return string(b)
 }
 
-func Extract(b, bootkey []byte) ([]Record, Pek, error) {
+func Extract(b, bootkey []byte) ([]Record, []Pek, error) {
 	var r []Record
 
 	ctx, err := parser.NewESEContext(bytes.NewReader(b))
@@ -120,14 +119,14 @@ func Extract(b, bootkey []byte) ([]Record, Pek, error) {
 		return nil, nil, err
 	}
 
-	key := newPek(getBytesFromCtl(ctl, pek), bootkey)
+	keys := getKeys(ctl, pekBin, bootkey)
 
 	_ = ctl.DumpTable("datatable", func(row *ordereddict.Dict) error {
 		if v, ok := row.Get(userRow); ok && v != nil {
 			t, _ := row.GetInt64(userType)
 
 			if slices.Contains(userTypes, t) {
-				rec, err := newRecord(row, v.(string), key)
+				rec, err := newRecord(row, v.(string), keys)
 
 				if err != nil {
 					log.Println(err)
@@ -141,7 +140,7 @@ func Extract(b, bootkey []byte) ([]Record, Pek, error) {
 		return nil
 	})
 
-	return r, key, nil
+	return r, keys, nil
 }
 
 func newPek(b, bootkey []byte) Pek {
@@ -171,7 +170,7 @@ func newPek(b, bootkey []byte) Pek {
 	return key
 }
 
-func newHash(b, def, pek, key1, key2 []byte) Hash {
+func newHash(b, def, key1, key2 []byte, pek []Pek) Hash {
 	if len(b) == 0 {
 		return def
 	}
@@ -180,17 +179,17 @@ func newHash(b, def, pek, key1, key2 []byte) Hash {
 
 	switch b[0] {
 	case 0x13:
-		buf = decryptAes(buf[20:36], pek, buf[:16])
+		buf = decryptAes(buf[20:36], pek[b[4]], buf[:16])
 
 	default:
-		key := deriveMd5(buf[:16], pek, 1)
+		key := deriveMd5(buf[:16], pek[0], 1)
 		buf = decryptRc4(buf[16:], key)
 	}
 
 	return decryptDes(buf, key1, key2)
 }
 
-func newRecord(row *ordereddict.Dict, usr string, pek []byte) (*Record, error) {
+func newRecord(row *ordereddict.Dict, usr string, pek []Pek) (*Record, error) {
 	rid := extractRid(getBytesFromRow(row, userSid))
 	uac, _ := row.GetInt64(userUac)
 	k1, k2 := deriveKey(rid)
@@ -199,8 +198,8 @@ func newRecord(row *ordereddict.Dict, usr string, pek []byte) (*Record, error) {
 		User: usr,
 		Rid:  rid,
 		Uac:  extractUac(uac),
-		Lm:   hex.EncodeToString(newHash(getBytesFromRow(row, lmHash), defaultLm, pek, k1, k2)),
-		Nt:   hex.EncodeToString(newHash(getBytesFromRow(row, ntHash), defaultNt, pek, k1, k2)),
+		Lm:   hex.EncodeToString(newHash(getBytesFromRow(row, lmHash), defaultLm, k1, k2, pek)),
+		Nt:   hex.EncodeToString(newHash(getBytesFromRow(row, ntHash), defaultNt, k1, k2, pek)),
 	}, nil
 }
 
@@ -221,18 +220,18 @@ func getBytesFromRow(row *ordereddict.Dict, key string) []byte {
 	return nil
 }
 
-func getBytesFromCtl(ctl *parser.Catalog, att string) []byte {
-	var b []byte
+func getKeys(ctl *parser.Catalog, att string, key []byte) []Pek {
+	var keys []Pek
 
 	_ = ctl.DumpTable("datatable", func(row *ordereddict.Dict) error {
 		if v, ok := row.Get(att); ok && v != nil {
-			b, _ = hex.DecodeString(v.(string))
-			return errors.New("stop")
+			b, _ := hex.DecodeString(v.(string))
+			keys = append(keys, newPek(b, key))
 		}
 		return nil
 	})
 
-	return b
+	return keys
 }
 
 func extractUac(v int64) *Flags {

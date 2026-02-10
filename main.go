@@ -66,7 +66,7 @@ Filter flags:
   -e, --regexp=PATTERN     filters output by pattern
 
 Archive flags: 
-  -P, --password=TEXT      uses archive password (7Z, RAR, ZIP)
+  -p, --password=TEXT      uses archive password (7Z, RAR, ZIP)
 
 Profile flags:
   -T, --threads=CORES      uses parallel threads

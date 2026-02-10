@@ -96,7 +96,9 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("dump: PEK %x\n", pek)
+		for i, k := range pek {
+			log.Printf("dump: PEK #%d %x\n", i, k)
+		}
 	}
 
 	for _, rec := range res {

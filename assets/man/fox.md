@@ -86,7 +86,7 @@ Filter Flags
 Archive Flags
 ------------
 
-**-P, --password**=_password_
+**-p, --password**=_password_
 
 :   Uses archive _password_ (only for **7Z**, **RAR**, **ZIP**).
 
