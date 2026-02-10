@@ -11,6 +11,10 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/storage"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/storage/parquet"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/storage/sqlite"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
@@ -26,7 +30,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/text/unique"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/hunter"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
 
@@ -41,7 +44,8 @@ Flags:
   -u, --uniq               shows logs that are unique 
   -j, --json               shows logs as JSON objects
   -J, --jsonl              shows logs as JSON lines
-  -Q, --sqlite             saves logs to SQLite3 DB (very slow)
+  -Q, --sqlite             saves logs to SQLite3 (very slow)
+  -P, --parquet            saves logs to Parquet (very slow)
 
 Hunter flags:
   -b, --block=SIZE         block size for event carving
@@ -65,12 +69,13 @@ Examples:
 `)
 
 type Hunt struct {
-	All    bool `short:"a"`
-	Sort   bool `short:"s"`
-	Uniq   bool `short:"u" xor:"uniq,dist"`
-	Json   bool `short:"j" xor:"json,jsonl"`
-	Jsonl  bool `short:"J" xor:"json,jsonl"`
-	Sqlite bool `short:"Q"`
+	All     bool `short:"a"`
+	Sort    bool `short:"s"`
+	Uniq    bool `short:"u" xor:"uniq,dist"`
+	Json    bool `short:"j" xor:"json,jsonl"`
+	Jsonl   bool `short:"J" xor:"json,jsonl"`
+	Sqlite  bool `short:"Q" xor:"sqlite,parquet"`
+	Parquet bool `short:"P" xor:"sqlite,parquet"`
 
 	// hunter
 	Block uint `short:"b" default:"65536"`
@@ -93,7 +98,7 @@ type Hunt struct {
 	Paths []string `arg:"" type:"path" optional:""`
 
 	// internal
-	db   *event.Database `kong:"-"`
+	db   storage.Storage `kong:"-"`
 	net  stream.Streamer `kong:"-"`
 	rule sigma.Rule      `kong:"-"`
 	uniq unique.Unique   `kong:"-"`
@@ -120,7 +125,11 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	}
 
 	if cmd.Sqlite {
-		cmd.db = event.NewDB(hunter.Database)
+		cmd.db = sqlite.New(hunter.Storage)
+	}
+
+	if cmd.Parquet {
+		cmd.db = parquet.New(hunter.Storage)
 	}
 
 	if cmd.Logstash {
@@ -242,7 +251,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			continue // not matched afterward
 		}
 
-		if !cmd.Sqlite {
+		if cmd.db == nil {
 			_, _ = fmt.Fprintln(cli.Stdout, line)
 		}
 
@@ -285,7 +294,7 @@ func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp) string {
 
 func (cmd *Hunt) upsert(e *event.Event) {
 	if cmd.db != nil {
-		err := cmd.db.Upsert(e)
+		err := cmd.db.Write(e)
 
 		if err != nil {
 			log.Println(err)
@@ -304,11 +313,23 @@ func (cmd *Hunt) stream(e *event.Event) {
 }
 
 func (cmd *Hunt) discard(cli *cli.Globals) {
-	if cmd.db != nil && !cli.NoReceipt {
-		err := receipt.Generate(hunter.Database)
+	if cmd.db == nil {
+		return
+	}
 
-		if err != nil {
-			log.Println(err)
-		}
+	err := cmd.db.Close()
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	if cli.NoReceipt {
+		return
+	}
+
+	err = receipt.Generate(cmd.db.String())
+
+	if err != nil {
+		log.Println(err)
 	}
 }

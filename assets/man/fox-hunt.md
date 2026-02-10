@@ -40,7 +40,11 @@ FLAGS
 
 **-Q, --sqlite**
 
-:   Saves logs to SQLite3 DB (very slow).
+:   Saves logs to SQLite3 (very slow).
+
+**-P, --parquet**
+
+:   Saves logs to Parquet (very slow).
 
 Hunter Flags
 ------------

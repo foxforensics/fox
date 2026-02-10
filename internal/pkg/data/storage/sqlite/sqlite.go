@@ -1,13 +1,17 @@
-package event
+package sqlite
 
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 	"maps"
 	"os"
 
 	_ "modernc.org/sqlite"
+
+	"github.com/cuhsat/fox/v4/internal/pkg/data/storage"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
 const schema = `
@@ -61,11 +65,11 @@ type Database struct {
 	sql  *sql.DB
 }
 
-func NewDB(path string) *Database {
+func New(path string) storage.Storage {
 	var err error
 
 	db := &Database{path: path}
-	db.sql, err = sql.Open("sqlite", "file:"+path)
+	db.sql, err = sql.Open("sqlite", fmt.Sprintf("file:%s.sqlite", path))
 
 	if err != nil {
 		log.Fatalln(err)
@@ -85,10 +89,10 @@ func NewDB(path string) *Database {
 }
 
 func (db *Database) String() string {
-	return db.path
+	return db.path + ".sqlite"
 }
 
-func (db *Database) Upsert(evt *Event) error {
+func (db *Database) Write(evt *event.Event) error {
 	res, err := db.sql.Exec(events,
 		evt.Time.UTC(),
 		evt.Host,
@@ -121,5 +125,9 @@ func (db *Database) Upsert(evt *Event) error {
 		}
 	}
 
+	return nil
+}
+
+func (db *Database) Close() error {
 	return nil
 }

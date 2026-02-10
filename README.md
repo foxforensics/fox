@@ -49,7 +49,7 @@ brew install cuhsat/fox/fox
   * [x] Filter events with [Sigma Rules](https://sigmahq.io/) syntax
   * [x] Filter anomalies using [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
   * [x] Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) and [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
-  * [x] Save as `JSON`, `JSON Lines` or `SQLite3`
+  * [x] Save as `JSON`, `JSON Lines`, `Parquet` or `SQLite3` 
 
 ## Examples
 Find occurrences in event logs:

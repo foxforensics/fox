@@ -17,7 +17,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
 
-const Database = "hunt.sqlite"
+const Storage = "hunt"
 
 var Block = 4096 * 16 // NTFS block size multiple
 var Local = []string{
