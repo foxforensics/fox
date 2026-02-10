@@ -56,7 +56,7 @@ Performance hashes
 
 Similarity hashes
 
-:   IMPHASH0, IMPHASH, SSDEEP, TLSH
+:   IMPHASH, IMPHASH0, SSDEEP, TLSH
 
 Windows specific
 

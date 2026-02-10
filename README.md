@@ -112,7 +112,7 @@ Performance Hashes
 > FNV-1, FNV-1a, Murmur3, SipHash, XXH32, XXH64, XXH3
 
 Similarity Hashes
-> ImpHash0, ImpHash, SSDeep, TLSH
+> ImpHash, ImpHash0, SSDeep, TLSH
 
 Windows Specific
 > LM, NT, PE Checksum  
