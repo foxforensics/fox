@@ -1,9 +1,9 @@
-package storage
+package store
 
 import "github.com/cuhsat/fox/v4/internal/pkg/types/event"
 
-type Storage interface {
+type Store interface {
 	String() string
-	Write(*event.Event) error
+	Store(*event.Event) error
 	Close() error
 }

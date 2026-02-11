@@ -10,7 +10,7 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/storage"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/store"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS Events (
 	Service TEXT NULL
 );
 
+CREATE UNIQUE INDEX idx_Events ON Events(Time, Host, Sequence);
+
 CREATE TABLE IF NOT EXISTS Fields (
     ID INTEGER PRIMARY KEY,
 	EventID INTEGER REFERENCES Events,
@@ -35,7 +37,7 @@ CREATE TABLE IF NOT EXISTS Fields (
     Value TEXT NULL
 );
 
-CREATE INDEX EventID ON Fields(EventID);
+CREATE UNIQUE INDEX ix_Fields ON Fields(EventID, Key);
 `
 
 const events = `
@@ -65,7 +67,7 @@ type Database struct {
 	sql  *sql.DB
 }
 
-func New(name string) storage.Storage {
+func New(name string) store.Store {
 	var err error
 
 	name = fmt.Sprintf("%s.sqlite", name)
@@ -94,7 +96,13 @@ func (db *Database) String() string {
 	return db.path
 }
 
-func (db *Database) Write(evt *event.Event) error {
+func (db *Database) Store(evt *event.Event) error {
+	tx, err := db.sql.Begin()
+
+	if err != nil {
+		return err
+	}
+
 	res, err := db.sql.Exec(events,
 		evt.Time.UTC(),
 		evt.Host,
@@ -108,6 +116,7 @@ func (db *Database) Write(evt *event.Event) error {
 	)
 
 	if err != nil {
+		_ = tx.Rollback()
 		return err
 	}
 
@@ -115,6 +124,7 @@ func (db *Database) Write(evt *event.Event) error {
 		id, err := res.LastInsertId()
 
 		if err != nil {
+			_ = tx.Rollback()
 			return err
 		}
 
@@ -122,12 +132,13 @@ func (db *Database) Write(evt *event.Event) error {
 			_, err := db.sql.Exec(fields, id, k, v)
 
 			if err != nil {
+				_ = tx.Rollback()
 				return err
 			}
 		}
 	}
 
-	return nil
+	return tx.Commit()
 }
 
 func (db *Database) Close() error {

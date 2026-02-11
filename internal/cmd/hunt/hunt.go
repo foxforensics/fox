@@ -11,9 +11,9 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/storage"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/storage/parquet"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/storage/sqlite"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/store"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/store/parquet"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/store/sqlite"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
@@ -44,8 +44,8 @@ Flags:
   -u, --uniq               shows logs that are unique 
   -j, --json               shows logs as JSON objects
   -J, --jsonl              shows logs as JSON lines
-  -Q, --sqlite             saves logs to SQLite3 (very slow)
-  -P, --parquet            saves logs to Parquet (very slow)
+  -P, --parquet            saves logs as Parquet (very fast)
+  -Q, --sqlite             saves logs as SQLite3 (very slow)
 
 Hunter flags:
   -b, --block=SIZE         block size for event carving
@@ -98,7 +98,7 @@ type Hunt struct {
 	Paths []string `arg:"" type:"path" optional:""`
 
 	// internal
-	db   storage.Storage `kong:"-"`
+	db   store.Store     `kong:"-"`
 	net  stream.Streamer `kong:"-"`
 	rule sigma.Rule      `kong:"-"`
 	uniq unique.Unique   `kong:"-"`
@@ -187,9 +187,11 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		register.Reader("vmdk", vmdk.Detect, vmdk.Reader)
 	}
 
-	cli.NoExtract = true // forced
-	cli.NoDeflate = true // forced
-	cli.NoConvert = true // forced
+	if !cli.NoStrict {
+		cli.NoExtract = true // forced
+		cli.NoDeflate = true // forced
+		cli.NoConvert = true // forced
+	}
 
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
@@ -205,7 +207,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 && cmd.db != nil {
-		log.Printf("hunt: using database %s\n", cmd.db)
+		log.Printf("hunt: using store %s\n", cmd.db)
 	}
 
 	if cli.Verbose > 1 {
@@ -255,7 +257,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			_, _ = fmt.Fprintln(cli.Stdout, line)
 		}
 
-		cmd.upsert(e)
+		cmd.store(e)
 
 		cmd.stream(e)
 
@@ -292,9 +294,9 @@ func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp) string {
 	return line
 }
 
-func (cmd *Hunt) upsert(e *event.Event) {
+func (cmd *Hunt) store(e *event.Event) {
 	if cmd.db != nil {
-		err := cmd.db.Write(e)
+		err := cmd.db.Store(e)
 
 		if err != nil {
 			log.Println(err)

@@ -38,13 +38,13 @@ FLAGS
 
 :   Shows logs as JSON lines.
 
-**-Q, --sqlite**
-
-:   Saves logs to SQLite3 (very slow).
-
 **-P, --parquet**
 
-:   Saves logs to Parquet (very slow).
+:   Saves logs as Parquet (very fast).
+
+**-Q, --sqlite**
+
+:   Saves logs as SQLite3 (very slow).
 
 Hunter Flags
 ------------
