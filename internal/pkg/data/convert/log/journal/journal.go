@@ -132,7 +132,7 @@ func newEvent(od *ordereddict.Dict) (*event.Event, error) {
 	}
 
 	if v, ok := evt.GetInt64("PRIORITY"); ok {
-		e.Severity = 10 - int8(v) // minimum 3
+		e.Severity = 10 - int(v) // minimum 3
 	}
 
 	d := ordereddict.NewDict()

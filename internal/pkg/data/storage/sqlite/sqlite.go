@@ -65,17 +65,19 @@ type Database struct {
 	sql  *sql.DB
 }
 
-func New(path string) storage.Storage {
+func New(name string) storage.Storage {
 	var err error
 
-	db := &Database{path: path}
-	db.sql, err = sql.Open("sqlite", fmt.Sprintf("file:%s.sqlite", path))
+	name = fmt.Sprintf("%s.sqlite", name)
+
+	db := &Database{path: name}
+	db.sql, err = sql.Open("sqlite", fmt.Sprintf("file:%s", name))
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	_, err = os.Stat(path)
+	_, err = os.Stat(name)
 
 	if errors.Is(err, os.ErrNotExist) {
 		_, err = db.sql.Exec(schema)
@@ -89,7 +91,7 @@ func New(path string) storage.Storage {
 }
 
 func (db *Database) String() string {
-	return db.path + ".sqlite"
+	return db.path
 }
 
 func (db *Database) Write(evt *event.Event) error {

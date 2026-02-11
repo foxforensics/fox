@@ -72,7 +72,7 @@ func (hec Hec) Stream(e *event.Event) error {
 	})
 }
 
-func toCEF(n int8) string {
+func toCEF(n int) string {
 	switch n {
 	case 10, 9:
 		return "CRITICAL"

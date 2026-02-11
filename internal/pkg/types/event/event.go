@@ -20,7 +20,7 @@ type Event struct {
 	Host     string            `json:"host,omitempty"`
 	User     string            `json:"user,omitempty"`
 	Message  string            `json:"message,omitempty"`
-	Severity int8              `json:"severity,omitempty"`
+	Severity int               `json:"severity,omitempty"`
 	Sequence string            `json:"sequence,omitempty"`
 	Source   string            `json:"source,omitempty"`
 	Category string            `json:"category,omitempty"`
