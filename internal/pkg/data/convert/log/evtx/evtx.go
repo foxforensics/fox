@@ -2,6 +2,7 @@ package evtx
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -59,7 +60,9 @@ func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 
 	if err != nil {
 		defer close(ch)
-		log.Println(err)
+		if !errors.Is(err, io.EOF) {
+			log.Println(err)
+		}
 		return ch
 	}
 

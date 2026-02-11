@@ -50,7 +50,7 @@ func Detect(b []byte) bool {
 }
 
 func Convert(b []byte) ([]byte, error) {
-	log.Println("warning: fortinet parser is experimental!")
+	log.Println("warning: fortinet parser is not yet finished!")
 
 	buf := bytes.NewBuffer(nil)
 

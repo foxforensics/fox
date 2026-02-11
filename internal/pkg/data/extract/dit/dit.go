@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"log"
 	"slices"
+	"strings"
 
 	"github.com/Velocidex/ordereddict"
 	"www.velocidex.com/golang/go-ese/parser"
@@ -78,6 +79,7 @@ type Flags struct {
 type Record struct {
 	User string `json:"user,omitempty"`
 	Rid  uint32 `json:"rid,omitempty"`
+	Sid  string `json:"sid,omitempty"`
 	Uac  *Flags `json:"uac,omitempty"`
 	Lm   string `json:"lm,omitempty"`
 	Nt   string `json:"nt,omitempty"`
@@ -190,13 +192,15 @@ func newHash(b, def, key1, key2 []byte, pek []Pek) Hash {
 }
 
 func newRecord(row *ordereddict.Dict, usr string, pek []Pek) (*Record, error) {
-	rid := extractRid(getBytesFromRow(row, userSid))
+	sid := getBytesFromRow(row, userSid)
+	rid := extractRid(sid)
 	uac, _ := row.GetInt64(userUac)
 	k1, k2 := deriveKey(rid)
 
 	return &Record{
 		User: usr,
 		Rid:  rid,
+		Sid:  formatSid(sid),
 		Uac:  extractUac(uac),
 		Lm:   hex.EncodeToString(newHash(getBytesFromRow(row, lmHash), defaultLm, k1, k2, pek)),
 		Nt:   hex.EncodeToString(newHash(getBytesFromRow(row, ntHash), defaultNt, k1, k2, pek)),
@@ -234,6 +238,27 @@ func getKeys(ctl *parser.Catalog, att string, key []byte) []Pek {
 	return keys
 }
 
+func formatSid(sid []byte) string {
+	var sb strings.Builder
+
+	// "sid": "S-1-5-21-3188177830-2933342842-421106997-1003",
+	sb.WriteString(fmt.Sprintf("S-%d-%d-%d", sid[0], sid[1], sid[6]))
+
+	l, s := sid[1], sid[8:]
+
+	for i := 0; i < int(l); i++ {
+		sb.WriteString(fmt.Sprintf("-%d", binary.BigEndian.Uint32(s[i*4:i*4+4])))
+	}
+
+	return sb.String()
+}
+
+func extractRid(sid []byte) uint32 {
+	l, s := sid[1], sid[8:]
+
+	return binary.BigEndian.Uint32(s[(l-1)*4 : (l-1)*4+4])
+}
+
 func extractUac(v int64) *Flags {
 	return &Flags{
 		Script:                       v|1 == v,
@@ -258,12 +283,6 @@ func extractUac(v int64) *Flags {
 		TrustedToAuthForDelegation:   v|16777216 == v,
 		PartialSecrets:               v|67108864 == v,
 	}
-}
-
-func extractRid(sid []byte) uint32 {
-	l, s := sid[1], sid[8:]
-
-	return binary.BigEndian.Uint32(s[(l-1)*4 : (l-1)*4+4])
 }
 
 func decryptDes(b, key1, key2 []byte) []byte {
