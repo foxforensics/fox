@@ -130,5 +130,7 @@ Checksums
 ---
 
 <div align="center">
-🦊 is released under the GPL-3.0
+🦊 is released under the <a href="LICENSE.md">GPL-3.0</a>
+<br/>
+<i>Veritas vos liberabit</i>
 </div>
