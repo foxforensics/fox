@@ -18,6 +18,8 @@ import (
 	"strings"
 
 	"github.com/cespare/xxhash"
+	"github.com/cuhsat/go-hash/skein"
+	"github.com/cuhsat/go-hash/streebog"
 	"github.com/cuhsat/go-krypto/has160"
 	"github.com/cuhsat/go-krypto/lsh256"
 	"github.com/cuhsat/go-krypto/lsh512"
@@ -39,6 +41,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/blake3"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/shake"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/xxh"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/impfuzzy"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/imphash"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/image"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/lm"
@@ -64,7 +67,10 @@ var Algorithms = []string{
 	types.FLETCHER4,
 	types.FNV1,
 	types.FNV1A,
+	types.GOST2012256,
+	types.GOST2012512,
 	types.HAS160,
+	types.IMPFUZZY,
 	types.IMPHASH,
 	types.IMPHASH0,
 	types.LSH256,
@@ -90,6 +96,10 @@ var Algorithms = []string{
 	types.SHA3384,
 	types.SHA3512,
 	types.SIPHASH,
+	types.SKEIN224,
+	types.SKEIN256,
+	types.SKEIN384,
+	types.SKEIN512,
 	types.SM3,
 	types.SSDEEP,
 	types.TLSH,
@@ -106,6 +116,8 @@ var secure = []string{
 	types.BLAKE2B512,
 	types.BLAKE3256,
 	types.BLAKE3512,
+	types.GOST2012256,
+	types.GOST2012512,
 	types.LSH256,
 	types.LSH512,
 	types.RIPEMD160,
@@ -118,7 +130,13 @@ var secure = []string{
 	types.SHA3256,
 	types.SHA3384,
 	types.SHA3512,
+	types.SKEIN224,
+	types.SKEIN256,
+	types.SKEIN384,
+	types.SKEIN512,
 	types.SM3,
+	types.STREEBOG256,
+	types.STREEBOG512,
 	types.WHIRLPOOL,
 }
 
@@ -138,6 +156,8 @@ func MustSum(algo string, data []byte) string {
 
 func Sum(algo string, data []byte) (string, error) {
 	var imp hash.Hash
+
+	ssdeep.Force = true
 
 	switch strings.ToLower(algo) {
 	case types.ADLER32:
@@ -172,8 +192,14 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = fnv.New128()
 	case types.FNV1A:
 		imp = fnv.New128a()
+	case types.GOST2012256, types.STREEBOG256:
+		imp = streebog.New256()
+	case types.GOST2012512, types.STREEBOG512:
+		imp = streebog.New512()
 	case types.HAS160:
 		imp = has160.New()
+	case types.IMPFUZZY:
+		imp = impfuzzy.New()
 	case types.IMPHASH:
 		imp = imphash.New()
 	case types.IMPHASH0:
@@ -226,6 +252,14 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = shake.New256()
 	case types.SIPHASH:
 		imp = siphash.New(make([]byte, 16)) // SipHash-2-4 with zero key
+	case types.SKEIN224:
+		imp = skein.NewHash224()
+	case types.SKEIN256:
+		imp = skein.NewHash256()
+	case types.SKEIN384:
+		imp = skein.NewHash384()
+	case types.SKEIN512:
+		imp = skein.NewHash512()
 	case types.SM3:
 		imp = sm3.New()
 	case types.SSDEEP:
@@ -257,7 +291,7 @@ func Sum(algo string, data []byte) (string, error) {
 	}
 
 	switch algo {
-	case types.SSDEEP:
+	case types.SSDEEP, types.IMPFUZZY:
 		return fmt.Sprintf("%s", data), nil
 	case types.TLSH:
 		return fmt.Sprintf("T1%x", data), nil

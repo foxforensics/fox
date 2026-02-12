@@ -1,47 +1,42 @@
-// Package imphash based on https://github.com/omarghader/pefile-go/blob/master/pe/pe.go
-package imphash
+package impfuzzy
 
 import (
 	"bytes"
-	"crypto/md5"
 	"debug/pe"
 	"errors"
 	"fmt"
 	"hash"
-	"slices"
+	"log"
 	"strings"
+
+	"github.com/glaslos/ssdeep"
 
 	intern "github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
 )
 
 var ErrNotSupported = errors.New("file type not supported")
 
-type ImpHash struct {
-	sort bool
-	buf  []string
+type ImpFuzzy struct {
+	buf []string
 }
 
 func New() hash.Hash {
-	return &ImpHash{sort: false}
+	return new(ImpFuzzy)
 }
 
-func NewStable() hash.Hash {
-	return &ImpHash{sort: true}
+func (h *ImpFuzzy) BlockSize() int {
+	return h.BlockSize()
 }
 
-func (h *ImpHash) BlockSize() int {
-	return md5.BlockSize // from underlying MD5
+func (h *ImpFuzzy) Size() int {
+	return h.Size()
 }
 
-func (h *ImpHash) Size() int {
-	return md5.Size
-}
-
-func (h *ImpHash) Reset() {
+func (h *ImpFuzzy) Reset() {
 	h.buf = h.buf[:0]
 }
 
-func (h *ImpHash) Write(b []byte) (n int, err error) {
+func (h *ImpFuzzy) Write(b []byte) (n int, err error) {
 	if !intern.Detect(b) {
 		return 0, ErrNotSupported
 	}
@@ -62,10 +57,6 @@ func (h *ImpHash) Write(b []byte) (n int, err error) {
 		return 0, err
 	}
 
-	if h.sort {
-		slices.Sort(iat)
-	}
-
 	rep := strings.NewReplacer(".dll", "", ".ocx", "", ".sys", "")
 
 	for _, e := range iat {
@@ -81,8 +72,12 @@ func (h *ImpHash) Write(b []byte) (n int, err error) {
 	return len(b), nil
 }
 
-func (h *ImpHash) Sum(_ []byte) []byte {
-	sum := md5.Sum([]byte(strings.Join(h.buf, ",")))
+func (h *ImpFuzzy) Sum(_ []byte) []byte {
+	sum, err := ssdeep.FuzzyBytes([]byte(strings.Join(h.buf, ",")))
 
-	return sum[:]
+	if err != nil {
+		log.Println(err)
+	}
+
+	return []byte(sum)
 }

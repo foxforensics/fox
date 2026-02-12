@@ -26,7 +26,6 @@
   * https://github.com/walles/moor
 * Add support for salted/keyed hashes?
   * `-S, --salt` flag
-* Add GOST hash support?
 * Add Telf hash support?
   * https://github.com/trendmicro/telfhash
 * Add LZXPRESS to own ESE fork?

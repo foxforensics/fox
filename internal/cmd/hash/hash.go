@@ -31,8 +31,14 @@ Remarks:
 Cryptographic hashes (BLAKE family):
   BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
 
+Cryptographic hashes (GOST family):
+  GOST2012-256, GOST2012-512
+
 Cryptographic hashes (SHA family):
   SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512
+
+Cryptographic hashes (SKEIN family):
+  SKEIN-224, SKEIN-256, SKEIN-384, SKEIN-512
 
 Cryptographic hashes (MD family):
   MD2, MD4, MD5, MD6
@@ -44,7 +50,7 @@ Performance hashes:
   FNV-1, FNV-1A, MURMUR3, SIPHASH, XXH32, XXH64, XXH3
 
 Similarity hashes:
-  IMPHASH, IMPHASH0, SSDEEP, TLSH
+  IMPFUZZY, IMPHASH, IMPHASH0, SSDEEP, TLSH
 
 Windows specific:
   LM, NT, PE Checksum
