@@ -2,7 +2,6 @@ package ewf
 
 import (
 	"io"
-	"os"
 
 	"github.com/Velocidex/go-ewf/parser"
 
@@ -15,12 +14,12 @@ func Detect(b []byte) bool {
 	})
 }
 
-func Reader(f *os.File) (io.ReaderAt, error) {
-	r, err := parser.OpenEWFFile(nil, f)
+func Reader(r ...io.ReaderAt) (io.ReaderAt, error) {
+	v, err := parser.OpenEWFFile(nil, r...)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return r, nil
+	return v, nil
 }
