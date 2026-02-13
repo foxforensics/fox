@@ -20,7 +20,7 @@ type Heap struct {
 	Size uint64 // heap size
 
 	m mmap.MMap   // memory map
-	f *os.File    // file handle
+	f []*os.File  // file handles
 	r io.ReaderAt // file reader
 }
 
@@ -33,7 +33,7 @@ func FromData(name, hint string, size uint64, m mmap.MMap, l *types.Limits) *Hea
 	}
 }
 
-func FromFile(name, hint string, size uint64, f *os.File, r io.ReaderAt) *Heap {
+func FromFile(name, hint string, size uint64, r io.ReaderAt, f ...*os.File) *Heap {
 	return &Heap{
 		Name: name,
 		Hint: hint,
@@ -70,15 +70,16 @@ func (h *Heap) Discard() {
 	// unmap memory
 	if h.m != nil {
 		mmap.Unmap(h.m)
-		h.m = nil
 	}
 
-	// close file
-	if h.f != nil {
-		_ = h.f.Close()
-		h.f = nil
-		h.r = nil
+	// close files
+	for _, f := range h.f {
+		_ = f.Close()
 	}
+
+	h.f = h.f[:0]
+	h.r = nil
+	h.m = nil
 
 	h.Size = 0
 

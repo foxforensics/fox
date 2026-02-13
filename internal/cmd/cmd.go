@@ -228,8 +228,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		Password: cli.Password,
 		Parallel: cli.Threads,
 		Verbose:  cli.Verbose,
-		Strict:   cli.NoStrict,
-		Warnings: cli.NoWarnings,
+		Strict:   !cli.NoStrict,
+		Warnings: !cli.NoWarnings,
 	})
 
 	if cli.DryRun {

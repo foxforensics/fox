@@ -16,6 +16,7 @@ import (
 	"github.com/sourcegraph/conc"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/ewf"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
@@ -42,17 +43,15 @@ type Loader struct {
 	sync.RWMutex
 	opts  *Options
 	size  int64
+	later []disk
 	paths []string
-	queue []handle
 	heaps chan *heap.Heap
 }
 
-type handle struct {
-	f    *os.File
-	r    data.Reader
-	name string
+type disk struct {
+	file *os.File
+	size int64
 	path string
-	size uint64
 }
 
 func New(opts *Options) *Loader {
@@ -82,10 +81,9 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 	go func() {
 		defer close(ldr.heaps)
 
-		// collect file handles or process data directly
 		for _, path := range paths {
 			if path == stdin {
-				if !isFilePiped(os.Stdin) {
+				if !isPiped(os.Stdin) {
 					log.Fatalln("stdin not open")
 				}
 
@@ -110,16 +108,20 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 			ldr.loadPath(path, part)
 		}
 
-		// combine file handles for some readers
-		for _, e := range ldr.queue {
-			r, err := e.r(e.f)
+		// combine file for ewf disks
+		if path, is := isCoherent(ldr.later); is {
+			ldr.combineFile(path)
+		}
+
+		// read remaining ewf disks
+		for _, e := range ldr.later {
+			r, err := ewf.Reader(e.file)
 
 			if err != nil {
 				log.Println(err)
-				continue
 			}
 
-			ldr.createFile(e.path, "", e.size, e.f, r)
+			ldr.createFile(e.path, "", uint64(e.size), r, e.file)
 		}
 
 		if ldr.opts.Warnings && float32(memory.FreeMemory()/memory.TotalMemory()) > limit {
@@ -261,13 +263,37 @@ func (ldr *Loader) peekFile(path string) []byte {
 	return b
 }
 
+func (ldr *Loader) combineFile(path string) {
+	var file []*os.File
+	var size int64
+
+	for _, h := range ldr.later {
+		file = append(file, h.file)
+		size += h.size
+	}
+
+	r, err := ewf.Combine(file...)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	if ldr.opts.Verbose > 1 {
+		log.Printf("disk combined as %s (%d)\n", path, len(ldr.later))
+	}
+
+	ldr.later = ldr.later[:0]
+
+	ldr.createFile(path, "", uint64(size), r, file...)
+}
+
 func (ldr *Loader) processFile(path string) bool {
 	b := ldr.peekFile(path) // peek at file header
 
 	for _, e := range register.Readers {
 		if e.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("disk detected %s\n", e.Name)
+				log.Printf("disk detected as possibly %s\n", e.Name)
 			}
 
 			if ldr.opts.Warnings && e.Name == "ewf" {
@@ -288,13 +314,20 @@ func (ldr *Loader) processFile(path string) bool {
 				break
 			}
 
-			ldr.queue = append(ldr.queue, handle{
-				f:    f,
-				r:    e.Reader,
-				name: e.Name,
-				path: path,
-				size: uint64(s.Size()),
-			})
+			// combine ewf disks later
+			if e.Name == "ewf" {
+				ldr.later = append(ldr.later, disk{f, s.Size(), path})
+				return true
+			}
+
+			r, err := e.Reader(f)
+
+			if err != nil {
+				log.Println(err)
+				continue
+			}
+
+			ldr.createFile(path, "", uint64(s.Size()), r, f)
 
 			return true
 		}
@@ -347,7 +380,7 @@ func (ldr *Loader) extractData(path, part string, b []byte) bool {
 	for _, a := range register.Archives {
 		if a.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("archive detected %s\n", a.Name)
+				log.Printf("archive detected as possibly %s\n", a.Name)
 			}
 
 			var wg conc.WaitGroup
@@ -355,7 +388,7 @@ func (ldr *Loader) extractData(path, part string, b []byte) bool {
 			for _, e := range a.Extract(b, path, ldr.opts.Password) {
 				wg.Go(func() {
 					if ldr.opts.Verbose > 2 {
-						log.Printf("stream detected %s\n", e.Path)
+						log.Printf("stream detected as %s\n", e.Path)
 					}
 
 					ldr.processData(e.Path, part, e.Data)
@@ -375,7 +408,7 @@ func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
 	for _, e := range register.Deflates {
 		if e.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("deflate detected %s\n", e.Name)
+				log.Printf("deflate detected as possibly %s\n", e.Name)
 			}
 
 			r, err := e.Deflate(b)
@@ -399,7 +432,7 @@ func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
 	for _, e := range register.Converts {
 		if e.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("convert detected %s\n", e.Name)
+				log.Printf("convert detected as possibly %s\n", e.Name)
 			}
 
 			r, err := e.Convert(b)
@@ -423,7 +456,7 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 	for _, e := range register.Formats {
 		if e.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("format detected %s\n", e.Name)
+				log.Printf("format detected as possibly %s\n", e.Name)
 			}
 
 			r, err := e.Format(b)
@@ -443,41 +476,12 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 	return b, false
 }
 
-/*
-func (ldr *Loader) openFile(path string) *os.File {
-	b := ldr.peekFile(path) // peek at file header
-
-	for _, e := range register.Readers {
-		if e.Detect(b) {
-			if ldr.opts.Verbose > 1 {
-				log.Printf("disk detected %s\n", e.Name)
-			}
-
-			if ldr.opts.Warnings && e.Name == "ewf" {
-				log.Println("warning: ewf support is experimental!")
-			}
-
-			f, err := os.Open(path)
-
-			if err != nil {
-				log.Println(err)
-				return nil
-			}
-
-			return f
-		}
-	}
-
-	return nil
-}
-*/
-
 func (ldr *Loader) createData(path, hint string, size uint64, b []byte) {
 	ldr.createHeap(path, size, heap.FromData(path, hint, size, b, ldr.opts.Limit))
 }
 
-func (ldr *Loader) createFile(path, hint string, size uint64, f *os.File, r io.ReaderAt) {
-	ldr.createHeap(path, size, heap.FromFile(path, hint, size, f, r))
+func (ldr *Loader) createFile(path, hint string, size uint64, r io.ReaderAt, f ...*os.File) {
+	ldr.createHeap(path, size, heap.FromFile(path, hint, size, r, f...))
 }
 
 func (ldr *Loader) createHeap(path string, size uint64, h *heap.Heap) {
@@ -497,7 +501,29 @@ func (ldr *Loader) createHeap(path string, size uint64, h *heap.Heap) {
 	}
 }
 
-func isFilePiped(f *os.File) bool {
+func isCoherent(disk []disk) (string, bool) {
+	var last, name, ext string
+
+	if len(disk) < 2 {
+		return "", false
+	}
+
+	for _, d := range disk {
+		ext = filepath.Ext(d.path)
+		name = filepath.Base(d.path)
+		name = name[0 : len(name)-len(ext)]
+
+		if last != "" && last != name {
+			return "", false
+		}
+
+		last = name
+	}
+
+	return name, true
+}
+
+func isPiped(f *os.File) bool {
 	fi, err := f.Stat()
 
 	if err != nil {
@@ -505,22 +531,4 @@ func isFilePiped(f *os.File) bool {
 	}
 
 	return (fi.Mode() & os.ModeCharDevice) != os.ModeCharDevice
-}
-
-func isCoherent(paths []string) bool {
-	var l, p, e string
-
-	for _, path := range paths {
-		e = filepath.Ext(path)
-		p = filepath.Base(path)
-		p = path[0 : len(path)-len(e)]
-
-		if p == l {
-			return false
-		}
-
-		l = p
-	}
-
-	return true
 }
