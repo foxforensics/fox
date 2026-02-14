@@ -2,6 +2,10 @@ package text
 
 import (
 	"fmt"
+	"log"
+	"math"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"golang.org/x/term"
@@ -20,6 +24,8 @@ const (
 	FSI = 0x2068
 	PDI = 0x2069
 )
+
+var isValue = regexp.MustCompile("")
 
 func Line() string {
 	return strings.Repeat("─", width())
@@ -81,14 +87,44 @@ func Humanize(i int64) string {
 		return fmt.Sprintf("%db", i)
 	}
 
-	d, e := m, 0
+	v, e := m, 0
 
 	for n := i / m; n >= m; n /= m {
-		d *= m
+		v *= m
 		e++
 	}
 
-	return fmt.Sprintf("%.1f%c", float64(i)/float64(d), "kmgtpezyrq"[e])
+	return fmt.Sprintf("%.1f%c", float64(i)/float64(v), "kmgtpezyrq"[e])
+}
+
+func Mechanize(s string) int64 {
+	s = strings.ToLower(s)
+
+	if !isValue.MatchString(`^[-+]?\d+[bkmgtpezyrq]?$`) {
+		log.Fatalln("value invalid")
+	}
+
+	unit := s[len(s)-1]
+
+	has := unit < '0' || unit > '9'
+
+	if has {
+		s = s[:len(s)-1]
+	}
+
+	v, err := strconv.Atoi(s)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if !has {
+		return int64(v)
+	}
+
+	exp := float64(strings.IndexByte("bkmgtpezyrq", unit))
+
+	return int64(v * int(math.Pow(1024, exp)))
 }
 
 func width() int {

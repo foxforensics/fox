@@ -7,6 +7,8 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/alecthomas/kong"
+
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
@@ -35,7 +37,7 @@ Examples:
 
 type List struct {
 	Sort  bool    `short:"s"`
-	Block uint64  `short:"b"`
+	Block string  `short:"b"`
 	Min   float64 `short:"n" default:"0.0"`
 	Max   float64 `short:"x" default:"1.0"`
 
@@ -44,11 +46,24 @@ type List struct {
 
 	// paths
 	Paths []string `arg:"" name:"path" type:"path" optional:""`
+
+	// internal
+	block uint64 `kong:"-"`
 }
 
 func (cmd *List) Validate() error {
 	if cmd.Min > cmd.Max {
 		log.Fatalln("invalid range")
+	}
+
+	return nil
+}
+
+func (cmd *List) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+	if len(cmd.Block) > 0 {
+		cmd.block = uint64(text.Mechanize(cmd.Block))
+
+		println(cmd.block)
 	}
 
 	return nil
@@ -70,7 +85,7 @@ func (cmd *List) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	for h := range ch {
-		var n = cmd.Block
+		var n = cmd.block
 		var off int
 
 		if n == 0 {
@@ -80,7 +95,7 @@ func (cmd *List) Run(cli *cli.Globals) error {
 		if h.Size == 0 {
 			title := h.String()
 
-			if cmd.Block > 0 {
+			if cmd.block > 0 {
 				title = "[00000000] " + title
 			}
 
@@ -108,7 +123,7 @@ func (cmd *List) Run(cli *cli.Globals) error {
 					size = text.Humanize(int64(len(block)))
 				}
 
-				if cmd.Block > 0 {
+				if cmd.block > 0 {
 					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %.10fe  %s %s\n", l, size, e, start, title)
 				} else {
 					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %.10fe  %s\n", l, size, e, title)
