@@ -13,7 +13,7 @@ import (
 
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/pbnjay/memory"
-	"github.com/sourcegraph/conc"
+	"github.com/sourcegraph/conc/pool"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/ewf"
@@ -155,7 +155,7 @@ func (ldr *Loader) loadPath(path, part string) {
 		return
 	}
 
-	var wg conc.WaitGroup
+	p := pool.New().WithMaxGoroutines(ldr.opts.Parallel)
 
 	for _, path := range match {
 		fi, err := os.Stat(path)
@@ -165,7 +165,7 @@ func (ldr *Loader) loadPath(path, part string) {
 			continue
 		}
 
-		wg.Go(func() {
+		p.Go(func() {
 			if fi.IsDir() {
 				ldr.loadDir(path, part)
 			} else {
@@ -174,7 +174,7 @@ func (ldr *Loader) loadPath(path, part string) {
 		})
 	}
 
-	wg.Wait()
+	p.Wait()
 }
 
 func (ldr *Loader) loadDir(path, part string) {
@@ -185,17 +185,17 @@ func (ldr *Loader) loadDir(path, part string) {
 		return
 	}
 
-	var wg conc.WaitGroup
+	p := pool.New().WithMaxGoroutines(ldr.opts.Parallel)
 
 	for _, f := range dir {
 		if !f.IsDir() {
-			wg.Go(func() {
+			p.Go(func() {
 				ldr.loadFile(filepath.Join(path, f.Name()), part)
 			})
 		}
 	}
 
-	wg.Wait()
+	p.Wait()
 }
 
 func (ldr *Loader) loadFile(path, part string) {
@@ -383,10 +383,10 @@ func (ldr *Loader) extractData(path, part string, b []byte) bool {
 				log.Printf("archive detected as possibly %s\n", a.Name)
 			}
 
-			var wg conc.WaitGroup
+			p := pool.New().WithMaxGoroutines(ldr.opts.Parallel)
 
 			for _, e := range a.Extract(b, path, ldr.opts.Password) {
-				wg.Go(func() {
+				p.Go(func() {
 					if ldr.opts.Verbose > 2 {
 						log.Printf("stream detected as %s\n", e.Path)
 					}
@@ -395,7 +395,7 @@ func (ldr *Loader) extractData(path, part string, b []byte) bool {
 				})
 			}
 
-			wg.Wait()
+			p.Wait()
 
 			return true
 		}

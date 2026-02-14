@@ -11,16 +11,15 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/store"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/store/parquet"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/store/sqlite"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/ewf"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/vhdx"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/vmdk"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/store"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/store/parquet"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/store/sqlite"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/ecs"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/hec"
@@ -30,6 +29,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/text/unique"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/hunter"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
 

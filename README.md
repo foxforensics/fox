@@ -125,12 +125,6 @@ Checksums
 
 ---
 
-*Disclaimer: This code was developed without the use of AI tooling and therefor does not contain any AI generated code, test nor documentation. Furthermore, this code does not contain, employ or utilize AI tools in any other form. All data processed will not be shared with third parties.*
-
----
-
 <div align="center">
 🦊 is released under the <a href="LICENSE.md">GPL-3.0</a>
-<br/>
-<i>Veritas vos liberabit</i>
 </div>

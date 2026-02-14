@@ -8,7 +8,6 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/sourcegraph/conc"
 	"github.com/sourcegraph/conc/pool"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
@@ -93,17 +92,17 @@ func (htr *Hunter) sort() <-chan *event.Event {
 func (htr *Hunter) carve(h *heap.Heap) {
 	defer h.Discard()
 
-	var wg conc.WaitGroup
+	p := pool.New().WithMaxGoroutines(htr.opts.Parallel)
 
-	wg.Go(func() {
+	p.Go(func() {
 		htr.carveEvtx(h)
 	})
 
-	wg.Go(func() {
+	p.Go(func() {
 		htr.carveJournal(h)
 	})
 
-	wg.Wait()
+	p.Wait()
 }
 
 func (htr *Hunter) carveEvtx(h *heap.Heap) {

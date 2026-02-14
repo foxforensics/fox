@@ -13,10 +13,17 @@
 * ~~Done~~
 
 ## 5. Ideas
+* Add advanced examples?
+  * `fox test -pinfected files.zip:sample.exe`
+* Add Windows resources?
+  * Metadata
+  * Icon
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
 * Add CEF syntax highlighting (pygments)
 * Add global flag to change chroma style
+* Add MSI release
+  * https://dev.to/abdfnx/how-to-create-a-msi-file-for-go-program-je
 * Add different endpoints for test
   * https://github.com/woanware/lookuper
   * HaveIBeenHacked for mails

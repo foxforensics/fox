@@ -19,18 +19,22 @@ Prints file infos and entropy.
 fox list [FLAGS...] <PATHS...>
 
 Flags:
-  -b, --block=SIZE         block size for calculations
-  -n, --min=VALUE          minimum entropy value (default: 0.0)
-  -x, --max=VALUE          maximal entropy value (default: 1.0)
+  -s, --sort               sorts files by path (slower)
+  -b, --block=SIZE         uses block size for analysis
+
+Filter flags:
+  -n, --min=VALUE          filters for minimum entropy value (default: 0.0)
+  -x, --max=VALUE          filters for maximal entropy value (default: 1.0)
 
 Format flags:
-  -H, --human              format size in human-readable units
+  -H, --human              formats size in human-readable units
 
 Examples:
   $ fox list -n0.9 ./**/*
 `)
 
 type List struct {
+	Sort  bool    `short:"s"`
 	Block uint64  `short:"b"`
 	Min   float64 `short:"n" default:"0.0"`
 	Max   float64 `short:"x" default:"1.0"`
@@ -56,6 +60,10 @@ func (cmd *List) Run(cli *cli.Globals) error {
 		return nil
 	}
 
+	if cmd.Sort {
+		cli.Threads = 1 // single threaded
+	}
+
 	cli.NoConvert = true // forced
 
 	ch := cli.Load(cmd.Paths)
@@ -70,7 +78,14 @@ func (cmd *List) Run(cli *cli.Globals) error {
 		}
 
 		if h.Size == 0 {
-			_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s\n", 0, 0, 0.0, text.Hide(h.String()))
+			title := h.String()
+
+			if cmd.Block > 0 {
+				title = "[00000000] " + title
+			}
+
+			_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s\n", 0, 0, 0.0, text.Hide(title))
+
 			h.Discard()
 			continue
 		}
@@ -87,16 +102,16 @@ func (cmd *List) Run(cli *cli.Globals) error {
 			if e >= cmd.Min && e <= cmd.Max {
 				size := fmt.Sprintf("%db", len(block))
 				title := text.Hide(h.String())
-				start := text.Hide(fmt.Sprintf("@ 0x%x", off))
+				start := text.Hide(fmt.Sprintf("[%08x]", off))
 
 				if cmd.Human {
 					size = text.Humanize(int64(len(block)))
 				}
 
 				if cmd.Block > 0 {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10s  %.10fe  %s %s\n", l, size, e, title, start)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %.10fe  %s %s\n", l, size, e, start, title)
 				} else {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10s  %.10fe  %s\n", l, size, e, title)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %.10fe  %s\n", l, size, e, title)
 				}
 			}
 
