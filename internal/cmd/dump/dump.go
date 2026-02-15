@@ -131,9 +131,9 @@ func (cmd *Dump) format(rec *dit.Record, re *regexp.Regexp) string {
 	case cmd.Json:
 		line = text.ColorizeStringAs(rec.ToJSON(), "json")
 	case cmd.OnlyNt:
-		line = rec.Nt
+		line = rec.NtHash
 	case cmd.OnlyLm:
-		line = rec.Lm
+		line = rec.LmHash
 	default:
 		line = rec.String()
 	}

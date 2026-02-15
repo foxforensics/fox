@@ -19,6 +19,7 @@ import (
 	"log"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/Velocidex/ordereddict"
 	"www.velocidex.com/golang/go-ese/parser"
@@ -26,13 +27,16 @@ import (
 
 // row attributes
 const (
-	userRow  = "ATTm590045"
-	userSid  = "ATTr589970"
-	userUac  = "ATTj589832"
-	userType = "ATTj590126"
-	ntHash   = "ATTk589914"
-	lmHash   = "ATTk589879"
-	pekBin   = "ATTk590689"
+	accType = "ATTj590126"
+	userRow = "ATTm590045"
+	userSid = "ATTr589970"
+	userUac = "ATTj589832"
+	userExp = "ATTq589983"
+	lastLog = "ATTq589876"
+	lastPwd = "ATTq589920"
+	ntHash  = "ATTk589914"
+	lmHash  = "ATTk589879"
+	pekBin  = "ATTk590689"
 )
 
 // user types
@@ -51,6 +55,12 @@ var defaultNt = []byte{0x31, 0xD6, 0xCF, 0xE0, 0xD1, 0x6A, 0xE9, 0x31, 0xB7, 0x3
 type Pek []byte
 
 type Hash []byte
+
+type Times struct {
+	Expires    time.Time `json:"expires,omitempty"`
+	LastLogin  time.Time `json:"last_login,omitempty"`
+	LastChange time.Time `json:"last_change,omitempty"`
+}
 
 type Flags struct {
 	Script                       bool `json:"script,omitempty"`
@@ -77,20 +87,21 @@ type Flags struct {
 }
 
 type Record struct {
-	User string `json:"user,omitempty"`
-	Rid  uint32 `json:"rid,omitempty"`
-	Sid  string `json:"sid,omitempty"`
-	Uac  *Flags `json:"uac,omitempty"`
-	Lm   string `json:"lm,omitempty"`
-	Nt   string `json:"nt,omitempty"`
+	Username string `json:"username,omitempty"`
+	Rid      uint32 `json:"rid,omitempty"`
+	Sid      string `json:"sid,omitempty"`
+	Times    *Times `json:"times,omitempty"`
+	Flags    *Flags `json:"flags,omitempty"`
+	LmHash   string `json:"lm_hash,omitempty"`
+	NtHash   string `json:"nt_hash,omitempty"`
 }
 
 func (rec *Record) String() string {
 	return fmt.Sprintf("%s:%d:%s:%s:::",
-		rec.User,
+		rec.Username,
 		rec.Rid,
-		rec.Lm,
-		rec.Nt,
+		rec.LmHash,
+		rec.NtHash,
 	)
 }
 
@@ -125,7 +136,7 @@ func Extract(b, bootkey []byte) ([]Record, []Pek, error) {
 
 	_ = ctl.DumpTable("datatable", func(row *ordereddict.Dict) error {
 		if v, ok := row.Get(userRow); ok && v != nil {
-			t, _ := row.GetInt64(userType)
+			t, _ := row.GetInt64(accType)
 
 			if slices.Contains(userTypes, t) {
 				rec, err := newRecord(row, v.(string), keys)
@@ -198,12 +209,13 @@ func newRecord(row *ordereddict.Dict, usr string, pek []Pek) (*Record, error) {
 	k1, k2 := deriveKey(rid)
 
 	return &Record{
-		User: usr,
-		Rid:  rid,
-		Sid:  formatSid(sid),
-		Uac:  extractUac(uac),
-		Lm:   hex.EncodeToString(newHash(getBytesFromRow(row, lmHash), defaultLm, k1, k2, pek)),
-		Nt:   hex.EncodeToString(newHash(getBytesFromRow(row, ntHash), defaultNt, k1, k2, pek)),
+		Username: usr,
+		Rid:      rid,
+		Sid:      formatSid(sid),
+		Times:    extractTimes(row),
+		Flags:    extractFlags(uac),
+		LmHash:   hex.EncodeToString(newHash(getBytesFromRow(row, lmHash), defaultLm, k1, k2, pek)),
+		NtHash:   hex.EncodeToString(newHash(getBytesFromRow(row, ntHash), defaultNt, k1, k2, pek)),
 	}, nil
 }
 
@@ -259,7 +271,17 @@ func extractRid(sid []byte) uint32 {
 	return binary.BigEndian.Uint32(s[(l-1)*4 : (l-1)*4+4])
 }
 
-func extractUac(v int64) *Flags {
+func extractTimes(row *ordereddict.Dict) *Times {
+	println(fmt.Sprintf("%v", row))
+
+	return &Times{
+		Expires:    formatUtc(row.GetInt64(userExp)),
+		LastLogin:  formatUtc(row.GetInt64(lastLog)),
+		LastChange: formatUtc(row.GetInt64(lastPwd)),
+	}
+}
+
+func extractFlags(v int64) *Flags {
 	return &Flags{
 		Script:                       v|1 == v,
 		AccountDisable:               v|2 == v,
@@ -380,6 +402,25 @@ func deriveKey(rid uint32) ([]byte, []byte) {
 	}
 
 	return transformKey(b1), transformKey(b2)
+}
+
+func formatUtc(v int64, _ bool) time.Time {
+	b := make([]byte, 8)
+	binary.LittleEndian.PutUint64(b, uint64(v))
+
+	low := binary.LittleEndian.Uint32(b[:4])
+	high := binary.LittleEndian.Uint32(b[4:])
+
+	// 100-nanosecond intervals since January 1, 1601
+	nsec := int64(high)<<32 + int64(low)
+	// change starting time to the Epoch (00:00:00 UTC, January 1, 1970)
+	nsec -= 116444736000000000
+	// convert into nanoseconds
+	nsec *= 100
+	//return nsec
+	return time.Unix(0, nsec).UTC()
+
+	// 2016-07-10 12:56 / 1468155360000 ms
 }
 
 func transformKey(b []byte) []byte {
