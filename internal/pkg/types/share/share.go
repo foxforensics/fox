@@ -58,15 +58,15 @@ func New(addr string) *Share {
 }
 
 func (shr *Share) String() string {
-	pass := shr.pass
+	pw := shr.pass
 
-	if len(pass) > 0 {
-		pass = "***"
+	if len(pw) > 0 {
+		pw = "********"
 	}
 
 	return fmt.Sprintf("smb://%s:%s@%s/%s",
 		shr.user,
-		pass,
+		pw,
 		shr.host,
 		shr.path,
 	)

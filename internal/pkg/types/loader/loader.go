@@ -6,8 +6,10 @@ import (
 	"io"
 	"io/fs"
 	"log"
+	"maps"
 	"os"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strings"
 	"sync"
@@ -26,9 +28,11 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/share"
 )
 
-const stdin = "-"
-const limit = 0.95
-const peek = 8
+const (
+	stdin = "-"
+	limit = 0.95
+	peek  = 8
+)
 
 type Options struct {
 	Limit    *types.Limits
@@ -43,24 +47,25 @@ type Options struct {
 
 type Loader struct {
 	sync.RWMutex
-	size  int64
-	opts  *Options
-	later []disk
-	paths []string
-	share *share.Share
-	heaps chan *heap.Heap
+	size   int64
+	opts   *Options
+	later  []disk
+	paths  []string
+	heaps  chan *heap.Heap
+	mounts map[string]*share.Share
 }
 
 type disk struct {
-	file *os.File
+	file types.File
 	size int64
 	path string
 }
 
 func New(opts *Options) *Loader {
 	return &Loader{
-		opts:  opts,
-		heaps: make(chan *heap.Heap, opts.Parallel),
+		opts:   opts,
+		heaps:  make(chan *heap.Heap, opts.Parallel),
+		mounts: make(map[string]*share.Share),
 	}
 }
 
@@ -103,13 +108,15 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 			path, part := data.SplitPart(path)
 
 			if isRemote(path) {
-				ldr.share = share.New(path)
+				mnt := share.New(path)
+
+				ldr.mounts[path] = mnt
 
 				if ldr.opts.Verbose > 0 {
-					log.Printf("use network share %s\n", ldr.share.String())
+					log.Printf("mount network share %s\n", mnt.String())
 				}
 
-				ldr.share.Mount()
+				mnt.Mount()
 			}
 
 			_, err := os.Stat(path)
@@ -148,8 +155,12 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 func (ldr *Loader) Exit() {
 	ldr.RLock()
 
-	if ldr.share != nil {
-		ldr.share.Umount()
+	for _, mnt := range maps.All(ldr.mounts) {
+		if ldr.opts.Verbose > 0 {
+			log.Printf("umount network share %s\n", mnt.String())
+		}
+
+		mnt.Umount()
 	}
 
 	if ldr.opts.Verbose > 0 {
@@ -164,8 +175,8 @@ func (ldr *Loader) loadPath(path, part string) {
 
 	base, mask := doublestar.SplitPattern(path)
 
-	if ldr.share != nil {
-		root = ldr.share.DirFS(base)
+	if mnt, ok := ldr.mounts[path]; ok {
+		root = mnt.DirFS(base)
 	} else {
 		root = os.DirFS(base)
 	}
@@ -228,11 +239,11 @@ func (ldr *Loader) loadDir(path, part string) {
 }
 
 func (ldr *Loader) loadFile(path, part string) {
-	var f *os.File
+	var f types.File
 	var err error
 
-	if ldr.share != nil {
-		f, err = ldr.share.DirFS(".").Open(path)
+	if mnt, ok := ldr.mounts[path]; ok {
+		f, err = mnt.DirFS(".").Open(path)
 	} else {
 		f, err = os.OpenFile(path, os.O_RDONLY, 0x400)
 	}
@@ -242,7 +253,7 @@ func (ldr *Loader) loadFile(path, part string) {
 		return
 	}
 
-	defer func(f *os.File) {
+	defer func(f types.File) {
 		_ = f.Close()
 	}(f)
 
@@ -260,11 +271,24 @@ func (ldr *Loader) loadFile(path, part string) {
 	}
 
 	// try to load the file first
-	if ldr.processFile(path) {
+	if ldr.processFile(path, f) {
 		return
 	}
 
-	m := mmap.Map(f)
+	var m []byte
+
+	// get file contents
+	switch v := f.(type) {
+	case *os.File:
+		m = mmap.Map(v)
+	case fs.File:
+		m, err = io.ReadAll(v)
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
 
 	if ldr.opts.Verbose > 2 {
 		log.Printf("mapped file %s\n", path)
@@ -273,24 +297,12 @@ func (ldr *Loader) loadFile(path, part string) {
 	ldr.processData(path, part, m)
 }
 
-func (ldr *Loader) peekFile(path string) []byte {
+func (ldr *Loader) peekFile(file types.File) []byte {
 	b := make([]byte, peek)
 
-	f, err := os.Open(path)
+	r := io.LimitReader(file, peek) // TODO: must use a buffered ReaderAt
 
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	r := io.LimitReader(f, peek)
-
-	_, err = r.Read(b)
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	err = f.Close()
+	_, err := r.Read(b)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -300,15 +312,17 @@ func (ldr *Loader) peekFile(path string) []byte {
 }
 
 func (ldr *Loader) combineFile(path string) {
-	var file []*os.File
-	var size int64
+	var f []types.File
+	var c []io.Closer
+	var s int64
 
-	for _, h := range ldr.later {
-		file = append(file, h.file)
-		size += h.size
+	for _, d := range ldr.later {
+		f = append(f, d.file)
+		c = append(c, d.file)
+		s += d.size
 	}
 
-	r, err := ewf.Combine(file...)
+	r, err := ewf.Combine(f...)
 
 	if err != nil {
 		log.Println(err)
@@ -320,11 +334,11 @@ func (ldr *Loader) combineFile(path string) {
 
 	ldr.later = ldr.later[:0]
 
-	ldr.createFile(path, "", uint64(size), r, file...)
+	ldr.createFile(path, "", uint64(s), r, c...)
 }
 
-func (ldr *Loader) processFile(path string) bool {
-	b := ldr.peekFile(path) // peek at file header
+func (ldr *Loader) processFile(path string, file types.File) bool {
+	b := ldr.peekFile(file) // peek at file header
 
 	for _, e := range register.Readers {
 		if e.Detect(b) {
@@ -336,14 +350,7 @@ func (ldr *Loader) processFile(path string) bool {
 				log.Println("warning: ewf support is experimental!")
 			}
 
-			f, err := os.Open(path)
-
-			if err != nil {
-				log.Println(err)
-				break
-			}
-
-			s, err := f.Stat()
+			s, err := file.Stat()
 
 			if err != nil {
 				log.Println(err)
@@ -352,18 +359,18 @@ func (ldr *Loader) processFile(path string) bool {
 
 			// combine ewf disks later
 			if e.Name == "ewf" {
-				ldr.later = append(ldr.later, disk{f, s.Size(), path})
+				ldr.later = append(ldr.later, disk{file, s.Size(), path})
 				return true
 			}
 
-			r, err := e.Reader(f)
+			r, err := e.Reader(file)
 
 			if err != nil {
 				log.Println(err)
 				continue
 			}
 
-			ldr.createFile(path, "", uint64(s.Size()), r, f)
+			ldr.createFile(path, "", uint64(s.Size()), r, file)
 
 			return true
 		}
@@ -516,8 +523,8 @@ func (ldr *Loader) createData(path, hint string, size uint64, b []byte) {
 	ldr.createHeap(path, size, heap.FromData(path, hint, size, b, ldr.opts.Limit))
 }
 
-func (ldr *Loader) createFile(path, hint string, size uint64, r io.ReaderAt, f ...*os.File) {
-	ldr.createHeap(path, size, heap.FromFile(path, hint, size, r, f...))
+func (ldr *Loader) createFile(path, hint string, size uint64, r io.ReaderAt, c ...io.Closer) {
+	ldr.createHeap(path, size, heap.FromFile(path, hint, size, r, c...))
 }
 
 func (ldr *Loader) createHeap(path string, size uint64, h *heap.Heap) {
@@ -560,7 +567,7 @@ func isCoherent(disk []disk) (string, bool) {
 }
 
 func isRemote(path string) bool {
-	return strings.HasPrefix("//", strings.TrimPrefix("smb:", path))
+	return regexp.MustCompile("^(smb:)?//.+").MatchString(path)
 }
 
 func isPiped(f *os.File) bool {

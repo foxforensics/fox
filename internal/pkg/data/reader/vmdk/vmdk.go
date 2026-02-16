@@ -2,11 +2,11 @@ package vmdk
 
 import (
 	"io"
-	"os"
 
 	"github.com/Velocidex/go-vmdk/parser"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 const size = 64 * 1024 // buffer size
@@ -17,7 +17,7 @@ func Detect(b []byte) bool {
 	})
 }
 
-func Reader(f *os.File) (io.ReaderAt, error) {
+func Reader(f types.File) (io.ReaderAt, error) {
 	r, err := parser.GetVMDKContext(f, size, func(filename string) (io.ReaderAt, func(), error) {
 		return f, func() { _ = f.Close() }, nil
 	})

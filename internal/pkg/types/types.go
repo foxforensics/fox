@@ -1,5 +1,10 @@
 package types
 
+import (
+	"io"
+	"os"
+)
+
 const (
 	ADLER32     = "adler32"
 	AHASH       = "ahash"
@@ -67,3 +72,42 @@ const (
 	Eventlog = "eventlog"
 	Journal  = "journal"
 )
+
+type File interface {
+	io.Closer
+	io.Reader
+	io.ReaderAt
+	Stat() (os.FileInfo, error)
+}
+
+type readerAt struct {
+	r   io.Reader
+	buf []byte
+}
+
+func NewReaderAt(r io.Reader) io.ReaderAt {
+	return &readerAt{r: r}
+}
+
+func (ra *readerAt) ReadAt(p []byte, off int64) (n int, err error) {
+	end := off + int64(len(p))
+	mis := end - int64(len(ra.buf))
+
+	if mis > 0 {
+		var m int
+
+		buf := make([]byte, mis)
+		m, err = io.ReadFull(ra.r, buf)
+		ra.buf = append(ra.buf, buf[:m]...)
+	}
+
+	if int64(len(ra.buf)) >= off {
+		n = copy(p, ra.buf[off:])
+	}
+
+	if n == len(p) {
+		err = nil
+	}
+
+	return
+}

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io"
 	"math"
-	"os"
 	"runtime"
 	"sync"
 
@@ -20,27 +19,16 @@ type Heap struct {
 	Size uint64 // heap size
 
 	m mmap.MMap   // memory map
-	f []*os.File  // file handles
 	r io.ReaderAt // file reader
+	c []io.Closer // file closer
 }
 
 func FromData(name, hint string, size uint64, m mmap.MMap, l *types.Limits) *Heap {
-	return &Heap{
-		Name: name,
-		Hint: hint,
-		Size: size,
-		m:    l.Reduce(m),
-	}
+	return &Heap{Name: name, Hint: hint, Size: size, m: l.Reduce(m)}
 }
 
-func FromFile(name, hint string, size uint64, r io.ReaderAt, f ...*os.File) *Heap {
-	return &Heap{
-		Name: name,
-		Hint: hint,
-		Size: size,
-		f:    f,
-		r:    r,
-	}
+func FromFile(name, hint string, size uint64, r io.ReaderAt, c ...io.Closer) *Heap {
+	return &Heap{Name: name, Hint: hint, Size: size, c: c, r: r}
 }
 
 func (h *Heap) String() string {
@@ -51,11 +39,11 @@ func (h *Heap) Reader() io.ReaderAt {
 	h.RLock()
 	defer h.RUnlock()
 
-	if h.f != nil {
-		return h.r
+	if len(h.c) == 0 {
+		return bytes.NewReader(h.m)
 	}
 
-	return bytes.NewReader(h.m)
+	return h.r
 }
 
 func (h *Heap) Bytes() []byte {
@@ -73,11 +61,11 @@ func (h *Heap) Discard() {
 	}
 
 	// close files
-	for _, f := range h.f {
+	for _, f := range h.c {
 		_ = f.Close()
 	}
 
-	h.f = h.f[:0]
+	h.c = h.c[:0]
 	h.r = nil
 	h.m = nil
 

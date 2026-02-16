@@ -2,11 +2,11 @@ package vhdx
 
 import (
 	"io"
-	"os"
 
 	"github.com/Velocidex/go-vhdx/parser"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 func Detect(b []byte) bool {
@@ -15,7 +15,7 @@ func Detect(b []byte) bool {
 	})
 }
 
-func Reader(f *os.File) (io.ReaderAt, error) {
+func Reader(f types.File) (io.ReaderAt, error) {
 	r, err := parser.NewVHDXFile(f)
 
 	if err != nil {

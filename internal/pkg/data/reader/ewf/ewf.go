@@ -2,11 +2,11 @@ package ewf
 
 import (
 	"io"
-	"os"
 
 	"github.com/Velocidex/go-ewf/parser"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 func Detect(b []byte) bool {
@@ -15,7 +15,7 @@ func Detect(b []byte) bool {
 	})
 }
 
-func Reader(f *os.File) (io.ReaderAt, error) {
+func Reader(f types.File) (io.ReaderAt, error) {
 	r, err := parser.OpenEWFFile(nil, f)
 
 	if err != nil {
@@ -25,7 +25,7 @@ func Reader(f *os.File) (io.ReaderAt, error) {
 	return r, nil
 }
 
-func Combine(f ...*os.File) (io.ReaderAt, error) {
+func Combine(f ...types.File) (io.ReaderAt, error) {
 	var rs []io.ReaderAt
 
 	for _, r := range f {
