@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"io"
+	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
@@ -22,6 +23,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/mmap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/share"
 )
 
 const stdin = "-"
@@ -41,10 +43,11 @@ type Options struct {
 
 type Loader struct {
 	sync.RWMutex
-	opts  *Options
 	size  int64
+	opts  *Options
 	later []disk
 	paths []string
+	share *share.Share
 	heaps chan *heap.Heap
 }
 
@@ -99,6 +102,16 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 
 			path, part := data.SplitPart(path)
 
+			if isRemote(path) {
+				ldr.share = share.New(path)
+
+				if ldr.opts.Verbose > 0 {
+					log.Printf("use network share %s\n", ldr.share.String())
+				}
+
+				ldr.share.Mount()
+			}
+
 			_, err := os.Stat(path)
 
 			if ldr.opts.Verbose > 0 && errors.Is(err, os.ErrNotExist) {
@@ -135,6 +148,10 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 func (ldr *Loader) Exit() {
 	ldr.RLock()
 
+	if ldr.share != nil {
+		ldr.share.Umount()
+	}
+
 	if ldr.opts.Verbose > 0 {
 		log.Printf("size %s\n", text.Humanize(ldr.size))
 	}
@@ -143,7 +160,17 @@ func (ldr *Loader) Exit() {
 }
 
 func (ldr *Loader) loadPath(path, part string) {
-	match, err := doublestar.FilepathGlob(path)
+	var root fs.FS
+
+	base, mask := doublestar.SplitPattern(path)
+
+	if ldr.share != nil {
+		root = ldr.share.DirFS(base)
+	} else {
+		root = os.DirFS(base)
+	}
+
+	match, err := doublestar.Glob(root, mask)
 
 	if err != nil {
 		log.Println(err)
@@ -158,6 +185,8 @@ func (ldr *Loader) loadPath(path, part string) {
 	p := pool.New().WithMaxGoroutines(ldr.opts.Parallel)
 
 	for _, path := range match {
+		path = filepath.Join(base, path)
+
 		fi, err := os.Stat(path)
 
 		if err != nil {
@@ -199,7 +228,14 @@ func (ldr *Loader) loadDir(path, part string) {
 }
 
 func (ldr *Loader) loadFile(path, part string) {
-	f, err := os.OpenFile(path, os.O_RDONLY, 0x400)
+	var f *os.File
+	var err error
+
+	if ldr.share != nil {
+		f, err = ldr.share.DirFS(".").Open(path)
+	} else {
+		f, err = os.OpenFile(path, os.O_RDONLY, 0x400)
+	}
 
 	if err != nil {
 		log.Println(err)
@@ -521,6 +557,10 @@ func isCoherent(disk []disk) (string, bool) {
 	}
 
 	return name, true
+}
+
+func isRemote(path string) bool {
+	return strings.HasPrefix("//", strings.TrimPrefix("smb:", path))
 }
 
 func isPiped(f *os.File) bool {
