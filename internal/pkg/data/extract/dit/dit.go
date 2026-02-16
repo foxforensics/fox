@@ -18,8 +18,6 @@ import (
 	"fmt"
 	"log"
 	"slices"
-	"strings"
-	"time"
 
 	"github.com/Velocidex/ordereddict"
 	"www.velocidex.com/golang/go-ese/parser"
@@ -31,9 +29,6 @@ const (
 	userRow = "ATTm590045"
 	userSid = "ATTr589970"
 	userUac = "ATTj589832"
-	userExp = "ATTq589983"
-	lastLog = "ATTq589876"
-	lastPwd = "ATTq589920"
 	ntHash  = "ATTk589914"
 	lmHash  = "ATTk589879"
 	pekBin  = "ATTk590689"
@@ -55,12 +50,6 @@ var defaultNt = []byte{0x31, 0xD6, 0xCF, 0xE0, 0xD1, 0x6A, 0xE9, 0x31, 0xB7, 0x3
 type Pek []byte
 
 type Hash []byte
-
-type Times struct {
-	Expires    time.Time `json:"expires,omitempty"`
-	LastLogin  time.Time `json:"last_login,omitempty"`
-	LastChange time.Time `json:"last_change,omitempty"`
-}
 
 type Flags struct {
 	Script                       bool `json:"script,omitempty"`
@@ -90,7 +79,6 @@ type Record struct {
 	Username string `json:"username,omitempty"`
 	Rid      uint32 `json:"rid,omitempty"`
 	Sid      string `json:"sid,omitempty"`
-	Times    *Times `json:"times,omitempty"`
 	Flags    *Flags `json:"flags,omitempty"`
 	LmHash   string `json:"lm_hash,omitempty"`
 	NtHash   string `json:"nt_hash,omitempty"`
@@ -211,8 +199,6 @@ func newRecord(row *ordereddict.Dict, usr string, pek []Pek) (*Record, error) {
 	return &Record{
 		Username: usr,
 		Rid:      rid,
-		Sid:      formatSid(sid),
-		Times:    extractTimes(row),
 		Flags:    extractFlags(uac),
 		LmHash:   hex.EncodeToString(newHash(getBytesFromRow(row, lmHash), defaultLm, k1, k2, pek)),
 		NtHash:   hex.EncodeToString(newHash(getBytesFromRow(row, ntHash), defaultNt, k1, k2, pek)),
@@ -250,35 +236,10 @@ func getKeys(ctl *parser.Catalog, att string, key []byte) []Pek {
 	return keys
 }
 
-func formatSid(sid []byte) string {
-	var sb strings.Builder
-
-	// "sid": "S-1-5-21-3188177830-2933342842-421106997-1003",
-	sb.WriteString(fmt.Sprintf("S-%d-%d-%d", sid[0], sid[1], sid[6]))
-
-	l, s := sid[1], sid[8:]
-
-	for i := 0; i < int(l); i++ {
-		sb.WriteString(fmt.Sprintf("-%d", binary.BigEndian.Uint32(s[i*4:i*4+4])))
-	}
-
-	return sb.String()
-}
-
 func extractRid(sid []byte) uint32 {
 	l, s := sid[1], sid[8:]
 
 	return binary.BigEndian.Uint32(s[(l-1)*4 : (l-1)*4+4])
-}
-
-func extractTimes(row *ordereddict.Dict) *Times {
-	println(fmt.Sprintf("%v", row))
-
-	return &Times{
-		Expires:    formatUtc(row.GetInt64(userExp)),
-		LastLogin:  formatUtc(row.GetInt64(lastLog)),
-		LastChange: formatUtc(row.GetInt64(lastPwd)),
-	}
 }
 
 func extractFlags(v int64) *Flags {
@@ -402,25 +363,6 @@ func deriveKey(rid uint32) ([]byte, []byte) {
 	}
 
 	return transformKey(b1), transformKey(b2)
-}
-
-func formatUtc(v int64, _ bool) time.Time {
-	b := make([]byte, 8)
-	binary.LittleEndian.PutUint64(b, uint64(v))
-
-	low := binary.LittleEndian.Uint32(b[:4])
-	high := binary.LittleEndian.Uint32(b[4:])
-
-	// 100-nanosecond intervals since January 1, 1601
-	nsec := int64(high)<<32 + int64(low)
-	// change starting time to the Epoch (00:00:00 UTC, January 1, 1970)
-	nsec -= 116444736000000000
-	// convert into nanoseconds
-	nsec *= 100
-	//return nsec
-	return time.Unix(0, nsec).UTC()
-
-	// 2016-07-10 12:56 / 1468155360000 ms
 }
 
 func transformKey(b []byte) []byte {
