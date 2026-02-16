@@ -9,6 +9,7 @@ const (
 	BLAKE2B512  = "blake2b-512"
 	BLAKE3256   = "blake3-256"
 	BLAKE3512   = "blake3-512"
+	CRC16CCITT  = "crc16-ccitt"
 	CRC32C      = "crc32-c"
 	CRC32IEEE   = "crc32-ieee"
 	CRC64ECMA   = "crc64-ecma"

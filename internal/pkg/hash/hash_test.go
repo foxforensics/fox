@@ -43,6 +43,7 @@ func TestSum(t *testing.T) {
 		{small, types.BLAKE2B512, "6805b54f9ad456d6a217624fa0c992108a35cf52f35b9d7f617533b50804bf08b2af20653469b3b76acc799bd3c905919cc958084179adf2b1475493d5cd1810"},
 		{small, types.BLAKE3256, "68aa491620394f724284e35b51551a21ab715f0c38f85cf8ba837233d34ae4a6"},
 		{small, types.BLAKE3512, "68aa491620394f724284e35b51551a21ab715f0c38f85cf8ba837233d34ae4a646914037b62a958cc6f769865ea235ae326f8cc4e7eb7010102dfd0d72652d9a"},
+		{small, types.CRC16CCITT, "3ff9"},
 		{small, types.CRC32C, "afb3f887"},
 		{small, types.CRC32IEEE, "7ab53d60"},
 		{small, types.CRC64ECMA, "df2fc66f2c50575f"},

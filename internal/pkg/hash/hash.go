@@ -43,7 +43,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/xxh"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/impfuzzy"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/imphash"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/image"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/other/image"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/other/kermit"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/lm"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/nt"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/pe"
@@ -59,6 +60,7 @@ var Algorithms = []string{
 	types.BLAKE2B512,
 	types.BLAKE3256,
 	types.BLAKE3512,
+	types.CRC16CCITT,
 	types.CRC32C,
 	types.CRC32IEEE,
 	types.CRC64ECMA,
@@ -176,6 +178,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = blake3.New256()
 	case types.BLAKE3512:
 		imp = blake3.New512()
+	case types.CRC16CCITT:
+		imp = kermit.New()
 	case types.CRC32C:
 		imp = crc32.New(crc32.MakeTable(crc32.Castagnoli))
 	case types.CRC32IEEE:
