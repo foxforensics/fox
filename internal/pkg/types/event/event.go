@@ -11,6 +11,7 @@ import (
 	"github.com/zeebo/xxh3"
 
 	"github.com/cuhsat/fox/v4/internal"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
 const CEF = "%s %s CEF:1|fox|hunt|%s|100|%s|%d|"
@@ -43,7 +44,7 @@ func (evt *Event) SortKey() string {
 func (evt *Event) ToCEF() string {
 	var sb strings.Builder
 
-	msg := evt.Message
+	msg := text.Sanitize(evt.Message)
 	msg = strings.ReplaceAll(msg, `\`, `\\`)
 	msg = strings.ReplaceAll(msg, `|`, `\|`)
 	msg = strings.ReplaceAll(msg, `\t`, ` `)
