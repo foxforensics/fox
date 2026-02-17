@@ -260,11 +260,9 @@ func (ldr *Loader) loadFile(root fs.FS, path, part string) {
 	}
 
 	// try to load the file first
-	/*
-		if ldr.processFile(path, f) { // TODO: does not work anymore!?
-			return
-		}
-	*/
+	if ldr.processFile(path, f) { // TODO: does not work anymore!?
+		return
+	}
 
 	var b []byte
 
@@ -298,9 +296,13 @@ func (ldr *Loader) loadFile(root fs.FS, path, part string) {
 func (ldr *Loader) peekFile(file types.File) []byte {
 	b := make([]byte, peek)
 
-	r := io.LimitReader(file, peek)
+	_, err := file.Read(b)
 
-	_, err := r.Read(b)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	_, err = file.Seek(0, io.SeekStart)
 
 	if err != nil {
 		log.Fatalln(err)
