@@ -25,8 +25,8 @@ brew install cuhsat/fox/fox
 
 ## Features
 * [x] Restricted read-only access
+* [x] Support for SMB2/3 UNC paths
 * [x] [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
-* [x] Fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * [x] String carving and automatic classification
 * [x] With over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
 * [x] Dump Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
@@ -36,6 +36,7 @@ brew install cuhsat/fox/fox
 * [x] Extract NTLM hashes from [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) databases
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
 * [x] Integral syntax highlighting for many different formats
+* [x] Integral fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * [x] Integral *Chain-of-Custody* receipt generation
 * [x] Many popular archive and compression formats
 * [x] Many popular cryptographic, fuzzy, image and fast hashes
@@ -124,7 +125,4 @@ Checksums
 > Adler32, Fletcher4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 ---
-
-<div align="center">
-🦊 is released under the <a href="LICENSE.md">GPL-3.0</a>
-</div>
+🦊 is released under the [GPL-3.0](LICENSE.md)
