@@ -6,73 +6,97 @@ import (
 	"log"
 	"net"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/hirochachacha/go-smb2"
 )
 
-const Port = 445
+var re = regexp.MustCompile(`^//((?<user>.+?)(:(?<pass>.*?))?@)?(?<host>.+?)?(:(?<port>\d+?))?/(?<root>.+?)/(?<path>.*?)(:(?<part>.+))?$`)
 
-type Share struct {
-	cn net.Conn
-	se *smb2.Session
-	fs *smb2.Share
-
-	user string
-	pass string
-	host string
-	path string
+type Unc struct {
+	User string
+	Pass string
+	Host string
+	Root string
+	Port string
+	Path string
+	Part string
 }
 
-func New(addr string) *Share {
-	shr := &Share{}
+type Share struct {
+	unc *Unc
+	cn  net.Conn
+	se  *smb2.Session
+	fs  *smb2.Share
+}
 
-	// remove protocol
-	addr = strings.TrimPrefix(addr, "smb:")
-	addr = strings.TrimPrefix(addr, "//")
+func New(path string) *Share {
+	return &Share{unc: Parse(path)}
+}
 
-	host := strings.SplitN(addr, "@", 1)
+func Parse(path string) *Unc {
+	path = strings.TrimSpace(path)
+	path = strings.TrimPrefix(path, "smb:")
 
-	// parse credentials
-	if len(host) > 1 {
-		cred := strings.SplitN(host[0], ":", 1)
+	match := re.FindStringSubmatch(path)
+	group := make(map[string]string, 6)
 
-		// set username
-		shr.user = cred[0]
-
-		// set password
-		if len(cred) > 1 {
-			shr.pass = cred[1]
+	for i, k := range re.SubexpNames() {
+		if i > 0 && len(k) > 0 {
+			group[k] = match[i]
 		}
 	}
 
-	// parse hostname
-	path := strings.SplitN(host[len(host)-1], "/", 1)
+	unc := new(Unc)
 
-	// set hostname
-	shr.host = path[0]
+	unc.User, _ = group["user"]
+	unc.Pass, _ = group["pass"]
+	unc.Host, _ = group["host"]
+	unc.Root, _ = group["root"]
+	unc.Port, _ = group["port"]
 
-	// set path
-	if len(path) > 1 {
-		shr.path = path[1]
+	if len(unc.Port) == 0 {
+		unc.Port = "445"
 	}
 
-	return shr
+	unc.Path, _ = group["path"]
+	unc.Part, _ = group["part"]
+
+	return unc
+}
+
+func (unc *Unc) String() string {
+	var cred string
+	var host = unc.Host
+	var root = unc.Root
+	var path = unc.Path
+
+	if len(unc.User) > 0 {
+		cred = unc.User
+	}
+
+	if len(unc.Pass) > 0 {
+		cred += ":" + strings.Repeat("*", len(unc.Pass))
+	}
+
+	if len(cred) > 0 {
+		cred += "@"
+	}
+
+	if len(unc.Port) > 0 {
+		host += ":" + unc.Port
+	}
+
+	if len(unc.Part) > 0 {
+		path += ":" + unc.Part
+	}
+
+	return fmt.Sprintf("smb://%s%s/%s/%s", cred, host, root, path)
 }
 
 func (shr *Share) String() string {
-	pw := shr.pass
-
-	if len(pw) > 0 {
-		pw = "********"
-	}
-
-	return fmt.Sprintf("smb://%s:%s@%s/%s",
-		shr.user,
-		pw,
-		shr.host,
-		shr.path,
-	)
+	return shr.unc.String()
 }
 
 func (shr *Share) DirFS(path string) fs.FS {
@@ -88,28 +112,28 @@ func (shr *Share) List() ([]string, error) {
 }
 
 func (shr *Share) Mount() {
-	println(shr.String()) // TODO: port does not be parsed correctly
+	var err error
 
-	conn, err := net.Dial("tcp", shr.host+":445")
+	addr := fmt.Sprintf("%s:%s", shr.unc.Host, shr.unc.Port)
 
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	d := &smb2.Dialer{
-		Initiator: &smb2.NTLMInitiator{
-			User:     shr.user,
-			Password: shr.pass,
-		},
-	}
-
-	shr.se, err = d.Dial(conn)
+	shr.cn, err = net.Dial("tcp", addr)
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	shr.fs, err = shr.se.Mount(shr.path)
+	d := &smb2.Dialer{Initiator: &smb2.NTLMInitiator{
+		User:     shr.unc.User,
+		Password: shr.unc.Pass,
+	}}
+
+	shr.se, err = d.Dial(shr.cn)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	shr.fs, err = shr.se.Mount(shr.unc.Path)
 
 	if err != nil {
 		log.Fatalln(err)

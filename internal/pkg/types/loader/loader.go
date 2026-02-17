@@ -287,7 +287,7 @@ func (ldr *Loader) loadFile(path, part string) {
 		b = ldr.readFile(f)
 
 		if ldr.opts.Verbose > 2 {
-			log.Printf("readed file %s\n", path)
+			log.Printf("loaded file %s\n", path)
 		}
 	}
 
