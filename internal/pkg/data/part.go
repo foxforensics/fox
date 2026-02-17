@@ -12,11 +12,11 @@ func JoinPart(path, part string) string {
 }
 
 func SplitPart(path string) (string, string) {
-	tokens := strings.Split(path, sep) // TODO: take smb:// into account
+	t := strings.Split(path, sep)
 
-	if len(tokens) == 1 {
+	if len(t) == 1 {
 		return path, ""
 	}
 
-	return tokens[0], strings.Join(tokens[1:], sep)
+	return strings.Join(t[:len(t)-2], sep), t[len(t)-1] // TODO
 }
