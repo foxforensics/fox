@@ -5,10 +5,13 @@ import (
 	"io/fs"
 	"log"
 	"net"
+	"os"
 	"strings"
 
 	"github.com/hirochachacha/go-smb2"
 )
+
+const Port = 445
 
 type Share struct {
 	cn net.Conn
@@ -76,8 +79,18 @@ func (shr *Share) DirFS(path string) fs.FS {
 	return shr.fs.DirFS(path)
 }
 
+func (shr *Share) Open(path string) (*smb2.File, error) {
+	return shr.fs.OpenFile(path, os.O_RDONLY, 0400)
+}
+
+func (shr *Share) List() ([]string, error) {
+	return shr.se.ListSharenames()
+}
+
 func (shr *Share) Mount() {
-	conn, err := net.Dial("tcp", shr.host)
+	println(shr.String()) // TODO: port does not be parsed correctly
+
+	conn, err := net.Dial("tcp", shr.host+":445")
 
 	if err != nil {
 		log.Fatalln(err)

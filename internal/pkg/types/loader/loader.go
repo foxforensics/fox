@@ -243,19 +243,15 @@ func (ldr *Loader) loadFile(path, part string) {
 	var err error
 
 	if mnt, ok := ldr.mounts[path]; ok {
-		f, err = mnt.DirFS(".").Open(path)
+		f, err = mnt.Open(path)
 	} else {
-		f, err = os.OpenFile(path, os.O_RDONLY, 0x400)
+		f, err = os.OpenFile(path, os.O_RDONLY, 0400)
 	}
 
 	if err != nil {
 		log.Println(err)
 		return
 	}
-
-	defer func(f types.File) {
-		_ = f.Close()
-	}(f)
 
 	fi, err := f.Stat()
 
@@ -275,37 +271,50 @@ func (ldr *Loader) loadFile(path, part string) {
 		return
 	}
 
-	var m []byte
+	var b []byte
 
-	// get file contents
 	switch v := f.(type) {
+	// memory map local files
 	case *os.File:
-		m = mmap.Map(v)
-	case fs.File:
-		m, err = io.ReadAll(v)
+		b = mmap.Map(v)
 
-		if err != nil {
-			log.Println(err)
-			return
+		if ldr.opts.Verbose > 2 {
+			log.Printf("mapped file %s\n", path)
+		}
+
+	// read remote file whole
+	default:
+		b = ldr.readFile(f)
+
+		if ldr.opts.Verbose > 2 {
+			log.Printf("readed file %s\n", path)
 		}
 	}
 
-	if ldr.opts.Verbose > 2 {
-		log.Printf("mapped file %s\n", path)
-	}
+	_ = f.Close()
 
-	ldr.processData(path, part, m)
+	ldr.processData(path, part, b)
 }
 
 func (ldr *Loader) peekFile(file types.File) []byte {
 	b := make([]byte, peek)
 
-	r := io.LimitReader(file, peek) // TODO: must use a buffered ReaderAt
+	r := io.LimitReader(file, peek)
 
 	_, err := r.Read(b)
 
 	if err != nil {
 		log.Fatalln(err)
+	}
+
+	return b
+}
+
+func (ldr *Loader) readFile(file types.File) []byte {
+	b, err := io.ReadAll(file)
+
+	if err != nil {
+		log.Println(err)
 	}
 
 	return b
