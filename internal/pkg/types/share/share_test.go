@@ -11,47 +11,27 @@ func TestParse(t *testing.T) {
 		str string
 	}{
 		{
-			"smb://user:pass@127.0.0.1:445/Share/dir/file.ext:stream",
-			"//user:****@127.0.0.1:445/Share/dir/file.ext:stream",
+			"smb://user:pass@127.0.0.1:445/Share/",
+			"//user@127.0.0.1:445/Share/",
 		},
 		{
-			`\\user@host\Share\dir\file.ext:stream`,
-			"//user@host:445/Share/dir/file.ext:stream",
+			`\\user@host\Share\`,
+			"//user@host:445/Share/",
 		},
 		{
-			"//user:@host:445/Share/dir/file.ext:stream",
-			"//user@host:445/Share/dir/file.ext:stream",
+			"//user:@host:445/Share/",
+			"//user@host:445/Share/",
 		},
 		{
-			"//user@host:445/Share/dir/file.ext:stream",
-			"//user@host:445/Share/dir/file.ext:stream",
+			"//user@host:445/Share/",
+			"//user@host:445/Share/",
 		},
 		{
-			"//host:445/Share/dir/file.ext:stream",
-			"//host:445/Share/dir/file.ext:stream",
-		},
-		{
-			"//host/Share/dir/file.ext:stream",
-			"//host:445/Share/dir/file.ext:stream",
-		},
-		{
-			"//host/Share/dir/file.ext",
-			"//host:445/Share/dir/file.ext",
-		},
-		{
-			"//host/Share/file.ext",
-			"//host:445/Share/file.ext",
-		},
-		{
-			"//host/Share/dir/",
-			"//host:445/Share/dir/",
-		},
-		{
-			"//host/Share/",
+			"//host:445/Share/",
 			"//host:445/Share/",
 		},
 		{
-			`\\host\Share\`,
+			"//host/Share/",
 			"//host:445/Share/",
 		},
 	} {

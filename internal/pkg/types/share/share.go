@@ -13,16 +13,14 @@ import (
 )
 
 //goland:noinspection ALL
-var re = regexp.MustCompile(`^//((?<user>.+?)(:(?<pass>.*?))?@)?(?<host>.+?)?(:(?<port>\d+?))?/(?<root>.+?)/(?<path>.*?)(:(?<part>.+))?$`)
+var re = regexp.MustCompile(`^//((?<user>.+?)(:(?<pass>.*?))?@)?(?<host>.+?)?(:(?<port>\d+?))?/(?<root>.+)/`)
 
 type unc struct {
 	User string
 	Pass string
 	Host string
-	Root string
 	Port string
-	Path string
-	Part string
+	Root string
 }
 
 type Share struct {
@@ -37,18 +35,8 @@ func New(path string) *Share {
 }
 
 func (unc *unc) String() string {
-	var cred string
+	var cred = unc.User
 	var host = unc.Host
-	var root = unc.Root
-	var path = unc.Path
-
-	if len(unc.User) > 0 {
-		cred = unc.User
-	}
-
-	if len(unc.Pass) > 0 {
-		cred += ":" + strings.Repeat("*", len(unc.Pass))
-	}
 
 	if len(cred) > 0 {
 		cred += "@"
@@ -58,15 +46,11 @@ func (unc *unc) String() string {
 		host += ":" + unc.Port
 	}
 
-	if len(unc.Part) > 0 {
-		path += ":" + unc.Part
-	}
-
-	return fmt.Sprintf("//%s%s/%s/%s", cred, host, root, path)
+	return fmt.Sprintf("//%s%s/%s/", cred, host, unc.Root)
 }
 
 func (shr *Share) String() string {
-	return fmt.Sprintf("//%s/%s", shr.unc.Host, shr.unc.Root)
+	return fmt.Sprintf("//%s/%s/", shr.unc.Host, shr.unc.Root)
 }
 
 func (shr *Share) DirFS(path string) fs.FS {
@@ -75,10 +59,6 @@ func (shr *Share) DirFS(path string) fs.FS {
 
 func (shr *Share) Open(path string) (*smb2.File, error) {
 	return shr.fs.OpenFile(path, os.O_RDONLY, 0400)
-}
-
-func (shr *Share) List() ([]string, error) {
-	return shr.se.ListSharenames()
 }
 
 func (shr *Share) Mount() {
@@ -139,8 +119,6 @@ func parse(path string) *unc {
 	unc.Host, _ = group["host"]
 	unc.Root, _ = group["root"]
 	unc.Port, _ = group["port"]
-	unc.Path, _ = group["path"]
-	unc.Part, _ = group["part"]
 
 	if len(unc.Port) == 0 {
 		unc.Port = "445"

@@ -31,7 +31,7 @@ import (
 const (
 	stdin = "-"
 	limit = 0.95
-	peek  = 8
+	peek  = 0
 )
 
 type Options struct {
@@ -176,7 +176,7 @@ func (ldr *Loader) loadPath(path, part string) {
 	base, mask := doublestar.SplitPattern(path)
 
 	if shr, ok := ldr.shares[path]; ok {
-		root = shr.DirFS(base)
+		root = shr.DirFS(".")
 	} else {
 		root = os.DirFS(base)
 	}
@@ -196,9 +196,7 @@ func (ldr *Loader) loadPath(path, part string) {
 	p := pool.New().WithMaxGoroutines(ldr.opts.Parallel)
 
 	for _, path := range match {
-		path = filepath.Join(base, path)
-
-		fi, err := os.Stat(path)
+		fi, err := fs.Stat(root, path)
 
 		if err != nil {
 			log.Println(err)
@@ -207,9 +205,9 @@ func (ldr *Loader) loadPath(path, part string) {
 
 		p.Go(func() {
 			if fi.IsDir() {
-				ldr.loadDir(path, part)
+				ldr.loadDir(root, path, part)
 			} else {
-				ldr.loadFile(path, part)
+				ldr.loadFile(root, path, part)
 			}
 		})
 	}
@@ -217,8 +215,8 @@ func (ldr *Loader) loadPath(path, part string) {
 	p.Wait()
 }
 
-func (ldr *Loader) loadDir(path, part string) {
-	dir, err := os.ReadDir(path)
+func (ldr *Loader) loadDir(root fs.FS, path, part string) {
+	dir, err := fs.ReadDir(root, path)
 
 	if err != nil {
 		log.Println(err)
@@ -230,7 +228,7 @@ func (ldr *Loader) loadDir(path, part string) {
 	for _, f := range dir {
 		if !f.IsDir() {
 			p.Go(func() {
-				ldr.loadFile(filepath.Join(path, f.Name()), part)
+				ldr.loadFile(root, filepath.Join(path, f.Name()), part)
 			})
 		}
 	}
@@ -238,15 +236,10 @@ func (ldr *Loader) loadDir(path, part string) {
 	p.Wait()
 }
 
-func (ldr *Loader) loadFile(path, part string) {
-	var f types.File
-	var err error
+func (ldr *Loader) loadFile(root fs.FS, path, part string) {
+	x, err := root.Open(path) //TODO: File(path, os.O_RDONLY, 0400)
 
-	if mnt, ok := ldr.shares[path]; ok {
-		f, err = mnt.Open(path)
-	} else {
-		f, err = os.OpenFile(path, os.O_RDONLY, 0400)
-	}
+	f := x.(types.File)
 
 	if err != nil {
 		log.Println(err)
@@ -267,9 +260,11 @@ func (ldr *Loader) loadFile(path, part string) {
 	}
 
 	// try to load the file first
-	if ldr.processFile(path, f) {
-		return
-	}
+	/*
+		if ldr.processFile(path, f) { // TODO: does not work anymore!?
+			return
+		}
+	*/
 
 	var b []byte
 
@@ -283,8 +278,12 @@ func (ldr *Loader) loadFile(path, part string) {
 		}
 
 	// read remote file whole
-	default:
-		b = ldr.readFile(f)
+	case types.File:
+		b, err = fs.ReadFile(root, path)
+
+		if err != nil {
+			log.Println(err)
+		}
 
 		if ldr.opts.Verbose > 2 {
 			log.Printf("loaded file %s\n", path)
@@ -305,16 +304,6 @@ func (ldr *Loader) peekFile(file types.File) []byte {
 
 	if err != nil {
 		log.Fatalln(err)
-	}
-
-	return b
-}
-
-func (ldr *Loader) readFile(file types.File) []byte {
-	b, err := io.ReadAll(file)
-
-	if err != nil {
-		log.Println(err)
 	}
 
 	return b
