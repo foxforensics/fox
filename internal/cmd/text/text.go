@@ -53,7 +53,7 @@ type Text struct {
 	Decimal bool `short:"D"`
 
 	// paths
-	Paths []string `arg:"" type:"path" optional:""`
+	Paths []string `arg:"" optional:""`
 }
 
 func (cmd *Text) Validate() error {

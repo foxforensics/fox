@@ -15,7 +15,7 @@ import (
 //goland:noinspection ALL
 var re = regexp.MustCompile(`^//((?<user>.+?)(:(?<pass>.*?))?@)?(?<host>.+?)?(:(?<port>\d+?))?/(?<root>.+?)/(?<path>.*?)(:(?<part>.+))?$`)
 
-type Unc struct {
+type unc struct {
 	User string
 	Pass string
 	Host string
@@ -26,48 +26,17 @@ type Unc struct {
 }
 
 type Share struct {
-	unc *Unc
+	unc *unc
 	cn  net.Conn
 	se  *smb2.Session
 	fs  *smb2.Share
 }
 
 func New(path string) *Share {
-	return &Share{unc: Parse(path)}
+	return &Share{unc: parse(path)}
 }
 
-func Parse(path string) *Unc {
-	path = strings.TrimSpace(path)
-	path = strings.TrimPrefix(path, "smb:")
-
-	match := re.FindStringSubmatch(path)
-	group := make(map[string]string, 6)
-
-	for i, k := range re.SubexpNames() {
-		if i > 0 && len(k) > 0 {
-			group[k] = match[i]
-		}
-	}
-
-	unc := new(Unc)
-
-	unc.User, _ = group["user"]
-	unc.Pass, _ = group["pass"]
-	unc.Host, _ = group["host"]
-	unc.Root, _ = group["root"]
-	unc.Port, _ = group["port"]
-
-	if len(unc.Port) == 0 {
-		unc.Port = "445"
-	}
-
-	unc.Path, _ = group["path"]
-	unc.Part, _ = group["part"]
-
-	return unc
-}
-
-func (unc *Unc) String() string {
+func (unc *unc) String() string {
 	var cred string
 	var host = unc.Host
 	var root = unc.Root
@@ -93,11 +62,11 @@ func (unc *Unc) String() string {
 		path += ":" + unc.Part
 	}
 
-	return fmt.Sprintf("smb://%s%s/%s/%s", cred, host, root, path)
+	return fmt.Sprintf("//%s%s/%s/%s", cred, host, root, path)
 }
 
 func (shr *Share) String() string {
-	return shr.unc.String()
+	return fmt.Sprintf("//%s/%s", shr.unc.Host, shr.unc.Root)
 }
 
 func (shr *Share) DirFS(path string) fs.FS {
@@ -134,7 +103,7 @@ func (shr *Share) Mount() {
 		log.Fatalln(err)
 	}
 
-	shr.fs, err = shr.se.Mount(shr.unc.Path)
+	shr.fs, err = shr.se.Mount(shr.unc.Root)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -145,4 +114,37 @@ func (shr *Share) Umount() {
 	_ = shr.fs.Umount()
 	_ = shr.se.Logoff()
 	_ = shr.cn.Close()
+}
+
+func parse(path string) *unc {
+	path = strings.TrimSpace(path)
+	path = strings.TrimPrefix(path, "smb:")
+
+	if strings.HasPrefix(path, `\\`) {
+		path = strings.ReplaceAll(path, `\`, `/`)
+	}
+
+	match := re.FindStringSubmatch(path)
+	group := make(map[string]string, 6)
+
+	for i, k := range re.SubexpNames() {
+		if i > 0 && len(k) > 0 {
+			group[k] = match[i]
+		}
+	}
+
+	unc := new(unc)
+	unc.User, _ = group["user"]
+	unc.Pass, _ = group["pass"]
+	unc.Host, _ = group["host"]
+	unc.Root, _ = group["root"]
+	unc.Port, _ = group["port"]
+	unc.Path, _ = group["path"]
+	unc.Part, _ = group["part"]
+
+	if len(unc.Port) == 0 {
+		unc.Port = "445"
+	}
+
+	return unc
 }

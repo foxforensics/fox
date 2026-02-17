@@ -48,7 +48,7 @@ type Cat struct {
 	Syntax string `short:"S"`
 
 	// paths
-	Paths []string `arg:"" type:"path" optional:""`
+	Paths []string `arg:"" optional:""`
 
 	// internal
 	uniq unique.Unique `kong:"-"`

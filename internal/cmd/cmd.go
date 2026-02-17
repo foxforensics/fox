@@ -56,7 +56,7 @@ import (
 
 type Globals struct {
 	// file flags
-	Paths string `short:"i" long:"in" type:"path"`
+	Paths string `short:"i" long:"in"`
 	File  string `short:"o" long:"out" xor:"out,quiet"`
 
 	// limit flags

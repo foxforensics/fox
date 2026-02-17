@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
-	"github.com/cuhsat/fox/v4/internal/pkg/test"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
@@ -43,6 +42,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/zstd"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/format/json"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/format/jsonl"
+	"github.com/cuhsat/fox/v4/internal/pkg/test"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )

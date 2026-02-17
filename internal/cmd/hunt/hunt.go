@@ -81,7 +81,7 @@ type Hunt struct {
 	Block uint `short:"b" default:"65536"`
 
 	// filter
-	Rule string  `short:"R" type:"path"`
+	Rule string  `short:"R"`
 	Dist float64 `short:"D" xor:"uniq,dist"`
 
 	// stream
@@ -95,7 +95,7 @@ type Hunt struct {
 	Splunk   bool `short:"S" xor:"logstash,splunk"`
 
 	// paths
-	Paths []string `arg:"" type:"path" optional:""`
+	Paths []string `arg:"" optional:""`
 
 	// internal
 	db   store.Store     `kong:"-"`

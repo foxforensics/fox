@@ -45,7 +45,7 @@ type Dump struct {
 	OnlyNt bool `short:"N" long:"only-nt" xor:"only-lm,only-nt"`
 
 	// paths
-	Paths []string `arg:"" type:"path" optional:""`
+	Paths []string `arg:"" optional:""`
 }
 
 func (cmd *Dump) AfterApply(_ *kong.Kong, _ kong.Vars) error {

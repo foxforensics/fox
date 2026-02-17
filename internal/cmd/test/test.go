@@ -54,7 +54,7 @@ type Test struct {
 	Two string `xor:"one,two" hidden:""`
 
 	// paths
-	Paths []string `arg:"" type:"path" optional:""`
+	Paths []string `arg:"" optional:""`
 }
 
 func (cmd *Test) AfterApply(_ *kong.Kong, _ kong.Vars) error {

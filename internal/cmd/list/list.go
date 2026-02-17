@@ -45,7 +45,7 @@ type List struct {
 	Human bool `short:"H"`
 
 	// paths
-	Paths []string `arg:"" name:"path" type:"path" optional:""`
+	Paths []string `arg:"" name:"path" optional:""`
 
 	// internal
 	block uint64 `kong:"-"`
@@ -62,8 +62,6 @@ func (cmd *List) Validate() error {
 func (cmd *List) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if len(cmd.Block) > 0 {
 		cmd.block = uint64(text.Mechanize(cmd.Block))
-
-		println(cmd.block)
 	}
 
 	return nil

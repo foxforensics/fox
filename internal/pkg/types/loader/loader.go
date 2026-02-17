@@ -52,7 +52,7 @@ type Loader struct {
 	later  []disk
 	paths  []string
 	heaps  chan *heap.Heap
-	mounts map[string]*share.Share
+	shares map[string]*share.Share
 }
 
 type disk struct {
@@ -65,7 +65,7 @@ func New(opts *Options) *Loader {
 	return &Loader{
 		opts:   opts,
 		heaps:  make(chan *heap.Heap, opts.Parallel),
-		mounts: make(map[string]*share.Share),
+		shares: make(map[string]*share.Share),
 	}
 }
 
@@ -108,15 +108,15 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 			path, part := data.SplitPart(path)
 
 			if isRemote(path) {
-				mnt := share.New(path)
+				shr := share.New(path)
 
-				ldr.mounts[path] = mnt
+				ldr.shares[path] = shr
 
 				if ldr.opts.Verbose > 0 {
-					log.Printf("mount network share %s\n", mnt.String())
+					log.Printf("mount share %s\n", shr.String())
 				}
 
-				mnt.Mount()
+				shr.Mount()
 			}
 
 			_, err := os.Stat(path)
@@ -155,12 +155,12 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 func (ldr *Loader) Exit() {
 	ldr.RLock()
 
-	for _, mnt := range maps.All(ldr.mounts) {
+	for _, shr := range maps.All(ldr.shares) {
 		if ldr.opts.Verbose > 0 {
-			log.Printf("umount network share %s\n", mnt.String())
+			log.Printf("umount share %s\n", shr.String())
 		}
 
-		mnt.Umount()
+		shr.Umount()
 	}
 
 	if ldr.opts.Verbose > 0 {
@@ -175,8 +175,8 @@ func (ldr *Loader) loadPath(path, part string) {
 
 	base, mask := doublestar.SplitPattern(path)
 
-	if mnt, ok := ldr.mounts[path]; ok {
-		root = mnt.DirFS(base)
+	if shr, ok := ldr.shares[path]; ok {
+		root = shr.DirFS(base)
 	} else {
 		root = os.DirFS(base)
 	}
@@ -242,7 +242,7 @@ func (ldr *Loader) loadFile(path, part string) {
 	var f types.File
 	var err error
 
-	if mnt, ok := ldr.mounts[path]; ok {
+	if mnt, ok := ldr.shares[path]; ok {
 		f, err = mnt.Open(path)
 	} else {
 		f, err = os.OpenFile(path, os.O_RDONLY, 0400)
@@ -576,7 +576,7 @@ func isCoherent(disk []disk) (string, bool) {
 }
 
 func isRemote(path string) bool {
-	return regexp.MustCompile("^(smb:)?//.+").MatchString(path)
+	return regexp.MustCompile(`^\S*(smb:)?(//|\\).+`).MatchString(path)
 }
 
 func isPiped(f *os.File) bool {

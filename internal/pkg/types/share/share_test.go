@@ -12,43 +12,51 @@ func TestParse(t *testing.T) {
 	}{
 		{
 			"smb://user:pass@127.0.0.1:445/Share/dir/file.ext:stream",
-			"smb://user:****@127.0.0.1:445/Share/dir/file.ext:stream",
+			"//user:****@127.0.0.1:445/Share/dir/file.ext:stream",
+		},
+		{
+			`\\user@host\Share\dir\file.ext:stream`,
+			"//user@host:445/Share/dir/file.ext:stream",
 		},
 		{
 			"//user:@host:445/Share/dir/file.ext:stream",
-			"smb://user@host:445/Share/dir/file.ext:stream",
+			"//user@host:445/Share/dir/file.ext:stream",
 		},
 		{
 			"//user@host:445/Share/dir/file.ext:stream",
-			"smb://user@host:445/Share/dir/file.ext:stream",
+			"//user@host:445/Share/dir/file.ext:stream",
 		},
 		{
 			"//host:445/Share/dir/file.ext:stream",
-			"smb://host:445/Share/dir/file.ext:stream",
+			"//host:445/Share/dir/file.ext:stream",
 		},
 		{
 			"//host/Share/dir/file.ext:stream",
-			"smb://host:445/Share/dir/file.ext:stream",
+			"//host:445/Share/dir/file.ext:stream",
 		},
 		{
 			"//host/Share/dir/file.ext",
-			"smb://host:445/Share/dir/file.ext",
+			"//host:445/Share/dir/file.ext",
 		},
 		{
 			"//host/Share/file.ext",
-			"smb://host:445/Share/file.ext",
+			"//host:445/Share/file.ext",
 		},
 		{
 			"//host/Share/dir/",
-			"smb://host:445/Share/dir/",
+			"//host:445/Share/dir/",
 		},
 		{
 			"//host/Share/",
-			"smb://host:445/Share/",
+			"//host:445/Share/",
+		},
+		{
+			`\\host\Share\`,
+			"//host:445/Share/",
 		},
 	} {
-		t.Run(fmt.Sprintf("%d", i+1), func(t *testing.T) {
-			if Parse(tt.unc).String() != tt.str {
+		t.Run(fmt.Sprintf("Path%d", i+1), func(t *testing.T) {
+			if parse(tt.unc).String() != tt.str {
 				t.Fatal("wrong result")
 			}
 		})

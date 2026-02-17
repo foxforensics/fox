@@ -65,7 +65,7 @@ Checksums:
 type Hash struct {
 	Algo  []string `short:"A" sep:"," default:"SHA256"`
 	All   bool     `short:"a"`
-	Paths []string `arg:"" type:"path" optional:""`
+	Paths []string `arg:"" optional:""`
 }
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
