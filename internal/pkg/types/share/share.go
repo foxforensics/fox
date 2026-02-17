@@ -12,6 +12,7 @@ import (
 	"github.com/hirochachacha/go-smb2"
 )
 
+//goland:noinspection ALL
 var re = regexp.MustCompile(`^//((?<user>.+?)(:(?<pass>.*?))?@)?(?<host>.+?)?(:(?<port>\d+?))?/(?<root>.+?)/(?<path>.*?)(:(?<part>.+))?$`)
 
 type Unc struct {
