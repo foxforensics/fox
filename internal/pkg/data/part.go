@@ -2,6 +2,7 @@ package data
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 )
 
@@ -12,11 +13,13 @@ func JoinPart(path, part string) string {
 }
 
 func SplitPart(path string) (string, string) {
-	t := strings.SplitN(path, sep, 2)
+	base := filepath.Base(path)
 
-	if len(t) > 1 {
-		return t[0], t[1]
+	i := strings.LastIndex(base, sep)
+
+	if i < 0 {
+		return path, ""
 	}
 
-	return path, ""
+	return path[:(len(path)-len(base))+i], base[i+1:]
 }

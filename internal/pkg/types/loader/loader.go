@@ -2,7 +2,6 @@ package loader
 
 import (
 	"bufio"
-	"errors"
 	"io"
 	"io/fs"
 	"log"
@@ -70,6 +69,7 @@ func New(opts *Options) *Loader {
 }
 
 func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
+	// read paths from given file
 	if len(ldr.opts.Paths) > 0 {
 		b, err := os.ReadFile(ldr.opts.Paths)
 
@@ -90,6 +90,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 		defer close(ldr.heaps)
 
 		for _, path := range paths {
+			// read file content from stdin
 			if path == stdin {
 				if !isPiped(os.Stdin) {
 					log.Fatalln("stdin not open")
@@ -105,24 +106,22 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 				break
 			}
 
+			// split file and stream
 			path, part := data.SplitPart(path)
 
+			// mount remote share
 			if isRemote(path) {
-				shr := share.New(path)
+				shr, tmp := share.New(path)
 
-				ldr.shares[path] = shr
+				ldr.shares[shr.String()] = shr
 
 				if ldr.opts.Verbose > 0 {
 					log.Printf("mount share %s\n", shr.String())
 				}
 
 				shr.Mount()
-			}
 
-			_, err := os.Stat(path)
-
-			if ldr.opts.Verbose > 0 && errors.Is(err, os.ErrNotExist) {
-				log.Printf("looked for %s\n", path)
+				path = tmp
 			}
 
 			ldr.loadPath(path, part)
@@ -172,6 +171,10 @@ func (ldr *Loader) Exit() {
 
 func (ldr *Loader) loadPath(path, part string) {
 	var root fs.FS
+
+	if ldr.opts.Verbose > 0 {
+		log.Printf("looking for %s\n", path)
+	}
 
 	base, mask := doublestar.SplitPattern(path)
 

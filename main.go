@@ -25,12 +25,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
 
-var Short = strings.TrimSpace(`
-Usage: fox [MODE] [FLAGS...] <PATHS...>
-
-Use the manual or "fox help".
-`)
-
 var Usage = strings.TrimSpace(`
 .-------.----.--.  .--.   .--. .--.--. .--.-. .--.-----.
 |   ___/ .__. \  \/  /    |  |_|  |  | |  |  \|  |   _/
@@ -148,7 +142,7 @@ func main() {
 	case cli.Globals.Help, ctx.Command() == "help":
 		fmt.Println(fmt.Sprintf(Usage, res.Version))
 	case len(ctx.Args) == 0, ctx.Error != nil:
-		fmt.Println(Short)
+		fmt.Println(fmt.Sprintf(Usage, res.Version))
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())

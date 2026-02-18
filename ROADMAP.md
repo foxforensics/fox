@@ -18,6 +18,10 @@
 * Add Windows resources?
   * Metadata
   * Icon
+* Add table with deep links to release files
+* Add support for NTFS to disks in hunt mode
+* Add support for MSI files
+  * https://pkg.go.dev/github.com/asalih/go-msi
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
 * Add CEF syntax highlighting (pygments)

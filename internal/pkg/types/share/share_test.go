@@ -11,28 +11,28 @@ func TestParse(t *testing.T) {
 		str string
 	}{
 		{
-			"smb://user:pass@127.0.0.1:445/Share/",
-			"//user@127.0.0.1:445/Share/",
+			"smb://user:pass@127.0.0.1:445/share/",
+			"//127.0.0.1:445/share/",
 		},
 		{
-			`\\user@host\Share\`,
-			"//user@host:445/Share/",
+			`\\user:pass@127.0.0.1:445\share\`,
+			"//127.0.0.1:445/share/",
 		},
 		{
-			"//user:@host:445/Share/",
-			"//user@host:445/Share/",
+			"//user:@host/share/",
+			"//host/share/",
 		},
 		{
-			"//user@host:445/Share/",
-			"//user@host:445/Share/",
+			"//user@host/share/",
+			"//host/share/",
 		},
 		{
-			"//host:445/Share/",
-			"//host:445/Share/",
+			"//host/share/",
+			"//host/share/",
 		},
 		{
-			"//host/Share/",
-			"//host:445/Share/",
+			"//host/share",
+			"//host/share/",
 		},
 	} {
 		t.Run(fmt.Sprintf("Path%d", i+1), func(t *testing.T) {
