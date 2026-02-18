@@ -237,9 +237,7 @@ func (ldr *Loader) loadDir(root fs.FS, path, part string) {
 }
 
 func (ldr *Loader) loadFile(root fs.FS, path, part string) {
-	x, err := root.Open(path) //TODO: File(path, os.O_RDONLY, 0400)
-
-	f := x.(types.File)
+	f, err := root.Open(path)
 
 	if err != nil {
 		log.Println(err)
@@ -260,7 +258,7 @@ func (ldr *Loader) loadFile(root fs.FS, path, part string) {
 	}
 
 	// try to load the file first
-	if ldr.processFile(path, f) { // TODO: does not work anymore!?
+	if ldr.processFile(path, f.(types.File)) {
 		return
 	}
 
@@ -276,7 +274,7 @@ func (ldr *Loader) loadFile(root fs.FS, path, part string) {
 		}
 
 	// read remote file whole
-	case types.File:
+	default:
 		b, err = fs.ReadFile(root, path)
 
 		if err != nil {

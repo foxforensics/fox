@@ -12,15 +12,14 @@ import (
 	"github.com/hirochachacha/go-smb2"
 )
 
-//goland:noinspection ALL
-var re = regexp.MustCompile(`^//((?<user>.+?)(:(?<pass>.*?))?@)?(?<host>.+?)?(:(?<port>\d+?))?/(?<root>.+)/`)
+var re = regexp.MustCompile(`^//((.+?)(:(.*?))?@)?(.+?)?(:(\d+?))?/(.+)/`)
 
 type unc struct {
-	User string
-	Pass string
-	Host string
-	Port string
-	Root string
+	user string
+	pass string
+	host string
+	port string
+	root string
 }
 
 type Share struct {
@@ -35,22 +34,22 @@ func New(path string) *Share {
 }
 
 func (unc *unc) String() string {
-	var cred = unc.User
-	var host = unc.Host
+	var cred = unc.user
+	var host = unc.host
 
 	if len(cred) > 0 {
 		cred += "@"
 	}
 
-	if len(unc.Port) > 0 {
-		host += ":" + unc.Port
+	if len(unc.port) > 0 {
+		host += ":" + unc.port
 	}
 
-	return fmt.Sprintf("//%s%s/%s/", cred, host, unc.Root)
+	return fmt.Sprintf("//%s%s/%s/", cred, host, unc.root)
 }
 
 func (shr *Share) String() string {
-	return fmt.Sprintf("//%s/%s/", shr.unc.Host, shr.unc.Root)
+	return fmt.Sprintf("//%s/%s/", shr.unc.host, shr.unc.root)
 }
 
 func (shr *Share) DirFS(path string) fs.FS {
@@ -64,7 +63,7 @@ func (shr *Share) Open(path string) (*smb2.File, error) {
 func (shr *Share) Mount() {
 	var err error
 
-	addr := fmt.Sprintf("%s:%s", shr.unc.Host, shr.unc.Port)
+	addr := fmt.Sprintf("%s:%s", shr.unc.host, shr.unc.port)
 
 	shr.cn, err = net.Dial("tcp", addr)
 
@@ -73,8 +72,8 @@ func (shr *Share) Mount() {
 	}
 
 	d := &smb2.Dialer{Initiator: &smb2.NTLMInitiator{
-		User:     shr.unc.User,
-		Password: shr.unc.Pass,
+		User:     shr.unc.user,
+		Password: shr.unc.pass,
 	}}
 
 	shr.se, err = d.Dial(shr.cn)
@@ -83,7 +82,7 @@ func (shr *Share) Mount() {
 		log.Fatalln(err)
 	}
 
-	shr.fs, err = shr.se.Mount(shr.unc.Root)
+	shr.fs, err = shr.se.Mount(shr.unc.root)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -104,25 +103,18 @@ func parse(path string) *unc {
 		path = strings.ReplaceAll(path, `\`, `/`)
 	}
 
-	match := re.FindStringSubmatch(path)
-	group := make(map[string]string, 6)
+	// TODO: does not work with sub dirs
+	group := re.FindStringSubmatch(path)
 
-	for i, k := range re.SubexpNames() {
-		if i > 0 && len(k) > 0 {
-			group[k] = match[i]
-		}
+	if len(group[7]) == 0 {
+		group[7] = "445"
 	}
 
-	unc := new(unc)
-	unc.User, _ = group["user"]
-	unc.Pass, _ = group["pass"]
-	unc.Host, _ = group["host"]
-	unc.Root, _ = group["root"]
-	unc.Port, _ = group["port"]
-
-	if len(unc.Port) == 0 {
-		unc.Port = "445"
+	return &unc{
+		user: group[2],
+		pass: group[4],
+		host: group[5],
+		port: group[7],
+		root: group[8],
 	}
-
-	return unc
 }
