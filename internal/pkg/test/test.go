@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/klauspost/compress/zstd"
 )
 
@@ -79,9 +78,7 @@ func Fixture(name string) []byte {
 }
 
 func deflate(b []byte) []byte {
-	if !data.HasMagic(b, 0, []byte{
-		0x28, 0xB5, 0x2F, 0xFD,
-	}) {
+	if !bytes.Equal(b[:4], []byte{0x28, 0xB5, 0x2F, 0xFD}) {
 		return b
 	}
 
