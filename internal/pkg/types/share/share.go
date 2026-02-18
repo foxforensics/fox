@@ -9,10 +9,9 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
-	"syscall"
 
 	"github.com/hirochachacha/go-smb2"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 var re = regexp.MustCompile(`^//((.+?)(:(.*?))?@)?(.+?)?/(.+?)/(.*)$`)
@@ -113,7 +112,7 @@ func (shr *Share) Umount() {
 func prompt(hint string) string {
 	print(fmt.Sprintf("%s: ", hint))
 
-	b, err := terminal.ReadPassword(syscall.Stdin)
+	b, err := term.ReadPassword(int(os.Stdin.Fd()))
 
 	println("")
 

@@ -32,6 +32,7 @@ require (
 	github.com/flanglet/kanzi-go/v2 v2.4.0
 	github.com/glaslos/ssdeep v0.4.0
 	github.com/glaslos/tlsh v0.4.0
+	github.com/hirochachacha/go-smb2 v1.1.0
 	github.com/hooklift/iso9660 v1.0.0
 	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f
 	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004
@@ -94,7 +95,6 @@ require (
 	github.com/geoffgarside/ber v1.1.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
-	github.com/hirochachacha/go-smb2 v1.1.0 // indirect
 	github.com/hooklift/assert v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
