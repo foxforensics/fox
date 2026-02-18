@@ -14,7 +14,10 @@
 
 ## 5. Ideas
 * Add advanced examples?
-  * `fox test -pinfected files.zip:sample.exe`
+  > Mount the network share, decrypt the archive, extract the file into memory, calculate the hash and test it against known malware on VirusTotal:
+  > ```console
+  > fox test -pinfected \\lab\case\files.zip:ioc.exe
+  > ```
 * Add Windows resources?
   * Metadata
   * Icon

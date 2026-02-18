@@ -21,6 +21,7 @@ type unc struct {
 	user string
 	pass string
 	host string
+	port string
 	root string
 	path string
 }
@@ -54,35 +55,35 @@ func (shr *Share) Open(path string) (*smb2.File, error) {
 }
 
 func (shr *Share) Mount() {
-	h, p, err := net.SplitHostPort(shr.unc.host)
+	var err error
 
-	if err != nil {
+	if h, p, err := net.SplitHostPort(shr.unc.host); err != nil {
 		if strings.Contains(err.Error(), "missing port") {
-			h = shr.unc.host
-			p = "445" // default SMB2/3 port
+			shr.unc.host = h
+			shr.unc.port = "445" // default SMB2/3 port
 		} else {
 			log.Fatalln(err)
 		}
+	} else {
+		shr.unc.host = h
+		shr.unc.port = p
 	}
 
-	shr.cn, err = net.Dial("tcp", fmt.Sprintf("%s:%s", h, p))
+	shr.cn, err = net.Dial("tcp", fmt.Sprintf("%s:%s",
+		shr.unc.host,
+		shr.unc.port,
+	))
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
+	if shr.unc.user == "*" {
+		shr.unc.user = prompt("Username")
+	}
+
 	if shr.unc.pass == "*" {
-		print("Password: ")
-
-		b, err := terminal.ReadPassword(syscall.Stdin)
-
-		println("")
-
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		shr.unc.pass = string(b)
+		shr.unc.pass = prompt("Password")
 	}
 
 	d := &smb2.Dialer{Initiator: &smb2.NTLMInitiator{
@@ -107,6 +108,20 @@ func (shr *Share) Umount() {
 	_ = shr.fs.Umount()
 	_ = shr.se.Logoff()
 	_ = shr.cn.Close()
+}
+
+func prompt(hint string) string {
+	print(fmt.Sprintf("%s: ", hint))
+
+	b, err := terminal.ReadPassword(syscall.Stdin)
+
+	println("")
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return string(b)
 }
 
 func parse(path string) *unc {

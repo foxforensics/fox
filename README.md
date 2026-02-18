@@ -25,7 +25,7 @@ brew install cuhsat/fox/fox
 
 ## Features
 * [x] Restricted read-only access
-* [x] Support for SMB2/3 UNC paths
+* [x] Supports SMB 2/3 UNC paths
 * [x] [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * [x] String carving and automatic classification
 * [x] With over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
