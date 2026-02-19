@@ -109,7 +109,7 @@ func parseVerdict(obj *vt.Object, res *Result) {
 func request(url *url.URL, key string) (*Result, error) {
 	res := new(Result)
 
-	api := vt.NewClient(key, vt.WithHTTPClient(client.Default))
+	api := vt.NewClient(key, vt.WithHTTPClient(client.Default()))
 
 	obj, err := api.GetObject(url)
 

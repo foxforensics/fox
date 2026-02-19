@@ -9,6 +9,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
+var _client = client.Default()
+
 type Streamer interface {
 	Stream(*event.Event) error
 }
@@ -26,7 +28,7 @@ func Post(url, body string, headers map[string]string) error {
 		req.Header.Set(k, v)
 	}
 
-	res, err := client.Default.Do(req)
+	res, err := _client.Do(req)
 
 	if err != nil {
 		return err

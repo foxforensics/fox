@@ -47,6 +47,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/format/jsonl"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/client"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
@@ -242,6 +243,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		os.Exit(0)
 	}
 
+	client.Idle = cli.Threads
 	smap.Chunks = cli.Threads
 
 	return cli.Loader.Load(args)
