@@ -60,10 +60,9 @@ require (
 	github.com/zeebo/xxh3 v1.1.0
 	go.dw1.io/rapidhash v0.3.0
 	go.solidsystem.no/fletcher4 v0.2.0
-	golang.org/x/net v0.49.0
 	golang.org/x/term v0.40.0
 	golang.org/x/text v0.34.0
-	modernc.org/sqlite v1.45.0
+	modernc.org/sqlite v1.46.1
 	www.velocidex.com/golang/go-ese v0.2.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 	www.velocidex.com/golang/regparser v0.0.0-20250203141505-31e704a67ef7
@@ -94,7 +93,7 @@ require (
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/edsrzf/mmap-go v1.2.0 // indirect
-	github.com/geoffgarside/ber v1.1.0 // indirect
+	github.com/geoffgarside/ber v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hooklift/assert v0.1.0 // indirect
@@ -103,7 +102,7 @@ require (
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/parquet-go/bitpack v1.0.0 // indirect
-	github.com/parquet-go/jsonlite v1.0.0 // indirect
+	github.com/parquet-go/jsonlite v1.4.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
@@ -114,11 +113,11 @@ require (
 	github.com/twpayne/go-geom v1.6.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
-	golang.org/x/exp v0.0.0-20260211191109-2735e65f0518 // indirect
+	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa // indirect
 	golang.org/x/sys v0.41.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	modernc.org/libc v1.67.7 // indirect
+	modernc.org/libc v1.68.0 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
 	www.velocidex.com/golang/go-ntfs v0.2.0 // indirect
