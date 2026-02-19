@@ -23,6 +23,9 @@ go install github.com/cuhsat/fox/v4@latest
 brew install cuhsat/fox/fox
 ```
 
+## Scope
+Fox is a UNIX-style CLI tool, build to support the examination process of file based artifacts, by providing the most useful features in a cross-platform standalone binary. The data will be processed in a read-only manner and output uninterpreted.
+
 ## Features
 * [x] Restricted read-only access
 * [x] Supports SMB 2/3 UNC paths
@@ -110,7 +113,7 @@ Cryptographic Hashes
 > BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, GOST2012-256, GOST2012-512, HAS-160, LSH-256, LSH-512, MD2, MD4, MD5, MD6, RIPEMD-160, SHAKE128, SHAKE256, SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512, Skein-224, Skein-256, Skein-384, Skein-512, SM3, Whirlpool
 
 Performance Hashes
-> FNV-1, FNV-1a, Murmur3, SipHash, XXH32, XXH64, XXH3
+> djb2, FNV-1, FNV-1a, Murmur3, RapidHash, SipHash, XXH32, XXH64, XXH3
 
 Similarity Hashes
 > ImpFuzzy, ImpHash, ImpHash0, SSDeep, TLSH

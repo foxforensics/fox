@@ -12,7 +12,7 @@ import (
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/extern/vt"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/apis/vt"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"

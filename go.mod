@@ -58,7 +58,9 @@ require (
 	github.com/xxtea/xxtea-go v1.0.0
 	github.com/zeebo/blake3 v0.2.4
 	github.com/zeebo/xxh3 v1.1.0
+	go.dw1.io/rapidhash v0.3.0
 	go.solidsystem.no/fletcher4 v0.2.0
+	golang.org/x/net v0.49.0
 	golang.org/x/term v0.40.0
 	golang.org/x/text v0.34.0
 	modernc.org/sqlite v1.45.0

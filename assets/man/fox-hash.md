@@ -60,7 +60,7 @@ Cryptographic hashes (other)
 
 Performance hashes
 
-:   FNV-1, FNV-1A, MURMUR3, SIPHASH, XXH32, XXH64, XXH3
+:   DJB2, FNV-1, FNV-1A, MURMUR3, RAPIDHASH, SIPHASH, XXH32, XXH64, XXH3
 
 Similarity hashes
 

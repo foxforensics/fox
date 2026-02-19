@@ -32,6 +32,7 @@ import (
 	"github.com/spaolacci/murmur3"
 	"github.com/tjfoc/gmsm/v2/sm3"
 	"github.com/zeebo/xxh3"
+	"go.dw1.io/rapidhash"
 	"go.solidsystem.no/fletcher4"
 	"golang.org/x/crypto/blake2b"
 	"golang.org/x/crypto/blake2s"
@@ -40,7 +41,8 @@ import (
 
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/blake3"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/shake"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/xxh"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/fast/djb2"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/fast/xxh"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/impfuzzy"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/imphash"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/other/image"
@@ -66,6 +68,7 @@ var Algorithms = []string{
 	types.CRC64ECMA,
 	types.CRC64ISO,
 	types.DHASH,
+	types.DJB2,
 	types.FLETCHER4,
 	types.FNV1,
 	types.FNV1A,
@@ -86,6 +89,7 @@ var Algorithms = []string{
 	types.NT,
 	types.PE,
 	types.PHASH,
+	types.RAPIDHASH,
 	types.RIPEMD160,
 	types.SHAKE128,
 	types.SHAKE256,
@@ -190,6 +194,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = crc64.New(crc64.MakeTable(crc64.ISO))
 	case types.DHASH:
 		imp = image.NewDHash()
+	case types.DJB2:
+		imp = djb2.New()
 	case types.FLETCHER4:
 		imp = fletcher4.New()
 	case types.FNV1:
@@ -230,6 +236,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = pe.New()
 	case types.PHASH:
 		imp = image.NewPHash()
+	case types.RAPIDHASH:
+		imp = rapidhash.New()
 	case types.RIPEMD160:
 		imp = ripemd160.New()
 	case types.SHA1:
