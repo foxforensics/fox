@@ -7,12 +7,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
+	"foxhunt.dev/fox/internal/pkg/types"
 	"github.com/twmb/murmur3"
 
-	"github.com/cuhsat/fox/v4/internal"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"foxhunt.dev/fox/internal"
+	"foxhunt.dev/fox/internal/pkg/data/stream"
+	"foxhunt.dev/fox/internal/pkg/types/event"
 )
 
 const LocalHost = "http://localhost:8080"

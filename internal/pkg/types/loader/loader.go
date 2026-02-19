@@ -17,14 +17,14 @@ import (
 	"github.com/pbnjay/memory"
 	"github.com/sourcegraph/conc/pool"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/ewf"
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/mmap"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/share"
+	"foxhunt.dev/fox/internal/pkg/data"
+	"foxhunt.dev/fox/internal/pkg/data/reader/ewf"
+	"foxhunt.dev/fox/internal/pkg/text"
+	"foxhunt.dev/fox/internal/pkg/types"
+	"foxhunt.dev/fox/internal/pkg/types/heap"
+	"foxhunt.dev/fox/internal/pkg/types/mmap"
+	"foxhunt.dev/fox/internal/pkg/types/register"
+	"foxhunt.dev/fox/internal/pkg/types/share"
 )
 
 const (

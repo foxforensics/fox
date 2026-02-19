@@ -7,8 +7,8 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/mmap"
+	"foxhunt.dev/fox/internal/pkg/types"
+	"foxhunt.dev/fox/internal/pkg/types/mmap"
 )
 
 type Heap struct {

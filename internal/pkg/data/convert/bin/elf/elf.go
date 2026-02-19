@@ -6,7 +6,7 @@ import (
 
 	"github.com/saferwall/elf"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"foxhunt.dev/fox/internal/pkg/data"
 )
 
 const Magic = "\x7FELF"

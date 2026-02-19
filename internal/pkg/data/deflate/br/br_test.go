@@ -3,7 +3,7 @@ package br
 import (
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/test"
+	"foxhunt.dev/fox/internal/pkg/test"
 )
 
 const file = "deflate/fox.br"

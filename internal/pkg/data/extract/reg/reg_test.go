@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/extract"
-	"github.com/cuhsat/fox/v4/internal/pkg/test"
+	"foxhunt.dev/fox/internal/pkg/data/extract"
+	"foxhunt.dev/fox/internal/pkg/test"
 )
 
 const file = "ntds/system.zst"

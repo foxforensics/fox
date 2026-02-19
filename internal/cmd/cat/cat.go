@@ -6,11 +6,11 @@ import (
 
 	"github.com/alecthomas/kong"
 
-	cli "github.com/cuhsat/fox/v4/internal/cmd"
+	cli "foxhunt.dev/fox/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"github.com/cuhsat/fox/v4/internal/pkg/text/unique"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
+	"foxhunt.dev/fox/internal/pkg/text"
+	"foxhunt.dev/fox/internal/pkg/text/unique"
+	"foxhunt.dev/fox/internal/pkg/types/buffer"
 )
 
 var Usage = strings.TrimSpace(`

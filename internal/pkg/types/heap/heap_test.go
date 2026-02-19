@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/test"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
+	"foxhunt.dev/fox/internal/pkg/test"
+	"foxhunt.dev/fox/internal/pkg/types"
 )
 
 const (

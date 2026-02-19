@@ -11,7 +11,7 @@ import (
 
 	"github.com/glaslos/ssdeep"
 
-	intern "github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
+	intern "foxhunt.dev/fox/internal/pkg/data/convert/bin/pe"
 )
 
 var ErrNotSupported = errors.New("file type not supported")

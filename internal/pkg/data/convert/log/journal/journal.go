@@ -13,9 +13,9 @@ import (
 	"github.com/Velocidex/go-journalctl/parser"
 	"github.com/Velocidex/ordereddict"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"foxhunt.dev/fox/internal/pkg/data"
+	"foxhunt.dev/fox/internal/pkg/types"
+	"foxhunt.dev/fox/internal/pkg/types/event"
 )
 
 var Magic = []byte("LPKSHHRH")

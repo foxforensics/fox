@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types/mmap"
+	"foxhunt.dev/fox/internal/pkg/types/mmap"
 )
 
 const CR = '\n'

@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/store"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"foxhunt.dev/fox/internal/pkg/data/store"
+	"foxhunt.dev/fox/internal/pkg/types/event"
 	"github.com/parquet-go/parquet-go"
 )
 

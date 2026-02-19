@@ -10,10 +10,10 @@ import (
 
 	"github.com/sourcegraph/conc/pool"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
+	"foxhunt.dev/fox/internal/pkg/data/convert/log/evtx"
+	"foxhunt.dev/fox/internal/pkg/data/convert/log/journal"
+	"foxhunt.dev/fox/internal/pkg/types/event"
+	"foxhunt.dev/fox/internal/pkg/types/heap"
 )
 
 const Storage = "hunt"

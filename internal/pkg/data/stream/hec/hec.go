@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/cuhsat/fox/v4/internal"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"foxhunt.dev/fox/internal"
+	"foxhunt.dev/fox/internal/pkg/data/stream"
+	"foxhunt.dev/fox/internal/pkg/types/event"
 )
 
 const LocalHost = "http://localhost:8088/services/collector/event/1.0"

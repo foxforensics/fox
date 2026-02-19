@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/test"
+	"foxhunt.dev/fox/internal/pkg/test"
 )
 
 const file = "convert/test.pf.zst"

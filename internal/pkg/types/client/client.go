@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	app "github.com/cuhsat/fox/v4/internal"
+	app "foxhunt.dev/fox/internal"
 )
 
 var (

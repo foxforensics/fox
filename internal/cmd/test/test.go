@@ -10,12 +10,12 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/xxtea/xxtea-go/xxtea"
 
-	cli "github.com/cuhsat/fox/v4/internal/cmd"
+	cli "foxhunt.dev/fox/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/apis/vt"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash"
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
+	"foxhunt.dev/fox/internal/pkg/data/apis/vt"
+	"foxhunt.dev/fox/internal/pkg/hash"
+	"foxhunt.dev/fox/internal/pkg/text"
+	"foxhunt.dev/fox/internal/pkg/types"
 )
 
 var Usage = strings.TrimSpace(`

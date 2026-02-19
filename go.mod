@@ -1,4 +1,4 @@
-module github.com/cuhsat/fox/v4
+module foxhunt.dev/fox
 
 go 1.25.7
 

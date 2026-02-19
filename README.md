@@ -5,7 +5,7 @@ The Forensic Examiners Swiss Army Knife. Providing many useful features to lever
 <br/>
 <br/>
 
-[![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
+[![Go Report](https://goreportcard.com/badge/foxhunt.dev/fox?style=for-the-badge)](https://goreportcard.com/report/foxhunt.dev/fox)
 [![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/cuhsat/fox/actions)
 [![Commits](https://img.shields.io/github/commit-activity/y/cuhsat/fox.svg?style=for-the-badge&label=commits)](https://github.com/cuhsat/fox/commits/main/)
 [![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
@@ -15,7 +15,7 @@ The Forensic Examiners Swiss Army Knife. Providing many useful features to lever
 
 **Get it on Linux**
 ```bash
-go install github.com/cuhsat/fox/v4@latest
+go install foxhunt.dev/fox@latest
 ```
 
 **Get it on macOS**
