@@ -51,7 +51,7 @@ type Loader struct {
 	later  []disk
 	paths  []string
 	heaps  chan *heap.Heap
-	shares map[string]*share.Share
+	mounts map[string]*share.Share
 }
 
 type disk struct {
@@ -64,7 +64,7 @@ func New(opts *Options) *Loader {
 	return &Loader{
 		opts:   opts,
 		heaps:  make(chan *heap.Heap, opts.Parallel),
-		shares: make(map[string]*share.Share),
+		mounts: make(map[string]*share.Share),
 	}
 }
 
@@ -111,15 +111,15 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 
 			// mount remote share
 			if isRemote(path) {
-				shr, tmp := share.New(path)
+				mnt, tmp := share.New(path)
 
-				ldr.shares[shr.String()] = shr
+				ldr.mounts[mnt.String()] = mnt
 
 				if ldr.opts.Verbose > 0 {
-					log.Printf("mount share %s\n", shr.String())
+					log.Printf("mount share %s\n", mnt.String())
 				}
 
-				shr.Mount()
+				mnt.Mount()
 
 				path = tmp
 			}
@@ -154,12 +154,12 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 func (ldr *Loader) Exit() {
 	ldr.RLock()
 
-	for _, shr := range maps.All(ldr.shares) {
+	for _, mnt := range maps.All(ldr.mounts) {
 		if ldr.opts.Verbose > 0 {
-			log.Printf("umount share %s\n", shr.String())
+			log.Printf("umount share %s\n", mnt.String())
 		}
 
-		shr.Umount()
+		mnt.Umount()
 	}
 
 	if ldr.opts.Verbose > 0 {
@@ -178,7 +178,7 @@ func (ldr *Loader) loadPath(path, part string) {
 
 	base, mask := doublestar.SplitPattern(path)
 
-	if shr, ok := ldr.shares[path]; ok {
+	if shr, ok := ldr.mounts[path]; ok {
 		root = shr.DirFS(".")
 	} else {
 		root = os.DirFS(base)
