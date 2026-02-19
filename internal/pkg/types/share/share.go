@@ -34,6 +34,7 @@ type Share struct {
 
 func New(path string) (*Share, string) {
 	shr := &Share{unc: parse(path)}
+
 	return shr, filepath.Join(shr.unc.root, shr.unc.path)
 }
 
@@ -58,7 +59,6 @@ func (shr *Share) Mount() {
 
 	if h, p, err := net.SplitHostPort(shr.unc.host); err != nil {
 		if strings.Contains(err.Error(), "missing port") {
-			shr.unc.host = h
 			shr.unc.port = "445" // default SMB2/3 port
 		} else {
 			log.Fatalln(err)

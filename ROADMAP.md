@@ -13,6 +13,8 @@
 * ~~Done~~
 
 ## 5. Ideas
+* Change byte arrays to ReaderAt
+  * So that disks can read from mmap
 * Add advanced examples?
   > Mount the network share, decrypt the archive, extract the file into memory, calculate the hash and test it against known malware on VirusTotal:
   > ```console
