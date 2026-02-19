@@ -23,8 +23,8 @@ go install github.com/cuhsat/fox/v4@latest
 brew install cuhsat/fox/fox
 ```
 
-## Scope
-Fox is a UNIX-style CLI tool, build to support the examination process of file based artifacts, by providing the most useful features in a cross-platform standalone binary. The data will be processed in a read-only manner and output uninterpreted.
+## Synopsis
+Fox is a UNIX-style CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. The data will be processed in read-only manner and output uninterpreted. For a full feature list see below.
 
 ## Features
 * [x] Restricted read-only access
