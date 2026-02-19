@@ -1,6 +1,6 @@
 package store
 
-import "foxhunt.dev/fox/internal/pkg/types/event"
+import "github.com/cuhsat/fox/v4/internal/pkg/types/event"
 
 type Store interface {
 	String() string

@@ -6,11 +6,11 @@ import (
 	"regexp"
 	"strings"
 
-	cli "foxhunt.dev/fox/internal/cmd"
-	"foxhunt.dev/fox/internal/pkg/data/extract/dit"
-	"foxhunt.dev/fox/internal/pkg/data/extract/reg"
-	"foxhunt.dev/fox/internal/pkg/text"
 	"github.com/alecthomas/kong"
+	cli "github.com/cuhsat/fox/v4/internal/cmd"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/dit"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
 var Usage = strings.TrimSpace(`

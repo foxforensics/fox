@@ -3,7 +3,7 @@ package types
 import (
 	"regexp"
 
-	"foxhunt.dev/fox/internal/pkg/types/smap"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
 
 type Filters struct {

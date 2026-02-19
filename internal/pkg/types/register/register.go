@@ -1,6 +1,6 @@
 package register
 
-import "foxhunt.dev/fox/internal/pkg/data"
+import "github.com/cuhsat/fox/v4/internal/pkg/data"
 
 var (
 	Readers  []ReaderEntry

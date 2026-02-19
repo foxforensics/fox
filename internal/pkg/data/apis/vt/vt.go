@@ -12,7 +12,7 @@ import (
 
 	"github.com/VirusTotal/vt-go"
 
-	"foxhunt.dev/fox/internal/pkg/types/client"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/client"
 )
 
 // Trace API responses

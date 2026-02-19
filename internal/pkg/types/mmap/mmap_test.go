@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"foxhunt.dev/fox/internal/pkg/test"
+	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
 func BenchmarkMMap(b *testing.B) {

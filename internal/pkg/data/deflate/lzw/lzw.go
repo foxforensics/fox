@@ -6,7 +6,7 @@ import (
 	"errors"
 	"io"
 
-	"foxhunt.dev/fox/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )
 
 func Detect(b []byte) bool {

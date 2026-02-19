@@ -5,8 +5,8 @@ import (
 
 	"github.com/Velocidex/go-vhdx/parser"
 
-	"foxhunt.dev/fox/internal/pkg/data"
-	"foxhunt.dev/fox/internal/pkg/types"
+	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 func Detect(b []byte) bool {

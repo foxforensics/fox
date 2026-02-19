@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"foxhunt.dev/fox/internal/pkg/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
 var header = strings.TrimSpace(`

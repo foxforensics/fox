@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"foxhunt.dev/fox/internal/pkg/data/format"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/format"
 )
 
 func Detect(b []byte) bool {

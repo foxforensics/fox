@@ -4,14 +4,14 @@ import (
 	"os"
 	"testing"
 
-	"foxhunt.dev/fox/internal/pkg/data/reader/ewf"
-	"foxhunt.dev/fox/internal/pkg/data/reader/vhdx"
-	"foxhunt.dev/fox/internal/pkg/data/reader/vmdk"
-	"foxhunt.dev/fox/internal/pkg/test"
-	"foxhunt.dev/fox/internal/pkg/types"
-	"foxhunt.dev/fox/internal/pkg/types/event"
-	"foxhunt.dev/fox/internal/pkg/types/loader"
-	"foxhunt.dev/fox/internal/pkg/types/register"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/ewf"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/vhdx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/vmdk"
+	"github.com/cuhsat/fox/v4/internal/pkg/test"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
 
 func TestMain(m *testing.M) {

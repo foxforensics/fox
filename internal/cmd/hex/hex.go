@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	cli "foxhunt.dev/fox/internal/cmd"
+	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
-	"foxhunt.dev/fox/internal/pkg/text"
-	"foxhunt.dev/fox/internal/pkg/types/buffer"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
 )
 
 var Usage = strings.TrimSpace(`

@@ -7,10 +7,10 @@ import (
 
 	"github.com/alecthomas/kong"
 
-	cli "foxhunt.dev/fox/internal/cmd"
+	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
-	"foxhunt.dev/fox/internal/pkg/text"
-	"foxhunt.dev/fox/internal/pkg/text/carver"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/text/carver"
 )
 
 var Usage = strings.TrimSpace(`

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"math"
 
-	cli "foxhunt.dev/fox/internal/cmd"
+	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
-	"foxhunt.dev/fox/internal/pkg/text"
-	"foxhunt.dev/fox/internal/pkg/types/heap"
-	"foxhunt.dev/fox/internal/pkg/types/smap"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
 
 type TextLine struct {

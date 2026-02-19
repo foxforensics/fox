@@ -7,7 +7,7 @@ import (
 	"bytes"
 	"io"
 
-	"foxhunt.dev/fox/internal/pkg/types"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 type Stream struct {

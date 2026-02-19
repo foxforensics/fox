@@ -3,8 +3,8 @@ package rar
 import (
 	"testing"
 
-	"foxhunt.dev/fox/internal/pkg/data"
-	"foxhunt.dev/fox/internal/pkg/test"
+	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
 const pass = "test"

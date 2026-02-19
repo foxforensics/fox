@@ -3,8 +3,8 @@ package raw
 import (
 	"fmt"
 
-	"foxhunt.dev/fox/internal/pkg/data/stream"
-	"foxhunt.dev/fox/internal/pkg/types/event"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
 type Raw struct {

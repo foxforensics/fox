@@ -3,7 +3,7 @@ package bzip2
 import (
 	"testing"
 
-	"foxhunt.dev/fox/internal/pkg/test"
+	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
 const file = "deflate/fox.bz2"
