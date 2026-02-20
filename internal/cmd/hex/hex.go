@@ -58,6 +58,8 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 		mode = buffer.Canonical
 	}
 
+	cli.NoConvert = true // forced
+
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
