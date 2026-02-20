@@ -7,24 +7,27 @@ The Forensic Examiners Swiss Army Knife. Providing many useful features to lever
 
 [![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
 [![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/cuhsat/fox/actions)
-[![Commits](https://img.shields.io/github/commit-activity/y/cuhsat/fox.svg?style=for-the-badge&label=commits)](https://github.com/cuhsat/fox/commits/main/)
 [![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
 
 <br/>
 </div>
 
-**Get it on Linux**
+**Get started**
+
 ```bash
 go install github.com/cuhsat/fox/v4@latest
 ```
 
-**Get it on macOS**
-```bash
-brew install cuhsat/fox/fox
-```
-
 ## Synopsis
 Fox is a UNIX-style CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. The data will be processed in read-only manner and output uninterpreted. For a full feature list see below.
+
+## Downloads
+
+|   OS    | Binaries                                                                                       | Packages                                                                                                                                                                                         |
+|:-------:|:-----------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Windows | [amd](https://github.com/cuhsat/fox/releases) \| [arm](https://github.com/cuhsat/fox/releases) |                                                                                                                                                                                                  |
+|  Linux  | [amd](https://github.com/cuhsat/fox/releases) \| [arm](https://github.com/cuhsat/fox/releases) | [apk](https://github.com/cuhsat/fox/releases) \| [deb](https://github.com/cuhsat/fox/releases) \| [pkg](https://github.com/cuhsat/fox/releases) \| [rpm](https://github.com/cuhsat/fox/releases) |
+|  macOs  | [amd](https://github.com/cuhsat/fox/releases) \| [arm](https://github.com/cuhsat/fox/releases) | `brew install cuhsat/fox/fox`                                                                                                                                                                    |
 
 ## Features
 * [x] Restricted read-only access

@@ -13,8 +13,6 @@
 * ~~Done~~
 
 ## 5. Ideas
-* Change byte arrays to ReaderAt
-  * So that disks can read from mmap
 * Add advanced examples?
   > Mount the network share, decrypt the archive, extract the file into memory, calculate the hash and test it against known malware on VirusTotal:
   > ```console
@@ -23,7 +21,6 @@
 * Add Windows resources?
   * Metadata
   * Icon
-* Add table with deep links to release files
 * Add support for NTFS to disks in hunt mode
 * Add support for MSI files
   * https://pkg.go.dev/github.com/asalih/go-msi

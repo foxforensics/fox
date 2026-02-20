@@ -18,6 +18,8 @@ Fox is a UNIX-style CLI tool, build to support the examination process of file b
 MODES
 =====
 
+If no mode is passed, mode `cat` will be run by default.
+
 cat
 
 :   Shows file contents (default mode).
