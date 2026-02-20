@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Shows file contents in hex format.
+Shows file contents in hex format. This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====
