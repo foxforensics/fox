@@ -102,7 +102,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 					log.Fatalln(err)
 				}
 
-				ldr.createData("STDIN", "", uint64(len(buf)), buf)
+				ldr.processData("STDIN", "", buf)
 				break
 			}
 
