@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Fox is a UNIX-style CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. The data will be processed in read-only manner and output uninterpreted.
+Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. The data will be processed in read-only manner and output uninterpreted.
 
 MODES
 =====

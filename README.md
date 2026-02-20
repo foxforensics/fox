@@ -1,7 +1,7 @@
 [![fox](assets/img/logo.png "fox")](https://foxhunt.dev)
 
 <div align="center">
-The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process. Standalone binaries available for Windows, Linux and macOS.
+The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process.
 <br/>
 <br/>
 
@@ -12,16 +12,17 @@ The Forensic Examiners Swiss Army Knife. Providing many useful features to lever
 <br/>
 </div>
 
-**Get started**
+## Synopsis
+Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. The data will be processed in read-only manner and output uninterpreted.
 
-```bash
+## Install
+The fastest way to get started, is to install fox via the `go install` command:
+
+```console
 go install github.com/cuhsat/fox/v4@latest
 ```
 
-## Synopsis
-Fox is a UNIX-style CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. The data will be processed in read-only manner and output uninterpreted. For a full feature list see below.
-
-## Downloads
+Standalone binaries are also available for Windows, Linux and macOS:
 
 |   OS    | Binaries                                                                                       | Packages                                                                                                                                                                                         |
 |:-------:|:-----------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
