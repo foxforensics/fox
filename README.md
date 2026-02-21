@@ -54,7 +54,7 @@ There are also standalone binaries available:
   * [x] Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * [x] Built-in translation of over 51600 event ids
   * [x] Built-in warning of critical system events
-  * [x] Built-in [MCP server](https://modelcontextprotocol.io/docs/getting-started/intro) for agentic AI tools
+  * [x] Built-in agentic AI [MCP server](https://modelcontextprotocol.io/docs/getting-started/intro) support
   * [x] Filter events with [Sigma Rules](https://sigmahq.io/) syntax
   * [x] Filter anomalies using [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
   * [x] Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) and [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
