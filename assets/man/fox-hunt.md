@@ -83,6 +83,12 @@ Stream Flags
 
 :   Uses **HEC** schema for streaming.
 
+Agent Flags
+-----------
+**-M, --mcp**
+
+:   Starts as **MCP** server (blocking).
+
 ALIASES
 =======
 

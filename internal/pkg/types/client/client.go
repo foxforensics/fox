@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"time"
 
-	app "github.com/cuhsat/fox/v4/internal"
+	res "github.com/cuhsat/fox/v4/internal"
 )
 
 var (
 	Idle      = 0
 	Timeout   = time.Second * 30
-	UserAgent = fmt.Sprintf("fox %s", app.Version)
+	UserAgent = fmt.Sprintf("fox %s", res.Version)
 )
 
 // Default HTTP client

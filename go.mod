@@ -99,6 +99,7 @@ require (
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hooklift/assert v0.1.0 // indirect
 	github.com/josephspurrier/goversioninfo v1.5.0 // indirect
+	github.com/mark3labs/mcp-go v0.44.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect

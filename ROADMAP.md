@@ -13,6 +13,7 @@
 * ~~Done~~
 
 ## 5. Ideas
+* Add ModTime to heaps (files and streams)
 * Add advanced examples?
   > Mount the network share, decrypt the archive, extract the file into memory, calculate the hash and test it against known malware on VirusTotal:
   > ```console

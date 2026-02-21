@@ -11,7 +11,10 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
+	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/mark3labs/mcp-go/server"
 
+	res "github.com/cuhsat/fox/v4/internal"
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/ewf"
@@ -60,6 +63,9 @@ Stream flags:
   -E, --ecs                uses ECS schema for streaming
   -H, --hec                uses HEC schema for streaming
 
+Agent flags:
+  -M, --mcp                starts as MCP server (blocking)
+
 Aliases:
   -L, --logstash           alias for -E -Uhttp://localhost:8080
   -S, --splunk             alias for -H -Uhttp://localhost:8088/...
@@ -89,6 +95,9 @@ type Hunt struct {
 	Auth string `short:"A"`
 	Ecs  bool   `short:"E" xor:"ecs,hec"`
 	Hec  bool   `short:"H" xor:"ecs,hec"`
+
+	// agent
+	Mcp bool `short:"M"`
 
 	// alias
 	Logstash bool `short:"L" xor:"logstash,splunk"`
@@ -169,6 +178,10 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		log.Fatalln(err)
 	}
 
+	if cmd.Mcp {
+		// TODO: call cmd.listen() with cli?
+	}
+
 	return nil
 }
 
@@ -232,7 +245,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		Parallel: cli.Threads,
 		Verbose:  cli.Verbose,
 	}).Hunt(ch) {
-		res, err := sig.Matches(ctx, e.Fields)
+		m, err := sig.Matches(ctx, e.Fields)
 
 		if err != nil {
 			log.Println(err)
@@ -243,7 +256,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			continue // not unique
 		}
 
-		if !cmd.All && !res.Match {
+		if !cmd.All && !m.Match {
 			continue // not matched
 		}
 
@@ -314,6 +327,28 @@ func (cmd *Hunt) stream(e *event.Event) {
 	}
 }
 
+func (cmd *Hunt) listen(cli *cli.Globals) {
+	tool := mcp.NewTool("hunt",
+		mcp.WithDescription("Hunts suspicious events"),
+		mcp.WithString("path",
+			mcp.Required(),
+			mcp.Description("Path of the file to hunt in"),
+		),
+	)
+
+	srv := server.NewMCPServer(
+		"Fox",
+		res.Version,
+		server.WithToolCapabilities(false),
+	)
+
+	srv.AddTool(tool, handler)
+
+	if err := server.ServeStdio(srv); err != nil {
+		log.Fatalln(err)
+	}
+}
+
 func (cmd *Hunt) discard(cli *cli.Globals) {
 	if cmd.db == nil {
 		return
@@ -334,4 +369,15 @@ func (cmd *Hunt) discard(cli *cli.Globals) {
 	if err != nil {
 		log.Println(err)
 	}
+}
+
+func handler(_ context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	val, err := request.RequireString("path")
+
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	// TODO: call hunt with cli
+	return mcp.NewToolResultText(val), nil
 }
