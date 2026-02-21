@@ -18,9 +18,6 @@
   > ```console
   > fox test -pinfected \\lab\case\files.zip:ioc.exe
   > ```
-* Add Windows resources?
-  * Metadata
-  * Icon
 * Add support for NTFS to disks in hunt mode
 * Add support for MSI files
   * https://pkg.go.dev/github.com/asalih/go-msi

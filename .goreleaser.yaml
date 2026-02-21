@@ -33,6 +33,7 @@ builds:
         goarm: 7
 
 archives:
+  - name_template: "{{ .Binary }}_{{ .Os }}_{{ .Arch }}"
   - formats: [tar.gz]
     format_overrides:
       - goos: windows
@@ -81,6 +82,7 @@ nfpms:
     maintainer: Christian Uhsat <christian@uhsat.de>
     description: The Forensic Examiners Swiss Army Knife.
     license: GPL-3.0
+    file_name_template: "{{ .Binary }}_{{ .Os }}_{{ .Arch }}"
     formats:
       - archlinux
       - apk
