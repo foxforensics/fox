@@ -35,9 +35,11 @@ require (
 	github.com/hirochachacha/go-smb2 v1.1.0
 	github.com/hooklift/iso9660 v1.0.0
 	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f
+	github.com/josephspurrier/goversioninfo v1.5.0
 	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004
 	github.com/klauspost/compress v1.18.4
 	github.com/korylprince/goxar v0.1.2
+	github.com/mark3labs/mcp-go v0.44.0
 	github.com/minio/minlz v1.0.1
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
 	github.com/nwaples/rardecode/v2 v2.2.2
@@ -87,8 +89,10 @@ require (
 	github.com/alecthomas/participle v0.7.1 // indirect
 	github.com/alecthomas/repr v0.5.2 // indirect
 	github.com/ayoubfaouzi/pkcs7 v0.2.2 // indirect
+	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
+	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/c4milo/gotoolkit v0.0.0-20190525173301-67483a18c17a // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
@@ -98,8 +102,8 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hooklift/assert v0.1.0 // indirect
-	github.com/josephspurrier/goversioninfo v1.5.0 // indirect
-	github.com/mark3labs/mcp-go v0.44.0 // indirect
+	github.com/invopop/jsonschema v0.13.0 // indirect
+	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
@@ -112,8 +116,11 @@ require (
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
+	github.com/spf13/cast v1.7.1 // indirect
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2 // indirect
 	github.com/twpayne/go-geom v1.6.1 // indirect
+	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
+	github.com/yosida95/uritemplate/v3 v3.0.2 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa // indirect
