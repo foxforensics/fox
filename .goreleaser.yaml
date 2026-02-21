@@ -33,7 +33,8 @@ builds:
         goarm: 7
 
 archives:
-  - formats: [tar.gz]
+  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    formats: [tar.gz]
     format_overrides:
       - goos: windows
         formats: [zip]
