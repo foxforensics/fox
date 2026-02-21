@@ -83,6 +83,7 @@ require (
 	github.com/BobuSumisu/aho-corasick v1.0.3 // indirect
 	github.com/PaesslerAG/gval v1.2.4 // indirect
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
+	github.com/akavel/rsrc v0.10.2 // indirect
 	github.com/alecthomas/participle v0.7.1 // indirect
 	github.com/alecthomas/repr v0.5.2 // indirect
 	github.com/ayoubfaouzi/pkcs7 v0.2.2 // indirect
@@ -97,6 +98,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hooklift/assert v0.1.0 // indirect
+	github.com/josephspurrier/goversioninfo v1.5.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect

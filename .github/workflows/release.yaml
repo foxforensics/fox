@@ -27,6 +27,8 @@ jobs:
         uses: pandoc/actions/setup@v1
       - name: Setup Go
         uses: actions/setup-go@v5
+      - name: Setup GoVersionInfo
+        run: go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:

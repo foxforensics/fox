@@ -42,6 +42,8 @@ github.com/agnivade/levenshtein v1.2.1 h1:EHBY3UOn1gwdy/VbFwgo4cxecRznFk7fKWN1KO
 github.com/agnivade/levenshtein v1.2.1/go.mod h1:QVVI16kDrtSuwcpd0p1+xMC6Z/VfhtCyDIjcwga4/DU=
 github.com/aixiansheng/lzfse v0.2.4 h1:pnI+nzzakffPlwYjuTVEBmgAAPtY9+pi43ITjMuu0po=
 github.com/aixiansheng/lzfse v0.2.4/go.mod h1:QFcvJcpqVSunO1DVOk9SJSB26/rJHp1+Aa7BJqNl2WQ=
+github.com/akavel/rsrc v0.10.2 h1:Zxm8V5eI1hW4gGaYsJQUhxpjkENuG91ki8B4zCrvEsw=
+github.com/akavel/rsrc v0.10.2/go.mod h1:uLoCtb9J+EyAqh+26kdrTgmzRBFPGOolLWKpdxkKq+c=
 github.com/alecthomas/assert v1.0.0 h1:3XmGh/PSuLzDbK3W2gUbRXwgW5lqPkuqvRgeQ30FI5o=
 github.com/alecthomas/assert v1.0.0/go.mod h1:va/d2JC+M7F6s+80kl/R3G7FUiW6JzUO+hPhLyJ36ZY=
 github.com/alecthomas/assert/v2 v2.11.0 h1:2Q9r3ki8+JYXvGsDyBXwH3LcJ+WK5D0gc5E8vS6K3D0=
@@ -170,6 +172,8 @@ github.com/hooklift/iso9660 v1.0.0 h1:GYN0ejrqTl1qtB+g+ics7xxWHp7J2B1zmr25O9EyG3
 github.com/hooklift/iso9660 v1.0.0/go.mod h1:sOC47ru8lB0DlU0EZ7BJ0KCP5rDqOvx0c/5K5ADm8H0=
 github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f h1:GcDipGuLklPyATFZtZcwsN4WFCBhQdRsVoJL1vDLp64=
 github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f/go.mod h1:uMYyN0e+BBSemEoe2Ys7jLGs6DIV9zc6Sj8gTHK1XOI=
+github.com/josephspurrier/goversioninfo v1.5.0 h1:9TJtORoyf4YMoWSOo/cXFN9A/lB3PniJ91OxIH6e7Zg=
+github.com/josephspurrier/goversioninfo v1.5.0/go.mod h1:6MoTvFZ6GKJkzcdLnU5T/RGYUbHQbKpYeNP0AgQLd2o=
 github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004 h1:G+9t9cEtnC9jFiTxyptEKuNIAbiN5ZCQzX2a74lj3xg=
 github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004/go.mod h1:KmHnJWQrgEvbuy0vcvj00gtMqbvNn1L+3YUZLK/B92c=
 github.com/klauspost/compress v1.18.4 h1:RPhnKRAQ4Fh8zU2FY/6ZFDwTVTxgJ/EMydqSTzE9a2c=
