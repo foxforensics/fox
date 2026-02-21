@@ -33,7 +33,6 @@ builds:
         goarm: 7
 
 archives:
-  - name_template: "{{ .Binary }}_{{ .Os }}_{{ .Arch }}"
   - formats: [tar.gz]
     format_overrides:
       - goos: windows

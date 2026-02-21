@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
-//go:generate goversioninfo -arm -64 -icon assets/img/fox.ico assets/exe/info.json
+//go:generate goversioninfo -arm -64 .goversion.json
 package main
 
 import (
