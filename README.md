@@ -98,7 +98,7 @@ fox test ioc.exe
 
 Hunt down suspicious events:
 ```console
-fox hunt -sv ./**/*.dd
+fox hunt -u *.vmdk
 ```
 
 ## Supports

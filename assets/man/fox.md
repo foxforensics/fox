@@ -212,7 +212,7 @@ fox test ioc.exe
 
 :   Test a suspicious file.
 
-fox hunt -sv ./**/*.dd
+fox hunt -u *.vmdk
 
 :   Hunt down suspicious events.
 

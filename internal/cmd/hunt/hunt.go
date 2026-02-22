@@ -71,7 +71,7 @@ Aliases:
   -S, --splunk             alias for -H -Uhttp://localhost:8088/...
 
 Examples:
-  $ fox hunt -sv ./**/*.dd
+  $ fox hunt -u *.vmdk
 `)
 
 type Hunt struct {

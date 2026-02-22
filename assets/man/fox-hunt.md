@@ -108,7 +108,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox hunt -sv ./**/*.dd
+fox hunt -u *.vmdk
 
 :   Hunt down suspicious events.
 
