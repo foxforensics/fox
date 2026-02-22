@@ -19,6 +19,10 @@
   > ```console
   > fox test -pinfected \\lab\case\files.zip:ioc.exe
   > ```
+  > Start a multithreaded MCP server for Hunt mode using 10 cores with debug output:
+  > ```console
+  > fox hunt -vvvMT10
+  > ```
 * Add support for NTFS to disks in hunt mode
 * Add support for MSI files
   * https://pkg.go.dev/github.com/asalih/go-msi
