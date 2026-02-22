@@ -178,14 +178,15 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		log.Fatalln(err)
 	}
 
-	if cmd.Mcp {
-		// TODO: call cmd.listen() with cli?
-	}
-
 	return nil
 }
 
 func (cmd *Hunt) Run(cli *cli.Globals) error {
+	if cmd.Mcp {
+		cmd.listen(cli) // blocking recall
+		return nil
+	}
+
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
 		cmd.Paths = hunter.Local
 	}
@@ -328,24 +329,60 @@ func (cmd *Hunt) stream(e *event.Event) {
 }
 
 func (cmd *Hunt) listen(cli *cli.Globals) {
-	tool := mcp.NewTool("hunt",
-		mcp.WithDescription("Hunts suspicious events"),
-		mcp.WithString("path",
-			mcp.Required(),
-			mcp.Description("Path of the file to hunt in"),
-		),
-	)
-
 	srv := server.NewMCPServer(
-		"Fox",
+		"fox",
 		res.Version,
 		server.WithToolCapabilities(false),
 	)
 
-	srv.AddTool(tool, handler)
+	srv.AddTool(mcp.NewTool("hunt",
+		mcp.WithDescription("Search for suspicious event logs in a file"),
+		mcp.WithString("path",
+			mcp.Description("Path of the file to search in"),
+			mcp.Required(),
+		),
+	), func(_ context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+		path, err := request.RequireString("path")
+
+		if err != nil {
+			return mcp.NewToolResultError(err.Error()), nil
+		}
+
+		// configure for mcp server
+		cmd.Paths = []string{path}
+		cmd.Mcp = false // kinda ugly
+		cmd.All = false
+		cmd.Sort = false
+		cmd.Uniq = true
+
+		sb := new(strings.Builder)
+
+		cli.Stdout = sb
+		cli.NoFile = true
+		cli.NoLine = true
+		cli.NoColor = true
+		cli.NoPretty = true
+		cli.NoStrict = true
+
+		err = cmd.Run(cli)
+
+		if err != nil {
+			return mcp.NewToolResultError(err.Error()), nil
+		}
+
+		return mcp.NewToolResultText(sb.String()), nil
+	})
+
+	if cli.Verbose > 0 {
+		log.Println("mcp server started")
+	}
 
 	if err := server.ServeStdio(srv); err != nil {
 		log.Fatalln(err)
+	}
+
+	if cli.Verbose > 0 {
+		log.Println("mcp server stopped")
 	}
 }
 
@@ -369,15 +406,4 @@ func (cmd *Hunt) discard(cli *cli.Globals) {
 	if err != nil {
 		log.Println(err)
 	}
-}
-
-func handler(_ context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	val, err := request.RequireString("path")
-
-	if err != nil {
-		return mcp.NewToolResultError(err.Error()), nil
-	}
-
-	// TODO: call hunt with cli
-	return mcp.NewToolResultText(val), nil
 }

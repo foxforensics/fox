@@ -97,7 +97,7 @@ type Globals struct {
 	Verbose int  `short:"v" type:"counter"`
 
 	// internal
-	Stdout io.WriteCloser `kong:"-"`
+	Stdout io.Writer      `kong:"-"`
 	Regexp *regexp.Regexp `kong:"-"`
 	Loader *loader.Loader `kong:"-"`
 	Filter *types.Filters `kong:"-"`
@@ -257,7 +257,9 @@ func (cli *Globals) Exit(code int) {
 
 func (cli *Globals) Discard() {
 	if len(cli.File) > 0 {
-		_ = cli.Stdout.Close()
+		if v, is := cli.Stdout.(io.Closer); is {
+			_ = v.Close()
+		}
 
 		if !cli.NoReceipt {
 			err := receipt.Generate(cli.File)
