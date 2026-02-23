@@ -2,19 +2,12 @@
 package imphash
 
 import (
-	"bytes"
 	"crypto/md5"
-	"debug/pe"
-	"errors"
-	"fmt"
 	"hash"
-	"slices"
 	"strings"
 
-	intern "github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy"
 )
-
-var ErrNotSupported = errors.New("file type not supported")
 
 type ImpHash struct {
 	sort bool
@@ -42,43 +35,10 @@ func (h *ImpHash) Reset() {
 }
 
 func (h *ImpHash) Write(b []byte) (n int, err error) {
-	if !intern.Detect(b) {
-		return 0, ErrNotSupported
-	}
+	h.buf, err = fuzzy.GetImports(b, h.sort)
 
-	f, err := pe.NewFile(bytes.NewReader(b))
+	return len(b), err
 
-	if err != nil {
-		return 0, err
-	}
-
-	defer func(f *pe.File) {
-		_ = f.Close()
-	}(f)
-
-	iat, err := f.ImportedSymbols()
-
-	if err != nil {
-		return 0, err
-	}
-
-	if h.sort {
-		slices.Sort(iat)
-	}
-
-	rep := strings.NewReplacer(".dll", "", ".ocx", "", ".sys", "")
-
-	for _, e := range iat {
-		if !strings.Contains(e, ":") {
-			continue
-		}
-
-		p := strings.Split(rep.Replace(strings.ToLower(e)), ":")
-
-		h.buf = append(h.buf, fmt.Sprintf("%s.%s", p[1], p[0]))
-	}
-
-	return len(b), nil
 }
 
 func (h *ImpHash) Sum(_ []byte) []byte {

@@ -1,8 +1,8 @@
 // Package dit based on:
-// - https://www.exploit-db.com/docs/english/18244-active-domain-offline-hash-dump-&-forensic-analysis.pdf
-// - https://github.com/fortra/impacket/blob/master/impacket/examples/secretsdump.py
-// - https://github.com/C-Sto/gosecretsdump/blob/master/pkg/ditreader/crypto.go
-// - https://github.com/Dionach/NtdsAudit/blob/master/src/NtdsAudit/NTCrypto.cs
+// https://www.exploit-db.com/docs/english/18244-active-domain-offline-hash-dump-&-forensic-analysis.pdf
+// https://github.com/fortra/impacket/blob/master/impacket/examples/secretsdump.py
+// https://github.com/C-Sto/gosecretsdump/blob/master/pkg/ditreader/crypto.go
+// https://github.com/Dionach/NtdsAudit/blob/master/src/NtdsAudit/NTCrypto.cs
 package dit
 
 import (
