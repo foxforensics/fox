@@ -6,6 +6,7 @@ package fortinet
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io"
 
@@ -15,60 +16,22 @@ import (
 )
 
 var (
-	magic = [][]byte{
-		{0xEC, 0xCF},
-		{0xEC, 0xDE},
-	}
-	tlcFields = []string{
-		"",
-		"devid",
-		"devname",
-		"vdom",
-		"devtype",
-		"logtype",
-		"tmzone",
-		"fazid",
-		"srcip",
-		"unused?",
-		"unused?",
-		"num-logs",
-		"unzip-len",
-		"incr-zip",
-		"unzip-len-p",
-		"prefix",
-		"zbuf",
-		"logs",
-	}
+	ErrTlcDeflate   = errors.New("can not deflate TLC")
+	ErrNotSupported = errors.New("type not supported")
 )
 
-type llog5 struct {
-	// entries raw
-	Magic         uint16
-	Flags         uint8
-	Unused        uint16
-	LDevId        uint8
-	LDevName      uint8
-	LVDom         uint8
-	Entries       uint16
-	LCompressed   uint16
-	LDecompressed uint16
-	Timestamp     uint32
-
-	// entries parsed
-	LEntries uint16
-	LAscii   uint16
-	Padding  uint16
-	DevId    string
-	DevName  string
-	VDom     string
-	Body     []byte
+var magic = [][]byte{
+	{0xEC, 0xCF},
+	{0xEC, 0xDE},
 }
+
+// Timestamp     uint32 TODO
 
 func Detect(b []byte) bool {
 	for _, m := range [][]byte{
-		{0xEC, 0xCE}, // llog v5
-		{0xEC, 0xCF}, // llog v5
-		{0xEC, 0xDF}, // llog v5
+		{0xEC, 0xCE}, // llog v5 old
+		{0xEC, 0xCF}, // llog v5 old
+		{0xEC, 0xDF}, // llog v5 new
 		{0xAA, 0x01}, // tlc
 	} {
 		if data.HasMagic(b, 0, m) {
@@ -90,31 +53,32 @@ func Convert(b []byte) ([]byte, error) {
 
 	return buf.Bytes(), nil
 }
-func decodeLLogV5(data []byte, out *bytes.Buffer) error {
-	reader := bytes.NewReader(data)
-	var filePtrPos int64
-	var logEntries int
+
+func decodeLLogV5(b []byte, out *bytes.Buffer) error {
+	r := bytes.NewReader(b)
+
+	var i int64
 
 	for {
-		filePtrPos = reader.Size() - int64(reader.Len())
+		i = r.Size() - int64(r.Len())
 
 		// Peek at next 2 bytes to determine type
 		logType := make([]byte, 2)
-		n, err := reader.Read(logType)
+		n, err := r.Read(logType)
 		if err == io.EOF || n < 2 {
 			break
 		}
 		if err != nil {
 			return err
 		}
-		reader.Seek(-2, io.SeekCurrent) // Unread for processing
+		_, _ = r.Seek(-2, io.SeekCurrent) // Unread for processing
 
 		if bytes.Equal(logType, magic[0]) || bytes.Equal(logType, magic[1]) {
 			// Consume magic bytes
-			reader.Read(logType)
+			_, _ = r.Read(logType)
 
 			head := make([]byte, 16)
-			if _, err := io.ReadFull(reader, head); err != nil {
+			if _, err := io.ReadFull(r, head); err != nil {
 				return err
 			}
 
@@ -123,26 +87,26 @@ func decodeLLogV5(data []byte, out *bytes.Buffer) error {
 			lDevName := int(head[4])
 			lVDOM := int(head[5])
 			entryCount := int(binary.BigEndian.Uint16(head[6:8]))
-
+			lCompressed := int(binary.BigEndian.Uint16(head[8:10]))
+			lDecompressed := int(binary.BigEndian.Uint16(head[10:12]))
 			lEntryCounts := entryCount * 2
 			lSomething := 0
+
 			if flag != 0 {
 				lSomething = lEntryCounts
 			}
 
-			lCompressed := int(binary.BigEndian.Uint16(head[8:10]))
-			lDecompressed := int(binary.BigEndian.Uint16(head[10:12]))
-
 			var tzLen int
 			if bytes.Equal(logType, magic[1]) { // 0xECDE
-				reader.Seek(10, io.SeekCurrent)
-				tzByte, _ := reader.ReadByte()
+				_, _ = r.Seek(10, io.SeekCurrent)
+				tzByte, _ := r.ReadByte()
 				tzLen = int(tzByte)
 			}
 
 			lASCII := lDevID + lDevName + lVDOM
 			body := make([]byte, lASCII+lEntryCounts+lSomething)
-			if _, err := io.ReadFull(reader, body); err != nil {
+
+			if _, err := io.ReadFull(r, body); err != nil {
 				return err
 			}
 
@@ -152,11 +116,11 @@ func decodeLLogV5(data []byte, out *bytes.Buffer) error {
 			entriesLengths := body[lASCII : lASCII+lEntryCounts]
 
 			if bytes.Equal(logType, magic[1]) && tzLen > 0 {
-				reader.Seek(int64(tzLen), io.SeekCurrent)
+				_, _ = r.Seek(int64(tzLen), io.SeekCurrent)
 			}
 
 			compressed := make([]byte, lCompressed)
-			if _, err := io.ReadFull(reader, compressed); err != nil {
+			if _, err := io.ReadFull(r, compressed); err != nil {
 				return err
 			}
 
@@ -178,34 +142,32 @@ func decodeLLogV5(data []byte, out *bytes.Buffer) error {
 					out.Write(decompressed[pointer : pointer+l])
 					out.WriteByte(0x0a)
 					pointer += l
-					logEntries++
 				}
 			} else if entryCount == 1 {
 				out.WriteString(prefix)
 				out.Write(decompressed)
 				out.WriteByte(0x0a)
-				logEntries++
 			}
 
 			// Skip 2nd variable part
 			head2 := make([]byte, 2)
-			if _, err := io.ReadFull(reader, head2); err != nil {
+			if _, err := io.ReadFull(r, head2); err != nil {
 				continue
 			}
 			body2 := binary.LittleEndian.Uint16(head2)
-			reader.Seek(int64(body2), io.SeekCurrent)
+			_, _ = r.Seek(int64(body2), io.SeekCurrent)
 
 		} else if bytes.Equal(logType, []byte{0xAA, 0x01}) {
-			reader.Seek(4, io.SeekCurrent) // Skip magic + 2 bytes
+			_, _ = r.Seek(4, io.SeekCurrent) // Skip magic + 2 bytes
 
 			lBodyBytes := make([]byte, 4)
-			if _, err := io.ReadFull(reader, lBodyBytes); err != nil {
+			if _, err := io.ReadFull(r, lBodyBytes); err != nil {
 				return err
 			}
 			lBody := int(binary.BigEndian.Uint32(lBodyBytes)) - 8
 
 			body := make([]byte, lBody)
-			if _, err := io.ReadFull(reader, body); err != nil {
+			if _, err := io.ReadFull(r, body); err != nil {
 				return err
 			}
 
@@ -222,122 +184,90 @@ func decodeLLogV5(data []byte, out *bytes.Buffer) error {
 				}
 				out.Write(rawEntry[idx:])
 				out.WriteByte(0x0a)
-				logEntries++
 			}
 
 		} else if bytes.Equal(logType, []byte{0x00, 0x00}) || logType[0] == 0x00 {
-			reader.ReadByte()
+			_, _ = r.ReadByte()
 			continue
 		} else {
-			return fmt.Errorf("unknown header %x at offset %d", logType, filePtrPos)
+			return fmt.Errorf("unknown header %x at offset %d", logType, i)
 		}
 	}
 
 	return nil
 }
 
-func parseTLC(body []byte) ([]byte, error) {
-	pointer := 0
-	var lUnzipped int
+func parseTLC(b []byte) ([]byte, error) {
+	var zBufLen int
+	var zBuf []byte
 
-	for pointer < len(body) {
-		if pointer >= len(body) {
+	for i := 0; i < len(b); {
+		var l int
+		var v int64
+
+		if i >= len(b) {
 			break
 		}
-		typeHigh := body[pointer] >> 4
-		pointer++
+		typeHigh := b[i] >> 4
+		i++
 
-		if pointer >= len(body) {
+		if i >= len(b) {
 			break
 		}
-		fieldID := body[pointer]
-		pointer++
+		field := b[i]
+		i++
 
-		var value int64
-		var array []byte
+		switch typeHigh {
+		case 0: // byte array prefixed with int8 length
+			i, l = i+1, int(b[i])
 
+		case 1: // byte array prefixed with int16be length
+			i, l = i+2, int(binary.BigEndian.Uint16(b[i:i+2]))
+
+		case 2: // byte array prefixed with int32be length
+			i, l = i+4, int(binary.BigEndian.Uint32(b[i:i+4]))
+
+		case 3: // int8
+			i, v = i+1, int64(b[i])
+
+		case 4: // int16be
+			i, v = i+2, int64(binary.BigEndian.Uint16(b[i:i+2]))
+
+		case 5: // int32be
+			i, v = i+4, int64(binary.BigEndian.Uint32(b[i:i+4]))
+
+		case 6: // int64be
+			i, v = i+8, int64(binary.BigEndian.Uint64(b[i:i+8]))
+
+		default:
+			return nil, ErrNotSupported
+		}
+
+		// type is byte array
 		if typeHigh <= 2 {
-			var lArray int
-			switch typeHigh {
-			case 0:
-				if pointer >= len(body) {
-					return nil, fmt.Errorf("unexpected EOF")
-				}
-				lArray = int(body[pointer])
-				pointer++
-			case 1:
-				if pointer+2 > len(body) {
-					return nil, fmt.Errorf("unexpected EOF")
-				}
-				lArray = int(binary.BigEndian.Uint16(body[pointer : pointer+2]))
-				pointer += 2
-			case 2:
-				if pointer+4 > len(body) {
-					return nil, fmt.Errorf("unexpected EOF")
-				}
-				lArray = int(binary.BigEndian.Uint32(body[pointer : pointer+4]))
-				pointer += 4
-			}
-			if pointer+lArray > len(body) {
-				return nil, fmt.Errorf("unexpected EOF")
-			}
-			array = body[pointer : pointer+lArray]
-			pointer += lArray
-		} else if typeHigh == 3 {
-			if pointer >= len(body) {
-				return nil, fmt.Errorf("unexpected EOF")
-			}
-			value = int64(body[pointer])
-			pointer++
-		} else if typeHigh == 4 {
-			if pointer+2 > len(body) {
-				return nil, fmt.Errorf("unexpected EOF")
-			}
-			value = int64(binary.BigEndian.Uint16(body[pointer : pointer+2]))
-			pointer += 2
-		} else if typeHigh == 5 {
-			if pointer+4 > len(body) {
-				return nil, fmt.Errorf("unexpected EOF")
-			}
-			value = int64(binary.BigEndian.Uint32(body[pointer : pointer+4]))
-			pointer += 4
-		} else if typeHigh == 6 {
-			if pointer+8 > len(body) {
-				return nil, fmt.Errorf("unexpected EOF")
-			}
-			value = int64(binary.BigEndian.Uint64(body[pointer : pointer+8]))
-			pointer += 8
-		} else if typeHigh == 7 {
-			if pointer+16 > len(body) {
-				return nil, fmt.Errorf("unexpected EOF")
-			}
-			valA := binary.BigEndian.Uint64(body[pointer : pointer+8])
-			valB := binary.BigEndian.Uint64(body[pointer+8 : pointer+16])
-			value = int64((valA << 64) | valB)
-			pointer += 16
+			i, zBuf = i+l, b[i:i+l]
 		}
 
-		fieldName := ""
-		if int(fieldID) < len(tlcFields) {
-			fieldName = tlcFields[fieldID]
-		}
+		switch field {
+		case 12: // set buf len
+			zBufLen = int(v)
 
-		if fieldName == "unzip-len" {
-			lUnzipped = int(value)
-		} else if fieldName == "zbuf" {
-			if lUnzipped == 0 || len(array) == 0 {
-				return nil, fmt.Errorf("invalid zbuf")
+		case 16: // deflate buf
+			if len(zBuf) == 0 || zBufLen == 0 {
+				return nil, ErrTlcDeflate
 			}
 
-			decompressed := make([]byte, lUnzipped)
-			lz4Reader := lz4.NewReader(bytes.NewReader(array))
-			n, err := io.ReadFull(lz4Reader, decompressed)
-			if err != nil && err != io.ErrUnexpectedEOF {
+			r := lz4.NewReader(bytes.NewReader(zBuf))
+			d := make([]byte, zBufLen)
+			n, err := io.ReadFull(r, d)
+
+			if err != nil && !errors.Is(err, io.ErrUnexpectedEOF) {
 				return nil, err
 			}
-			return decompressed[:n], nil
+
+			return d[:n], nil
 		}
 	}
 
-	return nil, fmt.Errorf("zbuf not found")
+	return nil, ErrTlcDeflate
 }
