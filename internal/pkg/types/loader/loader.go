@@ -30,7 +30,7 @@ import (
 const (
 	stdin = "-"
 	limit = 0.95
-	peek  = 0
+	peek  = 16
 )
 
 type Options struct {
@@ -192,7 +192,7 @@ func (ldr *Loader) loadPath(path, part string) {
 	}
 
 	if len(match) == 0 {
-		log.Printf("file not found %s\n", path)
+		log.Printf("no files found %s\n", path)
 		return
 	}
 

@@ -1,7 +1,7 @@
 [![fox](assets/img/logo.png "fox")](https://foxhunt.dev)
 
 <div align="center">
-The Forensic Examiners Swiss Army Knife. Providing many useful features to leverage your forensic examination process.
+The Forensic Examiners Swiss Army Knife
 <br/>
 <br/>
 
