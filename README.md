@@ -24,15 +24,14 @@ go install github.com/cuhsat/fox/v4@latest
 
 There are also standalone binaries available:
 
-|   OS    | Binaries                                                                                                                                                                       | Packages                                                                                                                                                                                                                                                                                                                                                |
-|:-------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|   OS    | Binaries                                                                                                                                                                       | Packages                                                                                                                                                                                                                                                                                                                                                 |
+|:-------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |  Linux  | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.tar.gz) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_arm64.tar.gz)   | [apk](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.apk) \| [deb](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.deb) \| [pkg](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.pkg.tar.zst) \| [rpm](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.rpm) |
-|  macOs  | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_darwin_amd64.tar.gz) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_darwin_arm64.tar.gz) | `brew install cuhsat/fox/fox`                                                                                                                                                                                                                                                                                                                           |
-| Windows | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_windows_amd64.zip) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_windows_arm64.zip)     |                                                                                                                                                                                                                                                                                                                                                         |
+|  macOs  | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_darwin_amd64.tar.gz) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_darwin_arm64.tar.gz) | `brew install cuhsat/fox/fox`                                                                                                                                                                                                                                                                                                                            |
+| Windows | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_windows_amd64.zip) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_windows_arm64.zip)     | Binaries are Portable Executables                                                                                                                                                                                                                                                                                                                        |
 
 ## Features
 * [x] Restricted read-only access
-* [x] Supports SMB 2/3 UNC paths
 * [x] [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * [x] String carving and automatic classification
 * [x] With over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
@@ -50,7 +49,6 @@ There are also standalone binaries available:
 * [x] Many popular cryptographic, fuzzy, fast and image hashes
 * [x] Complete with [man pages](assets/man) for every mode
 * [x] Special [Hunt](assets/man/fox-hunt.md) mode
-  * [x] Built-in support for [EnCase EWF](https://www.loc.gov/preservation/digital/formats/fdd/fdd000408.shtml), [VHDX](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-vhdx/83e061f8-f6e2-4de1-91bd-5d518a43d477), [VMDK](https://code.vmware.com/web/sdk/6.7/vddk) and raw disks
   * [x] Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * [x] Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * [x] Built-in translation of over 51600 event ids
@@ -100,15 +98,12 @@ fox test ioc.exe
 
 Hunt down suspicious events:
 ```console
-fox hunt -u *.vmdk
+fox hunt -u *.dd
 ```
 
 ## Supports
 File Formats
 > evtx, journal, json, jsonl, lnk, pf, ELF, ESE/EDB, PE/COFF
-
-Disk Formats
-> dd/raw, EWF-E01, EWF-S01, VHD, VHDX, VMDK
 
 Archive Formats
 > 7zip, ar, CAB, CPIO, ISO, MSI, RAR, RPM, tar, xar, ZIP
@@ -120,7 +115,7 @@ Cryptographic Hashes
 > BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, GOST2012-256, GOST2012-512, HAS-160, LSH-256, LSH-512, MD2, MD4, MD5, MD6, RIPEMD-160, SHAKE128, SHAKE256, SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512, Skein-224, Skein-256, Skein-384, Skein-512, SM3, Whirlpool
 
 Performance Hashes
-> djb2, FNV-1, FNV-1a, Murmur3, RapidHash, SipHash, XXH32, XXH64, XXH3
+> FNV-1, FNV-1a, Murmur3, RapidHash, SipHash, XXH32, XXH64, XXH3
 
 Similarity Hashes
 > ImpFuzzy, ImpHash, ImpHash0, SSDeep, TLSH

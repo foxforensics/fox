@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Hunts suspicious activities by carving events from file(s). This mode enforces the **--no-extract**, **--no-deflate** and **--no-convert** flags.
+Hunts suspicious activities by carving events from file(s). This mode enforces the **--no-extract**, **--no-deflate** and **--no-convert** flags unless **--no-strict** is specified.
 
 FLAGS
 =====
@@ -108,7 +108,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox hunt -u *.vmdk
+fox hunt -u *.dd
 
 :   Hunt down suspicious events.
 

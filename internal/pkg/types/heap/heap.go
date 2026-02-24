@@ -7,7 +7,6 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/mmap"
 )
 
@@ -18,17 +17,11 @@ type Heap struct {
 	Hint string // heap hint
 	Size uint64 // heap size
 
-	m mmap.MMap   // memory map
-	r io.ReaderAt // file reader
-	c []io.Closer // file closer
+	m mmap.MMap // memory map
 }
 
-func FromData(name, hint string, size uint64, m mmap.MMap, l *types.Limits) *Heap {
-	return &Heap{Name: name, Hint: hint, Size: size, m: l.Reduce(m)}
-}
-
-func FromFile(name, hint string, size uint64, r io.ReaderAt, c ...io.Closer) *Heap {
-	return &Heap{Name: name, Hint: hint, Size: size, c: c, r: r}
+func New(name, hint string, size uint64, m mmap.MMap) *Heap {
+	return &Heap{Name: name, Hint: hint, Size: size, m: m}
 }
 
 func (h *Heap) String() string {
@@ -38,12 +31,7 @@ func (h *Heap) String() string {
 func (h *Heap) Reader() io.ReaderAt {
 	h.RLock()
 	defer h.RUnlock()
-
-	if len(h.c) == 0 {
-		return bytes.NewReader(h.m)
-	}
-
-	return h.r
+	return bytes.NewReader(h.m)
 }
 
 func (h *Heap) Bytes() []byte {
@@ -58,16 +46,8 @@ func (h *Heap) Discard() {
 	// unmap memory
 	if h.m != nil {
 		mmap.Unmap(h.m)
+		h.m = nil
 	}
-
-	// close files
-	for _, f := range h.c {
-		_ = f.Close()
-	}
-
-	h.c = h.c[:0]
-	h.r = nil
-	h.m = nil
 
 	h.Size = 0
 

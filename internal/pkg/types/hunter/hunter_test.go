@@ -4,23 +4,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/ewf"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/vhdx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/vmdk"
 	"github.com/cuhsat/fox/v4/internal/pkg/test"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
-
-func TestMain(m *testing.M) {
-	register.Reader("ewf", ewf.Detect, ewf.Reader)
-	register.Reader("vhdx", vhdx.Detect, vhdx.Reader)
-	register.Reader("vmdk", vmdk.Detect, vmdk.Reader)
-
-	os.Exit(m.Run())
-}
 
 func TestHunt(t *testing.T) {
 	for _, tt := range []struct {
@@ -43,20 +31,6 @@ func TestHunt(t *testing.T) {
 		}, {
 			"raw",
 			"hunt/test.dd.zst",
-			919,
-			/* TODO: ewf is slow and not correct!
-			}, {
-				"ewf",
-				"hunt/test.E01.zst",
-				193,
-			*/
-		}, {
-			"vhdx",
-			"hunt/test.vhdx.zst",
-			919,
-		}, {
-			"vmdk",
-			"hunt/test.vmdk.zst",
 			919,
 		},
 	} {

@@ -5,9 +5,6 @@ package data
 
 import (
 	"bytes"
-	"io"
-
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 type Stream struct {
@@ -19,15 +16,11 @@ type Detect func([]byte) bool
 
 type Format func([]byte) ([]byte, error)
 
-type Ingest func([]byte) ([]byte, error)
-
 type Convert func([]byte) ([]byte, error)
 
 type Deflate func([]byte) ([]byte, error)
 
 type Extract func([]byte, string, string) []Stream
-
-type Reader func(types.File) (io.ReaderAt, error)
 
 func HasMagic(b []byte, off int, m []byte) bool {
 	if len(b) < off+len(m) {

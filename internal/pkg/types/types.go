@@ -1,10 +1,5 @@
 package types
 
-import (
-	"io"
-	"os"
-)
-
 const (
 	ADLER32     = "adler32"
 	AHASH       = "ahash"
@@ -20,7 +15,6 @@ const (
 	CRC64ECMA   = "crc64-ecma"
 	CRC64ISO    = "crc64-iso"
 	DHASH       = "dhash"
-	DJB2        = "djb2"
 	FLETCHER4   = "fletcher4"
 	FNV1        = "fnv-1"
 	FNV1A       = "fnv-1a"
@@ -74,11 +68,3 @@ const (
 	Eventlog = "eventlog"
 	Journal  = "journal"
 )
-
-type File interface {
-	io.ReaderAt
-	io.Reader
-	io.Seeker
-	io.Closer
-	Stat() (os.FileInfo, error)
-}

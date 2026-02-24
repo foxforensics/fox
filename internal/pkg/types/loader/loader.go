@@ -3,35 +3,25 @@ package loader
 import (
 	"bufio"
 	"io"
-	"io/fs"
 	"log"
-	"maps"
 	"os"
 	"path/filepath"
-	"regexp"
 	"slices"
 	"strings"
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
-	"github.com/pbnjay/memory"
 	"github.com/sourcegraph/conc/pool"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/ewf"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/mmap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/share"
 )
 
-const (
-	stdin = "-"
-	limit = 0.95
-	peek  = 16
-)
+const stdin = "-"
 
 type Options struct {
 	Limit    *types.Limits
@@ -46,25 +36,16 @@ type Options struct {
 
 type Loader struct {
 	sync.RWMutex
-	size   int64
-	opts   *Options
-	later  []disk
-	paths  []string
-	heaps  chan *heap.Heap
-	mounts map[string]*share.Share
-}
-
-type disk struct {
-	file types.File
-	size int64
-	path string
+	size  int64
+	opts  *Options
+	paths []string
+	heaps chan *heap.Heap
 }
 
 func New(opts *Options) *Loader {
 	return &Loader{
-		opts:   opts,
-		heaps:  make(chan *heap.Heap, opts.Parallel),
-		mounts: make(map[string]*share.Share),
+		opts:  opts,
+		heaps: make(chan *heap.Heap, opts.Parallel),
 	}
 }
 
@@ -106,45 +87,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 				break
 			}
 
-			// split file and stream
-			path, part := data.SplitPart(path)
-
-			// mount remote share
-			if isRemote(path) {
-				mnt, tmp := share.New(path)
-
-				ldr.mounts[mnt.String()] = mnt
-
-				if ldr.opts.Verbose > 0 {
-					log.Printf("mount share %s\n", mnt.String())
-				}
-
-				mnt.Mount()
-
-				path = tmp
-			}
-
-			ldr.loadPath(path, part)
-		}
-
-		// combine file for ewf disks
-		if path, is := isCoherent(ldr.later); is {
-			ldr.combineFile(path)
-		}
-
-		// read remaining ewf disks
-		for _, e := range ldr.later {
-			r, err := ewf.Reader(e.file)
-
-			if err != nil {
-				log.Println(err)
-			}
-
-			ldr.createFile(e.path, "", uint64(e.size), r, e.file)
-		}
-
-		if ldr.opts.Warnings && float32(memory.FreeMemory()/memory.TotalMemory()) > limit {
-			log.Println("warning: low memory may cause swapping!")
+			ldr.loadPath(data.SplitPart(path))
 		}
 	}()
 
@@ -154,14 +97,6 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 func (ldr *Loader) Exit() {
 	ldr.RLock()
 
-	for _, mnt := range maps.All(ldr.mounts) {
-		if ldr.opts.Verbose > 0 {
-			log.Printf("umount share %s\n", mnt.String())
-		}
-
-		mnt.Umount()
-	}
-
 	if ldr.opts.Verbose > 0 {
 		log.Printf("size %s\n", text.Humanize(ldr.size))
 	}
@@ -170,21 +105,11 @@ func (ldr *Loader) Exit() {
 }
 
 func (ldr *Loader) loadPath(path, part string) {
-	var root fs.FS
-
 	if ldr.opts.Verbose > 0 {
 		log.Printf("looking for %s\n", path)
 	}
 
-	base, mask := doublestar.SplitPattern(path)
-
-	if shr, ok := ldr.mounts[path]; ok {
-		root = shr.DirFS(".")
-	} else {
-		root = os.DirFS(base)
-	}
-
-	match, err := doublestar.Glob(root, mask)
+	match, err := doublestar.FilepathGlob(path)
 
 	if err != nil {
 		log.Println(err)
@@ -199,7 +124,7 @@ func (ldr *Loader) loadPath(path, part string) {
 	p := pool.New().WithMaxGoroutines(ldr.opts.Parallel)
 
 	for _, path := range match {
-		fi, err := fs.Stat(root, path)
+		fi, err := os.Stat(path)
 
 		if err != nil {
 			log.Println(err)
@@ -208,9 +133,9 @@ func (ldr *Loader) loadPath(path, part string) {
 
 		p.Go(func() {
 			if fi.IsDir() {
-				ldr.loadDir(root, path, part)
+				ldr.loadDir(path, part)
 			} else {
-				ldr.loadFile(root, path, part)
+				ldr.loadFile(path, part)
 			}
 		})
 	}
@@ -218,8 +143,8 @@ func (ldr *Loader) loadPath(path, part string) {
 	p.Wait()
 }
 
-func (ldr *Loader) loadDir(root fs.FS, path, part string) {
-	dir, err := fs.ReadDir(root, path)
+func (ldr *Loader) loadDir(path, part string) {
+	dir, err := os.ReadDir(path)
 
 	if err != nil {
 		log.Println(err)
@@ -231,7 +156,7 @@ func (ldr *Loader) loadDir(root fs.FS, path, part string) {
 	for _, f := range dir {
 		if !f.IsDir() {
 			p.Go(func() {
-				ldr.loadFile(root, filepath.Join(path, f.Name()), part)
+				ldr.loadFile(filepath.Join(path, f.Name()), part)
 			})
 		}
 	}
@@ -239,8 +164,8 @@ func (ldr *Loader) loadDir(root fs.FS, path, part string) {
 	p.Wait()
 }
 
-func (ldr *Loader) loadFile(root fs.FS, path, part string) {
-	f, err := root.Open(path)
+func (ldr *Loader) loadFile(path, part string) {
+	f, err := os.Open(path)
 
 	if err != nil {
 		log.Println(err)
@@ -256,128 +181,19 @@ func (ldr *Loader) loadFile(root fs.FS, path, part string) {
 
 	// empty files will cause issues
 	if fi.Size() == 0 {
-		ldr.createData(path, "", 0, []byte{})
+		ldr.createHeap(path, "", 0, []byte{})
 		return
 	}
 
-	// try to load the file first
-	if ldr.processFile(path, f.(types.File)) {
-		return
-	}
+	b := mmap.Map(f)
 
-	var b []byte
-
-	switch v := f.(type) {
-	// memory map local files
-	case *os.File:
-		b = mmap.Map(v)
-
-		if ldr.opts.Verbose > 2 {
-			log.Printf("mapped file %s\n", path)
-		}
-
-	// read remote file whole
-	default:
-		b, err = fs.ReadFile(root, path)
-
-		if err != nil {
-			log.Println(err)
-		}
-
-		if ldr.opts.Verbose > 2 {
-			log.Printf("loaded file %s\n", path)
-		}
+	if ldr.opts.Verbose > 2 {
+		log.Printf("mapped file %s\n", path)
 	}
 
 	_ = f.Close()
 
 	ldr.processData(path, part, b)
-}
-
-func (ldr *Loader) peekFile(file types.File) []byte {
-	b := make([]byte, peek)
-
-	_, err := file.Read(b)
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	_, err = file.Seek(0, io.SeekStart)
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return b
-}
-
-func (ldr *Loader) combineFile(path string) {
-	var f []types.File
-	var c []io.Closer
-	var s int64
-
-	for _, d := range ldr.later {
-		f = append(f, d.file)
-		c = append(c, d.file)
-		s += d.size
-	}
-
-	r, err := ewf.Combine(f...)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	if ldr.opts.Verbose > 1 {
-		log.Printf("disk combined as %s (%d)\n", path, len(ldr.later))
-	}
-
-	ldr.later = ldr.later[:0]
-
-	ldr.createFile(path, "", uint64(s), r, c...)
-}
-
-func (ldr *Loader) processFile(path string, file types.File) bool {
-	b := ldr.peekFile(file) // peek at file header
-
-	for _, e := range register.Readers {
-		if e.Detect(b) {
-			if ldr.opts.Verbose > 1 {
-				log.Printf("disk detected as possibly %s\n", e.Name)
-			}
-
-			if ldr.opts.Warnings && e.Name == "ewf" {
-				log.Println("warning: ewf support is experimental!")
-			}
-
-			s, err := file.Stat()
-
-			if err != nil {
-				log.Println(err)
-				break
-			}
-
-			// combine ewf disks later
-			if e.Name == "ewf" {
-				ldr.later = append(ldr.later, disk{file, s.Size(), path})
-				return true
-			}
-
-			r, err := e.Reader(file)
-
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-
-			ldr.createFile(path, "", uint64(s.Size()), r, file)
-
-			return true
-		}
-	}
-
-	return false
 }
 
 func (ldr *Loader) processData(path, part string, b []byte) {
@@ -409,7 +225,7 @@ func (ldr *Loader) processData(path, part string, b []byte) {
 
 	// filter for specific streams
 	if strings.Contains(path, part) {
-		ldr.createData(path, hint, uint64(len(b)), b)
+		ldr.createHeap(path, hint, uint64(len(b)), b)
 	}
 }
 
@@ -520,15 +336,7 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 	return b, false
 }
 
-func (ldr *Loader) createData(path, hint string, size uint64, b []byte) {
-	ldr.createHeap(path, size, heap.FromData(path, hint, size, b, ldr.opts.Limit))
-}
-
-func (ldr *Loader) createFile(path, hint string, size uint64, r io.ReaderAt, c ...io.Closer) {
-	ldr.createHeap(path, size, heap.FromFile(path, hint, size, r, c...))
-}
-
-func (ldr *Loader) createHeap(path string, size uint64, h *heap.Heap) {
+func (ldr *Loader) createHeap(path, hint string, size uint64, b []byte) {
 	ldr.Lock()
 	defer ldr.Unlock()
 
@@ -536,39 +344,15 @@ func (ldr *Loader) createHeap(path string, size uint64, h *heap.Heap) {
 		return // already loaded
 	}
 
+	b = ldr.opts.Limit.Reduce(b)
+
 	ldr.size += int64(size)
 	ldr.paths = append(ldr.paths, path)
-	ldr.heaps <- h
+	ldr.heaps <- heap.New(path, hint, size, b)
 
 	if ldr.opts.Verbose > 1 {
 		log.Printf("loaded heap %s\n", path)
 	}
-}
-
-func isCoherent(disk []disk) (string, bool) {
-	var last, name, ext string
-
-	if len(disk) < 2 {
-		return "", false
-	}
-
-	for _, d := range disk {
-		ext = filepath.Ext(d.path)
-		name = filepath.Base(d.path)
-		name = name[0 : len(name)-len(ext)]
-
-		if last != "" && last != name {
-			return "", false
-		}
-
-		last = name
-	}
-
-	return name, true
-}
-
-func isRemote(path string) bool {
-	return regexp.MustCompile(`^\S*(smb:)?(//|\\).+`).MatchString(path)
 }
 
 func isPiped(f *os.File) bool {

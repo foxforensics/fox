@@ -100,7 +100,7 @@ Example: List high entropy files
   $ fox list -n0.9 ./**/*
 
 Example: Hunt down suspicious events
-  $ fox hunt -u *.vmdk
+  $ fox hunt -u *.dd
 
 For more information please visit: https://foxhunt.dev
 Use "fox help <MODE>" to see help on a specific mode.

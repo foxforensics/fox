@@ -14,18 +14,6 @@
 
 ## 5. Ideas
 * Add ModTime to heaps (files and streams)
-* Add advanced examples?
-  > Mount the network share, decrypt the archive, extract the file into memory, calculate the hash and test it against known malware on VirusTotal:
-  > ```console
-  > fox test -pinfected \\lab\case\files.zip:ioc.exe
-  > ```
-  > Start a multithreaded MCP server for Hunt mode using 10 cores with debug output:
-  > ```console
-  > fox hunt -vvvMT10
-  > ```
-* Add support for NTFS to disks in hunt mode
-* Add support for MSI files
-  * https://pkg.go.dev/github.com/asalih/go-msi
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
 * Add CEF syntax highlighting (pygments)

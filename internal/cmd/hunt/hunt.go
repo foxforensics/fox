@@ -17,9 +17,6 @@ import (
 	res "github.com/cuhsat/fox/v4/internal"
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/ewf"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/vhdx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/reader/vmdk"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/store"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/store/parquet"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/store/sqlite"
@@ -33,7 +30,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/hunter"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 )
 
 var Usage = strings.TrimSpace(`
@@ -71,7 +67,7 @@ Aliases:
   -S, --splunk             alias for -H -Uhttp://localhost:8088/...
 
 Examples:
-  $ fox hunt -u *.vmdk
+  $ fox hunt -u *.dd
 `)
 
 type Hunt struct {
@@ -193,12 +189,6 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	if cmd.Dist > 0 {
 		cli.NoSyntax = true
-	}
-
-	if !cli.Raw {
-		register.Reader("ewf", ewf.Detect, ewf.Reader)
-		register.Reader("vhdx", vhdx.Detect, vhdx.Reader)
-		register.Reader("vmdk", vmdk.Detect, vmdk.Reader)
 	}
 
 	if !cli.NoStrict {

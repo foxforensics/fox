@@ -49,7 +49,6 @@ func TestSum(t *testing.T) {
 		{small, types.CRC64ECMA, "df2fc66f2c50575f"},
 		{small, types.CRC64ISO, "66747f552337d269"},
 		{image, types.DHASH, "180c0e1e1f171b19"},
-		{small, types.DJB2, "40f6d9f45fb58b8f"},
 		{small, types.FLETCHER4, "670c11a5040000007293332e26000000f95ebb7dd7000000cdb2a56cc1030000"},
 		{small, types.FNV1, "847595167a564758d45f1ac5f7b7fad0"},
 		{small, types.FNV1A, "8e1fbe2b2d87d680249d1d1135695632"},

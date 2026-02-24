@@ -41,7 +41,6 @@ import (
 
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/blake3"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/shake"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/fast/djb2"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/fast/xxh"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/impfuzzy"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/imphash"
@@ -68,7 +67,6 @@ var Algorithms = []string{
 	types.CRC64ECMA,
 	types.CRC64ISO,
 	types.DHASH,
-	types.DJB2,
 	types.FLETCHER4,
 	types.FNV1,
 	types.FNV1A,
@@ -194,8 +192,6 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = crc64.New(crc64.MakeTable(crc64.ISO))
 	case types.DHASH:
 		imp = image.NewDHash()
-	case types.DJB2:
-		imp = djb2.New()
 	case types.FLETCHER4:
 		imp = fletcher4.New()
 	case types.FNV1:
