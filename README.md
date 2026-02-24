@@ -36,7 +36,7 @@ There are also standalone binaries available:
 * [x] [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * [x] String carving and automatic classification
 * [x] With over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
-* [x] Dump Fortinet binary firewall LLog v5 files
+* [x] Dump Fortinet binary firewall log files
 * [x] Dump Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * [x] Dump Windows shortcut and prefetch files
 * [x] Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
@@ -62,6 +62,16 @@ There are also standalone binaries available:
   * [x] Save as `JSON`, `JSON Lines`, `Parquet` or `SQLite` 
 
 ## Examples
+
+Find occurrences in event logs:
+```console
+fox -eWinlogon ./**/*.evtx
+```
+
+Show MBR in canonical hex:
+```console
+fox hex -hc512 disk.dd
+```
 
 Show strings in binary:
 ```console
