@@ -98,6 +98,8 @@ github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDk
 github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
 github.com/corona10/goimagehash v1.1.0 h1:teNMX/1e+Wn/AYSbLHX8mj+mF9r60R1kBeqE9MkoYwI=
 github.com/corona10/goimagehash v1.1.0/go.mod h1:VkvE0mLn84L4aF8vCb6mafVajEb6QYMHl2ZJLn0mOGI=
+github.com/cuhsat/go-fortilog v0.1.0 h1:Va/y8Tw5JjUMtSlg2LV4DtXWtqvsszVmHy3stfVFBWk=
+github.com/cuhsat/go-fortilog v0.1.0/go.mod h1:+yKvvLy0/N7JpTqVGjqZr97SbnjZMF2qtMxIc/vYAUU=
 github.com/cuhsat/go-hash v0.2.2 h1:qigYmnD3Xuef5w4fzqLK5BIKL7OgjNwLJLXxsl5ceKE=
 github.com/cuhsat/go-hash v0.2.2/go.mod h1:Kapf8lKI87YdMldAHc8xwklr5nk4gLOX/5fDpL5HF80=
 github.com/cuhsat/go-krypto v0.2.1 h1:y+L67yIpolNOmv/tdPUMGnFgFv2MZFZ+4FShCAQCaaQ=
