@@ -13,7 +13,7 @@ The Forensic Examiners Swiss Army Knife. Providing many useful features to lever
 </div>
 
 ## Synopsis
-Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. The files will be processed in read-only manner and output uninterpreted.
+Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. All files will only be processed read-only. A Chain-of-Custody receipt is generated upon every output.
 
 ## Install
 The fastest way to get started, is to use the `go install` command:
@@ -49,7 +49,7 @@ There are also standalone binaries available:
 * [x] Many popular archive and compression formats
 * [x] Many popular cryptographic, fuzzy, fast and image hashes
 * [x] Complete with [man pages](assets/man) for every mode
-* [x] Special Hunt mode
+* [x] Special [Hunt](assets/man/fox-hunt.md) mode
   * [x] Built-in support for [EnCase EWF](https://www.loc.gov/preservation/digital/formats/fdd/fdd000408.shtml), [VHDX](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-vhdx/83e061f8-f6e2-4de1-91bd-5d518a43d477), [VMDK](https://code.vmware.com/web/sdk/6.7/vddk) and raw disks
   * [x] Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * [x] Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
@@ -62,15 +62,6 @@ There are also standalone binaries available:
   * [x] Save as `JSON`, `JSON Lines`, `Parquet` or `SQLite` 
 
 ## Examples
-Find occurrences in event logs:
-```console
-fox -eWinlogon ./**/*.evtx
-```
-
-Show MBR in canonical hex:
-```console
-fox hex -hc512 disk.dd
-```
 
 Show strings in binary:
 ```console
