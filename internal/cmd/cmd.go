@@ -7,9 +7,9 @@ import (
 	"os"
 	"regexp"
 
-	_color "github.com/fatih/color"
-
 	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/msi"
+	_color "github.com/fatih/color"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
@@ -194,13 +194,14 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	}
 
 	if !cli.NoExtract {
+		register.Archive("7z", _zip.Detect, _zip.Extract)
 		register.Archive("ar", ar.Detect, ar.Extract)
 		register.Archive("cab", cab.Detect, cab.Extract)
 		register.Archive("cpio", cpio.Detect, cpio.Extract)
 		register.Archive("iso", iso.Detect, iso.Extract)
+		register.Archive("msi", msi.Detect, msi.Extract)
 		register.Archive("rar", rar.Detect, rar.Extract)
 		register.Archive("rpm", rpm.Detect, rpm.Extract)
-		register.Archive("7z", _zip.Detect, _zip.Extract)
 		register.Archive("tar", tar.Detect, tar.Extract)
 		register.Archive("xar", xar.Detect, xar.Extract)
 		register.Archive("zip", zip.Detect, zip.Extract)

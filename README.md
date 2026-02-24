@@ -111,7 +111,7 @@ Disk Formats
 > dd/raw, EWF-E01, EWF-S01, VHD, VHDX, VMDK
 
 Archive Formats
-> 7zip, ar, CAB, CPIO, ISO, RAR, RPM, tar, xar, ZIP
+> 7zip, ar, CAB, CPIO, ISO, MSI, RAR, RPM, tar, xar, ZIP
 
 Compression Formats
 > Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZFSE, LZO, LZVN, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd

@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
-
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cpio"
@@ -23,7 +22,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pf"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/fortinet"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bzip2"
@@ -64,13 +62,13 @@ func TestMain(m *testing.M) {
 	register.Deflate("zlib", zlib.Detect, zlib.Deflate)
 	register.Deflate("zstd", zstd.Detect, zstd.Deflate)
 
+	register.Archive("7z", _zip.Detect, _zip.Extract)
 	register.Archive("ar", ar.Detect, ar.Extract)
 	register.Archive("cab", cab.Detect, cab.Extract)
 	register.Archive("cpio", cpio.Detect, cpio.Extract)
 	register.Archive("iso", iso.Detect, iso.Extract)
 	register.Archive("rar", rar.Detect, rar.Extract)
 	register.Archive("rpm", rpm.Detect, rpm.Extract)
-	register.Archive("7z", _zip.Detect, _zip.Extract)
 	register.Archive("tar", tar.Detect, tar.Extract)
 	register.Archive("xar", xar.Detect, xar.Extract)
 	register.Archive("zip", zip.Detect, zip.Extract)
@@ -81,7 +79,6 @@ func TestMain(m *testing.M) {
 	register.Convert("pe", pe.Detect, pe.Convert)
 	register.Convert("pf", pf.Detect, pf.Convert)
 	register.Convert("evtx", evtx.Detect, evtx.Convert)
-	register.Convert("fortinet", fortinet.Detect, fortinet.Convert)
 	register.Convert("journal", journal.Detect, journal.Convert)
 
 	register.Format("json", json.Detect, json.Format)
