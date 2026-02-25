@@ -122,15 +122,15 @@ func TestLoadFiles(t *testing.T) {
 		}, {
 			"Multiple file streams",
 			[]string{
-				"archive/multi.zip",
+				"archive/test.zip",
 			},
 			[]string{
-				"multi.zip:hello.rar:hello.txt",
-				"multi.zip:hello.txt.bz2",
-				"multi.zip:hello.txt.gz",
-				"multi.zip:hello.txt.lz4",
-				"multi.zip:hello.txt.xz",
-				"multi.zip:hello.txt.zst",
+				"test.zip:hello.rar:hello.txt",
+				"test.zip:hello.txt.bz2",
+				"test.zip:hello.txt.gz",
+				"test.zip:hello.txt.lz4",
+				"test.zip:hello.txt.xz",
+				"test.zip:hello.txt.zst",
 			},
 		}, {
 			"Directory",

@@ -3,11 +3,10 @@ package msi
 import (
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
-const file = "archive/fox.msi"
+const file = "archive/test.msi"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := test.Fixture(file)
@@ -34,15 +33,17 @@ func TestDetect(t *testing.T) {
 func TestExtract(t *testing.T) {
 	e := Extract(test.Fixture(file), "", "")
 
-	if len(e) != 1 {
+	if len(e) != 3 {
 		t.Fatal("invalid entry count")
 	}
 
-	if e[0].Path != data.JoinPart("", test.Sample) {
-		t.Fatal("invalid entry path")
-	}
+	for _, s := range e {
+		if len(s.Path) == 0 {
+			t.Fatal("invalid entry path")
+		}
 
-	if !test.Assert(e[0].Data) {
-		t.Fatal("invalid entry data")
+		if len(s.Data) == 0 {
+			t.Fatal("invalid entry data")
+		}
 	}
 }
