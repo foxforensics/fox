@@ -36,9 +36,9 @@ hash
 
 :   Shows file hashes and checksums.
 
-list
+stat
 
-:   Lists file infos and entropy.
+:   Shows file stats and entropy.
 
 test
 
@@ -204,7 +204,7 @@ fox hash -Amd5 files.7z
 
 :   Hash archive contents.
 
-fox list -n0.9 ./**/*
+fox stat -n0.9 ./**/*
 
 :   List high entropy files.
 

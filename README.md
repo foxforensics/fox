@@ -1,15 +1,12 @@
-[![fox](assets/img/logo.png "fox")](https://foxhunt.dev)
-
 <div align="center">
-The Forensic Examiners Swiss Army Knife
-<br/>
-<br/>
+  <img src="assets/img/fox.png" width="256px" alt=""/>
+  <br/>The Forensic Examiners Swiss Army Knife<br/><br/>
 
-[![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
-[![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/cuhsat/fox/actions)
-[![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
+  [![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
+  [![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/cuhsat/fox/actions)
+  [![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
 
-<br/>
+  <br/>
 </div>
 
 ## Synopsis
@@ -83,7 +80,7 @@ fox hash -Amd5 files.7z
 
 List high entropy files:
 ```console
-fox list -n0.9 ./**/*
+fox stat -n0.9 ./**/*
 ```
 
 Dump NTLM hashes:
@@ -121,7 +118,7 @@ Similarity Hashes
 > ImpFuzzy, ImpHash, ImpHash0, SSDeep, TLSH
 
 Windows Specific
-> LM, NT, PE Checksum  
+> LM, NT, PE Checksum, PE Rich
 
 Image Specific
 > aHash, dHash, pHash

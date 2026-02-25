@@ -10,7 +10,7 @@ before:
     - pandoc -s -t man assets/man/fox-hex.md -o fox-hex.1
     - pandoc -s -t man assets/man/fox-text.md -o fox-text.1
     - pandoc -s -t man assets/man/fox-hash.md -o fox-hash.1
-    - pandoc -s -t man assets/man/fox-list.md -o fox-list.1
+    - pandoc -s -t man assets/man/fox-stat.md -o fox-stat.1
     - pandoc -s -t man assets/man/fox-dump.md -o fox-dump.1
     - pandoc -s -t man assets/man/fox-test.md -o fox-test.1
     - pandoc -s -t man assets/man/fox-hunt.md -o fox-hunt.1
@@ -44,7 +44,7 @@ archives:
       - fox-hex.1
       - fox-text.1
       - fox-hash.1
-      - fox-list.1
+      - fox-stat.1
       - fox-dump.1
       - fox-test.1
       - fox-hunt.1
@@ -120,8 +120,8 @@ nfpms:
         dst: /usr/share/man/man1/fox-hash.1
         file_info:
           mode: 0644
-      - src: ./fox-list.1
-        dst: /usr/share/man/man1/fox-list.1
+      - src: ./fox-stat.1
+        dst: /usr/share/man/man1/fox-stat.1
         file_info:
           mode: 0644
       - src: ./fox-dump.1
@@ -141,7 +141,7 @@ homebrew_casks:
   - url:
       verified: github.com/cuhsat/homebrew-fox/
     name: "fox"
-    description: "Forensic Examiners Swiss Army Knife"
+    description: "The Forensic Examiners Swiss Army Knife"
     homepage: "https://foxhunt.dev/"
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
     repository:
@@ -163,7 +163,7 @@ homebrew_casks:
       - fox-hex.1
       - fox-text.1
       - fox-hash.1
-      - fox-list.1
+      - fox-stat.1
       - fox-dump.1
       - fox-test.1
       - fox-hunt.1

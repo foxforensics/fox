@@ -24,7 +24,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/help"
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
-	"github.com/cuhsat/fox/v4/internal/cmd/list"
+	"github.com/cuhsat/fox/v4/internal/cmd/stat"
 	"github.com/cuhsat/fox/v4/internal/cmd/test"
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
@@ -45,9 +45,9 @@ Modes:
   (x) hex      shows file contents in hex format
   (t) text     shows file contained strings
   (a) hash     shows file hashes and checksums
-  (l) list     lists file infos and entropy
+  (s) stat     shows file stats and entropy
   (d) dump     dumps sensitive data
-  (s) test     tests suspicious files
+  (e) test     tests suspicious files
   (u) hunt     hunts suspicious events
 
 File flags:
@@ -97,7 +97,7 @@ Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
 Example: List high entropy files
-  $ fox list -n0.9 ./**/*
+  $ fox stat -n0.9 ./**/*
 
 Example: Hunt down suspicious events
   $ fox hunt -u *.dd
@@ -112,9 +112,9 @@ type fox struct {
 	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hexdump"`
 	Text text.Text `cmd:"" aliases:"t,strings"`
 	Hash hash.Hash `cmd:"" aliases:"a,sum"`
-	List list.List `cmd:"" aliases:"l,ls,wc"`
+	Stat stat.Stat `cmd:"" aliases:"s,ls,wc"`
 	Dump dump.Dump `cmd:"" aliases:"d"`
-	Test test.Test `cmd:"" aliases:"s,check"`
+	Test test.Test `cmd:"" aliases:"e,vt,check"`
 	Hunt hunt.Hunt `cmd:"" aliases:"u"`
 	Help help.Help `cmd:"" aliases:"h" hidden:""`
 
@@ -141,12 +141,12 @@ func main() {
 		})
 
 	switch {
-	case cli.Version:
-		fmt.Printf("fox %s\n", res.Version)
+	case len(ctx.Args) == 0, ctx.Error != nil:
+		fallthrough // show usage
 	case cli.Globals.Help, ctx.Command() == "help":
 		fmt.Println(fmt.Sprintf(Usage, res.Version))
-	case len(ctx.Args) == 0, ctx.Error != nil:
-		fmt.Println(fmt.Sprintf(Usage, res.Version))
+	case cli.Version:
+		fmt.Printf("fox %s\n", res.Version)
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())

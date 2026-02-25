@@ -1,4 +1,4 @@
-% FOX LIST(1) Version 4 | Fox Documentation
+% FOX STAT(1) Version 4 | Fox Documentation
 
 NAME
 ====
@@ -8,12 +8,12 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **list** \[_flags_ ...] \[_paths_ ...]
+| **fox** **stat** \[_flags_ ...] \[_paths_ ...]
 
 DESCRIPTION
 ===========
 
-Lists file infos and entropy. If the **--sort** flag is used, the files will be processed single-threaded. This mode enforces the **--no-convert** flag.
+Shows file stats and entropy. If the **--sort** flag is used, the files will be processed single-threaded. This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====
@@ -52,7 +52,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox list -n0.9 ./**/*
+fox stat -n0.9 ./**/*
 
 :   List high entropy files
 

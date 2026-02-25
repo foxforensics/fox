@@ -13,13 +13,9 @@
 * ~~Done~~
 
 ## 5. Ideas
-* Add ModTime to heaps (files and streams)
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
 * Add CEF syntax highlighting (pygments)
-* Add global flag to change chroma style
-* Add MSI release
-  * https://dev.to/abdfnx/how-to-create-a-msi-file-for-go-program-je
 * Add different endpoints for test
   * https://github.com/woanware/lookuper
   * HaveIBeenHacked for mails
@@ -27,8 +23,6 @@
   * Custom BgColor from red to yellow in 256 steps?
 * Add pager for output like moor?
   * https://github.com/walles/moor
-* Add support for salted/keyed hashes?
-  * `-S, --salt` flag
 * Add Telf hash support?
   * https://github.com/trendmicro/telfhash
 * Add LZXPRESS to own ESE fork?

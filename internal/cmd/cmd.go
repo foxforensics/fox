@@ -7,14 +7,15 @@ import (
 	"os"
 	"regexp"
 
-	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/msi"
 	_color "github.com/fatih/color"
+
+	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cpio"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/iso"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/msi"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/rar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/rpm"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"

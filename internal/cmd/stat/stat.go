@@ -1,4 +1,4 @@
-package list
+package stat
 
 import (
 	"bytes"
@@ -6,6 +6,7 @@ import (
 	"log"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/alecthomas/kong"
 
@@ -16,9 +17,9 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints file infos and entropy.
+Shows file stats and entropy.
 
-fox list [FLAGS...] <PATHS...>
+fox stat [FLAGS...] <PATHS...>
 
 Flags:
   -s, --sort               sorts files by path (slower)
@@ -32,10 +33,10 @@ Format flags:
   -H, --human              formats size in human-readable units
 
 Examples:
-  $ fox list -n0.9 ./**/*
+  $ fox stat -n0.9 ./**/*
 `)
 
-type List struct {
+type Stat struct {
 	Sort  bool    `short:"s"`
 	Block string  `short:"b"`
 	Min   float64 `short:"n" default:"0.0"`
@@ -51,7 +52,7 @@ type List struct {
 	block uint64 `kong:"-"`
 }
 
-func (cmd *List) Validate() error {
+func (cmd *Stat) Validate() error {
 	if cmd.Min > cmd.Max {
 		log.Fatalln("invalid range")
 	}
@@ -59,7 +60,7 @@ func (cmd *List) Validate() error {
 	return nil
 }
 
-func (cmd *List) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+func (cmd *Stat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if len(cmd.Block) > 0 {
 		cmd.block = uint64(text.Mechanize(cmd.Block))
 	}
@@ -67,7 +68,7 @@ func (cmd *List) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	return nil
 }
 
-func (cmd *List) Run(cli *cli.Globals) error {
+func (cmd *Stat) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
 		fmt.Println(Usage)
 		return nil
@@ -83,6 +84,7 @@ func (cmd *List) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	for h := range ch {
+		var t = time.UnixMilli(int64(h.Time)).UTC().Format(time.RFC3339)
 		var n = cmd.block
 		var off int
 
@@ -97,7 +99,7 @@ func (cmd *List) Run(cli *cli.Globals) error {
 				title = "[00000000] " + title
 			}
 
-			_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s\n", 0, 0, 0.0, text.Hide(title))
+			_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s  %s\n", 0, 0, 0.0, t, text.Hide(title))
 
 			h.Discard()
 			continue
@@ -122,9 +124,9 @@ func (cmd *List) Run(cli *cli.Globals) error {
 				}
 
 				if cmd.block > 0 {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %.10fe  %s %s\n", l, size, e, start, title)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %.10fe  %s  %s %s\n", l, size, e, t, start, title)
 				} else {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %.10fe  %s\n", l, size, e, title)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %.10fe  %s  %s\n", l, size, e, t, title)
 				}
 			}
 
