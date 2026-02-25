@@ -68,7 +68,7 @@ Similarity hashes
 
 Windows specific
 
-:   LM, NT, PE Checksum
+:   LM, NT, PE Checksum, PE Rich
 
 Image specific
 

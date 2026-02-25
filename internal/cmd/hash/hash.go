@@ -53,7 +53,7 @@ Similarity hashes:
   IMPFUZZY, IMPHASH, IMPHASH0, SSDEEP, TLSH
 
 Windows specific:
-  LM, NT, PE Checksum
+  LM, NT, PE Checksum, PE Rich
 
 Image specific:
   AHASH, DHASH, PHASH
