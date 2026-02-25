@@ -10,7 +10,7 @@ import (
 const (
 	Large = "text/bible.txt"
 	Small = "fox.txt"
-	PeBin = "convert/fox.exe.zst"
+	BinPe = "convert/fox.exe.zst"
 	Image = "misc/fox.jpg"
 	Input = "FOX123XOF"
 )
@@ -26,7 +26,7 @@ func BenchmarkSum(b *testing.B) {
 func TestSum(t *testing.T) {
 	large := test.Fixture(Large)
 	small := test.Fixture(Small)
-	pebin := test.Fixture(PeBin)
+	binpe := test.Fixture(BinPe)
 	image := test.Fixture(Image)
 	input := []byte(Input)
 
@@ -55,9 +55,9 @@ func TestSum(t *testing.T) {
 		{small, types.GOST2012256, "59b14e45039898838d3a905382c73f9d7d73d8a376e770d2c78c744a45de840b"},
 		{small, types.GOST2012512, "c3893dcdaec9998ac50b551a13f296a5599a1e5443dd508b29fafef6cbe369c063a565a90e0bf7fc0d9367dc59f314684f0dea19d983adf98144f3c107c7b681"},
 		{small, types.HAS160, "e58d5cfe11171951799249e751e3bafecbf4d4a8"},
-		{pebin, types.IMPFUZZY, "24:ibVjh9wOuuTkkboVaXOr6kwmDgUPMztxdEr6Ul:AwOuUjXOmokx0nl"},
-		{pebin, types.IMPHASH, "d42595b695fc008ef2c56aabd8efd68e"},
-		{pebin, types.IMPHASH0, "e76ebde493cf72a6f596a2c046a67080"},
+		{binpe, types.IMPFUZZY, "24:ibVjh9wOuuTkkboVaXOr6kwmDgUPMztxdEr6Ul:AwOuUjXOmokx0nl"},
+		{binpe, types.IMPHASH, "d42595b695fc008ef2c56aabd8efd68e"},
+		{binpe, types.IMPHASH0, "e76ebde493cf72a6f596a2c046a67080"},
 		{input, types.LM, "74ac61daa7e79d69482bc9e3e9caf5a9"},
 		{small, types.LSH256, "32be26fe3aab949b3682a6bd77028f9ffe9338fe605a7e7fd45c6a1dfa2c8585"},
 		{small, types.LSH512, "06d60a9e8abba640bc989578af921ef1e13d333a6d017422fb45fff8611bd8321aaad2b25514877ad4a33ca3b5800f8e349dbf906d97999f9538dbfe0c075dec"},
