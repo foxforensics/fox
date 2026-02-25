@@ -23,8 +23,6 @@
   * Custom BgColor from red to yellow in 256 steps?
 * Add pager for output like moor?
   * https://github.com/walles/moor
-* Add Telf hash support?
-  * https://github.com/trendmicro/telfhash
 * Add LZXPRESS to own ESE fork?
   * https://forensics.wiki/compression/#lzxpress
   * https://github.com/Velocidex/go-prefetch/blob/master/lzxpress.go

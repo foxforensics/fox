@@ -11,6 +11,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
 
+var Limit = 1024 * 1024 * 4 // turn off color for big files
+
 type TextLine struct {
 	Line   string
 	Group  uint
@@ -32,10 +34,13 @@ type TextContext struct {
 func Text(h *heap.Heap, cli *cli.Globals, ctx *TextContext) *TextBuffer {
 	var last uint
 
-	if len(ctx.Syntax) > 0 {
+	switch {
+	case len(h.Bytes()) < Limit && len(ctx.Syntax) > 0:
 		ctx.SMap = smap.Map(text.ColorizeAs(h.Bytes(), ctx.Syntax, ctx.Style))
-	} else {
+	case len(h.Bytes()) < Limit:
 		ctx.SMap = smap.Map(text.Colorize(h.Bytes(), h.Hint, ctx.Style))
+	default:
+		ctx.SMap = smap.Map(h.Bytes())
 	}
 
 	ctx.SMap = cli.Filter.Filter(ctx.SMap).Render()
