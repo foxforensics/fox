@@ -29,7 +29,8 @@ RegExp flags:
   -A, --after=LINES        lines trailing after a match
 
 Syntax flags
-  -S, --syntax=TYPE        force syntax highlighting type
+  -X, --syntax=TYPE        force syntax highlighting type
+  -Y, --style=STYLE        force syntax highlighting style
 
 Examples:
   $ fox -eWinlogon ./**/*.evtx
@@ -45,7 +46,8 @@ type Cat struct {
 	After   uint `short:"A"`
 
 	// syntax
-	Syntax string `short:"S"`
+	Syntax string `short:"X"`
+	Style  string `short:"Y"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -95,6 +97,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 
 		for l := range buffer.Text(h, cli, &buffer.TextContext{
 			Syntax: cmd.Syntax,
+			Style:  cmd.Style,
 		}).Lines {
 			s := l.String
 

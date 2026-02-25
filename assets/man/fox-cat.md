@@ -48,9 +48,13 @@ RegExp Flags
 Syntax Flags
 ------------
 
-**-S, --syntax**=_type_
+**-X, --syntax**=_type_
 
 :   Force syntax highlighting _type_.
+
+**-Y, --style**=_style_
+
+:   Force syntax highlighting _style_.
 
 POSITIONAL ARGUMENTS
 ====================
