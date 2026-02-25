@@ -12,7 +12,7 @@ func JoinPart(path, part string) string {
 }
 
 func SplitPart(path string) (string, string) {
-	t := strings.Split(path, sep)
+	t := strings.SplitN(path, sep, 2)
 
 	if len(t) < 2 {
 		return path, ""
