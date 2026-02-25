@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/img/fox.png" width="256px" alt=""/>
+  <img src="assets/img/fox.png" width="192px" alt=""/>
   <br/>The Forensic Examiners Swiss Army Knife<br/><br/>
 
   [![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
@@ -118,7 +118,7 @@ Similarity Hashes
 > ImpFuzzy, ImpHash, ImpHash0, SSDeep, TLSH
 
 Windows Specific
-> LM, NT, PE Checksum, PE Rich
+> LM, NT, PE Checksum
 
 Image Specific
 > aHash, dHash, pHash

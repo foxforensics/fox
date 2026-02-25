@@ -36,7 +36,6 @@ const (
 	PE          = "pe"
 	PHASH       = "phash"
 	RAPIDHASH   = "rapidhash"
-	RICH        = "rich"
 	RIPEMD160   = "ripemd-160"
 	SHA1        = "sha1"
 	SHA224      = "sha224"

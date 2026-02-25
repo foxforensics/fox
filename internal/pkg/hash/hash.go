@@ -18,7 +18,6 @@ import (
 	"strings"
 
 	"github.com/cespare/xxhash"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/rich"
 	"github.com/cuhsat/go-hash/skein"
 	"github.com/cuhsat/go-hash/streebog"
 	"github.com/cuhsat/go-krypto/has160"
@@ -89,7 +88,6 @@ var Algorithms = []string{
 	types.PE,
 	types.PHASH,
 	types.RAPIDHASH,
-	types.RICH,
 	types.RIPEMD160,
 	types.SHAKE128,
 	types.SHAKE256,
@@ -236,8 +234,6 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = image.NewPHash()
 	case types.RAPIDHASH:
 		imp = rapidhash.New()
-	case types.RICH:
-		imp = rich.New()
 	case types.RIPEMD160:
 		imp = ripemd160.New()
 	case types.SHA1:
