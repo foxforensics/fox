@@ -6,7 +6,7 @@
   [![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/cuhsat/fox/actions)
   [![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
 
-  <br/>
+  <img src="assets/img/term.png" alt="Terminal"/>
 </div>
 
 ## Synopsis
