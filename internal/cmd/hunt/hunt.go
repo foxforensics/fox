@@ -191,11 +191,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		cli.NoSyntax = true
 	}
 
-	if !cli.NoStrict {
-		cli.NoExtract = true // forced
-		cli.NoDeflate = true // forced
-		cli.NoConvert = true // forced
-	}
+	cli.NoConvert = true // forced
 
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()

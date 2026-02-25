@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Hunts suspicious activities by carving events from file(s). This mode enforces the **--no-extract**, **--no-deflate** and **--no-convert** flags unless **--no-strict** is specified.
+Hunts suspicious activities by carving events from file(s). This mode enforces the **--no-convert** flag. If no path is specified, a built-in list of known locations will be processed.
 
 FLAGS
 =====

@@ -11,7 +11,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
-	"github.com/cuhsat/fox/v4/internal/cmd/list"
+	"github.com/cuhsat/fox/v4/internal/cmd/stat"
 	"github.com/cuhsat/fox/v4/internal/cmd/test"
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
@@ -21,7 +21,7 @@ var usage = map[string]string{
 	"hex":  hex.Usage,
 	"text": text.Usage,
 	"hash": hash.Usage,
-	"list": list.Usage,
+	"stat": stat.Usage,
 	"dump": dump.Usage,
 	"test": test.Usage,
 	"hunt": hunt.Usage,
