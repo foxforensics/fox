@@ -34,6 +34,10 @@ func NewLimits(h, t bool, b, l string) *Limits {
 func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 	var a, b = 0, len(m)
 
+	if !l.IsHead && !l.IsTail {
+		return m
+	}
+
 	if l.IsHead && l.Bytes > 0 {
 		b = min(int(l.Bytes), b)
 	}
@@ -113,7 +117,7 @@ func count(m mmap.MMap) int {
 	v := bytes.Count(m, []byte{CR})
 
 	if m[len(m)-1] != CR {
-		v++
+		v++ // last line
 	}
 
 	return v

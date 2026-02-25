@@ -15,13 +15,14 @@ type Heap struct {
 
 	Name string // heap name
 	Hint string // heap hint
+	Time uint64 // heap time
 	Size uint64 // heap size
 
 	m mmap.MMap // memory map
 }
 
-func New(name, hint string, size uint64, m mmap.MMap) *Heap {
-	return &Heap{Name: name, Hint: hint, Size: size, m: m}
+func New(name, hint string, time, size uint64, m mmap.MMap) *Heap {
+	return &Heap{Name: name, Hint: hint, Time: time, Size: size, m: m}
 }
 
 func (h *Heap) String() string {
