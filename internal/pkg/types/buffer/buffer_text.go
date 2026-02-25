@@ -26,15 +26,16 @@ type TextContext struct {
 	SMap   smap.SMap
 	Delta  int
 	Syntax string
+	Style  string
 }
 
 func Text(h *heap.Heap, cli *cli.Globals, ctx *TextContext) *TextBuffer {
 	var last uint
 
 	if len(ctx.Syntax) > 0 {
-		ctx.SMap = smap.Map(text.ColorizeAs(h.Bytes(), ctx.Syntax))
+		ctx.SMap = smap.Map(text.ColorizeAs(h.Bytes(), ctx.Syntax, ctx.Style))
 	} else {
-		ctx.SMap = smap.Map(text.Colorize(h.Bytes(), h.Hint))
+		ctx.SMap = smap.Map(text.Colorize(h.Bytes(), h.Hint, ctx.Style))
 	}
 
 	ctx.SMap = cli.Filter.Filter(ctx.SMap).Render()

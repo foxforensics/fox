@@ -48,14 +48,18 @@ func ColorizeStringAs(s, lexer string) string {
 	return sb.String()
 }
 
-func ColorizeAs(b []byte, lexer string) []byte {
+func ColorizeAs(b []byte, lexer string, style string) []byte {
 	if NoSyntax {
 		return b
 	}
 
+	if style == "" {
+		style = Style
+	}
+
 	buf := bytes.NewBuffer(nil)
 
-	err := quick.Highlight(buf, string(b), lexer, "terminal256", Style)
+	err := quick.Highlight(buf, string(b), lexer, "terminal256", style)
 
 	if err != nil {
 		return b
@@ -64,7 +68,7 @@ func ColorizeAs(b []byte, lexer string) []byte {
 	return buf.Bytes()
 }
 
-func Colorize(b []byte, hint string) []byte {
+func Colorize(b []byte, hint string, style string) []byte {
 	if NoSyntax {
 		return b
 	}
@@ -83,7 +87,7 @@ func Colorize(b []byte, hint string) []byte {
 		return b
 	}
 
-	return ColorizeAs(b, lexer)
+	return ColorizeAs(b, lexer, style)
 }
 
 func MarkMatch(s string, re *regexp.Regexp) string {
