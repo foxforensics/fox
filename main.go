@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/cuhsat/fox/v4/internal/cmd/mcp"
 	_ "github.com/josephspurrier/goversioninfo"
 
 	"github.com/alecthomas/kong"
@@ -49,6 +50,7 @@ Modes:
   (d) dump     dumps sensitive data
   (e) test     tests suspicious files
   (u) hunt     hunts suspicious events
+  (m) mcp      loads MCP server (blocking)
 
 File flags:
   -i, --in=FILE            reads paths from file
@@ -117,6 +119,9 @@ type fox struct {
 	Test test.Test `cmd:"" aliases:"e,vt,check"`
 	Hunt hunt.Hunt `cmd:"" aliases:"u"`
 	Help help.Help `cmd:"" aliases:"h" hidden:""`
+
+	// server modes
+	Mcp mcp.Mcp `cmd:"" aliases:"m,serve,listen"`
 
 	// support flags
 	Version bool

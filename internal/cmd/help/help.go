@@ -11,12 +11,14 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
+	"github.com/cuhsat/fox/v4/internal/cmd/mcp"
 	"github.com/cuhsat/fox/v4/internal/cmd/stat"
 	"github.com/cuhsat/fox/v4/internal/cmd/test"
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
 )
 
 var usage = map[string]string{
+	"mcp":  mcp.Usage,
 	"cat":  cat.Usage,
 	"hex":  hex.Usage,
 	"text": text.Usage,

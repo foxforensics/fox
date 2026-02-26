@@ -11,10 +11,7 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
-	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/mark3labs/mcp-go/server"
 
-	res "github.com/cuhsat/fox/v4/internal"
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/store"
@@ -59,9 +56,6 @@ Stream flags:
   -E, --ecs                uses ECS schema for streaming
   -H, --hec                uses HEC schema for streaming
 
-Agent flags:
-  -M, --mcp                starts as MCP server (blocking)
-
 Aliases:
   -L, --logstash           alias for -E -Uhttp://localhost:8080
   -S, --splunk             alias for -H -Uhttp://localhost:8088/...
@@ -91,9 +85,6 @@ type Hunt struct {
 	Auth string `short:"A"`
 	Ecs  bool   `short:"E" xor:"ecs,hec"`
 	Hec  bool   `short:"H" xor:"ecs,hec"`
-
-	// agent
-	Mcp bool `short:"M"`
 
 	// alias
 	Logstash bool `short:"L" xor:"logstash,splunk"`
@@ -178,11 +169,6 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Hunt) Run(cli *cli.Globals) error {
-	if cmd.Mcp {
-		cmd.listen(cli) // blocking recall
-		return nil
-	}
-
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
 		cmd.Paths = hunter.Local
 	}
@@ -311,64 +297,6 @@ func (cmd *Hunt) stream(e *event.Event) {
 		if err != nil {
 			log.Println(err)
 		}
-	}
-}
-
-func (cmd *Hunt) listen(cli *cli.Globals) {
-	srv := server.NewMCPServer(
-		"fox",
-		res.Version,
-		server.WithToolCapabilities(false),
-	)
-
-	srv.AddTool(mcp.NewTool("hunt",
-		mcp.WithDescription("Search for suspicious event logs in a file"),
-		mcp.WithString("path",
-			mcp.Description("Path of the file to search in"),
-			mcp.Required(),
-		),
-	), func(_ context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		path, err := request.RequireString("path")
-
-		if err != nil {
-			return mcp.NewToolResultError(err.Error()), nil
-		}
-
-		// configure for mcp server
-		cmd.Paths = []string{path}
-		cmd.Mcp = false // kinda ugly
-		cmd.All = false
-		cmd.Sort = false
-		cmd.Uniq = true
-
-		sb := new(strings.Builder)
-
-		cli.Stdout = sb
-		cli.NoFile = true
-		cli.NoLine = true
-		cli.NoColor = true
-		cli.NoPretty = true
-		cli.NoStrict = true
-
-		err = cmd.Run(cli)
-
-		if err != nil {
-			return mcp.NewToolResultError(err.Error()), nil
-		}
-
-		return mcp.NewToolResultText(sb.String()), nil
-	})
-
-	if cli.Verbose > 0 {
-		log.Println("mcp server started")
-	}
-
-	if err := server.ServeStdio(srv); err != nil {
-		log.Fatalln(err)
-	}
-
-	if cli.Verbose > 0 {
-		log.Println("mcp server stopped")
 	}
 }
 
