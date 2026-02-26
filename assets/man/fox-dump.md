@@ -47,7 +47,7 @@ Active Directory Flags
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**.
+The Windows System registry hive followed by the Active Directory database (optional).
 
 EXAMPLES
 ========

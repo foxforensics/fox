@@ -50,7 +50,7 @@ Modes:
   (d) dump     dumps sensitive data
   (e) test     tests suspicious files
   (u) hunt     hunts suspicious events
-  (m) mcp      loads MCP server (blocks)
+  (m) mcp      inits MCP server (blocks)
 
 File flags:
   -i, --in=FILE            reads paths from file

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/img/fox.png" width="192px" alt=""/>
+  <img src="assets/img/fox.png" width="160" alt=""/>
   <br/>The Forensic Examiners Swiss Army Knife<br/><br/>
 
   [![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)

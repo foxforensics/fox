@@ -8,19 +8,24 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **mcp** \[_flags_ ...]
+| **fox** **mcp** \[_flags_ ...] \[_port_]
 
 DESCRIPTION
 ===========
 
-Loads MCP server and blocks until canceling.
+Inits MCP server and blocks until canceling.
+
+POSITIONAL ARGUMENTS
+====================
+
+The port number (default: **3000**).
 
 EXAMPLES
 ========
 
-fox mcp
+fox mcp 8080
 
-:   Load the MCP server
+:   Init the MCP server
 
 BUGS
 ====
