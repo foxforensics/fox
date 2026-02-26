@@ -2,19 +2,21 @@ package mcp
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"strings"
 
 	res "github.com/cuhsat/fox/v4/internal"
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
-	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+
+	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
 )
 
 var Usage = strings.TrimSpace(`
-Loads MCP server (blocking).
+Loads MCP server (blocks).
 
 fox mcp [FLAGS...]
 
@@ -22,10 +24,19 @@ Examples:
   $ fox mcp
 `)
 
-type Mcp struct {
-}
+type Mcp struct{}
 
 func (cmd *Mcp) Run(cli *cli.Globals) error {
+	sb := new(strings.Builder)
+
+	// prepare
+	cli.Stdout = sb
+	cli.NoFile = true
+	cli.NoLine = true
+	cli.NoColor = true
+	cli.NoPretty = true
+	cli.NoStrict = true
+
 	srv := server.NewMCPServer(
 		"fox",
 		res.Version,
@@ -45,14 +56,11 @@ func (cmd *Mcp) Run(cli *cli.Globals) error {
 			return mcp.NewToolResultError(err.Error()), nil
 		}
 
-		sb := new(strings.Builder)
+		if cli.Verbose > 1 {
+			log.Println(fmt.Sprintf("rx: %s", path))
+		}
 
-		cli.Stdout = sb
-		cli.NoFile = true
-		cli.NoLine = true
-		cli.NoColor = true
-		cli.NoPretty = true
-		cli.NoStrict = true
+		sb.Reset()
 
 		mode := hunt.Hunt{
 			Paths: []string{path},
@@ -62,6 +70,10 @@ func (cmd *Mcp) Run(cli *cli.Globals) error {
 
 		if err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
+		}
+
+		if cli.Verbose > 1 {
+			log.Println(fmt.Sprintf("tx: %s", sb.String()))
 		}
 
 		return mcp.NewToolResultText(sb.String()), nil

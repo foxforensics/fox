@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Loads MCP server.
+Loads MCP server and blocks until canceling.
 
 EXAMPLES
 ========
