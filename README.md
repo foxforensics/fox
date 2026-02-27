@@ -57,7 +57,7 @@ There are also standalone binaries available:
 
 ## Agents
 
-> Fox provides full [MCP](https://modelcontextprotocol.io/docs/getting-started/intro) streaming server (SSE) support for AI agents.
+> Fox provides full [MCP](https://modelcontextprotocol.io/docs/getting-started/intro) streaming server (SSE) support for AI agents. (WIP)
 
 ## Examples
 
