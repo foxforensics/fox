@@ -1,11 +1,13 @@
 package mcp
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"log"
 	"strings"
 
+	"github.com/alecthomas/kong"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 
@@ -25,7 +27,16 @@ Examples:
 `)
 
 type Mcp struct {
-	Port uint16 `arg:"" optional:"" default:"3000"`
+	Port uint16 `arg:"" optional:"" default:"3001"`
+
+	// internal
+	addr string `kong:"-"`
+}
+
+func (cmd *Mcp) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+	cmd.addr = fmt.Sprintf(":%d", cmd.Port)
+
+	return nil
 }
 
 func (cmd *Mcp) Run(cli *cli.Globals) error {
@@ -38,20 +49,18 @@ func (cmd *Mcp) Run(cli *cli.Globals) error {
 	srv := server.NewMCPServer(
 		"fox",
 		res.Version,
-		server.WithToolCapabilities(false),
+		server.WithToolCapabilities(true),
 	)
 
 	cmd.addHunt(cli, srv)
 
 	if cli.Verbose > 0 {
-		log.Println("mcp server started")
+		log.Println(fmt.Sprintf("mcp server started on %d", cmd.Port))
 	}
-
-	addr := fmt.Sprintf(":%d", cmd.Port)
 
 	sse := server.NewStreamableHTTPServer(srv)
 
-	if err := sse.Start(addr); err != nil {
+	if err := sse.Start(cmd.addr); err != nil {
 		log.Fatalln(err)
 	}
 
@@ -65,38 +74,15 @@ func (cmd *Mcp) Run(cli *cli.Globals) error {
 func (cmd *Mcp) addHunt(cli *cli.Globals, srv *server.MCPServer) {
 	srv.AddTool(mcp.NewTool("hunt",
 		mcp.WithDescription("Search for suspicious event logs in a file"),
-		mcp.WithBoolean("all",
-			mcp.Description("Look for all severities"),
-		),
-		mcp.WithBoolean("sort",
-			mcp.Description("Sort events by timestamp"),
-		),
-		mcp.WithBoolean("uniq",
-			mcp.Description("Filter unique events"),
-		),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(false),
 		mcp.WithString("path",
 			mcp.Description("Path of the file to search in"),
 			mcp.Required(),
 		),
 	), func(_ context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		all, err := request.RequireBool("all")
-
-		if err != nil {
-			return mcp.NewToolResultError(err.Error()), nil
-		}
-
-		sort, err := request.RequireBool("sort")
-
-		if err != nil {
-			return mcp.NewToolResultError(err.Error()), nil
-		}
-
-		uniq, err := request.RequireBool("uniq")
-
-		if err != nil {
-			return mcp.NewToolResultError(err.Error()), nil
-		}
-
 		path, err := request.RequireString("path")
 
 		if err != nil {
@@ -107,16 +93,15 @@ func (cmd *Mcp) addHunt(cli *cli.Globals, srv *server.MCPServer) {
 			log.Println(fmt.Sprintf("rx: %s", path))
 		}
 
-		sb := new(strings.Builder)
-
-		cli.Stdout = sb
-
 		mode := hunt.Hunt{
-			All:   all,
-			Sort:  sort,
-			Uniq:  uniq,
+			All:   true,
+			Uniq:  true,
 			Paths: []string{path},
 		}
+
+		pipe := bytes.NewBuffer(nil)
+
+		cli.Stdout = pipe
 
 		err = mode.Run(cli)
 
@@ -125,9 +110,9 @@ func (cmd *Mcp) addHunt(cli *cli.Globals, srv *server.MCPServer) {
 		}
 
 		if cli.Verbose > 1 {
-			log.Println(fmt.Sprintf("tx: %s", sb.String()))
+			log.Println(fmt.Sprintf("tx: %s", pipe.String()))
 		}
 
-		return mcp.NewToolResultText(sb.String()), nil
+		return mcp.NewToolResultText(pipe.String()), nil
 	})
 }

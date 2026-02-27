@@ -13,12 +13,12 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Inits MCP server and blocks until canceling.
+Inits MCP server and blocks until canceling. Once started, the server will be available under <_http://localhost:3001/mcp_>.
 
 POSITIONAL ARGUMENTS
 ====================
 
-The port number (default: **3000**).
+The port number (default: **3001**).
 
 EXAMPLES
 ========
