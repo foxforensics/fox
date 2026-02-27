@@ -78,41 +78,27 @@ func (cmd *Mcp) addHunt(cli *cli.Globals, srv *server.MCPServer) {
 		mcp.WithDestructiveHintAnnotation(false),
 		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(false),
-		mcp.WithString("path",
-			mcp.Description("Path of the file to search in"),
+		mcp.WithArray("paths",
+			mcp.Description("Paths of the file to search in"),
 			mcp.Required(),
 		),
 	), func(_ context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		path, err := request.RequireString("path")
+		paths, err := request.RequireStringSlice("paths")
 
 		if err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
 		}
 
-		if cli.Verbose > 1 {
-			log.Println(fmt.Sprintf("rx: %s", path))
-		}
+		cli.Pipe = bytes.NewBuffer(nil)
 
-		mode := hunt.Hunt{
+		if err = (&hunt.Hunt{
 			All:   true,
 			Uniq:  true,
-			Paths: []string{path},
-		}
-
-		pipe := bytes.NewBuffer(nil)
-
-		cli.Stdout = pipe
-
-		err = mode.Run(cli)
-
-		if err != nil {
+			Paths: paths,
+		}).Run(cli); err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
 		}
 
-		if cli.Verbose > 1 {
-			log.Println(fmt.Sprintf("tx: %s", pipe.String()))
-		}
-
-		return mcp.NewToolResultText(pipe.String()), nil
+		return mcp.NewToolResultText(cli.Pipe.String()), nil
 	})
 }

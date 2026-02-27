@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"log"
@@ -103,6 +104,7 @@ type Globals struct {
 	Loader *loader.Loader `kong:"-"`
 	Filter *types.Filters `kong:"-"`
 	Limit  *types.Limits  `kong:"-"`
+	Pipe   *bytes.Buffer  `kong:"-"`
 }
 
 func (cli *Globals) Load(args []string) <-chan *heap.Heap {
@@ -117,6 +119,10 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		if err != nil {
 			log.Fatalln(err)
 		}
+
+	// pipe to buffer
+	case cli.Pipe != nil:
+		cli.Stdout = cli.Pipe
 
 	// disabled
 	case cli.Quiet:
