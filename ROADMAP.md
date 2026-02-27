@@ -32,7 +32,6 @@
 * Add vanity URL?
   * https://sagikazarmark.hu/blog/vanity-import-paths-in-go/
   * https://gitea.com/techknowlogick/go-vanity-url
-* Add macOS trace3 log parser?
 * Add Shellbag parser?
 * Add Jumplist parser?
 * Add specs to manpages?
