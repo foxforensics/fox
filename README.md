@@ -44,17 +44,20 @@ There are also standalone binaries available:
 * [x] Integral *Chain-of-Custody* receipt generation
 * [x] Many popular archive and compression formats
 * [x] Many popular cryptographic, fuzzy, fast and image hashes
-* [x] Complete with [man pages](assets/man) for every mode
+* [x] With [man pages](assets/man) for every mode
 * [x] Special [Hunt](assets/man/fox-hunt.md) mode
   * [x] Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * [x] Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * [x] Built-in translation of over 51600 event ids
   * [x] Built-in warning of critical system events
-  * [x] Built-in [MCP server](https://modelcontextprotocol.io/docs/getting-started/intro) for agentic AIs
   * [x] Filter events with [Sigma Rules](https://sigmahq.io/) syntax
   * [x] Filter anomalies using [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
   * [x] Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) and [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
   * [x] Save as `JSON`, `JSON Lines`, `Parquet` or `SQLite` 
+
+## Agents
+
+> Fox provides full [MCP](https://modelcontextprotocol.io/docs/getting-started/intro) streaming server (SSE) support for AI agents.
 
 ## Examples
 

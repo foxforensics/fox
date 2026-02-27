@@ -40,35 +40,70 @@ func (cmd *Mcp) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Mcp) Run(cli *cli.Globals) error {
+	srv := server.NewMCPServer("fox", res.Version,
+		server.WithToolCapabilities(true),
+	)
+
+	// prepare cli
 	cli.NoFile = true
 	cli.NoLine = true
 	cli.NoColor = true
 	cli.NoPretty = true
 	cli.NoStrict = true
 
-	srv := server.NewMCPServer(
-		"fox",
-		res.Version,
-		server.WithToolCapabilities(true),
-	)
-
+	// add tools
+	cmd.addCat(cli, srv)
+	cmd.addHex(cli, srv)
+	cmd.addText(cli, srv)
+	cmd.addHash(cli, srv)
+	cmd.addStat(cli, srv)
+	cmd.addTest(cli, srv)
+	cmd.addDump(cli, srv)
 	cmd.addHunt(cli, srv)
 
-	if cli.Verbose > 0 {
-		log.Println(fmt.Sprintf("mcp server started on %d", cmd.Port))
-	}
-
 	sse := server.NewStreamableHTTPServer(srv)
+
+	if cli.Verbose > 0 {
+		log.Println(fmt.Sprintf("mcp: started on port %d", cmd.Port))
+	}
 
 	if err := sse.Start(cmd.addr); err != nil {
 		log.Fatalln(err)
 	}
 
 	if cli.Verbose > 0 {
-		log.Println("mcp server stopped")
+		log.Println("mcp: stopped")
 	}
 
 	return nil
+}
+
+func (cmd *Mcp) addCat(cli *cli.Globals, srv *server.MCPServer) {
+	//
+}
+
+func (cmd *Mcp) addHex(cli *cli.Globals, srv *server.MCPServer) {
+	//
+}
+
+func (cmd *Mcp) addText(cli *cli.Globals, srv *server.MCPServer) {
+	//
+}
+
+func (cmd *Mcp) addHash(cli *cli.Globals, srv *server.MCPServer) {
+	//
+}
+
+func (cmd *Mcp) addStat(cli *cli.Globals, srv *server.MCPServer) {
+	//
+}
+
+func (cmd *Mcp) addTest(cli *cli.Globals, srv *server.MCPServer) {
+	//
+}
+
+func (cmd *Mcp) addDump(cli *cli.Globals, srv *server.MCPServer) {
+	//
 }
 
 func (cmd *Mcp) addHunt(cli *cli.Globals, srv *server.MCPServer) {
