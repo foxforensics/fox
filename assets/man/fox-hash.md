@@ -13,18 +13,18 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Shows file hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified. This mode enforces the **--no-convert** flag.
+Show file hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified. This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====
 
 **-A, --algo**=_name_,...
 
-:   Uses algorithm(s) (default: **SHA256**).
+:   Use algorithm(s) (default: **SHA256**).
 
 **-a, --all**
 
-:   Uses all algorithms.
+:   Use all algorithms.
 
 POSITIONAL ARGUMENTS
 ====================

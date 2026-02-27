@@ -13,38 +13,38 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Hunts suspicious activities by carving events from file(s). This mode enforces the **--no-convert** flag. If no path is specified, a built-in list of known locations will be processed.
+Hunt suspicious activities by carving events from file(s). This mode enforces the **--no-convert** flag. If no path is specified, a built-in list of known locations will be processed.
 
 FLAGS
 =====
 
 **-a, --all**
 
-:   Shows logs with all severities.
+:   Show logs with all severities.
 
 **-s, --sort**
 
-:   Shows logs sorted by timestamp (slow).
+:   Show logs sorted by timestamp (slow).
 
 **-u, --uniq**
 
-:   Shows logs that are unique.
+:   Show logs that are unique.
 
 **-j, --json**
 
-:   Shows logs as JSON objects.
+:   Show logs as JSON objects.
 
 **-J, --jsonl**
 
-:   Shows logs as JSON lines.
+:   Show logs as JSON lines.
 
 **-P, --parquet**
 
-:   Saves logs as Parquet (very fast).
+:   Save logs as Parquet (very fast).
 
 **-Q, --sqlite**
 
-:   Saves logs as SQLite3 (very slow).
+:   Save logs as SQLite3 (very slow).
 
 Hunter Flags
 ------------
@@ -58,30 +58,30 @@ Filter Flags
 
 **-R, --rule**=_file_
 
-:   Filters using Sigma Rules _file_ (slow).
+:   Filter using Sigma Rules _file_ (slow).
 
 **-D, --dist**=_length_
 
-:   Filters using Levenshtein distance (slow).
+:   Filter using Levenshtein distance (slow).
 
 Stream Flags
 ------------
 
 **-U, --url**=_server_
 
-:   Streams events to _server_ address.
+:   Stream events to _server_ address.
 
 **-A, --auth**=_token_
 
-:   Streams events using auth _token_.
+:   Stream events using auth _token_.
 
 **-E, --ecs**
 
-:   Uses **ECS** schema for streaming.
+:   Use **ECS** schema for streaming.
 
 **-H, --hec**
 
-:   Uses **HEC** schema for streaming.
+:   Use **HEC** schema for streaming.
 
 ALIASES
 =======

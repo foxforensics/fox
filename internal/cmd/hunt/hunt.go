@@ -30,35 +30,35 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Hunts suspicious events.
+Hunt suspicious events.
 
 fox hunt [FLAGS...] [PATHS...]
 
 Flags:
-  -a, --all                shows logs with all severities
-  -s, --sort               shows logs sorted by timestamp (slow)
-  -u, --uniq               shows logs that are unique 
-  -j, --json               shows logs as JSON objects
-  -J, --jsonl              shows logs as JSON lines
-  -P, --parquet            saves logs as Parquet (very fast)
-  -Q, --sqlite             saves logs as SQLite3 (very slow)
+  -a, --all                Show logs with all severities
+  -s, --sort               Show logs sorted by timestamp (slow)
+  -u, --uniq               Show logs that are unique 
+  -j, --json               Show logs as JSON objects
+  -J, --jsonl              Show logs as JSON lines
+  -P, --parquet            Save logs as Parquet (very fast)
+  -Q, --sqlite             Save logs as SQLite3 (very slow)
 
 Hunter flags:
-  -b, --block=SIZE         block size for event carving
+  -b, --block=SIZE         Block size for event carving
 
 Filter flags:
-  -R, --rule=FILE          filters using Sigma Rules file (slow)
-  -D, --dist=LENGTH        filters using Levenshtein distance (slow)
+  -R, --rule=FILE          Filter using Sigma Rules file (slow)
+  -D, --dist=LENGTH        Filter using Levenshtein distance (slow)
 
 Stream flags:
-  -U, --url=SERVER         streams events to server address
-  -A, --auth=TOKEN         streams events using auth token
-  -E, --ecs                uses ECS schema for streaming
-  -H, --hec                uses HEC schema for streaming
+  -U, --url=SERVER         Stream events to server address
+  -A, --auth=TOKEN         Stream events using auth token
+  -E, --ecs                Use ECS schema for streaming
+  -H, --hec                Use HEC schema for streaming
 
 Aliases:
-  -L, --logstash           alias for -E -Uhttp://localhost:8080
-  -S, --splunk             alias for -H -Uhttp://localhost:8088/...
+  -L, --logstash           Alias for -E -Uhttp://localhost:8080
+  -S, --splunk             Alias for -H -Uhttp://localhost:8088/...
 
 Examples:
   $ fox hunt -u *.dd
@@ -74,7 +74,7 @@ type Hunt struct {
 	Parquet bool `short:"P" xor:"sqlite,parquet"`
 
 	// hunter
-	Block uint `short:"b" default:"65536"`
+	Block string `short:"b" default:"65536"`
 
 	// filter
 	Rule string  `short:"R"`
@@ -111,7 +111,9 @@ func (cmd *Hunt) Validate() error {
 func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
 
-	hunter.Block = int(cmd.Block)
+	if len(cmd.Block) > 0 {
+		hunter.Block = int(text.Mechanize(cmd.Block))
+	}
 
 	switch {
 	case cmd.Uniq:

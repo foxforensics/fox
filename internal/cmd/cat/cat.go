@@ -14,23 +14,23 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Shows file contents.
+Show file contents.
 
 fox cat [FLAGS...] <PATHS...>
 
 Flags:
-  -u, --uniq               filters by unique hash (XXH3)
-  -D, --dist=LENGTH        filters by Levenshtein distance (slow)
-  -e, --regexp=PATTERN     filters by regular expression
+  -u, --uniq               Filter using unique hash (XXH3)
+  -D, --dist=LENGTH        Filter using Levenshtein distance (slow)
+  -e, --regexp=PATTERN     Filter using regular expression
 
 RegExp flags:
-  -C, --context=LINES      lines surrounding a match
-  -B, --before=LINES       lines leading before a match
-  -A, --after=LINES        lines trailing after a match
+  -C, --context=LINES      Lines surrounding a match
+  -B, --before=LINES       Lines leading before a match
+  -A, --after=LINES        Lines trailing after a match
 
 Syntax flags
-  -X, --syntax=TYPE        force syntax highlighting type
-  -Y, --style=STYLE        force syntax highlighting style
+  -X, --syntax=TYPE        Force syntax highlighting type
+  -Y, --style=STYLE        Force syntax highlighting style
 
 Examples:
   $ fox -eWinlogon ./**/*.evtx

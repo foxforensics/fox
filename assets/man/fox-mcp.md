@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Inits MCP server and blocks until canceling. Once started, the server will be available under <_http://localhost:3001/mcp_>.
+Init MCP server and block until canceling. Once started, the server will be available under <_http://localhost:3001/mcp_>.
 
 POSITIONAL ARGUMENTS
 ====================

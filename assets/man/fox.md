@@ -22,53 +22,57 @@ If no mode is passed, mode `cat` will be run by default.
 
 cat
 
-:   Shows file contents (default mode).
+:   Show file contents (default mode).
 
 hex
 
-:   Shows file contents in hex format.
+:   Show file contents in hex format.
 
 text
 
-:   Shows file contained strings.
+:   Show file contained strings.
 
 hash
 
-:   Shows file hashes and checksums.
+:   Show file hashes and checksums.
 
 stat
 
-:   Shows file stats and entropy.
+:   Show file stats and entropy.
+
+dump
+
+:   Dump sensitive data.
 
 test
 
-:   Tests suspicious files.
+:   Test suspicious files.
 
 hunt
 
-:   Hunts suspicious events.
+:   Hunt suspicious events.
 
 FLAGS
 =====
 
 **-i, --in**=_file_
 
-:   Reads paths from _file_.
+:   Read paths from _file_.
 
 **-o, --out**=_file_
 
-:   Writes output to _file_ (receipted).
+:   Write output to _file_ (receipted).
 
 Limit Flags
 -----------
 
 **-h, --head**
 
-:   Limits head of file by **bytes** or **lines**.
+:   Limit head of file by **bytes** or **lines**.
 
 **-t, --tail**
 
-:   Limits tail of file by **bytes** or **lines**.
+:   Limit tail of file by **bytes** or **lines**.
 
 **-c, --bytes**=_number_
 
@@ -83,21 +87,21 @@ Filter Flags
 
 **-e, --regexp**=_pattern_
 
-:   Filters output by _pattern_.
+:   Filter output by _pattern_.
 
 Archive Flags
 ------------
 
 **-p, --password**=_password_
 
-:   Uses archive _password_ (only for **7Z**, **RAR**, **ZIP**).
+:   Use archive _password_ (only for **7Z**, **RAR**, **ZIP**).
 
 Profile Flags
 -------------
 
 **-T, --threads**=_cores_
 
-:   Uses parallel threads.
+:   Use parallel threads.
 
 Disable Flags
 -------------
@@ -159,19 +163,19 @@ Standard Flags
 
 **-d, --dry-run**
 
-:   Prints only the found files.
+:   Print only the found files.
 
 **-v, --verbose**[=_level_]
 
-:   Prints more details (v/vv/vvv).
+:   Print more details (v/vv/vvv).
 
 **--version**
 
-:   Prints the version number.
+:   Print the version number.
 
 **--help**
 
-:   Prints this help message.
+:   Print this help message.
 
 POSITIONAL ARGUMENTS
 ====================

@@ -13,22 +13,22 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Shows file contents.
+Show file contents.
 
 FLAGS
 =====
 
 **-u, --uniq**
 
-:   Filters by unique hash (**XXH3**).
+:   Filter using unique hash (**XXH3**).
 
 **-D, --dist**=_length_
 
-:   Filters by Levenshtein distance (slow).
+:   Filter using Levenshtein distance (slow).
 
 **-e, --regexp**=_pattern_
 
-:   Filters by regular expression.
+:   Filter using regular expression.
 
 RegExp Flags
 ------------

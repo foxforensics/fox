@@ -13,29 +13,29 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Shows file contents in hex format. This mode enforces the **--no-convert** flag.
+Show file contents in hex format. This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====
 
 **-H, --hexdump**
 
-:   Formats output like **hexdump**.
+:   Format output like **hexdump**.
 
 **-X, --xxd**
 
-:   Formats output like **xxd**.
+:   Format output like **xxd**.
 
 **-R, --raw**
 
-:   Don't format the output.
+:   Don't format output.
 
 Format Flags
 ------------
 
 **-D, --decimal**
 
-:   Format addresses as decimals.
+:   Format addresses as decimal.
 
 POSITIONAL ARGUMENTS
 ====================

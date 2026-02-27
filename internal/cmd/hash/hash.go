@@ -14,13 +14,13 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints file hashes and checksums.
+Show file hashes and checksums.
 
 fox hash [FLAGS...] <PATHS...>
 
 Flags:
-  -A, --algo=NAME,...      uses algorithm(s) (default: SHA256)
-  -a, --all                uses all algorithms
+  -A, --algo=NAME,...      Use algorithm(s) (default: SHA256)
+  -a, --all                Use all algorithms
 
 Examples:
   $ fox hash -Amd5 files.7z

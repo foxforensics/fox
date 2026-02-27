@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Shows file text contents by carving the file(s). This mode enforces the **--no-convert** flag.
+Show file text contents by carving the file(s). This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====
@@ -28,37 +28,37 @@ FLAGS
 
 **-a, --ascii**
 
-:   Shows only strings with ASCII encoding.
+:   Show only strings with ASCII encoding.
 
 **-s, --sort**
 
-:   Sorts strings alphabetically.
+:   Sort strings alphabetically.
 
 Class Flags
 -----------
 
 **-w, --wtf**[=_level_]
 
-:   Shows string classifications (w/ww/www).
+:   Show string classifications (w/ww/www).
 
 **-F, --find**=_class_,...
 
-:   Shows only strings that match _class_(es).
+:   Show only strings that match _class_(es).
 
 **-1, --first**
 
-:   Shows only strings first class.
+:   Show only strings first class.
 
 **-L, --list**
 
-:   Shows only classification list.
+:   Show only classification list.
 
 Format Flags
 ------------
 
 **-D, --decimal**
 
-:   Format addresses as decimals.
+:   Format addresses as decimal.
 
 POSITIONAL ARGUMENTS
 ====================

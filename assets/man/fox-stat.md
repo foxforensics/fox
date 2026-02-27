@@ -13,36 +13,36 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Shows file stats and entropy. If the **--sort** flag is used, the files will be processed single-threaded. This mode enforces the **--no-convert** flag.
+Show file stats and entropy. If the **--sort** flag is used, the files will be processed single-threaded. This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====
 
 **-s, --sort**
 
-:   Sorts files by path (slower).
+:   Sort files by path (slower).
 
 **-b, --block**=_size_
 
-:   Uses block _size_ for analysis.
+:   Block _size_ for analysis.
 
 Filter Flags
 ------------
 
 **-n, --min**=_value_
 
-:   Filters for minimum entropy _value_ (default: **0.0**).
+:   Filter minimum entropy _value_ (default: **0.0**).
 
 **-x, --max**=_value_
 
-:   Filters for maximal entropy _value_ (default: **1.0**).
+:   Filter maximal entropy _value_ (default: **1.0**).
 
 Format Flags
 ------------
 
 **-h, --human**
 
-:   Formats size in human-readable units.
+:   Format size in human-readable units.
 
 POSITIONAL ARGUMENTS
 ====================

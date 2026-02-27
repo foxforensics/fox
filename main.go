@@ -12,7 +12,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cuhsat/fox/v4/internal/cmd/mcp"
 	_ "github.com/josephspurrier/goversioninfo"
 
 	"github.com/alecthomas/kong"
@@ -25,6 +24,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/help"
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
+	"github.com/cuhsat/fox/v4/internal/cmd/mcp"
 	"github.com/cuhsat/fox/v4/internal/cmd/stat"
 	"github.com/cuhsat/fox/v4/internal/cmd/test"
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
@@ -42,55 +42,55 @@ Usage:
   fox [MODE] [FLAGS...] <PATHS...>
 
 Modes:
-  (c) cat      shows file contents (default mode)
-  (x) hex      shows file contents in hex format
-  (t) text     shows file contained strings
-  (a) hash     shows file hashes and checksums
-  (s) stat     shows file stats and entropy
-  (d) dump     dumps sensitive data
-  (e) test     tests suspicious files
-  (u) hunt     hunts suspicious events
-  (m) mcp      inits MCP server (blocks)
+  (c) cat     Show file contents (default mode)
+  (x) hex     Show file contents in hex format
+  (t) text    Show file contained strings
+  (a) hash    Show file hashes and checksums
+  (s) stat    Show file stats and entropy
+  (d) dump    Dump sensitive data
+  (e) test    Test suspicious files
+  (u) hunt    Hunt suspicious events
+  (m) mcp     Init MCP server (blocks)
 
 File flags:
-  -i, --in=FILE            reads paths from file
-  -o, --out=FILE           writes output to file (receipted)
+  -i, --in=FILE            Read paths from file
+  -o, --out=FILE           Write output to file (receipted)
 
 Limit flags:
-  -h, --head               limits head of file by...
-  -t, --tail               limits tail of file by...
-  -c, --bytes=NUMBER       number of bytes
-  -l, --lines=NUMBER       number of lines
+  -h, --head               Limit head of file by...
+  -t, --tail               Limit tail of file by...
+  -c, --bytes=NUMBER       Number of bytes
+  -l, --lines=NUMBER       Number of lines
 
 Filter flags:
-  -e, --regexp=PATTERN     filters output by pattern
+  -e, --regexp=PATTERN     Filter output by pattern
 
 Archive flags: 
-  -p, --password=TEXT      uses archive password (7Z, RAR, ZIP)
+  -p, --password=TEXT      Use archive password (7Z, RAR, ZIP)
 
 Profile flags:
-  -T, --threads=CORES      uses parallel threads
+  -T, --threads=CORES      Use parallel threads
 
 Disable flags:
-  -r, --raw                don't process files at all
-  -q, --quiet              don't print anything
-      --no-file            don't print filenames
-      --no-line            don't print line numbers
-      --no-color           don't colorize the output
-      --no-syntax          don't colorize the syntax
-      --no-pretty          don't prettify the output
-      --no-strict          don't stop on parser errors
-      --no-deflate         don't deflate automatically
-      --no-extract         don't extract automatically
-      --no-convert         don't convert automatically
-      --no-receipt         don't write the receipt
-      --no-warnings        don't show any warnings
+  -r, --raw                Don't process files at all
+  -q, --quiet              Don't print anything
+      --no-file            Don't print filenames
+      --no-line            Don't print line numbers
+      --no-color           Don't colorize the output
+      --no-syntax          Don't colorize the syntax
+      --no-pretty          Don't prettify the output
+      --no-strict          Don't stop on parser errors
+      --no-deflate         Don't deflate automatically
+      --no-extract         Don't extract automatically
+      --no-convert         Don't convert automatically
+      --no-receipt         Don't write the receipt
+      --no-warnings        Don't show any warnings
 
 Standard flags:
-  -d, --dry-run            prints only the found files
-  -v, --verbose[=LEVEL]    prints more details (v/vv/vvv)
-      --version            prints the version number
-      --help               prints this help message
+  -d, --dry-run            Print only the found files
+  -v, --verbose[=LEVEL]    Print more details (v/vv/vvv)
+      --version            Print the version number
+      --help               Print this help message
 
 Positional arguments:
   Globbing paths to open or '-' to read from STDIN

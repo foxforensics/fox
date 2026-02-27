@@ -17,20 +17,20 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Shows file stats and entropy.
+Show file stats and entropy.
 
 fox stat [FLAGS...] <PATHS...>
 
 Flags:
-  -s, --sort               sorts files by path (slower)
-  -b, --block=SIZE         uses block size for analysis
+  -s, --sort               Sort files by path (slower)
+  -b, --block=SIZE         Block size for analysis
 
 Filter flags:
-  -n, --min=VALUE          filters for minimum entropy value (default: 0.0)
-  -x, --max=VALUE          filters for maximal entropy value (default: 1.0)
+  -n, --min=VALUE          Minimum entropy value (default: 0.0)
+  -x, --max=VALUE          Maximal entropy value (default: 1.0)
 
 Format flags:
-  -H, --human              formats size in human-readable units
+  -H, --human              Format size in human-readable units
 
 Examples:
   $ fox stat -n0.9 ./**/*

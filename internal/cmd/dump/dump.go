@@ -7,27 +7,29 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
+
 	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/dit"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
 var Usage = strings.TrimSpace(`
-Dumps sensitive data.
+Dump sensitive data.
 
 fox dump [FLAGS...] system [ntds.dit]
 
 Flags:
-  -j, --json               dumps data as JSON objects
-  -J, --jsonl              dumps data as JSON lines
+  -j, --json               Dump data as JSON objects
+  -J, --jsonl              Dump data as JSON lines
 
 Registry flags:
-  -K, --bootkey            dumps the host bootkey
+  -K, --bootkey            Dump the host bootkey
 
 Active Directory flags:
-  -L, --only-lm            extracts only the LM hashes (hashcat: 3000)
-  -N, --only-nt            extracts only the NT hashes (hashcat: 1000)
+  -L, --only-lm            Extract only the LM hashes (hashcat: 3000)
+  -N, --only-nt            Extract only the NT hashes (hashcat: 1000)
 
 Examples:
   $ fox dump system ntds.dit

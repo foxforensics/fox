@@ -19,14 +19,14 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Tests suspicious files.
+Test suspicious files.
 
 fox test [FLAGS...] PATHS...
 
 Flags:
-  -D, --domain             file(s) contains domains
-  -U, --url                file(s) contains urls
-  -I, --ip                 file(s) contains ips
+  -D, --domain             File(s) contains domains
+  -U, --url                File(s) contains urls
+  -I, --ip                 File(s) contains ips
 
 Required:
   -k, --key=APIKEY         VirusTotal API key

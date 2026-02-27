@@ -14,24 +14,24 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Prints file text contents.
+Print file text contents.
 
 fox text [FLAGS...] <PATHS...>
 
 Flags:
-  -n, --min=LENGTH         minimum string length (default: 3)
-  -x, --max=LENGTH         maximal string length (default: 256)
-  -a, --ascii              shows only strings with ASCII encoding
-  -s, --sort               sorts strings alphabetically
+  -n, --min=LENGTH         Minimum string length (default: 3)
+  -x, --max=LENGTH         Maximal string length (default: 256)
+  -a, --ascii              Show only strings with ASCII encoding
+  -s, --sort               Sort strings alphabetically
 
 Class flags:
-  -w, --wtf[=LEVEL]        shows string classifications (w/ww/www)
-  -F, --find=CLASS,...     shows only strings that match class(es)
-  -1, --first              shows only strings first class
-  -L, --list               shows only classification list
+  -w, --wtf[=LEVEL]        Show string classifications (w/ww/www)
+  -F, --find=CLASS,...     Show only strings that match class(es)
+  -1, --first              Show only strings first class
+  -L, --list               Show only classification list
 
 Format flags:
-  -D, --decimal            format addresses as decimals
+  -D, --decimal            Format addresses as decimal
 
 Examples:
   $ fox text -w ioc.exe

@@ -11,17 +11,17 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Shows file contents in hex format.
+Show file contents in hex format.
 
 fox hex [FLAGS...] <PATHS...>
 
 Flags:
-  -H, --hexdump            formats output like hexdump
-  -X, --xxd                formats output like xxd
-  -R, --raw                don't format the output
+  -H, --hexdump            Format output like hexdump
+  -X, --xxd                Format output like xxd
+  -R, --raw                Don't format output
 
 Format flags:
-  -D, --decimal            format addresses as decimals
+  -D, --decimal            Format addresses as decimal
 
 Examples:
   $ fox hex -hc512 disk.dd

@@ -13,36 +13,36 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Dumps sensitive data from files. This mode enforces the **--no-convert** flag.
+Dump sensitive data from files. This mode enforces the **--no-convert** flag.
 
 FLAGS
 =====
 
 **-j, --json**
 
-:   Shows data as JSON objects.
+:   Dump data as JSON objects.
 
 **-J, --jsonl**
 
-:   Shows data as JSON lines.
+:   Dump data as JSON lines.
 
 Registry Flags
 --------------
 
 **-K, --bootkey**
 
-:   Dumps the host bootkey.
+:   Dump the host bootkey.
 
 Active Directory Flags
 ----------------------
 
 **-N, --only-lm**
 
-:   Extracts only the **LM** hashes (hashcat: _3000_).
+:   Extract only the **LM** hashes (hashcat: _3000_).
 
 **-L, --only-nt**
 
-:   Extracts only the **NT** hashes (hashcat: _1000_).
+:   Extract only the **NT** hashes (hashcat: _1000_).
 
 POSITIONAL ARGUMENTS
 ====================

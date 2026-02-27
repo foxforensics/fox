@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Tests suspicious files. A VirusTotal API key is required for this. This mode enforces the **--no-convert** flag. This mode will return **3** as exit code, if any test returns at least one alerting result.
+Test suspicious files using VirusTotal. An API key is required for this. This mode enforces the **--no-convert** flag. This mode will return **3** as exit code, if any test returns at least one alerting result.
 
 FLAGS
 =====
@@ -35,7 +35,7 @@ Required
 
 **-k, --key**=_apikey_
 
-:   **VirusTotal** _api key_.
+:   **VirusTotal** API _key_.
 
 POSITIONAL ARGUMENTS
 ====================
