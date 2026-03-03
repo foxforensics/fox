@@ -90,11 +90,11 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 			switch mode {
 			case buffer.Canonical:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s%s\n", text.Hide(l.Address), l.Values, text.Hide(l.String))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s%s\n", text.Hide(l.Address), l.Values, l.String)
 			case buffer.Hexdump:
 				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Address), l.Values)
 			case buffer.Xxd:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %-16s\n", text.Hide(l.Address), l.Values, text.Hide(l.String))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %-16s\n", text.Hide(l.Address), l.Values, l.String)
 			case buffer.Raw:
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", l.Values)
 			}
