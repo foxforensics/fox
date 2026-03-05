@@ -20,6 +20,7 @@ import (
 	"slices"
 
 	"github.com/Velocidex/ordereddict"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"www.velocidex.com/golang/go-ese/parser"
 )
 
@@ -85,11 +86,22 @@ type Record struct {
 }
 
 func (rec *Record) String() string {
+	lm := rec.LmHash
+	nt := rec.NtHash
+
+	if lm == fmt.Sprintf("%x", defaultLm) {
+		lm = text.Hide(lm)
+	}
+
+	if nt == fmt.Sprintf("%x", defaultNt) {
+		nt = text.Hide(nt)
+	}
+
 	return fmt.Sprintf("%s:%d:%s:%s:::",
-		rec.Username,
+		text.Bold(rec.Username),
 		rec.Rid,
-		rec.LmHash,
-		rec.NtHash,
+		lm,
+		nt,
 	)
 }
 

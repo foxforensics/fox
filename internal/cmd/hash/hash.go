@@ -116,9 +116,9 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			sum = text.MarkMatch(sum, cli.Regexp)
 
 			if len(cmd.Algo) > 1 {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.High(strings.ToUpper(algo)))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Bold(strings.ToUpper(algo)))
 			} else {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.High(h.Name))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.Bold(h.Name))
 			}
 		}
 

@@ -115,7 +115,7 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			l.Value = text.MarkMatch(l.Value, cli.Regexp)
 
 			if !cli.NoLine && cmd.Wtf > 0 && len(l.Class) > 0 {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s [%s]\n", text.Hide(l.Address), l.Value, text.High(l.Class))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s [%s]\n", text.Hide(l.Address), l.Value, text.Bold(l.Class))
 			} else if !cli.NoLine {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", text.Hide(l.Address), l.Value)
 			} else {

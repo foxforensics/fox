@@ -26,11 +26,10 @@ var (
 )
 
 var (
-	High = color.New(color.FgGreen).SprintFunc()
 	Hide = color.New(color.FgHiBlack).SprintFunc()
 	Warn = color.New(color.FgHiRed).SprintFunc()
 	Bold = color.New(color.Bold).SprintFunc()
-	Mark = color.New(color.FgRed)
+	Mark = color.New(color.Bold)
 )
 
 var Fg = color.RGB(0x0f, 0x88, 0xcd)

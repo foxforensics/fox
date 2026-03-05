@@ -118,7 +118,7 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 
 			if e >= cmd.Min && e <= cmd.Max {
 				size := fmt.Sprintf("%db", len(block))
-				title := text.High(h.String())
+				title := text.Bold(h.String())
 				start := fmt.Sprintf("[%08x]", off)
 				entropy := fmt.Sprintf("%.10fe", e)
 

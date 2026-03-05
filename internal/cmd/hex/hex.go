@@ -58,6 +58,10 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 		mode = buffer.Canonical
 	}
 
+	if mode != buffer.Canonical {
+		cli.NoLine = true
+	}
+
 	cli.NoConvert = true // forced
 
 	ch := cli.Load(cmd.Paths)
@@ -83,7 +87,11 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 			if l.Values == lastHex && !cmd.Raw {
 				if !wasCut {
 					wasCut = true
-					_, _ = fmt.Fprintln(cli.Stdout, text.Hide("*"))
+					if !cli.NoLine {
+						_, _ = fmt.Fprintln(cli.Stdout, text.Hide(text.Line()))
+					} else {
+						_, _ = fmt.Fprintln(cli.Stdout, text.Hide("*"))
+					}
 				}
 				continue
 			}
