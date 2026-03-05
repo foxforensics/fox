@@ -1,6 +1,6 @@
 <div align="center">
   <img src="assets/img/fox.png" width="160" alt=""/>
-  <br/>The Forensic Examiners Swiss Army Knife<br/><br/>
+  <br/><br/>The Forensic Examiners Swiss Army Knife<br/>
 
   [![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
   [![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/cuhsat/fox/actions)
@@ -117,11 +117,11 @@ Performance Hashes
 Similarity Hashes
 > ImpFuzzy, ImpHash, ImpHash0, SSDeep, TLSH
 
+Perceptual Hashes
+> Average, Difference, Median, PHash, WHash, MarrHildreth, BlockMean, PDQ, RASH
+
 Windows Specific
 > LM, NT, PE Checksum
-
-Image Specific
-> aHash, dHash, pHash
 
 Checksums
 > Adler32, Fletcher4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
