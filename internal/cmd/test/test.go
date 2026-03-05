@@ -136,7 +136,7 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 
 func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) bool {
 	if !cli.NoFile {
-		_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Title(h)))
+		_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Title(h))
 	}
 
 	if err != nil {
@@ -144,7 +144,7 @@ func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) b
 		return false
 	}
 
-	_, _ = fmt.Fprint(cli.Stdout, "VirusTotal:\n\n")
+	_, _ = fmt.Fprint(cli.Stdout, text.Bold("\n  VirusTotal\n\n"))
 
 	for _, e := range res.Entries {
 		if e.Alert {

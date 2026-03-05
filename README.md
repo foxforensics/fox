@@ -1,6 +1,6 @@
 <div align="center">
   <img src="assets/img/fox.png" width="160" alt=""/>
-  <br/><br/>The Forensic Examiners Swiss Army Knife<br/>
+  <br/><br/>The Forensic Examiners Swiss Army Knife<br/><br/>
 
   [![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
   [![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/cuhsat/fox/actions)

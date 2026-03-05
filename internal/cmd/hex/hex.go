@@ -65,7 +65,7 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoFile {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Title(h.String())))
+			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Title(h.String()))
 		}
 
 		lastHex, wasCut := "", false

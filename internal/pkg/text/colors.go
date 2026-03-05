@@ -26,11 +26,15 @@ var (
 )
 
 var (
+	High = color.New(color.FgGreen).SprintFunc()
 	Hide = color.New(color.FgHiBlack).SprintFunc()
 	Warn = color.New(color.FgHiRed).SprintFunc()
 	Bold = color.New(color.Bold).SprintFunc()
-	Mark = color.New(color.FgHiBlue)
+	Mark = color.New(color.FgRed)
 )
+
+var Fg = color.RGB(0x0f, 0x88, 0xcd)
+var Bg = color.RGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd)
 
 func ColorizeStringAs(s, lexer string) string {
 	if NoSyntax {

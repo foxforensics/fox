@@ -106,7 +106,7 @@ func fmtCanonical(ctx *HexContext) HexLine {
 	return HexLine{
 		adr,
 		hex.String(),
-		fmt.Sprintf("|%-16s|", text.ToAscii(str.String())),
+		fmt.Sprintf("%-16s", text.ToAscii(str.String(), "·")),
 	}
 }
 
@@ -170,7 +170,7 @@ func fmtXxd(ctx *HexContext) HexLine {
 	return HexLine{
 		adr,
 		hex.String(),
-		text.ToAscii(str.String()),
+		text.ToAscii(str.String(), "."),
 	}
 }
 

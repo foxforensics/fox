@@ -124,7 +124,7 @@ func (cvr *Carver) flush(off int, buf []rune) {
 
 			// format classes
 			if !cvr.opts.First {
-				cls = strings.Join(v, ", ")
+				cls = strings.Join(v, " ")
 			} else if len(v) > 0 {
 				cls = v[0]
 			}

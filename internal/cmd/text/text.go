@@ -94,7 +94,7 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoFile {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Hide(text.Title(h.String())))
+			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Title(h.String()))
 		}
 
 		for l := range carver.New(&carver.Options{
@@ -114,8 +114,8 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 
 			l.Value = text.MarkMatch(l.Value, cli.Regexp)
 
-			if !cli.NoLine && cmd.Wtf > 0 {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s  %s\n", text.Hide(l.Address), l.Value, text.Hide(l.Class))
+			if !cli.NoLine && cmd.Wtf > 0 && len(l.Class) > 0 {
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s [%s]\n", text.Hide(l.Address), l.Value, text.High(l.Class))
 			} else if !cli.NoLine {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", text.Hide(l.Address), l.Value)
 			} else {

@@ -36,6 +36,8 @@ Examples:
   $ fox stat -n0.9 ./**/*
 `)
 
+const Limit = 0.9
+
 type Stat struct {
 	Sort  bool    `short:"s"`
 	Block string  `short:"b"`
@@ -116,17 +118,22 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 
 			if e >= cmd.Min && e <= cmd.Max {
 				size := fmt.Sprintf("%db", len(block))
-				title := text.Hide(h.String())
-				start := text.Hide(fmt.Sprintf("[%08x]", off))
+				title := text.High(h.String())
+				start := fmt.Sprintf("[%08x]", off)
+				entropy := fmt.Sprintf("%.10fe", e)
 
 				if cmd.Human {
 					size = text.Humanize(int64(len(block)))
 				}
 
+				if e >= Limit {
+					entropy = text.Warn(entropy)
+				}
+
 				if cmd.block > 0 {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %.10fe  %s  %s %s\n", l, size, e, t, start, title)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %s  %s  %s %s\n", l, size, entropy, t, start, title)
 				} else {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %.10fe  %s  %s\n", l, size, e, t, title)
+					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %s  %s  %s\n", l, size, entropy, t, title)
 				}
 			}
 

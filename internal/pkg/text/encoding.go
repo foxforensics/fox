@@ -28,35 +28,31 @@ const (
 var isValue = regexp.MustCompile("")
 
 func Line() string {
-	return strings.Repeat("─", width())
+	return strings.Repeat("╌", width())
 }
 
-func Title(line string) string {
-	return Block(width(), line)
-}
-
-func Block(w int, lines ...string) string {
+func Title(lines ...string) string {
 	var sb strings.Builder
 
-	l := strings.Repeat("─", w-2)
+	w := width()
 
-	sb.WriteString(fmt.Sprintf("┌%s┐\n", l))
+	sb.WriteString(Fg.Sprintf("%s\n", strings.Repeat("▄", w)))
 
 	for _, line := range lines {
-		sb.WriteString(fmt.Sprintf("│ %-*s │\n", w-4, line))
+		sb.WriteString(Bg.Sprintf(" %-*s\n", w-1, line))
 	}
 
-	sb.WriteString(fmt.Sprintf("└%s┘", l))
+	sb.WriteString(Fg.Sprintf("%s", strings.Repeat("▀", w)))
 
 	return sb.String()
 }
 
-func ToAscii(s string) string {
+func ToAscii(s, c string) string {
 	var sb strings.Builder
 
 	for _, r := range s {
 		if r < SP || r > DEL {
-			sb.WriteRune('.')
+			sb.WriteString(Hide(c))
 		} else {
 			sb.WriteRune(r)
 		}
