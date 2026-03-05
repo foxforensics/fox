@@ -11,17 +11,17 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
 var header = strings.TrimSpace(`
-FILE │ %s
-─────┼─────────────────────────────────────────────────────────────────
-TIME │ %s
-USER │ %s
-HOST │ %s
-HASH │ %s
+┏━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ FILE │ %-64s ┃
+┠──────┼──────────────────────────────────────────────────────────────────┨
+┃ TIME │ %s ┃
+┃ USER │ %s ┃
+┃ HOST │ %s ┃
+┃ HASH │ %s ┃
+┗━━━━━━┴━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 `)
 
 func Generate(path string) error {
@@ -49,19 +49,20 @@ func Generate(path string) error {
 		return err
 	}
 
-	box := text.Block(75, strings.Split(fmt.Sprintf(header,
-		//app.Version,
+	return os.WriteFile(path+".cc", []byte(fmt.Sprintf(header,
 		abs,
 		pad(time.Now().UTC().String()),
 		pad(fmt.Sprintf("%s (%s)", usr.Name, usr.Username)),
-		pad(fmt.Sprintf("%s (%s)", hst, macAddr())),
+		pad(fmt.Sprintf("%s (%s)", hst, mac())),
 		fmt.Sprintf("%x", sha256.Sum256(buf)),
-	), "\n")...) + "\n"
-
-	return os.WriteFile(path+".cc", []byte(box), 0600)
+	)+"\n"), 0600)
 }
 
-func macAddr() string {
+func pad(s string) string {
+	return fmt.Sprintf("%s %s", s, strings.Repeat(".", 63-len(s)))
+}
+
+func mac() string {
 	iff, err := net.Interfaces()
 
 	if err == nil {
@@ -73,8 +74,4 @@ func macAddr() string {
 	}
 
 	return ""
-}
-
-func pad(s string) string {
-	return fmt.Sprintf("%s %s", s, strings.Repeat(".", 63-len(s)))
 }
