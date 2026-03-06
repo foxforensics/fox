@@ -90,15 +90,15 @@ func (rec *Record) String() string {
 	nt := rec.NtHash
 
 	if lm == fmt.Sprintf("%x", defaultLm) {
-		lm = text.Hide(lm)
+		lm = text.AsGray(lm)
 	}
 
 	if nt == fmt.Sprintf("%x", defaultNt) {
-		nt = text.Hide(nt)
+		nt = text.AsGray(nt)
 	}
 
 	return fmt.Sprintf("%s:%d:%s:%s:::",
-		text.Bold(rec.Username),
+		text.AsBold(rec.Username),
 		rec.Rid,
 		lm,
 		nt,

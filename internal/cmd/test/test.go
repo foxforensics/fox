@@ -144,14 +144,14 @@ func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) b
 		return false
 	}
 
-	_, _ = fmt.Fprint(cli.Stdout, text.Bold("\n  VirusTotal\n\n"))
+	_, _ = fmt.Fprint(cli.Stdout, text.AsBold("\n  VirusTotal\n\n"))
 
 	for _, e := range res.Entries {
 		if e.Alert {
-			e.Result = text.Warn(e.Result)
+			e.Result = text.AsWarn(e.Result)
 		}
 
-		e.Engine += strings.Repeat(text.Hide("."), 30-len(e.Engine))
+		e.Engine += strings.Repeat(text.AsGray("."), 30-len(e.Engine))
 
 		_, _ = fmt.Fprintf(cli.Stdout, "  %s %s\n", e.Engine, e.Result)
 	}
@@ -161,10 +161,10 @@ func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) b
 	}
 
 	if res.Alert {
-		res.Label = text.Warn(res.Label)
+		res.Label = text.AsWarn(res.Label)
 	}
 
-	_, _ = fmt.Fprintf(cli.Stdout, "  (%d of %d) %s\n\n", res.Bad, res.All, text.Bold(res.Label))
+	_, _ = fmt.Fprintf(cli.Stdout, "  (%d of %d) %s\n\n", res.Bad, res.All, text.AsBold(res.Label))
 
 	return res.Alert
 }

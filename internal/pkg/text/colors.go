@@ -16,26 +16,14 @@ const Lexer = "text"
 // Style (default)
 const Style = "monokai"
 
-var (
-	NoColor  = false
-	NoSyntax = false
-)
+var NoSyntax = false
 
 var (
-	HexZero = color.HiBlackString
-	HexLow  = color.WhiteString
-	HexHigh = color.WhiteString
+	AsBlue = color.RGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd).SprintFunc()
+	AsGray = color.New(color.FgHiBlack).SprintFunc()
+	AsWarn = color.New(color.FgHiRed).SprintFunc()
+	AsBold = color.New(color.Bold).SprintFunc()
 )
-
-var (
-	Hide = color.New(color.FgHiBlack).SprintFunc()
-	Warn = color.New(color.FgHiRed).SprintFunc()
-	Bold = color.New(color.Bold).SprintFunc()
-	Mark = color.New(color.Bold)
-)
-
-var Fg = color.RGB(0x0f, 0x88, 0xcd)
-var Bg = color.RGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd)
 
 func ColorizeStringAs(s, lexer string) string {
 	return string(ColorizeAs([]byte(s), lexer, Style))
@@ -88,5 +76,5 @@ func MarkMatch(s string, re *regexp.Regexp) string {
 		return s // no regex, no match
 	}
 
-	return marker.Mark(s, marker.MatchRegexp(re), Mark)
+	return marker.Mark(s, marker.MatchRegexp(re), color.New(color.Bold))
 }

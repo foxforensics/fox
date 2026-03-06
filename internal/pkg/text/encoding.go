@@ -31,20 +31,8 @@ func Line() string {
 	return strings.Repeat("╌", width())
 }
 
-func Title(line string) string {
-	if NoColor {
-		return fmt.Sprintf("%s:", line)
-	}
-
-	w := width()
-
-	var sb strings.Builder
-
-	sb.WriteString(Fg.Sprintf("%s\n", strings.Repeat("▄", w)))
-	sb.WriteString(Bg.Sprintf(" %-*s\n", w-1, line))
-	sb.WriteString(Fg.Sprintf("%s", strings.Repeat("▀", w)))
-
-	return sb.String()
+func Title(s string) string {
+	return AsBlue(fmt.Sprintf("%-*s", width(), s))
 }
 
 func ToAscii(s, c string) string {
@@ -52,7 +40,7 @@ func ToAscii(s, c string) string {
 
 	for _, r := range s {
 		if r < SP || r > DEL {
-			sb.WriteString(Hide(c))
+			sb.WriteString(AsGray(c))
 		} else {
 			sb.WriteRune(r)
 		}

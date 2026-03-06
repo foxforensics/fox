@@ -192,12 +192,9 @@ func fmtRaw(ctx *HexContext) HexLine {
 func fmtHex(b byte) string {
 	s := fmt.Sprintf("%02x", b)
 
-	switch {
-	case b == 0:
-		return text.HexZero(s)
-	case b < 0x20:
-		return text.HexLow(s)
-	default:
-		return text.HexHigh(s)
+	if b == 0 {
+		return text.AsGray(s)
 	}
+
+	return s
 }

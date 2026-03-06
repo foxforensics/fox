@@ -101,7 +101,7 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 				title = "[00000000] " + title
 			}
 
-			_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s  %s\n", 0, 0, 0.0, t, text.Hide(title))
+			_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s  %s\n", 0, 0, 0.0, t, text.AsGray(title))
 
 			h.Discard()
 			continue
@@ -118,7 +118,7 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 
 			if e >= cmd.Min && e <= cmd.Max {
 				size := fmt.Sprintf("%db", len(block))
-				title := text.Bold(h.String())
+				title := text.AsBold(h.String())
 				start := fmt.Sprintf("[%08x]", off)
 				entropy := fmt.Sprintf("%.10fe", e)
 
@@ -127,7 +127,7 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 				}
 
 				if e >= Limit {
-					entropy = text.Warn(entropy)
+					entropy = text.AsWarn(entropy)
 				}
 
 				if cmd.block > 0 {

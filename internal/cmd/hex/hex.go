@@ -88,9 +88,9 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 				if !wasCut {
 					wasCut = true
 					if !cli.NoLine {
-						_, _ = fmt.Fprintln(cli.Stdout, text.Hide(text.Line()))
+						_, _ = fmt.Fprintln(cli.Stdout, text.AsGray(text.Line()))
 					} else {
-						_, _ = fmt.Fprintln(cli.Stdout, text.Hide("*"))
+						_, _ = fmt.Fprintln(cli.Stdout, text.AsGray("*"))
 					}
 				}
 				continue
@@ -98,11 +98,11 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 			switch mode {
 			case buffer.Canonical:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s%s\n", text.Hide(l.Address), l.Values, l.String)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s%s\n", text.AsGray(l.Address), l.Values, l.String)
 			case buffer.Hexdump:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Hide(l.Address), l.Values)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.AsGray(l.Address), l.Values)
 			case buffer.Xxd:
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %-16s\n", text.Hide(l.Address), l.Values, l.String)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %-16s\n", text.AsGray(l.Address), l.Values, l.String)
 			case buffer.Raw:
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", l.Values)
 			}
