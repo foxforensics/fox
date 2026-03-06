@@ -31,17 +31,17 @@ func Line() string {
 	return strings.Repeat("╌", width())
 }
 
-func Title(lines ...string) string {
-	var sb strings.Builder
+func Title(line string) string {
+	if NoColor {
+		return fmt.Sprintf("%s:", line)
+	}
 
 	w := width()
 
+	var sb strings.Builder
+
 	sb.WriteString(Fg.Sprintf("%s\n", strings.Repeat("▄", w)))
-
-	for _, line := range lines {
-		sb.WriteString(Bg.Sprintf(" %-*s\n", w-1, line))
-	}
-
+	sb.WriteString(Bg.Sprintf(" %-*s\n", w-1, line))
 	sb.WriteString(Fg.Sprintf("%s", strings.Repeat("▀", w)))
 
 	return sb.String()

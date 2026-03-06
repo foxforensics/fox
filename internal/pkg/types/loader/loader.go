@@ -2,6 +2,7 @@ package loader
 
 import (
 	"bufio"
+	"bytes"
 	"io"
 	"log"
 	"os"
@@ -83,7 +84,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 					log.Fatalln(err)
 				}
 
-				ldr.processData("STDIN", "", 0, buf)
+				ldr.processData("STDIN", "", 0, bytes.TrimSpace(buf))
 				break
 			}
 

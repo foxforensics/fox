@@ -1,12 +1,12 @@
 <div align="center">
   <img src="assets/img/fox.png" width="160" alt=""/>
-  <br/><br/>The Forensic Examiners Swiss Army Knife<br/><br/>
+  <br/><br/>The Forensic Examiners Swiss Army Knife<br/>
 
   [![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
   [![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/cuhsat/fox/actions)
   [![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
 
-  <img src="assets/img/hunt.png" alt="Hunt"/>
+  <img src="assets/img/hunt.png" width="800" alt="Hunt"/>
 </div>
 
 ## Synopsis
@@ -114,11 +114,11 @@ Cryptographic Hashes
 Performance Hashes
 > FNV-1, FNV-1a, Murmur3, RapidHash, SipHash, XXH32, XXH64, XXH3
 
-Similarity Hashes
-> ImpFuzzy, ImpHash, ImpHash0, SSDeep, TLSH
-
 Perceptual Hashes
 > Average, Difference, Median, PHash, WHash, MarrHildreth, BlockMean, PDQ, RASH
+
+Similarity Hashes
+> ImpFuzzy, ImpHash, ImpHash0, SSDeep, TLSH
 
 Windows Specific
 > LM, NT, PE Checksum

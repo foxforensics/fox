@@ -62,6 +62,10 @@ Performance hashes
 
 :   FNV-1, FNV-1A, MURMUR3, RAPIDHASH, SIPHASH, XXH32, XXH64, XXH3
 
+Perceptual hashes
+
+:   AVERAGE, DIFFERENCE, MEDIAN, PHASH, WHASH, MARRHILDRETH, BLOCKMEAN, PDQ, RASH
+
 Similarity hashes
 
 :   IMPFUZZY, IMPHASH, IMPHASH0, SSDEEP, TLSH
@@ -69,10 +73,6 @@ Similarity hashes
 Windows specific
 
 :   LM, NT, PE Checksum
-
-Image specific
-
-:   AHASH, DHASH, PHASH
 
 Checksums
 

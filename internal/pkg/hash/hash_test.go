@@ -10,9 +10,9 @@ import (
 const (
 	Large = "text/bible.txt"
 	Small = "fox.txt"
-	BinPe = "convert/fox.exe.zst"
+	WinPe = "convert/fox.exe.zst"
 	Image = "misc/fox.jpg"
-	Input = "FOX123XOF"
+	Input = "password"
 )
 
 func BenchmarkSum(b *testing.B) {
@@ -26,7 +26,7 @@ func BenchmarkSum(b *testing.B) {
 func TestSum(t *testing.T) {
 	large := test.Fixture(Large)
 	small := test.Fixture(Small)
-	binpe := test.Fixture(BinPe)
+	winpe := test.Fixture(WinPe)
 	image := test.Fixture(Image)
 	input := []byte(Input)
 
@@ -36,39 +36,44 @@ func TestSum(t *testing.T) {
 		sum string
 	}{
 		{small, types.ADLER32, "6b0a131c"},
-		{image, types.AHASH, "ffefc7c7c3c1c3ff"},
+		{image, types.AVERAGE, "fff7e3e3c383c3ff"},
 		{small, types.BLAKE2S256, "35622f6446178515ba503412f31eb768b092d878acbe6bf422b3ee47cf0558e7"},
 		{small, types.BLAKE2B256, "adb735516f5c008b29e3313869311096fe671bd2bd5f199b1a49ce579e0f0bd2"},
 		{small, types.BLAKE2B384, "879b983993f559354807d61b7cdf00c310c093bbb904eb43db9db2b49a83e8a07512d5f24299e458b5374291b23a9f86"},
 		{small, types.BLAKE2B512, "6805b54f9ad456d6a217624fa0c992108a35cf52f35b9d7f617533b50804bf08b2af20653469b3b76acc799bd3c905919cc958084179adf2b1475493d5cd1810"},
 		{small, types.BLAKE3256, "68aa491620394f724284e35b51551a21ab715f0c38f85cf8ba837233d34ae4a6"},
 		{small, types.BLAKE3512, "68aa491620394f724284e35b51551a21ab715f0c38f85cf8ba837233d34ae4a646914037b62a958cc6f769865ea235ae326f8cc4e7eb7010102dfd0d72652d9a"},
+		{image, types.BLOCKMEAN, "ffffffffbfff3fff1ffe0ffc1ffc1ffc0fff07f107e007e00fe01fffffffffff"},
 		{small, types.CRC16CCITT, "3ff9"},
 		{small, types.CRC32C, "afb3f887"},
 		{small, types.CRC32IEEE, "7ab53d60"},
 		{small, types.CRC64ECMA, "df2fc66f2c50575f"},
 		{small, types.CRC64ISO, "66747f552337d269"},
-		{image, types.DHASH, "180c0e1e1f171b19"},
+		{image, types.DIFFERENCE, "08303038f8e8d808"},
 		{small, types.FLETCHER4, "670c11a5040000007293332e26000000f95ebb7dd7000000cdb2a56cc1030000"},
 		{small, types.FNV1, "847595167a564758d45f1ac5f7b7fad0"},
 		{small, types.FNV1A, "8e1fbe2b2d87d680249d1d1135695632"},
 		{small, types.GOST2012256, "59b14e45039898838d3a905382c73f9d7d73d8a376e770d2c78c744a45de840b"},
 		{small, types.GOST2012512, "c3893dcdaec9998ac50b551a13f296a5599a1e5443dd508b29fafef6cbe369c063a565a90e0bf7fc0d9367dc59f314684f0dea19d983adf98144f3c107c7b681"},
 		{small, types.HAS160, "e58d5cfe11171951799249e751e3bafecbf4d4a8"},
-		{binpe, types.IMPFUZZY, "24:ibVjh9wOuuTkkboVaXOr6kwmDgUPMztxdEr6Ul:AwOuUjXOmokx0nl"},
-		{binpe, types.IMPHASH, "d42595b695fc008ef2c56aabd8efd68e"},
-		{binpe, types.IMPHASH0, "e76ebde493cf72a6f596a2c046a67080"},
-		{input, types.LM, "74ac61daa7e79d69482bc9e3e9caf5a9"},
+		{winpe, types.IMPFUZZY, "24:ibVjh9wOuuTkkboVaXOr6kwmDgUPMztxdEr6Ul:AwOuUjXOmokx0nl"},
+		{winpe, types.IMPHASH, "d42595b695fc008ef2c56aabd8efd68e"},
+		{winpe, types.IMPHASH0, "e76ebde493cf72a6f596a2c046a67080"},
+		{input, types.LM, "e52cac67419a9a224a3b108f3fa6cb6d"},
 		{small, types.LSH256, "32be26fe3aab949b3682a6bd77028f9ffe9338fe605a7e7fd45c6a1dfa2c8585"},
 		{small, types.LSH512, "06d60a9e8abba640bc989578af921ef1e13d333a6d017422fb45fff8611bd8321aaad2b25514877ad4a33ca3b5800f8e349dbf906d97999f9538dbfe0c075dec"},
+		{image, types.MARRHILDRETH, "00000000000000000000000000000fe00800000036913afa4aec0000511ce2cff293ec0000103b840e412b5a000000081c0db24926000000000002009c3e00000000000000000000"},
 		{small, types.MD2, "9e49ada9a2ccafdafffff50137351626"},
 		{small, types.MD4, "faedf7d245748f2939593258a5e96875"},
 		{small, types.MD5, "7fe307fda20e805d110b35bcc1f31167"},
 		{small, types.MD6, "599f033e751832ce908f22a3b0b0bf316a77f1553bc4c24146caf9fa6b235854"},
+		{image, types.MEDIAN, "f7e3c1c1818181f3"},
 		{small, types.MURMUR3, "785ae97135fcdbc8"},
-		{input, types.NT, "0b2bee3bac7bddeae69d63d53c0b68f3"},
-		{image, types.PHASH, "b193ce6c9c666c31"},
+		{input, types.NT, "8846f7eaee8fb117ad06bdd830b7586c"},
+		{image, types.PDQ, "bf00eb007340bf0a392167223666cd8dc4dcf3b818ff18df40f704ff40fd40fe"},
+		{image, types.PHASH, "8cc973363966368c"},
 		{small, types.RAPIDHASH, "10f40b7aad98c3bf"},
+		{image, types.RASH, "fe073e000000ffff"},
 		{small, types.RIPEMD160, "12d7c8698119913bc60a9e1cfeb60853a9015b9d"},
 		{small, types.SHAKE128, "6a000450724089944184129ff3fa56cd"},
 		{small, types.SHAKE256, "3988412ad260af82eef7a889f3174147cf652ee07061b3606ea87fa37aabe01c"},

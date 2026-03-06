@@ -14,7 +14,6 @@ import (
 	"hash/crc64"
 	"hash/fnv"
 	"log"
-	"slices"
 	"strings"
 
 	"github.com/cespare/xxhash"
@@ -39,113 +38,99 @@ import (
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/crc/kermit"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/blake3"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/shake"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/fast/xxh"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/impfuzzy"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/imphash"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/other/image"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/other/kermit"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash/image/image"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/lm"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/nt"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/pe"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
-var Algorithms = []string{
-	types.ADLER32,
-	types.AHASH,
-	types.BLAKE2S256,
-	types.BLAKE2B256,
-	types.BLAKE2B384,
-	types.BLAKE2B512,
-	types.BLAKE3256,
-	types.BLAKE3512,
-	types.CRC16CCITT,
-	types.CRC32C,
-	types.CRC32IEEE,
-	types.CRC64ECMA,
-	types.CRC64ISO,
-	types.DHASH,
-	types.FLETCHER4,
-	types.FNV1,
-	types.FNV1A,
-	types.GOST2012256,
-	types.GOST2012512,
-	types.HAS160,
-	types.IMPFUZZY,
-	types.IMPHASH,
-	types.IMPHASH0,
-	types.LSH256,
-	types.LSH512,
-	types.LM,
-	types.MD2,
-	types.MD4,
-	types.MD5,
-	types.MD6,
-	types.MURMUR3,
-	types.NT,
-	types.PE,
-	types.PHASH,
-	types.RAPIDHASH,
-	types.RIPEMD160,
-	types.SHAKE128,
-	types.SHAKE256,
-	types.SHA1,
-	types.SHA256,
-	types.SHA512,
-	types.SHA3,
-	types.SHA3224,
-	types.SHA3256,
-	types.SHA3384,
-	types.SHA3512,
-	types.SIPHASH,
-	types.SKEIN224,
-	types.SKEIN256,
-	types.SKEIN384,
-	types.SKEIN512,
-	types.SM3,
-	types.SSDEEP,
-	types.TLSH,
-	types.WHIRLPOOL,
-	types.XXH3,
-	types.XXH32,
-	types.XXH64,
-}
-
-var secure = []string{
-	types.BLAKE2S256,
-	types.BLAKE2B256,
-	types.BLAKE2B384,
-	types.BLAKE2B512,
-	types.BLAKE3256,
-	types.BLAKE3512,
-	types.GOST2012256,
-	types.GOST2012512,
-	types.LSH256,
-	types.LSH512,
-	types.RIPEMD160,
-	types.SHAKE128,
-	types.SHAKE256,
-	types.SHA256,
-	types.SHA512,
-	types.SHA3,
-	types.SHA3224,
-	types.SHA3256,
-	types.SHA3384,
-	types.SHA3512,
-	types.SKEIN224,
-	types.SKEIN256,
-	types.SKEIN384,
-	types.SKEIN512,
-	types.SM3,
-	types.STREEBOG256,
-	types.STREEBOG512,
-	types.WHIRLPOOL,
+var Algorithms = []struct {
+	Name   string
+	Secure bool
+}{
+	{types.ADLER32, false},
+	{types.AVERAGE, false},
+	{types.BLAKE2S256, true},
+	{types.BLAKE2B256, true},
+	{types.BLAKE2B384, true},
+	{types.BLAKE2B512, true},
+	{types.BLAKE3256, true},
+	{types.BLAKE3512, true},
+	{types.BLOCKMEAN, false},
+	{types.CRC16CCITT, false},
+	{types.CRC32C, false},
+	{types.CRC32IEEE, false},
+	{types.CRC64ECMA, false},
+	{types.CRC64ISO, false},
+	{types.DIFFERENCE, false},
+	{types.FLETCHER4, false},
+	{types.FNV1, false},
+	{types.FNV1A, false},
+	{types.GOST2012256, true},
+	{types.GOST2012512, true},
+	{types.HAS160, false},
+	{types.IMPFUZZY, false},
+	{types.IMPHASH, false},
+	{types.IMPHASH0, false},
+	{types.LM, false},
+	{types.LSH256, true},
+	{types.LSH512, true},
+	{types.MARRHILDRETH, false},
+	{types.MD2, false},
+	{types.MD4, false},
+	{types.MD5, false},
+	{types.MD6, false},
+	{types.MEDIAN, false},
+	{types.MURMUR3, false},
+	{types.NT, false},
+	{types.PDQ, false},
+	{types.PE, false},
+	{types.PHASH, false},
+	{types.RAPIDHASH, false},
+	{types.RASH, false},
+	{types.RIPEMD160, true},
+	{types.SHAKE128, true},
+	{types.SHAKE256, true},
+	{types.SHA1, false},
+	{types.SHA256, true},
+	{types.SHA512, true},
+	{types.SHA3, true},
+	{types.SHA3224, true},
+	{types.SHA3256, true},
+	{types.SHA3384, true},
+	{types.SHA3512, true},
+	{types.SIPHASH, false},
+	{types.SKEIN224, true},
+	{types.SKEIN256, true},
+	{types.SKEIN384, true},
+	{types.SKEIN512, true},
+	{types.SM3, true},
+	{types.SSDEEP, false},
+	{types.STREEBOG256, true},
+	{types.STREEBOG512, true},
+	{types.TLSH, false},
+	{types.WHASH, false},
+	{types.WHIRLPOOL, true},
+	{types.XXH3, false},
+	{types.XXH32, false},
+	{types.XXH64, false},
 }
 
 func IsSecure(algo string) bool {
-	return slices.Contains(secure, strings.ToLower(algo))
+	for _, a := range Algorithms {
+		if a.Name == strings.ToLower(algo) {
+			return a.Secure
+		}
+	}
+
+	return false
 }
 
 func MustSum(algo string, data []byte) string {
@@ -166,8 +151,8 @@ func Sum(algo string, data []byte) (string, error) {
 	switch strings.ToLower(algo) {
 	case types.ADLER32:
 		imp = adler32.New()
-	case types.AHASH:
-		imp = image.NewAHash()
+	case types.AVERAGE:
+		imp = image.New(image.Average)
 	case types.BLAKE2B256:
 		imp, _ = blake2b.New256(nil)
 	case types.BLAKE2B384:
@@ -180,6 +165,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = blake3.New256()
 	case types.BLAKE3512:
 		imp = blake3.New512()
+	case types.BLOCKMEAN:
+		imp = image.New(image.BlockMean)
 	case types.CRC16CCITT:
 		imp = kermit.New()
 	case types.CRC32C:
@@ -190,8 +177,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = crc64.New(crc64.MakeTable(crc64.ECMA))
 	case types.CRC64ISO:
 		imp = crc64.New(crc64.MakeTable(crc64.ISO))
-	case types.DHASH:
-		imp = image.NewDHash()
+	case types.DIFFERENCE:
+		imp = image.New(image.Difference)
 	case types.FLETCHER4:
 		imp = fletcher4.New()
 	case types.FNV1:
@@ -216,6 +203,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = lsh256.New()
 	case types.LSH512:
 		imp = lsh512.New()
+	case types.MARRHILDRETH:
+		imp = image.New(image.MarrHildreth)
 	case types.MD2:
 		imp = md2.New()
 	case types.MD4:
@@ -224,16 +213,22 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = md5.New()
 	case types.MD6:
 		imp = md6.New256()
+	case types.MEDIAN:
+		imp = image.New(image.Median)
 	case types.MURMUR3:
 		imp = murmur3.New64() // Murmur3f
 	case types.NT:
 		imp = nt.New()
+	case types.PDQ:
+		imp = image.New(image.PDQ)
 	case types.PE:
 		imp = pe.New()
 	case types.PHASH:
-		imp = image.NewPHash()
+		imp = image.New(image.PHash)
 	case types.RAPIDHASH:
 		imp = rapidhash.New()
+	case types.RASH:
+		imp = image.New(image.RASH)
 	case types.RIPEMD160:
 		imp = ripemd160.New()
 	case types.SHA1:
@@ -274,6 +269,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = ssdeep.New()
 	case types.TLSH:
 		imp = tlsh.New()
+	case types.WHASH:
+		imp = image.New(image.WHash)
 	case types.WHIRLPOOL:
 		imp = whirlpool.New()
 	case types.XXH3:

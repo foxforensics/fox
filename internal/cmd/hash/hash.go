@@ -49,14 +49,14 @@ Cryptographic hashes (other):
 Performance hashes:
   FNV-1, FNV-1A, MURMUR3, RAPIDHASH, SIPHASH, XXH32, XXH64, XXH3
 
+Perceptual hashes:
+  AVERAGE, DIFFERENCE, MEDIAN, PHASH, WHASH, MARRHILDRETH, BLOCKMEAN, PDQ, RASH
+
 Similarity hashes:
   IMPFUZZY, IMPHASH, IMPHASH0, SSDEEP, TLSH
 
 Windows specific:
   LM, NT, PE Checksum
-
-Image specific:
-  AHASH, DHASH, PHASH
 
 Checksums:
   ADLER32, FLETCHER4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
@@ -70,7 +70,9 @@ type Hash struct {
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if cmd.All {
-		cmd.Algo = hash.Algorithms
+		for _, a := range hash.Algorithms {
+			cmd.Algo = append(cmd.Algo, a.Name)
+		}
 	}
 
 	return nil

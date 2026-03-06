@@ -14,8 +14,6 @@
 
 ## 5. Ideas
 * Add color to usages
-* Reformat and color file header blocks
-* Reformat text carving results
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
 * Add CEF syntax highlighting by hand with text encoding

@@ -8,6 +8,7 @@ require (
 	github.com/VirusTotal/vt-go v1.1.0
 	github.com/agnivade/levenshtein v1.2.1
 	github.com/aixiansheng/lzfse v0.2.4
+	github.com/ajdnik/imghash/v2 v2.3.0
 	github.com/alecthomas/chroma/v2 v2.23.1
 	github.com/alecthomas/kong v1.14.0
 	github.com/andybalholm/brotli v1.2.0
@@ -17,7 +18,6 @@ require (
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cespare/xxhash v1.1.0
-	github.com/corona10/goimagehash v1.1.0
 	github.com/cuhsat/go-fortilog v0.1.0
 	github.com/cuhsat/go-hash v0.2.2
 	github.com/cuhsat/go-krypto v0.2.1
@@ -103,7 +103,6 @@ require (
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
-	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/parquet-go/bitpack v1.0.0 // indirect
 	github.com/parquet-go/jsonlite v1.4.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
@@ -120,6 +119,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa // indirect
+	golang.org/x/image v0.36.0 // indirect
 	golang.org/x/sys v0.41.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect

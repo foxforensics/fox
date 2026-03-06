@@ -3,7 +3,6 @@ package text
 import (
 	"bytes"
 	"regexp"
-	"strings"
 
 	"github.com/alecthomas/chroma/v2/lexers"
 	"github.com/alecthomas/chroma/v2/quick"
@@ -17,7 +16,10 @@ const Lexer = "text"
 // Style (default)
 const Style = "monokai"
 
-var NoSyntax = false
+var (
+	NoColor  = false
+	NoSyntax = false
+)
 
 var (
 	HexZero = color.HiBlackString
@@ -36,19 +38,7 @@ var Fg = color.RGB(0x0f, 0x88, 0xcd)
 var Bg = color.RGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd)
 
 func ColorizeStringAs(s, lexer string) string {
-	if NoSyntax {
-		return s
-	}
-
-	var sb strings.Builder
-
-	err := quick.Highlight(&sb, s, lexer, "terminal256", Style)
-
-	if err != nil {
-		return s
-	}
-
-	return sb.String()
+	return string(ColorizeAs([]byte(s), lexer, Style))
 }
 
 func ColorizeAs(b []byte, lexer string, style string) []byte {

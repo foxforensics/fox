@@ -1,12 +1,11 @@
-// Package nt source: https://github.com/staaldraad/go-ntlm/blob/master/ntlm/crypto.go
+// Package nt source: https://github.com/staaldraad/go-ntlm/blob/master/ntlm/md4/md4.go
 package nt
 
 import (
-	"encoding/binary"
 	"hash"
-	"unicode/utf16"
 
 	"golang.org/x/crypto/md4"
+	"golang.org/x/text/encoding/unicode"
 )
 
 type NT struct {
@@ -32,8 +31,15 @@ func (h *NT) Reset() {
 }
 
 func (h *NT) Write(b []byte) (n int, err error) {
-	uints := utf16.Encode([]rune(string(b)))
-	return len(b), binary.Write(h.md4, binary.LittleEndian, &uints)
+	enc := unicode.UTF16(unicode.LittleEndian, unicode.IgnoreBOM).NewEncoder()
+
+	b, err = enc.Bytes(b)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return h.md4.Write(b)
 }
 
 func (h *NT) Sum(b []byte) []byte {
