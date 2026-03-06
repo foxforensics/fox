@@ -17,11 +17,11 @@ Fox is a CLI tool, build to support the examination process of file based forens
 * [x] [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * [x] String carving and automatic classification
 * [x] With over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
-* [x] Dump Fortinet binary firewall log files
-* [x] Dump Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
-* [x] Dump Windows shortcut and prefetch files
-* [x] Dump [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
-* [x] Check IPs, URLs, Domains and files via [VirusTotal](https://www.virustotal.com/)
+* [x] Parse Fortinet binary firewall log files
+* [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
+* [x] Parse Windows shortcut and prefetch files
+* [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
+* [x] Check IPs, URLs, Domains and files via [VirusTotal API](https://www.virustotal.com/)
 * [x] Extract NTLM hashes from [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) databases
 * [x] Integral full [MCP](https://modelcontextprotocol.io/docs/getting-started/intro) streaming server for AI agents
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
