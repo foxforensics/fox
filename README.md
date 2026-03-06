@@ -29,7 +29,7 @@ Fox is a CLI tool, build to support the examination process of file based forens
 * [x] Integral fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * [x] Integral *Chain-of-Custody* receipt generation
 * [x] Many popular archive and compression formats
-* [x] Many popular cryptographic, fuzzy, fast and image hashes
+* [x] Many popular cryptographic, image, fuzzy and fast hashes
 * [x] With [man pages](assets/man) for every mode
 * [x] Special [Hunt](assets/man/fox-hunt.md) mode
   * [x] Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
