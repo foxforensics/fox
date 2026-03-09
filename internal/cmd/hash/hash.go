@@ -2,10 +2,10 @@ package hash
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
@@ -63,16 +63,19 @@ Checksums:
 `)
 
 type Hash struct {
-	Algo  []string `short:"A" sep:"," default:"SHA256"`
+	Algo  []string `short:"A" sep:","`
 	All   bool     `short:"a"`
 	Paths []string `arg:"" optional:""`
 }
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if cmd.All {
-		for _, a := range hash.Algorithms {
-			cmd.Algo = append(cmd.Algo, a.Name)
-		}
+		cmd.Algo = hash.Algorithms
+	}
+
+	// default algorithm
+	if len(cmd.Algo) == 0 {
+		cmd.Algo = []string{types.SHA256}
 	}
 
 	return nil
@@ -100,27 +103,22 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		}
 
 		for _, algo := range cmd.Algo {
-			if !hash.IsSecure(algo) && !cli.NoWarnings {
-				log.Printf("warning: %s is not a cryptographically secure algorithm!\n", algo)
-			}
-
 			sum, err := hash.Sum(algo, h.Bytes())
-
-			if err != nil {
-				log.Println(err)
-				continue
-			}
 
 			if cli.Regexp != nil && !cli.Regexp.MatchString(sum) {
 				continue // not matched afterward
 			}
 
-			sum = text.MarkMatch(sum, cli.Regexp)
+			res := text.MarkMatch(sum, cli.Regexp)
+
+			if err != nil {
+				res = text.AsGray(err.Error())
+			}
 
 			if len(cmd.Algo) > 1 {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.AsBold(strings.ToUpper(algo)))
+				_, _ = fmt.Fprintf(cli.Stdout, "%-21s  %s\n", text.AsBold(strings.ToUpper(algo)), res)
 			} else {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", sum, text.AsBold(h.Name))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", res, text.AsBold(h.Name))
 			}
 		}
 

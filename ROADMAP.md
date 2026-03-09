@@ -16,7 +16,6 @@
 * Add color to usages
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
-* Add CEF syntax highlighting by hand with text encoding
 * Add own image hash based in SSDeep
   * Convert to 256 Grayscale
   * Resize/crop to 256x256?
