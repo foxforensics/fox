@@ -23,6 +23,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pf"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bgzf"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bzip2"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/gzip"
@@ -46,6 +47,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
+	register.Deflate("bgzf", bgzf.Detect, bgzf.Deflate)
 	register.Deflate("br", br.Detect, br.Deflate)
 	register.Deflate("bzip2", bzip2.Detect, bzip2.Deflate)
 	register.Deflate("gzip", gzip.Detect, gzip.Deflate)
