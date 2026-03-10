@@ -66,8 +66,6 @@ github.com/ayoubfaouzi/pkcs7 v0.2.2 h1:TDxAqfoE0Am130tiwmBnIOU8pjfof5+0MW8u7vEZc
 github.com/ayoubfaouzi/pkcs7 v0.2.2/go.mod h1:u1EPWZOeIdVRo6C0/FVjB91Nsletw+8vZeAaAmeyJvQ=
 github.com/bahlo/generic-list-go v0.2.0 h1:5sz/EEAK+ls5wF+NeqDpk5+iNdMDXrh3z3nPnH1Wvgk=
 github.com/bahlo/generic-list-go v0.2.0/go.mod h1:2KvAjgMlE5NNynlg/5iLrrCCZ2+5xWbdbCW3pNTGyYg=
-github.com/biogo/hts v1.4.5 h1:mhVCpZaTYlAhBjMaAATGWBnauioBtmvOb0ApLdU4/+0=
-github.com/biogo/hts v1.4.5/go.mod h1:GgiMFa6c4eEkwS3kCBRPv3oPgtRm7L8SXvdE9nICnYc=
 github.com/bmatcuk/doublestar/v4 v4.10.0 h1:zU9WiOla1YA122oLM6i4EXvGW62DvKZVxIe6TYWexEs=
 github.com/bmatcuk/doublestar/v4 v4.10.0/go.mod h1:xBQ8jztBU6kakFMg+8WGxn0c6z1fTSPVIjEY1Wr7jzc=
 github.com/bodgit/plumbing v1.3.0 h1:pf9Itz1JOQgn7vEOE7v7nlEfBykYqvUYioC61TwWCFU=
@@ -93,6 +91,8 @@ github.com/cespare/xxhash v1.1.0 h1:a6HrQnmkObjyL+Gs60czilIUGqrzKutQD6XZog3p+ko=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
+github.com/cuhsat/go-bgzf v0.2.0 h1:+dQbf8CB3FmINBB63vZQRYAi4DtgStY1r2kJtVp4tIA=
+github.com/cuhsat/go-bgzf v0.2.0/go.mod h1:5NE+5JZuGsst7LIkqDzJq2LmxwXqVOJvY5hgRMU+D9U=
 github.com/cuhsat/go-fortilog v0.1.0 h1:Va/y8Tw5JjUMtSlg2LV4DtXWtqvsszVmHy3stfVFBWk=
 github.com/cuhsat/go-fortilog v0.1.0/go.mod h1:+yKvvLy0/N7JpTqVGjqZr97SbnjZMF2qtMxIc/vYAUU=
 github.com/cuhsat/go-hash v0.2.2 h1:qigYmnD3Xuef5w4fzqLK5BIKL7OgjNwLJLXxsl5ceKE=

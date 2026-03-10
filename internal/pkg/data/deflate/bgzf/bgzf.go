@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"io"
 
-	"github.com/biogo/hts/bgzf"
+	"github.com/cuhsat/go-bgzf/bgzf"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )

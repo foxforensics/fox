@@ -18,6 +18,7 @@ require (
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cespare/xxhash v1.1.0
+	github.com/cuhsat/go-bgzf v0.2.0
 	github.com/cuhsat/go-fortilog v0.1.0
 	github.com/cuhsat/go-hash v0.2.2
 	github.com/cuhsat/go-krypto v0.2.1
@@ -86,7 +87,6 @@ require (
 	github.com/alecthomas/participle v0.7.1 // indirect
 	github.com/ayoubfaouzi/pkcs7 v0.2.2 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
-	github.com/biogo/hts v1.4.5 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
