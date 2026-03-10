@@ -28,11 +28,24 @@ const (
 var isValue = regexp.MustCompile("")
 
 func Line() string {
-	return strings.Repeat("╌", width())
+	return strings.Repeat("╌", width()-2)
 }
 
 func Title(s string) string {
-	return AsBlue(fmt.Sprintf("%-*s", width(), s))
+	var sb strings.Builder
+
+	l := strings.Repeat("━", width()-2)
+
+	sb.WriteString(Blue.Sprintf("┏%s┓\n", l))
+	sb.WriteString(Blue.Sprintf("┃ "))
+	sb.WriteString(AsBold(s))
+	sb.WriteString(strings.Repeat(" ", width()-len(s)-4))
+	sb.WriteString(Blue.Sprintf(" ┃\n"))
+	sb.WriteString(Blue.Sprintf("┣%s┛", l))
+
+	return sb.String()
+
+	//return AsBlue(fmt.Sprintf("%-*s", width(), s))
 }
 
 func ToAscii(s, c string) string {

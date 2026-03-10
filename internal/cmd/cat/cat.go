@@ -110,11 +110,11 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 			}
 
 			if !cli.NoLine && l.Line == buffer.Sep {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.AsGray(text.Line()))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Border, text.AsGray(text.Line()))
 			} else if l.Line == buffer.Sep {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.AsGray("--"))
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Border, text.AsGray("--"))
 			} else if !cli.NoLine {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.AsGray(l.Line), s)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %s\n", text.Border, text.AsGray(l.Line), s)
 			} else {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", s)
 			}

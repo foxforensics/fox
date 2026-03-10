@@ -22,6 +22,9 @@ var NoColor = false
 // NoSyntax toggle
 var NoSyntax = false
 
+var Border = Blue.Sprintf("┃")
+var Blue = color.RGB(0x0f, 0x88, 0xcd)
+
 var (
 	AsBlue = blue.SprintFunc()
 	AsGray = gray.SprintFunc()
