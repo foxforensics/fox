@@ -272,7 +272,7 @@ func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp) string {
 	case cmd.Json:
 		line = text.ColorizeStringAs(e.ToJSON(), "json")
 	default:
-		line = e.ToCEF()
+		line = text.MarkEvent(e.ToCEF())
 	}
 
 	if re != nil {

@@ -16,13 +16,24 @@ const Lexer = "text"
 // Style (default)
 const Style = "monokai"
 
+// NoColor toggle
+var NoColor = false
+
+// NoSyntax toggle
 var NoSyntax = false
 
 var (
-	AsBlue = color.RGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd).SprintFunc()
-	AsGray = color.New(color.FgHiBlack).SprintFunc()
-	AsWarn = color.New(color.FgHiRed).SprintFunc()
-	AsBold = color.New(color.Bold).SprintFunc()
+	AsBlue = blue.SprintFunc()
+	AsGray = gray.SprintFunc()
+	AsWarn = warn.SprintFunc()
+	AsBold = bold.SprintFunc()
+)
+
+var (
+	blue = color.RGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd)
+	gray = color.New(color.FgHiBlack)
+	warn = color.New(color.FgHiRed)
+	bold = color.New(color.Bold)
 )
 
 func ColorizeStringAs(s, lexer string) string {
@@ -72,9 +83,20 @@ func Colorize(b []byte, hint string, style string) []byte {
 }
 
 func MarkMatch(s string, re *regexp.Regexp) string {
-	if re == nil {
+	if NoColor || re == nil {
 		return s // no regex, no match
 	}
 
-	return marker.Mark(s, marker.MatchRegexp(re), color.New(color.Bold))
+	return marker.Mark(s, marker.MatchRegexp(re), bold)
+}
+
+func MarkEvent(s string) string {
+	if NoColor {
+		return s
+	}
+
+	return new(marker.MarkBuilder).SetString(s).
+		Mark(marker.MatchRegexp(regexp.MustCompile(`^\S{3} \d{2} \d{4} \d{2}:\d{2}:\d{2}.\d{3}`)), bold).
+		Mark(marker.MatchRegexp(regexp.MustCompile(`[^|]+$`)), gray).
+		Build()
 }

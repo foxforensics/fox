@@ -171,6 +171,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	if cli.NoColor {
 		cli.NoSyntax = true
+		text.NoColor = true
 		_color.NoColor = true // turn off color package
 	}
 
