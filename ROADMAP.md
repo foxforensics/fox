@@ -16,11 +16,6 @@
 * Add color to usages
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
-* Add own image hash based in SSDeep
-  * Convert to 256 Grayscale
-  * Resize/crop to 256x256?
-  * SSDeep over pixel byte values
-  * FHash
 * Add different endpoints for test
   * https://github.com/woanware/lookuper
   * HaveIBeenHacked for mails
