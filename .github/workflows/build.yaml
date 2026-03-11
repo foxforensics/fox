@@ -10,7 +10,7 @@ permissions:
   id-token: write
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     environment:
       name: release
