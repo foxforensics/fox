@@ -18,6 +18,10 @@ Show file contents in hex format. This mode enforces the **--no-convert** flag.
 FLAGS
 =====
 
+**-C, --canonical**
+
+:   Format output as **canonical**.
+
 **-H, --hexdump**
 
 :   Format output like **hexdump**.
@@ -26,16 +30,19 @@ FLAGS
 
 :   Format output like **xxd**.
 
-**-R, --raw**
-
-:   Don't format output.
-
 Format Flags
 ------------
 
 **-D, --decimal**
 
 :   Format addresses as decimal.
+
+Disable Flags
+-------------
+
+**-R, --no-format**
+
+:   Don't format output at all.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -45,7 +52,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox hex -hc512 disk.dd
+fox hex -Chc512 disk.dd
 
 :   Show MBR in canonical hex.
 

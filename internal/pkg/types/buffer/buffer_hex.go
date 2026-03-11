@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	Canonical HexMode = iota
+	Default HexMode = iota
+	Canonical
 	Hexdump
 	Xxd
 	Raw
@@ -56,8 +57,10 @@ func streamHex(buf *HexBuffer, ctx *HexContext) {
 
 	for ; ctx.Index < len(ctx.Data); ctx.Index += 16 {
 		switch ctx.Mode {
+		case Default:
+			buf.Lines <- fmtCanonical(ctx, "·")
 		case Canonical:
-			buf.Lines <- fmtCanonical(ctx)
+			buf.Lines <- fmtCanonical(ctx, ".")
 		case Hexdump:
 			buf.Lines <- fmtHexdump(ctx)
 		case Xxd:
@@ -68,7 +71,7 @@ func streamHex(buf *HexBuffer, ctx *HexContext) {
 	}
 }
 
-func fmtCanonical(ctx *HexContext) HexLine {
+func fmtCanonical(ctx *HexContext, spc string) HexLine {
 	var adr string
 	var hex strings.Builder
 	var str strings.Builder
@@ -106,7 +109,7 @@ func fmtCanonical(ctx *HexContext) HexLine {
 	return HexLine{
 		adr,
 		hex.String(),
-		fmt.Sprintf("%-16s", text.ToAscii(str.String(), "·")),
+		fmt.Sprintf("%-16s", text.ToAscii(str.String(), spc)),
 	}
 }
 

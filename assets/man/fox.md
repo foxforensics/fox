@@ -196,7 +196,7 @@ fox -eWinlogon ./**/*.evtx
 
 :   Find occurrences in event logs.
 
-fox hex -hc512 disk.dd
+fox hex -Chc512 disk.dd
 
 :   Show MBR in canonical hex.
 

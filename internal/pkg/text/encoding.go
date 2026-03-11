@@ -34,18 +34,16 @@ func Line() string {
 func Title(s string) string {
 	var sb strings.Builder
 
-	l := strings.Repeat("━", width()-2)
+	l := strings.Repeat("─", width()-2)
 
-	sb.WriteString(Blue.Sprintf("┏%s┓\n", l))
-	sb.WriteString(Blue.Sprintf("┃ "))
+	sb.WriteString(blue.Sprintf("┎%s┐\n", l))
+	sb.WriteString(blue.Sprintf("┃ "))
 	sb.WriteString(AsBold(s))
 	sb.WriteString(strings.Repeat(" ", width()-len(s)-4))
-	sb.WriteString(Blue.Sprintf(" ┃\n"))
-	sb.WriteString(Blue.Sprintf("┣%s┛", l))
+	sb.WriteString(blue.Sprintf(" │\n"))
+	sb.WriteString(blue.Sprintf("┠%s┘", l))
 
 	return sb.String()
-
-	//return AsBlue(fmt.Sprintf("%-*s", width(), s))
 }
 
 func ToAscii(s, c string) string {

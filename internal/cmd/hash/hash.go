@@ -116,7 +116,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			}
 
 			if len(cmd.Algo) > 1 {
-				_, _ = fmt.Fprintf(cli.Stdout, "%-21s  %s\n", text.AsBold(strings.ToUpper(algo)), res)
+				_, _ = fmt.Fprintf(cli.Stdout, "%s %-21s  %s\n", text.Border, text.AsBold(strings.ToUpper(algo)), res)
 			} else {
 				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", res, text.AsBold(h.Name))
 			}

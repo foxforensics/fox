@@ -119,10 +119,11 @@ func (cmd *Mcp) addHex(cli *cli.Globals) {
 		mcp.WithDestructiveHintAnnotation(false),
 		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(false),
+		mcp.WithBoolean("canonical", mcp.Description("Format output as canonical")),
 		mcp.WithBoolean("hexdump", mcp.Description("Format output like hexdump")),
 		mcp.WithBoolean("xxd", mcp.Description("Format output like xxd")),
-		mcp.WithBoolean("raw", mcp.Description("Don't format output")),
 		mcp.WithBoolean("decimal", mcp.Description("Format addresses as decimal")),
+		mcp.WithBoolean("no-format", mcp.Description("Don't format output at all")),
 		mcp.WithArray("paths", mcp.Description("Process paths"), mcp.Required()),
 	)...), func(_ context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 		paths, err := request.RequireStringSlice("paths")
@@ -132,11 +133,12 @@ func (cmd *Mcp) addHex(cli *cli.Globals) {
 		}
 
 		return execute(process(cli, &request), &hex.Hex{
-			Hexdump: request.GetBool("hexdump", false),
-			Xxd:     request.GetBool("xxd", false),
-			Raw:     request.GetBool("raw", false),
-			Decimal: request.GetBool("decimal", false),
-			Paths:   paths,
+			Canonical: request.GetBool("canonical", false),
+			Hexdump:   request.GetBool("hexdump", false),
+			Xxd:       request.GetBool("xxd", false),
+			Decimal:   request.GetBool("decimal", false),
+			NoFormat:  request.GetBool("no-format", false),
+			Paths:     paths,
 		}), nil
 	})
 }

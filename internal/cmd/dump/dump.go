@@ -65,6 +65,12 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		return nil
 	}
 
+	// turn off for raw data
+	if cmd.Json || cmd.Jsonl || cmd.OnlyLm || cmd.OnlyNt {
+		cli.NoFile = true
+		cli.NoLine = true
+	}
+
 	cli.NoConvert = true // forced
 
 	ch := cli.Load(cmd.Paths)
@@ -103,6 +109,10 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		}
 	}
 
+	if !cli.NoFile {
+		_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Title(f2.String()))
+	}
+
 	for _, rec := range res {
 		line := cmd.format(&rec, cli.Regexp)
 
@@ -110,7 +120,11 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 			continue // not matched afterward
 		}
 
-		_, _ = fmt.Fprintln(cli.Stdout, line)
+		if !cli.NoLine {
+			_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Border, line)
+		} else {
+			_, _ = fmt.Fprintln(cli.Stdout, line)
+		}
 	}
 
 	if cli.Verbose > 0 {

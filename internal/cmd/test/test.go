@@ -144,7 +144,13 @@ func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) b
 		return false
 	}
 
-	_, _ = fmt.Fprint(cli.Stdout, text.AsBold("\n  VirusTotal\n\n"))
+	prefix := text.Border + "  "
+
+	if cli.NoLine {
+		prefix = ""
+	}
+
+	_, _ = fmt.Fprintf(cli.Stdout, "%s\n%s%s\n%s\n", prefix, prefix, text.AsBold("VirusTotal"), prefix)
 
 	for _, e := range res.Entries {
 		if e.Alert {
@@ -153,18 +159,18 @@ func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) b
 
 		e.Engine += strings.Repeat(text.AsGray("."), 30-len(e.Engine))
 
-		_, _ = fmt.Fprintf(cli.Stdout, "  %s %s\n", e.Engine, e.Result)
+		_, _ = fmt.Fprintf(cli.Stdout, "%s%s %s\n", prefix, e.Engine, e.Result)
 	}
 
 	if len(res.Entries) > 0 {
-		_, _ = fmt.Fprintln(cli.Stdout, "")
+		_, _ = fmt.Fprintln(cli.Stdout, prefix)
 	}
 
 	if res.Alert {
 		res.Label = text.AsWarn(res.Label)
 	}
 
-	_, _ = fmt.Fprintf(cli.Stdout, "  (%d of %d) %s\n\n", res.Bad, res.All, text.AsBold(res.Label))
+	_, _ = fmt.Fprintf(cli.Stdout, "%s(%d of %d) %s\n%s\n", prefix, res.Bad, res.All, text.AsBold(res.Label), prefix)
 
 	return res.Alert
 }
