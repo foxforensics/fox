@@ -19,6 +19,7 @@ require (
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cespare/xxhash v1.1.0
 	github.com/cuhsat/go-bgzf v0.2.1
+	github.com/cuhsat/go-ese v0.2.5
 	github.com/cuhsat/go-fortilog v0.1.0
 	github.com/cuhsat/go-hash v0.2.2
 	github.com/cuhsat/go-krypto v0.2.1
@@ -60,10 +61,9 @@ require (
 	github.com/zeebo/xxh3 v1.1.0
 	go.dw1.io/rapidhash v0.3.0
 	go.solidsystem.no/fletcher4 v0.2.0
-	golang.org/x/term v0.40.0
-	golang.org/x/text v0.34.0
+	golang.org/x/term v0.41.0
+	golang.org/x/text v0.35.0
 	modernc.org/sqlite v1.46.1
-	www.velocidex.com/golang/go-ese v0.2.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 	www.velocidex.com/golang/regparser v0.0.0-20250203141505-31e704a67ef7
 )
@@ -74,8 +74,7 @@ require (
 	github.com/Velocidex/yaml/v2 v2.2.8 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
-	github.com/stretchr/testify v1.11.1 // indirect
-	golang.org/x/crypto v0.48.0
+	golang.org/x/crypto v0.49.0
 )
 
 require (
@@ -120,7 +119,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa // indirect
-	golang.org/x/image v0.36.0 // indirect
+	golang.org/x/image v0.37.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect

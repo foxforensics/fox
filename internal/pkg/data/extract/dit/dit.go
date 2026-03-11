@@ -20,8 +20,9 @@ import (
 	"slices"
 
 	"github.com/Velocidex/ordereddict"
+	"github.com/cuhsat/go-ese/parser"
+
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"www.velocidex.com/golang/go-ese/parser"
 )
 
 // row attributes

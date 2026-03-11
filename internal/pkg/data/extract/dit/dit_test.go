@@ -9,7 +9,7 @@ import (
 )
 
 const file = "ntds/ntds.dit.zst"
-const dump = "ntds/dump.txt"
+const dump = "ntds/dump.golden"
 
 func BenchmarkExtract(b *testing.B) {
 	buf := test.Fixture(file)

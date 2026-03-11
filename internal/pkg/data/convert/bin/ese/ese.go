@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/Velocidex/ordereddict"
-	"www.velocidex.com/golang/go-ese/parser"
+	"github.com/cuhsat/go-ese/parser"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 )

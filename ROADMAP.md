@@ -28,10 +28,6 @@
   * Custom BgColor from red to yellow in 256 steps?
 * Add pager for output/search/filter like moor?
   * https://github.com/walles/moor
-* Add LZXPRESS to own ESE fork?
-  * https://forensics.wiki/compression/#lzxpress
-  * https://github.com/Velocidex/go-prefetch/blob/master/lzxpress.go
-  * https://github.com/fox-it/dissect.util/tree/main/dissect/util/compression
 * Add LZNT1 deflate (magic bytes?)
   * https://github.com/Velocidex/go-ntfs/blob/d467c5e7dca0/lznt1.go
 * Add vanity URL?
