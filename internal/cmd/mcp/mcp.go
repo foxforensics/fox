@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"strings"
 
@@ -22,6 +23,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/stat"
 	"github.com/cuhsat/fox/v4/internal/cmd/test"
 	"github.com/cuhsat/fox/v4/internal/cmd/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
@@ -55,9 +57,6 @@ func (cmd *Mcp) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 func (cmd *Mcp) Run(cli *cli.Globals) error {
 	// prepare cli
-	cli.NoFile = true
-	cli.NoLine = true
-	cli.NoColor = true
 	cli.NoPretty = true
 	cli.NoStrict = true
 
@@ -350,6 +349,7 @@ func addGlobals(opts ...mcp.ToolOption) []mcp.ToolOption {
 		mcp.WithString("password", mcp.Description("Use password for archives")),
 		mcp.WithBoolean("dry", mcp.Description("Get only affected files")),
 		mcp.WithBoolean("raw", mcp.Description("Don't process file content at all")),
+		mcp.WithBoolean("no-pretty", mcp.Description("Don't prettify the output")),
 		mcp.WithBoolean("no-deflate", mcp.Description("Don't deflate file content")),
 		mcp.WithBoolean("no-extract", mcp.Description("Don't extract file content")),
 		mcp.WithBoolean("no-convert", mcp.Description("Don't convert file content")),
@@ -365,6 +365,7 @@ func process(cli *cli.Globals, req *mcp.CallToolRequest) *cli.Globals {
 	cli.Password = req.GetString("password", "")
 	cli.DryRun = req.GetBool("dry", false)
 	cli.Raw = req.GetBool("raw", false)
+	cli.NoPretty = req.GetBool("no-pretty", false)
 	cli.NoDeflate = req.GetBool("no-deflate", false)
 	cli.NoExtract = req.GetBool("no-extract", false)
 	cli.NoConvert = req.GetBool("no-convert", false)
@@ -373,11 +374,13 @@ func process(cli *cli.Globals, req *mcp.CallToolRequest) *cli.Globals {
 }
 
 func execute(cli *cli.Globals, mode Mode) *mcp.CallToolResult {
-	cli.Pipe = bytes.NewBuffer(nil)
+	buf := bytes.NewBuffer(nil)
+
+	std.Out = io.MultiWriter(buf, std.Out)
 
 	if err := mode.Run(cli); err != nil {
 		return mcp.NewToolResultError(err.Error())
 	}
 
-	return mcp.NewToolResultText(cli.Pipe.String())
+	return mcp.NewToolResultText(buf.String())
 }

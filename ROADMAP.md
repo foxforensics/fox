@@ -16,6 +16,8 @@
 * Add color to usages
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
+* Add own foldable section for every mode
+  * shell example with image for output
 * Add different endpoints for test
   * https://github.com/woanware/lookuper
   * HaveIBeenHacked for mails

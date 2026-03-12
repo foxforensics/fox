@@ -114,25 +114,13 @@ Disable Flags
 
 :   Don't print anything.
 
-**--no-file**
+**-y, --no-pretty**
 
-:   Don't print filenames.
-
-**--no-line**
-
-:   Don't print line numbers.
-
-**--no-color**
-
-:   Don't colorize the output.
+:   Don't prettify the output.
 
 **--no-syntax**
 
 :   Don't colorize the syntax.
-
-**--no-pretty**
-
-:   Don't prettify the output.
 
 **--no-strict**
 

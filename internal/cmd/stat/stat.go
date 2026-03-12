@@ -12,6 +12,7 @@ import (
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
@@ -101,7 +102,7 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 				title = "[00000000] " + title
 			}
 
-			_, _ = fmt.Fprintf(cli.Stdout, "%10dl %10db  %.10fe  %s  %s\n", 0, 0, 0.0, t, text.AsGray(title))
+			std.Writeln("%10dl %10db  %.10fe  %s  %s", 0, 0, 0.0, t, text.AsGray(title))
 
 			h.Discard()
 			continue
@@ -131,9 +132,9 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 				}
 
 				if cmd.block > 0 {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %s  %s  %s %s\n", l, size, entropy, t, start, title)
+					std.Writeln("%10dl %11s  %s  %s  %s %s", l, size, entropy, t, start, title)
 				} else {
-					_, _ = fmt.Fprintf(cli.Stdout, "%10dl %11s  %s  %s  %s\n", l, size, entropy, t, title)
+					std.Writeln("%10dl %11s  %s  %s  %s", l, size, entropy, t, title)
 				}
 			}
 

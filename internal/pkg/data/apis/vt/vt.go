@@ -15,6 +15,12 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/client"
 )
 
+const (
+	Clean      = "clean"
+	Indecisive = "indecisive"
+	Unrated    = "unrated"
+)
+
 // Trace API responses
 var Trace bool
 
@@ -33,8 +39,6 @@ type Result struct {
 	Entries []Entry
 	Label   string
 	Alert   bool
-	Bad     int64
-	All     int64
 }
 
 func TestIp(ip, key string) (*Result, error) {
@@ -78,32 +82,39 @@ func parseEngines(obj *vt.Object, res *Result) {
 }
 
 func parseVerdict(obj *vt.Object, res *Result) {
-	var (
-		mal, _ = obj.GetInt64("last_analysis_stats.malicious")
-		sus, _ = obj.GetInt64("last_analysis_stats.suspicious")
-		un, _  = obj.GetInt64("last_analysis_stats.undetected")
-		ha, _  = obj.GetInt64("last_analysis_stats.harmless")
-		to, _  = obj.GetInt64("last_analysis_stats.timeout")
-		cto, _ = obj.GetInt64("last_analysis_stats.confirmed-timeout")
-		fa, _  = obj.GetInt64("last_analysis_stats.failure")
-		tu, _  = obj.GetInt64("last_analysis_stats.type-unsupported")
-	)
+	bad := countStats(obj, alerts)
+	all := countStats(obj, []string{
+		"malicious",
+		"suspicious",
+		"undetected",
+		"harmless",
+		"timeout",
+		"confirmed-timeout",
+		"failure",
+		"type-unsupported",
+	})
 
-	res.Bad = mal + sus
-	res.All = res.Bad + un + ha + to + cto + fa + tu
+	res.Alert = bad > 0
 	res.Label, _ = obj.GetString("popular_threat_classification.suggested_threat_label")
-	res.Alert = res.Bad > 0
 
 	if len(res.Label) == 0 {
 		switch {
-		case res.Bad > 0:
-			res.Label = "indecisive"
-		case res.All > 0:
-			res.Label = "clean"
+		case bad > 0:
+			res.Label = Indecisive
+		case all > 0:
+			res.Label = Clean
 		default:
-			res.Label = "unrated"
+			res.Label = Unrated
 		}
 	}
+}
+
+func countStats(obj *vt.Object, lst []string) (n int) {
+	for _, k := range lst {
+		v, _ := obj.GetInt64(fmt.Sprintf("last_analysis_stats.%s", k))
+		n += int(v)
+	}
+	return
 }
 
 func request(url *url.URL, key string) (*Result, error) {

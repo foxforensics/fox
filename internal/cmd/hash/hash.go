@@ -5,12 +5,13 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
+	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 var Usage = strings.TrimSpace(`
@@ -89,17 +90,12 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 
 	cli.NoConvert = true // forced
 
-	// compatibility mode
-	if len(cmd.Algo) == 1 {
-		cli.NoFile = true
-	}
-
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
 	for h := range ch {
-		if !cli.NoFile {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Title(h.String()))
+		if !cli.NoPretty && len(cmd.Algo) > 1 {
+			std.Title(h.String())
 		}
 
 		for _, algo := range cmd.Algo {
@@ -116,9 +112,9 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			}
 
 			if len(cmd.Algo) > 1 {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %-21s  %s\n", text.Border, text.AsBold(strings.ToUpper(algo)), res)
+				std.Write("%-21s  %s", text.AsBold(strings.ToUpper(algo)), res)
 			} else {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s\n", res, text.AsBold(h.Name))
+				std.Writeln("%s  %s", res, text.AsBold(h.Name))
 			}
 		}
 

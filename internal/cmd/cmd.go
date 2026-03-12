@@ -1,14 +1,12 @@
 package cmd
 
 import (
-	"bytes"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"regexp"
 
-	_color "github.com/fatih/color"
+	"github.com/fatih/color"
 
 	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
 
@@ -53,7 +51,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types/client"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/register"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
@@ -81,13 +78,9 @@ type Globals struct {
 	// disable flags
 	Raw        bool `short:"r"`
 	Quiet      bool `short:"q" xor:"out,quiet"`
-	NoFile     bool `long:"no-file"`
-	NoLine     bool `long:"no-line"`
-	NoColor    bool `long:"no-color"`
+	NoPretty   bool `short:"y" long:"no-pretty"`
 	NoSyntax   bool `long:"no-syntax"`
-	NoPretty   bool `long:"no-pretty"`
 	NoStrict   bool `long:"no-strict"`
-	NoMapping  bool `long:"no-mapping"`
 	NoDeflate  bool `long:"no-deflate"`
 	NoExtract  bool `long:"no-extract"`
 	NoConvert  bool `long:"no-convert"`
@@ -100,41 +93,13 @@ type Globals struct {
 	Verbose int  `short:"v" type:"counter"`
 
 	// internal
-	Stdout io.Writer      `kong:"-"`
 	Regexp *regexp.Regexp `kong:"-"`
 	Loader *loader.Loader `kong:"-"`
 	Filter *types.Filters `kong:"-"`
 	Limit  *types.Limits  `kong:"-"`
-	Pipe   *bytes.Buffer  `kong:"-"`
 }
 
 func (cli *Globals) Load(args []string) <-chan *heap.Heap {
-	var err error
-
-	switch {
-	// file with receipt
-	case len(cli.File) > 0:
-		cli.NoColor = true
-		cli.Stdout, err = os.OpenFile(cli.File, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
-
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-	// pipe to buffer
-	case cli.Pipe != nil:
-		cli.Stdout = cli.Pipe
-
-	// disabled
-	case cli.Quiet:
-		log.SetOutput(io.Discard)
-		cli.Stdout, _ = os.Open(os.DevNull)
-
-	// stdout
-	default:
-		cli.Stdout = os.Stdout
-	}
-
 	if len(cli.Regex) > 0 {
 		cli.NoSyntax = true
 		cli.Regexp = regexp.MustCompile(cli.Regex)
@@ -152,13 +117,9 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	}
 
 	if cli.Raw {
-		cli.NoFile = true
-		cli.NoLine = true
-		cli.NoColor = true
-		cli.NoSyntax = true
 		cli.NoPretty = true
+		cli.NoSyntax = true
 		cli.NoStrict = true
-		cli.NoMapping = true
 		cli.NoDeflate = true
 		cli.NoExtract = true
 		cli.NoConvert = true
@@ -170,10 +131,10 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.Threads = 1 // must be at least one
 	}
 
-	if cli.NoColor {
+	if cli.NoPretty {
 		cli.NoSyntax = true
 		text.NoColor = true
-		_color.NoColor = true // turn off color package
+		color.NoColor = true // turn off color package
 	}
 
 	if cli.NoSyntax {
@@ -246,12 +207,11 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	if cli.DryRun {
 		for h := range cli.Loader.Load(args) {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", h.Name)
+			fmt.Println(h.Name)
 		}
 
 		// exit early
-		cli.Loader.Exit()
-		os.Exit(0)
+		cli.Exit(0)
 	}
 
 	client.Idle = cli.Threads
@@ -262,24 +222,9 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 func (cli *Globals) Exit(code int) {
 	cli.Discard()
-
 	os.Exit(code)
 }
 
 func (cli *Globals) Discard() {
-	if len(cli.File) > 0 {
-		if v, is := cli.Stdout.(io.Closer); is {
-			_ = v.Close()
-		}
-
-		if !cli.NoReceipt {
-			err := receipt.Generate(cli.File)
-
-			if err != nil {
-				log.Println(err)
-			}
-		}
-	}
-
 	cli.Loader.Exit()
 }

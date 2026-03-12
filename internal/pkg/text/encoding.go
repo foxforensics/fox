@@ -28,13 +28,13 @@ const (
 var isValue = regexp.MustCompile("")
 
 func Line() string {
-	return strings.Repeat("╌", width()-2)
+	return strings.Repeat("╌", width()-3)
 }
 
 func Title(s string) string {
-	var sb strings.Builder
-
 	l := strings.Repeat("─", width()-2)
+
+	var sb strings.Builder
 
 	sb.WriteString(blue.Sprintf("┎%s┐\n", l))
 	sb.WriteString(blue.Sprintf("┃ "))

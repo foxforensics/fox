@@ -12,6 +12,7 @@ import (
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/dit"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
+	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
@@ -67,8 +68,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 
 	// turn off for raw data
 	if cmd.Json || cmd.Jsonl || cmd.OnlyLm || cmd.OnlyNt {
-		cli.NoFile = true
-		cli.NoLine = true
+		cli.NoPretty = true
 	}
 
 	cli.NoConvert = true // forced
@@ -86,7 +86,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Bootkey {
-		_, _ = fmt.Fprintln(cli.Stdout, fmt.Sprintf("%x", key))
+		std.Writeln("%x", key)
 		return nil
 	}
 
@@ -109,8 +109,8 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		}
 	}
 
-	if !cli.NoFile {
-		_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Title(f2.String()))
+	if !cli.NoPretty {
+		std.Title(f2.String())
 	}
 
 	for _, rec := range res {
@@ -120,11 +120,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 			continue // not matched afterward
 		}
 
-		if !cli.NoLine {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Border, line)
-		} else {
-			_, _ = fmt.Fprintln(cli.Stdout, line)
-		}
+		std.Write(line)
 	}
 
 	if cli.Verbose > 0 {

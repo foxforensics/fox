@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"github.com/cuhsat/fox/v4/internal/pkg/std"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
@@ -93,8 +94,8 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	for h := range ch {
-		if !cli.NoFile {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Title(h.String()))
+		if !cli.NoPretty {
+			std.Title(h.String())
 		}
 
 		for l := range carver.New(&carver.Options{
@@ -114,12 +115,14 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 
 			l.Value = text.MarkMatch(l.Value, cli.Regexp)
 
-			if !cli.NoLine && cmd.Wtf > 0 && len(l.Class) > 0 {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s  %s [%s]\n", text.Border, text.AsGray(l.Address), l.Value, text.AsBold(l.Class))
-			} else if !cli.NoLine {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s  %s\n", text.Border, text.AsGray(l.Address), l.Value)
+			if !cli.NoPretty && cmd.Wtf > 0 && len(l.Class) > 0 {
+				std.Writebc("%s  %s [%s]", text.AsGray(l.Address), l.Value, text.AsBold(l.Class))
+			} else if !cli.NoPretty {
+				std.Writebc("%s  %s", text.AsGray(l.Address), l.Value)
+			} else if cmd.Wtf > 0 && len(l.Class) > 0 {
+				std.Writeln("%s [%s]", l.Value, l.Class)
 			} else {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", l.Value)
+				std.Writeln(l.Value)
 			}
 		}
 

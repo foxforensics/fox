@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
+	"github.com/cuhsat/fox/v4/internal/pkg/std"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
@@ -66,9 +67,8 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 		mode = buffer.Default
 	}
 
-	if mode != buffer.Default {
-		cli.NoFile = true
-		cli.NoLine = true
+	if mode > 0 {
+		cli.NoPretty = !cli.NoPretty
 	}
 
 	cli.NoConvert = true // forced
@@ -77,8 +77,8 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	for h := range ch {
-		if !cli.NoFile {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Title(h.String()))
+		if !cli.NoPretty {
+			std.Title(h.String())
 		}
 
 		lastHex, wasCut := "", false
@@ -96,27 +96,27 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 			if l.Values == lastHex && !cmd.NoFormat {
 				if !wasCut {
 					wasCut = true
-					if !cli.NoLine {
-						_, _ = fmt.Fprintln(cli.Stdout, text.Border, text.AsGray(text.Line()))
+					if !cli.NoPretty {
+						std.Writebc(text.AsGray(text.Line()))
 					} else {
-						_, _ = fmt.Fprintln(cli.Stdout, "*")
+						std.Writeln("*")
 					}
 				}
 				continue
 			}
 
-			if !cli.NoLine && mode == buffer.Default {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s  %s%s\n", text.Border, text.AsGray(l.Address), l.Values, l.String)
+			if !cli.NoPretty && mode == buffer.Default {
+				std.Writebc("%s  %s%s", text.AsGray(l.Address), l.Values, l.String)
 			} else if mode == buffer.Default {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s%s\n", l.Values, l.String)
+				std.Writeln("%s  %s%s", l.Address, l.Values, l.String)
 			} else if mode == buffer.Canonical {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s  %s%s\n", l.Address, l.Values, l.String)
+				std.Writeln("%s  %s|%s|", l.Address, l.Values, l.String)
 			} else if mode == buffer.Hexdump {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", l.Address, l.Values)
+				std.Writeln("%s %s", l.Address, l.Values)
 			} else if mode == buffer.Xxd {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %-16s\n", l.Address, l.Values, l.String)
+				std.Writeln("%s %s %-16s", l.Address, l.Values, l.String)
 			} else {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", l.Values)
+				std.Writeln(l.Values)
 			}
 
 			lastHex, wasCut = l.Values, false

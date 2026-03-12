@@ -8,6 +8,7 @@ import (
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/text/unique"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
@@ -91,8 +92,8 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	for h := range ch {
-		if !cli.NoFile {
-			_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Title(h.String()))
+		if !cli.NoPretty {
+			std.Title(h.String())
 		}
 
 		for l := range buffer.Text(h, cli, &buffer.TextContext{
@@ -109,14 +110,14 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 				s = text.MarkMatch(s, cli.Regexp)
 			}
 
-			if !cli.NoLine && l.Line == buffer.Sep {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Border, text.AsGray(text.Line()))
+			if !cli.NoPretty && l.Line == buffer.Sep {
+				std.Writebc(text.AsGray(text.Line()))
 			} else if l.Line == buffer.Sep {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s\n", text.Border, text.AsGray("--"))
-			} else if !cli.NoLine {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s %s %s\n", text.Border, text.AsGray(l.Line), s)
+				std.Writeln("--")
+			} else if !cli.NoPretty {
+				std.Writebc("%s %s", text.AsGray(l.Line), s)
 			} else {
-				_, _ = fmt.Fprintf(cli.Stdout, "%s\n", s)
+				std.Writeln(s)
 			}
 		}
 

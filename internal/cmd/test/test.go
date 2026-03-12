@@ -14,6 +14,7 @@ import (
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/apis/vt"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
+	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
@@ -34,6 +35,8 @@ Required:
 Examples:
   $ fox test ioc.exe
 `)
+
+const ExitAlert = 3
 
 // Encrypted backup keys for emergency use
 const (
@@ -128,15 +131,15 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 	}
 
 	if alert {
-		cli.Exit(3)
+		cli.Exit(ExitAlert)
 	}
 
 	return nil
 }
 
 func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) bool {
-	if !cli.NoFile {
-		_, _ = fmt.Fprintf(cli.Stdout, "%s\n", text.Title(h))
+	if !cli.NoPretty {
+		std.Title(h)
 	}
 
 	if err != nil {
@@ -144,33 +147,39 @@ func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) b
 		return false
 	}
 
-	prefix := text.Border + "  "
+	p := text.Border
 
-	if cli.NoLine {
-		prefix = ""
+	if cli.NoPretty {
+		p = ""
 	}
 
-	_, _ = fmt.Fprintf(cli.Stdout, "%s\n%s%s\n%s\n", prefix, prefix, text.AsBold("VirusTotal"), prefix)
+	l := 0
+
+	for _, e := range res.Entries {
+		l = max(l, len(e.Engine))
+	}
 
 	for _, e := range res.Entries {
 		if e.Alert {
 			e.Result = text.AsWarn(e.Result)
 		}
 
-		e.Engine += strings.Repeat(text.AsGray("."), 30-len(e.Engine))
+		pad := strings.Repeat(" ", l-len(e.Engine))
 
-		_, _ = fmt.Fprintf(cli.Stdout, "%s%s %s\n", prefix, e.Engine, e.Result)
+		std.Writeln("%s %s %s %s", p, text.AsBold(e.Engine), pad, e.Result)
 	}
 
-	if len(res.Entries) > 0 {
-		_, _ = fmt.Fprintln(cli.Stdout, prefix)
-	}
+	verdict := fmt.Sprintf("[%s]", res.Label)
 
 	if res.Alert {
-		res.Label = text.AsWarn(res.Label)
+		verdict = text.AsWarn(verdict)
 	}
 
-	_, _ = fmt.Fprintf(cli.Stdout, "%s(%d of %d) %s\n%s\n", prefix, res.Bad, res.All, text.AsBold(res.Label), prefix)
+	if !cli.NoPretty && len(res.Entries) > 0 {
+		std.Writebc(text.AsGray(text.Line()))
+	}
+
+	std.Writeln("%s %s", p, text.AsBold(verdict))
 
 	return res.Alert
 }

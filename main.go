@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	_ "github.com/josephspurrier/goversioninfo"
 
 	"github.com/alecthomas/kong"
@@ -54,7 +55,7 @@ Modes:
 
 File flags:
   -i, --in=FILE            Read paths from file
-  -o, --out=FILE           Write output to file (receipted)
+  -o, --out=FILE           Writeln output to file (receipted)
 
 Limit flags:
   -h, --head               Limit head of file by...
@@ -74,11 +75,8 @@ Profile flags:
 Disable flags:
   -r, --raw                Don't process files at all
   -q, --quiet              Don't print anything
-      --no-file            Don't print filenames
-      --no-line            Don't print line numbers
-      --no-color           Don't colorize the output
+  -y, --no-pretty          Don't prettify the output
       --no-syntax          Don't colorize the syntax
-      --no-pretty          Don't prettify the output
       --no-strict          Don't stop on parser errors
       --no-deflate         Don't deflate automatically
       --no-extract         Don't extract automatically
@@ -156,6 +154,9 @@ func main() {
 		if cli.Verbose > 0 {
 			defer timer(time.Now())
 		}
+
+		std.Init(&cli.Globals)
+		defer std.Close()
 
 		ctx.FatalIfErrorf(ctx.Run(&cli.Globals))
 	}
