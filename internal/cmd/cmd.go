@@ -100,6 +100,10 @@ type Globals struct {
 }
 
 func (cli *Globals) Load(args []string) <-chan *heap.Heap {
+	if len(cli.File) > 0 {
+		cli.NoPretty = true
+	}
+
 	if len(cli.Regex) > 0 {
 		cli.NoSyntax = true
 		cli.Regexp = regexp.MustCompile(cli.Regex)

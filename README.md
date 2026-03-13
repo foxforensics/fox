@@ -80,7 +80,7 @@ fox hash -Amd5 files.7z
 
 List high entropy files:
 ```console
-fox stat -n0.9 ./**/*
+fox stat -n0.8 ./**/*
 ```
 
 Dump NTLM hashes:

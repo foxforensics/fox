@@ -1,11 +1,9 @@
 package hex
 
 import (
-	"fmt"
 	"strings"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
-	"github.com/cuhsat/fox/v4/internal/pkg/std"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
@@ -48,8 +46,7 @@ type Hex struct {
 
 func (cmd *Hex) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
-		fmt.Println(Usage)
-		return nil
+		return text.Usage(Usage)
 	}
 
 	var mode buffer.HexMode
@@ -78,7 +75,7 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			std.Title(h.String())
+			text.Framed(h.String())
 		}
 
 		lastHex, wasCut := "", false
@@ -97,26 +94,26 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 				if !wasCut {
 					wasCut = true
 					if !cli.NoPretty {
-						std.Writebc(text.AsGray(text.Line()))
+						text.Pretty(text.AsGray(text.Separator()))
 					} else {
-						std.Writeln("*")
+						text.Writeln("*")
 					}
 				}
 				continue
 			}
 
 			if !cli.NoPretty && mode == buffer.Default {
-				std.Writebc("%s  %s%s", text.AsGray(l.Address), l.Values, l.String)
+				text.Pretty("%s  %s%s", text.AsGray(l.Address), l.Values, l.String)
 			} else if mode == buffer.Default {
-				std.Writeln("%s  %s%s", l.Address, l.Values, l.String)
+				text.Writeln("%s  %s%s", l.Address, l.Values, l.String)
 			} else if mode == buffer.Canonical {
-				std.Writeln("%s  %s|%s|", l.Address, l.Values, l.String)
+				text.Writeln("%s  %s|%s|", l.Address, l.Values, l.String)
 			} else if mode == buffer.Hexdump {
-				std.Writeln("%s %s", l.Address, l.Values)
+				text.Writeln("%s %s", l.Address, l.Values)
 			} else if mode == buffer.Xxd {
-				std.Writeln("%s %s %-16s", l.Address, l.Values, l.String)
+				text.Writeln("%s %s %-16s", l.Address, l.Values, l.String)
 			} else {
-				std.Writeln(l.Values)
+				text.Writeln(l.Values)
 			}
 
 			lastHex, wasCut = l.Values, false

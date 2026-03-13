@@ -14,7 +14,6 @@ import (
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/apis/vt"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
-	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
@@ -78,8 +77,7 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 	var alert bool
 
 	if len(cmd.Paths) == 0 {
-		fmt.Println(Usage)
-		return nil
+		return text.Usage(Usage)
 	}
 
 	if len(cmd.Key) == 0 {
@@ -139,7 +137,7 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 
 func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) bool {
 	if !cli.NoPretty {
-		std.Title(h)
+		text.Framed(h)
 	}
 
 	if err != nil {
@@ -166,7 +164,7 @@ func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) b
 
 		pad := strings.Repeat(" ", l-len(e.Engine))
 
-		std.Writeln("%s %s %s %s", p, text.AsBold(e.Engine), pad, e.Result)
+		text.Writeln("%s %s %s %s", p, text.AsBold(e.Engine), pad, e.Result)
 	}
 
 	verdict := fmt.Sprintf("[%s]", res.Label)
@@ -176,10 +174,10 @@ func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) b
 	}
 
 	if !cli.NoPretty && len(res.Entries) > 0 {
-		std.Writebc(text.AsGray(text.Line()))
+		text.Pretty(text.AsGray(text.Separator()))
 	}
 
-	std.Writeln("%s %s", p, text.AsBold(verdict))
+	text.Writeln("%s %s", p, text.AsBold(verdict))
 
 	return res.Alert
 }

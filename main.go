@@ -5,19 +5,22 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
+	"os"
 	"runtime"
 	"runtime/debug"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	_ "github.com/josephspurrier/goversioninfo"
 
 	"github.com/alecthomas/kong"
 
-	"github.com/cuhsat/fox/v4/internal"
+	ver "github.com/cuhsat/fox/v4/internal"
+	std "github.com/cuhsat/fox/v4/internal/pkg/text"
+
 	"github.com/cuhsat/fox/v4/internal/cmd"
 	"github.com/cuhsat/fox/v4/internal/cmd/cat"
 	"github.com/cuhsat/fox/v4/internal/cmd/dump"
@@ -32,11 +35,6 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-.-------.----.--.  .--.   .--. .--.--. .--.-. .--.-----.
-|   ___/ .__. \  \/  /    |  |_|  |  | |  |  \|  |   _/
-|   __|  |  |  >    <     |   _   |  | |  |   '  |  |
-|  |   \ '--' /  /\  \    |  | |  |  '-'  |  |\  |  |
-'--'    '----'--'  '--'   '--' '--'-------'--' '-'--'
 The Forensic Examiners Swiss Army Knife (%s)
 
 Usage:
@@ -51,7 +49,7 @@ Modes:
   (d) dump    Dump sensitive data
   (e) test    Test suspicious files
   (u) hunt    Hunt suspicious events
-  (m) mcp     Init MCP server (blocks)
+  (m) mcp     Starts as MCP server
 
 File flags:
   -i, --in=FILE            Read paths from file
@@ -97,7 +95,7 @@ Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
 Example: List high entropy files
-  $ fox stat -n0.9 ./**/*
+  $ fox stat -n0.8 ./**/*
 
 Example: Hunt down suspicious events
   $ fox hunt -u *.dd
@@ -117,9 +115,7 @@ type fox struct {
 	Test test.Test `cmd:"" aliases:"e,vt,check"`
 	Hunt hunt.Hunt `cmd:"" aliases:"u"`
 	Help help.Help `cmd:"" aliases:"h" hidden:""`
-
-	// server modes
-	Mcp mcp.Mcp `cmd:"" aliases:"m,serve,listen"`
+	Mcp  mcp.Mcp   `cmd:"" aliases:"m,serve,listen"`
 
 	// support flags
 	Version bool
@@ -147,16 +143,23 @@ func main() {
 	case len(ctx.Args) == 0, ctx.Error != nil:
 		fallthrough // show usage
 	case cli.Globals.Help, ctx.Command() == "help":
-		fmt.Println(fmt.Sprintf(Usage, res.Version))
+		_ = std.Usage(fmt.Sprintf(Usage, ver.Version))
 	case cli.Version:
-		fmt.Printf("fox %s\n", res.Version)
+		fmt.Printf("fox %s\n", ver.Version)
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())
 		}
 
-		std.Init(&cli.Globals)
-		defer std.Close()
+		// redirect output
+		if len(cli.File) > 0 {
+			std.Init(os.OpenFile(cli.File, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
+		} else if cli.Quiet {
+			std.Init(os.Open(os.DevNull))
+			log.SetOutput(io.Discard)
+		}
+
+		defer std.Close(cli.File, !cli.NoReceipt)
 
 		ctx.FatalIfErrorf(ctx.Run(&cli.Globals))
 	}

@@ -196,7 +196,7 @@ fox hash -Amd5 files.7z
 
 :   Hash archive contents.
 
-fox stat -n0.9 ./**/*
+fox stat -n0.8 ./**/*
 
 :   List high entropy files.
 

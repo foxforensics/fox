@@ -1,7 +1,6 @@
 package hash
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -9,7 +8,6 @@ import (
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
-	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
@@ -84,8 +82,7 @@ func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 func (cmd *Hash) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
-		fmt.Println(Usage)
-		return nil
+		return text.Usage(Usage)
 	}
 
 	cli.NoConvert = true // forced
@@ -95,7 +92,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty && len(cmd.Algo) > 1 {
-			std.Title(h.String())
+			text.Framed(h.String())
 		}
 
 		for _, algo := range cmd.Algo {
@@ -111,14 +108,17 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				res = text.AsGray(err.Error())
 			}
 
-			if len(cmd.Algo) > 1 {
-				std.Write("%-21s  %s", text.AsBold(strings.ToUpper(algo)), res)
+			if !cli.NoPretty && len(cmd.Algo) > 1 {
+				text.Pretty("%-21s  %s", text.AsBold(strings.ToUpper(algo)), res)
+			} else if len(cmd.Algo) > 1 {
+				text.Writeln("%-21s  %s", text.AsBold(strings.ToUpper(algo)), res)
 			} else {
-				std.Writeln("%s  %s", res, text.AsBold(h.Name))
+				text.Writeln("%s  %s", res, text.AsBold(h.Name))
 			}
 		}
 
 		h.Discard()
 	}
+
 	return nil
 }

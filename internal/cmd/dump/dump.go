@@ -1,7 +1,6 @@
 package dump
 
 import (
-	"fmt"
 	"log"
 	"regexp"
 	"strings"
@@ -12,7 +11,6 @@ import (
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/dit"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
-	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
@@ -62,13 +60,7 @@ func (cmd *Dump) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 func (cmd *Dump) Run(cli *cli.Globals) error {
 	if len(cmd.Paths) < 2 || (len(cmd.Paths) < 1 && cmd.Bootkey) {
-		fmt.Println(Usage)
-		return nil
-	}
-
-	// turn off for raw data
-	if cmd.Json || cmd.Jsonl || cmd.OnlyLm || cmd.OnlyNt {
-		cli.NoPretty = true
+		return text.Usage(Usage)
 	}
 
 	cli.NoConvert = true // forced
@@ -86,7 +78,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Bootkey {
-		std.Writeln("%x", key)
+		text.Writeln("%x", key)
 		return nil
 	}
 
@@ -110,7 +102,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	}
 
 	if !cli.NoPretty {
-		std.Title(f2.String())
+		text.Framed(f2.String())
 	}
 
 	for _, rec := range res {
@@ -120,7 +112,11 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 			continue // not matched afterward
 		}
 
-		std.Write(line)
+		if !cli.NoPretty {
+			text.Pretty(line)
+		} else {
+			text.Writeln(line)
+		}
 	}
 
 	if cli.Verbose > 0 {

@@ -52,7 +52,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox stat -n0.9 ./**/*
+fox stat -n0.8 ./**/*
 
 :   List high entropy files
 

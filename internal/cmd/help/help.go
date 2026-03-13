@@ -1,10 +1,10 @@
 package help
 
 import (
-	"fmt"
 	"strings"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
+	std "github.com/cuhsat/fox/v4/internal/pkg/text"
 
 	"github.com/cuhsat/fox/v4/internal/cmd/cat"
 	"github.com/cuhsat/fox/v4/internal/cmd/dump"
@@ -35,7 +35,7 @@ type Help struct {
 
 func (cmd *Help) Run(_ *cli.Globals) error {
 	if v, ok := usage[strings.ToLower(cmd.Mode)]; ok {
-		fmt.Println(v)
+		return std.Usage(v)
 	}
 
 	return nil

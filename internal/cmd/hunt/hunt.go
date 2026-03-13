@@ -21,7 +21,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/hec"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream/raw"
 	"github.com/cuhsat/fox/v4/internal/pkg/rules"
-	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/text/unique"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
@@ -242,7 +241,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.db == nil {
-			std.Writeln(line)
+			text.Writeln(line)
 		}
 
 		cmd.store(e)

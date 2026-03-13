@@ -12,7 +12,6 @@ import (
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
@@ -34,10 +33,10 @@ Format flags:
   -H, --human              Format size in human-readable units
 
 Examples:
-  $ fox stat -n0.9 ./**/*
+  $ fox stat -n0.8 ./**/*
 `)
 
-const Limit = 0.9
+const Limit = 0.72
 
 type Stat struct {
 	Sort  bool    `short:"s"`
@@ -73,8 +72,7 @@ func (cmd *Stat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 func (cmd *Stat) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
-		fmt.Println(Usage)
-		return nil
+		return text.Usage(Usage)
 	}
 
 	if cmd.Sort {
@@ -102,7 +100,7 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 				title = "[00000000] " + title
 			}
 
-			std.Writeln("%10dl %10db  %.10fe  %s  %s", 0, 0, 0.0, t, text.AsGray(title))
+			text.Writeln(text.AsGray(fmt.Sprintf("%10dl %10db  %.10fe  %s  %s", 0, 0, 0.0, t, title)))
 
 			h.Discard()
 			continue
@@ -132,9 +130,9 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 				}
 
 				if cmd.block > 0 {
-					std.Writeln("%10dl %11s  %s  %s  %s %s", l, size, entropy, t, start, title)
+					text.Writeln("%10dl %11s  %s  %s  %s %s", l, size, entropy, t, start, title)
 				} else {
-					std.Writeln("%10dl %11s  %s  %s  %s", l, size, entropy, t, title)
+					text.Writeln("%10dl %11s  %s  %s  %s", l, size, entropy, t, title)
 				}
 			}
 

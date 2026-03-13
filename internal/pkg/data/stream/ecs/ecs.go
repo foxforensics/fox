@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/twmb/murmur3"
 
 	"github.com/cuhsat/fox/v4/internal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/stream"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 )
 
@@ -60,7 +60,7 @@ type Ecs struct {
 func New(url string) Ecs {
 	ecs := Ecs{url: url}
 	ecs.Ecs.Version = "9.1.0"
-	ecs.Agent.Version = res.Version
+	ecs.Agent.Version = ver.Version
 	ecs.Agent.Type = "fox"
 	ecs.Event.Kind = "event"
 	return ecs

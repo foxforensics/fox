@@ -7,8 +7,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-
-	"golang.org/x/term"
 )
 
 const (
@@ -26,25 +24,6 @@ const (
 )
 
 var isValue = regexp.MustCompile("")
-
-func Line() string {
-	return strings.Repeat("╌", width()-3)
-}
-
-func Title(s string) string {
-	l := strings.Repeat("─", width()-2)
-
-	var sb strings.Builder
-
-	sb.WriteString(blue.Sprintf("┎%s┐\n", l))
-	sb.WriteString(blue.Sprintf("┃ "))
-	sb.WriteString(AsBold(s))
-	sb.WriteString(strings.Repeat(" ", width()-len(s)-4))
-	sb.WriteString(blue.Sprintf(" │\n"))
-	sb.WriteString(blue.Sprintf("┠%s┘", l))
-
-	return sb.String()
-}
 
 func ToAscii(s, c string) string {
 	var sb strings.Builder
@@ -120,14 +99,4 @@ func Mechanize(s string) int64 {
 	exp := float64(strings.IndexByte("bkmgtpezyrq", unit))
 
 	return int64(v * int(math.Pow(1024, exp)))
-}
-
-func width() int {
-	w, _, err := term.GetSize(0)
-
-	if err != nil {
-		w = 78 // default term width
-	}
-
-	return w
 }

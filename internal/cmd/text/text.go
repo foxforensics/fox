@@ -6,8 +6,6 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"github.com/cuhsat/fox/v4/internal/pkg/std"
-
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
@@ -84,8 +82,7 @@ func (cmd *Text) AfterApply(app *kong.Kong, _ kong.Vars) error {
 
 func (cmd *Text) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 && !cmd.List {
-		fmt.Println(Usage)
-		return nil
+		return text.Usage(Usage)
 	}
 
 	cli.NoConvert = true // forced
@@ -95,7 +92,7 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			std.Title(h.String())
+			text.Framed(h.String())
 		}
 
 		for l := range carver.New(&carver.Options{
@@ -116,13 +113,13 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 			l.Value = text.MarkMatch(l.Value, cli.Regexp)
 
 			if !cli.NoPretty && cmd.Wtf > 0 && len(l.Class) > 0 {
-				std.Writebc("%s  %s [%s]", text.AsGray(l.Address), l.Value, text.AsBold(l.Class))
+				text.Pretty("%s  %s [%s]", text.AsGray(l.Address), l.Value, text.AsBold(l.Class))
 			} else if !cli.NoPretty {
-				std.Writebc("%s  %s", text.AsGray(l.Address), l.Value)
+				text.Pretty("%s  %s", text.AsGray(l.Address), l.Value)
 			} else if cmd.Wtf > 0 && len(l.Class) > 0 {
-				std.Writeln("%s [%s]", l.Value, l.Class)
+				text.Writeln("%s [%s]", l.Value, l.Class)
 			} else {
-				std.Writeln(l.Value)
+				text.Writeln(l.Value)
 			}
 		}
 

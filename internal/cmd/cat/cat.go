@@ -1,14 +1,12 @@
 package cat
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/alecthomas/kong"
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/std"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/text/unique"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/buffer"
@@ -75,8 +73,7 @@ func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 func (cmd *Cat) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 {
-		fmt.Println(Usage)
-		return nil
+		return text.Usage(Usage)
 	}
 
 	if cmd.Dist > 0 {
@@ -93,7 +90,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			std.Title(h.String())
+			text.Framed(h.String())
 		}
 
 		for l := range buffer.Text(h, cli, &buffer.TextContext{
@@ -111,13 +108,13 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 			}
 
 			if !cli.NoPretty && l.Line == buffer.Sep {
-				std.Writebc(text.AsGray(text.Line()))
-			} else if l.Line == buffer.Sep {
-				std.Writeln("--")
+				text.Pretty(text.AsGray(text.Separator()))
 			} else if !cli.NoPretty {
-				std.Writebc("%s %s", text.AsGray(l.Line), s)
+				text.Pretty("%s %s", text.AsGray(l.Line), s)
+			} else if l.Line == buffer.Sep {
+				text.Writeln("--")
 			} else {
-				std.Writeln(s)
+				text.Writeln(s)
 			}
 		}
 
