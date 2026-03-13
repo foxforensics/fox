@@ -249,7 +249,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.db == nil {
-			if !cli.NoPretty {
+			if isPretty {
 				text.Pretty(line)
 			} else {
 				text.Writeln(line)
@@ -263,7 +263,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		n++
 	}
 
-	if !cli.NoPretty {
+	if isPretty {
 		text.Pretty(text.AsGray(text.Separator()))
 		text.Pretty(fmt.Sprintf("found %s event(s)", text.AsBold(n)))
 	}
