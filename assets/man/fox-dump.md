@@ -8,7 +8,7 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **dump** **system** \[**ntds.dit**]
+| **fox** **dump** **system** \[**ntds**]
 
 DESCRIPTION
 ===========

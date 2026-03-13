@@ -17,7 +17,7 @@ import (
 var Usage = strings.TrimSpace(`
 Dump sensitive data.
 
-fox dump [FLAGS...] system [ntds.dit]
+fox dump [FLAGS...] SYSTEM [NTDS]
 
 Flags:
   -j, --json               Dump data as JSON objects
@@ -59,7 +59,7 @@ func (cmd *Dump) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Dump) Run(cli *cli.Globals) error {
-	if len(cmd.Paths) < 2 || (len(cmd.Paths) < 1 && cmd.Bootkey) {
+	if len(cmd.Paths) != 2 && (len(cmd.Paths) == 1 && !cmd.Bootkey) {
 		return text.Usage(Usage)
 	}
 
@@ -78,7 +78,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Bootkey {
-		text.Writeln("%x", key)
+		text.Writeln("%s %x", text.AsBold("Bootkey"), key)
 		return nil
 	}
 

@@ -2,6 +2,7 @@ package hunt
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"regexp"
@@ -180,6 +181,13 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	cli.NoConvert = true // forced
 
+	isPretty := !cli.NoPretty && !cmd.Json && !cmd.Jsonl
+
+	if isPretty {
+		text.Writeln(fmt.Sprintf("\n%s\n", text.Banner))
+		text.Framed(cmd.rule.Title)
+	}
+
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
@@ -241,7 +249,11 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.db == nil {
-			text.Writeln(line)
+			if !cli.NoPretty {
+				text.Pretty(line)
+			} else {
+				text.Writeln(line)
+			}
 		}
 
 		cmd.store(e)
@@ -249,6 +261,11 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		cmd.stream(e)
 
 		n++
+	}
+
+	if !cli.NoPretty {
+		text.Pretty(text.AsGray(text.Separator()))
+		text.Pretty(fmt.Sprintf("found %s event(s)", text.AsBold(n)))
 	}
 
 	if cli.Verbose > 0 {
