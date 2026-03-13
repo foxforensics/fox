@@ -14,14 +14,14 @@ import (
 )
 
 var header = strings.TrimSpace(`
-┏━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ FILE │ %-64s ┃
-┠──────┼──────────────────────────────────────────────────────────────────┨
+┏━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ FILE │ %-71s ┃
+┠──────┼─────────────────────────────────────────────────────────────────────────┨
 ┃ TIME │ %s ┃
 ┃ USER │ %s ┃
 ┃ HOST │ %s ┃
 ┃ HASH │ %s ┃
-┗━━━━━━┴━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┗━━━━━━┴━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 `)
 
 func Generate(path string) error {
@@ -54,12 +54,12 @@ func Generate(path string) error {
 		pad(time.Now().UTC().String()),
 		pad(fmt.Sprintf("%s (%s)", usr.Name, usr.Username)),
 		pad(fmt.Sprintf("%s (%s)", hst, mac())),
-		fmt.Sprintf("%x", sha256.Sum256(buf)),
+		fmt.Sprintf("%x SHA256", sha256.Sum256(buf)),
 	)+"\n"), 0600)
 }
 
 func pad(s string) string {
-	return fmt.Sprintf("%s %s", s, strings.Repeat(".", 63-len(s)))
+	return fmt.Sprintf("%s %s", s, strings.Repeat(".", 70-len(s)))
 }
 
 func mac() string {
