@@ -62,24 +62,13 @@ func (evt *Event) ToCEF() string {
 		evt.Severity,
 	))
 
-	ext := map[string]any{
-		"rt":         evt.Time,
-		"app":        evt.Source,
-		"cat":        evt.Category,
-		"sproc":      evt.Service,
-		"shost":      evt.Host,
-		"suid":       evt.User,
-		"externalId": evt.Sequence,
-	}
+	for _, k := range slices.Sorted(maps.Keys(evt.Fields)) {
+		if v := evt.Fields[k]; len(v) > 0 {
+			k = strings.ReplaceAll(k, `=`, `\=`)
+			v = strings.ReplaceAll(v, `=`, `\=`)
+			v = strings.ReplaceAll(v, "\t", "")
 
-	for _, k := range slices.Sorted(maps.Keys(ext)) {
-		if v := ext[k]; v != nil {
-			if s := fmt.Sprintf("%v", v); len(s) > 0 {
-				k = strings.ReplaceAll(k, `=`, `\=`)
-				s = strings.ReplaceAll(s, `=`, `\=`)
-
-				sb.WriteString(fmt.Sprintf("%s=%s ", k, s))
-			}
+			sb.WriteString(fmt.Sprintf("%s=%s ", k, v))
 		}
 	}
 

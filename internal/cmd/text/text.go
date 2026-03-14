@@ -92,7 +92,7 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			text.Framed(h.String())
+			text.Title(h.String())
 		}
 
 		for l := range carver.New(&carver.Options{
@@ -112,14 +112,14 @@ func (cmd *Text) Run(cli *cli.Globals) error {
 
 			l.Value = text.MarkMatch(l.Value, cli.Regexp)
 
-			if !cli.NoPretty && cmd.Wtf > 0 && len(l.Class) > 0 {
-				text.Pretty("%s  %s [%s]", text.AsGray(l.Address), l.Value, text.AsBold(l.Class))
+			if !cli.NoPretty && len(l.Class) > 0 {
+				text.Print("%s  %s [%s]", text.AsGray(l.Address), l.Value, text.AsBold(l.Class))
 			} else if !cli.NoPretty {
-				text.Pretty("%s  %s", text.AsGray(l.Address), l.Value)
-			} else if cmd.Wtf > 0 && len(l.Class) > 0 {
-				text.Writeln("%s [%s]", l.Value, l.Class)
+				text.Print("%s  %s", text.AsGray(l.Address), l.Value)
+			} else if len(l.Class) > 0 {
+				text.Print("%s [%s]", l.Value, l.Class)
 			} else {
-				text.Writeln(l.Value)
+				text.Print(l.Value)
 			}
 		}
 

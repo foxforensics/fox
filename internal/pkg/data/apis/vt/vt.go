@@ -16,13 +16,14 @@ import (
 )
 
 const (
-	Clean      = "clean"
-	Indecisive = "indecisive"
+	Unknown    = "unknown"
 	Unrated    = "unrated"
+	Indecisive = "indecisive"
+	Clean      = "clean"
 )
 
-// Trace API responses
-var Trace bool
+// Verbose API responses
+var Verbose int
 
 var alerts = []string{
 	"malicious",
@@ -39,6 +40,8 @@ type Result struct {
 	Entries []Entry
 	Label   string
 	Alert   bool
+	All     int
+	Bad     int
 }
 
 func TestIp(ip, key string) (*Result, error) {
@@ -82,8 +85,8 @@ func parseEngines(obj *vt.Object, res *Result) {
 }
 
 func parseVerdict(obj *vt.Object, res *Result) {
-	bad := countStats(obj, alerts)
-	all := countStats(obj, []string{
+	res.Bad = countStats(obj, alerts)
+	res.All = countStats(obj, []string{
 		"malicious",
 		"suspicious",
 		"undetected",
@@ -94,14 +97,14 @@ func parseVerdict(obj *vt.Object, res *Result) {
 		"type-unsupported",
 	})
 
-	res.Alert = bad > 0
+	res.Alert = res.Bad > 0
 	res.Label, _ = obj.GetString("popular_threat_classification.suggested_threat_label")
 
 	if len(res.Label) == 0 {
 		switch {
-		case bad > 0:
+		case res.Bad > 0:
 			res.Label = Indecisive
-		case all > 0:
+		case res.All > 0:
 			res.Label = Clean
 		default:
 			res.Label = Unrated
@@ -126,45 +129,43 @@ func request(url *url.URL, key string) (*Result, error) {
 
 	if err != nil {
 		if strings.Contains(err.Error(), "not found") {
-			res.Label = "unknown"
+			res.Label = Unknown
 			return res, nil
 		}
 
 		return nil, err
 	}
 
-	err = trace(obj)
-
-	if err != nil {
-		log.Println(err)
+	if Verbose > 2 {
+		trace(obj)
 	}
 
 	parseEngines(obj, res)
 	parseVerdict(obj, res)
 
+	if Verbose > 1 {
+		for _, e := range res.Entries {
+			log.Printf(`result is "%s" by %s`, e.Result, e.Engine)
+		}
+	}
+
 	return res, nil
 }
 
-func trace(obj *vt.Object) error {
+func trace(obj *vt.Object) {
 	buf := bytes.NewBuffer(nil)
-
-	if !Trace {
-		return nil
-	}
 
 	b, err := obj.MarshalJSON()
 
 	if err != nil {
-		return err
+		return
 	}
 
 	err = json.Indent(buf, b, "", "  ")
 
 	if err != nil {
-		return err
+		return
 	}
 
-	log.Println(fmt.Sprintf("received response:\n%s", buf.String()))
-
-	return nil
+	log.Printf("received response:\n%s\n", buf.String())
 }

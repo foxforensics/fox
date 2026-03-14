@@ -70,7 +70,7 @@ func (cmd *Mcp) Run(cli *cli.Globals) error {
 	cmd.addHunt(cli)
 
 	if cli.Verbose > 0 {
-		log.Println(fmt.Sprintf("mcp: started on port %d", cmd.Port))
+		log.Printf("mcp: started on port %d\n", cmd.Port)
 	}
 
 	return server.NewStreamableHTTPServer(cmd.mcp).Start(fmt.Sprintf(":%d", cmd.Port))

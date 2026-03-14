@@ -12,6 +12,8 @@ import (
 
 	"github.com/Velocidex/go-journalctl/parser"
 	"github.com/Velocidex/ordereddict"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
@@ -143,7 +145,7 @@ func newEvent(od *ordereddict.Dict) (*event.Event, error) {
 
 	for _, i := range d.Items() {
 		if !strings.HasPrefix(i.Key, "(") {
-			e.Fields[i.Key] = fmt.Sprintf("%v", i.Value)
+			e.Fields[toTitle(i.Key)] = fmt.Sprintf("%v", i.Value)
 		}
 	}
 
@@ -153,4 +155,12 @@ func newEvent(od *ordereddict.Dict) (*event.Event, error) {
 func getString(od *ordereddict.Dict, path string) string {
 	v, _ := od.GetString(path)
 	return v
+}
+
+func toTitle(s string) string {
+	s = strings.TrimPrefix(s, "_")
+	s = strings.ReplaceAll(s, "_", " ")
+	s = cases.Title(language.Und).String(s)
+	s = strings.ReplaceAll(s, " ", "")
+	return s
 }

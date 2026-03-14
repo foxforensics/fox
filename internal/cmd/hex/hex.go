@@ -26,7 +26,7 @@ Disable flags:
   -R, --no-format          Don't format output at all
 
 Examples:
-  $ fox hex -Chc512 disk.dd
+  $ fox hex -hc512 disk.dd
 `)
 
 type Hex struct {
@@ -75,7 +75,7 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			text.Framed(h.String())
+			text.Title(h.String())
 		}
 
 		lastHex, wasCut := "", false
@@ -93,27 +93,21 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 			if l.Values == lastHex && !cmd.NoFormat {
 				if !wasCut {
 					wasCut = true
-					if !cli.NoPretty {
-						text.Pretty(text.AsGray(text.Separator()))
-					} else {
-						text.Writeln("*")
-					}
+					text.Print(text.AsGray("*"))
 				}
 				continue
 			}
 
-			if !cli.NoPretty && mode == buffer.Default {
-				text.Pretty("%s  %s%s", text.AsGray(l.Address), l.Values, l.String)
-			} else if mode == buffer.Default {
-				text.Writeln("%s  %s%s", l.Address, l.Values, l.String)
+			if mode == buffer.Default {
+				text.Print("%s  %s%s", text.AsGray(l.Address), l.Values, l.String)
 			} else if mode == buffer.Canonical {
-				text.Writeln("%s  %s|%s|", l.Address, l.Values, l.String)
+				text.Print("%s  %s|%s|", l.Address, l.Values, l.String)
 			} else if mode == buffer.Hexdump {
-				text.Writeln("%s %s", l.Address, l.Values)
+				text.Print("%s %s", l.Address, l.Values)
 			} else if mode == buffer.Xxd {
-				text.Writeln("%s %s %-16s", l.Address, l.Values, l.String)
+				text.Print("%s %s %-16s", l.Address, l.Values, l.String)
 			} else {
-				text.Writeln(l.Values)
+				text.Print(l.Values)
 			}
 
 			lastHex, wasCut = l.Values, false

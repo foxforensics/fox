@@ -92,7 +92,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty && len(cmd.Algo) > 1 {
-			text.Framed(h.String())
+			text.Title(h.String())
 		}
 
 		for _, algo := range cmd.Algo {
@@ -108,12 +108,10 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				res = text.AsGray(err.Error())
 			}
 
-			if !cli.NoPretty && len(cmd.Algo) > 1 {
-				text.Pretty("%-21s  %s", text.AsBold(strings.ToUpper(algo)), res)
-			} else if len(cmd.Algo) > 1 {
-				text.Writeln("%-21s  %s", text.AsBold(strings.ToUpper(algo)), res)
+			if len(cmd.Algo) > 1 {
+				text.Print("%-21s  %s", text.AsBold(strings.ToUpper(algo)), res)
 			} else {
-				text.Writeln("%s  %s", res, text.AsBold(h.Name))
+				text.Print("%s  %s", res, text.AsBold(h.Name))
 			}
 		}
 

@@ -74,8 +74,6 @@ func (cmd *Test) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Test) Run(cli *cli.Globals) error {
-	var alert bool
-
 	if len(cmd.Paths) == 0 {
 		return text.Usage(Usage)
 	}
@@ -84,9 +82,7 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 		log.Fatalln("VirusTotal API key required")
 	}
 
-	if cli.Verbose > 2 {
-		vt.Trace = true
-	}
+	vt.Verbose = cli.Verbose
 
 	cli.NoConvert = true // forced
 
@@ -94,33 +90,27 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	for h := range ch {
-		if !(cmd.Domain || cmd.Url || cmd.Ip) {
-			res, err := vt.TestFileHash(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
-			alert = alert || cmd.output(cli, res, err, h.String())
+		if !cmd.Domain && !cmd.Url && !cmd.Ip {
+			if !cli.NoPretty {
+				text.Title(h.String())
+			}
+
+			output(vt.TestFileHash(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key))
 		} else {
-			var res *vt.Result
-			var err error
-
 			for _, v := range strings.Split(string(h.Bytes()), "\n") {
-				if len(v) == 0 {
-					continue
-				}
+				if len(strings.TrimSpace(v)) > 0 {
+					if !cli.NoPretty {
+						text.Title(v)
+					}
 
-				switch {
-				case cmd.Domain:
-					res, err = vt.TestDomain(v, cmd.Key)
-				case cmd.Url:
-					res, err = vt.TestUrl(base64.StdEncoding.EncodeToString([]byte(v)), cmd.Key)
-				case cmd.Ip:
-					res, err = vt.TestIp(v, cmd.Key)
-				}
-
-				if err != nil {
-					log.Println(err)
-				}
-
-				if res != nil {
-					alert = alert || cmd.output(cli, res, err, v)
+					switch {
+					case cmd.Domain:
+						output(vt.TestDomain(v, cmd.Key))
+					case cmd.Url:
+						output(vt.TestUrl(base64.StdEncoding.EncodeToString([]byte(v)), cmd.Key))
+					case cmd.Ip:
+						output(vt.TestIp(v, cmd.Key))
+					}
 				}
 			}
 		}
@@ -128,56 +118,21 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 		h.Discard()
 	}
 
-	if alert {
-		cli.Exit(ExitAlert)
-	}
-
 	return nil
 }
 
-func (cmd *Test) output(cli *cli.Globals, res *vt.Result, err error, h string) bool {
-	if !cli.NoPretty {
-		text.Framed(h)
-	}
-
+func output(res *vt.Result, err error) {
 	if err != nil {
 		log.Println(err)
-		return false
 	}
 
-	p := text.Border
+	if res != nil {
+		verdict := fmt.Sprintf("%s (%d/%d)", res.Label, res.Bad, res.All)
 
-	if cli.NoPretty {
-		p = ""
-	}
-
-	l := 0
-
-	for _, e := range res.Entries {
-		l = max(l, len(e.Engine))
-	}
-
-	for _, e := range res.Entries {
-		if e.Alert {
-			e.Result = text.AsWarn(e.Result)
+		if res.Alert {
+			verdict = text.AsWarn(verdict)
 		}
 
-		pad := strings.Repeat(" ", l-len(e.Engine))
-
-		text.Writeln("%s %s %s %s", p, text.AsBold(e.Engine), pad, e.Result)
+		text.Print(verdict)
 	}
-
-	verdict := fmt.Sprintf("[%s]", res.Label)
-
-	if res.Alert {
-		verdict = text.AsWarn(verdict)
-	}
-
-	if !cli.NoPretty && len(res.Entries) > 0 {
-		text.Pretty(text.AsGray(text.Separator()))
-	}
-
-	text.Writeln("%s %s", p, text.AsBold(verdict))
-
-	return res.Alert
 }

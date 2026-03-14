@@ -53,7 +53,7 @@ Modes:
 
 File flags:
   -i, --in=FILE            Read paths from file
-  -o, --out=FILE           Writeln output to file (receipted)
+  -o, --out=FILE           Print output to file (receipted)
 
 Limit flags:
   -h, --head               Limit head of file by...

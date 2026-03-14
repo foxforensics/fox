@@ -90,7 +90,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			text.Framed(h.String())
+			text.Title(h.String())
 		}
 
 		for l := range buffer.Text(h, cli, &buffer.TextContext{
@@ -107,14 +107,12 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 				s = text.MarkMatch(s, cli.Regexp)
 			}
 
-			if !cli.NoPretty && l.Line == buffer.Sep {
-				text.Pretty(text.AsGray(text.Separator()))
-			} else if !cli.NoPretty {
-				text.Pretty("%s %s", text.AsGray(l.Line), s)
+			if !cli.NoPretty {
+				text.Print("%s %s", text.AsGray(l.Line), s)
 			} else if l.Line == buffer.Sep {
-				text.Writeln("--")
+				text.Print(text.AsGray("--"))
 			} else {
-				text.Writeln(s)
+				text.Print(s)
 			}
 		}
 

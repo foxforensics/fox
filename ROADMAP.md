@@ -13,7 +13,6 @@
 * ~~Done~~
 
 ## 5. Ideas
-* Add color to usages
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
 * Add own foldable section for every mode

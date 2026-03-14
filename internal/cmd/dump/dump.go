@@ -78,7 +78,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Bootkey {
-		text.Writeln("%s %x", text.AsBold("Bootkey"), key)
+		text.Print("%s %x", text.AsBold("Bootkey"), key)
 		return nil
 	}
 
@@ -101,10 +101,6 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		}
 	}
 
-	if !cli.NoPretty {
-		text.Framed(f2.String())
-	}
-
 	for _, rec := range res {
 		line := cmd.format(&rec, cli.Regexp)
 
@@ -112,11 +108,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 			continue // not matched afterward
 		}
 
-		if !cli.NoPretty {
-			text.Pretty(line)
-		} else {
-			text.Writeln(line)
-		}
+		text.Print(line)
 	}
 
 	if cli.Verbose > 0 {

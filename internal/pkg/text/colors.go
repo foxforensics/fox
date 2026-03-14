@@ -23,14 +23,12 @@ var NoColor = false
 var NoSyntax = false
 
 var (
-	Border = blue.Sprintf("┃")
 	AsGray = gray.SprintFunc()
 	AsWarn = warn.SprintFunc()
 	AsBold = bold.SprintFunc()
 )
 
 var (
-	blue = color.RGB(0x0f, 0x88, 0xcd)
 	gray = color.New(color.FgHiBlack)
 	warn = color.New(color.FgHiRed)
 	bold = color.New(color.Bold)

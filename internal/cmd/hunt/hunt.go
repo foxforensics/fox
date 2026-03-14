@@ -2,7 +2,6 @@ package hunt
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"regexp"
@@ -215,12 +214,6 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	var ctx = context.Background()
 	var sig = evaluator.ForRule(cmd.rule)
 
-	isPretty := !cli.NoPretty && !cmd.Json && !cmd.Jsonl
-
-	if isPretty {
-		text.Framed(cmd.rule.Title)
-	}
-
 	for e := range hunter.New(&hunter.Options{
 		Sort:     cmd.Sort,
 		Parallel: cli.Threads,
@@ -241,33 +234,31 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			continue // not matched
 		}
 
-		line := cmd.format(e, cli.Regexp)
-
-		if cli.Regexp != nil && !cli.Regexp.MatchString(line) {
-			continue // not matched afterward
-		}
-
 		if cmd.db == nil {
-			if isPretty {
-				text.Pretty(line)
-			} else {
-				text.Writeln(line)
+			line := cmd.format(e, cli.Regexp)
+
+			if cli.Regexp != nil && !cli.Regexp.MatchString(line) {
+				continue // not matched afterward
+			}
+
+			text.Print(line)
+		} else {
+			err := cmd.db.Store(e)
+
+			if err != nil {
+				log.Println(err)
 			}
 		}
 
-		cmd.store(e)
+		if cmd.net != nil {
+			err := cmd.net.Stream(e)
 
-		cmd.stream(e)
-
-		n++
-	}
-
-	if isPretty {
-		if n > 0 {
-			text.Pretty(text.AsGray(text.Separator()))
+			if err != nil {
+				log.Println(err)
+			}
 		}
 
-		text.Pretty(fmt.Sprintf("found %s event(s)", text.AsBold(n)))
+		n++
 	}
 
 	if cli.Verbose > 0 {
@@ -298,26 +289,6 @@ func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp) string {
 	}
 
 	return line
-}
-
-func (cmd *Hunt) store(e *event.Event) {
-	if cmd.db != nil {
-		err := cmd.db.Store(e)
-
-		if err != nil {
-			log.Println(err)
-		}
-	}
-}
-
-func (cmd *Hunt) stream(e *event.Event) {
-	if cmd.net != nil {
-		err := cmd.net.Stream(e)
-
-		if err != nil {
-			log.Println(err)
-		}
-	}
 }
 
 func (cmd *Hunt) discard(cli *cli.Globals) {

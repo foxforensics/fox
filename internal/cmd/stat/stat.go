@@ -94,13 +94,15 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 		}
 
 		if h.Size == 0 {
-			title := h.String()
+			if cmd.Min == 0 {
+				title := h.String()
 
-			if cmd.block > 0 {
-				title = "[00000000] " + title
+				if cmd.block > 0 {
+					title = "[00000000] " + title
+				}
+
+				text.Print(text.AsGray(fmt.Sprintf("%.10fe %10dl %10db %s  %s", 0.0, 0, 0, t, title)))
 			}
-
-			text.Writeln(text.AsGray(fmt.Sprintf("%10dl %10db  %.10fe  %s  %s", 0, 0, 0.0, t, title)))
 
 			h.Discard()
 			continue
@@ -130,9 +132,9 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 				}
 
 				if cmd.block > 0 {
-					text.Writeln("%10dl %11s  %s  %s  %s %s", l, size, entropy, t, start, title)
+					text.Print("%s %10dl %11s %s  %s %s", entropy, l, size, t, start, title)
 				} else {
-					text.Writeln("%10dl %11s  %s  %s  %s", l, size, entropy, t, title)
+					text.Print("%s %10dl %11s %s  %s", entropy, l, size, t, title)
 				}
 			}
 
