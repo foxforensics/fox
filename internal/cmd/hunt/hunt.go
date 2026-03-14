@@ -181,12 +181,6 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	cli.NoConvert = true // forced
 
-	isPretty := !cli.NoPretty && !cmd.Json && !cmd.Jsonl
-
-	if isPretty {
-		text.Framed(cmd.rule.Title)
-	}
-
 	ch := cli.Load(cmd.Paths)
 	defer cli.Discard()
 
@@ -220,6 +214,12 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	var ctx = context.Background()
 	var sig = evaluator.ForRule(cmd.rule)
+
+	isPretty := !cli.NoPretty && !cmd.Json && !cmd.Jsonl
+
+	if isPretty {
+		text.Framed(cmd.rule.Title)
+	}
 
 	for e := range hunter.New(&hunter.Options{
 		Sort:     cmd.Sort,
