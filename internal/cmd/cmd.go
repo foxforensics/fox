@@ -135,6 +135,10 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.Threads = 1 // must be at least one
 	}
 
+	if cli.Verbose > 0 {
+		cli.NoPretty = true
+	}
+
 	if cli.NoPretty {
 		cli.NoSyntax = true
 		text.NoColor = true

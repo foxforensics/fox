@@ -184,7 +184,6 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	isPretty := !cli.NoPretty && !cmd.Json && !cmd.Jsonl
 
 	if isPretty {
-		text.Writeln(fmt.Sprintf("\n%s\n", text.Banner))
 		text.Framed(cmd.rule.Title)
 	}
 
@@ -264,7 +263,10 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if isPretty {
-		text.Pretty(text.AsGray(text.Separator()))
+		if n > 0 {
+			text.Pretty(text.AsGray(text.Separator()))
+		}
+
 		text.Pretty(fmt.Sprintf("found %s event(s)", text.AsBold(n)))
 	}
 
