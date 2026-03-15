@@ -13,14 +13,15 @@
 * ~~Done~~
 
 ## 5. Ideas
+* Add -j/-J to test
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
-* Add own foldable section for every mode
+* Add own foldable section for every command
   * shell example with image for output
 * Add different endpoints for test
   * https://github.com/woanware/lookuper
   * HaveIBeenHacked for mails
-* Add heatmap to hex mode
+* Add heatmap to hex command
   * Custom BgColor from red to yellow in 256 steps?
 * Add pager for output/search/filter like moor?
   * https://github.com/walles/moor

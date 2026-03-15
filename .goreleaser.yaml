@@ -8,11 +8,11 @@ before:
     - pandoc -s -t man assets/man/fox.md -o fox.1
     - pandoc -s -t man assets/man/fox-cat.md -o fox-cat.1
     - pandoc -s -t man assets/man/fox-hex.md -o fox-hex.1
-    - pandoc -s -t man assets/man/fox-text.md -o fox-text.1
+    - pandoc -s -t man assets/man/fox-str.md -o fox-str.1
     - pandoc -s -t man assets/man/fox-hash.md -o fox-hash.1
     - pandoc -s -t man assets/man/fox-stat.md -o fox-stat.1
     - pandoc -s -t man assets/man/fox-dump.md -o fox-dump.1
-    - pandoc -s -t man assets/man/fox-test.md -o fox-test.1
+    - pandoc -s -t man assets/man/fox-check.md -o fox-check.1
     - pandoc -s -t man assets/man/fox-hunt.md -o fox-hunt.1
     - pandoc -s -t man assets/man/fox-mcp.md -o fox-mcp.1
 
@@ -43,11 +43,11 @@ archives:
       - fox.1
       - fox-cat.1
       - fox-hex.1
-      - fox-text.1
+      - fox-str.1
       - fox-hash.1
       - fox-stat.1
       - fox-dump.1
-      - fox-test.1
+      - fox-check.1
       - fox-hunt.1
       - fox-mcp.1
       - README.md
@@ -114,8 +114,8 @@ nfpms:
         dst: /usr/share/man/man1/fox-hex.1
         file_info:
           mode: 0644
-      - src: ./fox-text.1
-        dst: /usr/share/man/man1/fox-text.1
+      - src: ./fox-str.1
+        dst: /usr/share/man/man1/fox-str.1
         file_info:
           mode: 0644
       - src: ./fox-hash.1
@@ -130,8 +130,8 @@ nfpms:
         dst: /usr/share/man/man1/fox-dump.1
         file_info:
           mode: 0644
-      - src: ./fox-test.1
-        dst: /usr/share/man/man1/fox-test.1
+      - src: ./fox-check.1
+        dst: /usr/share/man/man1/fox-check.1
         file_info:
           mode: 0644
       - src: ./fox-hunt.1
@@ -167,10 +167,10 @@ homebrew_casks:
       - fox.1
       - fox-cat.1
       - fox-hex.1
-      - fox-text.1
+      - fox-str.1
       - fox-hash.1
       - fox-stat.1
       - fox-dump.1
-      - fox-test.1
+      - fox-check.1
       - fox-hunt.1
       - fox-mcp.1

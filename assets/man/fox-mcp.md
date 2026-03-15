@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Starts as MCP server and listens until canceling. Once started, the server will be available under <_http://localhost:3001/mcp_>.
+Starts the MCP server and listens until canceling. Once started, the server will be available under <_http://localhost:3001/mcp_>.
 
 POSITIONAL ARGUMENTS
 ====================

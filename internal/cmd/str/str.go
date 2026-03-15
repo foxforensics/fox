@@ -1,4 +1,4 @@
-package text
+package str
 
 import (
 	"fmt"
@@ -13,9 +13,9 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Print file text contents.
+Show file string contents.
 
-fox text [FLAGS...] <PATHS...>
+fox str [FLAGS...] <PATHS...>
 
 Flags:
   -n, --min=LENGTH         Minimum string length (default: 3)
@@ -33,10 +33,10 @@ Format flags:
   -D, --decimal            Format addresses as decimal
 
 Examples:
-  $ fox text -w ioc.exe
+  $ fox str -w ioc.exe
 `)
 
-type Text struct {
+type Str struct {
 	Min   uint `short:"n" default:"3"`
 	Max   uint `short:"x" default:"256"`
 	Ascii bool `short:"a"`
@@ -55,7 +55,7 @@ type Text struct {
 	Paths []string `arg:"" optional:""`
 }
 
-func (cmd *Text) Validate() error {
+func (cmd *Str) Validate() error {
 	if cmd.Min > cmd.Max {
 		log.Fatalln("invalid range")
 	}
@@ -67,7 +67,7 @@ func (cmd *Text) Validate() error {
 	return nil
 }
 
-func (cmd *Text) AfterApply(app *kong.Kong, _ kong.Vars) error {
+func (cmd *Str) AfterApply(app *kong.Kong, _ kong.Vars) error {
 	if cmd.List {
 		for _, cls := range carver.Classes(3) {
 			fmt.Printf("%s\n", cls)
@@ -80,7 +80,7 @@ func (cmd *Text) AfterApply(app *kong.Kong, _ kong.Vars) error {
 	return nil
 }
 
-func (cmd *Text) Run(cli *cli.Globals) error {
+func (cmd *Str) Run(cli *cli.Globals) error {
 	if len(cmd.Paths)+len(cli.Paths) == 0 && !cmd.List {
 		return text.Usage(Usage)
 	}

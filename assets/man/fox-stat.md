@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file stats and entropy. If the **--sort** flag is used, the files will be processed single-threaded. This mode enforces the **--no-convert** flag.
+Show file stats and entropy. If the **--sort** flag is used, the files will be processed single-threaded. This command enforces the **--no-convert** flag.
 
 FLAGS
 =====
@@ -54,7 +54,7 @@ EXAMPLES
 
 fox stat -n0.8 ./**/*
 
-:   List high entropy files
+:   List only high entropy files
 
 BUGS
 ====

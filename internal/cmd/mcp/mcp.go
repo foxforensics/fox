@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -13,21 +12,21 @@ import (
 
 	ver "github.com/cuhsat/fox/v4/internal"
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
-	std "github.com/cuhsat/fox/v4/internal/pkg/text"
 
 	"github.com/cuhsat/fox/v4/internal/cmd/cat"
+	"github.com/cuhsat/fox/v4/internal/cmd/check"
 	"github.com/cuhsat/fox/v4/internal/cmd/dump"
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
 	"github.com/cuhsat/fox/v4/internal/cmd/stat"
-	"github.com/cuhsat/fox/v4/internal/cmd/test"
-	"github.com/cuhsat/fox/v4/internal/cmd/text"
+	"github.com/cuhsat/fox/v4/internal/cmd/str"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 var Usage = strings.TrimSpace(`
-Starts as MCP server.
+Start the MCP server.
 
 fox mcp [FLAGS...] [PORT]
 
@@ -35,7 +34,7 @@ Examples:
   $ fox mcp 8080
 `)
 
-type Mode interface {
+type Command interface {
 	Run(_ *cli.Globals) error
 }
 
@@ -69,9 +68,7 @@ func (cmd *Mcp) Run(cli *cli.Globals) error {
 	cmd.addDump(cli)
 	cmd.addHunt(cli)
 
-	if cli.Verbose > 0 {
-		log.Printf("mcp: started on port %d\n", cmd.Port)
-	}
+	fmt.Printf("🦊 MCP available under http://localhost:%d/mcp (CTRL+C to stop)\n", cmd.Port)
 
 	return server.NewStreamableHTTPServer(cmd.mcp).Start(fmt.Sprintf(":%d", cmd.Port))
 }
@@ -143,7 +140,7 @@ func (cmd *Mcp) addHex(cli *cli.Globals) {
 
 func (cmd *Mcp) addText(cli *cli.Globals) {
 	cmd.mcp.AddTool(mcp.NewTool("text", addGlobals(
-		mcp.WithDescription("Get file text contents"),
+		mcp.WithDescription("Get file string contents"),
 		mcp.WithReadOnlyHintAnnotation(true),
 		mcp.WithDestructiveHintAnnotation(false),
 		mcp.WithIdempotentHintAnnotation(true),
@@ -165,7 +162,7 @@ func (cmd *Mcp) addText(cli *cli.Globals) {
 			return mcp.NewToolResultError(err.Error()), nil
 		}
 
-		return execute(process(cli, &request), &text.Text{
+		return execute(process(cli, &request), &str.Str{
 			Min:     uint(request.GetInt("min", 3)),
 			Max:     uint(request.GetInt("max", 256)),
 			Ascii:   request.GetBool("ascii", false),
@@ -236,7 +233,7 @@ func (cmd *Mcp) addStat(cli *cli.Globals) {
 
 func (cmd *Mcp) addTest(cli *cli.Globals) {
 	cmd.mcp.AddTool(mcp.NewTool("test", addGlobals(
-		mcp.WithDescription("Test suspicious files using VirusTotal"),
+		mcp.WithDescription("Check suspicious files using VirusTotal"),
 		mcp.WithReadOnlyHintAnnotation(true),
 		mcp.WithDestructiveHintAnnotation(false),
 		mcp.WithIdempotentHintAnnotation(true),
@@ -245,7 +242,7 @@ func (cmd *Mcp) addTest(cli *cli.Globals) {
 		mcp.WithBoolean("url", mcp.Description("Files contain URLs")),
 		mcp.WithBoolean("ip", mcp.Description("Files contain IPs")),
 		mcp.WithString("key", mcp.Description("Use required VirusTotal API key"), mcp.Required()),
-		mcp.WithArray("paths", mcp.Description("Test files in paths"), mcp.Required()),
+		mcp.WithArray("paths", mcp.Description("Check files in paths"), mcp.Required()),
 	)...), func(_ context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 		key, err := request.RequireString("key")
 
@@ -259,7 +256,7 @@ func (cmd *Mcp) addTest(cli *cli.Globals) {
 			return mcp.NewToolResultError(err.Error()), nil
 		}
 
-		return execute(process(cli, &request), &test.Test{
+		return execute(process(cli, &request), &check.Check{
 			Domain: request.GetBool("domain", false),
 			Url:    request.GetBool("url", false),
 			Ip:     request.GetBool("Ip", false),
@@ -271,7 +268,7 @@ func (cmd *Mcp) addTest(cli *cli.Globals) {
 
 func (cmd *Mcp) addDump(cli *cli.Globals) {
 	cmd.mcp.AddTool(mcp.NewTool("dump", addGlobals(
-		mcp.WithDescription("Dump sensitive data"),
+		mcp.WithDescription("Dump Active Directory secrets"),
 		mcp.WithReadOnlyHintAnnotation(true),
 		mcp.WithDestructiveHintAnnotation(false),
 		mcp.WithIdempotentHintAnnotation(true),
@@ -370,12 +367,12 @@ func process(cli *cli.Globals, req *mcp.CallToolRequest) *cli.Globals {
 	return cli
 }
 
-func execute(cli *cli.Globals, mode Mode) *mcp.CallToolResult {
+func execute(cli *cli.Globals, cmd Command) *mcp.CallToolResult {
 	pipe := bytes.NewBuffer(nil)
 
-	std.Redirect(pipe)
+	text.Redirect(pipe)
 
-	if err := mode.Run(cli); err != nil {
+	if err := cmd.Run(cli); err != nil {
 		return mcp.NewToolResultError(err.Error())
 	}
 

@@ -1,4 +1,4 @@
-% FOX TEST(1) Version 4 | Fox Documentation
+% FOX CHECK(1) Version 4 | Fox Documentation
 
 NAME
 ====
@@ -8,12 +8,12 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **test** \[_flags_ ...] \[_paths_ ...]
+| **fox** **check** \[_flags_ ...] \[_paths_ ...]
 
 DESCRIPTION
 ===========
 
-Test suspicious files using VirusTotal. An API key is required for this. This mode enforces the **--no-convert** flag. This mode will return **3** as exit code, if any test returns at least one alerting result.
+Check suspicious files using VirusTotal. An API key is required for this. This command enforces the **--no-convert** flag.
 
 FLAGS
 =====
@@ -52,9 +52,9 @@ ENVIRONMENT
 EXAMPLES
 ========
 
-fox test ioc.exe
+fox check ioc.exe
 
-:   Test a suspicious file.
+:   Check a suspicious file hash.
 
 BUGS
 ====

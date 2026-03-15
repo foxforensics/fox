@@ -18,8 +18,8 @@ import (
 const (
 	Unknown    = "unknown"
 	Unrated    = "unrated"
-	Indecisive = "indecisive"
 	Clean      = "clean"
+	Indecisive = "indecisive"
 )
 
 // Verbose API responses
@@ -44,19 +44,19 @@ type Result struct {
 	Bad     int
 }
 
-func TestIp(ip, key string) (*Result, error) {
+func CheckIp(ip, key string) (*Result, error) {
 	return request(vt.URL("ip_addresses/%s", ip), key)
 }
 
-func TestUrl(url, key string) (*Result, error) {
+func CheckUrl(url, key string) (*Result, error) {
 	return request(vt.URL("urls/%s", url), key)
 }
 
-func TestDomain(url, key string) (*Result, error) {
+func CheckDomain(url, key string) (*Result, error) {
 	return request(vt.URL("domains/%s", url), key)
 }
 
-func TestFileHash(sum, key string) (*Result, error) {
+func CheckFileHash(sum, key string) (*Result, error) {
 	return request(vt.URL("files/%s", sum), key)
 }
 

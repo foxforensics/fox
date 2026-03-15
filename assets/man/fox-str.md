@@ -1,4 +1,4 @@
-% FOX TEXT(1) Version 4 | Fox Documentation
+% FOX STR(1) Version 4 | Fox Documentation
 
 NAME
 ====
@@ -8,12 +8,12 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **text** \[_flags_ ...] \[_paths_ ...]
+| **fox** **str** \[_flags_ ...] \[_paths_ ...]
 
 DESCRIPTION
 ===========
 
-Show file text contents by carving the file(s). This mode enforces the **--no-convert** flag.
+Show file string contents by carving the file(s). This command enforces the **--no-convert** flag.
 
 FLAGS
 =====
@@ -68,9 +68,9 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox text -w ioc.exe
+fox str -w ioc.exe
 
-:   Show strings in binary.
+:   Show all strings in a binary.
 
 BUGS
 ====

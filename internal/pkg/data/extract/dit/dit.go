@@ -99,7 +99,7 @@ func (rec *Record) String() string {
 	}
 
 	return fmt.Sprintf("%s:%d:%s:%s:::",
-		text.AsBold(rec.Username),
+		rec.Username,
 		rec.Rid,
 		lm,
 		nt,

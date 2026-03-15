@@ -30,8 +30,8 @@ Fox is a CLI tool, build to support the examination process of file based forens
 * [x] Integral *Chain-of-Custody* receipt generation
 * [x] Many popular archive and compression formats
 * [x] Many popular cryptographic, image, fuzzy and fast hashes
-* [x] With [man pages](assets/man) for every mode
-* [x] Special [Hunt](assets/man/fox-hunt.md) mode
+* [x] With [man pages](assets/man) for every command
+* [x] Special [Hunt](assets/man/fox-hunt.md) command
   * [x] Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * [x] Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * [x] Built-in translation of over 51600 event ids
@@ -68,29 +68,29 @@ Show MBR in canonical hex:
 fox hex -hc512 disk.dd
 ```
 
-Show strings in binary:
+Show all strings in a binary:
 ```console
-fox text -w ioc.exe
+fox str -w ioc.exe
 ```
 
-Hash archive contents:
+Hash archive contents as MD5:
 ```console
 fox hash -Amd5 files.7z
 ```
 
-List high entropy files:
+List only high entropy files:
 ```console
 fox stat -n0.8 ./**/*
 ```
 
-Dump NTLM hashes:
+Dump NTLM hashes from database:
 ```console
 fox dump system ntds.dit
 ```
 
-Test a suspicious file:
+Check a suspicious file hash:
 ```console
-fox test ioc.exe
+fox check ioc.exe
 ```
 
 Hunt down suspicious events:

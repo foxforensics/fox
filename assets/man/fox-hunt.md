@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Hunt suspicious activities by carving events from file(s). This mode enforces the **--no-convert** flag. If no path is specified, a built-in list of known locations will be processed.
+Hunt suspicious activities by carving events from file(s). This command enforces the **--no-convert** flag. If no path is specified, a built-in list of known locations will be processed.
 
 FLAGS
 =====

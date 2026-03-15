@@ -15,7 +15,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Dump sensitive data.
+Dump Active Directory secrets.
 
 fox dump [FLAGS...] SYSTEM [NTDS]
 
@@ -78,7 +78,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Bootkey {
-		text.Print("%s %x", text.AsBold("Bootkey"), key)
+		text.Print("Bootkey %x", key)
 		return nil
 	}
 

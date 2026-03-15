@@ -34,6 +34,8 @@ var (
 	bold = color.New(color.Bold)
 )
 
+var cef = regexp.MustCompile(`[^|]+$`)
+
 func ColorizeStringAs(s, lexer string) string {
 	return string(ColorizeAs([]byte(s), lexer, Style))
 }
@@ -81,20 +83,15 @@ func Colorize(b []byte, hint string, style string) []byte {
 }
 
 func MarkMatch(s string, re *regexp.Regexp) string {
-	if NoColor || re == nil {
-		return s // no regex, no match
+	if !NoColor && re != nil {
+		s = marker.Mark(s, marker.MatchRegexp(re), bold)
 	}
-
-	return marker.Mark(s, marker.MatchRegexp(re), bold)
+	return s
 }
 
 func MarkEvent(s string) string {
-	if NoColor {
-		return s
+	if !NoColor {
+		s = marker.Mark(s, marker.MatchRegexp(cef), gray)
 	}
-
-	return new(marker.MarkBuilder).SetString(s).
-		Mark(marker.MatchRegexp(regexp.MustCompile(`^\S{3} \d{2} \d{4} \d{2}:\d{2}:\d{2}.\d{3}`)), bold).
-		Mark(marker.MatchRegexp(regexp.MustCompile(`[^|]+$`)), gray).
-		Build()
+	return s
 }

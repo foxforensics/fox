@@ -19,10 +19,10 @@ import (
 	"github.com/alecthomas/kong"
 
 	ver "github.com/cuhsat/fox/v4/internal"
-	std "github.com/cuhsat/fox/v4/internal/pkg/text"
 
 	"github.com/cuhsat/fox/v4/internal/cmd"
 	"github.com/cuhsat/fox/v4/internal/cmd/cat"
+	"github.com/cuhsat/fox/v4/internal/cmd/check"
 	"github.com/cuhsat/fox/v4/internal/cmd/dump"
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
 	"github.com/cuhsat/fox/v4/internal/cmd/help"
@@ -30,30 +30,30 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
 	"github.com/cuhsat/fox/v4/internal/cmd/mcp"
 	"github.com/cuhsat/fox/v4/internal/cmd/stat"
-	"github.com/cuhsat/fox/v4/internal/cmd/test"
-	"github.com/cuhsat/fox/v4/internal/cmd/text"
+	"github.com/cuhsat/fox/v4/internal/cmd/str"
+	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
 var Usage = strings.TrimSpace(`
 The Forensic Examiners Swiss Army Knife (%s)
 
 Usage:
-  fox [MODE] [FLAGS...] <PATHS...>
+  fox [COMMAND] [FLAGS...] <PATHS...>
 
-Modes:
-  (c) cat     Show file contents (default mode)
-  (x) hex     Show file contents in hex format
-  (t) text    Show file contained strings
-  (a) hash    Show file hashes and checksums
-  (s) stat    Show file stats and entropy
-  (d) dump    Dump sensitive data
-  (e) test    Test suspicious files
-  (u) hunt    Hunt suspicious events
-  (m) mcp     Starts as MCP server
+Commands:
+  [c] cat                  Show file contents (default)
+  [x] hex                  Show file contents in hex format
+  [s] str                  Show file contained strings
+  [h] hash                 Show file hashes and checksums
+  [l] stat                 Show file stats and entropy
+  [d] dump                 Dump Active Directory secrets
+  [v] check                Check suspicious files
+  [e] hunt                 Hunt suspicious events
+  [m] mcp                  Start the MCP server
 
 File flags:
   -i, --in=FILE            Read paths from file
-  -o, --out=FILE           Print output to file (receipted)
+  -o, --out=FILE           Write output to file (receipted)
 
 Limit flags:
   -h, --head               Limit head of file by...
@@ -80,7 +80,7 @@ Disable flags:
       --no-extract         Don't extract automatically
       --no-convert         Don't convert automatically
       --no-receipt         Don't write the receipt
-      --no-warnings        Don't show any warnings
+      --no-warnings        Don't print any warnings
 
 Standard flags:
   -d, --dry-run            Print only the found files
@@ -94,28 +94,28 @@ Positional arguments:
 Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
-Example: List high entropy files
+Example: List only high entropy files
   $ fox stat -n0.8 ./**/*
 
 Example: Hunt down suspicious events
   $ fox hunt -u *.dd
 
 For more information please visit: https://foxhunt.dev
-Use "fox help <MODE>" to see help on a specific mode.
+Use "fox help <COMMAND>" to see help on a sub command.
 `)
 
 type fox struct {
-	// command modes
-	Cat  cat.Cat   `cmd:"" aliases:"c,less,more" default:"withargs"`
-	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hexdump"`
-	Text text.Text `cmd:"" aliases:"t,strings"`
-	Hash hash.Hash `cmd:"" aliases:"a,sum"`
-	Stat stat.Stat `cmd:"" aliases:"s,ls,wc"`
-	Dump dump.Dump `cmd:"" aliases:"d"`
-	Test test.Test `cmd:"" aliases:"e,vt,check"`
-	Hunt hunt.Hunt `cmd:"" aliases:"u"`
-	Help help.Help `cmd:"" aliases:"h" hidden:""`
-	Mcp  mcp.Mcp   `cmd:"" aliases:"m,serve,listen"`
+	// commands
+	Cat   cat.Cat     `cmd:"" aliases:"c,less,more" default:"withargs"`
+	Hex   hex.Hex     `cmd:"" aliases:"x,xxd,hexdump"`
+	Str   str.Str     `cmd:"" aliases:"s,strings"`
+	Hash  hash.Hash   `cmd:"" aliases:"h"`
+	Stat  stat.Stat   `cmd:"" aliases:"l,ls,wc"`
+	Dump  dump.Dump   `cmd:"" aliases:"d"`
+	Check check.Check `cmd:"" aliases:"v,vt"`
+	Hunt  hunt.Hunt   `cmd:"" aliases:"e,carve"`
+	Mcp   mcp.Mcp     `cmd:"" aliases:"m,listen"`
+	Help  help.Help   `cmd:"" hidden:""`
 
 	// support flags
 	Version bool
@@ -143,7 +143,7 @@ func main() {
 	case len(ctx.Args) == 0, ctx.Error != nil:
 		fallthrough // show usage
 	case cli.Globals.Help, ctx.Command() == "help":
-		_ = std.Usage(fmt.Sprintf(Usage, ver.Version))
+		_ = text.Usage(fmt.Sprintf(Usage, ver.Version))
 	case cli.Version:
 		fmt.Printf("fox %s\n", ver.Version)
 	default:
@@ -153,13 +153,13 @@ func main() {
 
 		// redirect output
 		if len(cli.File) > 0 {
-			std.Init(os.OpenFile(cli.File, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
+			text.Init(os.OpenFile(cli.File, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
 		} else if cli.Quiet {
-			std.Init(os.Open(os.DevNull))
+			text.Init(os.Open(os.DevNull))
 			log.SetOutput(io.Discard)
 		}
 
-		defer std.Close(cli.File, !cli.NoReceipt)
+		defer text.Close(cli.File, !cli.NoReceipt)
 
 		ctx.FatalIfErrorf(ctx.Run(&cli.Globals))
 	}

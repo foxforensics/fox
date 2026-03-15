@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Dump sensitive data from files. This mode enforces the **--no-convert** flag.
+Dump secrets from Active Directory databases. This command enforces the **--no-convert** flag.
 
 FLAGS
 =====
@@ -54,7 +54,7 @@ EXAMPLES
 
 fox dump system ntds.dit
 
-:   Dump NTLM hashes
+:   Dump NTLM hashes from database
 
 BUGS
 ====

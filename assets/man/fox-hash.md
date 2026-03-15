@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified. This mode enforces the **--no-convert** flag.
+Show file hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified. This command enforces the **--no-convert** flag.
 
 FLAGS
 =====
@@ -83,7 +83,7 @@ EXAMPLES
 
 fox hash -Amd5 files.7z
 
-:   Hash archive contents.
+:   Hash archive contents as MD5.
 
 BUGS
 ====

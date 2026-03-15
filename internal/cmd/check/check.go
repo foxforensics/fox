@@ -1,4 +1,4 @@
-package test
+package check
 
 import (
 	"encoding/base64"
@@ -19,9 +19,9 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Test suspicious files.
+Check suspicious files.
 
-fox test [FLAGS...] PATHS...
+fox check [FLAGS...] PATHS...
 
 Flags:
   -D, --domain             File(s) contains domains
@@ -32,7 +32,7 @@ Required:
   -k, --key=APIKEY         VirusTotal API key
 
 Examples:
-  $ fox test ioc.exe
+  $ fox check ioc.exe
 `)
 
 const ExitAlert = 3
@@ -43,7 +43,7 @@ const (
 	Key2 = "44201ef4cbffe7edd1a7d2279a1fc3019700c3620da45d0542014b8a7be0fd7b53125c3e474c6db7360f4f538d56bfe15bd416b0d2a77c02a37d0ffc5015694b41c9f117"
 )
 
-type Test struct {
+type Check struct {
 	Domain bool `short:"D" xor:"domain,url,ip"`
 	Url    bool `short:"U" xor:"domain,url,ip"`
 	Ip     bool `short:"I" xor:"domain,url,ip"`
@@ -59,7 +59,7 @@ type Test struct {
 	Paths []string `arg:"" optional:""`
 }
 
-func (cmd *Test) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+func (cmd *Check) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	switch {
 	case len(cmd.One) > 0:
 		v, _ := hex.DecodeString(Key1)
@@ -73,7 +73,7 @@ func (cmd *Test) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	return nil
 }
 
-func (cmd *Test) Run(cli *cli.Globals) error {
+func (cmd *Check) Run(cli *cli.Globals) error {
 	if len(cmd.Paths) == 0 {
 		return text.Usage(Usage)
 	}
@@ -91,25 +91,36 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cmd.Domain && !cmd.Url && !cmd.Ip {
-			if !cli.NoPretty {
-				text.Title(h.String())
+			res, err := vt.CheckFileHash(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
+
+			if err != nil {
+				log.Println(err)
 			}
 
-			output(vt.TestFileHash(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key))
+			if res != nil {
+				text.Print(format(h.String(), res.Label))
+			}
 		} else {
 			for _, v := range strings.Split(string(h.Bytes()), "\n") {
 				if len(strings.TrimSpace(v)) > 0 {
-					if !cli.NoPretty {
-						text.Title(v)
-					}
+					var res *vt.Result
+					var err error
 
 					switch {
 					case cmd.Domain:
-						output(vt.TestDomain(v, cmd.Key))
+						res, err = vt.CheckDomain(v, cmd.Key)
 					case cmd.Url:
-						output(vt.TestUrl(base64.StdEncoding.EncodeToString([]byte(v)), cmd.Key))
+						res, err = vt.CheckUrl(base64.StdEncoding.EncodeToString([]byte(v)), cmd.Key)
 					case cmd.Ip:
-						output(vt.TestIp(v, cmd.Key))
+						res, err = vt.CheckIp(v, cmd.Key)
+					}
+
+					if err != nil {
+						log.Println(err)
+					}
+
+					if res != nil {
+						text.Print(format(h.String(), res.Label))
 					}
 				}
 			}
@@ -121,18 +132,17 @@ func (cmd *Test) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func output(res *vt.Result, err error) {
-	if err != nil {
-		log.Println(err)
-	}
-
-	if res != nil {
-		verdict := fmt.Sprintf("%s (%d/%d)", res.Label, res.Bad, res.All)
-
-		if res.Alert {
-			verdict = text.AsWarn(verdict)
-		}
-
-		text.Print(verdict)
+func format(s, l string) string {
+	switch l {
+	case vt.Unknown:
+		return fmt.Sprintf("%s:%s", s, l)
+	case vt.Unrated:
+		return fmt.Sprintf("%s:%s", s, text.AsGray(l))
+	case vt.Clean:
+		return fmt.Sprintf("%s:%s", s, text.AsGray(l))
+	case vt.Indecisive:
+		return fmt.Sprintf("%s:%s", s, text.AsWarn(l))
+	default:
+		return fmt.Sprintf("%s:%s", s, text.AsWarn(l))
 	}
 }

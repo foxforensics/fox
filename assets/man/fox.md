@@ -8,49 +8,53 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** \[_mode_] \[_flags_ ...] \[_paths_ ...]
+| **fox** \[_command_] \[_flags_ ...] \[_paths_ ...]
 
 DESCRIPTION
 ===========
 
 Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. All files will only be processed read-only. A Chain-of-Custody receipt is generated upon every output.
 
-MODES
-=====
+COMMANDS
+========
 
-If no mode is passed, mode `cat` will be run by default.
+If no command is passed, then `cat` will be used by default.
 
-cat
+**cat**
 
-:   Show file contents (default mode).
+:   Show file contents (default).
 
-hex
+**hex**
 
 :   Show file contents in hex format.
 
-text
+**str**
 
 :   Show file contained strings.
 
-hash
+**hash**
 
 :   Show file hashes and checksums.
 
-stat
+**stat**
 
 :   Show file stats and entropy.
 
-dump
+**dump**
 
-:   Dump sensitive data.
+:   Dump Active Directory secrets.
 
-test
+**check**
 
-:   Test suspicious files.
+:   Check suspicious files.
 
-hunt
+**hunt**
 
 :   Hunt suspicious events.
+
+**mcp**
+
+:   Start the MCP server.
 
 FLAGS
 =====
@@ -144,7 +148,7 @@ Disable Flags
 
 **--no-warnings**
 
-:   Don't show any warnings.
+:   Don't print any warnings.
 
 Standard Flags
 --------------
@@ -188,21 +192,21 @@ fox hex -hc512 disk.dd
 
 :   Show MBR in canonical hex.
 
-fox text -w ioc.exe
+fox str -w ioc.exe
 
-:   Show strings in binary.
+:   Show all strings in a binary.
 
 fox hash -Amd5 files.7z
 
-:   Hash archive contents.
+:   Hash archive contents as MD5.
 
 fox stat -n0.8 ./**/*
 
-:   List high entropy files.
+:   List only high entropy files.
 
-fox test ioc.exe
+fox check ioc.exe
 
-:   Test a suspicious file.
+:   Check a suspicious file hash.
 
 fox hunt -u *.dd
 
