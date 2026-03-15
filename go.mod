@@ -61,7 +61,6 @@ require (
 	github.com/zeebo/xxh3 v1.1.0
 	go.dw1.io/rapidhash v0.3.0
 	go.solidsystem.no/fletcher4 v0.2.0
-	golang.org/x/term v0.41.0
 	golang.org/x/text v0.35.0
 	modernc.org/sqlite v1.46.1
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb

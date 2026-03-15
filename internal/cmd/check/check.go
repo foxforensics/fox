@@ -35,8 +35,6 @@ Examples:
   $ fox check ioc.exe
 `)
 
-const ExitAlert = 3
-
 // Encrypted backup keys for emergency use
 const (
 	Key1 = "47ba3c085f105fff4fa186ce769f8a35f98bc3010fd8e25c9a90c1bf70696120b9fe1a5c6328bf0deae4eebdcc9f5df156a27efd923eaad648f3e8ab26fcc8f6753233b8"
