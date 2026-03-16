@@ -15,7 +15,10 @@ import (
 const api3 = "https://haveibeenpwned.com/api/v3"
 
 type breach struct {
-	Name string `json:"Name,omitempty"`
+	Title        string `json:"Title,omitempty"`
+	BreachDate   string `json:"BreachDate,omitempty"`
+	IsVerified   bool   `json:"IsVerified,omitempty"`
+	IsFabricated bool   `json:"IsFabricated,omitempty"`
 }
 
 func CheckMail(mail, key string) (*api.Result, error) {
@@ -23,19 +26,24 @@ func CheckMail(mail, key string) (*api.Result, error) {
 }
 
 func parseVerdict(br []breach, res *api.Result) {
-	res.Stats.All = len(br)
-	res.Stats.Bad = len(br)
+	for _, v := range br {
+		res.Stats.All += 1
 
-	if len(br) == 0 {
-		res.Verdict = api.Clean
+		if v.IsVerified && !v.IsFabricated {
+			res.Stats.Bad += 1
+		}
+	}
+
+	if res.Stats.Bad > 0 {
+		res.Verdict = api.Breached
 	} else {
-		res.Verdict = api.Compromised
+		res.Verdict = api.Clean
 	}
 }
 
 func parseDetails(br []breach, res *api.Result) {
 	for _, v := range br {
-		res.Details[v.Name] = api.Compromised
+		res.Details[v.Title] = v.BreachDate
 	}
 }
 

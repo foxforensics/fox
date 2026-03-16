@@ -5,11 +5,11 @@ import (
 )
 
 const (
-	Clean       = "clean"
-	Unknown     = "unknown"
-	Unrated     = "unrated"
-	Suspicious  = "suspicious"
-	Compromised = "compromised"
+	Clean      = "clean"
+	Unknown    = "unknown"
+	Unrated    = "unrated"
+	Breached   = "breached"
+	Suspicious = "suspicious"
 )
 
 type Result struct {
