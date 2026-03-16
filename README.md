@@ -21,7 +21,8 @@ Fox is a CLI tool, build to support the examination process of file based forens
 * [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * [x] Parse Windows shortcut and prefetch files
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
-* [x] Check IPs, URLs, Domains and files via [VirusTotal API](https://www.virustotal.com/)
+* [x] Check IPs, URLs, domains and files via [VirusTotal API](https://www.virustotal.com/)
+* [x] Check accounts for breaches via [Have I Been Pwned API](https://haveibeenpwned.com/)
 * [x] Extract NTLM hashes from [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) databases
 * [x] Integral full [MCP](https://modelcontextprotocol.io/docs/getting-started/intro) streaming server for AI agents
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
