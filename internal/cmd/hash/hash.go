@@ -54,7 +54,7 @@ Perceptual hashes:
 Similarity hashes:
   IMPFUZZY, IMPHASH, IMPHASH0, SSDEEP, TLSH
 
-Windows specific:
+Windows algorithms:
   LM, NT, PE Checksum
 
 Checksums:

@@ -40,16 +40,20 @@ The Forensic Examiners Swiss Army Knife (%s)
 Usage:
   fox [COMMAND] [FLAGS...] <PATHS...>
 
-Commands:
-  [c] cat                  Show file contents (default)
-  [x] hex                  Show file contents in hex format
-  [s] str                  Show file contained strings
-  [h] hash                 Show file hashes and checksums
-  [l] stat                 Show file stats and entropy
-  [d] dump                 Dump Active Directory secrets
-  [v] check                Check suspicious files
-  [e] hunt                 Hunt suspicious events
-  [m] mcp                  Start the MCP server
+Basic commands:
+   c, cat                  Show file contents (default)
+   x, hex                  Show file contents in hex format
+   s, str                  Show file contained strings
+   l, stat                 Show file stats and entropy
+   h, hash                 Show file hashes and checksums
+
+Advanced commands:
+   v, check                Check files, domains, mails, URLs, IPs
+   d, dump                 Dump Active Directory secrets
+   e, hunt                 Hunt suspicious events
+
+Server commands:
+   m, mcp                  Start the MCP server (blocking)
 
 File flags:
   -i, --in=FILE            Read paths from file
@@ -105,17 +109,23 @@ Use "fox help <COMMAND>" to see help on a sub command.
 `)
 
 type fox struct {
-	// commands
-	Cat   cat.Cat     `cmd:"" aliases:"c,less,more" default:"withargs"`
-	Hex   hex.Hex     `cmd:"" aliases:"x,xxd,hexdump"`
-	Str   str.Str     `cmd:"" aliases:"s,strings"`
-	Hash  hash.Hash   `cmd:"" aliases:"h"`
-	Stat  stat.Stat   `cmd:"" aliases:"l,ls,wc"`
-	Dump  dump.Dump   `cmd:"" aliases:"d"`
+	// basic commands
+	Cat  cat.Cat   `cmd:"" aliases:"c,less,more" default:"withargs"`
+	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hexdump"`
+	Str  str.Str   `cmd:"" aliases:"s,strings"`
+	Stat stat.Stat `cmd:"" aliases:"l,ls,wc,dir"`
+	Hash hash.Hash `cmd:"" aliases:"h"`
+
+	// advanced commands
 	Check check.Check `cmd:"" aliases:"v,vt"`
+	Dump  dump.Dump   `cmd:"" aliases:"d"`
 	Hunt  hunt.Hunt   `cmd:"" aliases:"e,carve"`
-	Mcp   mcp.Mcp     `cmd:"" aliases:"m,listen"`
-	Help  help.Help   `cmd:"" hidden:""`
+
+	// server commands
+	Mcp mcp.Mcp `cmd:"" aliases:"m,listen"`
+
+	// hidden commands
+	Help help.Help `cmd:"" hidden:""`
 
 	// support flags
 	Version bool

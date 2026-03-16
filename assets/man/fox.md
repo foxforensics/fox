@@ -13,48 +13,59 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. All files will only be processed read-only. A Chain-of-Custody receipt is generated upon every output.
+Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. As with any Swiss Army knife, there are many specific power tools that offer more in-depth functionality, but sometimes all you need is a simple screwdriver.
+
+All files will only be processed read-only. A Chain-of-Custody receipt is generated upon every file output.
 
 COMMANDS
 ========
 
 If no command is passed, then `cat` will be used by default.
 
-**cat**
+Basic Commands
+--------------
+
+**c, cat**
 
 :   Show file contents (default).
 
-**hex**
+**x, hex**
 
 :   Show file contents in hex format.
 
-**str**
+**s, str**
 
 :   Show file contained strings.
 
-**hash**
-
-:   Show file hashes and checksums.
-
-**stat**
+**l, stat**
 
 :   Show file stats and entropy.
 
-**dump**
+**h, hash**
+
+:   Show file hashes and checksums.
+
+Advanced Commands
+-----------------
+
+**v, check**
+
+:   Check files, domains, mails, URLs and IPs.
+
+**d, dump**
 
 :   Dump Active Directory secrets.
 
-**check**
-
-:   Check suspicious files.
-
-**hunt**
+**e, hunt**
 
 :   Hunt suspicious events.
 
-**mcp**
+Server Commands
+---------------
 
-:   Start the MCP server.
+**m, mcp**
+
+:   Start the MCP server (blocking).
 
 FLAGS
 =====
@@ -192,25 +203,33 @@ fox hex -hc512 disk.dd
 
 :   Show MBR in canonical hex.
 
-fox str -w ioc.exe
+fox str -w sample.exe
 
 :   Show all strings in a binary.
-
-fox hash -Amd5 files.7z
-
-:   Hash archive contents as MD5.
 
 fox stat -n0.8 ./**/*
 
 :   List only high entropy files.
 
-fox check ioc.exe
+fox hash -Amd5 files.7z
 
-:   Check a suspicious file hash.
+:   Hash archive contents as MD5.
+
+fox check sample.exe
+
+:   Check a suspicious file by hash.
+
+fox dump system ntds.dit
+
+:   Dump users and password hashes.
 
 fox hunt -u *.dd
 
 :   Hunt down suspicious events.
+
+fox mcp 8080
+
+:   Start a local MCP server.
 
 BUGS
 ====

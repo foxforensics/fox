@@ -23,8 +23,8 @@ var usage = map[string]string{
 	"str":   str.Usage,
 	"hash":  hash.Usage,
 	"stat":  stat.Usage,
-	"dump":  dump.Usage,
 	"check": check.Usage,
+	"dump":  dump.Usage,
 	"hunt":  hunt.Usage,
 	"mcp":   mcp.Usage,
 }

@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Starts the MCP server and listens until canceling. Once started, the server will be available under <_http://localhost:3001/mcp_>.
+Starts the MCP server and listens until canceling. Once started, the server will be available under <_http://localhost:3001/mcp_>. Use **CTRL+C** to shutdown the server.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -25,7 +25,7 @@ EXAMPLES
 
 fox mcp 8080
 
-:   Init the MCP server
+:   Start a local MCP server.
 
 BUGS
 ====

@@ -68,7 +68,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox str -w ioc.exe
+fox str -w sample.exe
 
 :   Show all strings in a binary.
 

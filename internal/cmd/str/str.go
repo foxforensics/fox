@@ -33,7 +33,7 @@ Format flags:
   -D, --decimal            Format addresses as decimal
 
 Examples:
-  $ fox str -w ioc.exe
+  $ fox str -w sample.exe
 `)
 
 type Str struct {

@@ -108,13 +108,11 @@ func (rec *Record) String() string {
 
 func (rec *Record) ToJSON() string {
 	b, _ := json.MarshalIndent(rec, "", "  ")
-
 	return string(b)
 }
 
 func (rec *Record) ToJSONL() string {
 	b, _ := json.Marshal(rec)
-
 	return string(b)
 }
 

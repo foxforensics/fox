@@ -9,8 +9,8 @@
   <img src="assets/img/hunt.png" width="800" alt="Hunt"/>
 </div>
 
-## Synopsis
-Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. All files will only be processed read-only. A Chain-of-Custody receipt is generated upon every output.
+## Abstract
+Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. As with any Swiss Army knife, there are many specific power tools that offer more in-depth functionality, but sometimes all you need is a simple screwdriver.
 
 ## Features
 * [x] Restricted read-only access
@@ -54,7 +54,7 @@ There are also standalone binaries available:
 |:-------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |  Linux  | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.tar.gz) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_arm64.tar.gz)   | [apk](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.apk) \| [deb](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.deb) \| [pkg](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.pkg.tar.zst) \| [rpm](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.rpm) |
 |  macOs  | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_darwin_amd64.tar.gz) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_darwin_arm64.tar.gz) | `brew install cuhsat/fox/fox`                                                                                                                                                                                                                                                                                                                            |
-| Windows | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_windows_amd64.zip) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_windows_arm64.zip)     | Binaries are Portable Executables                                                                                                                                                                                                                                                                                                                        |
+| Windows | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_windows_amd64.zip) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_windows_arm64.zip)     | Binaries are portable executables                                                                                                                                                                                                                                                                                                                        |
 
 ## Examples
 
@@ -70,12 +70,7 @@ fox hex -hc512 disk.dd
 
 Show all strings in a binary:
 ```console
-fox str -w ioc.exe
-```
-
-Hash archive contents as MD5:
-```console
-fox hash -Amd5 files.7z
+fox str -w sample.exe
 ```
 
 List only high entropy files:
@@ -83,19 +78,29 @@ List only high entropy files:
 fox stat -n0.8 ./**/*
 ```
 
+Hash archive contents as MD5:
+```console
+fox hash -Amd5 files.7z
+```
+
+Check a suspicious file by hash:
+```console
+fox check sample.exe
+```
+
 Dump NTLM hashes from database:
 ```console
 fox dump system ntds.dit
 ```
 
-Check a suspicious file hash:
-```console
-fox check ioc.exe
-```
-
 Hunt down suspicious events:
 ```console
 fox hunt -u *.dd
+```
+
+Run as MCP server:
+```console
+fox mcp 8080
 ```
 
 ## Supports
@@ -120,7 +125,7 @@ Perceptual Hashes
 Similarity Hashes
 > ImpFuzzy, ImpHash, ImpHash0, SSDeep, TLSH
 
-Windows Specific
+Windows Algorithms
 > LM, NT, PE Checksum
 
 Checksums

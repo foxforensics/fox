@@ -54,7 +54,7 @@ EXAMPLES
 
 fox stat -n0.8 ./**/*
 
-:   List only high entropy files
+:   List only high entropy files.
 
 BUGS
 ====

@@ -4,7 +4,11 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"log"
+	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 
 	"github.com/alecthomas/kong"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -26,7 +30,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Start the MCP server.
+Start the MCP server (blocking).
 
 fox mcp [FLAGS...] [PORT]
 
@@ -54,6 +58,8 @@ func (cmd *Mcp) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Mcp) Run(cli *cli.Globals) error {
+	exit := make(chan os.Signal, 1)
+
 	// prepare cli
 	cli.NoPretty = true
 	cli.NoStrict = true
@@ -61,16 +67,32 @@ func (cmd *Mcp) Run(cli *cli.Globals) error {
 	// add tools
 	cmd.addCat(cli)
 	cmd.addHex(cli)
-	cmd.addText(cli)
-	cmd.addHash(cli)
+	cmd.addStr(cli)
 	cmd.addStat(cli)
-	cmd.addTest(cli)
+	cmd.addHash(cli)
+	cmd.addCheck(cli)
 	cmd.addDump(cli)
 	cmd.addHunt(cli)
 
-	fmt.Printf("🦊 MCP available under http://localhost:%d/mcp (CTRL+C to stop)\n", cmd.Port)
+	signal.Notify(exit, syscall.SIGINT, syscall.SIGTERM)
 
-	return server.NewStreamableHTTPServer(cmd.mcp).Start(fmt.Sprintf(":%d", cmd.Port))
+	srv := server.NewStreamableHTTPServer(cmd.mcp)
+
+	go func(port uint16) {
+		err := srv.Start(fmt.Sprintf(":%d", port))
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}(cmd.Port)
+
+	log.Printf("mcp: started http://localhost:%d/mcp (CTRL+C to shutdown)\n", cmd.Port)
+
+	<-exit
+
+	log.Println("mcp: stopped")
+
+	return srv.Shutdown(context.Background())
 }
 
 func (cmd *Mcp) addCat(cli *cli.Globals) {
@@ -138,7 +160,7 @@ func (cmd *Mcp) addHex(cli *cli.Globals) {
 	})
 }
 
-func (cmd *Mcp) addText(cli *cli.Globals) {
+func (cmd *Mcp) addStr(cli *cli.Globals) {
 	cmd.mcp.AddTool(mcp.NewTool("text", addGlobals(
 		mcp.WithDescription("Get file string contents"),
 		mcp.WithReadOnlyHintAnnotation(true),
@@ -177,31 +199,6 @@ func (cmd *Mcp) addText(cli *cli.Globals) {
 	})
 }
 
-func (cmd *Mcp) addHash(cli *cli.Globals) {
-	cmd.mcp.AddTool(mcp.NewTool("hash", addGlobals(
-		mcp.WithDescription("Get file hashes and checksums"),
-		mcp.WithReadOnlyHintAnnotation(true),
-		mcp.WithDestructiveHintAnnotation(false),
-		mcp.WithIdempotentHintAnnotation(true),
-		mcp.WithOpenWorldHintAnnotation(false),
-		mcp.WithString("algo", mcp.Description("Use algorithms")),
-		mcp.WithBoolean("all", mcp.Description("Use all algorithms")),
-		mcp.WithArray("paths", mcp.Description("Hash files in paths"), mcp.Required()),
-	)...), func(_ context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		paths, err := request.RequireStringSlice("paths")
-
-		if err != nil {
-			return mcp.NewToolResultError(err.Error()), nil
-		}
-
-		return execute(process(cli, &request), &hash.Hash{
-			Algo:  request.GetStringSlice("algo", []string{types.SHA256}),
-			All:   request.GetBool("all", false),
-			Paths: paths,
-		}), nil
-	})
-}
-
 func (cmd *Mcp) addStat(cli *cli.Globals) {
 	cmd.mcp.AddTool(mcp.NewTool("stat", addGlobals(
 		mcp.WithDescription("Get file stats and entropy"),
@@ -231,7 +228,32 @@ func (cmd *Mcp) addStat(cli *cli.Globals) {
 	})
 }
 
-func (cmd *Mcp) addTest(cli *cli.Globals) {
+func (cmd *Mcp) addHash(cli *cli.Globals) {
+	cmd.mcp.AddTool(mcp.NewTool("hash", addGlobals(
+		mcp.WithDescription("Get file hashes and checksums"),
+		mcp.WithReadOnlyHintAnnotation(true),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithIdempotentHintAnnotation(true),
+		mcp.WithOpenWorldHintAnnotation(false),
+		mcp.WithString("algo", mcp.Description("Use algorithms")),
+		mcp.WithBoolean("all", mcp.Description("Use all algorithms")),
+		mcp.WithArray("paths", mcp.Description("Hash files in paths"), mcp.Required()),
+	)...), func(_ context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+		paths, err := request.RequireStringSlice("paths")
+
+		if err != nil {
+			return mcp.NewToolResultError(err.Error()), nil
+		}
+
+		return execute(process(cli, &request), &hash.Hash{
+			Algo:  request.GetStringSlice("algo", []string{types.SHA256}),
+			All:   request.GetBool("all", false),
+			Paths: paths,
+		}), nil
+	})
+}
+
+func (cmd *Mcp) addCheck(cli *cli.Globals) {
 	cmd.mcp.AddTool(mcp.NewTool("test", addGlobals(
 		mcp.WithDescription("Check suspicious files using VirusTotal"),
 		mcp.WithReadOnlyHintAnnotation(true),
@@ -239,12 +261,15 @@ func (cmd *Mcp) addTest(cli *cli.Globals) {
 		mcp.WithIdempotentHintAnnotation(true),
 		mcp.WithOpenWorldHintAnnotation(true),
 		mcp.WithBoolean("domain", mcp.Description("Files contain domains")),
+		mcp.WithBoolean("mail", mcp.Description("Files contain mails")),
 		mcp.WithBoolean("url", mcp.Description("Files contain URLs")),
 		mcp.WithBoolean("ip", mcp.Description("Files contain IPs")),
-		mcp.WithString("key", mcp.Description("Use required VirusTotal API key"), mcp.Required()),
+		mcp.WithString("hp-key", mcp.Description("Use required HaveIBeenPwned API key"), mcp.Required()),
+		mcp.WithString("vt-key", mcp.Description("Use required VirusTotal API key"), mcp.Required()),
 		mcp.WithArray("paths", mcp.Description("Check files in paths"), mcp.Required()),
 	)...), func(_ context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		key, err := request.RequireString("key")
+		hpKey, err := request.RequireString("hp-key")
+		vtKey, err := request.RequireString("vt-key")
 
 		if err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
@@ -258,9 +283,11 @@ func (cmd *Mcp) addTest(cli *cli.Globals) {
 
 		return execute(process(cli, &request), &check.Check{
 			Domain: request.GetBool("domain", false),
+			Mail:   request.GetBool("mail", false),
 			Url:    request.GetBool("url", false),
 			Ip:     request.GetBool("Ip", false),
-			Key:    key,
+			HpKey:  hpKey,
+			VtKey:  vtKey,
 			Paths:  paths,
 		}), nil
 	})
@@ -337,14 +364,17 @@ func (cmd *Mcp) addHunt(cli *cli.Globals) {
 
 func addGlobals(opts ...mcp.ToolOption) []mcp.ToolOption {
 	return append([]mcp.ToolOption{
+		mcp.WithString("in", mcp.Description("Read paths from file")),
+		mcp.WithString("out", mcp.Description(" Write output to file")),
 		mcp.WithBoolean("head", mcp.Description("Limit file head")),
 		mcp.WithBoolean("tail", mcp.Description("Limit file tail")),
 		mcp.WithString("bytes", mcp.Description("Limit by byte count")),
 		mcp.WithString("lines", mcp.Description("Limit by line count")),
 		mcp.WithString("regex", mcp.Description("Filter using regular expression")),
 		mcp.WithString("password", mcp.Description("Use password for archives")),
-		mcp.WithBoolean("dry", mcp.Description("Get only affected files")),
+		mcp.WithNumber("threads", mcp.Description("Use parallel threads")),
 		mcp.WithBoolean("raw", mcp.Description("Don't process file content at all")),
+		mcp.WithBoolean("dry", mcp.Description("Get only affected files")),
 		mcp.WithBoolean("no-deflate", mcp.Description("Don't deflate file content")),
 		mcp.WithBoolean("no-extract", mcp.Description("Don't extract file content")),
 		mcp.WithBoolean("no-convert", mcp.Description("Don't convert file content")),
@@ -352,14 +382,17 @@ func addGlobals(opts ...mcp.ToolOption) []mcp.ToolOption {
 }
 
 func process(cli *cli.Globals, req *mcp.CallToolRequest) *cli.Globals {
+	cli.Paths = req.GetString("in", "")
+	cli.File = req.GetString("out", "")
 	cli.Head = req.GetBool("head", false)
 	cli.Tail = req.GetBool("tail", false)
 	cli.Bytes = req.GetString("bytes", "")
 	cli.Lines = req.GetString("lines", "")
 	cli.Regex = req.GetString("regex", "")
 	cli.Password = req.GetString("password", "")
-	cli.DryRun = req.GetBool("dry", false)
+	cli.Threads = req.GetInt("threads", 1)
 	cli.Raw = req.GetBool("raw", false)
+	cli.DryRun = req.GetBool("dry", false)
 	cli.NoDeflate = req.GetBool("no-deflate", false)
 	cli.NoExtract = req.GetBool("no-extract", false)
 	cli.NoConvert = req.GetBool("no-convert", false)
