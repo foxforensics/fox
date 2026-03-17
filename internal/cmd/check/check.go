@@ -21,7 +21,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Check files, domains, mails, URLs and IPs.
+Check suspicious items online.
 
 fox check [FLAGS...] PATHS...
 

@@ -21,16 +21,12 @@ var Banner = strings.TrimSpace(`
 // standard output
 var stdout io.Writer = os.Stdout
 
-func Init(w io.WriteCloser, err error) {
+func Setup(w io.WriteCloser, err error) {
 	stdout = w
 
 	if err != nil {
 		log.Fatalln(err)
 	}
-}
-
-func Redirect(w io.Writer) {
-	stdout = w
 }
 
 func Usage(msg string) error {

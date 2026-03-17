@@ -22,8 +22,8 @@ COMMANDS
 
 If no command is passed, then `cat` will be used by default.
 
-Basic Commands
---------------
+File Commands
+-------------
 
 **c, cat**
 
@@ -45,12 +45,12 @@ Basic Commands
 
 :   Show file hashes and checksums.
 
-Advanced Commands
------------------
+Misc Commands
+-------------
 
 **v, check**
 
-:   Check files, domains, mails, URLs and IPs.
+:   Check suspicious items online.
 
 **d, dump**
 
@@ -58,14 +58,7 @@ Advanced Commands
 
 **e, hunt**
 
-:   Hunt suspicious events.
-
-Server Commands
----------------
-
-**m, mcp**
-
-:   Start the MCP server (blocking).
+:   Hunt critical events.
 
 FLAGS
 =====
@@ -225,11 +218,7 @@ fox dump system ntds.dit
 
 fox hunt -u *.dd
 
-:   Hunt down suspicious events.
-
-fox mcp 8080
-
-:   Start a local MCP server.
+:   Hunt down critical events.
 
 BUGS
 ====

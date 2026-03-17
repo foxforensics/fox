@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Check suspicious files, domains, mails, URLs and IPs using the HaveIBeenPwned or VirusTotal API. An API key is required for this. This command enforces the **--no-convert** flag. No files will be uploaded to VirusTotal, file checks will be conducted only the files **SHA256** hash value.
+Check suspicious files, domains, mail addresses, URLs and IPs using the HaveIBeenPwned or VirusTotal API. An API key is required for this. This command enforces the **--no-convert** flag. No files will be uploaded to VirusTotal, file checks will be conducted only the files **SHA256** hash value.
 
 FLAGS
 =====
@@ -35,7 +35,7 @@ Content Flags
 
 **-M, --mail**
 
-:   File(s) contains a list of _mails_ separated by line breaks.
+:   File(s) contains a list of _mail_ addresses separated by line breaks.
 
 **-U, --url**
 

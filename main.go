@@ -28,7 +28,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/help"
 	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
-	"github.com/cuhsat/fox/v4/internal/cmd/mcp"
 	"github.com/cuhsat/fox/v4/internal/cmd/stat"
 	"github.com/cuhsat/fox/v4/internal/cmd/str"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
@@ -40,20 +39,17 @@ The Forensic Examiners Swiss Army Knife (%s)
 Usage:
   fox [COMMAND] [FLAGS...] <PATHS...>
 
-Basic commands:
+File commands:
    c, cat                  Show file contents (default)
    x, hex                  Show file contents in hex format
    s, str                  Show file contained strings
    l, stat                 Show file stats and entropy
    h, hash                 Show file hashes and checksums
 
-Advanced commands:
-   v, check                Check files, domains, mails, URLs, IPs
+Misc commands:
+   v, check                Check suspicious items online
    d, dump                 Dump Active Directory secrets
-   e, hunt                 Hunt suspicious events
-
-Server commands:
-   m, mcp                  Start the MCP server (blocking)
+   e, hunt                 Hunt critical events
 
 File flags:
   -i, --in=FILE            Read paths from file
@@ -101,7 +97,7 @@ Example: Find occurrences in event logs
 Example: List only high entropy files
   $ fox stat -n0.8 ./**/*
 
-Example: Hunt down suspicious events
+Example: Hunt down critical events
   $ fox hunt -u *.dd
 
 For more information please visit: https://foxhunt.dev
@@ -109,20 +105,17 @@ Use "fox help <COMMAND>" to see help on a sub command.
 `)
 
 type fox struct {
-	// basic commands
+	// file commands
 	Cat  cat.Cat   `cmd:"" aliases:"c,less,more" default:"withargs"`
 	Hex  hex.Hex   `cmd:"" aliases:"x,xxd,hexdump"`
 	Str  str.Str   `cmd:"" aliases:"s,strings"`
 	Stat stat.Stat `cmd:"" aliases:"l,ls,wc,dir"`
 	Hash hash.Hash `cmd:"" aliases:"h"`
 
-	// advanced commands
+	// misc commands
 	Check check.Check `cmd:"" aliases:"v,vt"`
 	Dump  dump.Dump   `cmd:"" aliases:"d"`
 	Hunt  hunt.Hunt   `cmd:"" aliases:"e,carve"`
-
-	// server commands
-	Mcp mcp.Mcp `cmd:"" aliases:"m,listen"`
 
 	// hidden commands
 	Help help.Help `cmd:"" hidden:""`
@@ -163,9 +156,9 @@ func main() {
 
 		// redirect output
 		if len(cli.File) > 0 {
-			text.Init(os.OpenFile(cli.File, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
+			text.Setup(os.OpenFile(cli.File, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
 		} else if cli.Quiet {
-			text.Init(os.Open(os.DevNull))
+			text.Setup(os.Open(os.DevNull))
 			log.SetOutput(io.Discard)
 		}
 

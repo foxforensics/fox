@@ -14,7 +14,6 @@ before:
     - pandoc -s -t man assets/man/fox-dump.md -o fox-dump.1
     - pandoc -s -t man assets/man/fox-check.md -o fox-check.1
     - pandoc -s -t man assets/man/fox-hunt.md -o fox-hunt.1
-    - pandoc -s -t man assets/man/fox-mcp.md -o fox-mcp.1
 
 builds:
   - env:
@@ -49,7 +48,6 @@ archives:
       - fox-dump.1
       - fox-check.1
       - fox-hunt.1
-      - fox-mcp.1
       - README.md
       - LICENSE.md
       - SECURITY.md
@@ -138,10 +136,6 @@ nfpms:
         dst: /usr/share/man/man1/fox-hunt.1
         file_info:
           mode: 0644
-      - src: ./fox-mcp.1
-        dst: /usr/share/man/man1/fox-mcp.1
-        file_info:
-          mode: 0644
 
 homebrew_casks:
   - url:
@@ -173,4 +167,3 @@ homebrew_casks:
       - fox-dump.1
       - fox-check.1
       - fox-hunt.1
-      - fox-mcp.1

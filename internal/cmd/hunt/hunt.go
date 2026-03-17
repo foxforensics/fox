@@ -29,7 +29,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Hunt suspicious events.
+Hunt critical events.
 
 fox hunt [FLAGS...] [PATHS...]
 

@@ -24,7 +24,6 @@ Fox is a CLI tool, build to support the examination process of file based forens
 * [x] Check IPs, URLs, domains and files via [VirusTotal API](https://www.virustotal.com/)
 * [x] Check accounts for breaches via [Have I Been Pwned API](https://haveibeenpwned.com/)
 * [x] Extract NTLM hashes from [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) databases
-* [x] Integral full [MCP](https://modelcontextprotocol.io/docs/getting-started/intro) streaming server for AI agents
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
 * [x] Integral syntax highlighting for many different formats
 * [x] Integral fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
@@ -94,14 +93,9 @@ Dump NTLM hashes from database:
 fox dump system ntds.dit
 ```
 
-Hunt down suspicious events:
+Hunt down critical events:
 ```console
 fox hunt -u *.dd
-```
-
-Run as MCP server:
-```console
-fox mcp 8080
 ```
 
 ## Supports

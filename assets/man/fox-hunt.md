@@ -104,7 +104,7 @@ EXAMPLES
 
 fox hunt -u *.dd
 
-:   Hunt down suspicious events.
+:   Hunt down critical events.
 
 BUGS
 ====
