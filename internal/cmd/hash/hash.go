@@ -109,9 +109,9 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			}
 
 			if len(cmd.Algo) > 1 {
-				text.Print("%-21s  %s", strings.ToUpper(algo), res)
+				text.Write("%-21s  %s", strings.ToUpper(algo), res)
 			} else {
-				text.Print("%s  %s", res, h.Name)
+				text.Write("%s  %s", res, h.Name)
 			}
 		}
 

@@ -1,7 +1,6 @@
 package str
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -70,7 +69,7 @@ func (cmd *Str) Validate() error {
 func (cmd *Str) AfterApply(app *kong.Kong, _ kong.Vars) error {
 	if cmd.List {
 		for _, cls := range carver.Classes(3) {
-			fmt.Printf("%s\n", cls)
+			text.Write(cls)
 		}
 
 		// exit early
@@ -113,13 +112,13 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			l.Value = text.MarkMatch(l.Value, cli.Regexp)
 
 			if !cli.NoPretty && len(l.Class) > 0 {
-				text.Print("%s  %s [%s]", text.AsGray(l.Address), l.Value, text.AsBold(l.Class))
+				text.Write("%s  %s [%s]", text.AsGray(l.Address), l.Value, text.AsBold(l.Class))
 			} else if !cli.NoPretty {
-				text.Print("%s  %s", text.AsGray(l.Address), l.Value)
+				text.Write("%s  %s", text.AsGray(l.Address), l.Value)
 			} else if len(l.Class) > 0 {
-				text.Print("%s [%s]", l.Value, l.Class)
+				text.Write("%s [%s]", l.Value, l.Class)
 			} else {
-				text.Print(l.Value)
+				text.Write(l.Value)
 			}
 		}
 

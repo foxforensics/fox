@@ -40,7 +40,7 @@ func Title(s string) {
 	_, _ = fmt.Fprintln(stdout, bold.Sprint(s))
 }
 
-func Print(f string, a ...any) {
+func Write(f string, a ...any) {
 	_, _ = fmt.Fprintf(stdout, fmt.Sprintf("%s\n", f), a...)
 }
 

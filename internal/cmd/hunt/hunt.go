@@ -29,7 +29,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Hunt critical events.
+Hunt critical system events.
 
 fox hunt [FLAGS...] [PATHS...]
 
@@ -174,10 +174,6 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		cmd.Paths = hunter.Local
 	}
 
-	if cmd.Dist > 0 {
-		cli.NoSyntax = true
-	}
-
 	cli.NoConvert = true // forced
 
 	ch := cli.Load(cmd.Paths)
@@ -205,7 +201,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		log.Printf("hunt: streaming as %s\n", cmd.net)
 	}
 
-	if !rules.IsSupported(&cmd.rule) && !cli.NoWarnings {
+	if !rules.IsSupported(&cmd.rule) {
 		log.Println("warning: rule is not supported!")
 	}
 
@@ -241,7 +237,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 				continue // not matched afterward
 			}
 
-			text.Print(line)
+			text.Write(line)
 		} else {
 			err := cmd.db.Store(e)
 

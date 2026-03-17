@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"regexp"
@@ -69,28 +68,24 @@ type Globals struct {
 	// filter flags
 	Regex string `short:"e"`
 
-	// archive flags
+	// special flags
 	Password string `short:"p"`
-
-	// profile flags
-	Threads int `short:"T" default:"${cores}"`
+	Threads  int    `short:"T" default:"${cores}"`
 
 	// disable flags
-	Raw        bool `short:"r"`
-	Quiet      bool `short:"q" xor:"out,quiet"`
-	NoPretty   bool `short:"y" long:"no-pretty"`
-	NoSyntax   bool `long:"no-syntax"`
-	NoStrict   bool `long:"no-strict"`
-	NoDeflate  bool `long:"no-deflate"`
-	NoExtract  bool `long:"no-extract"`
-	NoConvert  bool `long:"no-convert"`
-	NoReceipt  bool `long:"no-receipt"`
-	NoWarnings bool `long:"no-warnings"`
+	Raw       bool `short:"r"`
+	Quiet     bool `short:"q" xor:"out,quiet"`
+	NoPretty  bool `short:"N" long:"no-pretty"`
+	NoStrict  bool `long:"no-strict"`
+	NoDeflate bool `long:"no-deflate"`
+	NoExtract bool `long:"no-extract"`
+	NoConvert bool `long:"no-convert"`
+	NoReceipt bool `long:"no-receipt"`
 
 	// standard flags
-	Help    bool
-	DryRun  bool `short:"d" long:"dry-run"`
 	Verbose int  `short:"v" type:"counter"`
+	DryRun  bool `short:"d" long:"dry-run"`
+	Help    bool
 
 	// internal
 	Regexp *regexp.Regexp `kong:"-"`
@@ -121,34 +116,22 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	if cli.Raw {
 		cli.NoPretty = true
-		cli.NoSyntax = true
 		cli.NoStrict = true
 		cli.NoDeflate = true
 		cli.NoExtract = true
 		cli.NoConvert = true
 		cli.NoReceipt = true
-		cli.NoWarnings = true
 	}
 
 	if cli.Threads <= 0 {
 		cli.Threads = 1 // must be at least one
 	}
 
-	if cli.Verbose > 0 {
-		cli.NoPretty = true
-	}
-
 	if cli.NoPretty {
-		cli.NoSyntax = true
-		text.NoColor = true
 		color.NoColor = true // turn off color package
 	}
 
-	if cli.NoSyntax {
-		text.NoSyntax = true // turn off syntax highlighting
-	}
-
-	if cli.NoReceipt && !cli.NoWarnings {
+	if cli.NoReceipt {
 		log.Println("warning: receipts has been disabled!")
 	}
 
@@ -209,12 +192,11 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		Parallel: cli.Threads,
 		Verbose:  cli.Verbose,
 		Strict:   !cli.NoStrict,
-		Warnings: !cli.NoWarnings,
 	})
 
 	if cli.DryRun {
 		for h := range cli.Loader.Load(args) {
-			fmt.Println(h.Name)
+			text.Write(h.Name)
 		}
 
 		// exit early

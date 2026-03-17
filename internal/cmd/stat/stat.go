@@ -99,7 +99,7 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 					title = "[00000000] " + title
 				}
 
-				text.Print(text.AsGray(fmt.Sprintf("%.10fe %10dl %10db %s  %s", 0.0, 0, 0, t, title)))
+				text.Write(text.AsGray(fmt.Sprintf("%.10fe %10dl %10db %s  %s", 0.0, 0, 0, t, title)))
 			}
 
 			h.Discard()
@@ -124,9 +124,9 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 				}
 
 				if cmd.block > 0 {
-					text.Print("%.10fe %10dl %11s %s  %s %s", e, l, size, t, start, h.String())
+					text.Write("%.10fe %10dl %11s %s  %s %s", e, l, size, t, start, h.String())
 				} else {
-					text.Print("%.10fe %10dl %11s %s  %s", e, l, size, t, h.String())
+					text.Write("%.10fe %10dl %11s %s  %s", e, l, size, t, h.String())
 				}
 			}
 

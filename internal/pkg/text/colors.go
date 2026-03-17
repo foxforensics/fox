@@ -16,12 +16,6 @@ const Lexer = "text"
 // Style (default)
 const Style = "monokai"
 
-// NoColor toggle
-var NoColor = false
-
-// NoSyntax toggle
-var NoSyntax = false
-
 var (
 	AsGray = gray.SprintFunc()
 	AsWarn = warn.SprintFunc()
@@ -41,7 +35,7 @@ func ColorizeStringAs(s, lexer string) string {
 }
 
 func ColorizeAs(b []byte, lexer string, style string) []byte {
-	if NoSyntax {
+	if color.NoColor {
 		return b
 	}
 
@@ -61,7 +55,7 @@ func ColorizeAs(b []byte, lexer string, style string) []byte {
 }
 
 func Colorize(b []byte, hint string, style string) []byte {
-	if NoSyntax {
+	if color.NoColor {
 		return b
 	}
 
@@ -83,15 +77,17 @@ func Colorize(b []byte, hint string, style string) []byte {
 }
 
 func MarkMatch(s string, re *regexp.Regexp) string {
-	if !NoColor && re != nil {
-		s = marker.Mark(s, marker.MatchRegexp(re), bold)
+	if color.NoColor || re == nil {
+		return s
 	}
-	return s
+
+	return marker.Mark(s, marker.MatchRegexp(re), bold)
 }
 
 func MarkEvent(s string) string {
-	if !NoColor {
-		s = marker.Mark(s, marker.MatchRegexp(cef), gray)
+	if color.NoColor {
+		return s
 	}
-	return s
+
+	return marker.Mark(s, marker.MatchRegexp(cef), gray)
 }

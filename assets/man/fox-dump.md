@@ -36,11 +36,11 @@ Registry Flags
 Active Directory Flags
 ----------------------
 
-**-N, --only-lm**
+**--only-lm**
 
 :   Extract only the **LM** hashes (hashcat: _3000_).
 
-**-L, --only-nt**
+**--only-nt**
 
 :   Extract only the **NT** hashes (hashcat: _1000_).
 

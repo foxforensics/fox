@@ -32,7 +32,6 @@ type Options struct {
 	Parallel int
 	Verbose  int
 	Strict   bool
-	Warnings bool
 }
 
 type Loader struct {

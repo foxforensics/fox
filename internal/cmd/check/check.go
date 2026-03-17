@@ -112,7 +112,7 @@ func (cmd *Check) Run(cli *cli.Globals) error {
 			}
 
 			if res != nil {
-				text.Print(cmd.format(res, h.String()))
+				text.Write(cmd.format(res, h.String()))
 			}
 		} else {
 			for _, v := range strings.Split(string(h.Bytes()), "\n") {
@@ -137,7 +137,7 @@ func (cmd *Check) Run(cli *cli.Globals) error {
 					}
 
 					if res != nil {
-						text.Print(cmd.format(res, v))
+						text.Write(cmd.format(res, v))
 					}
 				}
 			}

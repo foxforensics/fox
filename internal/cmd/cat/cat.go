@@ -76,10 +76,6 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 		return text.Usage(Usage)
 	}
 
-	if cmd.Dist > 0 {
-		cli.NoSyntax = true
-	}
-
 	ch := cli.Load(cmd.Paths)
 
 	// apply command specific context
@@ -108,11 +104,11 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 			}
 
 			if !cli.NoPretty {
-				text.Print("%s %s", text.AsGray(l.Line), s)
+				text.Write("%s %s", text.AsGray(l.Line), s)
 			} else if l.Line == buffer.Sep {
-				text.Print(text.AsGray("--"))
+				text.Write(text.AsGray("--"))
 			} else {
-				text.Print(s)
+				text.Write(s)
 			}
 		}
 

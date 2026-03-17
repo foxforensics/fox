@@ -27,8 +27,8 @@ Registry flags:
   -K, --bootkey            Dump the host bootkey
 
 Active Directory flags:
-  -L, --only-lm            Extract only the LM hashes (hashcat: 3000)
-  -N, --only-nt            Extract only the NT hashes (hashcat: 1000)
+      --only-lm            Extract only the LM hashes (hashcat: 3000)
+      --only-nt            Extract only the NT hashes (hashcat: 1000)
 
 Examples:
   $ fox dump system ntds.dit
@@ -42,8 +42,8 @@ type Dump struct {
 	Bootkey bool `short:"K"`
 
 	// active directory flags
-	OnlyLm bool `short:"L" long:"only-lm" xor:"only-lm,only-nt"`
-	OnlyNt bool `short:"N" long:"only-nt" xor:"only-lm,only-nt"`
+	OnlyLm bool `long:"only-lm" xor:"only-lm,only-nt"`
+	OnlyNt bool `long:"only-nt" xor:"only-lm,only-nt"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -78,7 +78,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Bootkey {
-		text.Print("Bootkey %x", key)
+		text.Write("Bootkey %x", key)
 		return nil
 	}
 
@@ -108,7 +108,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 			continue // not matched afterward
 		}
 
-		text.Print(line)
+		text.Write(line)
 	}
 
 	if cli.Verbose > 0 {

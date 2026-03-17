@@ -58,7 +58,7 @@ Misc Commands
 
 **e, hunt**
 
-:   Hunt critical events.
+:   Hunt critical system events.
 
 FLAGS
 =====
@@ -97,15 +97,12 @@ Filter Flags
 
 :   Filter output by _pattern_.
 
-Archive Flags
-------------
+Special Flags
+-------------
 
 **-p, --password**=_password_
 
 :   Use archive _password_ (only for **7Z**, **RAR**, **ZIP**).
-
-Profile Flags
--------------
 
 **-T, --threads**=_cores_
 
@@ -122,13 +119,9 @@ Disable Flags
 
 :   Don't print anything.
 
-**-y, --no-pretty**
+**-N, --no-pretty**
 
 :   Don't prettify the output.
-
-**--no-syntax**
-
-:   Don't colorize the syntax.
 
 **--no-strict**
 
@@ -150,20 +143,16 @@ Disable Flags
 
 :   Don't write the receipt.
 
-**--no-warnings**
-
-:   Don't print any warnings.
-
 Standard Flags
 --------------
-
-**-d, --dry-run**
-
-:   Print only the found files.
 
 **-v, --verbose**[=_level_]
 
 :   Print more details (v/vv/vvv).
+
+**-d, --dry-run**
+
+:   Print only the found files.
 
 **--version**
 

@@ -93,21 +93,21 @@ func (cmd *Hex) Run(cli *cli.Globals) error {
 			if l.Values == lastHex && !cmd.NoFormat {
 				if !wasCut {
 					wasCut = true
-					text.Print(text.AsGray("*"))
+					text.Write(text.AsGray("*"))
 				}
 				continue
 			}
 
 			if mode == buffer.Default {
-				text.Print("%s  %s%s", text.AsGray(l.Address), l.Values, l.String)
+				text.Write("%s  %s%s", text.AsGray(l.Address), l.Values, l.String)
 			} else if mode == buffer.Canonical {
-				text.Print("%s  %s|%s|", l.Address, l.Values, l.String)
+				text.Write("%s  %s|%s|", l.Address, l.Values, l.String)
 			} else if mode == buffer.Hexdump {
-				text.Print("%s %s", l.Address, l.Values)
+				text.Write("%s %s", l.Address, l.Values)
 			} else if mode == buffer.Xxd {
-				text.Print("%s %s %-16s", l.Address, l.Values, l.String)
+				text.Write("%s %s %-16s", l.Address, l.Values, l.String)
 			} else {
-				text.Print(l.Values)
+				text.Write(l.Values)
 			}
 
 			lastHex, wasCut = l.Values, false

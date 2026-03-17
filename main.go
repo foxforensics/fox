@@ -49,7 +49,7 @@ File commands:
 Misc commands:
    v, check                Check suspicious items online
    d, dump                 Dump Active Directory secrets
-   e, hunt                 Hunt critical events
+   e, hunt                 Hunt critical system events
 
 File flags:
   -i, --in=FILE            Read paths from file
@@ -64,27 +64,23 @@ Limit flags:
 Filter flags:
   -e, --regexp=PATTERN     Filter output by pattern
 
-Archive flags: 
+Special flags: 
   -p, --password=TEXT      Use archive password (7Z, RAR, ZIP)
-
-Profile flags:
   -T, --threads=CORES      Use parallel threads
 
 Disable flags:
   -r, --raw                Don't process files at all
   -q, --quiet              Don't print anything
-  -y, --no-pretty          Don't prettify the output
-      --no-syntax          Don't colorize the syntax
+  -N, --no-pretty          Don't prettify the output
       --no-strict          Don't stop on parser errors
       --no-deflate         Don't deflate automatically
       --no-extract         Don't extract automatically
       --no-convert         Don't convert automatically
       --no-receipt         Don't write the receipt
-      --no-warnings        Don't print any warnings
 
 Standard flags:
-  -d, --dry-run            Print only the found files
   -v, --verbose[=LEVEL]    Print more details (v/vv/vvv)
+  -d, --dry-run            Print only the found files
       --version            Print the version number
       --help               Print this help message
 
