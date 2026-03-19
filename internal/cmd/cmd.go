@@ -5,6 +5,14 @@ import (
 	"os"
 	"regexp"
 
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/elf"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/ese"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/lnk"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pf"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/fortinet"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
 	"github.com/fatih/color"
 
 	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -19,14 +27,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/xar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/elf"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/ese"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/lnk"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pf"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/fortinet"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bgzf"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bzip2"
@@ -70,7 +70,7 @@ type Globals struct {
 
 	// special flags
 	Password string `short:"p"`
-	Threads  int    `short:"T" default:"${cores}"`
+	Threads  int    `short:"P" default:"${cores}"`
 
 	// disable flags
 	Raw       bool `short:"r"`
@@ -87,11 +87,21 @@ type Globals struct {
 	DryRun  bool `short:"d" long:"dry-run"`
 	Help    bool
 
+	// hidden
+	Lexer string `hidden:""`
+	Style string `hidden:""`
+
 	// internal
 	Regexp *regexp.Regexp `kong:"-"`
 	Loader *loader.Loader `kong:"-"`
 	Filter *types.Filters `kong:"-"`
 	Limit  *types.Limits  `kong:"-"`
+}
+
+func (cli *Globals) LoadPlain(args []string) <-chan *heap.Heap {
+	cli.NoConvert = true // force
+
+	return cli.Load(args)
 }
 
 func (cli *Globals) Load(args []string) <-chan *heap.Heap {
@@ -101,6 +111,14 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	if len(cli.Regex) > 0 {
 		cli.Regexp = regexp.MustCompile(cli.Regex)
+	}
+
+	if len(cli.Lexer) > 0 {
+		text.Lexer = cli.Lexer
+	}
+
+	if len(cli.Style) > 0 {
+		text.Style = cli.Style
 	}
 
 	cli.Limit = types.NewLimits(
@@ -125,14 +143,6 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 
 	if cli.Threads <= 0 {
 		cli.Threads = 1 // must be at least one
-	}
-
-	if cli.NoPretty {
-		color.NoColor = true // turn off color package
-	}
-
-	if cli.NoReceipt {
-		log.Println("warning: receipts has been disabled!")
 	}
 
 	if !cli.NoDeflate {
@@ -182,6 +192,12 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	if !cli.NoPretty {
 		register.Format("json", json.Detect, json.Format)
 		register.Format("jsonl", jsonl.Detect, jsonl.Format)
+	} else {
+		color.NoColor = true // turn off color package
+	}
+
+	if cli.NoReceipt {
+		log.Println("warning: receipts has been disabled!")
 	}
 
 	cli.Loader = loader.New(&loader.Options{

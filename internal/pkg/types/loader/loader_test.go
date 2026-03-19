@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
+
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/ar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cab"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/cpio"

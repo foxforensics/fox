@@ -8,7 +8,6 @@ const (
 	Clean      = "clean"
 	Unknown    = "unknown"
 	Unrated    = "unrated"
-	Breached   = "breached"
 	Suspicious = "suspicious"
 )
 

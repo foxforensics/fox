@@ -5,11 +5,8 @@ import (
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/cmd/cat"
-	"github.com/cuhsat/fox/v4/internal/cmd/check"
 	"github.com/cuhsat/fox/v4/internal/cmd/dump"
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
-	"github.com/cuhsat/fox/v4/internal/cmd/hex"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
 	"github.com/cuhsat/fox/v4/internal/cmd/stat"
 	"github.com/cuhsat/fox/v4/internal/cmd/str"
@@ -17,14 +14,11 @@ import (
 )
 
 var usage = map[string]string{
-	"cat":   cat.Usage,
-	"hex":   hex.Usage,
-	"str":   str.Usage,
-	"hash":  hash.Usage,
-	"stat":  stat.Usage,
-	"check": check.Usage,
-	"dump":  dump.Usage,
-	"hunt":  hunt.Usage,
+	"str":  str.Usage,
+	"hash": hash.Usage,
+	"stat": stat.Usage,
+	"dump": dump.Usage,
+	"hunt": hunt.Usage,
 }
 
 type Help struct {

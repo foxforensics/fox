@@ -10,11 +10,11 @@ import (
 	"github.com/fatih/color"
 )
 
-// Lexer (default)
-const Lexer = "text"
+// Lexer global setting (default)
+var Lexer = ""
 
-// Style (default)
-const Style = "monokai"
+// Style global setting (default)
+var Style = "monokai"
 
 var (
 	AsGray = gray.SprintFunc()
@@ -30,50 +30,35 @@ var (
 
 var cef = regexp.MustCompile(`[^|]+$`)
 
-func ColorizeStringAs(s, lexer string) string {
-	return string(ColorizeAs([]byte(s), lexer, Style))
-}
-
-func ColorizeAs(b []byte, lexer string, style string) []byte {
+func ColorizeAs(s, hint string) string {
 	if color.NoColor {
-		return b
+		return s
 	}
 
-	if style == "" {
-		style = Style
+	// override hard
+	if len(Lexer) > 0 {
+		hint = Lexer
+	}
+
+	// analyse data
+	if len(hint) == 0 {
+		if l := lexers.Analyse(s); l != nil {
+			hint = l.Config().Name
+		}
+	}
+
+	if len(hint) == 0 {
+		return s
 	}
 
 	buf := bytes.NewBuffer(nil)
-
-	err := quick.Highlight(buf, string(b), lexer, "terminal256", style)
+	err := quick.Highlight(buf, s, hint, "terminal256", Style)
 
 	if err != nil {
-		return b
+		return s
 	}
 
-	return buf.Bytes()
-}
-
-func Colorize(b []byte, hint string, style string) []byte {
-	if color.NoColor {
-		return b
-	}
-
-	var lexer string
-
-	if len(hint) > 0 {
-		lexer = hint // use type hinting
-	} else if l := lexers.Analyse(string(b)); l != nil {
-		lexer = l.Config().Name
-	} else {
-		lexer = Lexer // use fallback
-	}
-
-	if lexer == "text" {
-		return b
-	}
-
-	return ColorizeAs(b, lexer, style)
+	return buf.String()
 }
 
 func MarkMatch(s string, re *regexp.Regexp) string {
@@ -90,4 +75,12 @@ func MarkEvent(s string) string {
 	}
 
 	return marker.Mark(s, marker.MatchRegexp(cef), gray)
+}
+
+func MarkZero(s string) string {
+	if color.NoColor {
+		return s
+	}
+
+	return marker.Mark(s, marker.MatchAll("00"), gray)
 }

@@ -7,11 +7,10 @@ import (
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
 )
 
-var Limit = 1024 * 1024 * 4 // turn off color for big files
+var Limit = 1024 * 1024 * 4
 
 type TextLine struct {
 	Line   string
@@ -25,24 +24,22 @@ type TextBuffer struct {
 }
 
 type TextContext struct {
-	SMap   smap.SMap
-	Delta  int
-	Syntax string
-	Style  string
+	SMap  smap.SMap
+	Data  []byte
+	Delta int
+	Hint  string
 }
 
-func Text(h *heap.Heap, cli *cli.Globals, ctx *TextContext) *TextBuffer {
+func Text(cli *cli.Globals, ctx *TextContext) *TextBuffer {
+	var data = ctx.Data
 	var last uint
 
-	switch {
-	case len(h.Bytes()) < Limit && len(ctx.Syntax) > 0:
-		ctx.SMap = smap.Map(text.ColorizeAs(h.Bytes(), ctx.Syntax, ctx.Style))
-	case len(h.Bytes()) < Limit:
-		ctx.SMap = smap.Map(text.Colorize(h.Bytes(), h.Hint, ctx.Style))
-	default:
-		ctx.SMap = smap.Map(h.Bytes())
+	// turn off color for big files
+	if len(data) < Limit {
+		data = []byte(text.ColorizeAs(string(data), ctx.Hint))
 	}
 
+	ctx.SMap = smap.Map(data)
 	ctx.SMap = cli.Filter.Filter(ctx.SMap).Render()
 
 	if len(ctx.SMap) > 0 {

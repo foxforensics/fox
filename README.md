@@ -9,7 +9,7 @@
   <img src="assets/img/hunt.png" width="800" alt="Hunt"/>
 </div>
 
-## Abstract
+## About
 Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. As with any Swiss Army knife, there are many specific power tools that offer more in-depth functionality, but sometimes all you need is a simple screwdriver.
 
 ## Features
@@ -21,9 +21,8 @@ Fox is a CLI tool, build to support the examination process of file based forens
 * [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * [x] Parse Windows shortcut and prefetch files
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
-* [x] Check IPs, URLs, domains and files via [VirusTotal API](https://www.virustotal.com/)
-* [x] Check accounts for breaches via [Have I Been Pwned API](https://haveibeenpwned.com/)
-* [x] Extract NTLM hashes from [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) databases
+* [x] Check suspicious files via the [VirusTotal API](https://www.virustotal.com/)
+* [x] Dump NTLM hashes from [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) databases
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
 * [x] Integral syntax highlighting for many different formats
 * [x] Integral fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
@@ -60,12 +59,12 @@ There are also standalone binaries available:
 
 Find occurrences in event logs:
 ```console
-fox -eWinlogon ./**/*.evtx
+fox -eWinlogin ./**/*.evtx
 ```
 
 Show MBR in canonical hex:
 ```console
-fox hex -hc512 disk.dd
+fox -hc512 disk.dd
 ```
 
 Show all strings in a binary:
@@ -85,7 +84,7 @@ fox hash -Amd5 files.7z
 
 Check a suspicious file by hash:
 ```console
-fox check sample.exe
+fox hash -C sample.exe
 ```
 
 Dump NTLM hashes from database:
@@ -100,7 +99,7 @@ fox hunt -u *.dd
 
 ## Supports
 File Formats
-> evtx, journal, json, jsonl, lnk, pf, ELF, ESE/EDB, PE/COFF
+> evtx, journal, lnk, pf, ELF, ESE/EDB, PE/COFF
 
 Archive Formats
 > 7zip, ar, CAB, CPIO, ISO, MSI, RAR, RPM, tar, xar, ZIP

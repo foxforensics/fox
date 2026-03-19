@@ -18,19 +18,7 @@ var badCategories = []string{
 	"suspicious",
 }
 
-func CheckIp(ip, key string) (*api.Result, error) {
-	return request(vt.URL("ip_addresses/%s", ip), key)
-}
-
-func CheckUrl(url, key string) (*api.Result, error) {
-	return request(vt.URL("urls/%s", url), key)
-}
-
-func CheckDomain(url, key string) (*api.Result, error) {
-	return request(vt.URL("domains/%s", url), key)
-}
-
-func CheckFileHash(sum, key string) (*api.Result, error) {
+func CheckFile(sum, key string) (*api.Result, error) {
 	return request(vt.URL("files/%s", sum), key)
 }
 

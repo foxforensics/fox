@@ -28,9 +28,6 @@ Class flags:
   -1, --first              Show only strings first class
   -L, --list               Show only classification list
 
-Format flags:
-  -D, --decimal            Format addresses as decimal
-
 Examples:
   $ fox str -w sample.exe
 `)
@@ -46,9 +43,6 @@ type Str struct {
 	Find  []string `short:"F" sep:","`
 	First bool     `short:"1" and:"first,wtf"`
 	List  bool     `short:"L"`
-
-	// format
-	Decimal bool `short:"D"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -84,9 +78,7 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 		return text.Usage(Usage)
 	}
 
-	cli.NoConvert = true // forced
-
-	ch := cli.Load(cmd.Paths)
+	ch := cli.LoadPlain(cmd.Paths)
 	defer cli.Discard()
 
 	for h := range ch {
@@ -102,7 +94,6 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			Wtf:      cmd.Wtf,
 			Find:     cmd.Find,
 			First:    cmd.First,
-			Decimal:  cmd.Decimal,
 			Parallel: cli.Threads,
 		}).Carve(h.Bytes()) {
 			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Value) {

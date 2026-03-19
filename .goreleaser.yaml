@@ -6,13 +6,10 @@ before:
     - go mod tidy
     - go mod download
     - pandoc -s -t man assets/man/fox.md -o fox.1
-    - pandoc -s -t man assets/man/fox-cat.md -o fox-cat.1
-    - pandoc -s -t man assets/man/fox-hex.md -o fox-hex.1
     - pandoc -s -t man assets/man/fox-str.md -o fox-str.1
     - pandoc -s -t man assets/man/fox-hash.md -o fox-hash.1
     - pandoc -s -t man assets/man/fox-stat.md -o fox-stat.1
     - pandoc -s -t man assets/man/fox-dump.md -o fox-dump.1
-    - pandoc -s -t man assets/man/fox-check.md -o fox-check.1
     - pandoc -s -t man assets/man/fox-hunt.md -o fox-hunt.1
 
 builds:
@@ -40,13 +37,10 @@ archives:
         formats: [zip]
     files:
       - fox.1
-      - fox-cat.1
-      - fox-hex.1
       - fox-str.1
       - fox-hash.1
       - fox-stat.1
       - fox-dump.1
-      - fox-check.1
       - fox-hunt.1
       - README.md
       - LICENSE.md
@@ -104,14 +98,6 @@ nfpms:
         dst: /usr/share/man/man1/fox.1
         file_info:
           mode: 0644
-      - src: ./fox-cat.1
-        dst: /usr/share/man/man1/fox-cat.1
-        file_info:
-          mode: 0644
-      - src: ./fox-hex.1
-        dst: /usr/share/man/man1/fox-hex.1
-        file_info:
-          mode: 0644
       - src: ./fox-str.1
         dst: /usr/share/man/man1/fox-str.1
         file_info:
@@ -126,10 +112,6 @@ nfpms:
           mode: 0644
       - src: ./fox-dump.1
         dst: /usr/share/man/man1/fox-dump.1
-        file_info:
-          mode: 0644
-      - src: ./fox-check.1
-        dst: /usr/share/man/man1/fox-check.1
         file_info:
           mode: 0644
       - src: ./fox-hunt.1
@@ -159,11 +141,8 @@ homebrew_casks:
     license: GPL-3.0
     manpages:
       - fox.1
-      - fox-cat.1
-      - fox-hex.1
       - fox-str.1
       - fox-hash.1
       - fox-stat.1
       - fox-dump.1
-      - fox-check.1
       - fox-hunt.1

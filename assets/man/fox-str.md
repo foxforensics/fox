@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file string contents by carving the file(s). This command enforces the **--no-convert** flag.
+Show file string contents by carving the file(s).
 
 FLAGS
 =====
@@ -52,13 +52,6 @@ Class Flags
 **-L, --list**
 
 :   Show only classification list.
-
-Format Flags
-------------
-
-**-D, --decimal**
-
-:   Format addresses as decimal.
 
 POSITIONAL ARGUMENTS
 ====================

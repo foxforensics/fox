@@ -15,14 +15,6 @@
 ## 5. Ideas
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
-* Add own foldable section for every command
-  * shell example with image for output
-* Add different endpoints for test
-  * https://github.com/woanware/lookuper
-* Add heatmap to hex command
-  * Custom BgColor from red to yellow in 256 steps?
-* Add pager for output/search/filter like moor?
-  * https://github.com/walles/moor
 * Add LZNT1 deflate (magic bytes?)
   * https://github.com/Velocidex/go-ntfs/blob/d467c5e7dca0/lznt1.go
 * Add vanity URL?

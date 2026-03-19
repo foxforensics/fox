@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Check suspicious files, domains, mail addresses, URLs and IPs using the HaveIBeenPwned or VirusTotal API. An API key is required for this. This command enforces the **--no-convert** flag. No files will be uploaded to VirusTotal, file checks will be conducted only the files **SHA256** hash value.
+Check suspicious files using the VirusTotal API. An API key is required for this. No files will be uploaded to VirusTotal, file checks will be conducted only the files **SHA256** hash value.
 
 FLAGS
 =====
@@ -26,34 +26,10 @@ FLAGS
 
 :   Show results as JSON lines.
 
-Content Flags
--------------
-
-**-D, --domain**
-
-:   File(s) contains a list of _domains_ separated by line breaks.
-
-**-M, --mail**
-
-:   File(s) contains a list of _mail_ addresses separated by line breaks.
-
-**-U, --url**
-
-:   File(s) contains a list of _urls_ separated by line breaks.
-
-**-I, --ip**
-
-:   File(s) contains a list of _ips_ separated by line breaks.
-
-
 Required
 --------
 
-**--hp-key**=_apikey_
-
-:   _API key_ for **Have I Been Pwned** (hexadecimal format).
-
-**--vt-key**=_apikey_
+**--api-key**=_apikey_
 
 :   _API key_ for **VirusTotal** (hexadecimal format).
 
@@ -65,11 +41,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 ENVIRONMENT
 ===========
 
-**FOX_HP_KEY**
-
-:   The **Have I Been Pwned** API key can also be set through this environment variable.
-
-**FOX_VT_KEY**
+**FOX_API_KEY**
 
 :   The **VirusTotal** API key can also be set through this environment variable.
 
@@ -79,14 +51,6 @@ EXAMPLES
 fox check sample.exe
 
 :   Check a suspicious file by hash.
-
-fox check -M users.txt
-
-:   Check a list of email addresses.
-
-echo 8.8.8.8 | fox check -I -
-
-:   Check an IP address directly from input.
 
 BUGS
 ====

@@ -16,7 +16,6 @@ type Options struct {
 	Wtf      int
 	Find     []string
 	First    bool
-	Decimal  bool
 	Parallel int
 }
 
@@ -99,19 +98,13 @@ func (cvr *Carver) Carve(block []byte) <-chan *String {
 }
 
 func (cvr *Carver) flush(off int, buf []rune) {
+	adr := fmt.Sprintf("%08x", off)
 	str := string(buf)
 
 	v := uint(len(strings.TrimSpace(str)))
 
 	if v >= cvr.opts.Min && v <= cvr.opts.Max {
-		var adr, cls string
-
-		// format address
-		if cvr.opts.Decimal {
-			adr = fmt.Sprintf("%08d", off)
-		} else {
-			adr = fmt.Sprintf("%08x", off)
-		}
+		var cls string
 
 		// append class
 		if cvr.opts.Wtf > 0 {

@@ -204,14 +204,14 @@ func (ldr *Loader) processData(path, part string, t uint64, b []byte) {
 	var hint string
 	var ok bool
 
-	// 1. deflate data
+	// 1. deflate data (recursive)
 	for {
 		if b, ok = ldr.deflateData(b); !ok {
 			break
 		}
 	}
 
-	// 2. extract data
+	// 2. extract data (multiply)
 	if ldr.extractData(path, part, t, b) {
 		return
 	}

@@ -8,8 +8,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
-const file = "ntds/ntds.dit.zst"
-const dump = "ntds/dump.golden"
+const file = "dump/test.dit.zst"
+const dump = "dump/dump.golden"
 
 func BenchmarkExtract(b *testing.B) {
 	buf := test.Fixture(file)

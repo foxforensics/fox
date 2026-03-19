@@ -63,9 +63,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		return text.Usage(Usage)
 	}
 
-	cli.NoConvert = true // forced
-
-	ch := cli.Load(cmd.Paths)
+	ch := cli.LoadPlain(cmd.Paths)
 	defer cli.Discard()
 
 	f1 := <-ch
@@ -127,9 +125,9 @@ func (cmd *Dump) format(rec *dit.Record, re *regexp.Regexp) string {
 
 	switch {
 	case cmd.Jsonl:
-		line = text.ColorizeStringAs(rec.ToJSONL(), "json")
+		line = text.ColorizeAs(rec.ToJSONL(), "json")
 	case cmd.Json:
-		line = text.ColorizeStringAs(rec.ToJSON(), "json")
+		line = text.ColorizeAs(rec.ToJSON(), "json")
 	case cmd.OnlyNt:
 		line = rec.NtHash
 	case cmd.OnlyLm:

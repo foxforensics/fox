@@ -77,9 +77,7 @@ func (cmd *Stat) Run(cli *cli.Globals) error {
 		cli.Threads = 1 // single threaded
 	}
 
-	cli.NoConvert = true // forced
-
-	ch := cli.Load(cmd.Paths)
+	ch := cli.LoadPlain(cmd.Paths)
 	defer cli.Discard()
 
 	for h := range ch {

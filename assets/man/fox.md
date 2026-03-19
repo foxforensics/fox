@@ -22,17 +22,6 @@ COMMANDS
 
 If no command is passed, then `cat` will be used by default.
 
-File Commands
--------------
-
-**c, cat**
-
-:   Show file contents (default).
-
-**x, hex**
-
-:   Show file contents in hex format.
-
 **s, str**
 
 :   Show file contained strings.
@@ -44,13 +33,6 @@ File Commands
 **h, hash**
 
 :   Show file hashes and checksums.
-
-Misc Commands
--------------
-
-**v, check**
-
-:   Check suspicious items online.
 
 **d, dump**
 
@@ -90,12 +72,35 @@ Limit Flags
 
 :   _Number_ of lines.
 
+Unique Flags
+------------
+
+**-u, --uniq**
+
+:   Filter using unique hash (**XXH3**).
+
+**-D, --dist**=_length_
+
+:   Filter using Levenshtein distance.
+
 Filter Flags
 ------------
 
 **-e, --regexp**=_pattern_
 
 :   Filter output by _pattern_.
+
+**-C, --context**=_lines_
+
+:   _Lines_ surrounding a match.
+
+**-B, --before**=_lines_
+
+:   _Lines_ leading before a match.
+
+**-A, --after**=_lines_
+
+:   _Lines_ trailing after a match.
 
 Special Flags
 -------------
@@ -104,9 +109,17 @@ Special Flags
 
 :   Use archive _password_ (only for **7Z**, **RAR**, **ZIP**).
 
-**-T, --threads**=_cores_
+**-P, --threads**=_cores_
 
 :   Use parallel threads.
+
+**-T, --force-text**
+
+:   Force output as text (in default mode).
+
+**-X, --force-hex**
+
+:   Force output as hex (in default mode).
 
 Disable Flags
 -------------
@@ -174,6 +187,18 @@ ENVIRONMENT
 
 :   Global flags can be set through environment variables. The variable name must be prefixed with _FOX_ followed by an underscore and the flags name. All dots must be replaced with underscores. A general proxy server can be set through the environment variables _HTTPS_PROXY_, _HTTP_PROXY_ and _NO_PROXY_.
 
+**FOX_API_KEY**
+
+:   API key for the **VirusTotal** API. Used to check file hashes.
+
+**FOX_LEXER**
+
+:   Force syntax highlighting lexer. Only available in default mode.
+
+**FOX_STYLE**
+
+:   Force syntax highlighting style. Only available in default mode.
+
 EXAMPLES
 ========
 
@@ -181,7 +206,7 @@ fox -eWinlogon ./**/*.evtx
 
 :   Find occurrences in event logs.
 
-fox hex -hc512 disk.dd
+fox -hc512 disk.dd
 
 :   Show MBR in canonical hex.
 
@@ -197,7 +222,7 @@ fox hash -Amd5 files.7z
 
 :   Hash archive contents as MD5.
 
-fox check sample.exe
+fox hash -C sample.exe
 
 :   Check a suspicious file by hash.
 
@@ -224,4 +249,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**cat(1)**, **grep(1)**, **head(1)**, **tail(1)**, **uniq(1)**, **wc(1)**, **hexdump(1)**, **strings(1)**
+**cat(1)**, **grep(1)**, **head(1)**, **tail(1)**, **uniq(1)**, **wc(1)**, **strings(1)**, **hexdump(1)**

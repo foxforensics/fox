@@ -41,6 +41,13 @@ func (h *Heap) Bytes() []byte {
 	return h.m
 }
 
+func (h *Heap) IsText() bool {
+	h.RLock()
+	defer h.RUnlock()
+	b := h.Bytes()[:min(len(h.Bytes()), 4096)]
+	return !bytes.ContainsRune(b, 0)
+}
+
 func (h *Heap) Discard() {
 	h.Lock()
 
@@ -51,7 +58,6 @@ func (h *Heap) Discard() {
 	}
 
 	h.Size = 0
-
 	h.Unlock()
 
 	runtime.GC()

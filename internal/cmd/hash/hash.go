@@ -85,9 +85,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		return text.Usage(Usage)
 	}
 
-	cli.NoConvert = true // forced
-
-	ch := cli.Load(cmd.Paths)
+	ch := cli.LoadPlain(cmd.Paths)
 	defer cli.Discard()
 
 	for h := range ch {

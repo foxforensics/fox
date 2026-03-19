@@ -39,8 +39,8 @@ Flags:
   -u, --uniq               Show logs that are unique 
   -j, --json               Show logs as JSON objects
   -J, --jsonl              Show logs as JSON lines
-  -P, --parquet            Save logs as Parquet (very fast)
-  -Q, --sqlite             Save logs as SQLite3 (very slow)
+      --parquet            Save logs as Parquet (very fast)
+      --sqlite             Save logs as SQLite3 (very slow)
 
 Hunter flags:
   -b, --block=SIZE         Block size for event carving
@@ -69,8 +69,8 @@ type Hunt struct {
 	Uniq    bool `short:"u" xor:"uniq,dist"`
 	Json    bool `short:"j" xor:"json,jsonl"`
 	Jsonl   bool `short:"J" xor:"json,jsonl"`
-	Sqlite  bool `short:"Q" xor:"sqlite,parquet"`
-	Parquet bool `short:"P" xor:"sqlite,parquet"`
+	Sqlite  bool `xor:"sqlite,parquet"`
+	Parquet bool `xor:"sqlite,parquet"`
 
 	// hunter
 	Block string `short:"b" default:"65536"`
@@ -174,9 +174,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		cmd.Paths = hunter.Local
 	}
 
-	cli.NoConvert = true // forced
-
-	ch := cli.Load(cmd.Paths)
+	ch := cli.LoadPlain(cmd.Paths)
 	defer cli.Discard()
 
 	defer cmd.discard(cli)
@@ -273,9 +271,9 @@ func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp) string {
 
 	switch {
 	case cmd.Jsonl:
-		line = text.ColorizeStringAs(e.ToJSONL(), "json")
+		line = text.ColorizeAs(e.ToJSONL(), "json")
 	case cmd.Json:
-		line = text.ColorizeStringAs(e.ToJSON(), "json")
+		line = text.ColorizeAs(e.ToJSON(), "json")
 	default:
 		line = text.MarkEvent(e.ToCEF())
 	}

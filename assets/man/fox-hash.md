@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified. This command enforces the **--no-convert** flag.
+Show file hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified.
 
 FLAGS
 =====

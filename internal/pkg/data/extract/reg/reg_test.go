@@ -8,7 +8,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
-const file = "ntds/system.zst"
+const file = "dump/test.reg.zst"
 
 func BenchmarkBootKey(b *testing.B) {
 	buf := bytes.NewReader(test.Fixture(file))
