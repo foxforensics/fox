@@ -21,13 +21,12 @@ import (
 	ver "github.com/cuhsat/fox/v4/internal"
 
 	"github.com/cuhsat/fox/v4/internal/cmd"
-	"github.com/cuhsat/fox/v4/internal/cmd/check"
 	"github.com/cuhsat/fox/v4/internal/cmd/dump"
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
 	"github.com/cuhsat/fox/v4/internal/cmd/help"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
+	"github.com/cuhsat/fox/v4/internal/cmd/info"
 	"github.com/cuhsat/fox/v4/internal/cmd/show"
-	"github.com/cuhsat/fox/v4/internal/cmd/stat"
 	"github.com/cuhsat/fox/v4/internal/cmd/str"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
@@ -40,7 +39,7 @@ Usage:
 
 Commands:
    s, str                  Show file contained strings
-   l, stat                 Show file stats and entropy
+   i, info                 Show file infos with verdict
    h, hash                 Show file hashes and checksums
    d, dump                 Dump Active Directory secrets
    e, hunt                 Hunt critical system events
@@ -67,7 +66,7 @@ Filter flags:
 
 Special flags:
   -p, --password=TEXT      Use archive password (7Z, RAR, ZIP)
-  -P, --threads=CORES      Use parallel threads
+  -P, --parallel=CORES     Use parallel processing
   -T, --force-text         Force output as text
   -X, --force-hex          Force output as hex
 
@@ -94,7 +93,7 @@ Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
 Example: List only high entropy files
-  $ fox stat -n0.8 ./**/*
+  $ fox info -n0.8 ./**/*
 
 Example: Hunt down critical events
   $ fox hunt -u *.dd
@@ -104,13 +103,12 @@ Use "fox help <COMMAND>" to see help on a sub command.
 `)
 
 type fox struct {
-	Str   str.Str     `cmd:"" aliases:"s"`
-	Stat  stat.Stat   `cmd:"" aliases:"l"`
-	Hash  hash.Hash   `cmd:"" aliases:"h"`
-	Check check.Check `cmd:"" aliases:"v"`
-	Dump  dump.Dump   `cmd:"" aliases:"d"`
-	Hunt  hunt.Hunt   `cmd:"" aliases:"e"`
-	Show  show.Show   `cmd:"" default:"withargs"`
+	Str  str.Str   `cmd:"" aliases:"s"`
+	Hash hash.Hash `cmd:"" aliases:"h"`
+	Info info.Info `cmd:"" aliases:"i"`
+	Dump dump.Dump `cmd:"" aliases:"d"`
+	Hunt hunt.Hunt `cmd:"" aliases:"e"`
+	Show show.Show `cmd:"" default:"withargs"`
 
 	// hidden commands
 	Help help.Help `cmd:"" hidden:""`

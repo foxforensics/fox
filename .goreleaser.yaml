@@ -7,8 +7,8 @@ before:
     - go mod download
     - pandoc -s -t man assets/man/fox.md -o fox.1
     - pandoc -s -t man assets/man/fox-str.md -o fox-str.1
+    - pandoc -s -t man assets/man/fox-info.md -o fox-info.1
     - pandoc -s -t man assets/man/fox-hash.md -o fox-hash.1
-    - pandoc -s -t man assets/man/fox-stat.md -o fox-stat.1
     - pandoc -s -t man assets/man/fox-dump.md -o fox-dump.1
     - pandoc -s -t man assets/man/fox-hunt.md -o fox-hunt.1
 
@@ -38,8 +38,8 @@ archives:
     files:
       - fox.1
       - fox-str.1
+      - fox-info.1
       - fox-hash.1
-      - fox-stat.1
       - fox-dump.1
       - fox-hunt.1
       - README.md
@@ -102,12 +102,12 @@ nfpms:
         dst: /usr/share/man/man1/fox-str.1
         file_info:
           mode: 0644
-      - src: ./fox-hash.1
-        dst: /usr/share/man/man1/fox-hash.1
+      - src: ./fox-info.1
+        dst: /usr/share/man/man1/fox-info.1
         file_info:
           mode: 0644
-      - src: ./fox-stat.1
-        dst: /usr/share/man/man1/fox-stat.1
+      - src: ./fox-hash.1
+        dst: /usr/share/man/man1/fox-hash.1
         file_info:
           mode: 0644
       - src: ./fox-dump.1
@@ -142,7 +142,7 @@ homebrew_casks:
     manpages:
       - fox.1
       - fox-str.1
+      - fox-info.1
       - fox-hash.1
-      - fox-stat.1
       - fox-dump.1
       - fox-hunt.1

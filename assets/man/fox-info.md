@@ -1,4 +1,4 @@
-% FOX STAT(1) Version 4 | Fox Documentation
+% FOX INFO(1) Version 4 | Fox Documentation
 
 NAME
 ====
@@ -8,12 +8,12 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **stat** \[_flags_ ...] \[_paths_ ...]
+| **fox** **info** \[_flags_ ...] \[_paths_ ...]
 
 DESCRIPTION
 ===========
 
-Show file stats and entropy. If the **--sort** flag is used, the files will be processed single-threaded.
+Show file infos with verdict. If the **--sort** flag is used, the files will be processed single-threaded, not _parallel_.
 
 FLAGS
 =====
@@ -40,7 +40,7 @@ Filter Flags
 Format Flags
 ------------
 
-**-h, --human**
+**-H, --human**
 
 :   Format size in human-readable units.
 
@@ -49,10 +49,17 @@ POSITIONAL ARGUMENTS
 
 Globbing paths to open or '-' to read from **STDIN(4)**.
 
+ENVIRONMENT
+===========
+
+**FOX_API_KEY**
+
+:   API key used to check files with the **VirusTotal** API. File checks will be conducted only by the files **SHA256** hash value, no files will be uploaded to VirusTotal (_optional_).
+
 EXAMPLES
 ========
 
-fox stat -n0.8 ./**/*
+fox info -n0.8 ./**/*
 
 :   List only high entropy files.
 

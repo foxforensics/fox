@@ -47,7 +47,7 @@ func Text(cli *cli.Globals, ctx *TextContext) *TextBuffer {
 	}
 
 	var buf = &TextBuffer{
-		make(chan *TextLine, cli.Threads*1024),
+		make(chan *TextLine, cli.Parallel*1024),
 		uint(math.Log10(float64(last))) + 1,
 	}
 

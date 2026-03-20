@@ -26,9 +26,9 @@ If no command is passed, then `cat` will be used by default.
 
 :   Show file contained strings.
 
-**l, stat**
+**i, info**
 
-:   Show file stats and entropy.
+:   Show file infos with verdict.
 
 **h, hash**
 
@@ -109,9 +109,9 @@ Special Flags
 
 :   Use archive _password_ (only for **7Z**, **RAR**, **ZIP**).
 
-**-P, --threads**=_cores_
+**-P, --parallel**=_cores_
 
-:   Use parallel threads.
+:   Use _cores_ for parallel processing.
 
 **-T, --force-text**
 
@@ -187,10 +187,6 @@ ENVIRONMENT
 
 :   Global flags can be set through environment variables. The variable name must be prefixed with _FOX_ followed by an underscore and the flags name. All dots must be replaced with underscores. A general proxy server can be set through the environment variables _HTTPS_PROXY_, _HTTP_PROXY_ and _NO_PROXY_.
 
-**FOX_API_KEY**
-
-:   API key for the **VirusTotal** API. Used to check file hashes.
-
 **FOX_LEXER**
 
 :   Force syntax highlighting lexer. Only available in default mode.
@@ -214,17 +210,13 @@ fox str -w sample.exe
 
 :   Show all strings in a binary.
 
-fox stat -n0.8 ./**/*
+fox info -n0.8 ./**/*
 
 :   List only high entropy files.
 
 fox hash -Amd5 files.7z
 
 :   Hash archive contents as MD5.
-
-fox hash -C sample.exe
-
-:   Check a suspicious file by hash.
 
 fox dump system ntds.dit
 

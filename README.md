@@ -74,17 +74,12 @@ fox str -w sample.exe
 
 List only high entropy files:
 ```console
-fox stat -n0.8 ./**/*
+fox info -n0.8 ./**/*
 ```
 
 Hash archive contents as MD5:
 ```console
 fox hash -Amd5 files.7z
-```
-
-Check a suspicious file by hash:
-```console
-fox hash -C sample.exe
 ```
 
 Dump NTLM hashes from database:

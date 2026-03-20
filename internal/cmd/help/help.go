@@ -8,15 +8,15 @@ import (
 	"github.com/cuhsat/fox/v4/internal/cmd/dump"
 	"github.com/cuhsat/fox/v4/internal/cmd/hash"
 	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
-	"github.com/cuhsat/fox/v4/internal/cmd/stat"
+	"github.com/cuhsat/fox/v4/internal/cmd/info"
 	"github.com/cuhsat/fox/v4/internal/cmd/str"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
 var usage = map[string]string{
 	"str":  str.Usage,
+	"info": info.Usage,
 	"hash": hash.Usage,
-	"stat": stat.Usage,
 	"dump": dump.Usage,
 	"hunt": hunt.Usage,
 }

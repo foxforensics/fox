@@ -5,14 +5,6 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/elf"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/ese"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/lnk"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pf"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/fortinet"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
 	"github.com/fatih/color"
 
 	_zip "github.com/cuhsat/fox/v4/internal/pkg/data/archive/7z"
@@ -27,6 +19,14 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/tar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/xar"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/archive/zip"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/elf"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/ese"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/lnk"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pe"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/bin/pf"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/fortinet"
+	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bgzf"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/br"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/deflate/bzip2"
@@ -70,7 +70,7 @@ type Globals struct {
 
 	// special flags
 	Password string `short:"p"`
-	Threads  int    `short:"P" default:"${cores}"`
+	Parallel int    `short:"P" default:"${cores}"`
 
 	// disable flags
 	Raw       bool `short:"r"`
@@ -141,8 +141,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.NoReceipt = true
 	}
 
-	if cli.Threads <= 0 {
-		cli.Threads = 1 // must be at least one
+	if cli.Parallel <= 0 {
+		cli.Parallel = 1 // must be at least one
 	}
 
 	if !cli.NoDeflate {
@@ -205,7 +205,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		Filter:   cli.Filter,
 		Paths:    cli.Paths,
 		Password: cli.Password,
-		Parallel: cli.Threads,
+		Parallel: cli.Parallel,
 		Verbose:  cli.Verbose,
 		Strict:   !cli.NoStrict,
 	})
@@ -219,8 +219,8 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		cli.Exit(0)
 	}
 
-	client.Idle = cli.Threads
-	smap.Chunks = cli.Threads
+	client.Idle = cli.Parallel
+	smap.Chunks = cli.Parallel
 
 	return cli.Loader.Load(args)
 }

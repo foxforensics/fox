@@ -94,7 +94,7 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			Wtf:      cmd.Wtf,
 			Find:     cmd.Find,
 			First:    cmd.First,
-			Parallel: cli.Threads,
+			Parallel: cli.Parallel,
 		}).Carve(h.Bytes()) {
 			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Value) {
 				continue // not matched afterward
