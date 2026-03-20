@@ -56,9 +56,9 @@ type Info struct {
 	Paths []string `arg:"" name:"path" optional:""`
 
 	// hidden
-	Key  string `short:"0" long:"api-key" hidden:""`
-	Key1 string `short:"1" xor:"key1,key2" hidden:""`
-	Key2 string `short:"2" xor:"key1,key2" hidden:""`
+	Key  string `hidden:"" long:"api-key"`
+	Jack string `hidden:"" xor:"jack,john"`
+	John string `hidden:"" xor:"jack,john"`
 
 	// internal
 	block uint64 `kong:"-"`
@@ -74,13 +74,11 @@ func (cmd *Info) Validate() error {
 
 func (cmd *Info) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	switch {
-	case len(cmd.Key1) > 0:
-		println("A", cmd.Key)
-		cmd.Key = api.Decrypt(vt.ReserveKey1, cmd.Key1)
-		println("B", cmd.Key)
+	case len(cmd.Jack) > 0:
+		cmd.Key = api.Decrypt(vt.ReserveKey1, cmd.Jack)
 
-	case len(cmd.Key2) > 0:
-		cmd.Key = api.Decrypt(vt.ReserveKey2, cmd.Key2)
+	case len(cmd.John) > 0:
+		cmd.Key = api.Decrypt(vt.ReserveKey2, cmd.John)
 	}
 
 	if len(cmd.Block) > 0 {
@@ -118,13 +116,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 
 		if h.Size == 0 {
 			if cmd.Min == 0 {
-				title := h.String()
-
-				if cmd.block > 0 {
-					title = "[00000000] " + title
-				}
-
-				text.Write(text.AsGray(fmt.Sprintf("%.10fe %10dl %10db %s  %s", 0.0, 0, 0, t, title)))
+				cmd.renderEmpty(h)
 			}
 
 			h.Discard()
@@ -132,13 +124,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		}
 
 		if len(cmd.Key) > 0 {
-			res, err := vt.CheckFile(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
-
-			if err != nil {
-				log.Println(err)
-			}
-
-			ver = fmt.Sprintf(" [%s]", verdict(res))
+			ver = cmd.verdict(h)
 		}
 
 		for block := range slices.Chunk(h.Bytes(), int(n)) {
@@ -174,13 +160,54 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func verdict(res *api.Result) string {
+func (cmd *Info) renderEmpty(h *heap.Heap) {
+	t := time.UnixMilli(int64(h.Time)).UTC().Format(time.RFC3339)
+	s := h.String()
+
+	if cmd.block > 0 {
+		s = "[00000000] " + s
+	}
+
+	text.Write(text.AsGray(fmt.Sprintf("%.10fe %10dl %10db %s  %s", 0.0, 0, 0, t, s)))
+}
+
+func (cmd *Info) renderBlock(h *heap.Heap, b []byte, o int) {
+	t := time.UnixMilli(int64(h.Time)).UTC().Format(time.RFC3339)
+	l := bytes.Count(b, []byte{'\n'})
+	e := heap.Entropy(b)
+
+	// add possibly remaining line
+	if b[len(b)-1] != '\n' {
+		l++
+	}
+
+	size := fmt.Sprintf("%db", len(b))
+	start := fmt.Sprintf("[%08x]", o)
+
+	if cmd.Human {
+		size = text.Humanize(int64(len(b)))
+	}
+
+	if cmd.block > 0 {
+		text.Write("%.10fe %10dl %11s %s  %s %s%s", e, l, size, t, start, h.String(), ver)
+	} else {
+		text.Write("%.10fe %10dl %11s %s  %s%s", e, l, size, t, h.String(), ver)
+	}
+}
+
+func (cmd *Info) verdict(h *heap.Heap) string {
+	res, err := vt.CheckFile(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
+
+	if err != nil {
+		log.Println(err)
+	}
+
 	switch res.Verdict {
 	case api.Unknown:
-		return res.Verdict
+		return fmt.Sprintf(" [%s]", res.Verdict)
 	case api.Unrated, api.Clean:
-		return text.AsGray(res.Verdict)
+		return fmt.Sprintf(" [%s]", text.AsGray(res.Verdict))
 	default:
-		return text.AsWarn(res.Verdict)
+		return fmt.Sprintf(" [%s]", text.AsWarn(res.Verdict))
 	}
 }
