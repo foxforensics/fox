@@ -37,13 +37,6 @@ Filter Flags
 
 :   Filter maximal entropy _value_ (default: **1.0**).
 
-Format Flags
-------------
-
-**-H, --human**
-
-:   Format size in human-readable units.
-
 POSITIONAL ARGUMENTS
 ====================
 

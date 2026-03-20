@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"math"
 	"slices"
 	"strings"
 	"time"
@@ -33,9 +34,6 @@ Filter flags:
   -n, --min=VALUE          Minimum entropy value (default: 0.0)
   -x, --max=VALUE          Maximal entropy value (default: 1.0)
 
-Format flags:
-  -H, --human              Format size in human-readable units
-
 Examples:
   $ fox info -n0.8 ./**/*
 
@@ -43,14 +41,44 @@ Remarks:
   Files hashes will be checked with VirusTotal, if FOX_API_KEY env is set.
 `)
 
+type FileInfo struct {
+	Path     string      `json:"path,omitempty"`
+	Lines    int64       `json:"lines,omitempty"`
+	Bytes    int64       `json:"bytes,omitempty"`
+	Offset   int64       `json:"offset,omitempty"`
+	Entropy  float64     `json:"entropy,omitempty"`
+	Modified time.Time   `json:"modified,omitempty"`
+	Verdict  *api.Result `json:"verdict,omitempty"`
+}
+
+func (fi *FileInfo) String() string {
+	var sb strings.Builder
+
+	sb.WriteString(fmt.Sprintf("%.10f ", fi.Entropy))
+	sb.WriteString(fmt.Sprintf("%10d ", fi.Lines))
+	sb.WriteString(fmt.Sprintf("%11s ", text.Humanize(fi.Bytes)))
+	sb.WriteString(fi.Modified.Format(time.RFC3339))
+	sb.WriteString(fmt.Sprintf(" %08x %s", fi.Offset, fi.Path))
+
+	if fi.Verdict != nil {
+		switch fi.Verdict.Verdict {
+		case api.Unknown:
+			sb.WriteString(fi.Verdict.Verdict)
+		case api.Unrated, api.Clean:
+			sb.WriteString(fmt.Sprintf(" [%s]", text.AsGray(fi.Verdict.Verdict)))
+		default:
+			sb.WriteString(fmt.Sprintf(" [%s]", text.AsWarn(fi.Verdict.Verdict)))
+		}
+	}
+
+	return sb.String()
+}
+
 type Info struct {
 	Sort  bool    `short:"s"`
 	Block string  `short:"b"`
 	Min   float64 `short:"n" default:"0.0"`
 	Max   float64 `short:"x" default:"1.0"`
-
-	// format
-	Human bool `short:"H"`
 
 	// paths
 	Paths []string `arg:"" name:"path" optional:""`
@@ -83,6 +111,8 @@ func (cmd *Info) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 	if len(cmd.Block) > 0 {
 		cmd.block = uint64(text.Mechanize(cmd.Block))
+	} else {
+		cmd.block = math.MaxUint64
 	}
 
 	return nil
@@ -98,116 +128,51 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 	}
 
 	if !cli.NoPretty {
-		text.Title(fmt.Sprintf("%-13s %11s %11s %s  %16s", "Entropy", "Lines", "Bytes", "Modified", "File"))
+		text.Title(fmt.Sprintf("%-12s %10s %11s %s  %17s %6s", "Entropy", "Lines", "Size", "Modified", "Offset", "File"))
 	}
 
 	ch := cli.LoadPlain(cmd.Paths)
 	defer cli.Discard()
 
 	for h := range ch {
-		var t = time.UnixMilli(int64(h.Time)).UTC().Format(time.RFC3339)
-		var n = cmd.block
-		var ver string
-		var off int
-
-		if n == 0 {
-			n = h.Size
-		}
-
-		if h.Size == 0 {
-			if cmd.Min == 0 {
-				cmd.renderEmpty(h)
-			}
-
-			h.Discard()
-			continue
+		fi := &FileInfo{
+			Path:     h.String(),
+			Modified: time.UnixMilli(int64(h.Time)).UTC(),
 		}
 
 		if len(cmd.Key) > 0 {
-			ver = cmd.verdict(h)
+			var err error
+
+			fi.Verdict, err = vt.CheckFile(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
+
+			if err != nil {
+				log.Println(err)
+			}
 		}
 
-		for block := range slices.Chunk(h.Bytes(), int(n)) {
-			l := bytes.Count(block, []byte{'\n'})
-			e := heap.Entropy(block)
+		var off int64
 
-			// add possibly remaining line
+		for block := range slices.Chunk(h.Bytes(), int(min(cmd.block, h.Size))) {
+			fi.Offset = off
+			fi.Bytes = int64(len(block))
+			fi.Lines = int64(bytes.Count(block, []byte{'\n'}))
+			fi.Entropy = heap.Entropy(block)
+
+			// add possibly remaining end
 			if block[len(block)-1] != '\n' {
-				l++
+				fi.Lines++
 			}
 
-			if e >= cmd.Min && e <= cmd.Max {
-				size := fmt.Sprintf("%db", len(block))
-				start := fmt.Sprintf("[%08x]", off)
+			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
 
-				if cmd.Human {
-					size = text.Humanize(int64(len(block)))
-				}
-
-				if cmd.block > 0 {
-					text.Write("%.10fe %10dl %11s %s  %s %s%s", e, l, size, t, start, h.String(), ver)
-				} else {
-					text.Write("%.10fe %10dl %11s %s  %s%s", e, l, size, t, h.String(), ver)
-				}
+				text.Write(fi.String())
 			}
 
-			off += len(block)
+			off += int64(len(block))
 		}
 
 		h.Discard()
 	}
 
 	return nil
-}
-
-func (cmd *Info) renderEmpty(h *heap.Heap) {
-	t := time.UnixMilli(int64(h.Time)).UTC().Format(time.RFC3339)
-	s := h.String()
-
-	if cmd.block > 0 {
-		s = "[00000000] " + s
-	}
-
-	text.Write(text.AsGray(fmt.Sprintf("%.10fe %10dl %10db %s  %s", 0.0, 0, 0, t, s)))
-}
-
-func (cmd *Info) renderBlock(h *heap.Heap, b []byte, o int) {
-	t := time.UnixMilli(int64(h.Time)).UTC().Format(time.RFC3339)
-	l := bytes.Count(b, []byte{'\n'})
-	e := heap.Entropy(b)
-
-	// add possibly remaining line
-	if b[len(b)-1] != '\n' {
-		l++
-	}
-
-	size := fmt.Sprintf("%db", len(b))
-	start := fmt.Sprintf("[%08x]", o)
-
-	if cmd.Human {
-		size = text.Humanize(int64(len(b)))
-	}
-
-	if cmd.block > 0 {
-		text.Write("%.10fe %10dl %11s %s  %s %s%s", e, l, size, t, start, h.String(), ver)
-	} else {
-		text.Write("%.10fe %10dl %11s %s  %s%s", e, l, size, t, h.String(), ver)
-	}
-}
-
-func (cmd *Info) verdict(h *heap.Heap) string {
-	res, err := vt.CheckFile(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	switch res.Verdict {
-	case api.Unknown:
-		return fmt.Sprintf(" [%s]", res.Verdict)
-	case api.Unrated, api.Clean:
-		return fmt.Sprintf(" [%s]", text.AsGray(res.Verdict))
-	default:
-		return fmt.Sprintf(" [%s]", text.AsWarn(res.Verdict))
-	}
 }
