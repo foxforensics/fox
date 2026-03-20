@@ -2,6 +2,7 @@ package vt
 
 import (
 	"fmt"
+	"log"
 	"maps"
 	"net/url"
 	"slices"
@@ -24,7 +25,7 @@ var badCategories = []string{
 	"suspicious",
 }
 
-func CheckFile(sum, key string) (*api.Result, error) {
+func CheckFile(sum, key string) *api.Result {
 	return request(vt.URL("files/%s", sum), key)
 }
 
@@ -83,24 +84,24 @@ func countStats(obj *vt.Object, lst []string) (n int) {
 	return
 }
 
-func request(url *url.URL, key string) (*api.Result, error) {
+func request(url *url.URL, key string) *api.Result {
 	res := &api.Result{Details: make(map[string]string)}
 
 	vtc := vt.NewClient(key, vt.WithHTTPClient(client.Default()))
 
 	obj, err := vtc.GetObject(url)
 
-	if err != nil {
-		if strings.Contains(err.Error(), "not found") {
-			res.Verdict = api.Unknown
-			return res, nil
-		}
-
-		return nil, err
+	if err == nil {
+		parseDetails(obj, res)
+		parseVerdict(obj, res)
+		return res
 	}
 
-	parseDetails(obj, res)
-	parseVerdict(obj, res)
-
-	return res, nil
+	if strings.Contains(err.Error(), "not found") {
+		res.Verdict = api.Unknown
+		return res
+	} else {
+		log.Println(err)
+		return nil
+	}
 }

@@ -22,9 +22,20 @@ FLAGS
 
 :   Sort files by path (slower).
 
+**-j, --json**
+
+:   Show infos as JSON objects.
+
+**-J, --jsonl**
+
+:   Show infos as JSON lines.
+
+Block Flags
+-----------
+
 **-b, --block**=_size_
 
-:   Block _size_ for analysis.
+:   Block _size_ for analysis (default: full size).
 
 Filter Flags
 ------------
