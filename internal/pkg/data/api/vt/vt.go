@@ -25,11 +25,11 @@ var badCategories = []string{
 	"suspicious",
 }
 
-func CheckHash(sha, key string) *api.Result {
+func CheckHash(sha, key string) *api.Report {
 	return request(vt.URL("files/%s", sha), key)
 }
 
-func parseVerdict(obj *vt.Object, res *api.Result) {
+func parseVerdict(obj *vt.Object, res *api.Report) {
 	res.Stats.Bad = countStats(obj, badCategories)
 	res.Stats.All = countStats(obj, []string{
 		"malicious",
@@ -56,7 +56,7 @@ func parseVerdict(obj *vt.Object, res *api.Result) {
 	}
 }
 
-func parseDetails(obj *vt.Object, res *api.Result) {
+func parseDetails(obj *vt.Object, res *api.Report) {
 	lar, err := obj.Get("last_analysis_results")
 
 	if err != nil {
@@ -84,8 +84,8 @@ func countStats(obj *vt.Object, lst []string) (n int) {
 	return
 }
 
-func request(url *url.URL, key string) *api.Result {
-	res := &api.Result{Details: make(map[string]string)}
+func request(url *url.URL, key string) *api.Report {
+	res := &api.Report{Details: make(map[string]string)}
 
 	vtc := vt.NewClient(key, vt.WithHTTPClient(client.Default()))
 

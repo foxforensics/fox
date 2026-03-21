@@ -10,13 +10,14 @@ import (
 	"time"
 
 	"github.com/alecthomas/kong"
+
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/api"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/api/vt"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
 
 // Threshold for high entropy files
@@ -50,13 +51,13 @@ Remarks:
 `)
 
 type FileInfo struct {
-	File       string      `json:"file,omitempty"`
-	Lines      int64       `json:"lines,omitempty"`
-	Bytes      int64       `json:"bytes,omitempty"`
-	Offset     int64       `json:"offset,omitempty"`
-	Entropy    float64     `json:"entropy,omitempty"`
-	Modified   time.Time   `json:"modified,omitempty"`
-	VirusTotal *api.Result `json:"virustotal,omitempty"`
+	File     string      `json:"file,omitempty"`
+	Lines    int64       `json:"lines,omitempty"`
+	Bytes    int64       `json:"bytes,omitempty"`
+	Offset   int64       `json:"offset,omitempty"`
+	Entropy  float64     `json:"entropy,omitempty"`
+	Modified time.Time   `json:"modified,omitempty"`
+	Report   *api.Report `json:"report,omitempty"`
 }
 
 func (fi *FileInfo) String() string {
@@ -169,7 +170,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		}
 
 		if len(cmd.Key) > 0 {
-			fi.VirusTotal = vt.CheckHash(hash.Sha256(h.Bytes()), cmd.Key)
+			fi.Report = vt.CheckHash(hash.Sha256(h.Bytes()), cmd.Key)
 		}
 
 		for block := range slices.Chunk(h.Bytes(), int(n)) {
@@ -211,16 +212,16 @@ func (cmd *Info) format(fi *FileInfo) string {
 	default:
 		line = fi.String()
 
-		if fi.VirusTotal != nil {
+		if fi.Report != nil {
 			var v string
 
-			switch fi.VirusTotal.Verdict {
+			switch fi.Report.Verdict {
 			case api.Unknown:
-				v = fi.VirusTotal.Verdict
+				v = fi.Report.Verdict
 			case api.Unrated, api.Clean:
-				v = text.AsGray(fi.VirusTotal.Verdict)
+				v = text.AsGray(fi.Report.Verdict)
 			default:
-				v = text.AsWarn(fi.VirusTotal.Verdict)
+				v = text.AsWarn(fi.Report.Verdict)
 			}
 
 			line = fmt.Sprintf("%s [%s]", line, text.AsBold(v))

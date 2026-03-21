@@ -14,7 +14,7 @@ const (
 	Suspicious = "suspicious"
 )
 
-type Result struct {
+type Report struct {
 	Verdict string            `json:"verdict,omitempty"`
 	Details map[string]string `json:"details,omitempty"`
 	Stats   struct {
@@ -23,13 +23,13 @@ type Result struct {
 	} `json:"stats,omitempty"`
 }
 
-func (res *Result) ToJSON() string {
-	b, _ := json.MarshalIndent(res, "", "  ")
+func (rep *Report) ToJSON() string {
+	b, _ := json.MarshalIndent(rep, "", "  ")
 	return string(b)
 }
 
-func (res *Result) ToJSONL() string {
-	b, _ := json.Marshal(res)
+func (rep *Report) ToJSONL() string {
+	b, _ := json.Marshal(rep)
 	return string(b)
 }
 
