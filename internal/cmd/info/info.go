@@ -11,13 +11,13 @@ import (
 
 	"github.com/alecthomas/kong"
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
+	"github.com/cuhsat/fox/v4/internal/pkg/hash"
+	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/api"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/api/vt"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
 var Usage = strings.TrimSpace(`
@@ -44,6 +44,8 @@ Remarks:
   Files hashes will be checked with VirusTotal, if FOX_API_KEY env is set.
 `)
 
+const limit = 0.9
+
 type FileInfo struct {
 	File       string      `json:"file,omitempty"`
 	Lines      int64       `json:"lines,omitempty"`
@@ -57,24 +59,15 @@ type FileInfo struct {
 func (fi *FileInfo) String() string {
 	var sb strings.Builder
 
-	sb.WriteString(fmt.Sprintf("%.10f ", fi.Entropy))
 	sb.WriteString(fi.Modified.Format(time.RFC3339))
-	sb.WriteString(fmt.Sprintf(" %s", fi.File))
+	sb.WriteString(fmt.Sprintf("  %6s", text.Humanize(fi.Bytes)))
+	sb.WriteString(fmt.Sprintf("  %.10f ", fi.Entropy))
 
-	if fi.VirusTotal != nil {
-		var v string
-
-		switch fi.VirusTotal.Verdict {
-		case api.Unknown:
-			v = fi.VirusTotal.Verdict
-		case api.Unrated, api.Clean:
-			v = text.AsGray(fi.VirusTotal.Verdict)
-		default:
-			v = text.AsWarn(fi.VirusTotal.Verdict)
-		}
-
-		sb.WriteString(fmt.Sprintf(" [%s]", text.AsBold(v)))
+	if fi.Offset >= 0 {
+		sb.WriteString(fmt.Sprintf(" %.08x", fi.Offset))
 	}
+
+	sb.WriteString(fmt.Sprintf(" %s", fi.File))
 
 	return sb.String()
 }
@@ -155,22 +148,26 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 			Modified: time.UnixMilli(int64(h.Time)).UTC(),
 		}
 
-		if len(cmd.Key) > 0 {
-			fi.VirusTotal = vt.CheckFile(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
-		}
+		n := int64(h.Size)
 
-		if len(cmd.Block) == 0 {
-			cmd.block = int64(h.Size)
+		if cmd.block > 0 {
+			n = cmd.block
+		} else {
+			fi.Offset = -1
 		}
 
 		// because empty files will cause errors
-		if fi.Bytes == 0 && cmd.Min == 0 {
+		if h.Size == 0 && cmd.Min == 0 {
 			text.Write(cmd.format(fi))
 			h.Discard()
 			continue
 		}
 
-		for block := range slices.Chunk(h.Bytes(), int(cmd.block)) {
+		if len(cmd.Key) > 0 {
+			fi.VirusTotal = vt.CheckFile(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
+		}
+
+		for block := range slices.Chunk(h.Bytes(), int(n)) {
 			fi.Bytes = int64(len(block))
 			fi.Lines = int64(bytes.Count(block, []byte{'\n'}))
 
@@ -185,7 +182,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 				text.Write(cmd.format(fi))
 			}
 
-			fi.Offset += int64(len(block))
+			fi.Offset += n
 		}
 
 		h.Discard()
@@ -202,10 +199,27 @@ func (cmd *Info) format(fi *FileInfo) string {
 		line = text.ColorizeAs(fi.ToJSONL(), "json")
 	case cmd.Json:
 		line = text.ColorizeAs(fi.ToJSON(), "json")
-		// case fi.Bytes == 0:
-		// line = text.AsGray(fi.String())
+	case fi.Bytes == 0:
+		line = text.AsGray(fi.String())
+	case fi.Entropy > limit:
+		line = text.AsWarn(fi.String())
 	default:
 		line = fi.String()
+
+		if fi.VirusTotal != nil {
+			var v string
+
+			switch fi.VirusTotal.Verdict {
+			case api.Unknown:
+				v = fi.VirusTotal.Verdict
+			case api.Unrated, api.Clean:
+				v = text.AsGray(fi.VirusTotal.Verdict)
+			default:
+				v = text.AsWarn(fi.VirusTotal.Verdict)
+			}
+
+			line = fmt.Sprintf("%s [%s]", line, text.AsBold(v))
+		}
 	}
 
 	return line

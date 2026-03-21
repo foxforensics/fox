@@ -196,7 +196,7 @@ func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 		color.NoColor = true // turn off color package
 	}
 
-	if cli.NoReceipt {
+	if cli.NoReceipt && len(cli.File) > 0 {
 		log.Println("warning: receipts has been disabled!")
 	}
 
