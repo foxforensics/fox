@@ -41,7 +41,7 @@ Examples:
   $ fox info -n0.8 ./**/*
 
 Remarks:
-  Files hashes will be checked with VirusTotal, if FOX_API_KEY env is set.
+  If FOX_API_KEY is set, then files hashes will be checked with VirusTotal.
 `)
 
 const limit = 0.9
