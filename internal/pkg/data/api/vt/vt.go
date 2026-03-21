@@ -25,8 +25,8 @@ var badCategories = []string{
 	"suspicious",
 }
 
-func CheckFile(sum, key string) *api.Result {
-	return request(vt.URL("files/%s", sum), key)
+func CheckHash(sha, key string) *api.Result {
+	return request(vt.URL("files/%s", sha), key)
 }
 
 func parseVerdict(obj *vt.Object, res *api.Result) {

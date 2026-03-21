@@ -39,7 +39,7 @@ Usage:
 
 Commands:
    s, str                  Show file contained strings
-   i, info                 Show file infos with verdict
+   i, info                 Show file infos and entropy
    h, hash                 Show file hashes and checksums
    d, dump                 Dump Active Directory secrets
    e, hunt                 Hunt critical system events
@@ -93,7 +93,7 @@ Example: Find occurrences in event logs
   $ fox -eWinlogon ./**/*.evtx
 
 Example: List only high entropy files
-  $ fox info -n0.8 ./**/*
+  $ fox info -n6.0 ./**/*
 
 Example: Hunt down critical events
   $ fox hunt -u *.dd

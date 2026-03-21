@@ -28,7 +28,7 @@ If no command is passed, then `cat` will be used by default.
 
 **i, info**
 
-:   Show file infos with verdict.
+:   Show file infos and entropy.
 
 **h, hash**
 
@@ -210,7 +210,7 @@ fox str -w sample.exe
 
 :   Show all strings in a binary.
 
-fox info -n0.8 ./**/*
+fox info -n6.0 ./**/*
 
 :   List only high entropy files.
 

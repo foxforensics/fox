@@ -80,7 +80,5 @@ func Entropy(block []byte) float64 {
 		}
 	}
 
-	v /= 8
-
 	return v
 }

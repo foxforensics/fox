@@ -74,7 +74,7 @@ fox str -w sample.exe
 
 List only high entropy files:
 ```console
-fox info -n0.8 ./**/*
+fox info -n6.0 ./**/*
 ```
 
 Hash archive contents as MD5:

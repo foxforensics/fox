@@ -12,7 +12,6 @@ import (
 	"github.com/alecthomas/kong"
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/data/api"
@@ -20,8 +19,14 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 
+// Threshold for high entropy files
+const Threshold = 7.2
+
+// NoOffset is used for analysis
+const NoOffset = -1
+
 var Usage = strings.TrimSpace(`
-Show file infos with verdict.
+Show file infos and entropy.
 
 fox info [FLAGS...] <PATHS...>
 
@@ -35,16 +40,14 @@ Block flags:
 
 Filter flags:
   -n, --min=VALUE          Minimum entropy value (default: 0.0)
-  -x, --max=VALUE          Maximal entropy value (default: 1.0)
+  -x, --max=VALUE          Maximal entropy value (default: 8.0)
 
 Examples:
-  $ fox info -n0.8 ./**/*
+  $ fox info -n6.0 ./**/*
 
 Remarks:
-  If FOX_API_KEY is set, then files hashes will be checked with VirusTotal.
+  If FOX_API_KEY is set, then file hashes will be checked via VirusTotal.
 `)
-
-const limit = 0.9
 
 type FileInfo struct {
 	File       string      `json:"file,omitempty"`
@@ -60,14 +63,14 @@ func (fi *FileInfo) String() string {
 	var sb strings.Builder
 
 	sb.WriteString(fi.Modified.Format(time.RFC3339))
-	sb.WriteString(fmt.Sprintf("  %6s", text.Humanize(fi.Bytes)))
-	sb.WriteString(fmt.Sprintf("  %.10f ", fi.Entropy))
+	sb.WriteString(fmt.Sprintf(" %6s", text.Humanize(fi.Bytes)))
+	sb.WriteString(fmt.Sprintf(" %.1fe ", fi.Entropy))
 
-	if fi.Offset >= 0 {
-		sb.WriteString(fmt.Sprintf(" %.08x", fi.Offset))
+	if fi.Offset != NoOffset {
+		sb.WriteString(fmt.Sprintf("%.08x:", fi.Offset))
 	}
 
-	sb.WriteString(fmt.Sprintf(" %s", fi.File))
+	sb.WriteString(fmt.Sprintf("%s", fi.File))
 
 	return sb.String()
 }
@@ -92,7 +95,7 @@ type Info struct {
 
 	// filter
 	Min float64 `short:"n" default:"0.0"`
-	Max float64 `short:"x" default:"1.0"`
+	Max float64 `short:"x" default:"8.0"`
 
 	// paths
 	Paths []string `arg:"" name:"path" optional:""`
@@ -153,18 +156,20 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		if cmd.block > 0 {
 			n = cmd.block
 		} else {
-			fi.Offset = -1
+			fi.Offset = NoOffset
 		}
 
 		// because empty files will cause errors
-		if h.Size == 0 && cmd.Min == 0 {
-			text.Write(cmd.format(fi))
+		if h.Size == 0 {
+			if cmd.Min == 0 {
+				text.Write(cmd.format(fi))
+			}
 			h.Discard()
 			continue
 		}
 
 		if len(cmd.Key) > 0 {
-			fi.VirusTotal = vt.CheckFile(hash.MustSum(types.SHA256, h.Bytes()), cmd.Key)
+			fi.VirusTotal = vt.CheckHash(hash.Sha256(h.Bytes()), cmd.Key)
 		}
 
 		for block := range slices.Chunk(h.Bytes(), int(n)) {
@@ -199,10 +204,10 @@ func (cmd *Info) format(fi *FileInfo) string {
 		line = text.ColorizeAs(fi.ToJSONL(), "json")
 	case cmd.Json:
 		line = text.ColorizeAs(fi.ToJSON(), "json")
+	case fi.Entropy > Threshold:
+		line = text.AsWarn(fi.String())
 	case fi.Bytes == 0:
 		line = text.AsGray(fi.String())
-	case fi.Entropy > limit:
-		line = text.AsWarn(fi.String())
 	default:
 		line = fi.String()
 

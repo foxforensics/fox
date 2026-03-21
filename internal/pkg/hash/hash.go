@@ -120,8 +120,8 @@ var Algorithms = []string{
 	types.XXH64,
 }
 
-func MustSum(algo string, data []byte) string {
-	sum, err := Sum(algo, data)
+func Sha256(data []byte) string {
+	sum, err := Sum(types.SHA256, data)
 
 	if err != nil {
 		log.Fatalln(err)

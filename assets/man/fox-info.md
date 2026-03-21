@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file infos with verdict. If the **--sort** flag is used, the files will be processed single-threaded, not _parallel_.
+Show file infos and entropy. If the **--sort** flag is used, the files will be processed single-threaded, not _parallel_. If the **FOX_API_KEY** environment variable is set, then file hashes will be checked via the **VirusTotal** API.
 
 FLAGS
 =====
@@ -46,7 +46,7 @@ Filter Flags
 
 **-x, --max**=_value_
 
-:   Filter maximal entropy _value_ (default: **1.0**).
+:   Filter maximal entropy _value_ (default: **8.0**).
 
 POSITIONAL ARGUMENTS
 ====================
@@ -58,12 +58,12 @@ ENVIRONMENT
 
 **FOX_API_KEY**
 
-:   API key used to check files with the **VirusTotal** API. File checks will be conducted only by the files **SHA256** hash value, no files will be uploaded to VirusTotal (_optional_).
+:   API key used to check files with the **VirusTotal** API. File checks will be conducted only by the files **SHA256** hash value, no files will be uploaded to VirusTotal. This environment variable is _optional_.
 
 EXAMPLES
 ========
 
-fox info -n0.8 ./**/*
+fox info -n6.0 ./**/*
 
 :   List only high entropy files.
 
@@ -82,4 +82,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**fox(1)**, **wc(1)**
+**fox(1)**, **ls(1)**, **wc(1)**
