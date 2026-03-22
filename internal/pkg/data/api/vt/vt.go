@@ -13,12 +13,14 @@ import (
 
 const FilesUrl = "https://www.virustotal.com/api/v3/files/%s"
 
+/*
 const (
 	Clean      = "clean"
 	Unknown    = "unknown"
 	Unrated    = "unrated"
 	Suspicious = "suspicious"
 )
+*/
 
 // Encrypted reserve keys for emergency use
 const (
@@ -26,10 +28,12 @@ const (
 	ReserveKey2 = "44201ef4cbffe7edd1a7d2279a1fc3019700c3620da45d0542014b8a7be0fd7b53125c3e474c6db7360f4f538d56bfe15bd416b0d2a77c02a37d0ffc5015694b41c9f117"
 )
 
+/*
 var badCategories = []string{
 	"malicious",
 	"suspicious",
 }
+*/
 
 type FileReport struct {
 	Data Data `json:"data"`
