@@ -78,7 +78,7 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 		return text.Usage(Usage)
 	}
 
-	ch := cli.LoadPlain(cmd.Paths)
+	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
 
 	for h := range ch {

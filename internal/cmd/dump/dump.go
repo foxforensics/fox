@@ -63,7 +63,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		return text.Usage(Usage)
 	}
 
-	ch := cli.LoadPlain(cmd.Paths)
+	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
 
 	f1 := <-ch

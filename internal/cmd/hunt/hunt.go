@@ -174,7 +174,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		cmd.Paths = hunter.Local
 	}
 
-	ch := cli.LoadPlain(cmd.Paths)
+	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
 
 	defer cmd.discard(cli)

@@ -98,13 +98,11 @@ type Globals struct {
 	Limit  *types.Limits  `kong:"-"`
 }
 
-func (cli *Globals) LoadPlain(args []string) <-chan *heap.Heap {
-	cli.NoConvert = true // force
+func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
+	if raw {
+		cli.NoConvert = true
+	}
 
-	return cli.Load(args)
-}
-
-func (cli *Globals) Load(args []string) <-chan *heap.Heap {
 	if len(cli.File) > 0 {
 		cli.NoPretty = true
 	}

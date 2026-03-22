@@ -13,7 +13,6 @@ import (
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/api"
 	"github.com/cuhsat/fox/v4/internal/pkg/data/api/vt"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
@@ -51,13 +50,13 @@ Remarks:
 `)
 
 type FileInfo struct {
-	File     string      `json:"file,omitempty"`
-	Lines    int64       `json:"lines,omitempty"`
-	Bytes    int64       `json:"bytes,omitempty"`
-	Offset   int64       `json:"offset,omitempty"`
-	Entropy  float64     `json:"entropy,omitempty"`
-	Modified time.Time   `json:"modified,omitempty"`
-	Report   *api.Report `json:"report,omitempty"`
+	File     string         `json:"file,omitempty"`
+	Lines    int64          `json:"lines,omitempty"`
+	Bytes    int64          `json:"bytes,omitempty"`
+	Offset   int64          `json:"offset,omitempty"`
+	Entropy  float64        `json:"entropy,omitempty"`
+	Modified time.Time      `json:"modified,omitempty"`
+	Report   *vt.FileReport `json:"report,omitempty"`
 }
 
 func (fi *FileInfo) String() string {
@@ -121,10 +120,10 @@ func (cmd *Info) Validate() error {
 func (cmd *Info) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	switch {
 	case len(cmd.Jack) > 0:
-		cmd.Key = api.Decrypt(vt.ReserveKey1, cmd.Jack)
+		cmd.Key = vt.Decrypt(vt.ReserveKey1, cmd.Jack)
 
 	case len(cmd.John) > 0:
-		cmd.Key = api.Decrypt(vt.ReserveKey2, cmd.John)
+		cmd.Key = vt.Decrypt(vt.ReserveKey2, cmd.John)
 	}
 
 	if len(cmd.Block) > 0 {
@@ -143,7 +142,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		cli.Parallel = 1 // single threaded
 	}
 
-	ch := cli.LoadPlain(cmd.Paths)
+	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
 
 	for h := range ch {
@@ -215,14 +214,18 @@ func (cmd *Info) format(fi *FileInfo) string {
 		if fi.Report != nil {
 			var v string
 
-			switch fi.Report.Verdict {
-			case api.Unknown:
-				v = fi.Report.Verdict
-			case api.Unrated, api.Clean:
-				v = text.AsGray(fi.Report.Verdict)
-			default:
-				v = text.AsWarn(fi.Report.Verdict)
-			}
+			/*
+				switch fi.Report.Verdict {
+				case api.Unknown:
+					v = fi.Report.Verdict
+				case api.Unrated, api.Clean:
+					v = text.AsGray(fi.Report.Verdict)
+				default:
+					v = text.AsWarn(fi.Report.Verdict)
+				}
+			*/
+
+			v = fi.Report.String()
 
 			line = fmt.Sprintf("%s [%s]", line, text.AsBold(v))
 		}

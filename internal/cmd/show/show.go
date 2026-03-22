@@ -48,7 +48,7 @@ func (cmd *Show) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Show) Run(cli *cli.Globals) error {
-	ch := cli.Load(cmd.Paths)
+	ch := cli.Load(cmd.Paths, false)
 
 	// apply command specific context
 	cli.Filter.Before = cmd.Before
