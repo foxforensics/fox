@@ -9,8 +9,8 @@ import (
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/dit"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/extract/reg"
+	"github.com/cuhsat/fox/v4/internal/pkg/file/extract/dit"
+	"github.com/cuhsat/fox/v4/internal/pkg/file/extract/reg"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
 

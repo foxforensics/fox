@@ -14,7 +14,7 @@ import (
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/sourcegraph/conc/pool"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data"
+	"github.com/cuhsat/fox/v4/internal/pkg/file"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
@@ -87,7 +87,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 				break
 			}
 
-			ldr.loadPath(data.SplitPart(path))
+			ldr.loadPath(file.SplitPart(path))
 		}
 	}()
 

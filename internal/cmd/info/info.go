@@ -13,7 +13,7 @@ import (
 
 	cli "github.com/cuhsat/fox/v4/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/api/vt"
+	"github.com/cuhsat/fox/v4/internal/pkg/file"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
@@ -50,29 +50,41 @@ Remarks:
 `)
 
 type FileInfo struct {
-	File     string         `json:"file,omitempty"`
-	Lines    int64          `json:"lines,omitempty"`
-	Bytes    int64          `json:"bytes,omitempty"`
-	Offset   int64          `json:"offset,omitempty"`
-	Entropy  float64        `json:"entropy,omitempty"`
-	Modified time.Time      `json:"modified,omitempty"`
-	Report   *vt.FileReport `json:"report,omitempty"`
+	File     string       `json:"file,omitempty"`
+	Lines    int64        `json:"lines,omitempty"`
+	Bytes    int64        `json:"bytes,omitempty"`
+	Offset   int64        `json:"offset,omitempty"`
+	Entropy  float64      `json:"entropy,omitempty"`
+	Modified time.Time    `json:"modified,omitempty"`
+	Report   *file.Report `json:"report,omitempty"`
 }
 
 func (fi *FileInfo) String() string {
 	var sb strings.Builder
 
-	sb.WriteString(fi.Modified.Format(time.RFC3339))
-	sb.WriteString(fmt.Sprintf(" %6s", text.Humanize(fi.Bytes)))
-	sb.WriteString(fmt.Sprintf(" %.1fe ", fi.Entropy))
+	sb.WriteString(fmt.Sprintf("%6s %.1fe ",
+		text.Humanize(fi.Bytes), fi.Entropy))
 
 	if fi.Offset != NoOffset {
 		sb.WriteString(fmt.Sprintf("%.08x:", fi.Offset))
 	}
 
-	sb.WriteString(fmt.Sprintf("%s", fi.File))
+	sb.WriteString(fi.File)
 
-	return sb.String()
+	line := sb.String()
+
+	switch {
+	case fi.Entropy > Threshold:
+		line = text.AsWarn(line)
+	case fi.Bytes == 0:
+		line = text.AsGray(line)
+	}
+
+	if fi.Report != nil && len(fi.Report.String()) > 0 {
+		line = text.AsBold(text.AsWarn(fmt.Sprintf("%s [%s]", line, fi.Report)))
+	}
+
+	return fmt.Sprintf("%s %s", text.AsGray(fi.Modified.Format(time.RFC3339)), line)
 }
 
 func (fi *FileInfo) ToJSON() string {
@@ -120,10 +132,10 @@ func (cmd *Info) Validate() error {
 func (cmd *Info) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	switch {
 	case len(cmd.Jack) > 0:
-		cmd.Key = vt.Decrypt(vt.ReserveKey1, cmd.Jack)
+		cmd.Key = file.ReserveKey(1, cmd.Jack)
 
 	case len(cmd.John) > 0:
-		cmd.Key = vt.Decrypt(vt.ReserveKey2, cmd.John)
+		cmd.Key = file.ReserveKey(2, cmd.John)
 	}
 
 	if len(cmd.Block) > 0 {
@@ -169,7 +181,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		}
 
 		if len(cmd.Key) > 0 {
-			fi.Report = vt.CheckHash(hash.Sha256(h.Bytes()), cmd.Key)
+			fi.Report = file.GetReport(hash.Sha256(h.Bytes()), cmd.Key)
 		}
 
 		for block := range slices.Chunk(h.Bytes(), int(n)) {
@@ -197,39 +209,12 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 }
 
 func (cmd *Info) format(fi *FileInfo) string {
-	var line string
-
 	switch {
 	case cmd.Jsonl:
-		line = text.ColorizeAs(fi.ToJSONL(), "json")
+		return text.ColorizeAs(fi.ToJSONL(), "json")
 	case cmd.Json:
-		line = text.ColorizeAs(fi.ToJSON(), "json")
-	case fi.Entropy > Threshold:
-		line = text.AsWarn(fi.String())
-	case fi.Bytes == 0:
-		line = text.AsGray(fi.String())
+		return text.ColorizeAs(fi.ToJSON(), "json")
 	default:
-		line = fi.String()
-
-		if fi.Report != nil {
-			var v string
-
-			/*
-				switch fi.Report.Verdict {
-				case api.Unknown:
-					v = fi.Report.Verdict
-				case api.Unrated, api.Clean:
-					v = text.AsGray(fi.Report.Verdict)
-				default:
-					v = text.AsWarn(fi.Report.Verdict)
-				}
-			*/
-
-			v = fi.Report.String()
-
-			line = fmt.Sprintf("%s [%s]", line, text.AsBold(v))
-		}
+		return fi.String()
 	}
-
-	return line
 }

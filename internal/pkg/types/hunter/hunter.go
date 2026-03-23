@@ -10,8 +10,8 @@ import (
 
 	"github.com/sourcegraph/conc/pool"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/evtx"
-	"github.com/cuhsat/fox/v4/internal/pkg/data/convert/log/journal"
+	"github.com/cuhsat/fox/v4/internal/pkg/file/convert/log/evtx"
+	"github.com/cuhsat/fox/v4/internal/pkg/file/convert/log/journal"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
