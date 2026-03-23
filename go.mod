@@ -28,7 +28,7 @@ require (
 	github.com/cuhsat/go-zip v0.5.3
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/dchest/siphash v1.2.3
-	github.com/fatih/color v1.18.0
+	github.com/fatih/color v1.19.0
 	github.com/flanglet/kanzi-go/v2 v2.5.0
 	github.com/glaslos/ssdeep v0.4.0
 	github.com/glaslos/tlsh v0.4.0
@@ -36,7 +36,7 @@ require (
 	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f
 	github.com/josephspurrier/goversioninfo v1.5.0
 	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004
-	github.com/klauspost/compress v1.18.4
+	github.com/klauspost/compress v1.18.5
 	github.com/korylprince/goxar v0.1.2
 	github.com/minio/minlz v1.1.0
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
@@ -60,7 +60,7 @@ require (
 	go.dw1.io/rapidhash v0.3.0
 	go.solidsystem.no/fletcher4 v0.2.0
 	golang.org/x/text v0.35.0
-	modernc.org/sqlite v1.46.2
+	modernc.org/sqlite v1.47.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 	www.velocidex.com/golang/regparser v0.0.0-20250203141505-31e704a67ef7
 )
@@ -98,7 +98,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/parquet-go/bitpack v1.0.0 // indirect
-	github.com/parquet-go/jsonlite v1.4.0 // indirect
+	github.com/parquet-go/jsonlite v1.5.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
