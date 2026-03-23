@@ -8,10 +8,10 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
-const file = "dump/test.reg.zst"
+const src = "dump/test.reg.zst"
 
 func BenchmarkBootKey(b *testing.B) {
-	buf := bytes.NewReader(test.Fixture(file))
+	buf := bytes.NewReader(test.Fixture(src))
 
 	for b.Loop() {
 		_, _ = BootKey(buf)
@@ -19,7 +19,7 @@ func BenchmarkBootKey(b *testing.B) {
 }
 
 func TestBootKey(t *testing.T) {
-	buf, err := BootKey(bytes.NewReader(test.Fixture(file)))
+	buf, err := BootKey(bytes.NewReader(test.Fixture(src)))
 
 	if err != nil {
 		t.Error(err)

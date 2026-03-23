@@ -7,10 +7,10 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
-const file = "format/fox.jsonl"
+const src = "format/fox.jsonl"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := test.Fixture(file)
+	buf := test.Fixture(src)
 
 	for b.Loop() {
 		_ = Detect(buf)
@@ -18,7 +18,7 @@ func BenchmarkDetect(b *testing.B) {
 }
 
 func BenchmarkFormat(b *testing.B) {
-	buf := test.Fixture(file)
+	buf := test.Fixture(src)
 
 	for b.Loop() {
 		_, _ = Format(buf)
@@ -26,13 +26,13 @@ func BenchmarkFormat(b *testing.B) {
 }
 
 func TestDetect(t *testing.T) {
-	if !Detect(test.Fixture(file)) {
+	if !Detect(test.Fixture(src)) {
 		t.Fatal("not detected")
 	}
 }
 
 func TestFormat(t *testing.T) {
-	buf, err := Format(test.Fixture(file))
+	buf, err := Format(test.Fixture(src))
 
 	if err != nil {
 		t.Fatal(err)

@@ -8,11 +8,11 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
-const file = "dump/test.dit.zst"
-const dump = "dump/dump.golden"
+const src = "dump/test.dit.zst"
+const dst = "dump/dump.golden"
 
 func BenchmarkExtract(b *testing.B) {
-	buf := test.Fixture(file)
+	buf := test.Fixture(src)
 
 	for b.Loop() {
 		_, _, _ = Extract(buf, extract.BootKey)
@@ -22,7 +22,7 @@ func BenchmarkExtract(b *testing.B) {
 func TestExtract(t *testing.T) {
 	var buf bytes.Buffer
 
-	rec, key, err := Extract(test.Fixture(file), extract.BootKey)
+	rec, key, err := Extract(test.Fixture(src), extract.BootKey)
 
 	if err != nil {
 		t.Error(err)
@@ -41,7 +41,7 @@ func TestExtract(t *testing.T) {
 		buf.WriteByte('\n')
 	}
 
-	if !bytes.Equal(buf.Bytes(), test.Fixture(dump)) {
+	if !bytes.Equal(buf.Bytes(), test.Fixture(dst)) {
 		t.Fatal("wrong hashes")
 	}
 }

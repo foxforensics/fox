@@ -6,10 +6,10 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
-const file = "deflate/fox.sz"
+const src = "deflate/fox.sz"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := test.Fixture(file)
+	buf := test.Fixture(src)
 
 	for b.Loop() {
 		_ = Detect(buf)
@@ -17,7 +17,7 @@ func BenchmarkDetect(b *testing.B) {
 }
 
 func BenchmarkDeflate(b *testing.B) {
-	buf := test.Fixture(file)
+	buf := test.Fixture(src)
 
 	for b.Loop() {
 		_, _ = Deflate(buf)
@@ -25,13 +25,13 @@ func BenchmarkDeflate(b *testing.B) {
 }
 
 func TestDetect(t *testing.T) {
-	if !Detect(test.Fixture(file)) {
+	if !Detect(test.Fixture(src)) {
 		t.Fatal("not detected")
 	}
 }
 
 func TestDeflate(t *testing.T) {
-	buf, err := Deflate(test.Fixture(file))
+	buf, err := Deflate(test.Fixture(src))
 
 	if err != nil {
 		t.Error(err)

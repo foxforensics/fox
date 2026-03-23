@@ -6,10 +6,10 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
-const file = "archive/test.msi"
+const src = "archive/test.msi"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := test.Fixture(file)
+	buf := test.Fixture(src)
 
 	for b.Loop() {
 		_ = Detect(buf)
@@ -17,7 +17,7 @@ func BenchmarkDetect(b *testing.B) {
 }
 
 func BenchmarkExtract(b *testing.B) {
-	buf := test.Fixture(file)
+	buf := test.Fixture(src)
 
 	for b.Loop() {
 		Extract(buf, "", "")
@@ -25,13 +25,13 @@ func BenchmarkExtract(b *testing.B) {
 }
 
 func TestDetect(t *testing.T) {
-	if !Detect(test.Fixture(file)) {
+	if !Detect(test.Fixture(src)) {
 		t.Fatal("not detected")
 	}
 }
 
 func TestExtract(t *testing.T) {
-	e := Extract(test.Fixture(file), "", "")
+	e := Extract(test.Fixture(src), "", "")
 
 	if len(e) != 3 {
 		t.Fatal("invalid entry count")

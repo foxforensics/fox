@@ -8,10 +8,10 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/test"
 )
 
-const file = "convert/test.journal.zst"
+const src = "convert/test.journal.zst"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := test.Fixture(file)
+	buf := test.Fixture(src)
 
 	for b.Loop() {
 		_ = Detect(buf)
@@ -19,7 +19,7 @@ func BenchmarkDetect(b *testing.B) {
 }
 
 func BenchmarkConvert(b *testing.B) {
-	buf := test.Fixture(file)
+	buf := test.Fixture(src)
 
 	for b.Loop() {
 		_, _ = Convert(buf)
@@ -27,13 +27,13 @@ func BenchmarkConvert(b *testing.B) {
 }
 
 func TestDetect(t *testing.T) {
-	if !Detect(test.Fixture(file)) {
+	if !Detect(test.Fixture(src)) {
 		t.Fatal("not detected")
 	}
 }
 
 func TestConvert(t *testing.T) {
-	buf, err := Convert(test.Fixture(file))
+	buf, err := Convert(test.Fixture(src))
 
 	if err != nil {
 		t.Error(err)

@@ -8,11 +8,11 @@ import (
 )
 
 const pass = "test"
-const file1 = "archive/fox.rar"
-const file2 = "archive/crypt.rar"
+const src1 = "archive/fox.rar"
+const src2 = "archive/crypt.rar"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := test.Fixture(file1)
+	buf := test.Fixture(src1)
 
 	for b.Loop() {
 		_ = Detect(buf)
@@ -20,7 +20,7 @@ func BenchmarkDetect(b *testing.B) {
 }
 
 func BenchmarkExtract(b *testing.B) {
-	buf := test.Fixture(file1)
+	buf := test.Fixture(src1)
 
 	for b.Loop() {
 		Extract(buf, "", "")
@@ -28,7 +28,7 @@ func BenchmarkExtract(b *testing.B) {
 }
 
 func TestDetect(t *testing.T) {
-	if !Detect(test.Fixture(file1)) {
+	if !Detect(test.Fixture(src1)) {
 		t.Fatal("not detected")
 	}
 }
@@ -37,8 +37,8 @@ func TestExtract(t *testing.T) {
 	for _, tt := range []struct {
 		file, pass string
 	}{
-		{file1, ""},
-		{file2, pass},
+		{src1, ""},
+		{src2, pass},
 	} {
 		t.Run(tt.file, func(t *testing.T) {
 			e := Extract(test.Fixture(tt.file), "", tt.pass)
