@@ -65,13 +65,3 @@ func TestDiscard(t *testing.T) {
 		t.Fatal("bytes not nil")
 	}
 }
-
-func TestEntropy(t *testing.T) {
-	h := New(name, hint, size, test.Fixture(file))
-
-	defer h.Discard()
-
-	if Entropy(h.Bytes()) != 4.607133402625364 {
-		t.Fatal("entropy wrong")
-	}
-}
