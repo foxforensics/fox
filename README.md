@@ -5,8 +5,6 @@
   [![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
   [![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/cuhsat/fox/actions)
   [![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
-
-  <img src="assets/img/hunt.png" width="800" alt="Hunt"/>
 </div>
 
 ## About
@@ -21,11 +19,12 @@ Fox is a CLI tool, build to support the examination process of file based forens
 * [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * [x] Parse Windows shortcut and prefetch files
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
-* [x] Check suspicious files via the [VirusTotal API](https://www.virustotal.com/)
+
 * [x] Dump NTLM hashes from [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) databases
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
 * [x] Integral syntax highlighting for many different formats
 * [x] Integral fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
+* [x] Integral file hash lookup via the [VirusTotal API](https://www.virustotal.com/)
 * [x] Integral *Chain-of-Custody* receipt generation
 * [x] Many popular archive and compression formats
 * [x] Many popular cryptographic, image, fuzzy and fast hashes

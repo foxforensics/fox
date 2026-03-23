@@ -83,7 +83,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 					log.Fatalln(err)
 				}
 
-				ldr.processData("STDIN", "", 0, bytes.TrimSpace(buf))
+				ldr.processData("STDIN", "", bytes.TrimSpace(buf))
 				break
 			}
 
@@ -183,11 +183,9 @@ func (ldr *Loader) loadFile(path, part string) {
 		return
 	}
 
-	t := uint64(fi.ModTime().UnixMilli())
-
 	// empty files will cause issues
 	if fi.Size() == 0 {
-		ldr.createHeap(path, "", t, 0, []byte{})
+		ldr.createHeap(path, "", 0, []byte{})
 		return
 	}
 
@@ -197,10 +195,10 @@ func (ldr *Loader) loadFile(path, part string) {
 		log.Printf("mapped file %s\n", path)
 	}
 
-	ldr.processData(path, part, t, b)
+	ldr.processData(path, part, b)
 }
 
-func (ldr *Loader) processData(path, part string, t uint64, b []byte) {
+func (ldr *Loader) processData(path, part string, b []byte) {
 	var hint string
 	var ok bool
 
@@ -212,7 +210,7 @@ func (ldr *Loader) processData(path, part string, t uint64, b []byte) {
 	}
 
 	// 2. extract data (multiply)
-	if ldr.extractData(path, part, t, b) {
+	if ldr.extractData(path, part, b) {
 		return
 	}
 
@@ -234,11 +232,11 @@ func (ldr *Loader) processData(path, part string, t uint64, b []byte) {
 
 	// filter for specific streams
 	if strings.Contains(path, part) {
-		ldr.createHeap(path, hint, t, uint64(len(b)), b)
+		ldr.createHeap(path, hint, uint64(len(b)), b)
 	}
 }
 
-func (ldr *Loader) extractData(path, part string, t uint64, b []byte) bool {
+func (ldr *Loader) extractData(path, part string, b []byte) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Println("archive corrupt or password wrong")
@@ -260,7 +258,7 @@ func (ldr *Loader) extractData(path, part string, t uint64, b []byte) bool {
 						log.Printf("stream detected as %s\n", e.Path)
 					}
 
-					ldr.processData(e.Path, part, t, e.Data)
+					ldr.processData(e.Path, part, e.Data)
 				})
 			}
 
@@ -345,7 +343,7 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 	return b, false
 }
 
-func (ldr *Loader) createHeap(path, hint string, time, size uint64, b []byte) {
+func (ldr *Loader) createHeap(path, hint string, size uint64, b []byte) {
 	ldr.Lock()
 	defer ldr.Unlock()
 
@@ -357,7 +355,7 @@ func (ldr *Loader) createHeap(path, hint string, time, size uint64, b []byte) {
 
 	ldr.size += int64(size)
 	ldr.paths = append(ldr.paths, path)
-	ldr.heaps <- heap.New(path, hint, time, size, b)
+	ldr.heaps <- heap.New(path, hint, size, b)
 
 	if ldr.opts.Verbose > 1 {
 		log.Printf("loaded heap %s\n", path)

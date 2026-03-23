@@ -10,21 +10,16 @@ const (
 	file = "text/bible.txt"
 	name = "test"
 	hint = "text"
-	time = 946684800000
 	size = 4633983
 )
 
 func TestNew(t *testing.T) {
-	h := New(name, hint, time, size, test.Fixture(file))
+	h := New(name, hint, size, test.Fixture(file))
 
 	defer h.Discard()
 
 	if h.Name != name {
 		t.Fatal("invalid name")
-	}
-
-	if h.Time != time {
-		t.Fatal("invalid time")
 	}
 
 	if h.Size != size {
@@ -37,7 +32,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestBytes(t *testing.T) {
-	h := New(name, hint, time, size, test.Fixture(file))
+	h := New(name, hint, size, test.Fixture(file))
 
 	defer h.Discard()
 
@@ -47,7 +42,7 @@ func TestBytes(t *testing.T) {
 }
 
 func TestString(t *testing.T) {
-	h := New(name, hint, time, size, test.Fixture(file))
+	h := New(name, hint, size, test.Fixture(file))
 
 	defer h.Discard()
 
@@ -57,7 +52,7 @@ func TestString(t *testing.T) {
 }
 
 func TestDiscard(t *testing.T) {
-	h := New(name, hint, time, size, test.Fixture(file))
+	h := New(name, hint, size, test.Fixture(file))
 	h.Discard()
 
 	if h.Size > 0 {
@@ -72,7 +67,7 @@ func TestDiscard(t *testing.T) {
 }
 
 func TestEntropy(t *testing.T) {
-	h := New(name, hint, time, size, test.Fixture(file))
+	h := New(name, hint, size, test.Fixture(file))
 
 	defer h.Discard()
 

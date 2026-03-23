@@ -1,6 +1,10 @@
 package hash
 
 import (
+	"encoding/json"
+	"fmt"
+	"maps"
+	"slices"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -12,14 +16,57 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
+type FileHash struct {
+	File string         `json:"file,omitempty"`
+	Hash map[string]any `json:"hash,omitempty"`
+}
+
+func (fh *FileHash) String() string {
+	var sb strings.Builder
+
+	if len(fh.Hash) > 1 {
+		for _, k := range slices.Sorted(maps.Keys(fh.Hash)) {
+			v := fh.Hash[k]
+
+			if err, ok := v.(error); ok {
+				v = text.AsGray(err.Error())
+			}
+
+			sb.WriteString(fmt.Sprintf("%-12s  %s\n", strings.ToUpper(k), v))
+		}
+	} else {
+		for v := range maps.Values(fh.Hash) {
+			if err, ok := v.(error); ok {
+				v = text.AsGray(err.Error())
+			}
+
+			sb.WriteString(fmt.Sprintf("%s  %s\n", v, fh.File))
+		}
+	}
+
+	return sb.String()
+}
+
+func (fh *FileHash) ToJSON() string {
+	b, _ := json.MarshalIndent(fh, "", "  ")
+	return string(b)
+}
+
+func (fh *FileHash) ToJSONL() string {
+	b, _ := json.Marshal(fh)
+	return string(b)
+}
+
 var Usage = strings.TrimSpace(`
 Show file hashes and checksums.
 
 fox hash [FLAGS...] <PATHS...>
 
 Flags:
-  -A, --algo=NAME,...      Use algorithm(s) (default: SHA256)
-  -a, --all                Use all algorithms
+  -A, --algo=NAME,...      Show specific algorithms (default: SHA256)
+  -a, --all                Show all hashes and checksums
+  -j, --json               Show results as JSON objects
+  -J, --jsonl              Show results as JSON lines
 
 Examples:
   $ fox hash -Amd5 files.7z
@@ -64,6 +111,10 @@ Checksums:
 type Hash struct {
 	Algo  []string `short:"A" sep:","`
 	All   bool     `short:"a"`
+	Json  bool     `short:"j" xor:"json,jsonl"`
+	Jsonl bool     `short:"J" xor:"json,jsonl"`
+
+	// paths
 	Paths []string `arg:"" optional:""`
 }
 
@@ -89,7 +140,12 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	for h := range ch {
-		if !cli.NoPretty && len(cmd.Algo) > 1 {
+		fh := &FileHash{
+			File: h.String(),
+			Hash: make(map[string]any),
+		}
+
+		if !cli.NoPretty && len(cmd.Algo) > 1 && !cmd.Json && !cmd.Jsonl {
 			text.Title(h.String())
 		}
 
@@ -97,24 +153,31 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			sum, err := hash.Sum(algo, h.Bytes())
 
 			if cli.Regexp != nil && !cli.Regexp.MatchString(sum) {
-				continue // not matched afterward
+				continue // do not include hash
 			}
 
-			res := text.MarkMatch(sum, cli.Regexp)
-
-			if err != nil {
-				res = text.AsGray(err.Error())
-			}
-
-			if len(cmd.Algo) > 1 {
-				text.Write("%-21s  %s", strings.ToUpper(algo), res)
+			if err == nil {
+				fh.Hash[algo] = sum
 			} else {
-				text.Write("%s  %s", res, h.Name)
+				fh.Hash[algo] = err
 			}
 		}
+
+		text.Match(cmd.format(fh), cli.Regexp)
 
 		h.Discard()
 	}
 
 	return nil
+}
+
+func (cmd *Hash) format(fh *FileHash) string {
+	switch {
+	case cmd.Jsonl:
+		return text.ColorizeAs(fh.ToJSONL(), "json")
+	case cmd.Json:
+		return text.ColorizeAs(fh.ToJSON(), "json")
+	default:
+		return fh.String()
+	}
 }

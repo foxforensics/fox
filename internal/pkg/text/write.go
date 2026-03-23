@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
@@ -42,6 +43,14 @@ func Title(s string) {
 
 func Write(f string, a ...any) {
 	_, _ = fmt.Fprintf(stdout, fmt.Sprintf("%s\n", f), a...)
+}
+
+func Match(s string, re *regexp.Regexp) {
+	if re != nil && re.MatchString(s) {
+		Write(MarkMatch(s, re))
+	} else if re == nil {
+		Write(s)
+	}
 }
 
 func Close(p string, r bool) {

@@ -2,7 +2,6 @@ package dump
 
 import (
 	"log"
-	"regexp"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -99,14 +98,8 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		}
 	}
 
-	for _, rec := range res {
-		line := cmd.format(&rec, cli.Regexp)
-
-		if cli.Regexp != nil && !cli.Regexp.MatchString(line) {
-			continue // not matched afterward
-		}
-
-		text.Write(line)
+	for _, r := range res {
+		text.Match(cmd.format(&r), cli.Regexp)
 	}
 
 	if cli.Verbose > 0 {
@@ -120,25 +113,17 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func (cmd *Dump) format(rec *dit.Record, re *regexp.Regexp) string {
-	var line string
-
+func (cmd *Dump) format(r *dit.Record) string {
 	switch {
 	case cmd.Jsonl:
-		line = text.ColorizeAs(rec.ToJSONL(), "json")
+		return text.ColorizeAs(r.ToJSONL(), "json")
 	case cmd.Json:
-		line = text.ColorizeAs(rec.ToJSON(), "json")
+		return text.ColorizeAs(r.ToJSON(), "json")
 	case cmd.OnlyNt:
-		line = rec.NtHash
+		return r.NtHash
 	case cmd.OnlyLm:
-		line = rec.LmHash
+		return r.LmHash
 	default:
-		line = rec.String()
+		return r.String()
 	}
-
-	if re != nil {
-		line = text.MarkMatch(line, re)
-	}
-
-	return line
 }

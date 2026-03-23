@@ -7,7 +7,6 @@ import (
 	"log"
 	"slices"
 	"strings"
-	"time"
 
 	"github.com/alecthomas/kong"
 
@@ -16,7 +15,6 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/file"
 	"github.com/cuhsat/fox/v4/internal/pkg/hash"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/heap"
 )
 
 // Threshold for high entropy files
@@ -50,20 +48,20 @@ Remarks:
 `)
 
 type FileInfo struct {
-	File     string       `json:"file,omitempty"`
-	Lines    int64        `json:"lines,omitempty"`
-	Bytes    int64        `json:"bytes,omitempty"`
-	Offset   int64        `json:"offset,omitempty"`
-	Entropy  float64      `json:"entropy,omitempty"`
-	Modified time.Time    `json:"modified,omitempty"`
-	Report   *file.Report `json:"report,omitempty"`
+	File    string       `json:"file,omitempty"`
+	Bytes   int64        `json:"bytes,omitempty"`
+	Lines   int64        `json:"lines,omitempty"`
+	Offset  int64        `json:"offset,omitempty"`
+	Entropy float64      `json:"entropy,omitempty"`
+	Report  *file.Report `json:"report,omitempty"`
 }
 
 func (fi *FileInfo) String() string {
 	var sb strings.Builder
 
-	sb.WriteString(fmt.Sprintf("%6s %.1fe ",
-		text.Humanize(fi.Bytes), fi.Entropy))
+	sb.WriteString(fmt.Sprintf("%7dl ", fi.Lines))
+	sb.WriteString(fmt.Sprintf("%6s ", text.Humanize(fi.Bytes)))
+	sb.WriteString(fmt.Sprintf("%.1fe ", fi.Entropy))
 
 	if fi.Offset != NoOffset {
 		sb.WriteString(fmt.Sprintf("%.08x:", fi.Offset))
@@ -71,20 +69,15 @@ func (fi *FileInfo) String() string {
 
 	sb.WriteString(fi.File)
 
-	line := sb.String()
-
-	switch {
-	case fi.Entropy > Threshold:
-		line = text.AsWarn(line)
-	case fi.Bytes == 0:
-		line = text.AsGray(line)
-	}
-
 	if fi.Report != nil && len(fi.Report.String()) > 0 {
-		line = text.AsBold(text.AsWarn(fmt.Sprintf("%s [%s]", line, fi.Report)))
+		return fmt.Sprintf("%s [%s]", sb.String(), text.AsWarn(text.AsBold(fi.Report)))
+	} else if fi.Entropy > Threshold {
+		return text.AsWarn(sb.String())
+	} else if fi.Bytes == 0 {
+		return text.AsGray(sb.String())
 	}
 
-	return fmt.Sprintf("%s %s", text.AsGray(fi.Modified.Format(time.RFC3339)), line)
+	return sb.String()
 }
 
 func (fi *FileInfo) ToJSON() string {
@@ -110,7 +103,7 @@ type Info struct {
 	Max float64 `short:"x" default:"8.0"`
 
 	// paths
-	Paths []string `arg:"" name:"path" optional:""`
+	Paths []string `arg:"" optional:""`
 
 	// hidden
 	Key  string `hidden:"" long:"api-key"`
@@ -158,10 +151,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 
 	for h := range ch {
-		fi := &FileInfo{
-			File:     h.String(),
-			Modified: time.UnixMilli(int64(h.Time)).UTC(),
-		}
+		fi := &FileInfo{File: h.String()}
 
 		n := int64(h.Size)
 
@@ -174,7 +164,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		// because empty files will cause errors
 		if h.Size == 0 {
 			if cmd.Min == 0 {
-				text.Write(cmd.format(fi))
+				text.Match(cmd.format(fi), cli.Regexp)
 			}
 			h.Discard()
 			continue
@@ -193,10 +183,10 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 				fi.Lines++
 			}
 
-			fi.Entropy = heap.Entropy(block)
+			fi.Entropy = file.Entropy(block)
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
-				text.Write(cmd.format(fi))
+				text.Match(cmd.format(fi), cli.Regexp)
 			}
 
 			fi.Offset += n

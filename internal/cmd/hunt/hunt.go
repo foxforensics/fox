@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"os"
-	"regexp"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -229,13 +228,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.db == nil {
-			line := cmd.format(e, cli.Regexp)
-
-			if cli.Regexp != nil && !cli.Regexp.MatchString(line) {
-				continue // not matched afterward
-			}
-
-			text.Write(line)
+			text.Match(cmd.format(e), cli.Regexp)
 		} else {
 			err := cmd.db.Store(e)
 
@@ -266,23 +259,15 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func (cmd *Hunt) format(e *event.Event, re *regexp.Regexp) string {
-	var line string
-
+func (cmd *Hunt) format(e *event.Event) string {
 	switch {
 	case cmd.Jsonl:
-		line = text.ColorizeAs(e.ToJSONL(), "json")
+		return text.ColorizeAs(e.ToJSONL(), "json")
 	case cmd.Json:
-		line = text.ColorizeAs(e.ToJSON(), "json")
+		return text.ColorizeAs(e.ToJSON(), "json")
 	default:
-		line = text.MarkEvent(e.ToCEF())
+		return text.MarkEvent(e.ToCEF())
 	}
-
-	if re != nil {
-		line = text.MarkMatch(line, re)
-	}
-
-	return line
 }
 
 func (cmd *Hunt) discard(cli *cli.Globals) {

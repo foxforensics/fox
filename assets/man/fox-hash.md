@@ -20,11 +20,19 @@ FLAGS
 
 **-A, --algo**=_name_,...
 
-:   Use algorithm(s) (default: **SHA256**).
+:   Show specific algorithms (default: **SHA256**).
 
 **-a, --all**
 
-:   Use all algorithms.
+:   Show all hashes and checksums.
+
+**-j, --json**
+
+:   Show results as JSON objects.
+
+**-J, --jsonl**
+
+:   Show results as JSON lines.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -100,4 +108,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**fox(1)**
+**fox(1)**, **md5sum(1)**, **sha1sum(1)**, **sha256sum(1)**

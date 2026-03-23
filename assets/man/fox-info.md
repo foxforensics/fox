@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file infos and entropy. If the **--sort** flag is used, the files will be processed single-threaded, not _parallel_. If the **FOX_API_KEY** environment variable is set, then file hashes will be checked via the **VirusTotal** API.
+Show file infos and entropy. If the **--sort** flag is used, the files will be processed single-threaded, not _parallel_. If the **FOX_API_KEY** environment variable is set, then file hashes will be checked via the **VirusTotal** API. An extensive file report is available via the **--json** and **--jsonl** flags.
 
 FLAGS
 =====
@@ -35,7 +35,7 @@ Block Flags
 
 **-b, --block**=_size_
 
-:   Block _size_ for analysis (default: full size).
+:   Block _size_ for analysis (default: all).
 
 Filter Flags
 ------------
@@ -82,4 +82,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**fox(1)**, **ls(1)**, **wc(1)**
+**fox(1)**, **wc(1)**

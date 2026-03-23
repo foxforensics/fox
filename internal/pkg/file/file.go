@@ -3,7 +3,10 @@
 // https://en.wikipedia.org/wiki/List_of_file_signatures
 package file
 
-import "bytes"
+import (
+	"bytes"
+	"math"
+)
 
 type Stream struct {
 	Path string // Stream path
@@ -26,4 +29,24 @@ func HasMagic(b []byte, off int, m []byte) bool {
 	}
 
 	return bytes.Equal(b[off:off+len(m)], m)
+}
+
+func Entropy(b []byte) float64 {
+	var v [256]float64
+	var e float64
+
+	for _, b := range b {
+		v[b]++
+	}
+
+	l := float64(len(b))
+
+	for i := range 256 {
+		if v[i] != 0 {
+			f := v[i] / l
+			e -= f * math.Log2(f)
+		}
+	}
+
+	return e
 }
