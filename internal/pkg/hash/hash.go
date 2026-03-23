@@ -51,6 +51,8 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 )
 
+var ErrNotSupported = errors.New("algorithm not supported")
+
 var Algorithms = []string{
 	types.ADLER32,
 	types.AVERAGE,
@@ -267,7 +269,7 @@ func Sum(algo string, data []byte) (string, error) {
 	case types.XXH64:
 		imp = xxhash.New()
 	default:
-		return "", errors.New("algorithm not recognized")
+		return "", ErrNotSupported
 	}
 
 	imp.Reset()
@@ -276,18 +278,12 @@ func Sum(algo string, data []byte) (string, error) {
 		return "", err
 	}
 
-	data = imp.Sum(nil)
-
-	if len(data) == 0 {
-		return "", errors.New("input size to small")
-	}
-
 	switch algo {
 	case types.SSDEEP, types.IMPFUZZY:
-		return fmt.Sprintf("%s", data), nil
+		return fmt.Sprintf("%s", imp.Sum(nil)), nil
 	case types.TLSH:
-		return fmt.Sprintf("T1%x", data), nil
+		return fmt.Sprintf("T1%x", imp.Sum(nil)), nil
 	default:
-		return fmt.Sprintf("%x", data), nil
+		return fmt.Sprintf("%x", imp.Sum(nil)), nil
 	}
 }

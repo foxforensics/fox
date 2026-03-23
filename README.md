@@ -15,7 +15,7 @@ Fox is a CLI tool, build to support the examination process of file based forens
 * [x] [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * [x] String carving and automatic classification
 * [x] With over 290 classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
-* [x] Parse Fortinet binary firewall log files
+* [x] Parse Fortinet binary firewall logs
 * [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * [x] Parse Windows shortcut and prefetch files
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables

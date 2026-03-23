@@ -13,14 +13,14 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified.
+Show different file hashes and checksums. Results will be grouped by path, if more than one _algorithm_ is specified.
 
 FLAGS
 =====
 
 **-A, --algo**=_name_,...
 
-:   Show specific algorithms (default: **SHA256**).
+:   Show a specific hash (default: **SHA256**).
 
 **-a, --all**
 
@@ -80,7 +80,7 @@ Similarity hashes
 
 Windows algorithms
 
-:   LM, NT, PE Checksum
+:   LM, NT, PE
 
 Checksums
 

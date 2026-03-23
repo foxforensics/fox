@@ -41,16 +41,16 @@ func Title(s string) {
 	_, _ = fmt.Fprintln(stdout, bold.Sprint(s))
 }
 
-func Write(f string, a ...any) {
-	_, _ = fmt.Fprintf(stdout, fmt.Sprintf("%s\n", f), a...)
-}
-
 func Match(s string, re *regexp.Regexp) {
 	if re != nil && re.MatchString(s) {
 		Write(MarkMatch(s, re))
 	} else if re == nil {
 		Write(s)
 	}
+}
+
+func Write(f string, a ...any) {
+	_, _ = fmt.Fprintf(stdout, fmt.Sprintf("%s\n", f), a...)
 }
 
 func Close(p string, r bool) {

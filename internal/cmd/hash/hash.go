@@ -2,6 +2,7 @@ package hash
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"maps"
 	"slices"
@@ -24,27 +25,28 @@ type FileHash struct {
 func (fh *FileHash) String() string {
 	var sb strings.Builder
 
-	if len(fh.Hash) > 1 {
-		for _, k := range slices.Sorted(maps.Keys(fh.Hash)) {
-			v := fh.Hash[k]
+	n := 0
 
-			if err, ok := v.(error); ok {
-				v = text.AsGray(err.Error())
-			}
+	for k := range maps.Keys(fh.Hash) {
+		n = max(n, len(k))
+	}
 
-			sb.WriteString(fmt.Sprintf("%-12s  %s\n", strings.ToUpper(k), v))
+	for _, k := range slices.Sorted(maps.Keys(fh.Hash)) {
+		v := fh.Hash[k]
+
+		// render errors
+		if err, ok := v.(error); ok {
+			v = text.AsGray(err.Error())
 		}
-	} else {
-		for v := range maps.Values(fh.Hash) {
-			if err, ok := v.(error); ok {
-				v = text.AsGray(err.Error())
-			}
 
-			sb.WriteString(fmt.Sprintf("%s  %s\n", v, fh.File))
+		if len(fh.Hash) > 1 {
+			sb.WriteString(fmt.Sprintf("%-*s  %s\n", n, strings.ToUpper(k), v))
+		} else {
+			sb.WriteString(fmt.Sprintf("%s  %s", v, fh.File))
 		}
 	}
 
-	return sb.String()
+	return strings.TrimSpace(sb.String())
 }
 
 func (fh *FileHash) ToJSON() string {
@@ -63,7 +65,7 @@ Show file hashes and checksums.
 fox hash [FLAGS...] <PATHS...>
 
 Flags:
-  -A, --algo=NAME,...      Show specific algorithms (default: SHA256)
+  -A, --algo=NAME,...      Show a specific hash (default: SHA256)
   -a, --all                Show all hashes and checksums
   -j, --json               Show results as JSON objects
   -J, --jsonl              Show results as JSON lines
@@ -102,7 +104,7 @@ Similarity hashes:
   IMPFUZZY, IMPHASH, IMPHASH0, SSDEEP, TLSH
 
 Windows algorithms:
-  LM, NT, PE Checksum
+  LM, NT, PE
 
 Checksums:
   ADLER32, FLETCHER4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
@@ -119,7 +121,7 @@ type Hash struct {
 }
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
-	if cmd.All {
+	if cmd.All || slices.Contains(cmd.Algo, "*") {
 		cmd.Algo = hash.Algorithms
 	}
 
@@ -145,12 +147,16 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			Hash: make(map[string]any),
 		}
 
-		if !cli.NoPretty && len(cmd.Algo) > 1 && !cmd.Json && !cmd.Jsonl {
+		if !cli.NoPretty && !cmd.Json && !cmd.Jsonl && len(cmd.Algo) > 1 {
 			text.Title(h.String())
 		}
 
 		for _, algo := range cmd.Algo {
 			sum, err := hash.Sum(algo, h.Bytes())
+
+			if errors.Is(err, hash.ErrNotSupported) {
+				return err // not supported
+			}
 
 			if cli.Regexp != nil && !cli.Regexp.MatchString(sum) {
 				continue // do not include hash
