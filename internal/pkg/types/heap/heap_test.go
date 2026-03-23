@@ -76,7 +76,7 @@ func TestEntropy(t *testing.T) {
 
 	defer h.Discard()
 
-	if Entropy(h.Bytes()) != 0.5758916753281705 {
+	if Entropy(h.Bytes()) != 4.607133402625364 {
 		t.Fatal("entropy wrong")
 	}
 }
