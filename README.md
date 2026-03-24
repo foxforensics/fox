@@ -57,7 +57,7 @@ There are also standalone binaries available:
 
 Find occurrences in event logs:
 ```console
-fox -eWinlogin ./**/*.evtx
+fox -eWinlogon ./**/*.evtx
 ```
 
 Show MBR in canonical hex:
