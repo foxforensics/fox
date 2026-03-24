@@ -113,6 +113,9 @@ Special Flags
 
 :   Use _cores_ for parallel processing.
 
+Display Flags
+-------------
+
 **-T, --force-text**
 
 :   Force output as text (in default mode).

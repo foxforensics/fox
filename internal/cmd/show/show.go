@@ -20,7 +20,7 @@ type Show struct {
 	Before  uint `short:"B"`
 	After   uint `short:"A"`
 
-	// force
+	// display
 	ForceText bool `short:"T" xor:"force-text,force-hex" long:"force-text"`
 	ForceHex  bool `short:"X" xor:"force-text,force-hex" long:"force-hex"`
 

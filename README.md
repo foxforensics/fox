@@ -95,7 +95,7 @@ File Formats
 > evtx, journal, lnk, pf, ELF, ESE/EDB, PE/COFF
 
 Archive Formats
-> 7zip, ar, CAB, CPIO, ISO, MSI, RAR, RPM, tar, xar, ZIP
+> 7zip, ar, CAB, CFB, CPIO, ISO, MSI, RAR, RPM, tar, xar, ZIP
 
 Compression Formats
 > BGZF, Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZFSE, LZO, LZVN, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
