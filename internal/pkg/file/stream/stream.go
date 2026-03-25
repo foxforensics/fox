@@ -30,6 +30,10 @@ func Post(url, body string, headers map[string]string) error {
 
 	res, err := _client.Do(req)
 
+	defer func() {
+		_ = res.Body.Close()
+	}()
+
 	if err != nil {
 		return err
 	}
@@ -38,5 +42,5 @@ func Post(url, body string, headers map[string]string) error {
 		return errors.New(http.StatusText(res.StatusCode))
 	}
 
-	return res.Body.Close()
+	return nil
 }
