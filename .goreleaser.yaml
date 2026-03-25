@@ -29,6 +29,12 @@ builds:
         goarch: arm
         goarm: 7
 
+upx:
+  - enabled: true
+    compress: best
+    lzma: true
+    brute: true
+
 archives:
   - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
     formats: [tar.gz]

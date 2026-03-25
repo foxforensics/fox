@@ -15,13 +15,9 @@
 ## 5. Ideas
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
-* Add LZNT1 deflate (magic bytes?)
-  * https://github.com/Velocidex/go-ntfs/blob/d467c5e7dca0/lznt1.go
 * Add vanity URL?
   * https://sagikazarmark.hu/blog/vanity-import-paths-in-go/
   * https://gitea.com/techknowlogick/go-vanity-url
-* Add Shellbag parser?
-* Add Jumplist parser?
 * Add specs to manpages?
   * `Fox Unified Event Format`
   * `Fox Unified Event Storage`

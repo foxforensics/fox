@@ -16,9 +16,13 @@ jobs:
       name: release
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
+      - name: Install UPX
+        uses: crazy-max/ghaction-upx@v4
+        with:
+          install-only: true
       - name: Setup Syft
         uses: anchore/sbom-action/download-syft@v0
       - name: Setup Cosign
@@ -26,7 +30,7 @@ jobs:
       - name: Setup Pandoc
         uses: pandoc/actions/setup@v1
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
       - name: Setup GoVersionInfo
         run: go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo
       - name: Run GoReleaser

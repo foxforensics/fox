@@ -35,6 +35,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/file/deflate/lz4"
 	"github.com/cuhsat/fox/v4/internal/pkg/file/deflate/lzfse"
 	"github.com/cuhsat/fox/v4/internal/pkg/file/deflate/lzip"
+	"github.com/cuhsat/fox/v4/internal/pkg/file/deflate/lznt1"
 	"github.com/cuhsat/fox/v4/internal/pkg/file/deflate/lzo"
 	"github.com/cuhsat/fox/v4/internal/pkg/file/deflate/lzw"
 	"github.com/cuhsat/fox/v4/internal/pkg/file/deflate/minlz"
@@ -45,6 +46,7 @@ import (
 	"github.com/cuhsat/fox/v4/internal/pkg/file/deflate/zstd"
 	"github.com/cuhsat/fox/v4/internal/pkg/file/format/json"
 	"github.com/cuhsat/fox/v4/internal/pkg/file/format/jsonl"
+	"github.com/cuhsat/fox/v4/internal/pkg/file/format/xml"
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 	"github.com/cuhsat/fox/v4/internal/pkg/types"
 	"github.com/cuhsat/fox/v4/internal/pkg/types/client"
@@ -153,6 +155,7 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		register.Deflate("lzip", lzip.Detect, lzip.Deflate)
 		register.Deflate("lzo", lzo.Detect, lzo.Deflate)
 		register.Deflate("lzfse", lzfse.Detect, lzfse.Deflate)
+		register.Deflate("lznt1", lznt1.Detect, lznt1.Deflate)
 		register.Deflate("lzw", lzw.Detect, lzw.Deflate)
 		register.Deflate("minlz", minlz.Detect, minlz.Deflate)
 		register.Deflate("s2", s2.Detect, s2.Deflate)
@@ -190,6 +193,7 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 	if !cli.NoPretty {
 		register.Format("json", json.Detect, json.Format)
 		register.Format("jsonl", jsonl.Detect, jsonl.Format)
+		register.Format("xml", xml.Detect, xml.Format)
 	} else {
 		color.NoColor = true // turn off color package
 	}

@@ -92,13 +92,13 @@ fox hunt -u *.dd
 
 ## Supports
 File Formats
-> evtx, journal, lnk, pf, ELF, ESE/EDB, PE/COFF
+> evtx, journal, json, jsonl, lnk, pf, ELF, ESE/EDB, PE/COFF
 
 Archive Formats
 > 7zip, ar, CAB, CFB, CPIO, ISO, MSI, RAR, RPM, tar, xar, ZIP
 
 Compression Formats
-> BGZF, Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZFSE, LZO, LZVN, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
+> BGZF, Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZFSE, LZNT1, LZO, LZVN, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
 
 Cryptographic Hashes
 > BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, GOST2012-256, GOST2012-512, HAS-160, LSH-256, LSH-512, MD2, MD4, MD5, MD6, RIPEMD-160, SHAKE128, SHAKE256, SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512, Skein-224, Skein-256, Skein-384, Skein-512, SM3, Whirlpool
