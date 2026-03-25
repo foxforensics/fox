@@ -17,6 +17,12 @@ var Lexer = ""
 var Style = "monokai"
 
 var (
+	Fg1 = color.New(color.Bold).AddRGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd)
+	Fg2 = color.New(color.FgHiBlack).AddBgRGB(0x33, 0x33, 0x33)
+	Fg3 = color.New(color.FgHiWhite).AddBgRGB(0x33, 0x33, 0x33)
+)
+
+var (
 	AsGray = gray.SprintFunc()
 	AsWarn = warn.SprintFunc()
 	AsBold = bold.SprintFunc()

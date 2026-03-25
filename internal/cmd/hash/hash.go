@@ -138,6 +138,10 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		return text.Usage(Usage)
 	}
 
+	if !cli.NoPretty && len(cmd.Algo) == 1 {
+		text.Title(cmd.Paths...)
+	}
+
 	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
 
@@ -147,7 +151,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			Hash: make(map[string]any),
 		}
 
-		if !cli.NoPretty && !cmd.Json && !cmd.Jsonl && len(cmd.Algo) > 1 {
+		if !cli.NoPretty && len(cmd.Algo) > 1 {
 			text.Title(h.String())
 		}
 

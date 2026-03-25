@@ -23,7 +23,7 @@ Flags:
   -J, --jsonl              Dump data as JSON lines
 
 Registry flags:
-  -K, --bootkey            Dump the host bootkey
+  -B, --bootkey            Dump the host bootkey
 
 Active Directory flags:
       --only-lm            Extract only the LM hashes (hashcat: 3000)
@@ -38,7 +38,7 @@ type Dump struct {
 	Jsonl bool `short:"J" xor:"json,jsonl"`
 
 	// registry flags
-	Bootkey bool `short:"K"`
+	Bootkey bool `short:"B"`
 
 	// active directory flags
 	OnlyLm bool `long:"only-lm" xor:"only-lm,only-nt"`
@@ -75,7 +75,11 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Bootkey {
-		text.Write("Bootkey %x", key)
+		if !cli.NoPretty {
+			text.Title(f1.String())
+		}
+
+		text.Write("%x", key)
 		return nil
 	}
 
@@ -96,6 +100,10 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		for i, k := range pek {
 			log.Printf("dump: PEK #%d %x\n", i, k)
 		}
+	}
+
+	if !cli.NoPretty {
+		text.Title(f2.String())
 	}
 
 	for _, r := range res {

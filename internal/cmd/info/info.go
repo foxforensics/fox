@@ -147,6 +147,10 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		cli.Parallel = 1 // single threaded
 	}
 
+	if !cli.NoPretty {
+		text.Title(cmd.Paths...)
+	}
+
 	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
 

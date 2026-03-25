@@ -173,6 +173,10 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		cmd.Paths = hunter.Local
 	}
 
+	if !cli.NoPretty {
+		text.Title(cmd.Paths...)
+	}
+
 	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
 

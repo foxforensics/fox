@@ -5,10 +5,19 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
+
+	"golang.org/x/term"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
+)
+
+const (
+	sep = " ❱ "
+	mul = " ⁞ "
 )
 
 var Banner = strings.TrimSpace(`
@@ -37,8 +46,24 @@ func Usage(msg string) error {
 	return nil
 }
 
-func Title(s string) {
-	_, _ = fmt.Fprintln(stdout, bold.Sprint(s))
+func Title(s ...string) {
+	w, _, err := term.GetSize(int(os.Stdin.Fd()))
+
+	if err != nil {
+		w = 78 // default
+	}
+
+	for i := 0; i < len(s); i++ {
+		s[i] = strings.TrimPrefix(s[i], "/")
+		s[i] = strings.TrimSuffix(s[i], "/")
+	}
+
+	title := strings.ReplaceAll(strings.Join(s, mul), string(filepath.Separator), sep)
+	stamp := time.Now().UTC().Format(time.RFC3339)
+
+	_, _ = fmt.Fprint(stdout, Fg1.Sprint(" FOX "))
+	_, _ = fmt.Fprint(stdout, Fg3.Sprintf(" %-*s ", w-29, title))
+	_, _ = fmt.Fprint(stdout, Fg2.Sprintf(" %s \n", stamp))
 }
 
 func Match(s string, re *regexp.Regexp) {

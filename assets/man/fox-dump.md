@@ -29,7 +29,7 @@ FLAGS
 Registry Flags
 --------------
 
-**-K, --bootkey**
+**-B, --bootkey**
 
 :   Dump the host bootkey.
 
