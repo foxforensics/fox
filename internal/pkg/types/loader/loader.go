@@ -109,7 +109,7 @@ func (ldr *Loader) loadPath(path, part string) {
 		log.Printf("looking for %s\n", path)
 	}
 
-	match, err := doublestar.FilepathGlob(path)
+	match, err := doublestar.FilepathGlob(filepath.Clean(path))
 
 	if err != nil {
 		log.Println(err)

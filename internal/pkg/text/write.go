@@ -53,17 +53,21 @@ func Title(s ...string) {
 		w = 78 // default
 	}
 
-	for i := 0; i < len(s); i++ {
-		s[i] = strings.TrimPrefix(s[i], "/")
-		s[i] = strings.TrimSuffix(s[i], "/")
+	title := s[0]
+	title = strings.TrimPrefix(title, "/")
+	title = strings.TrimSuffix(title, "/")
+	title = strings.ReplaceAll(title, string(filepath.Separator), sep)
+
+	if len(s) > 1 {
+		title += " …"
 	}
 
-	title := strings.ReplaceAll(strings.Join(s, mul), string(filepath.Separator), sep)
 	stamp := time.Now().UTC().Format(time.RFC3339)
 
 	_, _ = fmt.Fprint(stdout, Fg1.Sprint(" FOX "))
-	_, _ = fmt.Fprint(stdout, Fg3.Sprintf(" %-*s ", w-29, title))
-	_, _ = fmt.Fprint(stdout, Fg2.Sprintf(" %s \n", stamp))
+	_, _ = fmt.Fprint(stdout, Fg2.Sprintf(" %-*s ", w-29, title))
+	_, _ = fmt.Fprint(stdout, Fg3.Sprintf(" %s ", stamp))
+	_, _ = fmt.Fprintln(stdout)
 }
 
 func Match(s string, re *regexp.Regexp) {
