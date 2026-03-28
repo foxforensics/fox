@@ -127,14 +127,14 @@ nfpms:
 
 homebrew_casks:
   - url:
-      verified: github.com/f0x4n6/fox-cask/
+      verified: github.com/f0x4n6/homebrew-fox/
     name: "fox"
     description: "The Forensic Examiners Swiss Army Knife"
     homepage: "https://foxforensics.dev/"
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
     repository:
       owner: f0x4n6
-      name: fox-cask
+      name: homebrew-fox
       branch: main
       token: "{{ .Env.HOMEBREW_TOKEN }}"
     hooks:
