@@ -9,7 +9,7 @@ import (
 
 	"github.com/xxtea/xxtea-go/xxtea"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types/client"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/client"
 )
 
 const api = "https://www.virustotal.com/api/v3/files/%s"

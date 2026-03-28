@@ -4,10 +4,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/test"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/loader"
+	"go.foxforensics.dev/fox/v4/internal/pkg/test"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/loader"
 )
 
 func TestHunt(t *testing.T) {

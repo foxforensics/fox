@@ -5,7 +5,7 @@ import (
 	"compress/bzip2"
 	"io"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 )
 
 func Detect(b []byte) bool {

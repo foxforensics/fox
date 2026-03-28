@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file/extract"
-	"github.com/cuhsat/fox/v4/internal/pkg/test"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract"
+	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 )
 
 const src = "dump/test.dit.zst"

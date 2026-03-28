@@ -8,7 +8,7 @@ import (
 
 	"github.com/saferwall/pe"
 
-	intern "github.com/cuhsat/fox/v4/internal/pkg/file/convert/bin/pe"
+	intern "go.foxforensics.dev/fox/v4/internal/pkg/file/convert/bin/pe"
 )
 
 var ErrNotSupported = errors.New("file type not supported")

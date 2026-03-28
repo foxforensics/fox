@@ -1,6 +1,6 @@
 package store
 
-import "github.com/cuhsat/fox/v4/internal/pkg/types/event"
+import "go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 
 type Store interface {
 	String() string

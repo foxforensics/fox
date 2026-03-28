@@ -18,17 +18,17 @@ import (
 
 	"github.com/alecthomas/kong"
 
-	ver "github.com/cuhsat/fox/v4/internal"
+	ver "go.foxforensics.dev/fox/v4/internal"
 
-	"github.com/cuhsat/fox/v4/internal/cmd"
-	"github.com/cuhsat/fox/v4/internal/cmd/dump"
-	"github.com/cuhsat/fox/v4/internal/cmd/hash"
-	"github.com/cuhsat/fox/v4/internal/cmd/help"
-	"github.com/cuhsat/fox/v4/internal/cmd/hunt"
-	"github.com/cuhsat/fox/v4/internal/cmd/info"
-	"github.com/cuhsat/fox/v4/internal/cmd/show"
-	"github.com/cuhsat/fox/v4/internal/cmd/str"
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"go.foxforensics.dev/fox/v4/internal/cmd"
+	"go.foxforensics.dev/fox/v4/internal/cmd/dump"
+	"go.foxforensics.dev/fox/v4/internal/cmd/hash"
+	"go.foxforensics.dev/fox/v4/internal/cmd/help"
+	"go.foxforensics.dev/fox/v4/internal/cmd/hunt"
+	"go.foxforensics.dev/fox/v4/internal/cmd/info"
+	"go.foxforensics.dev/fox/v4/internal/cmd/show"
+	"go.foxforensics.dev/fox/v4/internal/cmd/str"
+	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
 
 var Usage = strings.TrimSpace(`
@@ -100,7 +100,7 @@ Example: List only high entropy files
 Example: Hunt down critical events
   $ fox hunt -u *.dd
 
-For more information visit: https://foxforensics.eu
+For more information visit: https://foxforensics.dev
 Use "fox help <COMMAND>" to see help on a sub command.
 `)
 

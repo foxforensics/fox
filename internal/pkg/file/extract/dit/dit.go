@@ -22,7 +22,7 @@ import (
 	"github.com/Velocidex/ordereddict"
 	"go.foxforensics.dev/go-ese/parser"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
 
 // row attributes

@@ -1,6 +1,6 @@
 package register
 
-import "github.com/cuhsat/fox/v4/internal/pkg/file"
+import "go.foxforensics.dev/fox/v4/internal/pkg/file"
 
 var (
 	Formats  []FormatEntry

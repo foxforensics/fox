@@ -9,10 +9,10 @@ import (
 
 	"github.com/twmb/murmur3"
 
-	"github.com/cuhsat/fox/v4/internal"
-	"github.com/cuhsat/fox/v4/internal/pkg/file/stream"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.dev/fox/v4/internal"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
 const LocalHost = "http://localhost:8080"

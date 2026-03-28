@@ -6,11 +6,11 @@ import (
 
 	"github.com/alecthomas/kong"
 
-	cli "github.com/cuhsat/fox/v4/internal/cmd"
+	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file/extract/dit"
-	"github.com/cuhsat/fox/v4/internal/pkg/file/extract/reg"
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/dit"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/reg"
+	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
 
 var Usage = strings.TrimSpace(`

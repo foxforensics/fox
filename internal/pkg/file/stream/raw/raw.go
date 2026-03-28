@@ -3,8 +3,8 @@ package raw
 import (
 	"fmt"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file/stream"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
 type Raw struct {

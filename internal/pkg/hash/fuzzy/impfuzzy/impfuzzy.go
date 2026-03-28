@@ -7,7 +7,7 @@ import (
 
 	"github.com/glaslos/ssdeep"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/fuzzy"
 )
 
 type ImpFuzzy struct {

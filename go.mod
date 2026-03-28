@@ -1,4 +1,4 @@
-module github.com/cuhsat/fox/v4
+module go.foxforensics.dev/fox/v4
 
 go 1.26.0
 

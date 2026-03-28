@@ -7,8 +7,8 @@ import (
 	"errors"
 	"io"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file"
-	"github.com/cuhsat/fox/v4/internal/pkg/file/format"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/format"
 )
 
 func Detect(b []byte) bool {

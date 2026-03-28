@@ -2,9 +2,9 @@
   <img src="assets/img/fox.png" width="160" alt=""/>
   <br/><br/>The Forensic Examiners Swiss Army Knife<br/><br/>
 
-  [![Go Report](https://goreportcard.com/badge/github.com/cuhsat/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/cuhsat/fox/v4)
-  [![Build](https://img.shields.io/github/actions/workflow/status/cuhsat/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/cuhsat/fox/actions)
-  [![Release](https://img.shields.io/github/release/cuhsat/fox.svg?style=for-the-badge&label=release)](https://github.com/cuhsat/fox/releases)
+  [![Go Report](https://goreportcard.com/badge/go.foxforensics.dev/fox/v4?style=for-the-badge)](https://goreportcard.com/report/go.foxforensics.dev/fox/v4)
+  [![Build](https://img.shields.io/github/actions/workflow/status/f0x4n6/fox/test.yaml?style=for-the-badge&label=build)](https://github.com/f0x4n6/fox/actions)
+  [![Release](https://img.shields.io/github/release/f0x4n6/fox.svg?style=for-the-badge&label=release)](https://github.com/f0x4n6/fox/releases)
 </div>
 
 ## About
@@ -42,16 +42,16 @@ Fox is a CLI tool, build to support the examination process of file based forens
 The fastest way to get started, is to use the `go install` command:
 
 ```console
-go install github.com/cuhsat/fox/v4@latest
+go install go.foxforensics.dev/fox/v4@latest
 ```
 
 There are also standalone binaries available:
 
-|   OS    | Binaries                                                                                                                                                                       | Packages                                                                                                                                                                                                                                                                                                                                                 |
-|:-------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|  Linux  | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.tar.gz) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_arm64.tar.gz)   | [apk](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.apk) \| [deb](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.deb) \| [pkg](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.pkg.tar.zst) \| [rpm](https://github.com/cuhsat/fox/releases/latest/download/fox_linux_amd64.rpm) |
-|  macOs  | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_darwin_amd64.tar.gz) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_darwin_arm64.tar.gz) | `brew install cuhsat/fox/fox`                                                                                                                                                                                                                                                                                                                            |
-| Windows | [amd](https://github.com/cuhsat/fox/releases/latest/download/fox_windows_amd64.zip) \| [arm](https://github.com/cuhsat/fox/releases/latest/download/fox_windows_arm64.zip)     | Binaries are portable executables                                                                                                                                                                                                                                                                                                                        |
+|   OS    | Binaries                                                                                                                                                                       | Packages                                                                                                                                                                                                                                                                                                                                             |
+|:-------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|  Linux  | [amd](https://foxforensics.dev/fox/releases/latest/download/fox_linux_amd64.tar.gz) \| [arm](https://foxforensics.dev/fox/releases/latest/download/fox_linux_arm64.tar.gz)     | [apk](https://foxforensics.dev/fox/releases/latest/download/fox_linux_amd64.apk) \| [deb](https://foxforensics.dev/fox/releases/latest/download/fox_linux_amd64.deb) \| [pkg](https://foxforensics.dev/fox/releases/latest/download/fox_linux_amd64.pkg.tar.zst) \| [rpm](https://foxforensics.dev/fox/releases/latest/download/fox_linux_amd64.rpm) |
+|  macOs  | [amd](https://foxforensics.dev/fox/releases/latest/download/fox_darwin_amd64.tar.gz) \| [arm](https://foxforensics.dev/fox/releases/latest/download/fox_darwin_arm64.tar.gz)   | `brew install f0x4n6/fox/fox`                                                                                                                                                                                                                                                                                                                        |
+| Windows | [amd](https://foxforensics.dev/fox/releases/latest/download/fox_windows_amd64.zip) \| [arm](https://foxforensics.dev/fox/releases/latest/download/fox_windows_arm64.zip)       | Binaries are portable executables                                                                                                                                                                                                                                                                                                                    |
 
 ## Examples
 

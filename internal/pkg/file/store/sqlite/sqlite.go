@@ -10,8 +10,8 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file/store"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/store"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
 const schema = `

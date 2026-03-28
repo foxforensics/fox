@@ -233,13 +233,13 @@ BUGS
 ====
 
 Please submit any issues with fox to the project's bug tracker:
-<_https://github.com/cuhsat/fox/issues_>
+<_https://foxforensics.dev/fox/issues_>
 
 WWW
 ===
 
 Please visit the project's homepage at:
-<_https://foxforensics.eu_>
+<_https://foxforensics.dev/fox_>
 
 SEE ALSO
 ========

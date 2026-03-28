@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	res "github.com/cuhsat/fox/v4/internal"
+	res "go.foxforensics.dev/fox/v4/internal"
 )
 
 var (

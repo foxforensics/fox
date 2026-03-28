@@ -38,17 +38,17 @@ import (
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/crc/kermit"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/blake3"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/crypto/shake"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/fast/xxh"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/impfuzzy"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy/imphash"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/image/image"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/lm"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/nt"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/windows/pe"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/crc/kermit"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/crypto/blake3"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/crypto/shake"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/fast/xxh"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/fuzzy/impfuzzy"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/fuzzy/imphash"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/image/image"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/windows/lm"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/windows/nt"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/windows/pe"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types"
 )
 
 var ErrNotSupported = errors.New("algorithm not supported")

@@ -10,8 +10,8 @@ import (
 
 	"github.com/zeebo/xxh3"
 
-	"github.com/cuhsat/fox/v4/internal"
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"go.foxforensics.dev/fox/v4/internal"
+	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
 
 const CEF = "%s %s CEF:1|fox|hunt|%s|100|%s|%d|"

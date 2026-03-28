@@ -6,7 +6,7 @@ import (
 	"hash"
 	"strings"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/hash/fuzzy"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/fuzzy"
 )
 
 type ImpHash struct {

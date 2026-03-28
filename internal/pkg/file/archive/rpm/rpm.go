@@ -14,7 +14,7 @@ import (
 	"github.com/ulikunitz/xz"
 	"github.com/ulikunitz/xz/lzma"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 )
 
 func Detect(b []byte) bool {

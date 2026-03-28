@@ -3,7 +3,7 @@ package types
 import (
 	"regexp"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/smap"
 )
 
 type Filters struct {

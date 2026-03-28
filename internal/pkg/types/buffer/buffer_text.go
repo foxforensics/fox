@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"math"
 
-	cli "github.com/cuhsat/fox/v4/internal/cmd"
+	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/smap"
+	"go.foxforensics.dev/fox/v4/internal/pkg/text"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/smap"
 )
 
 var Limit = 1024 * 1024 * 4

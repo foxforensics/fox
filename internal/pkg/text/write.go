@@ -12,7 +12,7 @@ import (
 
 	"golang.org/x/term"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types/receipt"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/receipt"
 )
 
 const (

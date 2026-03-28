@@ -10,11 +10,11 @@ import (
 
 	"github.com/alecthomas/kong"
 
-	cli "github.com/cuhsat/fox/v4/internal/cmd"
+	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file"
-	"github.com/cuhsat/fox/v4/internal/pkg/hash"
-	"github.com/cuhsat/fox/v4/internal/pkg/text"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash"
+	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
 
 // Threshold for high entropy files

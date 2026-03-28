@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/types/client"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/client"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
 var _client = client.Default()

@@ -13,9 +13,9 @@ import (
 
 	"github.com/0xrawsec/golang-evtx/evtx"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
 var Magic = []byte(evtx.EvtxMagic)

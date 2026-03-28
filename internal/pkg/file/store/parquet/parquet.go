@@ -5,9 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file/store"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
 	"github.com/parquet-go/parquet-go"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/store"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
 type File struct {

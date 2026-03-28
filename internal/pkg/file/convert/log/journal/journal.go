@@ -15,9 +15,9 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
-	"github.com/cuhsat/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
 var Magic = []byte("LPKSHHRH")

@@ -3,8 +3,8 @@ package hash
 import (
 	"testing"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/test"
-	"github.com/cuhsat/fox/v4/internal/pkg/types"
+	"go.foxforensics.dev/fox/v4/internal/pkg/test"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types"
 )
 
 const (

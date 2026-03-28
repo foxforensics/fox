@@ -9,7 +9,7 @@ import (
 	"github.com/Velocidex/ordereddict"
 	"go.foxforensics.dev/go-ese/parser"
 
-	"github.com/cuhsat/fox/v4/internal/pkg/file"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 )
 
 const (
