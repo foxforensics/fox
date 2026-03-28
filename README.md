@@ -3,7 +3,7 @@
   <br/><br/>The Forensic Examiners Swiss Army Knife<br/><br/>
 
   [![Go Report](https://goreportcard.com/badge/github.com/f0x4n6/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/f0x4n6/fox/v4)
-  [![Build](https://img.shields.io/github/actions/workflow/status/github.com/f0x4n6/fox/tests.yaml?style=for-the-badge&label=build)](https://github.com/f0x4n6/fox/actions)
+  [![Build](https://img.shields.io/github/actions/workflow/status/f0x4n6/fox/tests.yaml?style=for-the-badge&label=build)](https://github.com/f0x4n6/fox/actions)
   [![Release](https://img.shields.io/github/release/f0x4n6/fox.svg?style=for-the-badge&label=release)](https://github.com/f0x4n6/fox/releases)
 </div>
 
