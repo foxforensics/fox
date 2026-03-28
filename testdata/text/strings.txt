@@ -3,8 +3,8 @@ Test 🦊 Unicode
 127.0.0.1
 2001:0db8:85a3:08d3:1319:8a2e:0370:7344
 12:34:56:78:90:ab
-noreply@foxhunt.dev
-https://foxhunt.dev
+noreply@foxforensics.dev
+https://foxforensics.dev
 \\fox\hunt\wtf.txt
 550e8400-e29b-11d4-a716-446655440000
 002130-563959-533643-315590-484044-259380-247291-123456

@@ -66,7 +66,7 @@ WWW
 ===
 
 Please visit the project's homepage at:
-<_https://foxhunt.dev_>
+<_https://foxforensics.eu_>
 
 SEE ALSO
 ========

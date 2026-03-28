@@ -100,7 +100,7 @@ Example: List only high entropy files
 Example: Hunt down critical events
   $ fox hunt -u *.dd
 
-For more information please visit: https://foxhunt.dev
+For more information visit: https://foxforensics.eu
 Use "fox help <COMMAND>" to see help on a sub command.
 `)
 

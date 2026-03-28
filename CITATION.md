@@ -5,7 +5,7 @@ type: software
 authors:
   - given-names: Christian
     family-names: Uhsat
-url: "https://foxhunt.dev"
+url: "https://foxforensics.eu"
 version: 4
 abstract: "fox: The Forensic Examiners Swiss Army Knife."
 keywords:

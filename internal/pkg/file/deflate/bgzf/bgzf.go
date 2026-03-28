@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"io"
 
-	"github.com/f0x4n6/go-bgzf/bgzf"
+	"go.foxforensics.dev/go-bgzf/bgzf"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/file"
 )

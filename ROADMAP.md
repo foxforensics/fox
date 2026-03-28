@@ -15,9 +15,14 @@
 ## 5. Ideas
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
-* Add vanity URL?
-  * https://sagikazarmark.hu/blog/vanity-import-paths-in-go/
-  * https://gitea.com/techknowlogick/go-vanity-url
+* Vanity URL
+  * Refactor brew cask
+* Add artifact parsers
+  * JumpLists (from EZ)
+  * ShellBags (from EZ)
+* Add Triage command/mode
+  * Parse every file in dir
+  * Output as FILE.EXE.json?
 * Add specs to manpages?
   * `Fox Unified Event Format`
   * `Fox Unified Event Storage`

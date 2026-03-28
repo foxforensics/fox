@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/f0x4n6/go-zip/pkg/zip"
+	"go.foxforensics.dev/go-zip/pkg/zip"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/file"
 )

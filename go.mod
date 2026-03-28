@@ -20,15 +20,6 @@ require (
 	github.com/cespare/xxhash v1.1.0
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/dchest/siphash v1.2.3
-	github.com/f0x4n6/go-bgzf v0.3.0
-	github.com/f0x4n6/go-ese v0.4.0
-	github.com/f0x4n6/go-fortilog v0.2.0
-	github.com/f0x4n6/go-hash v0.3.0
-	github.com/f0x4n6/go-krypto v0.3.0
-	github.com/f0x4n6/go-lnk v0.2.0
-	github.com/f0x4n6/go-mmap v0.2.0
-	github.com/f0x4n6/go-msi v0.3.0
-	github.com/f0x4n6/go-zip v0.6.0
 	github.com/fatih/color v1.19.0
 	github.com/flanglet/kanzi-go/v2 v2.5.0
 	github.com/glaslos/ssdeep v0.4.0
@@ -59,6 +50,15 @@ require (
 	github.com/zeebo/blake3 v0.2.4
 	github.com/zeebo/xxh3 v1.1.0
 	go.dw1.io/rapidhash v0.3.0
+	go.foxforensics.dev/go-bgzf v0.3.1
+	go.foxforensics.dev/go-ese v0.4.1
+	go.foxforensics.dev/go-fortilog v0.2.1
+	go.foxforensics.dev/go-hash v0.3.1
+	go.foxforensics.dev/go-krypto v0.3.1
+	go.foxforensics.dev/go-lnk v0.2.1
+	go.foxforensics.dev/go-mmap v0.2.1
+	go.foxforensics.dev/go-msi v0.3.1
+	go.foxforensics.dev/go-zip v0.6.1
 	go.solidsystem.no/fletcher4 v0.2.0
 	golang.org/x/crypto v0.49.0
 	golang.org/x/term v0.41.0
@@ -85,7 +85,6 @@ require (
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/edsrzf/mmap-go v1.2.0 // indirect
-	github.com/f0x4n6/go-mscfb v0.3.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hooklift/assert v0.1.0 // indirect
@@ -102,6 +101,7 @@ require (
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/twpayne/go-geom v1.6.1 // indirect
+	go.foxforensics.dev/go-mscfb v0.3.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/exp v0.0.0-20260312153236-7ab1446f8b90 // indirect

@@ -81,8 +81,8 @@ signs:
     artifacts: checksum
 
 nfpms:
-  - vendor: fox
-    homepage: https://foxhunt.dev
+  - vendor: Fox Forensics
+    homepage: https://foxforensics.eu
     maintainer: Christian Uhsat <christian@uhsat.de>
     description: The Forensic Examiners Swiss Army Knife.
     license: GPL-3.0
@@ -130,7 +130,7 @@ homebrew_casks:
       verified: github.com/cuhsat/homebrew-fox/
     name: "fox"
     description: "The Forensic Examiners Swiss Army Knife"
-    homepage: "https://foxhunt.dev/"
+    homepage: "https://foxforensics.eu/"
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
     repository:
       owner: cuhsat
