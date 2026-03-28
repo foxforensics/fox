@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/cuhsat/go-lnk"
+	"github.com/f0x4n6/go-lnk"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/file"
 )

@@ -20,7 +20,7 @@ import (
 	"slices"
 
 	"github.com/Velocidex/ordereddict"
-	"github.com/cuhsat/go-ese/parser"
+	"github.com/f0x4n6/go-ese/parser"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/text"
 )
@@ -119,7 +119,7 @@ func (rec *Record) ToJSONL() string {
 func Extract(b, bootkey []byte) ([]Record, []Pek, error) {
 	var r []Record
 
-	ctx, err := parser.NewESEContext(bytes.NewReader(b))
+	ctx, err := parser.NewESEContext(bytes.NewReader(b), int64(len(b)))
 
 	if err != nil {
 		return nil, nil, err

@@ -6,7 +6,7 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/cuhsat/go-mmap"
+	"github.com/f0x4n6/go-mmap"
 )
 
 type MMap mmap.MMap

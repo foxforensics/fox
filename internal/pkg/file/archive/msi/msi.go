@@ -5,7 +5,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/cuhsat/go-msi/pkg/msi"
+	"github.com/f0x4n6/go-msi/pkg/msi"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/file"
 )

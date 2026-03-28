@@ -3,7 +3,7 @@ package fortinet
 import (
 	"bytes"
 
-	"github.com/cuhsat/go-fortilog/pkg/fortilog"
+	"github.com/f0x4n6/go-fortilog/pkg/fortilog"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/file"
 )

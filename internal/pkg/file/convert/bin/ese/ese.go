@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/Velocidex/ordereddict"
-	"github.com/cuhsat/go-ese/parser"
+	"github.com/f0x4n6/go-ese/parser"
 
 	"github.com/cuhsat/fox/v4/internal/pkg/file"
 )
@@ -28,7 +28,7 @@ func Detect(b []byte) bool {
 func Convert(b []byte) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 
-	ctx, err := parser.NewESEContext(bytes.NewReader(b))
+	ctx, err := parser.NewESEContext(bytes.NewReader(b), int64(len(b)))
 
 	if err != nil {
 		return b, err

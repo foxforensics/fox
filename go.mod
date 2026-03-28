@@ -1,10 +1,11 @@
 module github.com/cuhsat/fox/v4
 
-go 1.25.7
+go 1.26.0
 
 require (
 	github.com/0xrawsec/golang-evtx v1.2.9
 	github.com/Velocidex/go-journalctl v0.0.0-20250902002606-881a5f66df10
+	github.com/Velocidex/ordereddict v0.0.0-20250821063524-02dc06e46238
 	github.com/agnivade/levenshtein v1.2.1
 	github.com/aixiansheng/lzfse v0.2.4
 	github.com/ajdnik/imghash/v2 v2.3.0
@@ -17,17 +18,17 @@ require (
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cespare/xxhash v1.1.0
-	github.com/cuhsat/go-bgzf v0.2.1
-	github.com/cuhsat/go-ese v0.2.5
-	github.com/cuhsat/go-fortilog v0.1.0
-	github.com/cuhsat/go-hash v0.2.2
-	github.com/cuhsat/go-krypto v0.2.1
-	github.com/cuhsat/go-lnk v0.1.0
-	github.com/cuhsat/go-mmap v0.1.0
-	github.com/cuhsat/go-msi v0.2.2
-	github.com/cuhsat/go-zip v0.5.3
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/dchest/siphash v1.2.3
+	github.com/f0x4n6/go-bgzf v0.3.0
+	github.com/f0x4n6/go-ese v0.4.0
+	github.com/f0x4n6/go-fortilog v0.2.0
+	github.com/f0x4n6/go-hash v0.3.0
+	github.com/f0x4n6/go-krypto v0.3.0
+	github.com/f0x4n6/go-lnk v0.2.0
+	github.com/f0x4n6/go-mmap v0.2.0
+	github.com/f0x4n6/go-msi v0.3.0
+	github.com/f0x4n6/go-zip v0.6.0
 	github.com/fatih/color v1.19.0
 	github.com/flanglet/kanzi-go/v2 v2.5.0
 	github.com/glaslos/ssdeep v0.4.0
@@ -59,20 +60,12 @@ require (
 	github.com/zeebo/xxh3 v1.1.0
 	go.dw1.io/rapidhash v0.3.0
 	go.solidsystem.no/fletcher4 v0.2.0
+	golang.org/x/crypto v0.49.0
 	golang.org/x/term v0.41.0
 	golang.org/x/text v0.35.0
-	modernc.org/sqlite v1.47.0
+	modernc.org/sqlite v1.48.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 	www.velocidex.com/golang/regparser v0.0.0-20250203141505-31e704a67ef7
-)
-
-require (
-	github.com/Velocidex/json v0.0.0-20220224052537-92f3c0326e5a // indirect
-	github.com/Velocidex/ordereddict v0.0.0-20250821063524-02dc06e46238
-	github.com/Velocidex/yaml/v2 v2.2.8 // indirect
-	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
-	github.com/rogpeppe/go-internal v1.14.1 // indirect
-	golang.org/x/crypto v0.49.0
 )
 
 require (
@@ -80,21 +73,23 @@ require (
 	github.com/BobuSumisu/aho-corasick v1.0.3 // indirect
 	github.com/PaesslerAG/gval v1.2.4 // indirect
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
+	github.com/Velocidex/json v0.0.0-20220224052537-92f3c0326e5a // indirect
+	github.com/Velocidex/yaml/v2 v2.2.8 // indirect
 	github.com/akavel/rsrc v0.10.2 // indirect
 	github.com/alecthomas/participle v0.7.1 // indirect
 	github.com/ayoubfaouzi/pkcs7 v0.2.2 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/c4milo/gotoolkit v0.0.0-20190525173301-67483a18c17a // indirect
-	github.com/cuhsat/go-mscfb v0.2.1 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/edsrzf/mmap-go v1.2.0 // indirect
+	github.com/f0x4n6/go-mscfb v0.3.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hooklift/assert v0.1.0 // indirect
-	github.com/kr/pretty v0.3.1 // indirect
+	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
@@ -113,7 +108,6 @@ require (
 	golang.org/x/image v0.38.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/libc v1.70.0 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
