@@ -140,7 +140,7 @@ func main() {
 	case cli.Globals.Help, ctx.Command() == "help":
 		_ = text.Usage(Usage)
 	case cli.Version:
-		fmt.Printf("fox %s\n", ver.Version)
+		fmt.Printf("fox %s-%s\n", ver.Version, runtime.GOARCH)
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())
