@@ -32,8 +32,6 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-The Forensic Examiners Swiss Army Knife (%s)
-
 Usage:
   fox [COMMAND] [FLAGS...] <PATHS...>
 
@@ -100,8 +98,7 @@ Example: List only high entropy files
 Example: Hunt down critical events
   $ fox hunt -u *.dd
 
-For more information visit: https://foxforensics.dev
-Use "fox help <COMMAND>" to see help on a sub command.
+Use "fox help <COMMAND>" for sub commands.
 `)
 
 type fox struct {
@@ -141,7 +138,7 @@ func main() {
 	case len(ctx.Args) == 0, ctx.Error != nil:
 		fallthrough // show usage
 	case cli.Globals.Help, ctx.Command() == "help":
-		_ = text.Usage(fmt.Sprintf(Usage, ver.Version))
+		_ = text.Usage(Usage)
 	case cli.Version:
 		fmt.Printf("fox %s\n", ver.Version)
 	default:

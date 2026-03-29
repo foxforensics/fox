@@ -54,7 +54,7 @@ EXAMPLES
 
 fox dump system ntds.dit
 
-:   Dump NTLM hashes from database.
+:   Dump NTLM hashes from AD.
 
 BUGS
 ====

@@ -7,9 +7,11 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"strings"
 	"time"
 
+	ver "go.foxforensics.dev/fox/v4/internal"
 	"golang.org/x/term"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/receipt"
@@ -20,13 +22,13 @@ const (
 	mul = " ⁞ "
 )
 
-var Banner = strings.TrimSpace(`
-.-------.----.--.  .--.   .--. .--.--. .--.-. .--.-----.
-|   ___/ .__. \  \/  /    |  |_|  |  | |  |  \|  |   _/
-|   __|  |  |  >    <     |   _   |  | |  |   '  |  |
-|  |   \ '--' /  /\  \    |  | |  |  '-'  |  |\  |  |
-'--'    '----'--'  '--'   '--' '--'-------'--' '-'--'
-`)
+var Banner = `
+  .-------.----.--.  .--. 
+  |   ___/ .__. \  \/  /   Created by Fox Forensics
+  |   __|  |  |  >    <    https://foxforensics.dev
+  |  |   \ '--' /  /\  \   Version %s-%s
+  '--'    '----'--'  '--'
+`
 
 // standard output
 var stdout io.Writer = os.Stdout
@@ -40,7 +42,7 @@ func Setup(w io.WriteCloser, err error) {
 }
 
 func Usage(msg string) error {
-	_, _ = fmt.Println(Banner)
+	_, _ = fmt.Println(fmt.Sprintf(Banner, ver.Version, runtime.GOARCH))
 	_, _ = fmt.Println(msg)
 
 	return nil

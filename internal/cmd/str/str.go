@@ -12,8 +12,6 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Show file string contents.
-
 fox str [FLAGS...] <PATHS...>
 
 Flags:

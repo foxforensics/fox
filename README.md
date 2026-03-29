@@ -80,7 +80,7 @@ Hash archive contents as MD5:
 fox hash -Amd5 files.7z
 ```
 
-Dump NTLM hashes from database:
+Dump NTLM hashes from AD:
 ```console
 fox dump system ntds.dit
 ```

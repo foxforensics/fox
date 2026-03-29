@@ -24,8 +24,6 @@ const Threshold = 7.2
 const NoOffset = -1
 
 var Usage = strings.TrimSpace(`
-Show file infos and entropy.
-
 fox info [FLAGS...] <PATHS...>
 
 Flags:

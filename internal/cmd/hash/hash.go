@@ -17,51 +17,7 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/types"
 )
 
-type FileHash struct {
-	File string         `json:"file,omitempty"`
-	Hash map[string]any `json:"hash,omitempty"`
-}
-
-func (fh *FileHash) String() string {
-	var sb strings.Builder
-
-	n := 0
-
-	for k := range maps.Keys(fh.Hash) {
-		n = max(n, len(k))
-	}
-
-	for _, k := range slices.Sorted(maps.Keys(fh.Hash)) {
-		v := fh.Hash[k]
-
-		// render errors
-		if err, ok := v.(error); ok {
-			v = text.AsGray(err.Error())
-		}
-
-		if len(fh.Hash) > 1 {
-			sb.WriteString(fmt.Sprintf("%-*s  %s\n", n, strings.ToUpper(k), v))
-		} else {
-			sb.WriteString(fmt.Sprintf("%s  %s", v, fh.File))
-		}
-	}
-
-	return strings.TrimSpace(sb.String())
-}
-
-func (fh *FileHash) ToJSON() string {
-	b, _ := json.MarshalIndent(fh, "", "  ")
-	return string(b)
-}
-
-func (fh *FileHash) ToJSONL() string {
-	b, _ := json.Marshal(fh)
-	return string(b)
-}
-
 var Usage = strings.TrimSpace(`
-Show file hashes and checksums.
-
 fox hash [FLAGS...] <PATHS...>
 
 Flags:
@@ -109,6 +65,48 @@ Windows algorithms:
 Checksums:
   ADLER32, FLETCHER4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 `)
+
+type FileHash struct {
+	File string         `json:"file,omitempty"`
+	Hash map[string]any `json:"hash,omitempty"`
+}
+
+func (fh *FileHash) String() string {
+	var sb strings.Builder
+
+	n := 0
+
+	for k := range maps.Keys(fh.Hash) {
+		n = max(n, len(k))
+	}
+
+	for _, k := range slices.Sorted(maps.Keys(fh.Hash)) {
+		v := fh.Hash[k]
+
+		// render errors
+		if err, ok := v.(error); ok {
+			v = text.AsGray(err.Error())
+		}
+
+		if len(fh.Hash) > 1 {
+			sb.WriteString(fmt.Sprintf("%-*s  %s\n", n, strings.ToUpper(k), v))
+		} else {
+			sb.WriteString(fmt.Sprintf("%s  %s", v, fh.File))
+		}
+	}
+
+	return strings.TrimSpace(sb.String())
+}
+
+func (fh *FileHash) ToJSON() string {
+	b, _ := json.MarshalIndent(fh, "", "  ")
+	return string(b)
+}
+
+func (fh *FileHash) ToJSONL() string {
+	b, _ := json.Marshal(fh)
+	return string(b)
+}
 
 type Hash struct {
 	Algo  []string `short:"A" sep:","`

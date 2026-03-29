@@ -14,8 +14,6 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Dump Active Directory secrets.
-
 fox dump [FLAGS...] SYSTEM [NTDS]
 
 Flags:

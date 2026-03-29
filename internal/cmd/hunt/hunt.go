@@ -28,8 +28,6 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Hunt critical system events.
-
 fox hunt [FLAGS...] [PATHS...]
 
 Flags:
