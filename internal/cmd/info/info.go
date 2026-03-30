@@ -38,8 +38,11 @@ Filter flags:
   -n, --min=VALUE          Minimum entropy value (default: 0.0)
   -x, --max=VALUE          Maximal entropy value (default: 8.0)
 
-Examples:
+Example: List only high entropy files
   $ fox info -n6.0 ./**/*
+
+Example: List blocks by one MB size
+  $ fox info -b1m db.sqlite3
 
 Remarks:
   If FOX_API_KEY is set, then file hashes will be checked via VirusTotal.

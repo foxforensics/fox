@@ -89,9 +89,13 @@ Checksums
 EXAMPLES
 ========
 
-fox hash -Amd5 files.7z
+$ fox hash -Amd5 files.7z
 
 :   Hash archive contents as MD5.
+
+$ fox hash -Aimphash *.exe
+
+:   Hash binaries for similarity.
 
 BUGS
 ====

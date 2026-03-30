@@ -64,7 +64,7 @@ Filter flags:
 
 Special flags:
   -p, --password=TEXT      Use archive password (7Z, RAR, ZIP)
-  -P, --parallel=CORES     Use parallel processing
+  -z, --parallel=CORES     Use parallel processing
 
 Display flags:
   -T, --force-text         Force output as text

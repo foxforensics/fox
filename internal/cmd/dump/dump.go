@@ -27,7 +27,10 @@ Active Directory flags:
       --only-lm            Extract only the LM hashes (hashcat: 3000)
       --only-nt            Extract only the NT hashes (hashcat: 1000)
 
-Examples:
+Example: Dump the BootKey from registry
+  $ fox dump system -B
+
+Example: Dump NTLM hashes from AD
   $ fox dump system ntds.dit
 `)
 

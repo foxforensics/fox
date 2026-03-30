@@ -109,7 +109,7 @@ Special Flags
 
 :   Use archive _password_ (only for **7Z**, **RAR**, **ZIP**).
 
-**-P, --parallel**=_cores_
+**-z, --parallel**=_cores_
 
 :   Use _cores_ for parallel processing.
 
@@ -201,31 +201,31 @@ ENVIRONMENT
 EXAMPLES
 ========
 
-fox -eWinlogon ./**/*.evtx
+$ fox -eWinlogon ./**/*.evtx
 
 :   Find occurrences in event logs.
 
-fox -hc512 disk.dd
+$ fox -hc512 disk.dd
 
 :   Show MBR in canonical hex.
 
-fox str -w sample.exe
+$ fox str -w sample.exe
 
 :   Show all strings in a binary.
 
-fox info -n6.0 ./**/*
+$ fox info -n6.0 ./**/*
 
 :   List only high entropy files.
 
-fox hash -Amd5 files.7z
+$ fox hash -Amd5 files.7z
 
 :   Hash archive contents as MD5.
 
-fox dump system ntds.dit
+$ fox dump system ntds.dit
 
 :   Dump users and password hashes.
 
-fox hunt -u *.dd
+$ fox hunt -u *.dd
 
 :   Hunt down critical events.
 

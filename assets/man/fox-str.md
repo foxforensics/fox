@@ -61,9 +61,13 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox str -w sample.exe
+$ fox str -an8 sample.exe
 
-:   Show all strings in a binary.
+:   Show only long ASCII strings.
+
+$ fox str -wFurl sample.exe
+
+:   Show all URLs in a binary.
 
 BUGS
 ====

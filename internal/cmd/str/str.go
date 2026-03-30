@@ -26,8 +26,11 @@ Class flags:
   -1, --first              Show only strings first class
   -L, --list               Show only classification list
 
-Examples:
-  $ fox str -w sample.exe
+Example: Show only long ASCII strings
+  $ fox str -an8 sample.exe
+
+Example: Show all URLs in a binary
+  $ fox str -wFurl sample.exe
 `)
 
 type Str struct {

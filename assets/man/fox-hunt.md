@@ -38,11 +38,11 @@ FLAGS
 
 :   Show logs as JSON lines.
 
-**--parquet**
+**-P, --parquet**
 
 :   Save logs as Parquet (very fast).
 
-**--sqlite**
+**-S, --sqlite**
 
 :   Save logs as SQLite3 (very slow).
 
@@ -86,13 +86,13 @@ Stream Flags
 ALIASES
 =======
 
-**-L, --logstash**
+**--logstash**
 
-:   Alias for **-E -Uhttp://localhost:8080**.
+:   Alias for **-EUhttp://localhost:8080**.
 
-**-S, --splunk**
+**--splunk**
 
-:   Alias for **-H -Uhttp://localhost:8088/...**.
+:   Alias for **-HUhttp://localhost:8088/...**.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -102,9 +102,13 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-fox hunt -u *.dd
+$ fox hunt -u *.dd
 
 :   Hunt down critical events.
+
+$ fox hunt -aP *.evtx
+
+:   Save all events as Parquet.
 
 BUGS
 ====

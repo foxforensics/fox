@@ -50,6 +50,10 @@ func (cmd *Show) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 func (cmd *Show) Run(cli *cli.Globals) error {
 	ch := cli.Load(cmd.Paths, false)
 
+	if cmd.ForceText || cmd.ForceHex {
+		cli.NoConvert = true
+	}
+
 	// apply command specific context
 	cli.Filter.Before = cmd.Before
 	cli.Filter.After = cmd.After

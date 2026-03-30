@@ -72,7 +72,7 @@ type Globals struct {
 
 	// special flags
 	Password string `short:"p"`
-	Parallel int    `short:"P" default:"${cores}"`
+	Parallel int    `short:"z" default:"${cores}"`
 
 	// disable flags
 	Raw       bool `short:"r"`

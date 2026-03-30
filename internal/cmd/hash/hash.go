@@ -26,8 +26,11 @@ Flags:
   -j, --json               Show results as JSON objects
   -J, --jsonl              Show results as JSON lines
 
-Examples:
+Example: Hash archive contents as MD5
   $ fox hash -Amd5 files.7z
+
+Example: Hash binaries for similarity
+  $ fox hash -Aimphash *.exe
 
 Remarks:
   Results will be grouped by path, if more than one algorithm is specified.

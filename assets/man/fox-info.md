@@ -63,9 +63,13 @@ ENVIRONMENT
 EXAMPLES
 ========
 
-fox info -n6.0 ./**/*
+$ fox info -n6.0 ./**/*
 
 :   List only high entropy files.
+
+$ fox info -b1m db.sqlite3
+
+:   List blocks by one MB size.
 
 BUGS
 ====

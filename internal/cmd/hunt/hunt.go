@@ -36,8 +36,8 @@ Flags:
   -u, --uniq               Show logs that are unique 
   -j, --json               Show logs as JSON objects
   -J, --jsonl              Show logs as JSON lines
-      --parquet            Save logs as Parquet (very fast)
-      --sqlite             Save logs as SQLite3 (very slow)
+  -P, --parquet            Save logs as Parquet (very fast)
+  -S, --sqlite             Save logs as SQLite3 (very slow)
 
 Hunter flags:
   -b, --block=SIZE         Block size for event carving
@@ -53,11 +53,14 @@ Stream flags:
   -H, --hec                Use HEC schema for streaming
 
 Aliases:
-  -L, --logstash           Alias for -E -Uhttp://localhost:8080
-  -S, --splunk             Alias for -H -Uhttp://localhost:8088/...
+      --logstash           Alias for -EUhttp://localhost:8080
+      --splunk             Alias for -HUhttp://localhost:8088/...
 
-Examples:
+Example: Hunt down critical events
   $ fox hunt -u *.dd
+
+Example: Save all events as Parquet
+  $ fox hunt -aP *.evtx
 `)
 
 type Hunt struct {
@@ -66,8 +69,8 @@ type Hunt struct {
 	Uniq    bool `short:"u" xor:"uniq,dist"`
 	Json    bool `short:"j" xor:"json,jsonl"`
 	Jsonl   bool `short:"J" xor:"json,jsonl"`
-	Sqlite  bool `xor:"sqlite,parquet"`
-	Parquet bool `xor:"sqlite,parquet"`
+	Parquet bool `short:"P" xor:"sqlite,parquet"`
+	Sqlite  bool `short:"S" xor:"sqlite,parquet"`
 
 	// hunter
 	Block string `short:"b" default:"65536"`
@@ -83,8 +86,8 @@ type Hunt struct {
 	Hec  bool   `short:"H" xor:"ecs,hec"`
 
 	// alias
-	Logstash bool `short:"L" xor:"logstash,splunk"`
-	Splunk   bool `short:"S" xor:"logstash,splunk"`
+	Logstash bool `xor:"logstash,splunk"`
+	Splunk   bool `xor:"logstash,splunk"`
 
 	// paths
 	Paths []string `arg:"" optional:""`

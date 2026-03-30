@@ -15,12 +15,10 @@
 ## 5. Ideas
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
-* Vanity URL
-  * Refactor brew cask
-* Add artifact parsers
+* Add artifact parsers?
   * JumpLists (from EZ)
   * ShellBags (from EZ)
-* Add Triage command/mode
+* Add Triage command/mode?
   * Parse every file in dir
   * Output as FILE.EXE.json?
 * Add specs to manpages?

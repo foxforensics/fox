@@ -52,7 +52,11 @@ The Windows System registry hive followed by the Active Directory database (opti
 EXAMPLES
 ========
 
-fox dump system ntds.dit
+$ fox dump system -B
+
+:   Dump the BootKey from registry.
+
+$ fox dump system ntds.dit
 
 :   Dump NTLM hashes from AD.
 
