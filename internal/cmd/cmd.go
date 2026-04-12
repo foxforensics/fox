@@ -7,18 +7,8 @@ import (
 
 	"github.com/fatih/color"
 
-	_zip "go.foxforensics.dev/fox/v4/internal/pkg/file/archive/7z"
+	_zip "go.foxforensics.dev/fox/v4/internal/pkg/file/extract/7z"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/ar"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/cab"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/cpio"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/iso"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/msi"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/rar"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/rpm"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/tar"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/xar"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/zip"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/convert/bin/elf"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/convert/bin/ese"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/convert/bin/lnk"
@@ -44,6 +34,16 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/deflate/xz"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/deflate/zlib"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/deflate/zstd"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/ar"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/cab"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/cpio"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/iso"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/msi"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/rar"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/rpm"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/tar"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/xar"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/zip"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/format/json"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/format/jsonl"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/format/xml"
@@ -166,17 +166,17 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 	}
 
 	if !cli.NoExtract {
-		register.Archive("7z", _zip.Detect, _zip.Extract)
-		register.Archive("ar", ar.Detect, ar.Extract)
-		register.Archive("cab", cab.Detect, cab.Extract)
-		register.Archive("cpio", cpio.Detect, cpio.Extract)
-		register.Archive("iso", iso.Detect, iso.Extract)
-		register.Archive("msi", msi.Detect, msi.Extract)
-		register.Archive("rar", rar.Detect, rar.Extract)
-		register.Archive("rpm", rpm.Detect, rpm.Extract)
-		register.Archive("tar", tar.Detect, tar.Extract)
-		register.Archive("xar", xar.Detect, xar.Extract)
-		register.Archive("zip", zip.Detect, zip.Extract)
+		register.Extract("7z", _zip.Detect, _zip.Extract)
+		register.Extract("ar", ar.Detect, ar.Extract)
+		register.Extract("cab", cab.Detect, cab.Extract)
+		register.Extract("cpio", cpio.Detect, cpio.Extract)
+		register.Extract("iso", iso.Detect, iso.Extract)
+		register.Extract("msi", msi.Detect, msi.Extract)
+		register.Extract("rar", rar.Detect, rar.Extract)
+		register.Extract("rpm", rpm.Detect, rpm.Extract)
+		register.Extract("tar", tar.Detect, tar.Extract)
+		register.Extract("xar", xar.Detect, xar.Extract)
+		register.Extract("zip", zip.Detect, zip.Extract)
 	}
 
 	if !cli.NoConvert {

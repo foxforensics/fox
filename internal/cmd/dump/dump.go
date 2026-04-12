@@ -5,12 +5,13 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"go.foxforensics.dev/bootkey/pkg/bootkey"
+	"go.foxforensics.dev/hashdump/pkg/hashdump"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/dit"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/reg"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/record"
 )
 
 var Usage = strings.TrimSpace(`
@@ -21,14 +22,14 @@ Flags:
   -J, --jsonl              Dump data as JSON lines
 
 Registry flags:
-  -B, --bootkey            Dump the host bootkey
+  -K, --bootkey            Dump the host bootkey
 
 Active Directory flags:
       --only-lm            Extract only the LM hashes (hashcat: 3000)
       --only-nt            Extract only the NT hashes (hashcat: 1000)
 
 Example: Dump the BootKey from registry
-  $ fox dump system -B
+  $ fox dump system -K
 
 Example: Dump NTLM hashes from AD
   $ fox dump system ntds.dit
@@ -39,7 +40,7 @@ type Dump struct {
 	Jsonl bool `short:"J" xor:"json,jsonl"`
 
 	// registry flags
-	Bootkey bool `short:"B"`
+	Bootkey bool `short:"K"`
 
 	// active directory flags
 	OnlyLm bool `long:"only-lm" xor:"only-lm,only-nt"`
@@ -59,7 +60,7 @@ func (cmd *Dump) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Dump) Run(cli *cli.Globals) error {
-	if len(cmd.Paths) != 2 && (len(cmd.Paths) == 1 && !cmd.Bootkey) {
+	if (cmd.Bootkey && len(cmd.Paths) < 1) || (!cmd.Bootkey && len(cmd.Paths) < 2) {
 		return text.Usage(Usage)
 	}
 
@@ -69,7 +70,7 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	f1 := <-ch
 	defer f1.Discard()
 
-	key, err := reg.BootKey(f1.Reader())
+	key, err := bootkey.ReadData(f1.Reader())
 
 	if err != nil {
 		return err
@@ -91,7 +92,11 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		log.Println("dump: started")
 	}
 
-	res, pek, err := dit.Extract(f2.Bytes(), key)
+	if cli.Verbose > 1 {
+		log.Printf("dump: BootKey %x\n", key)
+	}
+
+	rec, pek, err := hashdump.Dump(f2.Bytes(), key)
 
 	if err != nil {
 		return err
@@ -107,8 +112,8 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 		text.Title(f2.String())
 	}
 
-	for _, r := range res {
-		text.Match(cmd.format(&r), cli.Regexp)
+	for _, r := range rec {
+		text.Match(cmd.format(record.New(r)), cli.Regexp)
 	}
 
 	if cli.Verbose > 0 {
@@ -116,22 +121,22 @@ func (cmd *Dump) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("dump: found %d records(s)\n", len(res))
+		log.Printf("dump: found %d records(s)\n", len(rec))
 	}
 
 	return nil
 }
 
-func (cmd *Dump) format(r *dit.Record) string {
+func (cmd *Dump) format(r *record.Record) string {
 	switch {
 	case cmd.Jsonl:
 		return text.ColorizeAs(r.ToJSONL(), "json")
 	case cmd.Json:
 		return text.ColorizeAs(r.ToJSON(), "json")
 	case cmd.OnlyNt:
-		return r.NtHash
+		return r.NT
 	case cmd.OnlyLm:
-		return r.LmHash
+		return r.LM
 	default:
 		return r.String()
 	}

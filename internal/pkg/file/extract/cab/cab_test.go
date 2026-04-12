@@ -1,12 +1,13 @@
-package msi
+package cab
 
 import (
 	"testing"
 
+	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 )
 
-const src = "archive/test.msi"
+const src = "extract/fox.cab"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := test.Fixture(src)
@@ -33,17 +34,15 @@ func TestDetect(t *testing.T) {
 func TestExtract(t *testing.T) {
 	e := Extract(test.Fixture(src), "", "")
 
-	if len(e) != 3 {
+	if len(e) != 1 {
 		t.Fatal("invalid entry count")
 	}
 
-	for _, s := range e {
-		if len(s.Path) == 0 {
-			t.Fatal("invalid entry path")
-		}
+	if e[0].Path != file.JoinPart("", test.Sample) {
+		t.Fatal("invalid entry path")
+	}
 
-		if len(s.Data) == 0 {
-			t.Fatal("invalid entry data")
-		}
+	if !test.Assert(e[0].Data) {
+		t.Fatal("invalid entry data")
 	}
 }

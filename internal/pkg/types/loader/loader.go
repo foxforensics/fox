@@ -244,7 +244,7 @@ func (ldr *Loader) extractData(path, part string, b []byte) bool {
 		}
 	}()
 
-	for _, a := range register.Archives {
+	for _, a := range register.Extracts {
 		if a.Detect(b) {
 			if ldr.opts.Verbose > 1 {
 				log.Printf("archive detected as possibly %s\n", a.Name)

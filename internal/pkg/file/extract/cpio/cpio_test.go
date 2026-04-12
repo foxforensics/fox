@@ -1,4 +1,4 @@
-package ar
+package cpio
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 )
 
-const src = "archive/fox.ar"
+const src = "extract/fox.cpio"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := test.Fixture(src)

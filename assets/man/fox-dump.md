@@ -29,7 +29,7 @@ FLAGS
 Registry Flags
 --------------
 
-**-B, --bootkey**
+**-K, --bootkey**
 
 :   Dump the host bootkey.
 
@@ -52,7 +52,7 @@ The Windows System registry hive followed by the Active Directory database (opti
 EXAMPLES
 ========
 
-$ fox dump system -B
+$ fox dump system -K
 
 :   Dump the BootKey from registry.
 

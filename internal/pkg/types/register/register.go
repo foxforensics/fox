@@ -5,7 +5,7 @@ import "go.foxforensics.dev/fox/v4/internal/pkg/file"
 var (
 	Formats  []FormatEntry
 	Deflates []DeflateEntry
-	Archives []ArchiveEntry
+	Extracts []ExtractEntry
 	Converts []ConvertEntry
 )
 
@@ -21,7 +21,7 @@ type DeflateEntry struct {
 	Deflate file.Deflate
 }
 
-type ArchiveEntry struct {
+type ExtractEntry struct {
 	Name    string
 	Detect  file.Detect
 	Extract file.Extract
@@ -41,8 +41,8 @@ func Deflate(s string, fn1 file.Detect, fn2 file.Deflate) {
 	Deflates = append(Deflates, DeflateEntry{s, fn1, fn2})
 }
 
-func Archive(s string, fn1 file.Detect, fn2 file.Extract) {
-	Archives = append(Archives, ArchiveEntry{s, fn1, fn2})
+func Extract(s string, fn1 file.Detect, fn2 file.Extract) {
+	Extracts = append(Extracts, ExtractEntry{s, fn1, fn2})
 }
 
 func Convert(s string, fn1 file.Detect, fn2 file.Convert) {
