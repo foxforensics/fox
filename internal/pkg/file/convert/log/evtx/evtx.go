@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/0xrawsec/golang-evtx/evtx"
+	"go.foxforensics.dev/evtx-db"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types"
@@ -23,11 +24,24 @@ var Chunk = []byte(evtx.ChunkMagic)
 
 var system = evtx.Path("/Event/System")
 
+var db evtx_db.Providers
+
 var children = []string{
 	"Guid",
 	"Name",
 	"Value",
 	"DwordVal",
+}
+
+func Preload() error {
+	var err error
+
+	// only load once
+	if len(db) == 0 {
+		db, err = evtx_db.Load()
+	}
+
+	return err
 }
 
 func Detect(b []byte) bool {
@@ -131,7 +145,7 @@ func newEvent(evt *evtx.GoEvtxMap) *event.Event {
 	// translate event id to message
 	e.Message = fmt.Sprintf("Undescribed event: %s: %d", e.Service, evt.EventID())
 
-	if events, ok := Events[e.Service]; ok {
+	if events, ok := db[e.Service]; ok {
 		if message, ok := events[evt.EventID()]; ok {
 			e.Message = message
 		}

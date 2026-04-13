@@ -50,7 +50,8 @@ require (
 	github.com/zeebo/blake3 v0.2.4
 	github.com/zeebo/xxh3 v1.1.0
 	go.dw1.io/rapidhash v0.3.0
-	go.foxforensics.dev/bootkey v0.3.2
+	go.foxforensics.dev/bootkey v0.3.3
+	go.foxforensics.dev/evtx-db v0.3.4
 	go.foxforensics.dev/go-bgzf v0.3.1
 	go.foxforensics.dev/go-ese v0.4.1
 	go.foxforensics.dev/go-fortilog v0.2.1
@@ -60,7 +61,7 @@ require (
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-zip v0.6.1
-	go.foxforensics.dev/hashdump v0.3.0
+	go.foxforensics.dev/hashdump v0.3.3
 	go.solidsystem.no/fletcher4 v0.2.0
 	golang.org/x/crypto v0.50.0
 	golang.org/x/term v0.42.0

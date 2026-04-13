@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"go.foxforensics.dev/hashdump/pkg/hashdump"
+	"go.foxforensics.dev/hashdump/hashdump"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )

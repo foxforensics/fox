@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"go.foxforensics.dev/bootkey/pkg/bootkey"
-	"go.foxforensics.dev/hashdump/pkg/hashdump"
+	"go.foxforensics.dev/bootkey/bootkey"
+	"go.foxforensics.dev/hashdump/hashdump"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 

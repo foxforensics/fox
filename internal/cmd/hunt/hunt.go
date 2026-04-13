@@ -9,6 +9,7 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/convert/log/evtx"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
@@ -161,6 +162,12 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	}
 
 	cmd.rule, err = sigma.ParseRule(rule)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	err = evtx.Preload()
 
 	if err != nil {
 		log.Fatalln(err)
