@@ -17,11 +17,6 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/receipt"
 )
 
-const (
-	sep = " ❱ "
-	mul = " ⁞ "
-)
-
 var Banner = `
   .-------.----.--.  .--. 
   |   ___/ .__. \  \/  /   Created by Fox Forensics
@@ -58,7 +53,7 @@ func Title(s ...string) {
 	title := s[0]
 	title = strings.TrimPrefix(title, "/")
 	title = strings.TrimSuffix(title, "/")
-	title = strings.ReplaceAll(title, string(filepath.Separator), sep)
+	title = strings.ReplaceAll(title, string(filepath.Separator), " ❱ ")
 
 	if len(s) > 1 {
 		title += " …"
