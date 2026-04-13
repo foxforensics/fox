@@ -19,12 +19,15 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
-var Magic = []byte(evtx.EvtxMagic)
-var Chunk = []byte(evtx.ChunkMagic)
+var (
+	Magic = []byte(evtx.EvtxMagic)
+	Chunk = []byte(evtx.ChunkMagic)
+)
 
-var system = evtx.Path("/Event/System")
-
-var db evtx_db.Providers
+var (
+	pathSystem    = evtx.Path("/Event/System")
+	pathEventData = evtx.Path("/Event/EventData")
+)
 
 var children = []string{
 	"Guid",
@@ -32,6 +35,8 @@ var children = []string{
 	"Value",
 	"DwordVal",
 }
+
+var db evtx_db.Providers
 
 func Preload() error {
 	var err error
@@ -171,7 +176,11 @@ func newEvent(evt *evtx.GoEvtxMap) *event.Event {
 		}
 	}
 
-	if v, err := evt.GetMap(&system); err == nil {
+	if v, err := evt.GetMap(&pathSystem); err == nil {
+		addMapDeep(&e, v, "")
+	}
+
+	if v, err := evt.GetMap(&pathEventData); err == nil {
 		addMapDeep(&e, v, "")
 	}
 
