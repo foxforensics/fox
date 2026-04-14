@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"go.foxforensics.dev/entropy/entropy"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
@@ -188,7 +189,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 				fi.Lines++
 			}
 
-			fi.Entropy = file.Entropy(block)
+			fi.Entropy = entropy.Calculate(block)
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
 				text.Match(cmd.format(fi), cli.Regexp)

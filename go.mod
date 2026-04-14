@@ -51,6 +51,7 @@ require (
 	github.com/zeebo/xxh3 v1.1.0
 	go.dw1.io/rapidhash v0.3.0
 	go.foxforensics.dev/bootkey v0.3.3
+	go.foxforensics.dev/entropy v0.3.1
 	go.foxforensics.dev/evtx-db v0.3.4
 	go.foxforensics.dev/go-bgzf v0.3.1
 	go.foxforensics.dev/go-ese v0.4.1
