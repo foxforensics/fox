@@ -10,7 +10,5 @@ version: 4
 abstract: "fox: The Forensic Examiners Swiss Army Knife."
 keywords:
   - fox
-  - hunt
-  - carving
   - forensics
 license: GPL-3.0
