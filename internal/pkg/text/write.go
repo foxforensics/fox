@@ -19,8 +19,8 @@ import (
 
 var Banner = `
   .-------.----.--.  .--. 
-  |   ___/ .__. \  \/  /   Created by Fox Forensics
-  |   __|  |  |  >    <    https://foxforensics.dev
+  |   ___/ .__. \  \/  /   Created by Fox Forensics 2026
+  |   __|  |  |  >    <    https://www.foxforensics.eu
   |  |   \ '--' /  /\  \   Version %s-%s
   '--'    '----'--'  '--'
 `
