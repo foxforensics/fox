@@ -71,7 +71,7 @@ Display flags:
   -X, --force-hex          Force output as hex
 
 Disable flags:
-  -r, --raw                Don't process files at all
+  -r, --raw                Don't process files (r/rr/rrr)
   -q, --quiet              Don't print anything
   -N, --no-pretty          Don't prettify the output
       --no-strict          Don't stop on parser errors

@@ -20,7 +20,7 @@ All files will only be processed read-only. A Chain-of-Custody receipt is genera
 COMMANDS
 ========
 
-If no command is passed, then `cat` will be used by default.
+If no command is passed, then the file contents will be shown by default.
 
 **s, str**
 
@@ -127,9 +127,9 @@ Display Flags
 Disable Flags
 -------------
 
-**-r, --raw**
+**-r, --raw**[=_level_]
 
-:   Don't process files at all.
+:   Don't process files (**r**/**rr**/**rrr**).
 
 **-q, --quiet**
 
@@ -141,19 +141,19 @@ Disable Flags
 
 **--no-strict**
 
-:   Don't stop on parser errors.
+:   Don't stop on parser errors (**-rrr**).
 
 **--no-deflate**
 
-:   Don't deflate automatically.
+:   Don't deflate automatically (**-rr**).
 
 **--no-extract**
 
-:   Don't extract automatically.
+:   Don't extract automatically (**-rr**).
 
 **--no-convert**
 
-:   Don't convert automatically.
+:   Don't convert automatically (**-r**).
 
 **--no-receipt**
 
@@ -164,7 +164,7 @@ Standard Flags
 
 **-v, --verbose**[=_level_]
 
-:   Print more details (v/vv/vvv).
+:   Print more details (**v**/**vv**/**vvv**).
 
 **-d, --dry-run**
 

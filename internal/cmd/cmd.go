@@ -75,7 +75,7 @@ type Globals struct {
 	Parallel int    `short:"z" default:"${cores}"`
 
 	// disable flags
-	Raw       bool `short:"r"`
+	Raw       int  `short:"r" type:"counter"`
 	Quiet     bool `short:"q" xor:"out,quiet"`
 	NoPretty  bool `short:"N" long:"no-pretty"`
 	NoStrict  bool `long:"no-strict"`
@@ -132,13 +132,17 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		Regex: cli.Regexp,
 	}
 
-	if cli.Raw {
-		cli.NoPretty = true
-		cli.NoStrict = true
+	if cli.Raw > 0 {
+		cli.NoConvert = true
+	}
+
+	if cli.Raw > 1 {
 		cli.NoDeflate = true
 		cli.NoExtract = true
-		cli.NoConvert = true
-		cli.NoReceipt = true
+	}
+
+	if cli.Raw > 2 {
+		cli.NoStrict = true
 	}
 
 	if cli.Parallel <= 0 {
