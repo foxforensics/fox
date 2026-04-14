@@ -30,7 +30,7 @@ type Carver struct {
 	opts  *Options
 	cache []*String
 	ch    chan *String
-	db    database
+	db    Database
 }
 
 func New(opts *Options) *Carver {
@@ -108,7 +108,7 @@ func (cvr *Carver) flush(off int, buf []rune) {
 
 		// append class
 		if cvr.opts.Wtf > 0 {
-			v := cvr.db.Search(str)
+			v := cvr.db.Lookup(str)
 
 			// search classes
 			if len(cvr.opts.Find) > 0 && !contains(v, cvr.opts.Find) {

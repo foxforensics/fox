@@ -63,8 +63,8 @@ func (cmd *Str) Validate() error {
 
 func (cmd *Str) AfterApply(app *kong.Kong, _ kong.Vars) error {
 	if cmd.List {
-		for _, cls := range carver.Classes(3) {
-			text.Write(cls)
+		for _, s := range carver.List(3) {
+			text.Write(s)
 		}
 
 		// exit early
