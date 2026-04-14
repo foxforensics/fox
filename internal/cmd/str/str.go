@@ -15,7 +15,7 @@ var Usage = strings.TrimSpace(`
 fox str [FLAGS...] <PATHS...>
 
 Flags:
-  -n, --min=LENGTH         Minimum string length (default: 3)
+  -n, --min=LENGTH         Minimum string length (default: 4)
   -x, --max=LENGTH         Maximal string length (default: 256)
   -a, --ascii              Show only strings with ASCII encoding
   -s, --sort               Sort strings alphabetically
@@ -34,7 +34,7 @@ Example: Show all URLs in a binary
 `)
 
 type Str struct {
-	Min   uint `short:"n" default:"3"`
+	Min   uint `short:"n" default:"4"`
 	Max   uint `short:"x" default:"256"`
 	Ascii bool `short:"a"`
 	Sort  bool `short:"s"`
