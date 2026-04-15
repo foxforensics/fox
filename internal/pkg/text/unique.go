@@ -15,11 +15,6 @@ type Hash struct {
 	cache map[uint64]null
 }
 
-type Distance struct {
-	limit float64
-	lines []string
-}
-
 func ByHash() *Hash {
 	return &Hash{
 		cache: make(map[uint64]null),
@@ -35,6 +30,11 @@ func (u *Hash) IsUnique(s string) bool {
 	}
 
 	return false
+}
+
+type Distance struct {
+	limit float64
+	lines []string
 }
 
 func ByDistance(limit float64) *Distance {

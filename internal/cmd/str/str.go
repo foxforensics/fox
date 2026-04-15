@@ -20,15 +20,16 @@ Flags:
   -x, --max=LENGTH         Maximal string length (default: 256)
   -a, --ascii              Show only strings with ASCII encoding
   -s, --sort               Sort strings alphabetically
+  -m, --trim               Trim strings whitespaces
 
 Class flags:
-  -w, --wtf[=LEVEL]        Show string classifications (w/ww/www)
+  -w, --what[=LEVEL]       Show string classifications (w/ww/www)
   -F, --find=CLASS,...     Show only strings that match class(es)
   -1, --first              Show only strings first class
   -L, --list               Show only classification list
 
 Example: Show only long ASCII strings
-  $ fox str -an8 sample.exe
+  $ fox str -ant8 sample.exe
 
 Example: Show all URLs in a binary
   $ fox str -wFurl sample.exe
@@ -39,11 +40,12 @@ type Str struct {
 	Max   uint `short:"x" default:"256"`
 	Ascii bool `short:"a"`
 	Sort  bool `short:"s"`
+	Trim  bool `short:"m"`
 
 	// class
-	Wtf   int      `short:"w" type:"counter"`
+	What  int      `short:"w" type:"counter"`
 	Find  []string `short:"F" sep:","`
-	First bool     `short:"1" and:"first,wtf"`
+	First bool     `short:"1" and:"first,what"`
 	List  bool     `short:"L"`
 
 	// paths
@@ -55,8 +57,8 @@ func (cmd *Str) Validate() error {
 		log.Fatalln("invalid range")
 	}
 
-	if (len(cmd.Find) > 0 || cmd.First) && cmd.Wtf == 0 {
-		log.Fatalln("wtf required")
+	if (len(cmd.Find) > 0 || cmd.First) && cmd.What == 0 {
+		log.Fatalln("what required")
 	}
 
 	return nil
@@ -64,7 +66,9 @@ func (cmd *Str) Validate() error {
 
 func (cmd *Str) AfterApply(app *kong.Kong, _ kong.Vars) error {
 	if cmd.List {
-		for _, s := range carver.List(3) {
+		db := text.BuildDB(3)
+
+		for _, s := range db.List() {
 			text.Write(s)
 		}
 
@@ -93,7 +97,8 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			Max:      cmd.Max,
 			Ascii:    cmd.Ascii,
 			Sort:     cmd.Sort,
-			Wtf:      cmd.Wtf,
+			Trim:     cmd.Trim,
+			What:     cmd.What,
 			Find:     cmd.Find,
 			First:    cmd.First,
 			Parallel: cli.Parallel,

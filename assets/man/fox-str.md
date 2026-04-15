@@ -34,10 +34,14 @@ FLAGS
 
 :   Sort strings alphabetically.
 
+**-m, --trim**
+
+:   Trim strings whitespaces.
+
 Class Flags
 -----------
 
-**-w, --wtf**[=_level_]
+**-w, --what**[=_level_]
 
 :   Show string classifications (w/ww/www).
 
@@ -61,7 +65,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-$ fox str -an8 sample.exe
+$ fox str -ant8 sample.exe
 
 :   Show only long ASCII strings.
 

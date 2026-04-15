@@ -280,8 +280,8 @@ go.foxforensics.dev/go-zip v0.6.1 h1:Gf/g2dk8ug36aW6rXfkSoSrHV/VR859Bq09atmQ0WWA
 go.foxforensics.dev/go-zip v0.6.1/go.mod h1:Nh0XUePo0ykSWW/pwaJ85TU1RU6M/RUemXVymJIIXsk=
 go.foxforensics.dev/hashdump v0.3.3 h1:SISAFGUNsVhHyDwllJce8S8pgLfm+rX+ZkgL8wTnH/0=
 go.foxforensics.dev/hashdump v0.3.3/go.mod h1:RZF2lyWsNi3C6RvnWNXJxXGoTOKcAhSCP3gGDXVrgKU=
-go.foxforensics.dev/ustrings v0.4.0 h1:gcVhKVonyPPTJrQ++gRld0gRAJ+gc7qv3i3+ohxrgCE=
-go.foxforensics.dev/ustrings v0.4.0/go.mod h1:auBOxKaStPnASjuYChbNIry+mweObsbHJR+wyFTx48Q=
+go.foxforensics.dev/ustrings v0.4.2 h1:jPJMrh6TIb2r5IDtcbWTEPsP032Splw9KMDaohqTCGU=
+go.foxforensics.dev/ustrings v0.4.2/go.mod h1:auBOxKaStPnASjuYChbNIry+mweObsbHJR+wyFTx48Q=
 go.foxforensics.dev/wth v1.5.0 h1:aiBeuMU8SBUjWgDErfZ9FZKzHwzrHGRGD0+k0qvqCrI=
 go.foxforensics.dev/wth v1.5.0/go.mod h1:6sUGNUhlfS3zsWl+QyY7ly1U4oA3glPwsf9FaM5rH8c=
 go.solidsystem.no/fletcher4 v0.2.0 h1:fHXw/8DSN0I41shMiRnP2zb8tCfts75Bh0S2YGueWBk=
