@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"go.foxforensics.dev/ustrings/ustrings"
+
+	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
 
 type Options struct {
@@ -13,7 +15,8 @@ type Options struct {
 	Max      uint
 	Ascii    bool
 	Sort     bool
-	Wtf      int
+	Trim     bool
+	What     int
 	Find     []string
 	First    bool
 	Parallel int
@@ -26,45 +29,45 @@ type String struct {
 }
 
 type Carver struct {
-	opts  *Options
-	cache []*String
-	ch    chan *String
-	db    Database
+	opts    *Options
+	list    []String
+	strings chan *String
+	entries text.Database
 }
 
 func New(opts *Options) *Carver {
 	return &Carver{
-		opts:  opts,
-		cache: make([]*String, 0),
-		ch:    make(chan *String, opts.Parallel*64),
-		db:    buildDB(opts.Wtf),
+		opts:    opts,
+		list:    make([]String, 0),
+		strings: make(chan *String, opts.Parallel*64),
+		entries: text.BuildDB(opts.What),
 	}
 }
 
 func (crv *Carver) Carve(block []byte) <-chan *String {
 	go func() {
-		defer close(crv.ch)
+		defer close(crv.strings)
 
 		for str := range ustrings.Carve(
 			block,
 			crv.opts.Min,
 			crv.opts.Max,
-			true,
+			crv.opts.Trim,
 			crv.opts.Ascii,
 		) {
 			var adr = fmt.Sprintf("%08x", str.Offset)
 			var cls string
 
-			// append class
-			if crv.opts.Wtf > 0 {
-				v := crv.db.Lookup(str.Value)
+			// lookup classes
+			if crv.opts.What > 0 {
+				v := crv.entries.Lookup(str.Value)
 
-				// search classes
+				// search entries
 				if len(crv.opts.Find) > 0 && !contains(v, crv.opts.Find) {
 					continue
 				}
 
-				// format classes
+				// format entries
 				if !crv.opts.First {
 					cls = strings.Join(v, " ")
 				} else if len(v) > 0 {
@@ -72,7 +75,7 @@ func (crv *Carver) Carve(block []byte) <-chan *String {
 				}
 			}
 
-			crv.ch <- &String{*str, adr, cls}
+			crv.strings <- &String{*str, adr, cls}
 		}
 	}()
 
@@ -80,29 +83,23 @@ func (crv *Carver) Carve(block []byte) <-chan *String {
 		return crv.sort()
 	}
 
-	return crv.ch
+	return crv.strings
 }
 
 func (crv *Carver) sort() <-chan *String {
-	sorted := make(chan *String, cap(crv.ch))
+	sorted := make(chan *String, cap(crv.strings))
 
 	go func() {
 		defer close(sorted)
 
-		for s := range crv.ch {
-			crv.cache = append(crv.cache, s)
+		for s := range crv.strings {
+			crv.list = append(crv.list, *s)
 		}
 
-		slices.SortStableFunc(crv.cache, func(a, b *String) int {
-			if a.Value != b.Value {
-				return strings.Compare(a.Value, b.Value)
-			}
+		slices.SortStableFunc(crv.list, compare)
 
-			return int(a.Offset - b.Offset)
-		})
-
-		for _, s := range crv.cache {
-			sorted <- s
+		for _, s := range crv.list {
+			sorted <- &s
 		}
 	}()
 
@@ -112,11 +109,19 @@ func (crv *Carver) sort() <-chan *String {
 func contains(a, b []string) bool {
 	for _, x := range a {
 		for _, y := range b {
-			if strings.Compare(strings.ToLower(x), strings.ToLower(y)) == 0 {
+			if strings.EqualFold(x, y) {
 				return true
 			}
 		}
 	}
 
 	return false
+}
+
+func compare(a, b String) int {
+	if a.Value == b.Value {
+		return int(a.Offset - b.Offset)
+	}
+
+	return strings.Compare(a.Value, b.Value)
 }

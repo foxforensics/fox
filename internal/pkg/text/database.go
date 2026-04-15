@@ -1,4 +1,4 @@
-package carver
+package text
 
 import (
 	"regexp"
@@ -10,36 +10,7 @@ import (
 
 type Database []database.Entry
 
-func (db Database) Lookup(s string) []string {
-	var v []string
-
-	for _, e := range db {
-		if e.Regex.MatchString(s) {
-			v = append(v, e.Names...)
-		}
-	}
-
-	return v
-}
-
-func List(level int) []string {
-	var v []string
-
-	for _, e := range buildDB(level) {
-		v = append(v, e.Names...)
-	}
-
-	slices.SortStableFunc(v, func(a, b string) int {
-		return strings.Compare(
-			strings.ToLower(a),
-			strings.ToLower(b),
-		)
-	})
-
-	return v
-}
-
-func buildDB(level int) Database {
+func BuildDB(level int) Database {
 	var db Database
 
 	if level > 0 {
@@ -139,4 +110,33 @@ func buildDB(level int) Database {
 	}
 
 	return db
+}
+
+func (db Database) List() []string {
+	var v []string
+
+	for _, e := range db {
+		v = append(v, e.Names...)
+	}
+
+	slices.SortStableFunc(v, func(a, b string) int {
+		return strings.Compare(
+			strings.ToLower(a),
+			strings.ToLower(b),
+		)
+	})
+
+	return v
+}
+
+func (db Database) Lookup(s string) []string {
+	var v []string
+
+	for _, e := range db {
+		if e.Regex.MatchString(s) {
+			v = append(v, e.Names...)
+		}
+	}
+
+	return v
 }

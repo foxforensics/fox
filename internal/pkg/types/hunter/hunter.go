@@ -47,6 +47,8 @@ func New(opts *Options) *Hunter {
 
 func (htr *Hunter) Hunt(heaps <-chan *heap.Heap) <-chan *event.Event {
 	go func() {
+		defer close(htr.events)
+
 		p := pool.New().WithMaxGoroutines(htr.opts.Parallel)
 
 		for h := range heaps {
@@ -60,8 +62,6 @@ func (htr *Hunter) Hunt(heaps <-chan *heap.Heap) <-chan *event.Event {
 		}
 
 		p.Wait()
-
-		close(htr.events)
 	}()
 
 	if htr.opts.Sort {
@@ -75,6 +75,8 @@ func (htr *Hunter) sort() <-chan *event.Event {
 	sorted := make(chan *event.Event, cap(htr.events))
 
 	go func() {
+		defer close(sorted)
+
 		for e := range htr.events {
 			htr.cache[e.SortKey()] = e
 		}
@@ -82,8 +84,6 @@ func (htr *Hunter) sort() <-chan *event.Event {
 		for _, k := range slices.Sorted(maps.Keys(htr.cache)) {
 			sorted <- htr.cache[k]
 		}
-
-		close(sorted)
 	}()
 
 	return sorted
