@@ -6,7 +6,6 @@ import (
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/text/unique"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/buffer"
 )
 
@@ -28,15 +27,15 @@ type Show struct {
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	uniq unique.Unique `kong:"-"`
+	uniq text.Unique `kong:"-"`
 }
 
 func (cmd *Show) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	switch {
 	case cmd.Uniq:
-		cmd.uniq = unique.ByHash()
+		cmd.uniq = text.ByHash()
 	case cmd.Dist > 0:
-		cmd.uniq = unique.ByDistance(cmd.Dist)
+		cmd.uniq = text.ByDistance(cmd.Dist)
 	}
 
 	if cmd.Context > 0 {

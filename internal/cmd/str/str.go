@@ -5,10 +5,11 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/text/carver"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/carver"
 )
 
 var Usage = strings.TrimSpace(`
@@ -103,12 +104,12 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 
 			l.Value = text.MarkMatch(l.Value, cli.Regexp)
 
-			if !cli.NoPretty && len(l.Class) > 0 {
-				text.Write("%s  %s [%s]", text.AsGray(l.Address), l.Value, text.AsBold(l.Class))
+			if !cli.NoPretty && len(l.Classes) > 0 {
+				text.Write("%s  %s [%s]", text.AsGray(l.Address), l.Value, text.AsBold(l.Classes))
 			} else if !cli.NoPretty {
 				text.Write("%s  %s", text.AsGray(l.Address), l.Value)
-			} else if len(l.Class) > 0 {
-				text.Write("%s [%s]", l.Value, l.Class)
+			} else if len(l.Classes) > 0 {
+				text.Write("%s [%s]", l.Value, l.Classes)
 			} else {
 				text.Write(l.Value)
 			}

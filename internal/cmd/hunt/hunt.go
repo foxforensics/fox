@@ -22,7 +22,6 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/raw"
 	"go.foxforensics.dev/fox/v4/internal/pkg/rules"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/text/unique"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/hunter"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/receipt"
@@ -97,7 +96,7 @@ type Hunt struct {
 	db   store.Store     `kong:"-"`
 	net  stream.Streamer `kong:"-"`
 	rule sigma.Rule      `kong:"-"`
-	uniq unique.Unique   `kong:"-"`
+	uniq text.Unique     `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
@@ -117,9 +116,9 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 	switch {
 	case cmd.Uniq:
-		cmd.uniq = unique.ByHash()
+		cmd.uniq = text.ByHash()
 	case cmd.Dist > 0:
-		cmd.uniq = unique.ByDistance(cmd.Dist)
+		cmd.uniq = text.ByDistance(cmd.Dist)
 	}
 
 	if cmd.Sqlite {
