@@ -63,6 +63,7 @@ require (
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-zip v0.6.1
 	go.foxforensics.dev/hashdump v0.3.3
+	go.foxforensics.dev/ustrings v0.4.0
 	go.foxforensics.dev/wth v1.5.0
 	go.solidsystem.no/fletcher4 v0.2.0
 	golang.org/x/crypto v0.50.0

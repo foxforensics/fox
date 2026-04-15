@@ -1,4 +1,4 @@
-package unique
+package text
 
 import (
 	"github.com/agnivade/levenshtein"
