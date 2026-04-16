@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/0xrawsec/golang-evtx/evtx"
-	"go.foxforensics.dev/evtx-db"
+	"go.foxforensics.dev/eventid/events"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types"
@@ -36,14 +36,14 @@ var children = []string{
 	"DwordVal",
 }
 
-var db evtx_db.Providers
+var db events.Providers
 
 func Preload() error {
 	var err error
 
 	// only load once
 	if len(db) == 0 {
-		db, err = evtx_db.Load()
+		db, err = events.Load()
 	}
 
 	return err
@@ -150,8 +150,8 @@ func newEvent(evt *evtx.GoEvtxMap) *event.Event {
 	// translate event id to message
 	e.Message = fmt.Sprintf("Undescribed event: %s: %d", e.Service, evt.EventID())
 
-	if events, ok := db[e.Service]; ok {
-		if message, ok := events[evt.EventID()]; ok {
+	if provider, ok := db[e.Service]; ok {
+		if message, ok := provider[evt.EventID()]; ok {
 			e.Message = message
 		}
 	}

@@ -52,7 +52,7 @@ require (
 	go.dw1.io/rapidhash v0.3.0
 	go.foxforensics.dev/bootkey v0.3.3
 	go.foxforensics.dev/entropy v0.3.1
-	go.foxforensics.dev/evtx-db v0.3.4
+	go.foxforensics.dev/eventid v0.4.0
 	go.foxforensics.dev/go-bgzf v0.3.1
 	go.foxforensics.dev/go-ese v0.4.1
 	go.foxforensics.dev/go-fortilog v0.2.1
@@ -69,6 +69,7 @@ require (
 	golang.org/x/crypto v0.50.0
 	golang.org/x/term v0.42.0
 	golang.org/x/text v0.36.0
+	golift.io/udf v0.0.1
 	modernc.org/sqlite v1.48.2
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
