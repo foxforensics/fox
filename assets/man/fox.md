@@ -36,7 +36,7 @@ If no command is passed, then the file contents will be shown by default.
 
 **d, dump**
 
-:   Dump Active Directory secrets.
+:   Dump critical system secrets.
 
 **e, hunt**
 
@@ -58,19 +58,23 @@ Limit Flags
 
 **-h, --head**
 
-:   Limit head of file by **bytes** or **lines**.
+:   Limit head of file by **bytes** or **lines**. Excludes **-t** and **-O** flag.
 
 **-t, --tail**
 
-:   Limit tail of file by **bytes** or **lines**.
+:   Limit tail of file by **bytes** or **lines**. Excludes **-h** and **-O** flag.
 
 **-c, --bytes**=_number_
 
-:   _Number_ of bytes.
+:   _Number_ of bytes. The value can be specified in decimal or hexadecimal notation.
 
 **-l, --lines**=_number_
 
-:   _Number_ of lines.
+:   _Number_ of lines. The value can be specified in decimal or hexadecimal notation.
+
+**-O, --offset**=_start_
+
+:   File _start_ offset. The value can be specified in decimal or hexadecimal notation. Excludes **-h** and **-t** flag.
 
 Unique Flags
 ------------

@@ -30,7 +30,7 @@ func Hex(cli *cli.Globals, ctx *HexContext) *HexBuffer {
 	var buf = &HexBuffer{make(chan HexLine, cli.Parallel*1024)}
 
 	if cli.Tail {
-		ctx.Delta = cli.Limit.Offset.Bytes
+		ctx.Delta = cli.Limit.Values.Bytes
 	}
 
 	go streamHex(buf, ctx)
