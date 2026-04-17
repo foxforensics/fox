@@ -18,9 +18,6 @@
 * Add artifact parsers?
   * JumpLists (from EZ)
   * ShellBags (from EZ)
-* Add Triage command/mode?
-  * Parse every file in dir
-  * Output as FILE.EXE.json?
 * Add specs to manpages?
   * `Fox Unified Event Format`
   * `Fox Unified Event Storage`
