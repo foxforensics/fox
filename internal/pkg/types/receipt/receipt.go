@@ -21,6 +21,8 @@ var header = strings.TrimSpace(`
 ┃ USER │ %s ┃
 ┃ HOST │ %s ┃
 ┃ HASH │ %s ┃
+┠──────┼─────────────────────────────────────────────────────────────────────────┨
+┃ ARGS │ %-71s ┃
 ┗━━━━━━┴━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 `)
 
@@ -55,6 +57,7 @@ func Generate(path string) error {
 		pad(fmt.Sprintf("%s (%s)", usr.Name, usr.Username)),
 		pad(fmt.Sprintf("%s (%s)", hst, mac())),
 		fmt.Sprintf("%x SHA256", sha256.Sum256(buf)),
+		strings.Join(os.Args[1:], " "),
 	)+"\n"), 0600)
 }
 
