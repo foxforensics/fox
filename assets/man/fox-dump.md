@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Dump secrets from Active Directory databases. This command enforces the **--no-convert** flag.
+Dump critical system secrets from the Windows Registry and Active Directory databases. This command enforces the **--no-convert** flag.
 
 FLAGS
 =====

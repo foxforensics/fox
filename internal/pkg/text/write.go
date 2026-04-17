@@ -7,13 +7,12 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"strings"
 	"time"
 
-	ver "go.foxforensics.dev/fox/v4/internal"
 	"golang.org/x/term"
 
+	"go.foxforensics.dev/fox/v4/internal"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/receipt"
 )
 
@@ -21,7 +20,7 @@ var Banner = `
   .-------.----.--.  .--. 
   |   ___/ .__. \  \/  /   Created by Fox Forensics
   |   __|  |  |  >    <    https://foxforensics.eu
-  |  |   \ '--' /  /\  \   Version %s-%s
+  |  |   \ '--' /  /\  \   Version %s
   '--'    '----'--'  '--'
 `
 
@@ -37,7 +36,7 @@ func Setup(w io.WriteCloser, err error) {
 }
 
 func Usage(msg string) error {
-	_, _ = fmt.Println(fmt.Sprintf(Banner, ver.Version, runtime.GOARCH))
+	_, _ = fmt.Println(fmt.Sprintf(Banner, ver.Version))
 	_, _ = fmt.Println(msg)
 
 	return nil

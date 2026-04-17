@@ -16,23 +16,29 @@ type Limits struct {
 	IsTail bool // is tail limit
 	Bytes  uint // bytes count
 	Lines  uint // lines count
-	Offset struct {
+	Offset uint // start offset
+	Values struct {
 		Bytes int
 		Lines int
 	}
 }
 
-func NewLimits(h, t bool, b, l string) *Limits {
+func NewLimits(h, t bool, b, l, o string) *Limits {
 	return &Limits{
 		IsHead: h,
 		IsTail: t,
 		Bytes:  convert(b),
 		Lines:  convert(l),
+		Offset: convert(o),
 	}
 }
 
 func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 	var a, b = 0, len(m)
+
+	if l.Offset > 0 {
+		m = m[min(uint(len(m)), l.Offset):]
+	}
 
 	if !l.IsHead && !l.IsTail {
 		return m
@@ -45,8 +51,8 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 	if l.IsTail && l.Bytes > 0 {
 		a = max(len(m)-int(l.Bytes), 0)
 
-		l.Offset.Bytes = a
-		l.Offset.Lines = count(m) - count(m[a:])
+		l.Values.Bytes = a
+		l.Values.Lines = count(m) - count(m[a:])
 	}
 
 	if l.IsHead && l.Lines > 0 {
@@ -80,8 +86,8 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 			n++ // add first line
 		}
 
-		l.Offset.Bytes = a
-		l.Offset.Lines = count(m) - n
+		l.Values.Bytes = a
+		l.Values.Lines = count(m) - n
 	}
 
 	return m[a:b]
@@ -100,8 +106,12 @@ func convert(s string) uint {
 	switch {
 	case strings.HasPrefix(s, "0x"):
 		val, err = strconv.ParseUint(s[2:], 16, 0)
+	case strings.HasPrefix(s, "x"):
+		val, err = strconv.ParseUint(s[1:], 16, 0)
 	case strings.HasPrefix(s, "#"):
 		val, err = strconv.ParseUint(s[1:], 16, 0)
+	case strings.HasSuffix(s, "h"):
+		val, err = strconv.ParseUint(s[:len(s)-1], 16, 0)
 	default:
 		val, err = strconv.ParseUint(s, 10, 0)
 	}

@@ -52,7 +52,7 @@ func Text(cli *cli.Globals, ctx *TextContext) *TextBuffer {
 	}
 
 	if cli.Tail {
-		ctx.Delta = cli.Limit.Offset.Lines
+		ctx.Delta = cli.Limit.Values.Lines
 	}
 
 	go streamText(buf, ctx)

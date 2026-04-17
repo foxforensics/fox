@@ -18,8 +18,7 @@ import (
 
 	"github.com/alecthomas/kong"
 
-	ver "go.foxforensics.dev/fox/v4/internal"
-
+	"go.foxforensics.dev/fox/v4/internal"
 	"go.foxforensics.dev/fox/v4/internal/cmd"
 	"go.foxforensics.dev/fox/v4/internal/cmd/dump"
 	"go.foxforensics.dev/fox/v4/internal/cmd/hash"
@@ -39,18 +38,19 @@ Commands:
    s, str                  Show file contained strings
    i, info                 Show file infos and entropy
    h, hash                 Show file hashes and checksums
-   d, dump                 Dump Active Directory secrets
+   d, dump                 Dump critical system secrets
    e, hunt                 Hunt critical system events
 
 File flags:
   -i, --in=FILE            Read paths from file
   -o, --out=FILE           Write output to file (receipted)
 
-Limit flags:
-  -h, --head               Limit head of file by...
-  -t, --tail               Limit tail of file by...
-  -c, --bytes=NUMBER       Number of bytes
-  -l, --lines=NUMBER       Number of lines
+Limits flags:
+  -h, --head               Limits head of file by...
+  -t, --tail               Limits tail of file by...
+  -c, --bytes=NUMBER       ...Number of bytes
+  -l, --lines=NUMBER       ...Number of lines
+  -O, --offset=START       File start offset
 
 Unique flags:
   -u, --uniq               Filter using unique hash
@@ -140,7 +140,7 @@ func main() {
 	case cli.Globals.Help, ctx.Command() == "help":
 		_ = text.Usage(Usage)
 	case cli.Version:
-		fmt.Printf("fox %s-%s\n", ver.Version, runtime.GOARCH)
+		fmt.Printf("fox %s\n", ver.Version)
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())

@@ -62,10 +62,11 @@ type Globals struct {
 	File  string `short:"o" long:"out" xor:"out,quiet"`
 
 	// limit flags
-	Head  bool   `short:"h" xor:"head,tail"`
-	Tail  bool   `short:"t" xor:"head,tail"`
-	Lines string `short:"l" xor:"lines,bytes"`
-	Bytes string `short:"c" xor:"lines,bytes"`
+	Head   bool   `short:"h" xor:"head,tail,offset"`
+	Tail   bool   `short:"t" xor:"head,tail,offset"`
+	Lines  string `short:"l" xor:"lines,bytes"`
+	Bytes  string `short:"c" xor:"lines,bytes"`
+	Offset string `short:"O" xor:"head,tail,offset"`
 
 	// filter flags
 	Regex string `short:"e"`
@@ -126,6 +127,7 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		cli.Tail,
 		cli.Bytes,
 		cli.Lines,
+		cli.Offset,
 	)
 
 	cli.Filter = &types.Filters{
