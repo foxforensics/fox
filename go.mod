@@ -8,7 +8,7 @@ require (
 	github.com/Velocidex/ordereddict v0.0.0-20250821063524-02dc06e46238
 	github.com/agnivade/levenshtein v1.2.1
 	github.com/aixiansheng/lzfse v0.2.4
-	github.com/ajdnik/imghash/v2 v2.3.0
+	github.com/ajdnik/imghash/v2 v2.3.1
 	github.com/alecthomas/chroma/v2 v2.23.1
 	github.com/alecthomas/kong v1.15.0
 	github.com/andybalholm/brotli v1.2.1
@@ -38,7 +38,7 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.26
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
 	github.com/saferwall/elf v0.3.1
-	github.com/saferwall/pe v1.6.3
+	github.com/saferwall/pe v1.6.4
 	github.com/secDre4mer/go-cab v0.0.0-20250826110853-e3fbafae92cd
 	github.com/sorairolake/lzip-go v0.3.8
 	github.com/sourcegraph/conc v0.3.0
@@ -52,7 +52,7 @@ require (
 	go.dw1.io/rapidhash v0.3.0
 	go.foxforensics.dev/bootkey v0.3.3
 	go.foxforensics.dev/entropy v0.3.1
-	go.foxforensics.dev/eventid v0.4.0
+	go.foxforensics.dev/eventid v0.4.1
 	go.foxforensics.dev/go-bgzf v0.3.1
 	go.foxforensics.dev/go-ese v0.4.1
 	go.foxforensics.dev/go-fortilog v0.2.1
@@ -69,8 +69,7 @@ require (
 	golang.org/x/crypto v0.50.0
 	golang.org/x/term v0.42.0
 	golang.org/x/text v0.36.0
-	golift.io/udf v0.0.1
-	modernc.org/sqlite v1.48.2
+	modernc.org/sqlite v1.49.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
