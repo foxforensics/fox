@@ -20,7 +20,7 @@ FLAGS
 
 **-n, --min**=_length_
 
-:   Minimum string _length_ (default: **4**).
+:   Minimum string _length_ (default: **3**).
 
 **-x, --max**=_length_
 
