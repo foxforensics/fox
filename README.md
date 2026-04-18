@@ -8,7 +8,7 @@
 </div>
 
 ## About
-Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. As with any Swiss Army knife, there are many specific power tools that offer more in-depth functionality, but sometimes all you need is a simple screwdriver.
+Fox is a powerful CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. As with any Swiss Army knife, there are many specific power tools that offer more in-depth functionality, but sometimes all you need is a simple screwdriver.
 
 ## Features
 * [x] Restricted read-only access
@@ -51,7 +51,7 @@ There are also standalone binaries available:
 |:-------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |  Linux  | [amd](https://foxforensics.dev/fox/releases/latest/download/fox_linux_amd64.tar.gz) \| [arm](https://foxforensics.dev/fox/releases/latest/download/fox_linux_arm64.tar.gz)     | [apk](https://foxforensics.dev/fox/releases/latest/download/fox_linux_amd64.apk) \| [deb](https://foxforensics.dev/fox/releases/latest/download/fox_linux_amd64.deb) \| [pkg](https://foxforensics.dev/fox/releases/latest/download/fox_linux_amd64.pkg.tar.zst) \| [rpm](https://foxforensics.dev/fox/releases/latest/download/fox_linux_amd64.rpm) |
 |  macOs  | [amd](https://foxforensics.dev/fox/releases/latest/download/fox_darwin_amd64.tar.gz) \| [arm](https://foxforensics.dev/fox/releases/latest/download/fox_darwin_arm64.tar.gz)   | `brew install f0x4n6/fox/fox`                                                                                                                                                                                                                                                                                                                        |
-| Windows | [amd](https://foxforensics.dev/fox/releases/latest/download/fox_windows_amd64.zip) \| [arm](https://foxforensics.dev/fox/releases/latest/download/fox_windows_arm64.zip)       | *Binaries are UPX compressed*                                                                                                                                                                                                                                                                                                                        |
+| Windows | [amd](https://foxforensics.dev/fox/releases/latest/download/fox_windows_amd64.zip) \| [arm](https://foxforensics.dev/fox/releases/latest/download/fox_windows_arm64.zip)       | Binaries are UPX compressed                                                                                                                                                                                                                                                                                                                          |
 
 ## Examples
 
@@ -91,14 +91,17 @@ fox hunt -u *.dd
 ```
 
 ## Supports
-File Formats
-> evtx, journal, json, jsonl, lnk, pf, ELF, ESE/EDB, PE/COFF
+Log Formats
+> EVTX, Journal, Fortigate
+
+Binary Formats
+> PE / COFF, ELF, ESE / EDB, LNK, PF
 
 Archive Formats
-> 7zip, ar, CAB, CFB, CPIO, ISO, MSI, RAR, RPM, tar, xar, ZIP
+> 7-Zip, AR, CAB, CFB, CPIO, ISO, MSI, RAR, RPM, TAR, XAR, ZIP
 
 Compression Formats
-> BGZF, Brotli, bzip2, gzip, Kanzi, lz4, lzip, lzma, LZFSE, LZNT1, LZO, LZVN, LZW, LZX, MinLZ, S2, Snappy, xz, zlib, zstd
+> BGZF, Brotli, Bzip2, Gzip, Kanzi, LZ4, Lzip, LZMA, LZFSE, LZNT1, LZO, LZVN, LZW, LZX, MinLZ, S2, Snappy, XZ, zlib, zstd
 
 Cryptographic Hashes
 > BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512, GOST2012-256, GOST2012-512, HAS-160, LSH-256, LSH-512, MD2, MD4, MD5, MD6, RIPEMD-160, SHAKE128, SHAKE256, SHA1, SHA224, SHA256, SHA512, SHA3, SHA3-224, SHA3-256, SHA3-384, SHA3-512, Skein-224, Skein-256, Skein-384, Skein-512, SM3, Whirlpool
@@ -115,7 +118,7 @@ Similarity Hashes
 Windows Algorithms
 > LM, NT, PE Checksum
 
-Checksums
+Checksum Algorithms
 > Adler32, Fletcher4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 ---
