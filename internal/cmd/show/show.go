@@ -124,7 +124,7 @@ func (cmd *Show) renderHex(cli *cli.Globals, b []byte) {
 		}
 
 		if !cli.NoPretty {
-			text.Write("%s  %s%s", text.AsGray(l.Address), text.MarkZero(l.Values), l.String)
+			text.Write("%s  %s%s", text.AsGray(l.Address), l.Values, l.String)
 		} else {
 			text.Write(l.Values)
 		}

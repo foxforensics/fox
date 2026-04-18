@@ -72,7 +72,7 @@ func (fi *FileInfo) String() string {
 	sb.WriteString(fi.File)
 
 	if fi.Report != nil && len(fi.Report.String()) > 0 {
-		return fmt.Sprintf("%s [%s]", sb.String(), text.AsWarn(text.AsBold(fi.Report)))
+		return fmt.Sprintf("%s [%s]", sb.String(), text.AsWarn(text.AsBold(fi.Report.String())))
 	} else if fi.Entropy > Threshold {
 		return text.AsWarn(sb.String())
 	} else if fi.Bytes == 0 {

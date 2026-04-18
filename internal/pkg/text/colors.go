@@ -23,9 +23,9 @@ var (
 )
 
 var (
-	AsGray = gray.SprintFunc()
-	AsWarn = warn.SprintFunc()
-	AsBold = bold.SprintFunc()
+	AsGray = gray.SprintfFunc()
+	AsWarn = warn.SprintfFunc()
+	AsBold = bold.SprintfFunc()
 )
 
 var (
@@ -81,12 +81,4 @@ func MarkEvent(s string) string {
 	}
 
 	return marker.Mark(s, marker.MatchRegexp(cef), gray)
-}
-
-func MarkZero(s string) string {
-	if color.NoColor {
-		return s
-	}
-
-	return marker.Mark(s, marker.MatchAll("00"), gray)
 }
