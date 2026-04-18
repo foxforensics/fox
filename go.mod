@@ -61,7 +61,7 @@ require (
 	go.foxforensics.dev/go-lnk v0.2.1
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
-	go.foxforensics.dev/go-zip v0.6.1
+	go.foxforensics.dev/go-zip v0.6.2
 	go.foxforensics.dev/hashdump v0.3.3
 	go.foxforensics.dev/ustrings v0.4.2
 	go.foxforensics.dev/wth v1.5.0
@@ -69,7 +69,7 @@ require (
 	golang.org/x/crypto v0.50.0
 	golang.org/x/term v0.42.0
 	golang.org/x/text v0.36.0
-	modernc.org/sqlite v1.49.0
+	modernc.org/sqlite v1.49.1
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
