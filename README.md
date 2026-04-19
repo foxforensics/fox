@@ -8,9 +8,9 @@
 </div>
 
 ## About
-Fox is a powerful CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. As with any Swiss Army knife, there are many specific power tools that offer more in-depth functionality, but sometimes all you need is a simple screwdriver.
+Fox is a powerful commandline tool, built to streamline the examination process of file-based forensic artifacts. It provides a wide spectrum of essential capabilities in a portable standalone binary. As a professional digital forensics tool, it respects evidence integrity and preserves the Chain of Custody.
 
-## Features
+## Capabilities
 * [x] Restricted read-only access
 * [x] [Bidirectional character](https://nvd.nist.gov/vuln/detail/CVE-2021-42574) detection
 * [x] String carving and automatic classification
