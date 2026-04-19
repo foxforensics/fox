@@ -8,7 +8,7 @@
 </div>
 
 ## Abstract
-Fox is a powerful commandline tool, built to streamline the examination process of file-based forensic artifacts. It provides a wide spectrum of essential capabilities in a portable standalone binary. As a professional digital forensics tool, it respects evidence integrity and preserves the Chain of Custody.
+Fox is a powerful commandline tool, built to streamline the examination process of file-based forensic artifacts. It provides a wide spectrum of essential capabilities in a portable standalone binary. As a professional digital forensics tool, it naturally respects evidence integrity and preserves the Chain of Custody.
 
 ## Features
 * [x] Restricted read-only access
