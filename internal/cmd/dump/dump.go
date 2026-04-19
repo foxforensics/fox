@@ -31,7 +31,7 @@ Active Directory flags:
 Example: Dump the BootKey from registry
   $ fox dump system -K
 
-Example: Dump NTLM hashes from AD
+Example: Dump NTLM password hashes
   $ fox dump system ntds.dit
 `)
 

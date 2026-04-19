@@ -1,14 +1,14 @@
 <div align="center">
-  <img src="assets/img/fox.png" width="160" alt=""/>
+  <img src="assets/img/fox.svg" width="160" alt=""/>
   <br/><br/>The Forensic Examiners Swiss Army Knife<br/><br/>
 
-  [![Go Report](https://goreportcard.com/badge/github.com/f0x4n6/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/f0x4n6/fox/v4)
+  [![Report](https://goreportcard.com/badge/github.com/f0x4n6/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/f0x4n6/fox/v4)
   [![Build](https://img.shields.io/github/actions/workflow/status/f0x4n6/fox/tests.yaml?style=for-the-badge&label=build)](https://github.com/f0x4n6/fox/actions)
   [![Release](https://img.shields.io/github/release/f0x4n6/fox.svg?style=for-the-badge&label=release)](https://github.com/f0x4n6/fox/releases)
 </div>
 
 ## Abstract
-Fox is a powerful commandline tool, built to streamline the examination process of file-based forensic artifacts. It provides a wide spectrum of essential capabilities in a portable standalone binary. As a professional digital forensics tool, it naturally respects evidence integrity and preserves the Chain of Custody.
+Fox is a versatile commandline tool, built to support the examination process of file-based forensic evidence. It provides a wide array of forensic capabilities in a cross-platform standalone binary.
 
 ## Features
 * [x] Restricted read-only access
@@ -39,13 +39,13 @@ Fox is a powerful commandline tool, built to streamline the examination process 
   * [x] Save as `JSON`, `JSON Lines`, `Parquet` or `SQLite` 
 
 ## Install
-The fastest way to get started, is to use the `go install` command:
+Install directly via the `go install` command:
 
 ```console
 go install go.foxforensics.dev/fox/v4@latest
 ```
 
-There are also standalone binaries available:
+Standalone binaries and packages are available for:
 
 |   OS    | Binaries                                                                                                                                                                       | Packages                                                                                                                                                                                                                                                                                                                                             |
 |:-------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -80,7 +80,7 @@ Hash archive contents as MD5:
 fox hash -Amd5 files.7z
 ```
 
-Dump NTLM hashes from AD:
+Dump NTLM password hashes:
 ```console
 fox dump system ntds.dit
 ```

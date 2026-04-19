@@ -58,7 +58,7 @@ $ fox dump system -K
 
 $ fox dump system ntds.dit
 
-:   Dump NTLM hashes from AD.
+:   Dump NTLM password hashes.
 
 BUGS
 ====
