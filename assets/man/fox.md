@@ -13,9 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Fox is a CLI tool, build to support the examination process of file based forensic artifacts, by providing the most useful features in a cross-platform standalone binary. As with any Swiss Army knife, there are many specific power tools that offer more in-depth functionality, but sometimes all you need is a simple screwdriver.
-
-All files will only be processed read-only. A Chain-of-Custody receipt is generated upon every file output.
+Fox is a versatile commandline tool, built to support the examination process of file-based forensic evidence. It provides a wide spectrum of forensic capabilities in a cross-platform standalone binary. All files will only be processed read-only. A Chain-of-Custody receipt is generated upon every file output.
 
 COMMANDS
 ========
@@ -66,11 +64,11 @@ Limit Flags
 
 **-c, --bytes**=_number_
 
-:   _Number_ of bytes. The value can be specified in decimal or hexadecimal notation.
+:   _Number_ of bytes. The value can be specified in decimal or hexadecimal notation. Excludes **-l** flag.
 
 **-l, --lines**=_number_
 
-:   _Number_ of lines. The value can be specified in decimal or hexadecimal notation.
+:   _Number_ of lines. The value can be specified in decimal or hexadecimal notation. Excludes **-c** flag.
 
 **-O, --offset**=_start_
 
@@ -96,7 +94,7 @@ Filter Flags
 
 **-C, --context**=_lines_
 
-:   _Lines_ surrounding a match.
+:   _Lines_ surrounding a match. Includes **-B** and **-A** flag.
 
 **-B, --before**=_lines_
 
@@ -111,22 +109,22 @@ Special Flags
 
 **-p, --password**=_password_
 
-:   Use archive _password_ (only for **7Z**, **RAR**, **ZIP**).
+:   Use archive _password_ (only supported for **7Z**, **RAR**, **ZIP** archives).
 
 **-z, --parallel**=_cores_
 
-:   Use _cores_ for parallel processing.
+:   Use number of _cores_ for parallel processing.
 
 Display Flags
 -------------
 
 **-T, --force-text**
 
-:   Force output as text (in default mode).
+:   Force output exclusively as text (in default mode).
 
 **-X, --force-hex**
 
-:   Force output as hex (in default mode).
+:   Force output exclusively as hex (in default mode).
 
 Disable Flags
 -------------

@@ -69,12 +69,10 @@ detection:
   condition: selection
 `)
 
-var supported = []string{
-	"fox",
-	"linux",
-	"windows",
-}
-
 func IsSupported(r *sigma.Rule) bool {
-	return slices.Contains(supported, strings.ToLower(r.Logsource.Product))
+	return slices.Contains([]string{
+		"fox",
+		"linux",
+		"windows",
+	}, strings.ToLower(r.Logsource.Product))
 }

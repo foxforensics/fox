@@ -55,17 +55,13 @@ func Generate(path string) error {
 		abs,
 		pad(time.Now().UTC().String()),
 		pad(fmt.Sprintf("%s (%s)", usr.Name, usr.Username)),
-		pad(fmt.Sprintf("%s (%s)", hst, mac())),
+		pad(fmt.Sprintf("%s (%s)", hst, macAddr())),
 		fmt.Sprintf("%x SHA256", sha256.Sum256(buf)),
 		strings.Join(os.Args[1:], " "),
 	)+"\n"), 0600)
 }
 
-func pad(s string) string {
-	return fmt.Sprintf("%s %s", s, strings.Repeat(".", 70-len(s)))
-}
-
-func mac() string {
+func macAddr() string {
 	iff, err := net.Interfaces()
 
 	if err == nil {
@@ -77,4 +73,8 @@ func mac() string {
 	}
 
 	return ""
+}
+
+func pad(s string) string {
+	return fmt.Sprintf("%s %s", s, strings.Repeat(".", 70-len(s)))
 }
