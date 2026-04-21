@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"go.foxforensics.dev/wth/database"
+	"go.foxforensics.dev/rhash/database"
 )
 
 type Database []database.Entry
