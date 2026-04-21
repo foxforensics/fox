@@ -16,6 +16,7 @@ const (
 	CRC64ECMA    = "crc64-ecma"
 	CRC64ISO     = "crc64-iso"
 	DIFFERENCE   = "difference"
+	DJB2         = "djb2"
 	FLETCHER4    = "fletcher4"
 	FNV1         = "fnv-1"
 	FNV1A        = "fnv-1a"

@@ -27,6 +27,7 @@ import (
 	"github.com/tjfoc/gmsm/v2/sm3"
 	"github.com/zeebo/xxh3"
 	"go.dw1.io/rapidhash"
+	"go.foxforensics.dev/fox/v4/internal/pkg/hash/fast/djb2"
 	"go.foxforensics.dev/go-hash/skein"
 	"go.foxforensics.dev/go-hash/streebog"
 	"go.foxforensics.dev/go-krypto/has160"
@@ -69,6 +70,7 @@ var Algorithms = []string{
 	types.CRC64ECMA,
 	types.CRC64ISO,
 	types.DIFFERENCE,
+	types.DJB2,
 	types.FLETCHER4,
 	types.FNV1,
 	types.FNV1A,
@@ -168,6 +170,8 @@ func Sum(algo string, data []byte) (string, error) {
 		imp = crc64.New(crc64.MakeTable(crc64.ISO))
 	case types.DIFFERENCE:
 		imp = image.New(image.Difference)
+	case types.DJB2:
+		imp = djb2.New()
 	case types.FLETCHER4:
 		imp = fletcher4.New()
 	case types.FNV1:
