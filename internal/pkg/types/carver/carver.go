@@ -52,8 +52,8 @@ func (crv *Carver) Carve(block []byte) <-chan *String {
 			block,
 			crv.opts.Min,
 			crv.opts.Max,
-			crv.opts.Trim,
 			crv.opts.Ascii,
+			crv.opts.Trim,
 		) {
 			var adr = fmt.Sprintf("%08x", str.Offset)
 			var cls string

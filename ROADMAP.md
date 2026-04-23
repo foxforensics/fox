@@ -10,14 +10,11 @@
 * ~~Done~~
 
 ## 4. Optimizations
-* ~~Done~~
+* Change loader to use readers instead of byte array
 
 ## 5. Ideas
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
-* Add artifact parsers?
-  * JumpLists (from EZ)
-  * ShellBags (from EZ)
 * Add specs to manpages?
   * `Fox Unified Event Format`
   * `Fox Unified Event Storage`
