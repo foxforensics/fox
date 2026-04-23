@@ -64,7 +64,7 @@ func formatStd(ctx *HexContext) HexLine {
 		case v == 0:
 			val.WriteString(text.AsGray("%02x ", v))
 		case v >= 1 && v <= 31:
-			val.WriteString(text.AsWarn("%02x ", v))
+			val.WriteString(text.AsBold("%02x ", v))
 		default:
 			val.WriteString(fmt.Sprintf("%02x ", v))
 		}

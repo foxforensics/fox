@@ -60,9 +60,9 @@ func Title(s ...string) {
 
 	stamp := time.Now().UTC().Format(time.RFC3339)
 
-	_, _ = fmt.Fprint(stdout, Fg1.Sprint(" FOX "))
-	_, _ = fmt.Fprint(stdout, Fg2.Sprintf(" %-*s ", w-29, title))
-	_, _ = fmt.Fprint(stdout, Fg3.Sprintf(" %s ", stamp))
+	_, _ = fmt.Fprint(stdout, Surface1.Sprint(" FOX "))
+	_, _ = fmt.Fprint(stdout, Surface2.Sprintf(" %-*s ", w-29, title))
+	_, _ = fmt.Fprint(stdout, Surface3.Sprintf(" %s ", stamp))
 	_, _ = fmt.Fprintln(stdout)
 }
 

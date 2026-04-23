@@ -17,21 +17,15 @@ var Lexer = ""
 var Style = "monokai"
 
 var (
-	Fg1 = color.New(color.Bold).AddRGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd)
-	Fg2 = color.New(color.FgHiWhite).AddBgRGB(0x33, 0x33, 0x33)
-	Fg3 = color.New(color.FgHiBlack).AddBgRGB(0x33, 0x33, 0x33)
+	Surface1 = color.New(color.Bold).AddRGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd)
+	Surface2 = color.New(color.FgHiWhite).AddBgRGB(0x33, 0x33, 0x33)
+	Surface3 = color.New(color.FgHiBlack).AddBgRGB(0x33, 0x33, 0x33)
 )
 
 var (
-	AsGray = gray.SprintfFunc()
-	AsWarn = warn.SprintfFunc()
-	AsBold = bold.SprintfFunc()
-)
-
-var (
-	gray = color.New(color.FgHiBlack)
-	warn = color.New(color.FgHiRed)
-	bold = color.New(color.Bold)
+	AsGray = color.New(color.FgHiBlack).SprintfFunc()
+	AsWarn = color.New(color.FgHiRed).SprintfFunc()
+	AsBold = color.New(color.Bold).SprintfFunc()
 )
 
 var cef = regexp.MustCompile(`[^|]+$`)
@@ -72,7 +66,7 @@ func MarkMatch(s string, re *regexp.Regexp) string {
 		return s
 	}
 
-	return marker.Mark(s, marker.MatchRegexp(re), bold)
+	return marker.Mark(s, marker.MatchRegexp(re), color.RGB(0x0f, 0x88, 0xcd))
 }
 
 func MarkEvent(s string) string {
@@ -80,5 +74,5 @@ func MarkEvent(s string) string {
 		return s
 	}
 
-	return marker.Mark(s, marker.MatchRegexp(cef), gray)
+	return marker.Mark(s, marker.MatchRegexp(cef), color.New(color.FgHiBlack))
 }
