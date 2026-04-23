@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"go.foxforensics.dev/ustrings/ustrings"
+	fstrings "go.foxforensics.dev/strings/strings"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
@@ -23,7 +23,7 @@ type Options struct {
 }
 
 type String struct {
-	ustrings.String
+	fstrings.String
 	Address string
 	Classes string
 }
@@ -48,7 +48,7 @@ func (crv *Carver) Carve(block []byte) <-chan *String {
 	go func() {
 		defer close(crv.strings)
 
-		for str := range ustrings.Carve(
+		for str := range fstrings.Carve(
 			block,
 			crv.opts.Min,
 			crv.opts.Max,

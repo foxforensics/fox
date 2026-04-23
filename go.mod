@@ -21,7 +21,7 @@ require (
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/dchest/siphash v1.2.3
 	github.com/fatih/color v1.19.0
-	github.com/flanglet/kanzi-go/v2 v2.5.0
+	github.com/flanglet/kanzi-go/v2 v2.5.1
 	github.com/glaslos/ssdeep v1.0.0
 	github.com/glaslos/tlsh v0.4.0
 	github.com/hooklift/iso9660 v1.0.0
@@ -64,7 +64,7 @@ require (
 	go.foxforensics.dev/go-zip v0.6.2
 	go.foxforensics.dev/hashdump v0.3.3
 	go.foxforensics.dev/rhash v1.6.2
-	go.foxforensics.dev/ustrings v0.4.2
+	go.foxforensics.dev/strings v0.5.1
 	go.solidsystem.no/fletcher4 v0.2.0
 	golang.org/x/crypto v0.50.0
 	golang.org/x/term v0.42.0
@@ -114,7 +114,7 @@ require (
 	golang.org/x/sys v0.43.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	modernc.org/libc v1.72.0 // indirect
+	modernc.org/libc v1.72.1 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
 	www.velocidex.com/golang/regparser v0.0.0-20250203141505-31e704a67ef7 // indirect
