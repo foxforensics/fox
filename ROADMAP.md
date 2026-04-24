@@ -15,7 +15,7 @@
 ## 5. Ideas
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
-* Add specs to manpages?
+* Add specs to man pages?
   * `Fox Unified Event Format`
   * `Fox Unified Event Storage`
   * `Fox Chain of Custody Receipt`

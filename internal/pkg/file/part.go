@@ -5,14 +5,14 @@ import (
 	"strings"
 )
 
-const sep = ":"
+const Separator = ":"
 
 func JoinPart(path, part string) string {
-	return fmt.Sprintf("%s%s%s", path, sep, part)
+	return fmt.Sprintf("%s%s%s", path, Separator, part)
 }
 
 func SplitPart(path string) (string, string) {
-	t := strings.SplitN(path, sep, 2)
+	t := strings.SplitN(path, Separator, 2)
 
 	if len(t) < 2 {
 		return path, ""

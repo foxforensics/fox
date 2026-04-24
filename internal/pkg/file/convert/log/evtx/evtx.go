@@ -14,8 +14,9 @@ import (
 	"github.com/0xrawsec/golang-evtx/evtx"
 	"go.foxforensics.dev/eventid/events"
 
+	logs "go.foxforensics.dev/fox/v4/internal/pkg/file/convert/log"
+
 	"go.foxforensics.dev/fox/v4/internal/pkg/file"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
@@ -136,7 +137,7 @@ func newEvent(evt *evtx.GoEvtxMap) *event.Event {
 		Host:     getString(evt, "/Event/System/Computer"),
 		User:     getString(evt, "/Event/System/Security/UserID"),
 		Sequence: getString(evt, "/Event/System/EventRecordID"),
-		Source:   types.Eventlog,
+		Source:   logs.Eventlog,
 		Category: getString(evt, "/Event/System/Channel"),
 		Service:  getString(evt, "/Event/System/Provider/Name"),
 		Fields:   make(map[string]string),

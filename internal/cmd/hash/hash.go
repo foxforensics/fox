@@ -9,12 +9,11 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"go.foxforensics.dev/hasher/hash"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/hash"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types"
 )
 
 var Usage = strings.TrimSpace(`
@@ -30,7 +29,7 @@ Example: Hash archive contents as MD5
   $ fox hash -Amd5 files.7z
 
 Example: Hash binaries for similarity
-  $ fox hash -Aimphash *.exe
+  $ fox hash -Aimpfuzzy *.exe
 
 Remarks:
   Results will be grouped by path, if more than one algorithm is specified.
@@ -62,10 +61,10 @@ Perceptual hashes:
 Similarity hashes:
   IMPFUZZY, IMPHASH, IMPHASH0, SSDEEP, TLSH
 
-Windows algorithms:
+Windows hashes:
   LM, NT, PE
 
-Checksum algorithms:
+Checksums:
   ADLER32, FLETCHER4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 `)
 
@@ -123,12 +122,12 @@ type Hash struct {
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if cmd.All || slices.Contains(cmd.Algo, "*") {
-		cmd.Algo = hash.Algorithms
+		cmd.Algo = hash.Algorithms // use all
 	}
 
 	// default algorithm
 	if len(cmd.Algo) == 0 {
-		cmd.Algo = []string{types.SHA256}
+		cmd.Algo = []string{hash.SHA256}
 	}
 
 	return nil
@@ -159,7 +158,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		for _, algo := range cmd.Algo {
 			sum, err := hash.Sum(algo, h.Bytes())
 
-			if errors.Is(err, hash.ErrNotSupported) {
+			if errors.Is(err, hash.NotSupported) {
 				return err // not supported
 			}
 

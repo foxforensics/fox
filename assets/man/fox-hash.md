@@ -78,7 +78,7 @@ Similarity hashes
 
 :   IMPFUZZY, IMPHASH, IMPHASH0, SSDEEP, TLSH
 
-Windows algorithms
+Windows hashes
 
 :   LM, NT, PE
 
@@ -93,7 +93,7 @@ $ fox hash -Amd5 files.7z
 
 :   Hash archive contents as MD5.
 
-$ fox hash -Aimphash *.exe
+$ fox hash -Aimpfuzzy *.exe
 
 :   Hash binaries for similarity.
 

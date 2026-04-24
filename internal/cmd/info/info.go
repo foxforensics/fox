@@ -10,11 +10,10 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.dev/entropy/entropy"
-
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
+	"go.foxforensics.dev/hasher/hash"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/file"
-	"go.foxforensics.dev/fox/v4/internal/pkg/hash"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
 
@@ -177,7 +176,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		}
 
 		if len(cmd.Key) > 0 {
-			fi.Report = file.GetReport(hash.Sha256(h.Bytes()), cmd.Key)
+			fi.Report = file.GetReport(hash.MustSum(hash.SHA256, h.Bytes()), cmd.Key)
 		}
 
 		for block := range slices.Chunk(h.Bytes(), int(n)) {

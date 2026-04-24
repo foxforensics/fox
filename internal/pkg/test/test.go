@@ -23,19 +23,19 @@ func FixtureDeflate(name string) string {
 	b, err := os.ReadFile(FixtureFile(name))
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("FixtureDeflate: %v", err)
 	}
 
 	t, err := os.CreateTemp("", "fox-*")
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("FixtureDeflate: %v", err)
 	}
 
 	_, err = t.Write(deflate(b))
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("FixtureDeflate: %v", err)
 	}
 
 	_ = t.Close()
@@ -47,7 +47,7 @@ func FixtureFile(name string) string {
 	_, c, _, ok := runtime.Caller(0)
 
 	if !ok {
-		log.Fatalln("runtime error")
+		log.Fatalln("FixtureFile: runtime error")
 	}
 
 	return filepath.Join(filepath.Dir(c), root, name)
@@ -67,7 +67,7 @@ func FixtureRaw(name string) []byte {
 	buf, err := os.ReadFile(FixtureFile(name))
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("FixtureRaw: %v", err)
 	}
 
 	return buf
@@ -85,7 +85,7 @@ func deflate(b []byte) []byte {
 	r, err := zstd.NewReader(bytes.NewReader(b))
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("deflate: %v", err)
 	}
 
 	defer r.Close()
@@ -93,7 +93,7 @@ func deflate(b []byte) []byte {
 	b, err = io.ReadAll(r)
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("deflate: %v", err)
 	}
 
 	return b

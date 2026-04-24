@@ -15,8 +15,9 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
+	logs "go.foxforensics.dev/fox/v4/internal/pkg/file/convert/log"
+
 	"go.foxforensics.dev/fox/v4/internal/pkg/file"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
@@ -105,7 +106,7 @@ func newEvent(od *ordereddict.Dict) (*event.Event, error) {
 	e := event.Event{
 		Host:     getString(sys, "_HOSTNAME"),
 		Message:  getString(evt, "MESSAGE"),
-		Source:   types.Journal,
+		Source:   logs.Journal,
 		Category: getString(sys, "_TRANSPORT"),
 		Service:  getString(sys, "_COMM"),
 		Fields:   make(map[string]string),

@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/twmb/murmur3"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/convert/log"
 
 	"go.foxforensics.dev/fox/v4/internal"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
@@ -90,7 +90,7 @@ func (ecs Ecs) Stream(e *event.Event) error {
 	ecs.Event.Hash = fmt.Sprintf("%x", murmur3.StringSum64(cef))
 
 	// os specific
-	if e.Source == types.Eventlog {
+	if e.Source == log.Eventlog {
 		ecs.Event.Code = e.Fields["EventID"]
 	}
 

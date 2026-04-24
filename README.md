@@ -115,10 +115,10 @@ Perceptual Hashes
 Similarity Hashes
 > ImpFuzzy, ImpHash, ImpHash0, SSDeep, TLSH
 
-Windows Algorithms
-> LM, NT, PE Checksum
+Windows Hashes
+> LM, NT, PE
 
-Checksum Algorithms
+Checksums
 > Adler32, Fletcher4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 ---

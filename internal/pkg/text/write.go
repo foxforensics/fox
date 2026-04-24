@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 	"golang.org/x/term"
 
 	"go.foxforensics.dev/fox/v4/internal"
@@ -52,6 +53,7 @@ func Title(s ...string) {
 	title := s[0]
 	title = strings.TrimPrefix(title, "/")
 	title = strings.TrimSuffix(title, "/")
+	title = strings.ReplaceAll(title, file.Separator, " ❱ ")
 	title = strings.ReplaceAll(title, string(filepath.Separator), " ❱ ")
 
 	if len(s) > 1 {
