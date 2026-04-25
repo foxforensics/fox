@@ -14,9 +14,9 @@ import (
 	"strings"
 	"time"
 
-	_ "github.com/josephspurrier/goversioninfo"
-
 	"github.com/alecthomas/kong"
+	_ "github.com/josephspurrier/goversioninfo"
+	"go.foxforensics.dev/fox/v4/internal/cmd/cat"
 
 	"go.foxforensics.dev/fox/v4/internal"
 	"go.foxforensics.dev/fox/v4/internal/cmd"
@@ -25,7 +25,6 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/cmd/help"
 	"go.foxforensics.dev/fox/v4/internal/cmd/hunt"
 	"go.foxforensics.dev/fox/v4/internal/cmd/info"
-	"go.foxforensics.dev/fox/v4/internal/cmd/show"
 	"go.foxforensics.dev/fox/v4/internal/cmd/str"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
@@ -102,12 +101,12 @@ Use "fox help <COMMAND>" for sub commands.
 `)
 
 type fox struct {
+	Cat  cat.Cat   `cmd:"" default:"withargs"`
 	Str  str.Str   `cmd:"" aliases:"s"`
 	Hash hash.Hash `cmd:"" aliases:"h"`
 	Info info.Info `cmd:"" aliases:"i"`
 	Dump dump.Dump `cmd:"" aliases:"d"`
 	Hunt hunt.Hunt `cmd:"" aliases:"e"`
-	Show show.Show `cmd:"" default:"withargs"`
 
 	// hidden commands
 	Help help.Help `cmd:"" hidden:""`

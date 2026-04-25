@@ -1,13 +1,13 @@
-package rpm
+package xar
 
 import (
-	"strings"
 	"testing"
 
+	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 )
 
-const src = "extract/fox.rpm"
+const src = "archive/fox.xar"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := test.Fixture(src)
@@ -38,7 +38,7 @@ func TestExtract(t *testing.T) {
 		t.Fatal("invalid entry count")
 	}
 
-	if !strings.HasSuffix(e[0].Path, test.Sample) {
+	if e[0].Path != file.JoinPart("", test.Sample) {
 		t.Fatal("invalid entry path")
 	}
 

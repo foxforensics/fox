@@ -6,8 +6,17 @@ import (
 	"slices"
 	"testing"
 
-	_zip "go.foxforensics.dev/fox/v4/internal/pkg/file/extract/7z"
+	_zip "go.foxforensics.dev/fox/v4/internal/pkg/file/archive/7z"
 
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/ar"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/cab"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/cpio"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/iso"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/rar"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/rpm"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/tar"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/xar"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/zip"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/convert/bin/elf"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/convert/bin/ese"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/convert/bin/lnk"
@@ -32,15 +41,6 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/deflate/xz"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/deflate/zlib"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/deflate/zstd"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/ar"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/cab"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/cpio"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/iso"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/rar"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/rpm"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/tar"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/xar"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/extract/zip"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/format/json"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/format/jsonl"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/format/xml"
@@ -129,7 +129,7 @@ func TestLoadFiles(t *testing.T) {
 		}, {
 			"Multiple file streams",
 			[]string{
-				"extract/test.zip",
+				"archive/test.zip",
 			},
 			[]string{
 				"test.zip:hello.rar:hello.txt",

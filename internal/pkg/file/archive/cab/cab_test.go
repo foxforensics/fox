@@ -1,4 +1,4 @@
-package tar
+package cab
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 )
 
-const src = "extract/fox.tar"
+const src = "archive/fox.cab"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := test.Fixture(src)

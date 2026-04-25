@@ -1,4 +1,4 @@
-package rar
+package szip
 
 import (
 	"testing"
@@ -8,8 +8,8 @@ import (
 )
 
 const pass = "test"
-const src1 = "extract/fox.rar"
-const src2 = "extract/crypt.rar"
+const src1 = "archive/fox.7z"
+const src2 = "archive/crypt.7z"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := test.Fixture(src1)
