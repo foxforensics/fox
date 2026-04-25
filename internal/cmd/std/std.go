@@ -1,4 +1,4 @@
-package cat
+package std
 
 import (
 	"github.com/alecthomas/kong"
@@ -9,7 +9,7 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/buffer"
 )
 
-type Cat struct {
+type Std struct {
 	// unique
 	Uniq bool    `short:"u" xor:"uniq,dist"`
 	Dist float64 `short:"D" xor:"uniq,dist"`
@@ -30,7 +30,7 @@ type Cat struct {
 	uniq text.Unique `kong:"-"`
 }
 
-func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+func (cmd *Std) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	switch {
 	case cmd.Uniq:
 		cmd.uniq = text.ByHash()
@@ -46,7 +46,7 @@ func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	return nil
 }
 
-func (cmd *Cat) Run(cli *cli.Globals) error {
+func (cmd *Std) Run(cli *cli.Globals) error {
 	ch := cli.Load(cmd.Paths, false)
 
 	if cmd.ForceText || cmd.ForceHex {
@@ -76,7 +76,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func (cmd *Cat) renderText(cli *cli.Globals, b []byte, hint string) {
+func (cmd *Std) renderText(cli *cli.Globals, b []byte, hint string) {
 	for l := range buffer.Text(cli, &buffer.TextContext{
 		Data: b,
 		Hint: hint,
@@ -101,7 +101,7 @@ func (cmd *Cat) renderText(cli *cli.Globals, b []byte, hint string) {
 	}
 }
 
-func (cmd *Cat) renderHex(cli *cli.Globals, b []byte) {
+func (cmd *Std) renderHex(cli *cli.Globals, b []byte) {
 	lastHex, wasCut := "", false
 
 	for l := range buffer.Hex(cli, &buffer.HexContext{

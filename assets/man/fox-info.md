@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file infos and entropy. If the **--sort** flag is used, the files will be processed single-threaded, not _parallel_. If the **FOX_API_KEY** environment variable is set, then file hashes will be checked via the **VirusTotal** API. An extensive file report is available via the **--json** and **--jsonl** flags.
+Show file infos and entropy. If the **--sort** flag is used, the files will be processed single-threaded, not _parallel_.
 
 FLAGS
 =====
@@ -52,13 +52,6 @@ POSITIONAL ARGUMENTS
 ====================
 
 Globbing paths to open or '-' to read from **STDIN(4)**.
-
-ENVIRONMENT
-===========
-
-**FOX_API_KEY**
-
-:   API key used to check files with the **VirusTotal** API. File checks will be conducted only by the files **SHA256** hash value, no files will be uploaded to VirusTotal. This environment variable is _optional_.
 
 EXAMPLES
 ========

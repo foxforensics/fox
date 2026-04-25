@@ -32,10 +32,6 @@ If no command is passed, then the file contents will be shown by default.
 
 :   Show file hashes and checksums.
 
-**d, dump**
-
-:   Dump critical system secrets.
-
 **e, hunt**
 
 :   Hunt critical system events.
@@ -222,10 +218,6 @@ $ fox info -n6.0 ./**/*
 $ fox hash -Amd5 files.7z
 
 :   Hash archive contents as MD5.
-
-$ fox dump system ntds.dit
-
-:   Dump users and password hashes.
 
 $ fox hunt -u *.dd
 

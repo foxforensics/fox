@@ -16,15 +16,14 @@ import (
 
 	"github.com/alecthomas/kong"
 	_ "github.com/josephspurrier/goversioninfo"
-	"go.foxforensics.dev/fox/v4/internal/cmd/cat"
 
 	"go.foxforensics.dev/fox/v4/internal"
 	"go.foxforensics.dev/fox/v4/internal/cmd"
-	"go.foxforensics.dev/fox/v4/internal/cmd/dump"
 	"go.foxforensics.dev/fox/v4/internal/cmd/hash"
 	"go.foxforensics.dev/fox/v4/internal/cmd/help"
 	"go.foxforensics.dev/fox/v4/internal/cmd/hunt"
 	"go.foxforensics.dev/fox/v4/internal/cmd/info"
+	"go.foxforensics.dev/fox/v4/internal/cmd/std"
 	"go.foxforensics.dev/fox/v4/internal/cmd/str"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
@@ -37,7 +36,6 @@ Commands:
    s, str                  Show file contained strings
    i, info                 Show file infos and entropy
    h, hash                 Show file hashes and checksums
-   d, dump                 Dump critical system secrets
    e, hunt                 Hunt critical system events
 
 File flags:
@@ -101,11 +99,10 @@ Use "fox help <COMMAND>" for sub commands.
 `)
 
 type fox struct {
-	Cat  cat.Cat   `cmd:"" default:"withargs"`
+	Std  std.Std   `cmd:"" default:"withargs"`
 	Str  str.Str   `cmd:"" aliases:"s"`
 	Hash hash.Hash `cmd:"" aliases:"h"`
 	Info info.Info `cmd:"" aliases:"i"`
-	Dump dump.Dump `cmd:"" aliases:"d"`
 	Hunt hunt.Hunt `cmd:"" aliases:"e"`
 
 	// hidden commands

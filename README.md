@@ -19,11 +19,9 @@ Fox is a versatile commandline tool, built to support the examination process of
 * [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * [x] Parse Windows shortcut and prefetch files
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
-* [x] Dump NTLM hashes from [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) databases
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
 * [x] Integral syntax highlighting for many different formats
 * [x] Integral fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
-* [x] Integral file hash lookup via the [VirusTotal API](https://www.virustotal.com/)
 * [x] Integral *Chain-of-Custody* receipt generation
 * [x] Many popular archive and compression formats
 * [x] Many popular cryptographic, image, fuzzy and fast hashes
@@ -78,11 +76,6 @@ fox info -n6.0 ./**/*
 Hash archive contents as MD5:
 ```console
 fox hash -Amd5 files.7z
-```
-
-Dump NTLM password hashes:
-```console
-fox dump system ntds.dit
 ```
 
 Hunt down critical events:

@@ -36,9 +36,7 @@ require (
 	github.com/sourcegraph/conc v0.3.0
 	github.com/twmb/murmur3 v1.1.8
 	github.com/ulikunitz/xz v0.5.15
-	github.com/xxtea/xxtea-go v1.0.0
 	github.com/zeebo/xxh3 v1.1.0
-	go.foxforensics.dev/bootkey v0.3.3
 	go.foxforensics.dev/entropy v0.3.1
 	go.foxforensics.dev/eventid v0.4.1
 	go.foxforensics.dev/go-bgzf v0.3.1
@@ -48,7 +46,6 @@ require (
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-zip v0.6.2
-	go.foxforensics.dev/hashdump v0.3.3
 	go.foxforensics.dev/hasher v0.2.0
 	go.foxforensics.dev/rhash v1.6.2
 	go.foxforensics.dev/strings v0.5.1
@@ -73,7 +70,6 @@ require (
 	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/c4milo/gotoolkit v0.0.0-20190525173301-67483a18c17a // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
-	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dchest/siphash v1.2.3 // indirect
 	github.com/dlclark/regexp2 v1.12.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
@@ -118,5 +114,4 @@ require (
 	modernc.org/libc v1.72.1 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
-	www.velocidex.com/golang/regparser v0.0.0-20250203141505-31e704a67ef7 // indirect
 )

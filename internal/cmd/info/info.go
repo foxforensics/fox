@@ -10,10 +10,9 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.dev/entropy/entropy"
-	cli "go.foxforensics.dev/fox/v4/internal/cmd"
-	"go.foxforensics.dev/hasher/hash"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	cli "go.foxforensics.dev/fox/v4/internal/cmd"
+
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
 
@@ -43,18 +42,14 @@ Example: List only high entropy files
 
 Example: List blocks by one MB size
   $ fox info -b1m db.sqlite3
-
-Remarks:
-  If FOX_API_KEY is set, then file hashes will be checked via VirusTotal.
 `)
 
 type FileInfo struct {
-	File    string       `json:"file,omitempty"`
-	Bytes   int64        `json:"bytes,omitempty"`
-	Lines   int64        `json:"lines,omitempty"`
-	Offset  int64        `json:"offset,omitempty"`
-	Entropy float64      `json:"entropy,omitempty"`
-	Report  *file.Report `json:"report,omitempty"`
+	File    string  `json:"file,omitempty"`
+	Bytes   int64   `json:"bytes,omitempty"`
+	Lines   int64   `json:"lines,omitempty"`
+	Offset  int64   `json:"offset,omitempty"`
+	Entropy float64 `json:"entropy,omitempty"`
 }
 
 func (fi *FileInfo) String() string {
@@ -70,9 +65,7 @@ func (fi *FileInfo) String() string {
 
 	sb.WriteString(fi.File)
 
-	if fi.Report != nil && len(fi.Report.String()) > 0 {
-		return fmt.Sprintf("%s [%s]", sb.String(), text.AsWarn(text.AsBold(fi.Report.String())))
-	} else if fi.Entropy > Threshold {
+	if fi.Entropy > Threshold {
 		return text.AsWarn(sb.String())
 	} else if fi.Bytes == 0 {
 		return text.AsGray(sb.String())
@@ -106,11 +99,6 @@ type Info struct {
 	// paths
 	Paths []string `arg:"" optional:""`
 
-	// hidden
-	Key  string `hidden:"" long:"api-key"`
-	Jack string `hidden:"" xor:"jack,john"`
-	John string `hidden:"" xor:"jack,john"`
-
 	// internal
 	block int64 `kong:"-"`
 }
@@ -124,14 +112,6 @@ func (cmd *Info) Validate() error {
 }
 
 func (cmd *Info) AfterApply(_ *kong.Kong, _ kong.Vars) error {
-	switch {
-	case len(cmd.Jack) > 0:
-		cmd.Key = file.ReserveKey(1, cmd.Jack)
-
-	case len(cmd.John) > 0:
-		cmd.Key = file.ReserveKey(2, cmd.John)
-	}
-
 	if len(cmd.Block) > 0 {
 		cmd.block = text.Mechanize(cmd.Block)
 	}
@@ -173,10 +153,6 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 			}
 			h.Discard()
 			continue
-		}
-
-		if len(cmd.Key) > 0 {
-			fi.Report = file.GetReport(hash.MustSum(hash.SHA256, h.Bytes()), cmd.Key)
 		}
 
 		for block := range slices.Chunk(h.Bytes(), int(n)) {

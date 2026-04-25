@@ -5,7 +5,6 @@ import (
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/cmd/dump"
 	"go.foxforensics.dev/fox/v4/internal/cmd/hash"
 	"go.foxforensics.dev/fox/v4/internal/cmd/hunt"
 	"go.foxforensics.dev/fox/v4/internal/cmd/info"
@@ -17,7 +16,6 @@ var usage = map[string]string{
 	"str":  str.Usage,
 	"info": info.Usage,
 	"hash": hash.Usage,
-	"dump": dump.Usage,
 	"hunt": hunt.Usage,
 }
 
