@@ -10,11 +10,14 @@ import (
 )
 
 func Detect(b []byte) bool {
-	for _, m := range [][]byte{
-		{'S', 'C', 'C', 'A'},  // uncompressed
-		{'M', 'A', 'M', 0x04}, // LZX compressed
+	for _, v := range []struct {
+		off int
+		buf []byte
+	}{
+		{off: 4, buf: []byte{'S', 'C', 'C', 'A'}},  // uncompressed
+		{off: 0, buf: []byte{'M', 'A', 'M', 0x04}}, // LZX compressed
 	} {
-		if file.HasMagic(b, 0, m) {
+		if file.HasMagic(b, v.off, v.buf) {
 			return true
 		}
 	}
