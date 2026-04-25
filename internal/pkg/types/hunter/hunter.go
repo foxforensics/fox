@@ -10,8 +10,8 @@ import (
 
 	"github.com/sourcegraph/conc/pool"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/convert/log/evtx"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/convert/log/journal"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/evtx"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/journal"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/heap"
 )

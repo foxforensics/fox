@@ -14,7 +14,7 @@ import (
 	"github.com/0xrawsec/golang-evtx/evtx"
 	"go.foxforensics.dev/eventid/events"
 
-	logs "go.foxforensics.dev/fox/v4/internal/pkg/file/convert/log"
+	logs "go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"

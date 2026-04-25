@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/twmb/murmur3"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/convert/log"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log"
 
 	"go.foxforensics.dev/fox/v4/internal"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream"

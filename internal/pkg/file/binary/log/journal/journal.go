@@ -15,7 +15,7 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
-	logs "go.foxforensics.dev/fox/v4/internal/pkg/file/convert/log"
+	logs "go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
