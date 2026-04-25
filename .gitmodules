@@ -1,0 +1,3 @@
+[submodule "testdata"]
+	path = testdata
+	url = git@github.com:f0x4n6/corpus.git

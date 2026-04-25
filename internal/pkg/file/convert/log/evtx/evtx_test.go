@@ -8,7 +8,7 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 )
 
-const src = "convert/test.evtx.zst"
+const src = "binary/test.evtx"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := test.Fixture(src)
@@ -41,7 +41,7 @@ func TestConvert(t *testing.T) {
 
 	lines := strings.Split(string(buf), "\n")
 
-	if len(lines) != 920 {
+	if len(lines) != 3171 {
 		t.Fatal("invalid length")
 	}
 
