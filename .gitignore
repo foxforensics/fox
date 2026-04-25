@@ -41,3 +41,6 @@ go.work.sum
 
 # MacOS crap
 .DS_Store
+
+# Test corpus
+testdata/

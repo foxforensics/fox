@@ -54,7 +54,7 @@ require (
 	go.foxforensics.dev/strings v0.5.1
 	golang.org/x/term v0.42.0
 	golang.org/x/text v0.36.0
-	modernc.org/sqlite v1.49.1
+	modernc.org/sqlite v1.50.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
@@ -65,7 +65,7 @@ require (
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
 	github.com/Velocidex/json v0.0.0-20220224052537-92f3c0326e5a // indirect
 	github.com/Velocidex/yaml/v2 v2.2.8 // indirect
-	github.com/ajdnik/imghash/v2 v2.3.2 // indirect
+	github.com/ajdnik/imghash/v2 v2.4.0 // indirect
 	github.com/akavel/rsrc v0.10.2 // indirect
 	github.com/alecthomas/participle v0.7.1 // indirect
 	github.com/ayoubfaouzi/pkcs7 v0.2.3 // indirect
