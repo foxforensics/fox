@@ -7,7 +7,7 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 )
 
-const src = "convert/fox.elf.zst"
+const src = "binary/fox.elf"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := test.Fixture(src)

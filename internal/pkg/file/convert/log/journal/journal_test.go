@@ -8,7 +8,7 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 )
 
-const src = "convert/test.journal.zst"
+const src = "binary/test.journal"
 
 func BenchmarkDetect(b *testing.B) {
 	buf := test.Fixture(src)

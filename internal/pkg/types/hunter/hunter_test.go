@@ -1,7 +1,6 @@
 package hunter
 
 import (
-	"os"
 	"testing"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/test"
@@ -17,19 +16,19 @@ func TestHunt(t *testing.T) {
 	}{
 		{
 			"empty",
-			"misc/empty",
+			"binary/test.nil",
 			0,
 		}, {
 			"evtx",
-			"convert/test.evtx.zst",
-			919,
+			"binary/test.evtx",
+			3170,
 		}, {
 			"journal",
-			"convert/test.journal.zst",
+			"binary/test.journal",
 			1922,
 		}, {
 			"raw",
-			"hunt/test.dd.zst",
+			"binary/test.dd",
 			919,
 		},
 	} {
@@ -48,13 +47,11 @@ func TestHunt(t *testing.T) {
 				Parallel: 1,
 			})
 
-			file := test.FixtureDeflate(tt.file)
+			file := test.FixtureFile(tt.file)
 
 			for range htr.Hunt(ldr.Load([]string{file})) {
 				n++
 			}
-
-			_ = os.Remove(file)
 
 			if n != tt.count {
 				t.Fatal("invalid count:", n)

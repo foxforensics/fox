@@ -15,22 +15,22 @@ func TestCarve(t *testing.T) {
 	}{
 		{
 			"empty",
-			"misc/empty",
+			"binary/test.nil",
 			false,
 			0,
 		}, {
 			"strings",
-			"text/strings.txt",
+			"string/test.txt",
 			false,
 			13,
 		}, {
 			"nasty",
-			"text/nasty.txt",
+			"string/nasty.txt",
 			false,
 			582,
 		}, {
 			"exe",
-			"convert/fox.exe.zst",
+			"binary/fox.exe",
 			true,
 			15501,
 		},
@@ -49,7 +49,7 @@ func TestCarve(t *testing.T) {
 			}
 
 			if n != tt.count {
-				t.Fatal("invalid count:", n)
+				t.Fatalf("invalid count: %d", n)
 			}
 		})
 	}
