@@ -23,7 +23,7 @@ require (
 	github.com/josephspurrier/goversioninfo v1.5.0
 	github.com/klauspost/compress v1.18.5
 	github.com/korylprince/goxar v0.1.2
-	github.com/minio/minlz v1.1.0
+	github.com/minio/minlz v1.1.1
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
 	github.com/nwaples/rardecode/v2 v2.2.2
 	github.com/parquet-go/parquet-go v0.29.0
@@ -46,7 +46,7 @@ require (
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-zip v0.6.2
-	go.foxforensics.dev/hasher v0.2.0
+	go.foxforensics.dev/hasher v0.2.1
 	go.foxforensics.dev/rhash v1.6.2
 	go.foxforensics.dev/strings v0.5.1
 	golang.org/x/term v0.42.0
@@ -83,7 +83,7 @@ require (
 	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
-	github.com/mattn/go-isatty v0.0.21 // indirect
+	github.com/mattn/go-isatty v0.0.22 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/parquet-go/bitpack v1.0.0 // indirect
 	github.com/parquet-go/jsonlite v1.5.2 // indirect
