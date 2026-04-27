@@ -162,8 +162,12 @@ github.com/mattn/go-isatty v0.0.8/go.mod h1:Iq45c/XA43vh69/j3iqttzPXn0bhXyGjM0Hd
 github.com/mattn/go-isatty v0.0.9/go.mod h1:YNRxwqDuOph6SZLI9vUUz6OYw3QyUt7WiY2yME+cCiQ=
 github.com/mattn/go-isatty v0.0.21 h1:xYae+lCNBP7QuW4PUnNG61ffM4hVIfm+zUzDuSzYLGs=
 github.com/mattn/go-isatty v0.0.21/go.mod h1:ZXfXG4SQHsB/w3ZeOYbR0PrPwLy+n6xiMrJlRFqopa4=
+github.com/mattn/go-isatty v0.0.22 h1:j8l17JJ9i6VGPUFUYoTUKPSgKe/83EYU2zBC7YNKMw4=
+github.com/mattn/go-isatty v0.0.22/go.mod h1:ZXfXG4SQHsB/w3ZeOYbR0PrPwLy+n6xiMrJlRFqopa4=
 github.com/minio/minlz v1.1.0 h1:rUOGu3EP4EqJC5k3qCsIwEnZiJULKqtRyDdqbhlvMmQ=
 github.com/minio/minlz v1.1.0/go.mod h1:qT0aEB35q79LLornSzeDH75LBf3aH1MV+jB5w9Wasec=
+github.com/minio/minlz v1.1.1 h1:OGmft1V6AnI/Wme332U6bhG54nxEan+VFgkD7lat4KM=
+github.com/minio/minlz v1.1.1/go.mod h1:qT0aEB35q79LLornSzeDH75LBf3aH1MV+jB5w9Wasec=
 github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da h1:Iu5QFXIMK/YrHJ0NgUnK0rqYTTyb0ldt/rqNenAj39U=
 github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da/go.mod h1:NfnmoBY0gGkr3/NmI+DP/UXbZvOCurCUYAzOdYJjlOc=
 github.com/ncruces/go-strftime v1.0.0 h1:HMFp8mLCTPp341M/ZnA4qaf7ZlsbTc+miZjCLOFAw7w=
@@ -276,6 +280,8 @@ go.foxforensics.dev/go-zip v0.6.2 h1:oOJOdcEnkL7OHLrnRJA45yJjeYGWBKhU7EX7b6Yu3SY
 go.foxforensics.dev/go-zip v0.6.2/go.mod h1:lciPKpFtI7fYu5UateHiUC/p2D/W57LzCCR18VwdvMk=
 go.foxforensics.dev/hasher v0.2.0 h1:0gRRU2ll4QLNZnb0WtTGJ+28Bxckcb8oo8dUVdVXLq4=
 go.foxforensics.dev/hasher v0.2.0/go.mod h1:8GGvzyHp918hKUCl+/96qWOQyladAdhv9Wk66amCABA=
+go.foxforensics.dev/hasher v0.2.1 h1:GcZbckRq0JYGKyuGgbj2LbMAGs/2YnpQpVZFi8yb9hg=
+go.foxforensics.dev/hasher v0.2.1/go.mod h1:8GGvzyHp918hKUCl+/96qWOQyladAdhv9Wk66amCABA=
 go.foxforensics.dev/rhash v1.6.2 h1:VkiXc4/Kby/G2FM2XyKR7wOQMRSJxQPxXUNOb+cRFvc=
 go.foxforensics.dev/rhash v1.6.2/go.mod h1:GLhCh/1vhQdH8FghI1F5cE3ZYnsPH+ZtEbEirF+cQRM=
 go.foxforensics.dev/strings v0.5.1 h1:bZZZPgnJkRhigb74cxfAHecd0BY9+XkgbSp33dj2UDk=
