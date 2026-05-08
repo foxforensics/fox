@@ -1,3 +1,3 @@
 package ver
 
-const Version = "4.48.1"
+const Version = "4.48.2"
