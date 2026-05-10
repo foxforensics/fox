@@ -48,9 +48,9 @@ require (
 	go.foxforensics.dev/go-zip v0.6.2
 	go.foxforensics.dev/hasher v0.2.1
 	go.foxforensics.dev/rhash v1.6.2
-	go.foxforensics.dev/strings v0.5.1
-	golang.org/x/term v0.42.0
-	golang.org/x/text v0.36.0
+	go.foxforensics.dev/strings v0.5.2
+	golang.org/x/term v0.43.0
+	golang.org/x/text v0.37.0
 	modernc.org/sqlite v1.50.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
@@ -70,6 +70,7 @@ require (
 	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/c4milo/gotoolkit v0.0.0-20190525173301-67483a18c17a // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dchest/siphash v1.2.3 // indirect
 	github.com/dlclark/regexp2 v1.12.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
@@ -99,19 +100,22 @@ require (
 	github.com/twpayne/go-geom v1.6.1 // indirect
 	github.com/zeebo/blake3 v0.2.4 // indirect
 	go.dw1.io/rapidhash v0.3.0 // indirect
+	go.foxforensics.dev/bootkey v0.3.3 // indirect
 	go.foxforensics.dev/go-hash v0.3.1 // indirect
 	go.foxforensics.dev/go-krypto v0.3.1 // indirect
 	go.foxforensics.dev/go-mscfb v0.3.1 // indirect
+	go.foxforensics.dev/hashdump v0.5.1 // indirect
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
-	golang.org/x/crypto v0.50.0 // indirect
-	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
-	golang.org/x/image v0.39.0 // indirect
+	golang.org/x/crypto v0.51.0 // indirect
+	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a // indirect
+	golang.org/x/image v0.40.0 // indirect
 	golang.org/x/sys v0.44.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/libc v1.72.3 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
+	www.velocidex.com/golang/regparser v0.0.0-20250203141505-31e704a67ef7 // indirect
 )
