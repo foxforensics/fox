@@ -87,7 +87,7 @@ func (a *Account) OnlyNT() string {
 
 func (a *Account) format(sum string, def []byte) string {
 	if pwd := table.Lookup(sum); len(pwd) > 0 {
-		return text.AsWarn(pwd)
+		return text.AsBold(pwd)
 	}
 
 	if sum == fmt.Sprintf("%x", def) {
