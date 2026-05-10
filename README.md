@@ -20,6 +20,7 @@ Fox is a versatile commandline tool, built to support the examination process of
 * [x] Parse Windows shortcut and prefetch files
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * [x] Extract NTLM hashes and accounts from [Active Directories](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication)  
+* [x] Lookup NTLM hashes using the built-in rainbow table
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
 * [x] Integral syntax highlighting for many different formats
 * [x] Integral fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation

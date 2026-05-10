@@ -20,7 +20,7 @@ func FixtureFile(name string) string {
 	_, c, _, ok := runtime.Caller(0)
 
 	if !ok {
-		log.Fatalln("FixtureFile: runtime error")
+		log.Fatalln("Fixture: runtime error")
 	}
 
 	return filepath.Join(filepath.Dir(c), root, name)
