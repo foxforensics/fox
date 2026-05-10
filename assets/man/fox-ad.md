@@ -29,6 +29,10 @@ FLAGS
 Secrets Flags
 -------------
 
+**-L, --lookup**
+
+:   Lookup hashes in rainbow tables.
+
 **-H, --history**
 
 :   Extract also the **LM** and **NT** hash history.

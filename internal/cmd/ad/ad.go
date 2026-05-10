@@ -1,12 +1,12 @@
 package ad
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.dev/bootkey/bootkey"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/rainbow"
 	"go.foxforensics.dev/hashdump/extract"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
@@ -23,6 +23,7 @@ Flags:
   -J, --jsonl              Show accounts as JSON lines
 
 Secrets flags:
+  -L, --lookup             Lookup hashes in rainbow tables
   -H, --history            Extract also the LM and NT hash history
       --lm                 Extract just the LM hashes (hashcat: 3000)
       --nt                 Extract just the NT hashes (hashcat: 1000)
@@ -39,6 +40,7 @@ type Ad struct {
 	Jsonl bool `short:"J" xor:"json,jsonl"`
 
 	// secrets flags
+	Lookup  bool `short:"L"`
 	History bool `short:"H"`
 	Lm      bool
 	Nt      bool
@@ -59,6 +61,18 @@ func (cmd *Ad) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 func (cmd *Ad) Run(cli *cli.Globals) error {
 	if len(cmd.Paths) < 2 {
 		return text.Usage(Usage)
+	}
+
+	if cmd.Lookup {
+		if cli.Verbose > 1 {
+			log.Println("building rainbow tables")
+		}
+
+		err := rainbow.Build()
+
+		if err != nil {
+			return err
+		}
 	}
 
 	ch := cli.Load(cmd.Paths, true)
@@ -114,11 +128,11 @@ func (cmd *Ad) format(r *record.Record) string {
 	case cmd.Json:
 		return text.ColorizeAs(r.ToJSON(), "json")
 	case cmd.Lm && cmd.Nt:
-		return fmt.Sprintf("%s:%s", r.LMHash, r.NTHash)
+		return r.OnlyNTLM()
 	case cmd.Lm:
-		return r.LMHash
+		return r.OnlyLM()
 	case cmd.Nt:
-		return r.NTHash
+		return r.OnlyNT()
 	default:
 		return r.ToNTLM(cmd.History)
 	}
