@@ -18,9 +18,6 @@ Extract **NTLM** password hashes and account infos from Active Directory offline
 FLAGS
 =====
 
-Account Flags
--------------
-
 **-j, --json**
 
 :   Show accounts as JSON objects.
