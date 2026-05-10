@@ -19,6 +19,7 @@ import (
 
 	"go.foxforensics.dev/fox/v4/internal"
 	"go.foxforensics.dev/fox/v4/internal/cmd"
+	"go.foxforensics.dev/fox/v4/internal/cmd/ad"
 	"go.foxforensics.dev/fox/v4/internal/cmd/hash"
 	"go.foxforensics.dev/fox/v4/internal/cmd/help"
 	"go.foxforensics.dev/fox/v4/internal/cmd/hunt"
@@ -33,6 +34,7 @@ Usage:
   fox [COMMAND] [FLAGS...] <PATHS...>
 
 Commands:
+   a, ad                   Show Active Directory infos
    s, str                  Show file contained strings
    i, info                 Show file infos and entropy
    h, hash                 Show file hashes and checksums
@@ -99,11 +101,12 @@ Use "fox help <COMMAND>" for sub commands.
 `)
 
 type fox struct {
-	Std  std.Std   `cmd:"" default:"withargs"`
-	Str  str.Str   `cmd:"" aliases:"s"`
+	Ad   ad.Ad     `cmd:"" aliases:"a"`
 	Hash hash.Hash `cmd:"" aliases:"h"`
-	Info info.Info `cmd:"" aliases:"i"`
 	Hunt hunt.Hunt `cmd:"" aliases:"e"`
+	Info info.Info `cmd:"" aliases:"i"`
+	Str  str.Str   `cmd:"" aliases:"s"`
+	Std  std.Std   `cmd:"" default:"withargs"`
 
 	// hidden commands
 	Help help.Help `cmd:"" hidden:""`

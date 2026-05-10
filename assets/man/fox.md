@@ -20,6 +20,10 @@ COMMANDS
 
 If no command is passed, then the file contents will be shown by default.
 
+**a, ad**
+
+:   Show Active Directory infos.
+
 **s, str**
 
 :   Show file contained strings.
@@ -206,6 +210,10 @@ $ fox -eWinlogon ./**/*.evtx
 $ fox -hc512 disk.dd
 
 :   Show MBR in canonical hex.
+
+$ fox ad NTDS.dit SYSTEM
+
+:   Show NTLM password hashes.
 
 $ fox str -w sample.exe
 
