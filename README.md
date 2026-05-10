@@ -67,7 +67,7 @@ fox -hc512 disk.dd
 
 Show NTLM password hashes:
 ```console
-fox ad NTDS.dit SYSTEM
+fox ad -LH NTDS.dit SYSTEM
 ```
 
 Show all strings in a binary:

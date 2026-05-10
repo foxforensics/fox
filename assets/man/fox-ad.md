@@ -53,7 +53,7 @@ The Active Directory offline database file followed by the Windows System regist
 EXAMPLES
 ========
 
-$ fox ad -H NTDS.dit SYSTEM
+$ fox ad -LH NTDS.dit SYSTEM
 
 :   Show NTLM secrets.
 

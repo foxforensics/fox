@@ -29,7 +29,7 @@ Secrets flags:
       --nt                 Extract just the NT hashes (hashcat: 1000)
 
 Example: Show NTLM secrets
-  $ fox ad -H NTDS.dit SYSTEM
+  $ fox ad -LH NTDS.dit SYSTEM
 
 Example: Show account infos
   $ fox ad -j NTDS.dit SYSTEM
