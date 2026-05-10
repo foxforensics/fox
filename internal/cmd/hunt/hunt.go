@@ -150,7 +150,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		}
 	}
 
-	rule := rules.Default
+	rule := rules.Critical
 
 	if len(cmd.Rule) > 0 {
 		rule, err = os.ReadFile(cmd.Rule)
