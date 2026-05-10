@@ -24,7 +24,7 @@ Flags:
   -J, --jsonl              Show accounts as JSON lines
 
 Secrets flags:
-  -L, --lookup             Lookup hashes in the rainbow table
+  -L, --lookup             Lookup hashes in the rainbow tables
   -H, --history            Extract also the users hash history
       --only-lm            Extract only the LM hashes (hashcat: 3000)
       --only-nt            Extract only the NT hashes (hashcat: 1000)
