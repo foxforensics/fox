@@ -32,6 +32,9 @@ go.work.sum
 # COC receipts
 *.cc
 
+# Test images
+*.dd
+
 # Databases
 *.parquet
 *.sqlite

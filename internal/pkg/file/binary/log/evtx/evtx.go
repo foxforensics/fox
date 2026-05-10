@@ -9,6 +9,7 @@ import (
 	"maps"
 	"slices"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/0xrawsec/golang-evtx/evtx"
@@ -151,12 +152,6 @@ func newEvent(evt *evtx.GoEvtxMap) *event.Event {
 	// translate event id to message
 	e.Message = fmt.Sprintf("Undescribed event: %s: %d", e.Service, evt.EventID())
 
-	if provider, ok := db[e.Service]; ok {
-		if message, ok := provider[evt.EventID()]; ok {
-			e.Message = message
-		}
-	}
-
 	// calculate severity from level
 	level := getString(evt, "/Event/System/Level")
 
@@ -185,6 +180,12 @@ func newEvent(evt *evtx.GoEvtxMap) *event.Event {
 		addMapDeep(&e, v, "")
 	}
 
+	if provider, ok := db[e.Service]; ok {
+		if message, ok := provider[evt.EventID()]; ok {
+			e.Message = tryReplace(&e, message)
+		}
+	}
+
 	return &e
 }
 
@@ -206,6 +207,20 @@ func addMapDeep(e *event.Event, em *evtx.GoEvtxMap, p string) {
 			e.Fields[k] = fmt.Sprintf("%v", v)
 		}
 	}
+}
+
+func tryReplace(e *event.Event, msg string) string {
+	if strings.Contains(msg, "$1") {
+		for i := 1; ; i++ {
+			if v, ok := e.Fields[fmt.Sprintf("param%d", i)]; ok {
+				msg = strings.ReplaceAll(msg, fmt.Sprintf("$%d", i), v)
+			} else {
+				break // no param
+			}
+		}
+	}
+
+	return msg
 }
 
 func getString(em *evtx.GoEvtxMap, path string) string {
