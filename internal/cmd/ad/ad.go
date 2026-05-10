@@ -23,10 +23,10 @@ Flags:
   -J, --jsonl              Show accounts as JSON lines
 
 Secrets flags:
-  -L, --lookup             Lookup hashes in rainbow tables
-  -H, --history            Extract also the LM and NT hash history
-      --lm                 Extract just the LM hashes (hashcat: 3000)
-      --nt                 Extract just the NT hashes (hashcat: 1000)
+  -L, --lookup             Lookup hashes in the rainbow table
+  -H, --history            Extract also the users hash history
+      --only-lm            Extract only the LM hashes (hashcat: 3000)
+      --only-nt            Extract only the NT hashes (hashcat: 1000)
 
 Example: Show NTLM secrets
   $ fox ad -LH NTDS.dit SYSTEM
@@ -42,15 +42,15 @@ type Ad struct {
 	// secrets flags
 	Lookup  bool `short:"L"`
 	History bool `short:"H"`
-	Lm      bool
-	Nt      bool
+	OnlyLm  bool `long:"only-lm" xor:"only-lm,only-nt"`
+	OnlyNt  bool `long:"only-nt" xor:"only-lm,only-nt"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
 }
 
 func (cmd *Ad) AfterApply(_ *kong.Kong, _ kong.Vars) error {
-	if cmd.Lm || cmd.Nt {
+	if cmd.OnlyLm || cmd.OnlyNt {
 		cmd.Json = false
 		cmd.Jsonl = false
 	}
@@ -65,10 +65,10 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 
 	if cmd.Lookup {
 		if cli.Verbose > 1 {
-			log.Println("building rainbow tables")
+			log.Println("building rainbow table")
 		}
 
-		err := rainbow.Build()
+		err := rainbow.Build(cli.Parallel)
 
 		if err != nil {
 			return err
@@ -127,11 +127,9 @@ func (cmd *Ad) format(r *record.Record) string {
 		return text.ColorizeAs(r.ToJSONL(), "json")
 	case cmd.Json:
 		return text.ColorizeAs(r.ToJSON(), "json")
-	case cmd.Lm && cmd.Nt:
-		return r.OnlyNTLM()
-	case cmd.Lm:
+	case cmd.OnlyLm:
 		return r.OnlyLM()
-	case cmd.Nt:
+	case cmd.OnlyNt:
 		return r.OnlyNT()
 	default:
 		return r.ToNTLM(cmd.History)

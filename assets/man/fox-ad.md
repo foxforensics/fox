@@ -31,19 +31,19 @@ Secrets Flags
 
 **-L, --lookup**
 
-:   Lookup hashes in rainbow tables.
+:   Lookup hashes in the rainbow table.
 
 **-H, --history**
 
-:   Extract also the **LM** and **NT** hash history.
+:   Extract also the users hash history.
 
-**--lm**
+**--only-lm**
 
-:   Extract just the **LM** hashes (hashcat: _3000_).
+:   Extract only the **LM** hashes (hashcat type _3000_). Excludes **--only-nt** flag.
 
-**--nt**
+**--only-nt**
 
-:   Extract just the **NT** hashes (hashcat: _1000_).
+:   Extract only the **NT** hashes (hashcat type _1000_). Excludes **--only-lm** flag.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -76,4 +76,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**fox(1)**
+**fox(1)**, **impacket-secretsdump(1)**

@@ -13,16 +13,10 @@ import (
 
 type Record struct {
 	extract.Account
-	LMHashCracked string `json:"lm_hash_cracked,omitempty"`
-	NTHashCracked string `json:"nt_hash_cracked,omitempty"`
 }
 
 func New(account extract.Account) *Record {
-	return &Record{
-		Account:       account,
-		LMHashCracked: rainbow.Lookup(account.LMHash),
-		NTHashCracked: rainbow.Lookup(account.NTHash),
-	}
+	return &Record{account}
 }
 
 func (r *Record) ToJSON() string {
@@ -60,13 +54,6 @@ func (r *Record) ToNTLM(history bool) string {
 	}
 
 	return sb.String()
-}
-
-func (r *Record) OnlyNTLM() string {
-	return fmt.Sprintf("%s:%s",
-		format(r.LMHash, extract.DefaultLM),
-		format(r.NTHash, extract.DefaultNT),
-	)
 }
 
 func (r *Record) OnlyLM() string {
