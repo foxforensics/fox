@@ -18,7 +18,7 @@ import (
 var Usage = strings.TrimSpace(`
 fox ad [FLAGS...] NTDS SYSTEM
 
-Account flags:
+Flags:
   -j, --json               Show accounts as JSON objects
   -J, --jsonl              Show accounts as JSON lines
 
@@ -35,7 +35,6 @@ Example: Show account infos
 `)
 
 type Ad struct {
-	// account flags
 	Json  bool `short:"j" xor:"json,jsonl"`
 	Jsonl bool `short:"J" xor:"json,jsonl"`
 
