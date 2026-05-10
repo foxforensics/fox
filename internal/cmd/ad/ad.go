@@ -1,18 +1,19 @@
 package ad
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"strings"
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.dev/bootkey/bootkey"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/rainbow"
 	"go.foxforensics.dev/hashdump/extract"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
+	"go.foxforensics.dev/fox/v4/internal/pkg/table"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/record"
 )
 
 var Usage = strings.TrimSpace(`
@@ -35,6 +36,67 @@ Example: Show account infos
   $ fox ad -j NTDS.dit SYSTEM
 `)
 
+type Account struct {
+	extract.Account
+}
+
+func (a *Account) ToJSON() string {
+	b, _ := json.MarshalIndent(a, "", "  ")
+	return string(b)
+}
+
+func (a *Account) ToJSONL() string {
+	b, _ := json.Marshal(a)
+	return string(b)
+}
+
+func (a *Account) ToNTLM(history bool) string {
+	var sb strings.Builder
+
+	// append actual hashes
+	sb.WriteString(fmt.Sprintf("%s:%d:%s:%s:::",
+		a.SAMAccountName,
+		a.RID,
+		a.format(a.LMHash, extract.DefaultLM),
+		a.format(a.NTHash, extract.DefaultNT),
+	))
+
+	// append hash histories
+	if history {
+		for i := range a.NTHashHistory {
+			sb.WriteString(fmt.Sprintf("\n%s_history%d:%d:%s:%s:::",
+				a.SAMAccountName,
+				i,
+				a.RID,
+				a.format(a.LMHashHistory[i], extract.DefaultLM),
+				a.format(a.NTHashHistory[i], extract.DefaultNT),
+			))
+		}
+	}
+
+	return sb.String()
+}
+
+func (a *Account) OnlyLM() string {
+	return a.format(a.LMHash, extract.DefaultLM)
+}
+
+func (a *Account) OnlyNT() string {
+	return a.format(a.NTHash, extract.DefaultNT)
+}
+
+func (a *Account) format(sum string, def []byte) string {
+	if pwd := table.Lookup(sum); len(pwd) > 0 {
+		return text.AsWarn(pwd)
+	}
+
+	if sum == fmt.Sprintf("%x", def) {
+		return text.AsGray(sum)
+	}
+
+	return sum
+}
+
 type Ad struct {
 	Json  bool `short:"j" xor:"json,jsonl"`
 	Jsonl bool `short:"J" xor:"json,jsonl"`
@@ -50,29 +112,23 @@ type Ad struct {
 }
 
 func (cmd *Ad) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+	var err error
+
 	if cmd.OnlyLm || cmd.OnlyNt {
 		cmd.Json = false
 		cmd.Jsonl = false
 	}
 
-	return nil
+	if cmd.Lookup {
+		err = table.Build()
+	}
+
+	return err
 }
 
 func (cmd *Ad) Run(cli *cli.Globals) error {
 	if len(cmd.Paths) < 2 {
 		return text.Usage(Usage)
-	}
-
-	if cmd.Lookup {
-		if cli.Verbose > 1 {
-			log.Println("building rainbow table")
-		}
-
-		err := rainbow.Build(cli.Parallel)
-
-		if err != nil {
-			return err
-		}
 	}
 
 	ch := cli.Load(cmd.Paths, true)
@@ -94,7 +150,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		log.Printf("BootKey %x\n", key)
 	}
 
-	pek, acc, err := extract.Extract(f1.Bytes(), key)
+	pek, usr, err := extract.Extract(f1.Bytes(), key)
 
 	if err != nil {
 		return err
@@ -110,28 +166,28 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		text.Title(f1.String())
 	}
 
-	for _, a := range acc {
-		text.Match(cmd.format(record.New(a)), cli.Regexp)
+	for _, v := range usr {
+		text.Match(cmd.format(&Account{v}), cli.Regexp)
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("found %d account(s)\n", len(acc))
+		log.Printf("found %d account(s)\n", len(usr))
 	}
 
 	return nil
 }
 
-func (cmd *Ad) format(r *record.Record) string {
+func (cmd *Ad) format(a *Account) string {
 	switch {
 	case cmd.Jsonl:
-		return text.ColorizeAs(r.ToJSONL(), "json")
+		return text.ColorizeAs(a.ToJSONL(), "json")
 	case cmd.Json:
-		return text.ColorizeAs(r.ToJSON(), "json")
+		return text.ColorizeAs(a.ToJSON(), "json")
 	case cmd.OnlyLm:
-		return r.OnlyLM()
+		return a.OnlyLM()
 	case cmd.OnlyNt:
-		return r.OnlyNT()
+		return a.OnlyNT()
 	default:
-		return r.ToNTLM(cmd.History)
+		return a.ToNTLM(cmd.History)
 	}
 }

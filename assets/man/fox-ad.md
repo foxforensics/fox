@@ -48,7 +48,7 @@ Secrets Flags
 POSITIONAL ARGUMENTS
 ====================
 
-The Active Directory offline database file followed by the Windows System registry hive.
+The Active Directory offline database file followed by the Windows system registry hive.
 
 EXAMPLES
 ========
