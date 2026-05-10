@@ -228,7 +228,7 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 	}
 
 	client.Idle = cli.Parallel
-	smap.Chunks = cli.Parallel
+	smap.Parallel = cli.Parallel
 
 	return cli.Loader.Load(args)
 }

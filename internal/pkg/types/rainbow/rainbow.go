@@ -2,23 +2,25 @@
 package rainbow
 
 import (
-	"bufio"
 	"bytes"
+	"io"
+	"strings"
+	"sync"
 
 	_ "embed"
 
 	"github.com/klauspost/compress/zstd"
+	"github.com/sourcegraph/conc/iter"
 	"go.foxforensics.dev/hasher/hash"
 )
 
 //go:embed rainbow.zst
-var table []byte
+var wordlist []byte
 
-var tableLm = make(map[string]string, 12645)
-var tableNt = make(map[string]string, 12645)
+var table sync.Map
 
-func Build() error {
-	r, err := zstd.NewReader(bytes.NewReader(table))
+func Build(parallel int) error {
+	r, err := zstd.NewReader(bytes.NewReader(wordlist))
 
 	if err != nil {
 		return err
@@ -26,29 +28,26 @@ func Build() error {
 
 	defer r.Close()
 
-	scanner := bufio.NewScanner(r)
+	b, err := io.ReadAll(r)
 
-	for scanner.Scan() {
-		b := scanner.Bytes()
-
-		tableLm[hash.MustSum(hash.LM, b)] = string(b)
-		tableNt[hash.MustSum(hash.NT, b)] = string(b)
-	}
-
-	if err = scanner.Err(); err != nil {
+	if err != nil {
 		return err
 	}
+
+	it := iter.Iterator[string]{
+		MaxGoroutines: parallel,
+	}
+
+	it.ForEach(strings.Split(string(b), "\n"), func(s *string) {
+		table.Store(hash.MustSum(hash.NT, []byte(*s)), *s)
+	})
 
 	return nil
 }
 
 func Lookup(sum string) string {
-	if v, ok := tableNt[sum]; ok {
-		return v
-	}
-
-	if v, ok := tableLm[sum]; ok {
-		return v
+	if v, ok := table.Load(sum); ok {
+		return v.(string)
 	}
 
 	return ""
