@@ -19,7 +19,6 @@ var Usage = strings.TrimSpace(`
 fox ad [FLAGS...] NTDS SYSTEM
 
 Account flags:
-  -F, --find=hash          Show only accounts that match hash
   -j, --json               Show accounts as JSON objects
   -J, --jsonl              Show accounts as JSON lines
 
