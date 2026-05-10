@@ -78,12 +78,8 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		return err
 	}
 
-	if cli.Verbose > 0 {
-		log.Println("ad: started")
-	}
-
 	if cli.Verbose > 1 {
-		log.Printf("ad: BootKey %x\n", key)
+		log.Printf("BootKey %x\n", key)
 	}
 
 	pek, acc, err := extract.Extract(f1.Bytes(), key)
@@ -94,7 +90,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 
 	if cli.Verbose > 1 {
 		for i, k := range pek {
-			log.Printf("ad: PEK #%d %x\n", i, k)
+			log.Printf("PEK #%d %x\n", i, k)
 		}
 	}
 
@@ -106,12 +102,8 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		text.Match(cmd.format(record.New(a)), cli.Regexp)
 	}
 
-	if cli.Verbose > 0 {
-		log.Println("ad: finished")
-	}
-
 	if cli.Verbose > 1 {
-		log.Printf("ad: found %d account(s)\n", len(acc))
+		log.Printf("found %d account(s)\n", len(acc))
 	}
 
 	return nil
