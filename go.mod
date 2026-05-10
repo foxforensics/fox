@@ -37,8 +37,9 @@ require (
 	github.com/twmb/murmur3 v1.1.8
 	github.com/ulikunitz/xz v0.5.15
 	github.com/zeebo/xxh3 v1.1.0
+	go.foxforensics.dev/bootkey v0.3.3
 	go.foxforensics.dev/entropy v0.3.1
-	go.foxforensics.dev/eventid v0.4.1
+	go.foxforensics.dev/eventid v0.4.2
 	go.foxforensics.dev/go-bgzf v0.3.1
 	go.foxforensics.dev/go-ese v0.4.1
 	go.foxforensics.dev/go-fortilog v0.2.1
@@ -46,6 +47,7 @@ require (
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-zip v0.6.2
+	go.foxforensics.dev/hashdump v0.5.2
 	go.foxforensics.dev/hasher v0.2.1
 	go.foxforensics.dev/rhash v1.6.2
 	go.foxforensics.dev/strings v0.5.2
@@ -100,11 +102,9 @@ require (
 	github.com/twpayne/go-geom v1.6.1 // indirect
 	github.com/zeebo/blake3 v0.2.4 // indirect
 	go.dw1.io/rapidhash v0.3.0 // indirect
-	go.foxforensics.dev/bootkey v0.3.3 // indirect
 	go.foxforensics.dev/go-hash v0.3.1 // indirect
 	go.foxforensics.dev/go-krypto v0.3.1 // indirect
 	go.foxforensics.dev/go-mscfb v0.3.1 // indirect
-	go.foxforensics.dev/hashdump v0.5.1 // indirect
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
