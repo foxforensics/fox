@@ -6,17 +6,17 @@ import (
 	"regexp"
 	"slices"
 
-	"github.com/sourcegraph/conc"
+	"github.com/sourcegraph/conc/iter"
 )
 
 const Size = 1024 * 1025 * 4 // 4m
 
-var Chunks = 2 // default
+var Parallel = 2 // default
 
 var tab = []byte{'\t'}
-var exp = []byte("  ")
+var spc = []byte("  ")
 
-type action func(chan<- String, []String)
+type action func(chan<- String, *String)
 
 type SMap []String
 
@@ -46,19 +46,15 @@ func Map(m []byte) (s SMap) {
 }
 
 func (s SMap) Render() SMap {
-	return s.do(func(ch chan<- String, chk []String) {
-		for _, str := range chk {
-			ch <- String{str.Line, str.Group, bytes.ReplaceAll(str.Bytes, tab, exp)}
-		}
+	return s.do(func(ch chan<- String, str *String) {
+		ch <- String{str.Line, str.Group, bytes.ReplaceAll(str.Bytes, tab, spc)}
 	})
 }
 
 func (s SMap) Grep(re *regexp.Regexp) SMap {
-	return s.do(func(ch chan<- String, chk []String) {
-		for _, str := range chk {
-			if re.Match(str.Bytes) {
-				ch <- str
-			}
+	return s.do(func(ch chan<- String, str *String) {
+		if re.Match(str.Bytes) {
+			ch <- *str
 		}
 	})
 }
@@ -66,17 +62,17 @@ func (s SMap) Grep(re *regexp.Regexp) SMap {
 func (s SMap) do(fn action) SMap {
 	ch := make(chan String, len(s))
 
-	go func() {
-		var wg conc.WaitGroup
-
-		for chk := range slices.Chunk(s, Chunks) {
-			wg.Go(func() { fn(ch, chk) })
+	go func(chan<- String) {
+		it := iter.Iterator[String]{
+			MaxGoroutines: Parallel,
 		}
 
-		wg.Wait()
+		it.ForEach(s, func(s *String) {
+			fn(ch, s)
+		})
 
 		close(ch)
-	}()
+	}(ch)
 
 	return sort(ch)
 }
