@@ -37,7 +37,7 @@ func Setup(w io.WriteCloser, err error) {
 }
 
 func Usage(msg string) error {
-	_, _ = fmt.Println(fmt.Sprintf(Banner, ver.Version))
+	_, _ = fmt.Println(fmt.Sprintf(Banner, version.Number))
 	_, _ = fmt.Println(msg)
 
 	return nil

@@ -1,3 +1,3 @@
-package ver
+package version
 
-const Version = "4.49.4"
+var Number = "dev"
