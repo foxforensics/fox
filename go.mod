@@ -20,7 +20,7 @@ require (
 	github.com/fatih/color v1.19.0
 	github.com/flanglet/kanzi-go/v2 v2.5.1
 	github.com/hooklift/iso9660 v1.0.0
-	github.com/josephspurrier/goversioninfo v1.5.0
+	github.com/josephspurrier/goversioninfo v1.7.0
 	github.com/klauspost/compress v1.18.6
 	github.com/korylprince/goxar v0.1.2
 	github.com/minio/minlz v1.1.1
@@ -47,13 +47,13 @@ require (
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-zip v0.6.2
-	go.foxforensics.dev/hashdump v0.5.2
+	go.foxforensics.dev/hashdump v0.5.3
 	go.foxforensics.dev/hasher v0.2.1
 	go.foxforensics.dev/rhash v1.6.2
 	go.foxforensics.dev/strings v0.5.2
 	golang.org/x/term v0.43.0
 	golang.org/x/text v0.37.0
-	modernc.org/sqlite v1.50.0
+	modernc.org/sqlite v1.50.1
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
