@@ -10,11 +10,11 @@ import (
 	"strings"
 	"time"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 	"golang.org/x/term"
 
-	"go.foxforensics.dev/fox/v4/internal"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/receipt"
+	"go.foxforensics.dev/fox/v4/internal/pkg/version"
 )
 
 var Banner = `

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"go.foxforensics.dev/fox/v4/internal"
+	"go.foxforensics.dev/fox/v4/internal/pkg/version"
 )
 
 var (

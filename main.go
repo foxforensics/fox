@@ -17,7 +17,6 @@ import (
 	"github.com/alecthomas/kong"
 	_ "github.com/josephspurrier/goversioninfo"
 
-	"go.foxforensics.dev/fox/v4/internal"
 	"go.foxforensics.dev/fox/v4/internal/cmd"
 	"go.foxforensics.dev/fox/v4/internal/cmd/ad"
 	"go.foxforensics.dev/fox/v4/internal/cmd/hash"
@@ -27,6 +26,7 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/cmd/std"
 	"go.foxforensics.dev/fox/v4/internal/cmd/str"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
+	"go.foxforensics.dev/fox/v4/internal/pkg/version"
 )
 
 var Usage = strings.TrimSpace(`
