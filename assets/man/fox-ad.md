@@ -50,6 +50,13 @@ POSITIONAL ARGUMENTS
 
 The Active Directory offline database file followed by the Windows system registry hive.
 
+ENVIRONMENT
+===========
+
+**FOX_WORDLIST**
+
+:   Force wordlist path as base of rainbow tables. Only available in AD mode.
+
 EXAMPLES
 ========
 

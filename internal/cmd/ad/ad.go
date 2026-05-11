@@ -107,6 +107,9 @@ type Ad struct {
 	OnlyLm  bool `long:"only-lm" xor:"only-lm,only-nt"`
 	OnlyNt  bool `long:"only-nt" xor:"only-lm,only-nt"`
 
+	// hidden
+	Wordlist []byte `type:"filecontent" hidden:""`
+
 	// paths
 	Paths []string `arg:"" optional:""`
 }
@@ -120,7 +123,7 @@ func (cmd *Ad) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	}
 
 	if cmd.Lookup {
-		err = table.Build()
+		err = table.Build(cmd.Wordlist)
 	}
 
 	return err

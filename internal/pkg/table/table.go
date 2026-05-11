@@ -18,17 +18,19 @@ var wordlist []byte
 var hashesLm sync.Map
 var hashesNt sync.Map
 
-func Build() error {
-	r, err := xz.NewReader(bytes.NewReader(wordlist))
+func Build(b []byte) error {
+	if b == nil {
+		r, err := xz.NewReader(bytes.NewReader(wordlist))
 
-	if err != nil {
-		return err
-	}
+		if err != nil {
+			return err
+		}
 
-	b, err := io.ReadAll(r)
+		b, err = io.ReadAll(r)
 
-	if err != nil {
-		return err
+		if err != nil {
+			return err
+		}
 	}
 
 	iter.ForEach(bytes.Split(b, []byte{'\n'}), func(b *[]byte) {
