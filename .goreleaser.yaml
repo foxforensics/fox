@@ -16,7 +16,7 @@ builds:
   - env:
       - CGO_ENABLED=0
     ldflags:
-      - -s -w -X "go.foxforensics.dev/fox/v4/internal/pkg/version.Number={{.Version}}
+      - -s -w -X go.foxforensics.dev/fox/v4/internal/pkg/version.Number={{.Version}}
     goos:
       - linux
       - windows
