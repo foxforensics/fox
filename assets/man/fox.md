@@ -192,6 +192,10 @@ ENVIRONMENT
 
 :   Global flags can be set through environment variables. The variable name must be prefixed with _FOX_ followed by an underscore and the flags name. All dots must be replaced with underscores. A general proxy server can be set through the environment variables _HTTPS_PROXY_, _HTTP_PROXY_ and _NO_PROXY_.
 
+**FOX_API_KEY**
+
+:   The VirusTotal API key used for lookups. Available for all modes.
+
 **FOX_LEXER**
 
 :   Force syntax highlighting lexer. Only available in default mode.

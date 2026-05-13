@@ -6,8 +6,9 @@ import (
 	"regexp"
 
 	"github.com/fatih/color"
-
+	"go.foxforensics.dev/checker/services/vt"
 	_zip "go.foxforensics.dev/fox/v4/internal/pkg/file/archive/7z"
+	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/ar"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/cab"
@@ -91,8 +92,11 @@ type Globals struct {
 	Help    bool
 
 	// hidden
-	Lexer string `hidden:""`
-	Style string `hidden:""`
+	ApiKey string `hidden:"" long:"api-key"`
+	Test1  string `hidden:"" long:"test1" xor:"test1,test2"`
+	Test2  string `hidden:"" long:"test2" xor:"test1,test2"`
+	Lexer  string `hidden:""`
+	Style  string `hidden:""`
 
 	// internal
 	Regexp *regexp.Regexp `kong:"-"`
@@ -227,6 +231,15 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		cli.Exit(0)
 	}
 
+	switch {
+	case len(cli.Test1) > 0:
+		cli.ApiKey = test.Reserve(1, cli.Test1)
+
+	case len(cli.Test2) > 0:
+		cli.ApiKey = test.Reserve(2, cli.Test2)
+	}
+
+	vt.Key = cli.ApiKey
 	client.Idle = cli.Parallel
 	smap.Parallel = cli.Parallel
 

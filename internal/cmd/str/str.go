@@ -26,7 +26,13 @@ Class flags:
   -w, --what[=LEVEL]       Show string classifications (w/ww/www)
   -F, --find=CLASS,...     Show only strings that match class(es)
   -1, --first              Show only strings first class
-  -L, --list               Show only classification list
+      --list               Show only classification list
+
+Check flags:
+  -L, --lookup             Lookup URLs and IPs via VirusTotal
+
+Remarks:
+  A VirusTotal API key is required for lookup. 
 
 Example: Show only long ASCII strings
   $ fox str -ant8 sample.exe
@@ -46,7 +52,10 @@ type Str struct {
 	What  int      `short:"w" type:"counter"`
 	Find  []string `short:"F" sep:","`
 	First bool     `short:"1" and:"first,what"`
-	List  bool     `short:"L"`
+	List  bool
+
+	// check
+	Lookup bool `short:"L"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -101,6 +110,7 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			What:     cmd.What,
 			Find:     cmd.Find,
 			First:    cmd.First,
+			Lookup:   cmd.Lookup,
 			Parallel: cli.Parallel,
 		}).Carve(h.Bytes()) {
 			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Value) {
@@ -109,7 +119,9 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 
 			l.Value = text.MarkMatch(l.Value, cli.Regexp)
 
-			if !cli.NoPretty && len(l.Classes) > 0 {
+			if !cli.NoPretty && l.Suspect {
+				text.Write("%s  %s [%s]", text.AsGray(l.Address), text.AsWarn(l.Value), text.AsBold(l.Classes))
+			} else if !cli.NoPretty && len(l.Classes) > 0 {
 				text.Write("%s  %s [%s]", text.AsGray(l.Address), l.Value, text.AsBold(l.Classes))
 			} else if !cli.NoPretty {
 				text.Write("%s  %s", text.AsGray(l.Address), l.Value)

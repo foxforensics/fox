@@ -53,9 +53,16 @@ Class Flags
 
 :   Show only strings first class.
 
-**-L, --list**
+**--list**
 
 :   Show only classification list.
+
+Check Flags
+-----------
+
+**-L, --lookup**
+
+:   Lookup URLs and IPs directly via VirusTotal.
 
 POSITIONAL ARGUMENTS
 ====================

@@ -36,8 +36,10 @@ require (
 	github.com/sourcegraph/conc v0.3.0
 	github.com/twmb/murmur3 v1.1.8
 	github.com/ulikunitz/xz v0.5.15
+	github.com/xxtea/xxtea-go v1.0.0
 	github.com/zeebo/xxh3 v1.1.0
 	go.foxforensics.dev/bootkey v0.3.3
+	go.foxforensics.dev/checker v0.2.1
 	go.foxforensics.dev/entropy v0.3.1
 	go.foxforensics.dev/eventid v0.4.2
 	go.foxforensics.dev/go-bgzf v0.3.1
@@ -64,6 +66,7 @@ require (
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
 	github.com/Velocidex/json v0.0.0-20220224052537-92f3c0326e5a // indirect
 	github.com/Velocidex/yaml/v2 v2.2.8 // indirect
+	github.com/VirusTotal/vt-go v1.1.0 // indirect
 	github.com/ajdnik/imghash/v2 v2.4.0 // indirect
 	github.com/akavel/rsrc v0.10.2 // indirect
 	github.com/alecthomas/participle v0.7.1 // indirect
@@ -98,6 +101,7 @@ require (
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
+	github.com/thedevsaddam/gojsonq/v2 v2.5.2 // indirect
 	github.com/tjfoc/gmsm/v2 v2.0.0 // indirect
 	github.com/twpayne/go-geom v1.6.1 // indirect
 	github.com/zeebo/blake3 v0.2.4 // indirect
