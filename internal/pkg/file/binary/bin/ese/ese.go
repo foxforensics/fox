@@ -12,12 +12,14 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 )
 
+// row attributes
 const (
-	colAttribId = "ATTc131102"
-	colLdapName = "ATTm131532"
+	attribId = "ATTc131102"
+	ldapName = "ATTm131532"
 )
 
-var sparse = "{\"table\":\"%s\",\"rows\":[\n%s\n]}"
+// table wrapper
+var wrapper = "{\"table\":\"%s\",\"rows\":[\n%s\n]}"
 
 func Detect(b []byte) bool {
 	return file.HasMagic(b, 4, []byte{
@@ -40,7 +42,7 @@ func Convert(b []byte) ([]byte, error) {
 		return b, err
 	}
 
-	rep := strings.NewReplacer(lookup(ctl)...)
+	rep := strings.NewReplacer(translate(ctl)...)
 
 	buf.WriteByte('[')
 
@@ -56,7 +58,7 @@ func Convert(b []byte) ([]byte, error) {
 
 		rows := bytes.Join(json, []byte(",\n"))
 
-		buf.WriteString(rep.Replace(fmt.Sprintf(sparse, table, rows)))
+		buf.WriteString(rep.Replace(fmt.Sprintf(wrapper, table, rows)))
 
 		if i < ctl.Tables.Len()-1 {
 			buf.WriteString(",\n")
@@ -68,32 +70,35 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// https://www.xmco.fr/en/active-directory-en/demystifying-the-ntds-2/
-func lookup(ctl *parser.Catalog) []string {
-	obj := make(map[int64]string)
-	lut := make([]string, 0)
+// translate attributes to their LDAP name
+// source: https://www.xmco.fr/en/active-directory-en/demystifying-the-ntds-2/
+func translate(ctl *parser.Catalog) []string {
+	cache := make(map[int64]string)
+	names := make([]string, 0)
 
+	// build name attribute cache
 	_ = ctl.DumpTable("MSysObjects", func(row *ordereddict.Dict) error {
 		if v, ok := row.GetString("Name"); ok {
 			if strings.HasPrefix(v, "ATT") {
 				if k, err := strconv.Atoi(v[4:]); err == nil {
-					obj[int64(k)] = v
+					cache[int64(k)] = v
 				}
 			}
 		}
 		return nil
 	})
 
+	// generate translations
 	_ = ctl.DumpTable("datatable", func(row *ordereddict.Dict) error {
-		if i, ok := row.GetInt64(colAttribId); ok {
-			if v, ok := row.GetString(colLdapName); ok {
-				if k, ok := obj[i]; ok {
-					lut = append(lut, k, v)
+		if i, ok := row.GetInt64(attribId); ok {
+			if v, ok := row.GetString(ldapName); ok {
+				if k, ok := cache[i]; ok {
+					names = append(names, k, v)
 				}
 			}
 		}
 		return nil
 	})
 
-	return lut
+	return names
 }
