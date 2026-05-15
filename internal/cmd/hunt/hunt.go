@@ -72,20 +72,20 @@ type Hunt struct {
 	Parquet bool `short:"P" xor:"sqlite,parquet"`
 	Sqlite  bool `short:"S" xor:"sqlite,parquet"`
 
-	// hunter
+	// hunter flags
 	Block string `short:"b" default:"65536"`
 
-	// filter
+	// filter flags
 	Rule string  `short:"R"`
 	Dist float64 `short:"D" xor:"uniq,dist"`
 
-	// stream
+	// stream flags
 	Url  string `short:"U"`
 	Auth string `short:"A"`
 	Ecs  bool   `short:"E" xor:"ecs,hec"`
 	Hec  bool   `short:"H" xor:"ecs,hec"`
 
-	// alias
+	// aliases
 	Logstash bool `xor:"logstash,splunk"`
 	Splunk   bool `xor:"logstash,splunk"`
 

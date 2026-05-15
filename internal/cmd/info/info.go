@@ -14,6 +14,7 @@ import (
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/lookup"
 )
 
 // Threshold for high entropy files
@@ -37,6 +38,9 @@ Filter flags:
   -n, --min=VALUE          Minimum entropy value (default: 0.0)
   -x, --max=VALUE          Maximal entropy value (default: 8.0)
 
+Lookup flags:
+  -L, --lookup             Lookup file hashes via VirusTotal
+
 Example: List only high entropy files
   $ fox info -n6.0 ./**/*
 
@@ -50,6 +54,7 @@ type FileInfo struct {
 	Lines   int64   `json:"lines,omitempty"`
 	Offset  int64   `json:"offset,omitempty"`
 	Entropy float64 `json:"entropy,omitempty"`
+	Suspect bool    `json:"suspect,omitempty"`
 }
 
 func (fi *FileInfo) String() string {
@@ -57,17 +62,24 @@ func (fi *FileInfo) String() string {
 
 	sb.WriteString(fmt.Sprintf("%7dl ", fi.Lines))
 	sb.WriteString(fmt.Sprintf("%6s ", text.Humanize(fi.Bytes)))
-	sb.WriteString(fmt.Sprintf("%.1fe ", fi.Entropy))
+
+	if fi.Entropy > Threshold {
+		sb.WriteString(text.AsWarn(fmt.Sprintf("%.1fe ", fi.Entropy)))
+	} else {
+		sb.WriteString(fmt.Sprintf("%.1fe ", fi.Entropy))
+	}
 
 	if fi.Offset != NoOffset {
 		sb.WriteString(fmt.Sprintf("%.08x:", fi.Offset))
 	}
 
-	sb.WriteString(fi.File)
+	if fi.Suspect {
+		sb.WriteString(text.AsWarn(fi.File))
+	} else {
+		sb.WriteString(fi.File)
+	}
 
-	if fi.Entropy > Threshold {
-		return text.AsWarn(sb.String())
-	} else if fi.Bytes == 0 {
+	if fi.Bytes == 0 {
 		return text.AsGray(sb.String())
 	}
 
@@ -89,12 +101,15 @@ type Info struct {
 	Json  bool `short:"j" xor:"json,jsonl"`
 	Jsonl bool `short:"J" xor:"json,jsonl"`
 
-	// block
-	Block string `short:"b"`
+	// block flags
+	Block string `short:"b" xor:"lookup,block"`
 
-	// filter
+	// filter flags
 	Min float64 `short:"n" default:"0.0"`
 	Max float64 `short:"x" default:"8.0"`
+
+	// lookup flags
+	Lookup bool `short:"L" xor:"lookup,block"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -144,6 +159,10 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 			n = cmd.block
 		} else {
 			fi.Offset = NoOffset
+		}
+
+		if cmd.Lookup {
+			fi.Suspect = lookup.Lookup(h.Bytes(), cli.Verbose)
 		}
 
 		// because empty files will cause errors

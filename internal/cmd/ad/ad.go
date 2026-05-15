@@ -27,7 +27,7 @@ Record flags:
   -U, --users              Extract all user records
 
 Secret flags:
-  -L, --lookup             Lookup hashes in the rainbow tables
+  -L, --lookup             Lookup hashes with rainbow tables
   -H, --history            Extract also the users hash history
       --only-lm            Extract only the LM hashes (Hashcat mode 3000)
       --only-nt            Extract only the NT hashes (Hashcat mode 1000)

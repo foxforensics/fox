@@ -57,12 +57,12 @@ Class Flags
 
 :   Show only classification list.
 
-Check Flags
------------
+Lookup Flags
+------------
 
 **-L, --lookup**
 
-:   Lookup URLs and IPs directly via VirusTotal. Implies **--what** flag.
+:   Lookup URLs, IPs and domains directly via VirusTotal. Implies **--what** flag.
 
 POSITIONAL ARGUMENTS
 ====================

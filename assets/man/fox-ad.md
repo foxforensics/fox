@@ -42,7 +42,7 @@ Secret Flags
 
 **-L, --lookup**
 
-:   Lookup hashes in the rainbow tables.
+:   Lookup hashes with rainbow tables.
 
 **-H, --history**
 

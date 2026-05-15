@@ -261,6 +261,10 @@ go.foxforensics.dev/bootkey v0.3.3 h1:ifJjiuvra645pdb+6q3eLiKFKF6oLefk4W7DFHQn2i
 go.foxforensics.dev/bootkey v0.3.3/go.mod h1:TVpVSmvQYGao+xrNa7Cr+XBmg13Fk1kOxFkxqhIzSIc=
 go.foxforensics.dev/checker v0.2.1 h1:a17ZUhZXG6aKCyGf4plxLE/FV4jK+Mb7ReL/LZB4z1U=
 go.foxforensics.dev/checker v0.2.1/go.mod h1:YyaqLQFqNVOcNY3Z4rHof15uvbvVNGrWK7pzl5Bk67o=
+go.foxforensics.dev/checker v0.3.0 h1:JDFrGLe5w5V3BQmbqFfBboUTggy1Fl3QFos2sipoCxU=
+go.foxforensics.dev/checker v0.3.0/go.mod h1:YyaqLQFqNVOcNY3Z4rHof15uvbvVNGrWK7pzl5Bk67o=
+go.foxforensics.dev/checker v0.3.1 h1:DL/b1HRoPx/3U4dOL12ECE6ZvpDUiQleCGEE/2u5y2E=
+go.foxforensics.dev/checker v0.3.1/go.mod h1:YyaqLQFqNVOcNY3Z4rHof15uvbvVNGrWK7pzl5Bk67o=
 go.foxforensics.dev/entropy v0.3.1 h1:GkxgeHBZsX8tGmyFeZtI8i47o30quYNwAmeECvuiCSE=
 go.foxforensics.dev/entropy v0.3.1/go.mod h1:C7B2Ao387n4Cw/leRqQ5NKyhDk5LBC9kijqjLq+0cRI=
 go.foxforensics.dev/eventid v0.4.2 h1:MEHpAFRLGebQdw2LspkbZnsxM+J29DDKJ4DWAoCXa5g=

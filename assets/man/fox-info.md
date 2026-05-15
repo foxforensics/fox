@@ -35,7 +35,7 @@ Block Flags
 
 **-b, --block**=_size_
 
-:   Block _size_ for analysis (default: all).
+:   Block _size_ for analysis (default: all). Excludes **--lookup** flag.
 
 Filter Flags
 ------------
@@ -47,6 +47,13 @@ Filter Flags
 **-x, --max**=_value_
 
 :   Filter maximal entropy _value_ (default: **8.0**).
+
+Lookup Flags
+------------
+
+**-L, --lookup**
+
+:   Lookup files **SHA256** hash via VirusTotal. Excludes **--block** flag.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -79,4 +86,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**fox(1)**, **wc(1)**
+**fox(1)**, **wc(1)**, **sha256sum(1)**

@@ -10,6 +10,7 @@ import (
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/carver"
+	"go.foxforensics.dev/fox/v4/internal/pkg/types/lookup"
 )
 
 var Usage = strings.TrimSpace(`
@@ -28,8 +29,8 @@ Class flags:
   -1, --first              Show only strings first class
       --list               Show only classification list
 
-Check flags:
-  -L, --lookup             Lookup URLs and IPs via VirusTotal
+Lookup flags:
+  -L, --lookup             Lookup URLs, IPs and domains via VirusTotal
 
 Remarks:
   A VirusTotal API key is required for lookup. 
@@ -48,13 +49,13 @@ type Str struct {
 	Sort  bool `short:"s"`
 	Trim  bool `short:"m"`
 
-	// class
+	// class flags
 	What  int      `short:"w" type:"counter"`
 	Find  []string `short:"F" sep:","`
 	First bool     `short:"1" and:"first,what"`
 	List  bool
 
-	// check
+	// lookup flags
 	Lookup bool `short:"L"`
 
 	// paths
@@ -105,7 +106,7 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			text.Title(h.String())
 		}
 
-		for l := range carver.New(&carver.Options{
+		for str := range carver.New(&carver.Options{
 			Min:      cmd.Min,
 			Max:      cmd.Max,
 			Ascii:    cmd.Ascii,
@@ -114,25 +115,24 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			What:     cmd.What,
 			Find:     cmd.Find,
 			First:    cmd.First,
-			Lookup:   cmd.Lookup,
 			Parallel: cli.Parallel,
 		}).Carve(h.Bytes()) {
-			if cli.Regexp != nil && !cli.Regexp.MatchString(l.Value) {
+			if cli.Regexp != nil && !cli.Regexp.MatchString(str.Value) {
 				continue // not matched afterward
 			}
 
-			l.Value = text.MarkMatch(l.Value, cli.Regexp)
+			str.Value = text.MarkMatch(str.Value, cli.Regexp)
 
-			if !cli.NoPretty && l.Suspect {
-				text.Write("%s  %s [%s]", text.AsGray(l.Address), text.AsWarn(l.Value), text.AsBold(l.Classes))
-			} else if !cli.NoPretty && len(l.Classes) > 0 {
-				text.Write("%s  %s [%s]", text.AsGray(l.Address), l.Value, text.AsBold(l.Classes))
+			if !cli.NoPretty && cmd.Lookup && lookup.Lookup(str, cli.Verbose) {
+				text.Write("%s  %s [%s]", text.AsGray(str.Address), text.AsWarn(str.Value), text.AsBold(str.Classes))
+			} else if !cli.NoPretty && len(str.Classes) > 0 {
+				text.Write("%s  %s [%s]", text.AsGray(str.Address), str.Value, text.AsBold(str.Classes))
 			} else if !cli.NoPretty {
-				text.Write("%s  %s", text.AsGray(l.Address), l.Value)
-			} else if len(l.Classes) > 0 {
-				text.Write("%s [%s]", l.Value, l.Classes)
+				text.Write("%s  %s", text.AsGray(str.Address), str.Value)
+			} else if len(str.Classes) > 0 {
+				text.Write("%s [%s]", str.Value, str.Classes)
 			} else {
-				text.Write(l.Value)
+				text.Write(str.Value)
 			}
 		}
 

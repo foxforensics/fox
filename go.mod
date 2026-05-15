@@ -39,7 +39,7 @@ require (
 	github.com/xxtea/xxtea-go v1.0.0
 	github.com/zeebo/xxh3 v1.1.0
 	go.foxforensics.dev/bootkey v0.3.3
-	go.foxforensics.dev/checker v0.2.1
+	go.foxforensics.dev/checker v0.3.1
 	go.foxforensics.dev/entropy v0.3.1
 	go.foxforensics.dev/eventid v0.4.2
 	go.foxforensics.dev/go-bgzf v0.3.1

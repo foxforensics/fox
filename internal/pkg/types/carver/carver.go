@@ -2,14 +2,10 @@ package carver
 
 import (
 	"fmt"
-	"log"
 	"slices"
 	"strings"
 
 	fstrings "go.foxforensics.dev/strings/strings"
-
-	"go.foxforensics.dev/checker/services"
-	"go.foxforensics.dev/checker/services/vt"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
@@ -23,7 +19,6 @@ type Options struct {
 	What     int
 	Find     []string
 	First    bool
-	Lookup   bool
 	Parallel int
 }
 
@@ -31,7 +26,6 @@ type String struct {
 	fstrings.String
 	Address string
 	Classes string
-	Suspect bool
 }
 
 type Carver struct {
@@ -63,7 +57,6 @@ func (crv *Carver) Carve(block []byte) <-chan *String {
 		) {
 			var adr = fmt.Sprintf("%08x", str.Offset)
 			var cls string
-			var sus bool
 
 			// lookup classes
 			if crv.opts.What > 0 {
@@ -80,14 +73,9 @@ func (crv *Carver) Carve(block []byte) <-chan *String {
 				} else if len(v) > 0 {
 					cls = v[0]
 				}
-
-				// check entries
-				if crv.opts.Lookup {
-					sus = check(str.Value, v)
-				}
 			}
 
-			crv.strings <- &String{*str, adr, cls, sus}
+			crv.strings <- &String{*str, adr, cls}
 		}
 	}()
 
@@ -116,31 +104,6 @@ func (crv *Carver) sort() <-chan *String {
 	}()
 
 	return sorted
-}
-
-func check(s string, v []string) bool {
-	var res *services.Result
-	var err error
-
-	switch {
-	case slices.Contains(v, "IPv6"):
-		fallthrough
-	case slices.Contains(v, "IPv4"):
-		res, err = vt.CheckIp(s)
-	case slices.Contains(v, "URL"):
-		res, err = vt.CheckUrl(s)
-	}
-
-	if err != nil {
-		log.Printf("warning: %s!\n", err.Error())
-		return false
-	}
-
-	if res == nil {
-		return false
-	}
-
-	return res.Verdict == services.Suspicious
 }
 
 func contains(a, b []string) bool {
