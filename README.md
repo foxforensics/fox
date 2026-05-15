@@ -92,6 +92,9 @@ fox hunt -u *.dd
 ```
 
 ## Capabilities
+AD Records
+> NTLM, Users, Computers
+
 Log Formats
 > EVTX, Journal, Fortigate
 
