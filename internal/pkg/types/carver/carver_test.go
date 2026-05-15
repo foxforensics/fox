@@ -22,7 +22,7 @@ func TestCarve(t *testing.T) {
 			"strings",
 			"string/test.txt",
 			false,
-			13,
+			14,
 		}, {
 			"nasty",
 			"string/nasty.txt",
