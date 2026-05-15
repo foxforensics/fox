@@ -125,5 +125,8 @@ Windows Hashes
 Checksums
 > Adler32, Fletcher4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
+Wordlists
+> Default Passwords, Top Passwords, Worst Passwords, Corporate Passwords, Password Permutations, Common SSH Passwords, 100k Common English Passwords, 100k Common German Passwords, Medical Devices
+
 ---
 🦊 is released under the [GPL-3.0](LICENSE.md)
