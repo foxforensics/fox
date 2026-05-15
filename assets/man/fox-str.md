@@ -62,7 +62,7 @@ Check Flags
 
 **-L, --lookup**
 
-:   Lookup URLs and IPs directly via VirusTotal.
+:   Lookup URLs and IPs directly via VirusTotal. Implies **--what** flag.
 
 POSITIONAL ARGUMENTS
 ====================

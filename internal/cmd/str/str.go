@@ -85,6 +85,10 @@ func (cmd *Str) AfterApply(app *kong.Kong, _ kong.Vars) error {
 		app.Exit(0)
 	}
 
+	if cmd.Lookup && cmd.What == 0 {
+		cmd.What = 1
+	}
+
 	return nil
 }
 
