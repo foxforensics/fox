@@ -287,6 +287,8 @@ go.foxforensics.dev/go-zip v0.6.2 h1:oOJOdcEnkL7OHLrnRJA45yJjeYGWBKhU7EX7b6Yu3SY
 go.foxforensics.dev/go-zip v0.6.2/go.mod h1:lciPKpFtI7fYu5UateHiUC/p2D/W57LzCCR18VwdvMk=
 go.foxforensics.dev/hashdump v0.5.3 h1:Ke+YwnR+S1iJjzDPpICstjz6B7r/xaDou2H+AIFp4mM=
 go.foxforensics.dev/hashdump v0.5.3/go.mod h1:x6MVo7uKn62bGrc4kn5F7i2VIG5ZwIFrxmOeQHPSwC0=
+go.foxforensics.dev/hashdump v0.6.0 h1:dZbPVS1BP7UUrKwlTTN8O07tRSoKMRTijDawrLKaw9o=
+go.foxforensics.dev/hashdump v0.6.0/go.mod h1:x6MVo7uKn62bGrc4kn5F7i2VIG5ZwIFrxmOeQHPSwC0=
 go.foxforensics.dev/hasher v0.2.1 h1:GcZbckRq0JYGKyuGgbj2LbMAGs/2YnpQpVZFi8yb9hg=
 go.foxforensics.dev/hasher v0.2.1/go.mod h1:8GGvzyHp918hKUCl+/96qWOQyladAdhv9Wk66amCABA=
 go.foxforensics.dev/rhash v1.6.2 h1:VkiXc4/Kby/G2FM2XyKR7wOQMRSJxQPxXUNOb+cRFvc=
