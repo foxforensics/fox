@@ -13,21 +13,32 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Extract **NTLM** password hashes and account infos from Active Directory offline databases.
+Extract **NTLM** password hashes and records from Active Directory offline databases. Hashes will be shown in **secretsdump** manner, if _records_ are not specified.
 
 FLAGS
 =====
 
 **-j, --json**
 
-:   Show accounts as JSON objects.
+:   Show AD records as JSON objects.
 
 **-J, --jsonl**
 
-:   Show accounts as JSON lines.
+:   Show AD records as JSON lines.
 
-Secrets Flags
--------------
+Record Flags
+------------
+
+**-C, --computers**
+
+:   Extract all computer records.
+
+**-U, --users**
+
+:   Extract all user records.
+
+Secret Flags
+------------
 
 **-L, --lookup**
 
@@ -39,11 +50,11 @@ Secrets Flags
 
 **--only-lm**
 
-:   Extract only the **LM** hashes (hashcat type _3000_). Excludes **--only-nt** flag.
+:   Extract only the **LM** hashes (Hashcat mode _3000_). Excludes **--only-nt** flag.
 
 **--only-nt**
 
-:   Extract only the **NT** hashes (hashcat type _1000_). Excludes **--only-lm** flag.
+:   Extract only the **NT** hashes (Hashcat mode _1000_). Excludes **--only-lm** flag.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -55,18 +66,18 @@ ENVIRONMENT
 
 **FOX_WORDLIST**
 
-:   Force wordlist path as base of rainbow tables. Only available in AD mode.
+:   Force wordlist path as base of rainbow tables. The file MUST be a plain text file with either _ASCII_ or _UTF-8_ encoding. The wordlist MUST contain a single word per line, followed by a linebreak. See <_https://github.com/danielmiessler/SecLists/tree/master/Passwords/Common-Credentials_> for different wordlists. Only available in AD mode.
 
 EXAMPLES
 ========
 
+$ fox ad -jU NTDS.dit SYSTEM
+
+:   Show AD records.
+
 $ fox ad -LH NTDS.dit SYSTEM
 
-:   Show NTLM secrets.
-
-$ fox ad -j NTDS.dit SYSTEM
-
-:   Show account infos.
+:   Show NTLM hashes.
 
 BUGS
 ====

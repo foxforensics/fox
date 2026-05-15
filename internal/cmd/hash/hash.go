@@ -25,14 +25,14 @@ Flags:
   -j, --json               Show results as JSON objects
   -J, --jsonl              Show results as JSON lines
 
+Remarks:
+  Results will be grouped by path, if more than one algorithm is specified.
+
 Example: Hash archive contents as MD5
   $ fox hash -Amd5 files.7z
 
 Example: Hash binaries for similarity
   $ fox hash -Aimpfuzzy *.exe
-
-Remarks:
-  Results will be grouped by path, if more than one algorithm is specified.
 
 Cryptographic hashes (BLAKE family):
   BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
