@@ -55,7 +55,7 @@ func checkString(s *carver.String) (*services.Result, error) {
 	case strings.Contains(s.Classes, "URL"):
 		return vt.CheckUrl(s.Value)
 	default:
-		return nil, errors.ErrUnsupported
+		return nil, nil
 	}
 }
 
