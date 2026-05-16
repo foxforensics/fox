@@ -9,8 +9,11 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
+
+	"go.foxforensics.dev/fox/v4/internal/pkg/version"
 )
 
 var header = strings.TrimSpace(`
@@ -22,7 +25,7 @@ var header = strings.TrimSpace(`
 ┃ HOST │ %s ┃
 ┃ HASH │ %s ┃
 ┠──────┼─────────────────────────────────────────────────────────────────────────┨
-┃ ARGS │ %-71s ┃
+┃ INFO │ %-71s ┃
 ┗━━━━━━┴━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 `)
 
@@ -57,7 +60,7 @@ func Generate(path string) error {
 		pad(fmt.Sprintf("%s (%s)", usr.Name, usr.Username)),
 		pad(fmt.Sprintf("%s (%s)", hst, macAddr())),
 		fmt.Sprintf("%x SHA256", sha256.Sum256(buf)),
-		strings.Join(os.Args[1:], " "),
+		fmt.Sprintf("Fox Version %s (%s-%s)", version.Number, runtime.GOOS, runtime.GOARCH),
 	)+"\n"), 0600)
 }
 
