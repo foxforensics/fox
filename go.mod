@@ -49,7 +49,7 @@ require (
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-zip v0.6.2
-	go.foxforensics.dev/hashdump v0.6.0
+	go.foxforensics.dev/hashdump v0.7.0
 	go.foxforensics.dev/hasher v0.2.1
 	go.foxforensics.dev/rhash v1.6.2
 	go.foxforensics.dev/strings v0.5.2
