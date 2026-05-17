@@ -51,7 +51,7 @@ require (
 	go.foxforensics.dev/go-zip v0.6.2
 	go.foxforensics.dev/hashdump v0.7.0
 	go.foxforensics.dev/hasher v0.2.1
-	go.foxforensics.dev/rhash v1.6.2
+	go.foxforensics.dev/rhash v1.6.3
 	go.foxforensics.dev/strings v0.5.2
 	golang.org/x/term v0.43.0
 	golang.org/x/text v0.37.0
