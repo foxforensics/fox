@@ -53,6 +53,7 @@ require (
 	go.foxforensics.dev/hasher v0.2.1
 	go.foxforensics.dev/rhash v1.6.3
 	go.foxforensics.dev/strings v0.5.2
+	go.foxforensics.dev/wordlist v0.1.1
 	golang.org/x/term v0.43.0
 	golang.org/x/text v0.37.0
 	modernc.org/sqlite v1.50.1
@@ -109,7 +110,6 @@ require (
 	go.foxforensics.dev/go-hash v0.3.1 // indirect
 	go.foxforensics.dev/go-krypto v0.3.1 // indirect
 	go.foxforensics.dev/go-mscfb v0.3.1 // indirect
-	go.foxforensics.dev/wordlist v0.1.1 // indirect
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
