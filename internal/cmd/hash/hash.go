@@ -34,6 +34,9 @@ Example: Hash archive contents as MD5
 Example: Hash binaries for similarity
   $ fox hash -Aimpfuzzy *.exe
 
+Example: Hash binary inside an archive
+  $ fox hash -pinfected ioc.zip:ioc.exe
+
 Cryptographic hashes (BLAKE family):
   BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
 

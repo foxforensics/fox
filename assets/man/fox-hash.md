@@ -97,6 +97,10 @@ $ fox hash -Aimpfuzzy *.exe
 
 :   Hash binaries for similarity.
 
+$ fox hash -pinfected ioc.zip:ioc.exe
+
+:   Hash binary inside an archive.
+
 BUGS
 ====
 
