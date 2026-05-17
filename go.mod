@@ -109,6 +109,7 @@ require (
 	go.foxforensics.dev/go-hash v0.3.1 // indirect
 	go.foxforensics.dev/go-krypto v0.3.1 // indirect
 	go.foxforensics.dev/go-mscfb v0.3.1 // indirect
+	go.foxforensics.dev/wordlist v0.1.1 // indirect
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect

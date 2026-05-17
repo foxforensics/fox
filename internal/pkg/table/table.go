@@ -1,32 +1,21 @@
-// Package table source: https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/
 package table
 
 import (
 	"bytes"
-	"io"
 	"sync"
 
-	_ "embed"
-
 	"github.com/sourcegraph/conc/iter"
-	"github.com/ulikunitz/xz"
 	"go.foxforensics.dev/hasher/hash"
+	"go.foxforensics.dev/wordlist"
 )
 
-//go:embed wordlist.xz
-var wordlist []byte
 var hashesLm sync.Map
 var hashesNt sync.Map
 
-func Build(b []byte) error {
+func Build(b []byte) (err error) {
+	// use built-in wordlist for rainbow tables
 	if b == nil {
-		r, err := xz.NewReader(bytes.NewReader(wordlist))
-
-		if err != nil {
-			return err
-		}
-
-		b, err = io.ReadAll(r)
+		b, err = wordlist.Deflate()
 
 		if err != nil {
 			return err
