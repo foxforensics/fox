@@ -178,6 +178,8 @@ github.com/parquet-go/jsonlite v1.5.2 h1:8TZzYknFOHUpgjTLf80qbzc+8GdeT/3a3fdXSzh
 github.com/parquet-go/jsonlite v1.5.2/go.mod h1:nDjpkpL4EOtqs6NQugUsi0Rleq9sW/OtC1NnZEnxzF0=
 github.com/parquet-go/parquet-go v0.29.0 h1:xXlPtFVR51jpSVzf+cgHnNIcb7Xet+iuvkbe0HIm90Y=
 github.com/parquet-go/parquet-go v0.29.0/go.mod h1:navtkAYr2LGoJVp141oXPlO/sxLvaOe3la2JEoD8+rg=
+github.com/parquet-go/parquet-go v0.30.0 h1:QOJIy4UrKqg4dpi2bojOSUHx2FehO8FjI8flOU3+Clw=
+github.com/parquet-go/parquet-go v0.30.0/go.mod h1:navtkAYr2LGoJVp141oXPlO/sxLvaOe3la2JEoD8+rg=
 github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4 h1:T10NNFGRLmLuOKm+d0Xrb4mZWxjHRCLLXqUrB8bdT5A=
 github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4/go.mod h1:SnCwEQNkRaJCqW/jmXTc+lS/yeUtoT+fJh/uczEj4MU=
 github.com/pierrec/lz4/v4 v4.1.26 h1:GrpZw1gZttORinvzBdXPUXATeqlJjqUG/D87TKMnhjY=
@@ -295,6 +297,8 @@ go.foxforensics.dev/hashdump v0.6.0 h1:dZbPVS1BP7UUrKwlTTN8O07tRSoKMRTijDawrLKaw
 go.foxforensics.dev/hashdump v0.6.0/go.mod h1:x6MVo7uKn62bGrc4kn5F7i2VIG5ZwIFrxmOeQHPSwC0=
 go.foxforensics.dev/hashdump v0.7.0 h1:Iiqdh/dyUqEX5fdoC46KG3gzmFEwKPUY4u9EYeMbOr0=
 go.foxforensics.dev/hashdump v0.7.0/go.mod h1:x6MVo7uKn62bGrc4kn5F7i2VIG5ZwIFrxmOeQHPSwC0=
+go.foxforensics.dev/hashdump v0.7.1 h1:iyzhh1QkKVOShsJC52UdAQKzSFeAJ8hZ+jg54869cVI=
+go.foxforensics.dev/hashdump v0.7.1/go.mod h1:x6MVo7uKn62bGrc4kn5F7i2VIG5ZwIFrxmOeQHPSwC0=
 go.foxforensics.dev/hasher v0.2.1 h1:GcZbckRq0JYGKyuGgbj2LbMAGs/2YnpQpVZFi8yb9hg=
 go.foxforensics.dev/hasher v0.2.1/go.mod h1:8GGvzyHp918hKUCl+/96qWOQyladAdhv9Wk66amCABA=
 go.foxforensics.dev/rhash v1.6.2 h1:VkiXc4/Kby/G2FM2XyKR7wOQMRSJxQPxXUNOb+cRFvc=
@@ -305,6 +309,8 @@ go.foxforensics.dev/strings v0.5.2 h1:7xgQN6J5l81IVltiutRIrb8kcYZ0xtCRIVP6P3GlVn
 go.foxforensics.dev/strings v0.5.2/go.mod h1:dra4qq8i4kC8WjNP5ZMeCCsdfr6I6Rj2phh336VtLZk=
 go.foxforensics.dev/wordlist v0.1.1 h1:xbvYP82LEVr9i6DgolYrnUJs7cQeilbtmOWGVzyEz78=
 go.foxforensics.dev/wordlist v0.1.1/go.mod h1:7EUElhiILSKQwJ/fNwAs9UWFcoHChAE7mYs42cg6skQ=
+go.foxforensics.dev/wordlist v0.1.2 h1:75dVFYr7vVftOGdaijYYvZgh2Q/gRscAKGVUzG2ZeQg=
+go.foxforensics.dev/wordlist v0.1.2/go.mod h1:7EUElhiILSKQwJ/fNwAs9UWFcoHChAE7mYs42cg6skQ=
 go.solidsystem.no/fletcher4 v0.2.0 h1:fHXw/8DSN0I41shMiRnP2zb8tCfts75Bh0S2YGueWBk=
 go.solidsystem.no/fletcher4 v0.2.0/go.mod h1:O3AlHhoAY2aHvZ/yjwzufMXWJ7+a6vYds5LDm1Er+2k=
 go.uber.org/multierr v1.11.0 h1:blXXJkSxSSfBVBlC76pxqeO+LN3aDfLQo+309xJstO0=

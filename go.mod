@@ -26,7 +26,7 @@ require (
 	github.com/minio/minlz v1.1.1
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
 	github.com/nwaples/rardecode/v2 v2.2.2
-	github.com/parquet-go/parquet-go v0.29.0
+	github.com/parquet-go/parquet-go v0.30.0
 	github.com/pierrec/lz4/v4 v4.1.26
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
 	github.com/saferwall/elf v0.3.1
@@ -49,11 +49,11 @@ require (
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-zip v0.6.2
-	go.foxforensics.dev/hashdump v0.7.0
+	go.foxforensics.dev/hashdump v0.7.1
 	go.foxforensics.dev/hasher v0.2.1
 	go.foxforensics.dev/rhash v1.6.3
 	go.foxforensics.dev/strings v0.5.2
-	go.foxforensics.dev/wordlist v0.1.1
+	go.foxforensics.dev/wordlist v0.1.2
 	golang.org/x/term v0.43.0
 	golang.org/x/text v0.37.0
 	modernc.org/sqlite v1.50.1
