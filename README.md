@@ -20,7 +20,7 @@ Fox is a versatile commandline tool, built to support the examination process of
 * [x] Parse Windows shortcut and prefetch files
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * [x] Extract [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes, users and computers  
-* [x] Lookup NTLM hashes using 210000+ common passwords
+* [x] Lookup NTLM hashes using 210000+ entry rainbow table
 * [x] Lookup URLs, IPs, domains and files via the [VirusTotal API](https://www.virustotal.com/)
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
 * [x] Integral syntax highlighting for many different formats
@@ -128,7 +128,7 @@ Checksums
 > Adler32, Fletcher4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 Wordlists
-> Default Passwords, Top Passwords, Worst Passwords, Corporate Passwords, Password Permutations, Common SSH Passwords, 100k Common English Passwords, 100k Common German Passwords, Medical Devices
+> English / German / French / Spanish Common Passwords, Most Common Passwords, Most Used Passwords, Default Passwords, Corporate Passwords, Production Passwords, Milw0rm Dictionary, Conficker Dictionary, Medical Devices, Seasons 
 
 ---
 🦊 is released under the [GPL-3.0](LICENSE.md)
