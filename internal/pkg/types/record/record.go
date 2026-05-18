@@ -7,7 +7,7 @@ import (
 
 	"go.foxforensics.dev/hashdump/extract"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/table"
+	"go.foxforensics.dev/fox/v4/internal/pkg/tables"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
 
@@ -93,7 +93,7 @@ func (s *Secret) OnlyNT() string {
 }
 
 func (s *Secret) format(sum string, def []byte) string {
-	if pwd := table.Lookup(sum); len(pwd) > 0 {
+	if pwd := tables.Lookup(sum); len(pwd) > 0 {
 		return text.AsBold(pwd)
 	}
 

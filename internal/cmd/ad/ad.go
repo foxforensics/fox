@@ -4,13 +4,12 @@ import (
 	"log"
 	"strings"
 
-	"github.com/alecthomas/kong"
 	"go.foxforensics.dev/bootkey/bootkey"
 	"go.foxforensics.dev/hashdump/extract"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/table"
+	"go.foxforensics.dev/fox/v4/internal/pkg/tables"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/record"
 )
@@ -63,14 +62,6 @@ type Ad struct {
 	Paths []string `arg:"" optional:""`
 }
 
-func (cmd *Ad) AfterApply(_ *kong.Kong, _ kong.Vars) error {
-	if cmd.Lookup {
-		return table.Build(cmd.Wordlist)
-	}
-
-	return nil
-}
-
 func (cmd *Ad) Run(cli *cli.Globals) error {
 	if len(cmd.Paths) < 2 {
 		return text.Usage(Usage)
@@ -84,6 +75,22 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 
 	f2 := <-ch
 	defer f2.Discard()
+
+	if cmd.Lookup {
+		if cli.Verbose > 0 {
+			log.Println("building tables")
+		}
+
+		n, err := tables.Build(cmd.Wordlist)
+
+		if err != nil {
+			return err
+		}
+
+		if cli.Verbose > 0 {
+			log.Printf("using %d NTLM hashes\n", n)
+		}
+	}
 
 	key, err := bootkey.ReadData(f2.Reader())
 
