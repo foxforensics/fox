@@ -46,8 +46,8 @@ FLAGS
 
 :   Save logs as SQLite3 (very slow).
 
-Hunter Flags
-------------
+Block Flags
+-----------
 
 **-b, --block**=_size_
 
@@ -73,26 +73,33 @@ Stream Flags
 
 **-A, --auth**=_token_
 
-:   Stream events using auth _token_.
+:   Stream events using auth _token_. HTTP protocol exclusive.
+
+**-M, --mqtt**=_topic_
+
+:   Stream events using MQTT protocol. Excludes **--ecs** and **--hec** flags.
+
+Format Flags
+------------
 
 **-E, --ecs**
 
-:   Use **ECS** schema for streaming.
+:   Use **ECS** schema for HTTP streaming.
 
 **-H, --hec**
 
-:   Use **HEC** schema for streaming.
+:   Use **HEC** schema for HTTP streaming.
 
 ALIASES
 =======
 
-**--logstash**
+**--local-ecs**
 
-:   Alias for **-EUhttp://localhost:8080**.
+:   Alias for **-E -U http://localhost:8080**.
 
-**--splunk**
+**--local-hec**
 
-:   Alias for **-HUhttp://localhost:8088/...**.
+:   Alias for **-H -U http://localhost:8088/...**.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -109,6 +116,10 @@ $ fox hunt -u *.dd
 $ fox hunt -aP *.evtx
 
 :   Save all events as Parquet.
+
+$ fox hunt -M events -U mqtt://127.0.0.1:1883
+
+:   Send events to a MQTT topic.
 
 BUGS
 ====

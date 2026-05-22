@@ -7,8 +7,8 @@ import (
 
 	"github.com/fatih/color"
 	"go.foxforensics.dev/checker/services/vt"
+
 	_zip "go.foxforensics.dev/fox/v4/internal/pkg/file/archive/7z"
-	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/ar"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/archive/cab"
@@ -48,6 +48,8 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/format/json"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/format/jsonl"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/format/xml"
+	"go.foxforensics.dev/fox/v4/internal/pkg/tables"
+	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/client"
@@ -240,8 +242,9 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 	}
 
 	vt.Key = cli.ApiKey
-	client.Idle = cli.Parallel
 	smap.Parallel = cli.Parallel
+	client.MaxIdle = cli.Parallel
+	tables.Parallel = cli.Parallel
 
 	return cli.Loader.Load(args)
 }

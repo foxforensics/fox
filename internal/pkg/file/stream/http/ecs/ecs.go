@@ -10,7 +10,7 @@ import (
 	"github.com/twmb/murmur3"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.dev/fox/v4/internal/pkg/version"
 )
@@ -67,7 +67,7 @@ func New(url string) Ecs {
 }
 
 func (ecs Ecs) String() string {
-	return fmt.Sprintf("ECS @ %s", ecs.url)
+	return fmt.Sprintf("ecs@%s", ecs.url)
 }
 
 func (ecs Ecs) Stream(e *event.Event) error {
@@ -107,7 +107,7 @@ func (ecs Ecs) Stream(e *event.Event) error {
 		return err
 	}
 
-	return stream.Post(ecs.url, string(buf), map[string]string{
+	return http.Post(ecs.url, string(buf), map[string]string{
 		"Content-Type": "application/json",
 	})
 }

@@ -10,6 +10,10 @@ import (
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/evtx"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http/ecs"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http/hec"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http/raw"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/mqtt"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
@@ -17,9 +21,6 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/store/parquet"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/store/sqlite"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/ecs"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/hec"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/raw"
 	"go.foxforensics.dev/fox/v4/internal/pkg/rules"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
@@ -39,7 +40,7 @@ Flags:
   -P, --parquet            Save logs as Parquet (very fast)
   -S, --sqlite             Save logs as SQLite3 (very slow)
 
-Hunter flags:
+Block flags:
   -b, --block=SIZE         Block size for event carving
 
 Filter flags:
@@ -49,18 +50,24 @@ Filter flags:
 Stream flags:
   -U, --url=SERVER         Stream events to server address
   -A, --auth=TOKEN         Stream events using auth token
-  -E, --ecs                Use ECS schema for streaming
-  -H, --hec                Use HEC schema for streaming
+  -M, --mqtt=TOPIC         Stream events using MQTT protocol
+
+Format flags:
+  -E, --ecs                Use ECS schema for HTTP streaming
+  -H, --hec                Use HEC schema for HTTP streaming
 
 Aliases:
-      --logstash           Alias for -EUhttp://localhost:8080
-      --splunk             Alias for -HUhttp://localhost:8088/...
+      --local-ecs          Alias for -E -U http://localhost:8080
+      --local-hec          Alias for -H -U http://localhost:8088/...
 
 Example: Hunt down critical events
   $ fox hunt -u *.dd
 
 Example: Save all events as Parquet
   $ fox hunt -aP *.evtx
+
+Example: Send events to a MQTT topic
+  $ fox hunt -M events -U mqtt://127.0.0.1:1883
 `)
 
 type Hunt struct {
@@ -72,7 +79,7 @@ type Hunt struct {
 	Parquet bool `short:"P" xor:"sqlite,parquet"`
 	Sqlite  bool `short:"S" xor:"sqlite,parquet"`
 
-	// hunter flags
+	// block flags
 	Block string `short:"b" default:"65536"`
 
 	// filter flags
@@ -82,12 +89,15 @@ type Hunt struct {
 	// stream flags
 	Url  string `short:"U"`
 	Auth string `short:"A"`
-	Ecs  bool   `short:"E" xor:"ecs,hec"`
-	Hec  bool   `short:"H" xor:"ecs,hec"`
+	Mqtt string `short:"M"`
+
+	// format flags
+	Ecs bool `short:"E" xor:"ecs,hec"`
+	Hec bool `short:"H" xor:"ecs,hec"`
 
 	// aliases
-	Logstash bool `xor:"logstash,splunk"`
-	Splunk   bool `xor:"logstash,splunk"`
+	LocalEcs bool `long:"local-ecs" xor:"local-ecs,local-hec"`
+	LocalHec bool `long:"local-hec" xor:"local-ecs,local-hec"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -129,18 +139,20 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		cmd.db = parquet.New(hunter.Storage)
 	}
 
-	if cmd.Logstash {
+	if cmd.LocalEcs {
 		cmd.Url = ecs.LocalHost
 		cmd.Ecs = true
 	}
 
-	if cmd.Splunk {
+	if cmd.LocalHec {
 		cmd.Url = hec.LocalHost
 		cmd.Hec = true
 	}
 
 	if len(cmd.Url) > 0 {
 		switch {
+		case len(cmd.Mqtt) > 0:
+			cmd.net = mqtt.New(cmd.Url, cmd.Mqtt)
 		case cmd.Hec:
 			cmd.net = hec.New(cmd.Url, cmd.Auth)
 		case cmd.Ecs:
