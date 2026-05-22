@@ -3,7 +3,7 @@ package raw
 import (
 	"fmt"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
@@ -16,11 +16,11 @@ func New(url string) Raw {
 }
 
 func (raw Raw) String() string {
-	return fmt.Sprintf("raw @ %s", raw.url)
+	return fmt.Sprintf("raw@%s", raw.url)
 }
 
 func (raw Raw) Stream(e *event.Event) error {
-	return stream.Post(raw.url, e.ToCEF(), map[string]string{
+	return http.Post(raw.url, e.ToCEF(), map[string]string{
 		"Content-Type": "text/plain",
 	})
 }

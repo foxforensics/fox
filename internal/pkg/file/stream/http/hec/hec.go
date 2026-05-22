@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.dev/fox/v4/internal/pkg/version"
 )
@@ -43,7 +43,7 @@ func New(url, token string) Hec {
 }
 
 func (hec Hec) String() string {
-	return fmt.Sprintf("HEC @ %s", hec.url)
+	return fmt.Sprintf("hec@%s", hec.url)
 }
 
 func (hec Hec) Stream(e *event.Event) error {
@@ -66,7 +66,7 @@ func (hec Hec) Stream(e *event.Event) error {
 		return err
 	}
 
-	return stream.Post(hec.url, string(buf), map[string]string{
+	return http.Post(hec.url, string(buf), map[string]string{
 		"Content-Type":  "application/json",
 		"Authorization": fmt.Sprintf("Splunk %s", strings.ToLower(hec.token)),
 	})

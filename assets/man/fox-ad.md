@@ -70,7 +70,7 @@ ENVIRONMENT
 
 **FOX_WORDLIST**
 
-:   Force wordlist path as base of rainbow tables. The file MUST be a plain text file with either _ASCII_ or _UTF-8_ encoding. The wordlist MUST contain a single word per line, followed by a linebreak. See <_https://github.com/danielmiessler/SecLists/tree/master/Passwords/Common-Credentials_> for different wordlists. Only available in AD mode.
+:   Force wordlist path as base of rainbow tables. The file MUST be a plain text file with either _ASCII_ or _UTF-8_ encoding. The wordlist MUST contain a single word per line, followed by a linebreak. See <_https://github.com/danielmiessler/SecLists/tree/master/Passwords/Common-Credentials_> for different wordlists. Only available in this mode.
 
 EXAMPLES
 ========

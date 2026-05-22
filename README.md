@@ -38,7 +38,7 @@ Fox is a versatile commandline tool, built to support the examination process of
   * [x] Built-in warning of critical system events
   * [x] Filter events with [Sigma Rules](https://sigmahq.io/) syntax
   * [x] Filter anomalies using [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
-  * [x] Stream in [Splunk HEC](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) and [Elastic ECS](https://www.elastic.co/docs/reference/ecs) format
+  * [x] Stream per HTTP and MQTT in [Splunk](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) and [Elastic](https://www.elastic.co/docs/reference/ecs) format
   * [x] Save as `JSON`, `JSON Lines`, `Parquet` or `SQLite` 
 
 ## Install
