@@ -76,7 +76,7 @@ Perceptual hashes
 
 Similarity hashes
 
-:   IMPFUZZY, IMPHASH, IMPHASH0, SSDEEP, TLSH
+:   IMPFUZZY, IMPHASHO, IMPHASHS, SSDEEP, TLSH
 
 Windows hashes
 

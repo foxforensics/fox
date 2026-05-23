@@ -119,7 +119,7 @@ Perceptual Hashes
 > Average, Difference, Median, PHash, WHash, MarrHildreth, BlockMean, PDQ, RASH
 
 Similarity Hashes
-> ImpFuzzy, ImpHash, ImpHash0, SSDeep, TLSH
+> ImpFuzzy, ImpHashO, ImpHashS, SSDeep, TLSH
 
 Windows Hashes
 > LM, NT, PE
