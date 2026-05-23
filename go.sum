@@ -205,6 +205,8 @@ github.com/saferwall/elf v0.3.1 h1:dYe2pr/eFeXbkQRvNbF508td3fKJK2BQcqMTos+T4vc=
 github.com/saferwall/elf v0.3.1/go.mod h1:OnS8yoEjdNplZw1257VOJHfrOyK6H3HgnxeQOy6VO3c=
 github.com/saferwall/pe v1.6.4 h1:sevZnbF2R3okkOfG1PCwuG7D16UNdn92EpXTuH2q8Eg=
 github.com/saferwall/pe v1.6.4/go.mod h1:aNooU8V9vpqCUCiPb9WWIxEag15MeTjUoDtKQiAsZwY=
+github.com/saferwall/pe v1.6.5 h1:CxgDvikdp9mnLb2kHKVyyRHbK/JSMrtslCaveXxIQ8M=
+github.com/saferwall/pe v1.6.5/go.mod h1:aNooU8V9vpqCUCiPb9WWIxEag15MeTjUoDtKQiAsZwY=
 github.com/sebdah/goldie v1.0.0 h1:9GNhIat69MSlz/ndaBg48vl9dF5fI+NBB6kfOxgfkMc=
 github.com/sebdah/goldie v1.0.0/go.mod h1:jXP4hmWywNEwZzhMuv2ccnqTSFpuq8iyQhtQdkkZBH4=
 github.com/secDre4mer/go-cab v0.0.0-20250826110853-e3fbafae92cd h1:/vpc4sAP5kjB/q0f5KPxEUnEejjlVTPCp9vIe75JqPE=
@@ -305,6 +307,8 @@ go.foxforensics.dev/hashdump v0.7.0 h1:Iiqdh/dyUqEX5fdoC46KG3gzmFEwKPUY4u9EYeMbO
 go.foxforensics.dev/hashdump v0.7.0/go.mod h1:x6MVo7uKn62bGrc4kn5F7i2VIG5ZwIFrxmOeQHPSwC0=
 go.foxforensics.dev/hashdump v0.7.1 h1:iyzhh1QkKVOShsJC52UdAQKzSFeAJ8hZ+jg54869cVI=
 go.foxforensics.dev/hashdump v0.7.1/go.mod h1:x6MVo7uKn62bGrc4kn5F7i2VIG5ZwIFrxmOeQHPSwC0=
+go.foxforensics.dev/hashdump v0.8.0 h1:5o1fgJexRwlp90s6lv8DlE34m7hJhEA5v6IHStbohYU=
+go.foxforensics.dev/hashdump v0.8.0/go.mod h1:2y7uFBjDf8NwU2R4gnEiNC+Gl3o3HP87+HHpIZNN2hE=
 go.foxforensics.dev/hasher v0.2.1 h1:GcZbckRq0JYGKyuGgbj2LbMAGs/2YnpQpVZFi8yb9hg=
 go.foxforensics.dev/hasher v0.2.1/go.mod h1:8GGvzyHp918hKUCl+/96qWOQyladAdhv9Wk66amCABA=
 go.foxforensics.dev/rhash v1.6.2 h1:VkiXc4/Kby/G2FM2XyKR7wOQMRSJxQPxXUNOb+cRFvc=

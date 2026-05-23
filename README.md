@@ -19,7 +19,7 @@ Fox is a versatile commandline tool, built to support the examination process of
 * [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
 * [x] Parse Windows shortcut and prefetch files
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
-* [x] Extract [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes, users and computers  
+* [x] Extract [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes, users, groups, computers  
 * [x] Lookup NTLM hashes using 210000+ entry rainbow table
 * [x] Lookup URLs, IPs, domains and files via the [VirusTotal API](https://www.virustotal.com/)
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
@@ -95,7 +95,7 @@ fox hunt -u *.dd
 
 ## Capabilities
 AD Records
-> NTLM, Users, Computers
+> NTLM, Users, Groups, Computers
 
 Log Formats
 > EVTX, Journal, Fortigate

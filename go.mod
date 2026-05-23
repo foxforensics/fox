@@ -30,7 +30,7 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.26
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
 	github.com/saferwall/elf v0.3.1
-	github.com/saferwall/pe v1.6.4
+	github.com/saferwall/pe v1.6.5
 	github.com/secDre4mer/go-cab v0.0.0-20250826110853-e3fbafae92cd
 	github.com/sorairolake/lzip-go v0.3.8
 	github.com/sourcegraph/conc v0.3.0
@@ -49,7 +49,7 @@ require (
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-zip v0.6.2
-	go.foxforensics.dev/hashdump v0.7.1
+	go.foxforensics.dev/hashdump v0.8.0
 	go.foxforensics.dev/hasher v0.2.1
 	go.foxforensics.dev/rhash v1.6.3
 	go.foxforensics.dev/strings v0.5.2
