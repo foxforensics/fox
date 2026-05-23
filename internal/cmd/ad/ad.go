@@ -1,6 +1,7 @@
 package ad
 
 import (
+	"errors"
 	"log"
 	"strings"
 
@@ -35,7 +36,7 @@ Secret flags:
 Remarks:
   Hashes will be shown in secretsdump manner, if records are not specified.
 
-Example: Show AD records
+Example: Show user records
   $ fox ad -jU NTDS.dit SYSTEM
 
 Example: Show NTLM hashes
@@ -72,11 +73,21 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
 
-	f1 := <-ch
-	defer f1.Discard()
+	ntds := <-ch
 
-	f2 := <-ch
-	defer f2.Discard()
+	if ntds == nil {
+		return errors.New("required file(s) missing")
+	}
+
+	defer ntds.Discard()
+
+	hive := <-ch
+
+	if hive == nil {
+		return errors.New("required file(s) missing")
+	}
+
+	defer hive.Discard()
 
 	if cmd.Lookup {
 		if cli.Verbose > 0 {
@@ -94,7 +105,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		}
 	}
 
-	key, err := bootkey.ReadData(f2.Reader())
+	key, err := bootkey.ReadData(hive.Reader())
 
 	if err != nil {
 		return err
@@ -103,7 +114,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 	if cli.Verbose > 1 {
 		log.Printf("BootKey %x\n", key)
 
-		pek, err := extract.Keys(f1.Bytes(), key)
+		pek, err := extract.Keys(ntds.Bytes(), key)
 
 		if err != nil {
 			return err
@@ -115,10 +126,10 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 	}
 
 	if !cli.NoPretty {
-		text.Title(f1.String())
+		text.Title(ntds.String())
 	}
 
-	n, err := cmd.extract(cli, key, f1.Bytes())
+	n, err := cmd.extract(cli, key, ntds.Bytes())
 
 	if err != nil {
 		return err

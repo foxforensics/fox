@@ -77,7 +77,7 @@ EXAMPLES
 
 $ fox ad -jU NTDS.dit SYSTEM
 
-:   Show AD records.
+:   Show user records.
 
 $ fox ad -LH NTDS.dit SYSTEM
 
