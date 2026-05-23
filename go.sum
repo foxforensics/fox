@@ -230,6 +230,8 @@ github.com/spf13/afero v1.15.0 h1:b/YBCLWAJdFWJTN9cLhiXXcD7mzKn9Dm86dNnfyQw1I=
 github.com/spf13/afero v1.15.0/go.mod h1:NC2ByUVxtQs4b3sIUphxK0NioZnmxgyCrfzeuq8lxMg=
 github.com/stangelandcl/ppmd v0.1.0 h1:0gOKtSdWyXxpRW55H/dZ3AgaJqjrtlIrAvsokFwp7ug=
 github.com/stangelandcl/ppmd v0.1.0/go.mod h1:Rrv7M+/2P5jYr/GMLhBl7Ug3uJ1bUiVzr5LbbaV6xgY=
+github.com/stangelandcl/ppmd v0.1.1 h1:c25QazhlWUn5nmR1QOzafKhQxBicAr7GGCKER2aJ8H8=
+github.com/stangelandcl/ppmd v0.1.1/go.mod h1:Rrv7M+/2P5jYr/GMLhBl7Ug3uJ1bUiVzr5LbbaV6xgY=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.4.0/go.mod h1:YvHI0jy2hoMjB+UWwv71VJQ9isScKT/TqJzVSSt89Yw=
 github.com/stretchr/objx v0.5.0/go.mod h1:Yh+to48EsGEfYuaHDzXPcE3xhTkx73EhmCGUpEOglKo=
@@ -309,6 +311,8 @@ go.foxforensics.dev/hashdump v0.7.1 h1:iyzhh1QkKVOShsJC52UdAQKzSFeAJ8hZ+jg54869c
 go.foxforensics.dev/hashdump v0.7.1/go.mod h1:x6MVo7uKn62bGrc4kn5F7i2VIG5ZwIFrxmOeQHPSwC0=
 go.foxforensics.dev/hashdump v0.8.0 h1:5o1fgJexRwlp90s6lv8DlE34m7hJhEA5v6IHStbohYU=
 go.foxforensics.dev/hashdump v0.8.0/go.mod h1:2y7uFBjDf8NwU2R4gnEiNC+Gl3o3HP87+HHpIZNN2hE=
+go.foxforensics.dev/hashdump v0.9.0 h1:nlu3cqzvCHdKiSZcX82sHD5A4CuIPqjEnFxg+HYTb4s=
+go.foxforensics.dev/hashdump v0.9.0/go.mod h1:2y7uFBjDf8NwU2R4gnEiNC+Gl3o3HP87+HHpIZNN2hE=
 go.foxforensics.dev/hasher v0.2.1 h1:GcZbckRq0JYGKyuGgbj2LbMAGs/2YnpQpVZFi8yb9hg=
 go.foxforensics.dev/hasher v0.2.1/go.mod h1:8GGvzyHp918hKUCl+/96qWOQyladAdhv9Wk66amCABA=
 go.foxforensics.dev/rhash v1.6.2 h1:VkiXc4/Kby/G2FM2XyKR7wOQMRSJxQPxXUNOb+cRFvc=
