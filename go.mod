@@ -12,7 +12,7 @@ require (
 	github.com/alecthomas/kong v1.15.0
 	github.com/andybalholm/brotli v1.2.1
 	github.com/bmatcuk/doublestar/v4 v4.10.0
-	github.com/bodgit/sevenzip v1.6.2
+	github.com/bodgit/sevenzip v1.6.4
 	github.com/bradleyjkemp/sigma-go v0.6.6
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
@@ -26,7 +26,7 @@ require (
 	github.com/minio/minlz v1.1.1
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
 	github.com/nwaples/rardecode/v2 v2.2.2
-	github.com/parquet-go/parquet-go v0.30.0
+	github.com/parquet-go/parquet-go v0.30.1
 	github.com/pierrec/lz4/v4 v4.1.26
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
 	github.com/saferwall/elf v0.3.1
@@ -102,6 +102,7 @@ require (
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
+	github.com/stangelandcl/ppmd v0.1.0 // indirect
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2 // indirect
 	github.com/tjfoc/gmsm/v2 v2.0.0 // indirect
 	github.com/twpayne/go-geom v1.6.1 // indirect
@@ -113,10 +114,10 @@ require (
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
-	golang.org/x/crypto v0.51.0 // indirect
+	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a // indirect
-	golang.org/x/image v0.40.0 // indirect
-	golang.org/x/sys v0.44.0 // indirect
+	golang.org/x/image v0.41.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/libc v1.72.3 // indirect
