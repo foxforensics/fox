@@ -131,4 +131,4 @@ Wordlists
 > English / German / French / Spanish Common Passwords, Most Common Passwords, Most Used Passwords, Default Passwords, Corporate Passwords, Production Passwords, Milw0rm Dictionary, Conficker Dictionary, Medical Devices, Seasons 
 
 ---
-🦊 is released under the [GPL-3.0](LICENSE.md)
+🦊 is released under the [GPL-3.0](LICENSE.md). All code is entirely written by human authors.
