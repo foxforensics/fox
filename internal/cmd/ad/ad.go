@@ -22,8 +22,9 @@ Flags:
   -J, --jsonl              Show AD records as JSON lines
 
 Record flags:
-  -C, --computers          Extract all computer records
   -U, --users              Extract all user records
+  -G, --groups             Extract all group records
+  -C, --computers          Extract all computer records
 
 Secret flags:
   -L, --lookup             Lookup hashes with rainbow tables
@@ -46,8 +47,9 @@ type Ad struct {
 	Jsonl bool `short:"J" xor:"json,jsonl"`
 
 	// record flags
-	Computers bool `short:"C" xor:"computers,users"`
-	Users     bool `short:"U" xor:"computers,users"`
+	Users     bool `short:"U" xor:"users,groups,computers"`
+	Groups    bool `short:"G" xor:"users,groups,computers"`
+	Computers bool `short:"C" xor:"users,groups,computers"`
 
 	// secret flags
 	Lookup  bool `short:"L"`
@@ -133,31 +135,40 @@ func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
 	var a []any
 
 	switch {
-	case cmd.Computers:
-		if v, err := extract.Computers(b); err == nil {
-			for _, r := range v {
-				a = append(a, &record.Computer{Computer: r})
-			}
-		} else {
-			return 0, err
-		}
-
 	case cmd.Users:
-		if v, err := extract.Accounts(b, k); err == nil {
+		if v, err := extract.Accounts(b, k); err != nil {
+			return 0, err
+		} else {
 			for _, r := range v {
 				a = append(a, &record.User{Account: r})
 			}
-		} else {
+		}
+
+	case cmd.Groups:
+		if v, err := extract.Groups(b); err != nil {
 			return 0, err
+		} else {
+			for _, r := range v {
+				a = append(a, &record.Group{Group: r})
+			}
+		}
+
+	case cmd.Computers:
+		if v, err := extract.Computers(b); err != nil {
+			return 0, err
+		} else {
+			for _, r := range v {
+				a = append(a, &record.Computer{Computer: r})
+			}
 		}
 
 	default:
-		if v, err := extract.Accounts(b, k); err == nil {
+		if v, err := extract.Accounts(b, k); err != nil {
+			return 0, err
+		} else {
 			for _, r := range v {
 				a = append(a, &record.Secret{Account: r})
 			}
-		} else {
-			return 0, err
 		}
 	}
 

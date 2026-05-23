@@ -29,13 +29,17 @@ FLAGS
 Record Flags
 ------------
 
-**-C, --computers**
-
-:   Extract all computer records.
-
 **-U, --users**
 
 :   Extract all user records.
+
+**-G, --groups**
+
+:   Extract all group records.
+
+**-C, --computers**
+
+:   Extract all computer records.
 
 Secret Flags
 ------------

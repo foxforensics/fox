@@ -35,6 +35,24 @@ func (c *Computer) ToJSONL() string {
 	return string(b)
 }
 
+type Group struct {
+	extract.Group
+}
+
+func (g *Group) String() string {
+	return g.Name
+}
+
+func (g *Group) ToJSON() string {
+	b, _ := json.MarshalIndent(g, "", "  ")
+	return string(b)
+}
+
+func (g *Group) ToJSONL() string {
+	b, _ := json.Marshal(g)
+	return string(b)
+}
+
 type User struct {
 	extract.Account
 }
