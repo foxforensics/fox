@@ -1,50 +1,73 @@
 package mqtt
 
 import (
-	"errors"
+	"context"
 	"fmt"
+	"log"
 
-	mqtt "github.com/eclipse/paho.mqtt.golang"
+	mqtt "github.com/eclipse/paho.golang/paho"
 
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema/ecs"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema/hec"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema/raw"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/client"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
-type Mqtt struct {
-	url   string
-	topic string
+const QoS = 2
 
-	client mqtt.Client
+type Options struct {
+	Url      string
+	Topic    string
+	Username string
+	Password string
+	Schema   schema.Schema
 }
 
-func New(url, topic string) Mqtt {
-	return Mqtt{url, topic, client.Mqtt(url)}
+type Mqtt struct {
+	client *mqtt.Client
+	opts   *Options
+}
+
+func New(opts *Options) *Mqtt {
+	return &Mqtt{client.Mqtt(opts.Url, opts.Username, opts.Password), opts}
 }
 
 func (m Mqtt) String() string {
-	return fmt.Sprintf("%s/%s", m.url, m.topic)
+	return fmt.Sprintf("%s@%s/%s", m.opts.Schema, m.opts.Url, m.opts.Topic)
 }
 
-func (m Mqtt) Stream(e *event.Event) error {
-	var res mqtt.Token
+func (m Mqtt) Stream(evt *event.Event) error {
+	var buf []byte
+	var err error
 
-	if !m.client.IsConnected() {
-		res = m.client.Connect()
+	switch m.opts.Schema {
+	case schema.Ecs:
+		buf, err = ecs.Apply(evt)
+	case schema.Hec:
+		buf, err = hec.Apply(evt)
+	case schema.Raw:
+		buf, err = raw.Apply(evt)
 	}
 
-	if !res.WaitTimeout(client.Timeout) {
-		return errors.New("mqtt connect timeout")
+	if err != nil {
+		return err
 	}
 
-	if res.Error() != nil {
-		return res.Error()
+	ctx, cancel := context.WithTimeout(context.Background(), client.Timeout)
+	defer cancel()
+
+	res, err := m.client.Publish(ctx, &mqtt.Publish{
+		Topic:   m.opts.Topic,
+		QoS:     QoS,
+		Retain:  false,
+		Payload: buf,
+	})
+
+	if res != nil && res.ReasonCode > 0 {
+		log.Println(res.Properties.ReasonString)
 	}
 
-	res = m.client.Publish(m.topic, 2, false, e.ToJSONL())
-
-	if !res.WaitTimeout(client.Timeout) {
-		return errors.New("mqtt publish timeout")
-	}
-
-	return res.Error()
+	return err
 }

@@ -31,14 +31,15 @@ Fox is a versatile commandline tool, built to support the examination process of
 * [x] Many popular archive and compression formats
 * [x] Many popular cryptographic, image, fuzzy and fast hashes
 * [x] With [man pages](assets/man) for every command
-* [x] Special [Hunt](assets/man/fox-hunt.md) command
+* [x] Advanced [Hunt](assets/man/fox-hunt.md) command
   * [x] Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * [x] Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
   * [x] Built-in translation of 51600+ event ids
   * [x] Built-in warning of critical system events
   * [x] Filter events with [Sigma Rules](https://sigmahq.io/) syntax
   * [x] Filter anomalies using [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
-  * [x] Stream per HTTP and MQTT in [Splunk](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) and [Elastic](https://www.elastic.co/docs/reference/ecs) format
+  * [x] Stream events in [Splunk](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [Elastic](https://www.elastic.co/docs/reference/ecs) format
+  * [x] Stream events using HTTP or MQTT protocol
   * [x] Save as `JSON`, `JSON Lines`, `Parquet` or `SQLite` 
 
 ## Install

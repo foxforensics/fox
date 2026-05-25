@@ -9,18 +9,17 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/evtx"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http/ecs"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http/hec"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http/raw"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/mqtt"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/store"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/store/parquet"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/store/sqlite"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/evtx"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage/parquet"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage/sqlite"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/mqtt"
 	"go.foxforensics.dev/fox/v4/internal/pkg/rules"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
@@ -29,7 +28,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-fox hunt [FLAGS...] [PATHS...]
+fox hunt [FLAGS...] <local|PATHS...>
 
 Flags:
   -a, --all                Show logs with all severities
@@ -44,21 +43,24 @@ Block flags:
   -b, --block=SIZE         Block size for event carving
 
 Filter flags:
-  -R, --rule=FILE          Filter using Sigma Rules file (slow)
+  -R, --rule=FILE          Filter using Sigma Rules file
   -D, --dist=LENGTH        Filter using Levenshtein distance (slow)
 
 Stream flags:
-  -U, --url=SERVER         Stream events to server address
-  -A, --auth=TOKEN         Stream events using auth token
-  -M, --mqtt=TOPIC         Stream events using MQTT protocol
+  -U, --url=SERVER         Stream events to a server or broker
+  -A, --auth=TOKEN         Use token for streaming to Splunk
+  -M, --mqtt=TOPIC         Use topic for streaming via MQTT
 
-Format flags:
-  -E, --ecs                Use ECS schema for HTTP streaming
-  -H, --hec                Use HEC schema for HTTP streaming
+Schema flags:
+  -E, --ecs                Use ECS schema while streaming
+  -H, --hec                Use HEC schema while streaming
 
 Aliases:
-      --local-ecs          Alias for -E -U http://localhost:8080
-      --local-hec          Alias for -H -U http://localhost:8088/...
+  --elastic                Alias for -EU http://localhost:8080
+  --splunk                 Alias for -HU http://localhost:8088/...
+
+Remarks:
+  If local is specified as path, built-in paths will be used.
 
 Example: Hunt down critical events
   $ fox hunt -u *.dd
@@ -66,9 +68,14 @@ Example: Hunt down critical events
 Example: Save all events as Parquet
   $ fox hunt -aP *.evtx
 
-Example: Send events to a MQTT topic
-  $ fox hunt -M events -U mqtt://127.0.0.1:1883
+Example: Send local events to a server
+  $ fox hunt -U http://127.0.0.1:8080 local
+
+Example: Send local events to a broker
+  $ fox hunt -U tcp://127.0.0.1:1883 -M events local
 `)
+
+const Local = "local"
 
 type Hunt struct {
 	All     bool `short:"a"`
@@ -88,29 +95,33 @@ type Hunt struct {
 
 	// stream flags
 	Url  string `short:"U"`
-	Auth string `short:"A"`
-	Mqtt string `short:"M"`
+	Auth string `short:"A" xor:"auth,mqtt"`
+	Mqtt string `short:"M" xor:"auth,mqtt"`
 
-	// format flags
+	// schema flags
 	Ecs bool `short:"E" xor:"ecs,hec"`
 	Hec bool `short:"H" xor:"ecs,hec"`
 
 	// aliases
-	LocalEcs bool `long:"local-ecs" xor:"local-ecs,local-hec"`
-	LocalHec bool `long:"local-hec" xor:"local-ecs,local-hec"`
+	Elastic bool `long:"elastic" xor:"elastic,splunk"`
+	Splunk  bool `long:"splunk" xor:"elastic,splunk"`
+
+	// hidden
+	Username string `hidden:"" long:"mqtt-username"`
+	Password string `hidden:"" long:"mqtt-password"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	db   store.Store     `kong:"-"`
+	db   storage.Storage `kong:"-"`
 	net  stream.Streamer `kong:"-"`
 	rule sigma.Rule      `kong:"-"`
 	uniq text.Unique     `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
-	if cmd.Hec && len(cmd.Auth) == 0 {
+	if cmd.Hec && (len(cmd.Auth)+len(cmd.Mqtt) == 0) {
 		log.Fatalln("auth required")
 	}
 
@@ -139,26 +150,42 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		cmd.db = parquet.New(hunter.Storage)
 	}
 
-	if cmd.LocalEcs {
-		cmd.Url = ecs.LocalHost
+	if cmd.Elastic {
+		cmd.Url = stream.Elastic
 		cmd.Ecs = true
 	}
 
-	if cmd.LocalHec {
-		cmd.Url = hec.LocalHost
+	if cmd.Splunk {
+		cmd.Url = stream.Splunk
 		cmd.Hec = true
 	}
 
 	if len(cmd.Url) > 0 {
+		var shm schema.Schema
+
 		switch {
-		case len(cmd.Mqtt) > 0:
-			cmd.net = mqtt.New(cmd.Url, cmd.Mqtt)
 		case cmd.Hec:
-			cmd.net = hec.New(cmd.Url, cmd.Auth)
+			shm = schema.Hec
 		case cmd.Ecs:
-			cmd.net = ecs.New(cmd.Url)
+			shm = schema.Ecs
 		default:
-			cmd.net = raw.New(cmd.Url)
+			shm = schema.Raw
+		}
+
+		if len(cmd.Mqtt) > 0 {
+			cmd.net = mqtt.New(&mqtt.Options{
+				Url:      cmd.Url,
+				Topic:    cmd.Mqtt,
+				Username: cmd.Username,
+				Password: cmd.Password,
+				Schema:   shm,
+			})
+		} else {
+			cmd.net = http.New(&http.Options{
+				Url:    cmd.Url,
+				Token:  cmd.Auth,
+				Schema: shm,
+			})
 		}
 	}
 
@@ -188,8 +215,12 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Hunt) Run(cli *cli.Globals) error {
-	if len(cmd.Paths)+len(cli.Paths) == 0 {
-		cmd.Paths = hunter.Local
+	if len(cmd.Paths) < 1 {
+		return text.Usage(Usage)
+	}
+
+	if cmd.Paths[0] == Local {
+		cmd.Paths = append(hunter.Local, cmd.Paths[1:]...)
 	}
 
 	if !cli.NoPretty {
@@ -210,7 +241,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 && cmd.db != nil {
-		log.Printf("hunt: using store %s\n", cmd.db)
+		log.Printf("hunt: using storage %s\n", cmd.db)
 	}
 
 	if cli.Verbose > 1 {

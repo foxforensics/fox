@@ -26,7 +26,7 @@ Flags:
   -J, --jsonl              Show results as JSON lines
 
 Remarks:
-  Results will be grouped by path, if more than one algorithm is specified.
+  If more than one algorithm is specified, results will be grouped by path.
 
 Example: Hash archive contents as MD5
   $ fox hash -Amd5 files.7z
