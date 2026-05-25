@@ -89,5 +89,5 @@ func (h Http) Stream(evt *event.Event) error {
 }
 
 func (h Http) Close() error {
-	return nil
+	return nil // stateless
 }
