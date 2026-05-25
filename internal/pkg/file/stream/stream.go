@@ -10,4 +10,5 @@ const (
 
 type Streamer interface {
 	Stream(*event.Event) error
+	Close() error
 }

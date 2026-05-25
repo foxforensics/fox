@@ -1,11 +1,14 @@
 package client
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha256"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -14,13 +17,48 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/version"
 )
 
-var (
-	Name    = fmt.Sprintf("fox %s", version.Number)
-	Timeout = time.Second * 30
-	MaxIdle = 0
-)
+// Timeout for everything network related.
+var Timeout = time.Second * 30
 
-// Http return the default http client
+// MaxIdle connections at once.
+var MaxIdle = 0
+
+// ID returns the clients unique and reproducible id. It is build from
+// the programs name and version number, followed by the SHA256 hash of
+// the hostname and the first interface found that is up.
+//
+// Example:
+//
+//	fox 1.2.3 42fee663a1683b00383ec69d91e4880335cd6b265611e4e7b4cdf5e5e4ae22d7
+func ID() string {
+	id, err := os.Hostname()
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	iff, err := net.Interfaces()
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	for _, i := range iff {
+		if i.Flags&net.FlagUp != 0 && bytes.Compare(i.HardwareAddr, nil) != 0 {
+			id = fmt.Sprintf("%s %s", id, i.HardwareAddr.String())
+			break
+		}
+	}
+
+	return fmt.Sprintf("%s %x", Name(), sha256.Sum256([]byte(id)))
+}
+
+// Name returns the clients name including the version number.
+func Name() string {
+	return fmt.Sprintf("fox %s", version.Number)
+}
+
+// Http return the default http client.
 func Http() *http.Client {
 	return &http.Client{
 		Timeout: Timeout,
@@ -33,7 +71,7 @@ func Http() *http.Client {
 	}
 }
 
-// Mqtt returns the default mqtt client
+// Mqtt returns the default mqtt client.
 func Mqtt(url, usr, pwd string) *mqtt.Client {
 	conn, err := net.Dial("tcp", strings.TrimPrefix(url, "tcp://"))
 
@@ -45,7 +83,7 @@ func Mqtt(url, usr, pwd string) *mqtt.Client {
 
 	cp := &mqtt.Connect{
 		KeepAlive:  uint16(Timeout.Seconds()),
-		ClientID:   Name,
+		ClientID:   ID(),
 		CleanStart: true,
 	}
 

@@ -15,9 +15,8 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
-const QoS = 2
-
 type Options struct {
+	QoS      byte
 	Url      string
 	Topic    string
 	Username string
@@ -60,7 +59,7 @@ func (m Mqtt) Stream(evt *event.Event) error {
 
 	res, err := m.client.Publish(ctx, &mqtt.Publish{
 		Topic:   m.opts.Topic,
-		QoS:     QoS,
+		QoS:     m.opts.QoS,
 		Retain:  false,
 		Payload: buf,
 	})
@@ -70,4 +69,10 @@ func (m Mqtt) Stream(evt *event.Event) error {
 	}
 
 	return err
+}
+
+func (m Mqtt) Close() error {
+	return m.client.Disconnect(&mqtt.Disconnect{
+		ReasonCode: 0,
+	})
 }

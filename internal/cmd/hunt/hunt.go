@@ -9,9 +9,7 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
-
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
-
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/evtx"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage"
@@ -175,6 +173,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		if len(cmd.Mqtt) > 0 {
 			cmd.net = mqtt.New(&mqtt.Options{
 				Url:      cmd.Url,
+				QoS:      1,
 				Topic:    cmd.Mqtt,
 				Username: cmd.Username,
 				Password: cmd.Password,
@@ -325,23 +324,29 @@ func (cmd *Hunt) format(e *event.Event) string {
 }
 
 func (cmd *Hunt) discard(cli *cli.Globals) {
-	if cmd.db == nil {
-		return
+	if cmd.net != nil {
+		err := cmd.net.Close()
+
+		if err != nil {
+			log.Println(err)
+		}
 	}
 
-	err := cmd.db.Close()
+	if cmd.db != nil {
+		err := cmd.db.Close()
 
-	if err != nil {
-		log.Println(err)
-	}
+		if err != nil {
+			log.Println(err)
+		}
 
-	if cli.NoReceipt {
-		return
-	}
+		if cli.NoReceipt {
+			return
+		}
 
-	err = receipt.Generate(cmd.db.String())
+		err = receipt.Generate(cmd.db.String())
 
-	if err != nil {
-		log.Println(err)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 }

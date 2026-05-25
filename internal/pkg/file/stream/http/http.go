@@ -57,7 +57,7 @@ func (h Http) Stream(evt *event.Event) error {
 		return err
 	}
 
-	req.Header.Add("User-Agent", client.Name)
+	req.Header.Add("User-Agent", client.Name())
 
 	switch h.opts.Schema {
 	case schema.Ecs, schema.Hec:
@@ -85,5 +85,9 @@ func (h Http) Stream(evt *event.Event) error {
 		return errors.New(http.StatusText(res.StatusCode))
 	}
 
+	return nil
+}
+
+func (h Http) Close() error {
 	return nil
 }

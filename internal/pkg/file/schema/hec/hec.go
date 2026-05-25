@@ -25,7 +25,7 @@ func Apply(evt *event.Event) ([]byte, error) {
 	hec := &Hec{
 		Time:       evt.Time.UTC().UnixMilli(),
 		Host:       evt.Host,
-		Source:     client.Name,
+		Source:     client.Name(),
 		Sourcetype: "_json",
 		Index:      "main",
 		Fields:     make(map[string]any),

@@ -69,7 +69,7 @@ Stream Flags
 
 **-U, --url**=_server_
 
-:   Stream events to a server or broker. Streaming via HTTP(S) is set as the default. To stream via the MQTT protocol, use the **--mqtt** flag and specify a topic. 
+:   Stream events to a server or broker. Streaming via HTTP(S) is set as the default. To stream via the MQTT V5 protocol, use the **--mqtt** flag and specify a topic. 
 
 **-A, --auth**=_token_
 
