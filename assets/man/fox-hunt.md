@@ -8,12 +8,12 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **hunt** \[_flags_ ...] \[_paths_ ...]
+| **fox** **hunt** \[_flags_ ...] \[**local** | _paths_ ...]
 
 DESCRIPTION
 ===========
 
-Hunt suspicious activities by carving events from file(s). If no path is specified, a built-in list of known locations will be processed.
+Hunt suspicious activities by carving events from file(s).
 
 FLAGS
 =====
@@ -58,7 +58,7 @@ Filter Flags
 
 **-R, --rule**=_file_
 
-:   Filter using Sigma Rules _file_ (slow).
+:   Filter using Sigma Rules _file_.
 
 **-D, --dist**=_length_
 
@@ -69,42 +69,53 @@ Stream Flags
 
 **-U, --url**=_server_
 
-:   Stream events to _server_ address.
+:   Stream events to a server or broker. Streaming via HTTP(S) is set as the default. To stream via the MQTT protocol, use the **--mqtt** flag and specify a topic. 
 
 **-A, --auth**=_token_
 
-:   Stream events using auth _token_. HTTP protocol exclusive.
+:   Authentication _token_ used for Splunk servers. Must be specified without the 'Splunk' prefix.
 
 **-M, --mqtt**=_topic_
 
-:   Stream events using MQTT protocol. Excludes **--ecs** and **--hec** flags.
+:   Use the MQTT protocol V5 for streaming. Currently only streaming via **TCP** is supported. A _topic_ is required.
 
-Format Flags
+Schema Flags
 ------------
 
 **-E, --ecs**
 
-:   Use **ECS** schema for HTTP streaming.
+:   Use ECS schema while streaming.
 
 **-H, --hec**
 
-:   Use **HEC** schema for HTTP streaming.
+:   Use HEC schema while streaming.
 
 ALIASES
 =======
 
-**--local-ecs**
+**--elastic**
 
-:   Alias for **-E -U http://localhost:8080**.
+:   Alias for **--ecs --url http://localhost:8080**.
 
-**--local-hec**
+**--splunk**
 
-:   Alias for **-H -U http://localhost:8088/...**.
+:   Alias for **--hec --url http://localhost:8088/...**.
 
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**.
+Globbing paths to open or '-' to read from **STDIN(4)**. If the path **local** is specified, a built-in list of known locations will be processed.
+
+ENVIRONMENT
+===========
+
+**FOX_MQTT_USERNAME**
+
+:   The username to be used for event streaming via the MQTT protocol.
+
+**FOX_MQTT_PASSWORD**
+
+:   The password to be used for event streaming via the MQTT protocol.
 
 EXAMPLES
 ========
@@ -117,9 +128,13 @@ $ fox hunt -aP *.evtx
 
 :   Save all events as Parquet.
 
-$ fox hunt -M events -U mqtt://127.0.0.1:1883
+$ fox hunt -U http://127.0.0.1:8080 local
 
-:   Send events to a MQTT topic.
+:   Send local events to a server.
+
+$ fox hunt -U tcp://127.0.0.1:1883 -M events local
+
+:   Send local events to a broker.
 
 BUGS
 ====

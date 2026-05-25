@@ -10,7 +10,7 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/store"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
@@ -67,7 +67,7 @@ type Database struct {
 	sql  *sql.DB
 }
 
-func New(name string) store.Store {
+func New(name string) storage.Storage {
 	var err error
 
 	name = fmt.Sprintf("%s.sqlite", name)

@@ -6,7 +6,8 @@ import (
 	"os"
 
 	"github.com/parquet-go/parquet-go"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/store"
+
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage"
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
 )
 
@@ -16,7 +17,7 @@ type File struct {
 	w    *parquet.GenericWriter[event.Event]
 }
 
-func New(name string) store.Store {
+func New(name string) storage.Storage {
 	var err error
 
 	name = fmt.Sprintf("%s.parquet", name)

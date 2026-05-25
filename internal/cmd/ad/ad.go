@@ -34,7 +34,7 @@ Secret flags:
       --only-nt            Extract only the NT hashes (Hashcat mode 1000)
 
 Remarks:
-  Hashes will be shown in secretsdump manner, if records are not specified.
+  If no records are specified, hashes will be shown in secretsdump manner.
 
 Example: Show user records
   $ fox ad -jU NTDS.dit SYSTEM
