@@ -109,13 +109,17 @@ Globbing paths to open or '-' to read from **STDIN(4)**. If the path **local** i
 ENVIRONMENT
 ===========
 
+**FOX_MQTT_QOS**
+
+:   The MQTT protocol Quality of Service level. Range 0 to 2 (default: 1).
+
 **FOX_MQTT_USERNAME**
 
-:   The username to be used for event streaming via the MQTT protocol.
+:   The username used to connect to the given MQTT broker.
 
 **FOX_MQTT_PASSWORD**
 
-:   The password to be used for event streaming via the MQTT protocol.
+:   The password used to connect to the given MQTT broker.
 
 EXAMPLES
 ========
