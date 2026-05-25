@@ -2,8 +2,8 @@ package mqtt
 
 import (
 	"context"
+	"errors"
 	"fmt"
-	"log"
 
 	mqtt "github.com/eclipse/paho.golang/paho"
 
@@ -65,7 +65,7 @@ func (m Mqtt) Stream(evt *event.Event) error {
 	})
 
 	if res != nil && res.ReasonCode > 0 {
-		log.Println(res.Properties.ReasonString)
+		return errors.New(res.Properties.ReasonString)
 	}
 
 	return err

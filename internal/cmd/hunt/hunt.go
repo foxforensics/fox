@@ -173,11 +173,11 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		if len(cmd.Mqtt) > 0 {
 			cmd.net = mqtt.New(&mqtt.Options{
 				Url:      cmd.Url,
-				QoS:      1,
 				Topic:    cmd.Mqtt,
 				Username: cmd.Username,
 				Password: cmd.Password,
 				Schema:   shm,
+				QoS:      1,
 			})
 		} else {
 			cmd.net = http.New(&http.Options{

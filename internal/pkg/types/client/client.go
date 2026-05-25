@@ -8,8 +8,8 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
-	"strings"
 	"time"
 
 	mqtt "github.com/eclipse/paho.golang/paho"
@@ -37,15 +37,15 @@ func ID() string {
 		log.Fatalln(err)
 	}
 
-	iff, err := net.Interfaces()
+	in, err := net.Interfaces()
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	for _, i := range iff {
+	for _, i := range in {
 		if i.Flags&net.FlagUp != 0 && bytes.Compare(i.HardwareAddr, nil) != 0 {
-			id = fmt.Sprintf("%s %s", id, i.HardwareAddr.String())
+			id = fmt.Sprintf("%s-%s", id, i.HardwareAddr.String())
 			break
 		}
 	}
@@ -72,40 +72,46 @@ func Http() *http.Client {
 }
 
 // Mqtt returns the default mqtt client.
-func Mqtt(url, usr, pwd string) *mqtt.Client {
-	conn, err := net.Dial("tcp", strings.TrimPrefix(url, "tcp://"))
+func Mqtt(adr, usr, pwd string) *mqtt.Client {
+	u, err := url.Parse(adr)
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	c := mqtt.NewClient(mqtt.ClientConfig{Conn: conn})
+	con, err := net.Dial("tcp", u.Host)
 
-	cp := &mqtt.Connect{
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	client := mqtt.NewClient(mqtt.ClientConfig{Conn: con})
+
+	pkg := &mqtt.Connect{
 		KeepAlive:  uint16(Timeout.Seconds()),
 		ClientID:   ID(),
 		CleanStart: true,
 	}
 
 	if len(usr) > 0 {
-		cp.Username = usr
-		cp.UsernameFlag = true
+		pkg.Username = usr
+		pkg.UsernameFlag = true
 	}
 
 	if len(pwd) > 0 {
-		cp.Password = []byte(pwd)
-		cp.PasswordFlag = true
+		pkg.Password = []byte(pwd)
+		pkg.PasswordFlag = true
 	}
 
-	ca, err := c.Connect(context.Background(), cp)
+	ack, err := client.Connect(context.Background(), pkg)
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if ca.ReasonCode > 0 {
-		log.Fatalln(ca.Properties.ReasonString)
+	if ack.ReasonCode > 0 {
+		log.Fatalln(ack.Properties.ReasonString)
 	}
 
-	return c
+	return client
 }
