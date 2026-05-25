@@ -18,7 +18,6 @@ require (
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/eclipse/paho.golang v0.23.0
-	github.com/eclipse/paho.mqtt.golang v1.5.1
 	github.com/fatih/color v1.19.0
 	github.com/flanglet/kanzi-go/v2 v2.5.1
 	github.com/hooklift/iso9660 v1.0.0
@@ -85,7 +84,6 @@ require (
 	github.com/glaslos/ssdeep v1.0.0 // indirect
 	github.com/glaslos/tlsh v0.4.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hooklift/assert v0.1.0 // indirect
 	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f // indirect
@@ -119,12 +117,10 @@ require (
 	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a // indirect
 	golang.org/x/image v0.41.0 // indirect
-	golang.org/x/net v0.55.0 // indirect
-	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	modernc.org/libc v1.72.4 // indirect
+	modernc.org/libc v1.72.5 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
 	www.velocidex.com/golang/regparser v0.0.0-20250203141505-31e704a67ef7 // indirect
