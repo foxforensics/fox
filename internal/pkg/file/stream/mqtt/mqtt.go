@@ -16,11 +16,11 @@ import (
 )
 
 type Options struct {
-	QoS      byte
 	Url      string
 	Topic    string
 	Username string
 	Password string
+	QoS      byte
 	Schema   schema.Schema
 }
 

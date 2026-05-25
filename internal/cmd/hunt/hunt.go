@@ -58,7 +58,7 @@ Aliases:
   --splunk                 Alias for -HU http://localhost:8088/...
 
 Remarks:
-  If local is specified as path, built-in paths will be used.
+  If 'local' is specified as path, built-in paths will be used.
 
 Example: Hunt down critical events
   $ fox hunt -u *.dd
@@ -72,8 +72,6 @@ Example: Send local events to a server
 Example: Send local events to a broker
   $ fox hunt -U tcp://127.0.0.1:1883 -M events local
 `)
-
-const Local = "local"
 
 type Hunt struct {
 	All     bool `short:"a"`
@@ -105,6 +103,7 @@ type Hunt struct {
 	Splunk  bool `long:"splunk" xor:"elastic,splunk"`
 
 	// hidden
+	QoS      byte   `hidden:"" long:"mqtt-qos"`
 	Username string `hidden:"" long:"mqtt-username"`
 	Password string `hidden:"" long:"mqtt-password"`
 
@@ -176,8 +175,8 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 				Topic:    cmd.Mqtt,
 				Username: cmd.Username,
 				Password: cmd.Password,
+				QoS:      cmd.QoS,
 				Schema:   shm,
-				QoS:      1,
 			})
 		} else {
 			cmd.net = http.New(&http.Options{
@@ -218,7 +217,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		return text.Usage(Usage)
 	}
 
-	if cmd.Paths[0] == Local {
+	if cmd.Paths[0] == "local" {
 		cmd.Paths = append(hunter.Local, cmd.Paths[1:]...)
 	}
 
@@ -283,7 +282,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		if cmd.db == nil {
 			text.Match(cmd.format(e), cli.Regexp)
 		} else {
-			err := cmd.db.Store(e)
+			err = cmd.db.Store(e)
 
 			if err != nil {
 				log.Println(err)
@@ -291,7 +290,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.net != nil {
-			err := cmd.net.Stream(e)
+			err = cmd.net.Stream(e)
 
 			if err != nil {
 				log.Println(err)
