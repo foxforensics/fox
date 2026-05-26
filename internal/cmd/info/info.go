@@ -138,7 +138,9 @@ func (cmd *Info) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Info) Run(cli *cli.Globals) error {
-	if len(cmd.Paths)+len(cli.Paths) == 0 {
+	cmd.Paths = append(cmd.Paths, cli.Input...)
+
+	if len(cmd.Paths) == 0 {
 		return text.Usage(Usage)
 	}
 
