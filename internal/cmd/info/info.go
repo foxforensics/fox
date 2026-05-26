@@ -41,6 +41,9 @@ Filter flags:
 Lookup flags:
   -L, --lookup             Lookup file hashes via VirusTotal
 
+Remarks:
+  A VirusTotal API key is required for lookup. 
+
 Example: List only high entropy files
   $ fox info -n6.0 ./**/*
 
