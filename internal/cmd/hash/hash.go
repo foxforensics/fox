@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"maps"
 	"slices"
 	"strings"
 
@@ -72,35 +71,8 @@ Checksums:
 `)
 
 type FileHash struct {
-	File string         `json:"file,omitempty"`
-	Hash map[string]any `json:"hash,omitempty"`
-}
-
-func (fh *FileHash) String() string {
-	var sb strings.Builder
-
-	n := 0
-
-	for k := range maps.Keys(fh.Hash) {
-		n = max(n, len(k))
-	}
-
-	for _, k := range slices.Sorted(maps.Keys(fh.Hash)) {
-		v := fh.Hash[k]
-
-		// render errors
-		if err, ok := v.(error); ok {
-			v = text.AsGray(err.Error())
-		}
-
-		if len(fh.Hash) > 1 {
-			sb.WriteString(fmt.Sprintf("%-*s  %s\n", n, strings.ToUpper(k), v))
-		} else {
-			sb.WriteString(fmt.Sprintf("%s  %s", v, fh.File))
-		}
-	}
-
-	return strings.TrimSpace(sb.String())
+	File string            `json:"file,omitempty"`
+	Hash map[string]string `json:"hash,omitempty"`
 }
 
 func (fh *FileHash) ToJSON() string {
@@ -147,13 +119,19 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		text.Title(cmd.Paths...)
 	}
 
+	plain, n := !cmd.Json && !cmd.Jsonl, 0
+
+	for _, algo := range cmd.Algo {
+		n = max(n, len(algo))
+	}
+
 	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
 
 	for h := range ch {
 		fh := &FileHash{
 			File: h.String(),
-			Hash: make(map[string]any),
+			Hash: make(map[string]string),
 		}
 
 		if !cli.NoPretty && len(cmd.Algo) > 1 {
@@ -164,7 +142,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			sum, err := hash.Sum(algo, h.Bytes())
 
 			if errors.Is(err, hash.NotSupported) {
-				return err // not supported
+				return fmt.Errorf("%s: %s", err, algo)
 			}
 
 			if cli.Regexp != nil && !cli.Regexp.MatchString(sum) {
@@ -174,11 +152,29 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			if err == nil {
 				fh.Hash[algo] = sum
 			} else {
-				fh.Hash[algo] = err
+				fh.Hash[algo] = err.Error()
 			}
+
+			if !plain {
+				continue // will be formated
+			}
+
+			if err != nil {
+				sum = text.AsGray(err.Error())
+			}
+
+			if len(cmd.Algo) > 1 {
+				sum = fmt.Sprintf("%-*s  %s", n, strings.ToUpper(algo), sum)
+			} else {
+				sum = fmt.Sprintf("%s  %s", sum, fh.File)
+			}
+
+			text.Match(sum, cli.Regexp)
 		}
 
-		text.Match(cmd.format(fh), cli.Regexp)
+		if !plain {
+			text.Match(cmd.format(fh), cli.Regexp)
+		}
 
 		h.Discard()
 	}
@@ -193,6 +189,6 @@ func (cmd *Hash) format(fh *FileHash) string {
 	case cmd.Json:
 		return text.ColorizeAs(fh.ToJSON(), "json")
 	default:
-		return fh.String()
+		return ""
 	}
 }
