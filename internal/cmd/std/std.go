@@ -47,6 +47,8 @@ func (cmd *Std) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Std) Run(cli *cli.Globals) error {
+	cmd.Paths = append(cmd.Paths, cli.Input...)
+
 	ch := cli.Load(cmd.Paths, false)
 
 	if cmd.ForceText || cmd.ForceHex {

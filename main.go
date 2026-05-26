@@ -145,15 +145,20 @@ func main() {
 			defer timer(time.Now())
 		}
 
+		// parse input
+		if len(cli.In) > 0 {
+			cli.Input = strings.Split(strings.TrimSpace(string(cli.In)), "\n")
+		}
+
 		// redirect output
-		if len(cli.File) > 0 {
-			text.Setup(os.OpenFile(cli.File, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
+		if len(cli.Out) > 0 {
+			text.Setup(os.OpenFile(cli.Out, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
 		} else if cli.Quiet {
 			text.Setup(os.Open(os.DevNull))
 			log.SetOutput(io.Discard)
 		}
 
-		defer text.Close(cli.File, !cli.NoReceipt)
+		defer text.Close(cli.Out, !cli.NoReceipt)
 
 		ctx.FatalIfErrorf(ctx.Run(&cli.Globals))
 	}

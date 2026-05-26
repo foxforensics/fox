@@ -66,6 +66,8 @@ type Ad struct {
 }
 
 func (cmd *Ad) Run(cli *cli.Globals) error {
+	cmd.Paths = append(cmd.Paths, cli.Input...)
+
 	if len(cmd.Paths) < 2 {
 		return text.Usage(Usage)
 	}

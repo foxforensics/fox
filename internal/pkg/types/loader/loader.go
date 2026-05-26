@@ -22,12 +22,11 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/register"
 )
 
-const stdin = "-"
+const Stdin = "-"
 
 type Options struct {
 	Limit    *types.Limits
 	Filter   *types.Filters
-	Paths    string
 	Password string
 	Parallel int
 	Verbose  int
@@ -50,29 +49,12 @@ func New(opts *Options) *Loader {
 }
 
 func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
-	// read paths from given file
-	if len(ldr.opts.Paths) > 0 {
-		b, err := os.ReadFile(ldr.opts.Paths)
-
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		paths = strings.Split(strings.TrimSpace(string(b)), "\n")
-
-		if ldr.opts.Verbose > 0 {
-			for _, l := range paths {
-				log.Printf("add path %s \n", l)
-			}
-		}
-	}
-
 	go func() {
 		defer close(ldr.heaps)
 
 		for _, path := range paths {
 			// read file content from stdin
-			if path == stdin {
+			if path == Stdin {
 				if !isPiped(os.Stdin) {
 					log.Fatalln("stdin not open")
 				}

@@ -213,7 +213,9 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Hunt) Run(cli *cli.Globals) error {
-	if len(cmd.Paths) < 1 {
+	cmd.Paths = append(cmd.Paths, cli.Input...)
+
+	if len(cmd.Paths) == 0 {
 		return text.Usage(Usage)
 	}
 

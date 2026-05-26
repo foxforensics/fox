@@ -137,7 +137,9 @@ func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Hash) Run(cli *cli.Globals) error {
-	if len(cmd.Paths)+len(cli.Paths) == 0 {
+	cmd.Paths = append(cmd.Paths, cli.Input...)
+
+	if len(cmd.Paths) == 0 {
 		return text.Usage(Usage)
 	}
 

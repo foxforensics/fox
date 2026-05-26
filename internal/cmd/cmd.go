@@ -61,8 +61,8 @@ import (
 
 type Globals struct {
 	// file flags
-	Paths string `short:"i" long:"in"`
-	File  string `short:"o" long:"out" xor:"out,quiet"`
+	In  []byte `short:"i" long:"in" type:"filecontent"`
+	Out string `short:"o" long:"out" xor:"out,quiet"`
 
 	// limit flags
 	Head   bool   `short:"h" xor:"head,tail,offset"`
@@ -105,6 +105,7 @@ type Globals struct {
 	Loader *loader.Loader `kong:"-"`
 	Filter *types.Filters `kong:"-"`
 	Limit  *types.Limits  `kong:"-"`
+	Input  []string       `kong:"-"`
 }
 
 func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
@@ -112,7 +113,7 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		cli.NoConvert = true
 	}
 
-	if len(cli.File) > 0 {
+	if len(cli.Out) > 0 {
 		cli.NoPretty = true
 	}
 
@@ -210,14 +211,13 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		color.NoColor = true // turn off color package
 	}
 
-	if cli.NoReceipt && len(cli.File) > 0 {
+	if cli.NoReceipt && len(cli.Out) > 0 {
 		log.Println("warning: receipts has been disabled!")
 	}
 
 	cli.Loader = loader.New(&loader.Options{
 		Limit:    cli.Limit,
 		Filter:   cli.Filter,
-		Paths:    cli.Paths,
 		Password: cli.Password,
 		Parallel: cli.Parallel,
 		Verbose:  cli.Verbose,

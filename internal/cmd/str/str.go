@@ -94,7 +94,9 @@ func (cmd *Str) AfterApply(app *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Str) Run(cli *cli.Globals) error {
-	if len(cmd.Paths)+len(cli.Paths) == 0 && !cmd.List {
+	cmd.Paths = append(cmd.Paths, cli.Input...)
+
+	if len(cmd.Paths) == 0 && !cmd.List {
 		return text.Usage(Usage)
 	}
 
