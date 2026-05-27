@@ -11,7 +11,7 @@ import (
 
 func Detect(b []byte) bool {
 	return file.HasMagic(b, 0, []byte{
-		0x4c, 0, 0, 0,
+		0x4C, 0, 0, 0,
 	})
 }
 
