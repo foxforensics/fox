@@ -49,7 +49,7 @@ require (
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-zip v0.6.2
-	go.foxforensics.dev/hashdump v0.9.0
+	go.foxforensics.dev/hashdump v0.9.1
 	go.foxforensics.dev/hasher v0.2.3
 	go.foxforensics.dev/rhash v1.6.3
 	go.foxforensics.dev/strings v0.5.2
@@ -66,7 +66,6 @@ require (
 	github.com/AlecRandazzo/MFT-Parser v0.6.6 // indirect
 	github.com/AlecRandazzo/Timestamp-Parser v1.4.3 // indirect
 	github.com/BobuSumisu/aho-corasick v1.0.3 // indirect
-	github.com/Go-Forensics/BinaryTransforms v1.3.3 // indirect
 	github.com/PaesslerAG/gval v1.2.4 // indirect
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
 	github.com/Velocidex/json v0.0.0-20220224052537-92f3c0326e5a // indirect
