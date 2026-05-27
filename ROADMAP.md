@@ -10,12 +10,8 @@
 * ~~Done~~
 
 ## 4. Optimizations
-* Change loader to use readers instead of byte array
+* ~~Done~~
 
 ## 5. Ideas
 * Add animated console image to README
   * https://docs.asciinema.org/manual/cli/
-* Add specs to man pages?
-  * `Fox Unified Event Format`
-  * `Fox Unified Event Storage`
-  * `Fox Chain of Custody Receipt`
