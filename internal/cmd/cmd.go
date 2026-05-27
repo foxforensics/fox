@@ -23,6 +23,7 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/bin/elf"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/bin/ese"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/bin/lnk"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/bin/mft"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/bin/pe"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/bin/pf"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/evtx"
@@ -196,6 +197,7 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		register.Convert("elf", elf.Detect, elf.Convert)
 		register.Convert("ese", ese.Detect, ese.Convert)
 		register.Convert("lnk", lnk.Detect, lnk.Convert)
+		register.Convert("mft", mft.Detect, mft.Convert)
 		register.Convert("pe", pe.Detect, pe.Convert)
 		register.Convert("pf", pf.Detect, pf.Convert)
 		register.Convert("evtx", evtx.Detect, evtx.Convert)

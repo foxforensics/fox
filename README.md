@@ -17,7 +17,7 @@ Fox is a versatile CLI tool, built to support the examination process of file-ba
 * [x] With 290+ classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
 * [x] Parse Fortinet binary firewall logs
 * [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
-* [x] Parse Windows shortcut and prefetch files
+* [x] Parse Windows MFT, LNK and prefetch files
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * [x] Extract [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes, users, groups, computers  
 * [x] Lookup NTLM hashes using 210000+ entry rainbow table
@@ -102,7 +102,7 @@ Log Formats
 > EVTX, Journal, Fortigate
 
 Binary Formats
-> PE / COFF, ELF, ESE / EDB, LNK, PF
+> PE / COFF, ELF, ESE / EDB, MFT, LNK, PF
 
 Archive Formats
 > 7-Zip, AR, CAB, CFB, CPIO, ISO, MSI, RAR, RPM, TAR, XAR, ZIP
