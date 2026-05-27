@@ -10,9 +10,16 @@ import (
 )
 
 func Detect(b []byte) bool {
-	return file.HasMagic(b, 0, []byte{
-		'F', 'I', 'L', 'E',
-	})
+	for _, m := range [][]byte{
+		{'F', 'I', 'L', 'E', '*'}, // NT 4.0 & 5.0
+		{'F', 'I', 'L', 'E', '0'}, // NT 5.1
+	} {
+		if file.HasMagic(b, 0, m) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func Convert(b []byte) ([]byte, error) {
