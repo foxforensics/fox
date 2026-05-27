@@ -183,7 +183,6 @@ func newOpts() *Options {
 		&types.Limits{},
 		&types.Filters{},
 		"",
-		"",
 		1,
 		0,
 		false,
