@@ -62,7 +62,11 @@ require (
 
 require (
 	github.com/0xrawsec/golang-utils v1.3.2 // indirect
+	github.com/AlecRandazzo/BinaryTransforms v1.3.5 // indirect
+	github.com/AlecRandazzo/MFT-Parser v0.6.6 // indirect
+	github.com/AlecRandazzo/Timestamp-Parser v1.4.3 // indirect
 	github.com/BobuSumisu/aho-corasick v1.0.3 // indirect
+	github.com/Go-Forensics/BinaryTransforms v1.3.3 // indirect
 	github.com/PaesslerAG/gval v1.2.4 // indirect
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
 	github.com/Velocidex/json v0.0.0-20220224052537-92f3c0326e5a // indirect
@@ -115,7 +119,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/crypto v0.52.0 // indirect
-	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a // indirect
+	golang.org/x/exp v0.0.0-20260527015227-08cc5374adb3 // indirect
 	golang.org/x/image v0.41.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
