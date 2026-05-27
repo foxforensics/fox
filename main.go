@@ -170,6 +170,11 @@ func timer(t time.Time) {
 
 func trace() {
 	if err := recover(); err != nil {
-		log.Printf("%+v\n\n%s\n", err, debug.Stack())
+		log.Printf("%+v\n", err)
+
+		// print stack trace only in dev
+		if version.Number == "dev" {
+			log.Printf("\n%s\n", debug.Stack())
+		}
 	}
 }
