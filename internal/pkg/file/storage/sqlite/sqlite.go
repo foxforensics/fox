@@ -16,10 +16,10 @@ import (
 
 const schema = `
 CREATE TABLE IF NOT EXISTS Events (
-    ID INTEGER PRIMARY KEY,
-    Time INTEGER NOT NULL,
-    Host TEXT NULL,
-    User TEXT NULL,
+	ID INTEGER PRIMARY KEY,
+	Time INTEGER NOT NULL,
+	Host TEXT NULL,
+	User TEXT NULL,
 	Message TEXT NULL,
 	Severity INTEGER NOT NULL,
 	Sequence TEXT NULL,
@@ -28,16 +28,15 @@ CREATE TABLE IF NOT EXISTS Events (
 	Service TEXT NULL
 );
 
-CREATE UNIQUE INDEX idx_Events ON Events(Time, Host, Sequence);
-
 CREATE TABLE IF NOT EXISTS Fields (
-    ID INTEGER PRIMARY KEY,
+	ID INTEGER PRIMARY KEY,
 	EventID INTEGER REFERENCES Events,
-    Key TEXT NOT NULL,
-    Value TEXT NULL
+	Key TEXT NOT NULL,
+	Value TEXT NULL
 );
 
-CREATE UNIQUE INDEX ix_Fields ON Fields(EventID, Key);
+CREATE UNIQUE INDEX idx_Events ON Events(Time, Host, Sequence);
+CREATE UNIQUE INDEX idx_Fields ON Fields(EventID, Key);
 `
 
 const events = `
