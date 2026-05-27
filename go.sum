@@ -6,19 +6,11 @@ github.com/0xrawsec/golang-utils v1.3.0/go.mod h1:DADTtCFY10qXjWmUVhhJqQIZdSweaH
 github.com/0xrawsec/golang-utils v1.3.2 h1:ww4jrtHRSnX9xrGzJYbalx5nXoZewy4zPxiY+ubJgtg=
 github.com/0xrawsec/golang-utils v1.3.2/go.mod h1:m7AzHXgdSAkFCD9tWWsApxNVxMlyy7anpPVOyT/yM7E=
 github.com/0xrawsec/golang-win32 v1.0.6/go.mod h1:MAxVU7dr8lujwknuhf4TwjYm8tVEELi2zwx1zDTu/RM=
-github.com/AlecRandazzo/BinaryTransforms v1.3.5 h1:Nbx54afOidnnYmth92R7YJtfZLc7vuXh1IVEAlmms1I=
-github.com/AlecRandazzo/BinaryTransforms v1.3.5/go.mod h1:a+Gn6CWbYTn1I7ZTr1xI0HoW9cvYBshuS7t7vvCEhF0=
-github.com/AlecRandazzo/MFT-Parser v0.6.6 h1:ACeIDEEBm73Ei7Ojqi+FCt30jS2G83qV2W37dFPN8Dg=
-github.com/AlecRandazzo/MFT-Parser v0.6.6/go.mod h1:KBupbr1fcNpUu563/UHE75eWR40v4me1jDqW0/8DRIc=
-github.com/AlecRandazzo/Timestamp-Parser v1.4.3 h1:RC42wi1506BrA2QHh+OeGBIvKufCZDurhlKzOmig00A=
-github.com/AlecRandazzo/Timestamp-Parser v1.4.3/go.mod h1:ZXLMmRQYV7MhuEIeB9leqr60N47Pq7lAp0CBtYUY/UY=
 github.com/BobuSumisu/aho-corasick v1.0.3 h1:uuf+JHwU9CHP2Vx+wAy6jcksJThhJS9ehR8a+4nPE9g=
 github.com/BobuSumisu/aho-corasick v1.0.3/go.mod h1:hm4jLcvZKI2vRF2WDU1N4p/jpWtpOzp3nLmi9AzX/XE=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/DATA-DOG/go-sqlmock v1.5.2 h1:OcvFkGmslmlZibjAjaHm3L//6LiuBgolP7OputlJIzU=
 github.com/DATA-DOG/go-sqlmock v1.5.2/go.mod h1:88MAG/4G7SMwSE3CeA0ZKzrT5CiOU3OJ+JlNzwDqpNU=
-github.com/Go-Forensics/BinaryTransforms v1.3.3 h1:W5ya4DS4hhjGE2DnrL7H5GpYu3pTCN8zwRI45Ltnklo=
-github.com/Go-Forensics/BinaryTransforms v1.3.3/go.mod h1:5WYD8lkQ4ISk9RSdHsB0pVl9RlAvw3NJQquWrLu2QV0=
 github.com/OneOfOne/xxhash v1.2.2 h1:KMrpdQIwFcEqXDklaen+P1axHaj9BSKzvpUUfnHldSE=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/PaesslerAG/gval v1.0.0/go.mod h1:y/nm5yEyTeX6av0OfKJNp9rBNj2XrGhAf5+v24IBN1I=
@@ -160,7 +152,6 @@ github.com/klauspost/compress v1.18.6 h1:2jupLlAwFm95+YDR+NwD2MEfFO9d4z4Prjl1XXD
 github.com/klauspost/compress v1.18.6/go.mod h1:cwPg85FWrGar70rWktvGQj8/hthj3wpl0PGDogxkrSQ=
 github.com/klauspost/cpuid/v2 v2.3.0 h1:S4CRMLnYUhGeDFDqkGriYKdfoFlDnMtqTiI/sFzhA9Y=
 github.com/klauspost/cpuid/v2 v2.3.0/go.mod h1:hqwkgyIinND0mEev00jJYCxPNVRVXFQeu1XKlok6oO0=
-github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/korylprince/goxar v0.1.2 h1:Jm8HHdgQGGLUTQPt70Wzj4iWxJas6WmZLymJzUegFY8=
 github.com/korylprince/goxar v0.1.2/go.mod h1:I7hVRteLxFHZHMU4nLdCPTb8xkYDa5K9jcTYmrZ2XDo=
 github.com/kr/fs v0.1.0/go.mod h1:FFnZGqtBN9Gxj7eW1uZ42v5BccTP0vu6NEaFoC2HwRg=
@@ -220,7 +211,6 @@ github.com/segmentio/kafka-go v0.2.2/go.mod h1:X6itGqS9L4jDletMsxZ7Dz+JFWxM6JHfP
 github.com/shopspring/decimal v1.3.1/go.mod h1:DKyhrW/HYNuLGql+MJL6WCR6knT2jwCFRcu2hWCYk4o=
 github.com/shopspring/decimal v1.4.0 h1:bxl37RwXBklmTi0C79JfXCEBD1cqqHt0bbgBAGFp81k=
 github.com/shopspring/decimal v1.4.0/go.mod h1:gawqmDU56v4yIKSwfBSFip1HdCCXN8/+DMd9qYNcwME=
-github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6MwdIuYE2rE=
 github.com/smallstep/pkcs7 v0.2.1 h1:6Kfzr/QizdIuB6LSv8y1LJdZ3aPSfTNhTLqAx9CTLfA=
 github.com/smallstep/pkcs7 v0.2.1/go.mod h1:RcXHsMfL+BzH8tRhmrF1NkkpebKpq3JEM66cOFxanf0=
 github.com/sorairolake/lzip-go v0.3.8 h1:j5Q2313INdTA80ureWYRhX+1K78mUXfMoPZCw/ivWik=
@@ -235,12 +225,10 @@ github.com/spf13/afero v1.15.0/go.mod h1:NC2ByUVxtQs4b3sIUphxK0NioZnmxgyCrfzeuq8
 github.com/stangelandcl/ppmd v0.1.1 h1:c25QazhlWUn5nmR1QOzafKhQxBicAr7GGCKER2aJ8H8=
 github.com/stangelandcl/ppmd v0.1.1/go.mod h1:Rrv7M+/2P5jYr/GMLhBl7Ug3uJ1bUiVzr5LbbaV6xgY=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
-github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.4.0/go.mod h1:YvHI0jy2hoMjB+UWwv71VJQ9isScKT/TqJzVSSt89Yw=
 github.com/stretchr/objx v0.5.0/go.mod h1:Yh+to48EsGEfYuaHDzXPcE3xhTkx73EhmCGUpEOglKo=
 github.com/stretchr/objx v0.5.2 h1:xuMeJ0Sdp5ZMRXx/aWO6RZxdr3beISkG5/G/aIRr3pY=
 github.com/stretchr/objx v0.5.2/go.mod h1:FRsXN1f5AsAjCGJKqEizvkpNtU+EGNCLh3NxZ/8L+MA=
-github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
@@ -291,6 +279,8 @@ go.foxforensics.dev/go-krypto v0.3.1 h1:2nPhYZP0LqhWVr3f9bjJRRxIbSlzB+skJSkLEqNX
 go.foxforensics.dev/go-krypto v0.3.1/go.mod h1:3PDAGCh77rZ/1Ad/d0BPJDH2ChJ3Mz3oqtmVbkepJsg=
 go.foxforensics.dev/go-lnk v0.2.1 h1:GikkgCPXwNsWb09w/BhlMIstQ4ShuUmSWWRFXPBNBs8=
 go.foxforensics.dev/go-lnk v0.2.1/go.mod h1:JfJ80H3tvUzBvQJjThgP1WqDRByAss5CmphnCsDuToE=
+go.foxforensics.dev/go-mft v0.1.0 h1:tqwq5qEED/ghhUko9A2WcG/aMIcOz7ZAOeg/0II5O/o=
+go.foxforensics.dev/go-mft v0.1.0/go.mod h1:zRQGmaEqDFE77p7sQl9cSU8zbQR3i1VPqieosu4foBg=
 go.foxforensics.dev/go-mmap v0.2.1 h1:gZeRcyK9nhW5OWqj2z0tqheLdZmBcFlY+mRRHE+rx1o=
 go.foxforensics.dev/go-mmap v0.2.1/go.mod h1:1QhmjvhlczDabWEaPZ+zJmXsYzPzqlLsw5dMSZ18oZU=
 go.foxforensics.dev/go-mscfb v0.3.1 h1:r+RyYDTfORA3JhjOkayijEOZhoBEmXfKwItXnKgppu4=
@@ -299,8 +289,6 @@ go.foxforensics.dev/go-msi v0.3.1 h1:8KoM2Mt6LTBUnnfduLMzqq4Wu+df4nfuBiEvTWN1rEM
 go.foxforensics.dev/go-msi v0.3.1/go.mod h1:/ln4vSJpsh+1f5tnKaVCnesmGHAXSW0+sRiHVK809c0=
 go.foxforensics.dev/go-zip v0.6.2 h1:oOJOdcEnkL7OHLrnRJA45yJjeYGWBKhU7EX7b6Yu3SY=
 go.foxforensics.dev/go-zip v0.6.2/go.mod h1:lciPKpFtI7fYu5UateHiUC/p2D/W57LzCCR18VwdvMk=
-go.foxforensics.dev/hashdump v0.9.0 h1:nlu3cqzvCHdKiSZcX82sHD5A4CuIPqjEnFxg+HYTb4s=
-go.foxforensics.dev/hashdump v0.9.0/go.mod h1:2y7uFBjDf8NwU2R4gnEiNC+Gl3o3HP87+HHpIZNN2hE=
 go.foxforensics.dev/hashdump v0.9.1 h1:zEWrWKvVGfnL5ms63J3tACWhBwlHUDgGUUvtSpwyhjs=
 go.foxforensics.dev/hashdump v0.9.1/go.mod h1:2y7uFBjDf8NwU2R4gnEiNC+Gl3o3HP87+HHpIZNN2hE=
 go.foxforensics.dev/hasher v0.2.3 h1:YjpgDmDiabTqY5ZfN3F/tZOXjPMd+IEG1vLSD0IWzf4=
@@ -331,8 +319,6 @@ golang.org/x/crypto v0.33.0/go.mod h1:bVdXmD7IV/4GdElGPozy6U7lWdRXA4qyRVGJV57uQ5
 golang.org/x/crypto v0.52.0 h1:RMs7fP2rXdep0CftQlK8Uf+kibLm7qkCcradZWYz988=
 golang.org/x/crypto v0.52.0/go.mod h1:1QgfPxDqh0T2M/elOJtp9RvuR95kVjir0e6/BvEmGbc=
 golang.org/x/exp v0.0.0-20190121172915-509febef88a4/go.mod h1:CJ0aWSM057203Lf6IL+f9T1iT9GByDxfZKAQTCR3kQA=
-golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a h1:+3jdDGGB8NGb1Zktc737jlt3/A5f6UlwSzmvqUuufxw=
-golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a/go.mod h1:d2fgXJLVs4dYDHUk5lwMIfzRzSrWCfGZb0ZqeLa/Vcw=
 golang.org/x/exp v0.0.0-20260527015227-08cc5374adb3 h1:VHEvKbpgPXcPXn40t9cDTGK3JZwMikIEyF/CTrFfu7k=
 golang.org/x/exp v0.0.0-20260527015227-08cc5374adb3/go.mod h1:d2fgXJLVs4dYDHUk5lwMIfzRzSrWCfGZb0ZqeLa/Vcw=
 golang.org/x/image v0.41.0 h1:8wS72eGJMJaBxK6okTzd4WaXumUlTVlb753MlsSvTCo=
@@ -377,7 +363,6 @@ golang.org/x/sys v0.0.0-20180830151530-49385e6e1522/go.mod h1:STP8DvDyc/dI5b8T5h
 golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20190412213103-97732733099d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
-golang.org/x/sys v0.0.0-20190422165155-953cdadca894/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20190626150813-e07cf5db2756/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20190813064441-fde4db37ae7a/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=

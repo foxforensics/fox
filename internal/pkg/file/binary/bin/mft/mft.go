@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/AlecRandazzo/MFT-Parser"
+	"go.foxforensics.dev/go-mft"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/file"
 )

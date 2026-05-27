@@ -46,6 +46,7 @@ require (
 	go.foxforensics.dev/go-ese v0.4.1
 	go.foxforensics.dev/go-fortilog v0.2.1
 	go.foxforensics.dev/go-lnk v0.2.1
+	go.foxforensics.dev/go-mft v0.1.0
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-zip v0.6.2
@@ -62,9 +63,6 @@ require (
 
 require (
 	github.com/0xrawsec/golang-utils v1.3.2 // indirect
-	github.com/AlecRandazzo/BinaryTransforms v1.3.5 // indirect
-	github.com/AlecRandazzo/MFT-Parser v0.6.6 // indirect
-	github.com/AlecRandazzo/Timestamp-Parser v1.4.3 // indirect
 	github.com/BobuSumisu/aho-corasick v1.0.3 // indirect
 	github.com/PaesslerAG/gval v1.2.4 // indirect
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
