@@ -277,8 +277,8 @@ go.foxforensics.dev/go-hash v0.3.1 h1:XCE0VJFOCACWXidXpz6DugFQ5WrzwqxoJOZhl62Jfn
 go.foxforensics.dev/go-hash v0.3.1/go.mod h1:KWpgAg0d8zNQeRHzV4Ko9uqKclgqSckLcSsQoa2327U=
 go.foxforensics.dev/go-krypto v0.3.1 h1:2nPhYZP0LqhWVr3f9bjJRRxIbSlzB+skJSkLEqNX85A=
 go.foxforensics.dev/go-krypto v0.3.1/go.mod h1:3PDAGCh77rZ/1Ad/d0BPJDH2ChJ3Mz3oqtmVbkepJsg=
-go.foxforensics.dev/go-lnk v0.2.1 h1:GikkgCPXwNsWb09w/BhlMIstQ4ShuUmSWWRFXPBNBs8=
-go.foxforensics.dev/go-lnk v0.2.1/go.mod h1:JfJ80H3tvUzBvQJjThgP1WqDRByAss5CmphnCsDuToE=
+go.foxforensics.dev/go-lnk v0.2.2 h1:N7auvUi6AktgrQVvgHnRsWfrdP9AkF60FHH1D6a8to0=
+go.foxforensics.dev/go-lnk v0.2.2/go.mod h1:JfJ80H3tvUzBvQJjThgP1WqDRByAss5CmphnCsDuToE=
 go.foxforensics.dev/go-mft v0.1.0 h1:tqwq5qEED/ghhUko9A2WcG/aMIcOz7ZAOeg/0II5O/o=
 go.foxforensics.dev/go-mft v0.1.0/go.mod h1:zRQGmaEqDFE77p7sQl9cSU8zbQR3i1VPqieosu4foBg=
 go.foxforensics.dev/go-mmap v0.2.1 h1:gZeRcyK9nhW5OWqj2z0tqheLdZmBcFlY+mRRHE+rx1o=

@@ -45,7 +45,7 @@ require (
 	go.foxforensics.dev/go-bgzf v0.3.1
 	go.foxforensics.dev/go-ese v0.4.1
 	go.foxforensics.dev/go-fortilog v0.2.1
-	go.foxforensics.dev/go-lnk v0.2.1
+	go.foxforensics.dev/go-lnk v0.2.2
 	go.foxforensics.dev/go-mft v0.1.0
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
