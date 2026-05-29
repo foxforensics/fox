@@ -45,7 +45,7 @@ Fox is a versatile CLI tool, built to support the examination process of file-ba
   * [x] Save as `JSON`, `JSON Lines`, `Parquet` or `SQLite` 
 
 ## Install
-Install directly via the `go install` command:
+Install the development version directly via `go`:
 
 ```console
 go install go.foxforensics.dev/fox/v4@latest
