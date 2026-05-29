@@ -42,7 +42,7 @@ Fox is a versatile CLI tool, built to support the examination process of file-ba
   * [x] Filter anomalies using [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
   * [x] Stream events in [Splunk](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [Elastic](https://www.elastic.co/docs/reference/ecs) format
   * [x] Stream events using HTTPS or MQTT protocol
-  * [x] Save as `JSON`, `JSON Lines`, `Parquet` or `SQLite` 
+  * [x] Save as `JSON`, `JSON Lines` or `Parquet` 
 
 ## Install
 Install the development version directly via `go`:
@@ -63,17 +63,17 @@ Standalone binaries and packages are available for:
 
 Find occurrences in event logs:
 ```console
-fox -eWinlogon ./**/*.evtx
+fox -FWinlogon ./**/*.evtx
 ```
 
 Show MBR in canonical hex:
 ```console
-fox -hc512 disk.dd
+fox -L512b image.dd
 ```
 
 Show NTLM password hashes:
 ```console
-fox ad -LH NTDS.dit SYSTEM
+fox ad -hl NTDS.dit SYSTEM
 ```
 
 Show all strings in a binary:
@@ -83,12 +83,12 @@ fox str -w sample.exe
 
 List only high entropy files:
 ```console
-fox info -n6.0 ./**/*
+fox info -N6.0 ./**/*
 ```
 
 Hash archive contents as MD5:
 ```console
-fox hash -Amd5 files.7z
+fox hash -Hmd5 files.7z
 ```
 
 Hunt down critical events:

@@ -18,6 +18,10 @@ Show file infos and entropy. If the **--sort** flag is used, the files will be p
 FLAGS
 =====
 
+**-l, --lookup**
+
+:   Lookup the files **SHA256** hash via VirusTotal. Excludes **--block** flag.
+
 **-s, --sort**
 
 :   Sort files by path (slower).
@@ -33,27 +37,20 @@ FLAGS
 Block Flags
 -----------
 
-**-b, --block**=_size_
+**-B, --block**=_size_
 
-:   Block _size_ for analysis (default: all). Excludes **--lookup** flag.
+:   Block _size_ for analysis (default: all). The _size_ can be either defined as raw bytes or with a size suffix. Excludes **--lookup** flag.
 
 Filter Flags
 ------------
 
-**-n, --min**=_value_
+**-N, --min**=_value_
 
 :   Filter minimum entropy _value_ (default: **0.0**).
 
-**-x, --max**=_value_
+**-X, --max**=_value_
 
 :   Filter maximal entropy _value_ (default: **8.0**).
-
-Lookup Flags
-------------
-
-**-L, --lookup**
-
-:   Lookup files **SHA256** hash via VirusTotal. Excludes **--block** flag.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -63,13 +60,13 @@ Globbing paths to open or '-' to read from **STDIN(4)**.
 EXAMPLES
 ========
 
-$ fox info -n6.0 ./**/*
+$ fox info -N6.0 ./**/*
 
 :   List only high entropy files.
 
-$ fox info -b1m db.sqlite3
+$ fox info -B1m backup.mdf
 
-:   List blocks by one MB size.
+:   List blocks by one megabyte.
 
 BUGS
 ====

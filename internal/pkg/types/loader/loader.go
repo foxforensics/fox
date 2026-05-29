@@ -25,8 +25,8 @@ import (
 const Stdin = "-"
 
 type Options struct {
-	Limit    *types.Limits
-	Filter   *types.Filters
+	Limits   *types.Limits
+	Filters  *types.Filters
 	Password string
 	Parallel int
 	Verbose  int
@@ -333,7 +333,7 @@ func (ldr *Loader) createHeap(path, hint string, size uint64, b []byte) {
 		return // already loaded
 	}
 
-	b = ldr.opts.Limit.Reduce(b)
+	b = ldr.opts.Limits.Reduce(b)
 
 	ldr.size += int64(size)
 	ldr.paths = append(ldr.paths, path)

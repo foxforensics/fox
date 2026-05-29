@@ -42,8 +42,8 @@ func TestHunt(t *testing.T) {
 			})
 
 			ldr := loader.New(&loader.Options{
-				Limit:    &types.Limits{},
-				Filter:   &types.Filters{},
+				Limits:   &types.Limits{},
+				Filters:  &types.Filters{},
 				Parallel: 1,
 			})
 

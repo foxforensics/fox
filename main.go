@@ -41,38 +41,30 @@ Commands:
    e, hunt                 Hunt critical system events
 
 File flags:
-  -i, --in=FILE            Read paths from file
-  -o, --out=FILE           Write output to file (receipted)
+  -I, --in=FILE            Read paths from file
+  -O, --out=FILE           Write output to file (receipted)
 
-Limits flags:
-  -h, --head               Limits head of file by...
-  -t, --tail               Limits tail of file by...
-  -c, --bytes=NUMBER       ...Number of bytes
-  -l, --lines=NUMBER       ...Number of lines
-  -O, --offset=START       File start offset
-
-Unique flags:
-  -u, --uniq               Filter using unique hash
-  -D, --dist=LENGTH        Filter using Levenshtein distance
+Force flags:
+  -t, --text               Force output as text
+  -x, --hex                Force output as hex
 
 Filter flags:
-  -e, --regexp=PATTERN     Filter output by pattern
+  -u, --uniq               Filter using unique hash
+  -D, --dist=LENGTH        Filter using Levenshtein distance
+  -L, --limit=NUMBER       Filter using byte or line count
+  -F, --find=PATTERN       Filter using regular expression
   -C, --context=LINES      Lines surrounding a match
   -B, --before=LINES       Lines leading before a match
   -A, --after=LINES        Lines trailing after a match
 
-Special flags:
-  -p, --password=TEXT      Use archive password (7Z, RAR, ZIP)
-  -z, --parallel=CORES     Use parallel processing
-
-Display flags:
-  -T, --force-text         Force output as text
-  -X, --force-hex          Force output as hex
+Process flags:
+  -P, --password=TEXT      Use archive password (7Z, RAR, ZIP)
+  -Z, --parallel=CORES     Use parallel processing
 
 Disable flags:
   -r, --raw                Don't process files (r/rr/rrr)
   -q, --quiet              Don't print anything
-  -N, --no-pretty          Don't prettify the output
+  -n, --no-pretty          Don't prettify the output
       --no-strict          Don't stop on parser errors
       --no-deflate         Don't deflate automatically
       --no-extract         Don't extract automatically
@@ -89,10 +81,10 @@ Positional arguments:
   Globbing paths to open or '-' to read from STDIN
 
 Example: Find occurrences in event logs
-  $ fox -eWinlogon ./**/*.evtx
+  $ fox -FWinlogon ./**/*.evtx
 
 Example: List only high entropy files
-  $ fox info -n6.0 ./**/*
+  $ fox info -N6.0 ./**/*
 
 Example: Hunt down critical events
   $ fox hunt -u *.dd

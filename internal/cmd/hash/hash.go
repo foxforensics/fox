@@ -19,7 +19,7 @@ var Usage = strings.TrimSpace(`
 fox hash [FLAGS...] <PATHS...>
 
 Flags:
-  -A, --algo=NAME,...      Show a specific hash (default: SHA256)
+  -H, --hash=NAME,...      Show a specific hash (default: SHA256)
   -a, --all                Show all hashes and checksums
   -j, --json               Show results as JSON objects
   -J, --jsonl              Show results as JSON lines
@@ -28,13 +28,13 @@ Remarks:
   If more than one algorithm is specified, results will be grouped by path.
 
 Example: Hash archive contents as MD5
-  $ fox hash -Amd5 files.7z
+  $ fox hash -Hmd5 files.7z
 
 Example: Hash binaries for similarity
-  $ fox hash -Aimpfuzzy *.exe
+  $ fox hash -Himpfuzzy *.exe
 
 Example: Hash binary inside an archive
-  $ fox hash -pinfected ioc.zip:ioc.exe
+  $ fox hash -Pinfected ioc.zip:ioc.exe
 
 Cryptographic hashes (BLAKE family):
   BLAKE2S-256, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE3-256, BLAKE3-512
@@ -86,7 +86,7 @@ func (fh *FileHash) ToJSONL() string {
 }
 
 type Hash struct {
-	Algo  []string `short:"A" sep:","`
+	Hash  []string `short:"H" sep:","`
 	All   bool     `short:"a"`
 	Json  bool     `short:"j" xor:"json,jsonl"`
 	Jsonl bool     `short:"J" xor:"json,jsonl"`
@@ -96,13 +96,13 @@ type Hash struct {
 }
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
-	if cmd.All || slices.Contains(cmd.Algo, "*") {
-		cmd.Algo = hash.Algorithms // use all
+	if cmd.All || slices.Contains(cmd.Hash, "*") {
+		cmd.Hash = hash.Algorithms // use all
 	}
 
 	// default algorithm
-	if len(cmd.Algo) == 0 {
-		cmd.Algo = []string{hash.SHA256}
+	if len(cmd.Hash) == 0 {
+		cmd.Hash = []string{hash.SHA256}
 	}
 
 	return nil
@@ -115,13 +115,13 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		return text.Usage(Usage)
 	}
 
-	if !cli.NoPretty && len(cmd.Algo) == 1 {
+	if !cli.NoPretty && len(cmd.Hash) == 1 {
 		text.Title(cmd.Paths...)
 	}
 
 	plain, n := !cmd.Json && !cmd.Jsonl, 0
 
-	for _, algo := range cmd.Algo {
+	for _, algo := range cmd.Hash {
 		n = max(n, len(algo))
 	}
 
@@ -134,15 +134,15 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			Hash: make(map[string]string),
 		}
 
-		if !cli.NoPretty && len(cmd.Algo) > 1 {
+		if !cli.NoPretty && len(cmd.Hash) > 1 {
 			text.Title(h.String())
 		}
 
-		for _, algo := range cmd.Algo {
-			sum, err := hash.Sum(algo, h.Bytes())
+		for _, k := range cmd.Hash {
+			sum, err := hash.Sum(k, h.Bytes())
 
 			if errors.Is(err, hash.NotSupported) {
-				return fmt.Errorf("%s: %s", err, algo)
+				return fmt.Errorf("%s: %s", err, k)
 			}
 
 			if cli.Regexp != nil {
@@ -152,9 +152,9 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			}
 
 			if err == nil {
-				fh.Hash[algo] = sum
+				fh.Hash[k] = sum
 			} else {
-				fh.Hash[algo] = err.Error()
+				fh.Hash[k] = err.Error()
 			}
 
 			if !plain {
@@ -165,8 +165,8 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				sum = text.AsGray(err.Error())
 			}
 
-			if len(cmd.Algo) > 1 {
-				sum = fmt.Sprintf("%-*s  %s", n, strings.ToUpper(algo), sum)
+			if len(cmd.Hash) > 1 {
+				sum = fmt.Sprintf("%-*s  %s", n, strings.ToUpper(k), sum)
 			} else {
 				sum = fmt.Sprintf("%s  %s", sum, fh.File)
 			}

@@ -29,7 +29,7 @@ go.work.sum
 # Local tests
 */local/
 
-# COC receipts
+# CoC receipts
 *.cc
 
 # Test images
@@ -37,7 +37,6 @@ go.work.sum
 
 # Databases
 *.parquet
-*.sqlite
 
 # Profiling
 *.pprof

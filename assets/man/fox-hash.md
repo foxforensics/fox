@@ -18,7 +18,7 @@ Show different file hashes and checksums. Results will be grouped by path, if mo
 FLAGS
 =====
 
-**-A, --algo**=_name_,...
+**-H, --hash**=_name_,...
 
 :   Show a specific hash (default: **SHA256**).
 
@@ -89,15 +89,15 @@ Checksums
 EXAMPLES
 ========
 
-$ fox hash -Amd5 files.7z
+$ fox hash -Hmd5 files.7z
 
 :   Hash archive contents as MD5.
 
-$ fox hash -Aimpfuzzy *.exe
+$ fox hash -Himpfuzzy *.exe
 
 :   Hash binaries for similarity.
 
-$ fox hash -pinfected ioc.zip:ioc.exe
+$ fox hash -Pinfected ioc.zip:ioc.exe
 
 :   Hash binary inside an archive.
 

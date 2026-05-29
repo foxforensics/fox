@@ -43,54 +43,43 @@ If no command is passed, then the file contents will be shown by default.
 FLAGS
 =====
 
-**-i, --in**=_file_
+**-I, --in**=_file_
 
 :   Read paths from _file_.
 
-**-o, --out**=_file_
+**-O, --out**=_file_
 
 :   Write output to _file_ (receipted).
 
-Limit Flags
+Force Flags
 -----------
 
-**-h, --head**
+**-t, --text**
 
-:   Limit head of file by **bytes** or **lines**. Excludes **-t** and **-O** flag.
+:   Force output exclusively as text (in default mode).
 
-**-t, --tail**
+**-x, --hex**
 
-:   Limit tail of file by **bytes** or **lines**. Excludes **-h** and **-O** flag.
+:   Force output exclusively as hex (in default mode).
 
-**-c, --bytes**=_number_
-
-:   _Number_ of bytes. The value can be specified in decimal or hexadecimal notation. Excludes **-l** flag.
-
-**-l, --lines**=_number_
-
-:   _Number_ of lines. The value can be specified in decimal or hexadecimal notation. Excludes **-c** flag.
-
-**-O, --offset**=_start_
-
-:   File _start_ offset. The value can be specified in decimal or hexadecimal notation. Excludes **-h** and **-t** flag.
-
-Unique Flags
+Filter Flags
 ------------
 
 **-u, --uniq**
 
-:   Filter using unique hash (**XXH3**).
+:   Filter using unique **XXH3** hash.
 
 **-D, --dist**=_length_
 
 :   Filter using Levenshtein distance.
 
-Filter Flags
-------------
+**-L, --limit**=_number_
 
-**-e, --regexp**=_pattern_
+:   Filter using byte or line count. The value can be either specified as decimal (_b_), hexadecimal (_h_) or line count (_l_). A positive value implies only to show the leading _number_ of bytes or lines. A negative value implies only to show the trailing _number_ of bytes or lines. 
 
-:   Filter output by _pattern_. Regular expressions do not have constant time guarantees and allow backtracking. All regular expressions are compatible with Perl5 and .NET.
+**-F, --find**=_pattern_
+
+:   Filter using regular expression _pattern_. Regular expressions do not have constant time guarantees and allow backtracking. All regular expressions are compatible with Perl5 and .NET.
 
 **-C, --context**=_lines_
 
@@ -104,27 +93,16 @@ Filter Flags
 
 :   _Lines_ trailing after a match.
 
-Special Flags
+Process Flags
 -------------
 
-**-p, --password**=_password_
+**-P, --password**=_password_
 
 :   Use archive _password_ (only supported for **7Z**, **RAR**, **ZIP** archives).
 
-**-z, --parallel**=_cores_
+**-Z, --parallel**=_cores_
 
 :   Use number of _cores_ for parallel processing.
-
-Display Flags
--------------
-
-**-T, --force-text**
-
-:   Force output exclusively as text (in default mode).
-
-**-X, --force-hex**
-
-:   Force output exclusively as hex (in default mode).
 
 Disable Flags
 -------------
@@ -137,7 +115,7 @@ Disable Flags
 
 :   Don't print anything.
 
-**-N, --no-pretty**
+**-n, --no-pretty**
 
 :   Don't prettify the output.
 
@@ -207,11 +185,11 @@ ENVIRONMENT
 EXAMPLES
 ========
 
-$ fox -eWinlogon ./**/*.evtx
+$ fox -FWinlogon ./**/*.evtx
 
 :   Find occurrences in event logs.
 
-$ fox -hc512 disk.dd
+$ fox -L512b image.dd
 
 :   Show MBR in canonical hex.
 
@@ -223,11 +201,11 @@ $ fox str -w sample.exe
 
 :   Show all strings in a binary.
 
-$ fox info -n6.0 ./**/*
+$ fox info -N6.0 ./**/*
 
 :   List only high entropy files.
 
-$ fox hash -Amd5 files.7z
+$ fox hash -Hmd5 files.7z
 
 :   Hash archive contents as MD5.
 

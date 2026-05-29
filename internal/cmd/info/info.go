@@ -27,28 +27,26 @@ var Usage = strings.TrimSpace(`
 fox info [FLAGS...] <PATHS...>
 
 Flags:
+  -l, --lookup             Lookup files via VirusTotal
   -s, --sort               Sort files by path (slower)
   -j, --json               Show infos as JSON objects
   -J, --jsonl              Show infos as JSON lines
 
 Block flags:
-  -b, --block=SIZE         Block size for analysis
+  -B, --block=SIZE         Block size for analysis
 
 Filter flags:
-  -n, --min=VALUE          Minimum entropy value (default: 0.0)
-  -x, --max=VALUE          Maximal entropy value (default: 8.0)
-
-Lookup flags:
-  -L, --lookup             Lookup file hashes via VirusTotal
+  -N, --min=VALUE          Minimum entropy value (default: 0.0)
+  -X, --max=VALUE          Maximal entropy value (default: 8.0)
 
 Remarks:
   A VirusTotal API key is required for lookup. 
 
 Example: List only high entropy files
-  $ fox info -n6.0 ./**/*
+  $ fox info -N6.0 ./**/*
 
-Example: List blocks by one MB size
-  $ fox info -b1m db.sqlite3
+Example: List blocks by one megabyte
+  $ fox info -B1m backup.mdf
 `)
 
 type FileInfo struct {
@@ -100,19 +98,17 @@ func (fi *FileInfo) ToJSONL() string {
 }
 
 type Info struct {
-	Sort  bool `short:"s"`
-	Json  bool `short:"j" xor:"json,jsonl"`
-	Jsonl bool `short:"J" xor:"json,jsonl"`
+	Lookup bool `short:"l" xor:"lookup,block"`
+	Sort   bool `short:"s"`
+	Json   bool `short:"j" xor:"json,jsonl"`
+	Jsonl  bool `short:"J" xor:"json,jsonl"`
 
 	// block flags
-	Block string `short:"b" xor:"lookup,block"`
+	Block string `short:"B" xor:"lookup,block"`
 
 	// filter flags
-	Min float64 `short:"n" default:"0.0"`
-	Max float64 `short:"x" default:"8.0"`
-
-	// lookup flags
-	Lookup bool `short:"L" xor:"lookup,block"`
+	Min float64 `short:"N" default:"0.0"`
+	Max float64 `short:"X" default:"8.0"`
 
 	// paths
 	Paths []string `arg:"" optional:""`

@@ -17,8 +17,7 @@ type Options struct {
 	Sort     bool
 	Trim     bool
 	What     int
-	Find     []string
-	First    bool
+	Class    []string
 	Parallel int
 }
 
@@ -63,16 +62,12 @@ func (crv *Carver) Carve(block []byte) <-chan *String {
 				v := crv.entries.Lookup(str.Value)
 
 				// search entries
-				if len(crv.opts.Find) > 0 && !contains(v, crv.opts.Find) {
+				if len(crv.opts.Class) > 0 && !contains(v, crv.opts.Class) {
 					continue
 				}
 
 				// format entries
-				if !crv.opts.First {
-					cls = strings.Join(v, " ")
-				} else if len(v) > 0 {
-					cls = v[0]
-				}
+				cls = strings.Join(v, " ")
 			}
 
 			crv.strings <- &String{*str, adr, cls}

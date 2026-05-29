@@ -8,7 +8,7 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **str** \[_flags_ ...] \[_paths_ ...]
+| **fox** **str** \[_flags_ ...] \[**list** | _paths_ ...]
 
 DESCRIPTION
 ===========
@@ -18,13 +18,9 @@ Show file string contents by carving the file(s).
 FLAGS
 =====
 
-**-n, --min**=_length_
+**-l, --lookup**
 
-:   Minimum string _length_ (default: **3**).
-
-**-x, --max**=_length_
-
-:   Maximal string _length_ (default: **256**).
+:   Lookup URLs, IPs and domains directly via VirusTotal. Implies **--what** flag.
 
 **-a, --ascii**
 
@@ -34,49 +30,42 @@ FLAGS
 
 :   Sort strings alphabetically.
 
-**-m, --trim**
+**-t, --trim**
 
 :   Trim strings whitespaces.
+
+**-N, --min**=_length_
+
+:   Minimum string _length_ (default: **3**).
+
+**-X, --max**=_length_
+
+:   Maximal string _length_ (default: **256**).
 
 Class Flags
 -----------
 
 **-w, --what**[=_level_]
 
-:   Show string classifications (w/ww/www).
+:   Show string classifications (**w**/**ww**/**www**).
 
-**-F, --find**=_class_,...
+**-C, --class**=_name_,...
 
-:   Show only strings that match _class_(es).
-
-**-1, --first**
-
-:   Show only strings first class.
-
-**--list**
-
-:   Show only classification list.
-
-Lookup Flags
-------------
-
-**-L, --lookup**
-
-:   Lookup URLs, IPs and domains directly via VirusTotal. Implies **--what** flag.
+:   Show only strings classes that match _name_. Implies **--what** flag at level _3_.
 
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**.
+Globbing paths to open or '-' to read from **STDIN(4)**. If the path **list** is specified, only the list of build-in classifications will be shown.
 
 EXAMPLES
 ========
 
-$ fox str -ant8 sample.exe
+$ fox str -atN8 sample.exe
 
 :   Show only long ASCII strings.
 
-$ fox str -wFurl sample.exe
+$ fox str -wCurl sample.exe
 
 :   Show all URLs in a binary.
 
