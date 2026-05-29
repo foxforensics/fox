@@ -145,8 +145,10 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				return fmt.Errorf("%s: %s", err, algo)
 			}
 
-			if cli.Regexp != nil && !cli.Regexp.MatchString(sum) {
-				continue // do not include hash
+			if cli.Regexp != nil {
+				if ok, _ := cli.Regexp.MatchString(sum); !ok {
+					continue // do not include hash
+				}
 			}
 
 			if err == nil {

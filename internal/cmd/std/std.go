@@ -110,8 +110,10 @@ func (cmd *Std) renderHex(cli *cli.Globals, b []byte) {
 		Data:   b,
 		Pretty: !cli.NoPretty,
 	}).Lines {
-		if cli.Regexp != nil && !cli.Regexp.MatchString(l.Values) {
-			continue // not matched afterward
+		if cli.Regexp != nil {
+			if ok, _ := cli.Regexp.MatchString(l.Values); !ok {
+				continue // not matched afterward
+			}
 		}
 
 		l.Values = text.MarkMatch(l.Values, cli.Regexp)

@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/dlclark/regexp2/v2"
 )
 
 const (
@@ -23,7 +24,7 @@ const (
 	PDI = 0x2069
 )
 
-var isValue = regexp.MustCompile("")
+var isValue = regexp2.MustCompile(`^[-+]?\d+[bkmgtpezyrq]?$`)
 
 func ToAscii(s, c string) string {
 	var sb strings.Builder
@@ -74,7 +75,7 @@ func Humanize(i int64) string {
 func Mechanize(s string) int64 {
 	s = strings.ToLower(s)
 
-	if !isValue.MatchString(`^[-+]?\d+[bkmgtpezyrq]?$`) {
+	if ok, _ := isValue.MatchString(s); !ok {
 		log.Fatalln("value invalid")
 	}
 

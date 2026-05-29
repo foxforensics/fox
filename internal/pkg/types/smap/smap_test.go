@@ -1,8 +1,9 @@
 package smap
 
 import (
-	"regexp"
 	"testing"
+
+	"github.com/dlclark/regexp2/v2"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/test"
 )
@@ -20,7 +21,7 @@ func BenchmarkGrep(b *testing.B) {
 
 	s := Map(v)
 
-	re := regexp.MustCompile(".*")
+	re := regexp2.MustCompile(".*")
 
 	for b.Loop() {
 		s.Grep(re)
@@ -38,7 +39,7 @@ func TestMap(t *testing.T) {
 func TestGrep(t *testing.T) {
 	v := test.Fixture("string/bible.txt")
 
-	re := regexp.MustCompile("King James")
+	re := regexp2.MustCompile("King James")
 
 	s := Map(v).Grep(re)
 

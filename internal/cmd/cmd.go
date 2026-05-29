@@ -3,8 +3,8 @@ package cmd
 import (
 	"log"
 	"os"
-	"regexp"
 
+	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
 	"go.foxforensics.dev/checker/services/vt"
 
@@ -102,11 +102,11 @@ type Globals struct {
 	Style  string `hidden:""`
 
 	// internal
-	Regexp *regexp.Regexp `kong:"-"`
-	Loader *loader.Loader `kong:"-"`
-	Filter *types.Filters `kong:"-"`
-	Limit  *types.Limits  `kong:"-"`
-	Input  []string       `kong:"-"`
+	Regexp *regexp2.Regexp `kong:"-"`
+	Loader *loader.Loader  `kong:"-"`
+	Filter *types.Filters  `kong:"-"`
+	Limit  *types.Limits   `kong:"-"`
+	Input  []string        `kong:"-"`
 }
 
 func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
@@ -119,7 +119,7 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 	}
 
 	if len(cli.Regex) > 0 {
-		cli.Regexp = regexp.MustCompile(cli.Regex)
+		cli.Regexp = regexp2.MustCompile(cli.Regex)
 	}
 
 	if len(cli.Lexer) > 0 {

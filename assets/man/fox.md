@@ -90,7 +90,7 @@ Filter Flags
 
 **-e, --regexp**=_pattern_
 
-:   Filter output by _pattern_.
+:   Filter output by _pattern_. Regular expressions do not have constant time guarantees and allow backtracking. All regular expressions are compatible with Perl5 and .NET.
 
 **-C, --context**=_lines_
 
