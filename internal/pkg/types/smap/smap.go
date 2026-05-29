@@ -3,9 +3,9 @@ package smap
 import (
 	"bufio"
 	"bytes"
-	"regexp"
 	"slices"
 
+	"github.com/dlclark/regexp2/v2"
 	"github.com/sourcegraph/conc/iter"
 )
 
@@ -51,9 +51,9 @@ func (s SMap) Render() SMap {
 	})
 }
 
-func (s SMap) Grep(re *regexp.Regexp) SMap {
+func (s SMap) Grep(re *regexp2.Regexp) SMap {
 	return s.do(func(ch chan<- String, str *String) {
-		if re.Match(str.Bytes) {
+		if ok, _ := re.MatchString(string(str.Bytes)); ok {
 			ch <- *str
 		}
 	})

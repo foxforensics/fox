@@ -119,8 +119,10 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			First:    cmd.First,
 			Parallel: cli.Parallel,
 		}).Carve(h.Bytes()) {
-			if cli.Regexp != nil && !cli.Regexp.MatchString(str.Value) {
-				continue // not matched afterward
+			if cli.Regexp != nil {
+				if ok, _ := cli.Regexp.MatchString(str.Value); !ok {
+					continue // not matched afterward
+				}
 			}
 
 			str.Value = text.MarkMatch(str.Value, cli.Regexp)

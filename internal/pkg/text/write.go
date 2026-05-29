@@ -6,10 +6,10 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"time"
 
+	"github.com/dlclark/regexp2/v2"
 	"golang.org/x/term"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/file"
@@ -68,12 +68,13 @@ func Title(s ...string) {
 	_, _ = fmt.Fprintln(stdout)
 }
 
-func Match(s string, re *regexp.Regexp) {
-	if re != nil && re.MatchString(s) {
-		Write(MarkMatch(s, re))
-	} else if re == nil {
-		Write(s)
+func Match(s string, re *regexp2.Regexp) {
+	if re != nil {
+		if ok, _ := re.MatchString(s); ok {
+			s = MarkMatch(s, re)
+		}
 	}
+	Write(s)
 }
 
 func Write(f string, a ...any) {

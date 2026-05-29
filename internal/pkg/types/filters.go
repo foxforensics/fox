@@ -1,15 +1,15 @@
 package types
 
 import (
-	"regexp"
+	"github.com/dlclark/regexp2/v2"
 
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/smap"
 )
 
 type Filters struct {
-	Regex  *regexp.Regexp // regex pattern
-	Before uint           // lines before
-	After  uint           // lines after
+	Regex  *regexp2.Regexp // regex pattern
+	Before uint            // lines before
+	After  uint            // lines after
 }
 
 func (f *Filters) Filter(s smap.SMap) smap.SMap {

@@ -2,11 +2,11 @@ package text
 
 import (
 	"bytes"
-	"regexp"
 
 	"github.com/alecthomas/chroma/v2/lexers"
 	"github.com/alecthomas/chroma/v2/quick"
 	"github.com/cyucelen/marker"
+	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
 )
 
@@ -28,7 +28,7 @@ var (
 	AsBold = color.New(color.Bold).SprintfFunc()
 )
 
-var cef = regexp.MustCompile(`[^|]+$`)
+var cef = regexp2.MustCompile(`[^|]+$`)
 
 func ColorizeAs(s, hint string) string {
 	if color.NoColor {
@@ -61,12 +61,12 @@ func ColorizeAs(s, hint string) string {
 	return buf.String()
 }
 
-func MarkMatch(s string, re *regexp.Regexp) string {
+func MarkMatch(s string, re *regexp2.Regexp) string {
 	if color.NoColor || re == nil {
 		return s
 	}
 
-	return marker.Mark(s, marker.MatchRegexp(re), color.RGB(0x0f, 0x88, 0xcd))
+	return marker.Mark(s, match(re), color.RGB(0x0f, 0x88, 0xcd))
 }
 
 func MarkEvent(s string) string {
@@ -74,5 +74,14 @@ func MarkEvent(s string) string {
 		return s
 	}
 
-	return marker.Mark(s, marker.MatchRegexp(cef), color.New(color.FgHiBlack))
+	return marker.Mark(s, match(cef), color.New(color.FgHiBlack))
+}
+
+func match(re *regexp2.Regexp) marker.MatcherFunc {
+	return func(s string) marker.Match {
+		return marker.Match{
+			Template: ReplaceAllString(re, s),
+			Patterns: FindAllString(re, s),
+		}
+	}
 }

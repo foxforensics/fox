@@ -8,7 +8,7 @@ require (
 	github.com/Velocidex/ordereddict v0.0.0-20250821063524-02dc06e46238
 	github.com/agnivade/levenshtein v1.2.1
 	github.com/aixiansheng/lzfse v0.2.4
-	github.com/alecthomas/chroma/v2 v2.25.0
+	github.com/alecthomas/chroma/v2 v2.26.1
 	github.com/alecthomas/kong v1.15.0
 	github.com/andybalholm/brotli v1.2.1
 	github.com/bmatcuk/doublestar/v4 v4.10.0
@@ -17,6 +17,7 @@ require (
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
+	github.com/dlclark/regexp2/v2 v2.1.1
 	github.com/eclipse/paho.golang v0.23.0
 	github.com/fatih/color v1.19.0
 	github.com/flanglet/kanzi-go/v2 v2.5.1
@@ -52,12 +53,12 @@ require (
 	go.foxforensics.dev/go-zip v0.6.2
 	go.foxforensics.dev/hashdump v0.9.1
 	go.foxforensics.dev/hasher v0.2.3
-	go.foxforensics.dev/rhash v1.6.3
+	go.foxforensics.dev/rhash v1.7.0
 	go.foxforensics.dev/strings v0.5.2
 	go.foxforensics.dev/wordlist v0.1.2
 	golang.org/x/term v0.43.0
 	golang.org/x/text v0.37.0
-	modernc.org/sqlite v1.50.1
+	modernc.org/sqlite v1.51.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
@@ -79,7 +80,6 @@ require (
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dchest/siphash v1.2.3 // indirect
-	github.com/dlclark/regexp2/v2 v2.1.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/edsrzf/mmap-go v1.2.0 // indirect
 	github.com/glaslos/ssdeep v1.0.0 // indirect
@@ -116,7 +116,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/crypto v0.52.0 // indirect
-	golang.org/x/exp v0.0.0-20260527015227-08cc5374adb3 // indirect
+	golang.org/x/exp v0.0.0-20260528193900-50dc527dd6c7 // indirect
 	golang.org/x/image v0.41.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
