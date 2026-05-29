@@ -6,39 +6,78 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/dlclark/regexp2/v2"
+
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/mmap"
 )
 
 const CR = '\n'
+
+var re = regexp2.MustCompile(`^-?[0-9a-f]+[bhl]?$`)
 
 type Limits struct {
 	IsHead bool // is head limit
 	IsTail bool // is tail limit
 	Bytes  uint // bytes count
 	Lines  uint // lines count
-	Offset uint // start offset
 	Values struct {
 		Bytes int
 		Lines int
 	}
 }
 
-func NewLimits(h, t bool, b, l, o string) *Limits {
-	return &Limits{
-		IsHead: h,
-		IsTail: t,
-		Bytes:  convert(b),
-		Lines:  convert(l),
-		Offset: convert(o),
+func NewLimits(s string) *Limits {
+	s = strings.TrimSpace(strings.ToLower(s))
+
+	neg := strings.HasPrefix(s, "-")
+
+	limits := &Limits{
+		IsHead: !neg,
+		IsTail: neg,
 	}
+
+	if len(s) == 0 {
+		return limits // empty
+	}
+
+	if ok, _ := re.MatchString(s); !ok {
+		log.Fatalf("invalid syntax: %s", s)
+	}
+
+	var val int64
+	var err error
+
+	switch {
+	case strings.HasSuffix(s, "h"):
+		val, err = strconv.ParseInt(s[:len(s)-1], 16, 0)
+	case strings.HasSuffix(s, "b"):
+		val, err = strconv.ParseInt(s[:len(s)-1], 10, 0)
+	case strings.HasSuffix(s, "l"):
+		val, err = strconv.ParseInt(s[:len(s)-1], 10, 0)
+	default:
+		val, err = strconv.ParseInt(s, 10, 0)
+	}
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if val < 0 {
+		val *= -1
+	}
+
+	switch {
+	case s[len(s)-1] == 'l':
+		limits.Lines = uint(val)
+	default:
+		limits.Bytes = uint(val)
+	}
+
+	return limits
 }
 
 func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 	var a, b = 0, len(m)
-
-	if l.Offset > 0 {
-		m = m[min(uint(len(m)), l.Offset):]
-	}
 
 	if !l.IsHead && !l.IsTail {
 		return m
@@ -91,36 +130,6 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 	}
 
 	return m[a:b]
-}
-
-func convert(s string) uint {
-	var val uint64
-	var err error
-
-	if len(s) == 0 {
-		return 0
-	}
-
-	s = strings.ToLower(s)
-
-	switch {
-	case strings.HasPrefix(s, "0x"):
-		val, err = strconv.ParseUint(s[2:], 16, 0)
-	case strings.HasPrefix(s, "x"):
-		val, err = strconv.ParseUint(s[1:], 16, 0)
-	case strings.HasPrefix(s, "#"):
-		val, err = strconv.ParseUint(s[1:], 16, 0)
-	case strings.HasSuffix(s, "h"):
-		val, err = strconv.ParseUint(s[:len(s)-1], 16, 0)
-	default:
-		val, err = strconv.ParseUint(s, 10, 0)
-	}
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return uint(val)
 }
 
 func count(m mmap.MMap) int {

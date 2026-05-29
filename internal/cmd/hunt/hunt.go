@@ -14,7 +14,6 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage/parquet"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage/sqlite"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/mqtt"
@@ -34,11 +33,10 @@ Flags:
   -u, --uniq               Show logs that are unique 
   -j, --json               Show logs as JSON objects
   -J, --jsonl              Show logs as JSON lines
-  -P, --parquet            Save logs as Parquet (very fast)
-  -S, --sqlite             Save logs as SQLite3 (very slow)
+  -p, --parquet            Save logs as Parquet
 
 Block flags:
-  -b, --block=SIZE         Block size for event carving
+  -B, --block=SIZE         Block size for event carving
 
 Filter flags:
   -R, --rule=FILE          Filter using Sigma Rules file
@@ -50,12 +48,12 @@ Stream flags:
   -M, --mqtt=TOPIC         Use topic for streaming via MQTT
 
 Schema flags:
-  -E, --ecs                Use ECS schema while streaming
-  -H, --hec                Use HEC schema while streaming
+  -e, --ecs                Use ECS schema while streaming
+  -h, --hec                Use HEC schema while streaming
 
 Aliases:
-  --elastic                Alias for -EU http://localhost:8080
-  --splunk                 Alias for -HU http://localhost:8088/...
+  --elastic                Alias for -eU http://localhost:8080
+  --splunk                 Alias for -hU http://localhost:8088/...
 
 Remarks:
   If 'local' is specified as path, built-in paths will be used.
@@ -64,7 +62,7 @@ Example: Hunt down critical events
   $ fox hunt -u *.dd
 
 Example: Save all events as Parquet
-  $ fox hunt -aP *.evtx
+  $ fox hunt -ap *.evtx
 
 Example: Send local events to a server
   $ fox hunt -U http://127.0.0.1:8080 local
@@ -79,11 +77,10 @@ type Hunt struct {
 	Uniq    bool `short:"u" xor:"uniq,dist"`
 	Json    bool `short:"j" xor:"json,jsonl"`
 	Jsonl   bool `short:"J" xor:"json,jsonl"`
-	Parquet bool `short:"P" xor:"sqlite,parquet"`
-	Sqlite  bool `short:"S" xor:"sqlite,parquet"`
+	Parquet bool `short:"p"`
 
 	// block flags
-	Block string `short:"b" default:"65536"`
+	Block string `short:"B" default:"65536"`
 
 	// filter flags
 	Rule string  `short:"R"`
@@ -95,8 +92,8 @@ type Hunt struct {
 	Mqtt string `short:"M" xor:"auth,mqtt"`
 
 	// schema flags
-	Ecs bool `short:"E" xor:"ecs,hec"`
-	Hec bool `short:"H" xor:"ecs,hec"`
+	Ecs bool `short:"e" xor:"ecs,hec"`
+	Hec bool `short:"h" xor:"ecs,hec"`
 
 	// aliases
 	Elastic bool `long:"elastic" xor:"elastic,splunk"`
@@ -111,10 +108,10 @@ type Hunt struct {
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	db   storage.Storage `kong:"-"`
-	net  stream.Streamer `kong:"-"`
-	rule sigma.Rule      `kong:"-"`
-	uniq text.Unique     `kong:"-"`
+	storage  storage.Storage `kong:"-"`
+	streamer stream.Streamer `kong:"-"`
+	rule     sigma.Rule      `kong:"-"`
+	uniq     text.Unique     `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
@@ -139,12 +136,8 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		cmd.uniq = text.ByDistance(cmd.Dist)
 	}
 
-	if cmd.Sqlite {
-		cmd.db = sqlite.New(hunter.Storage)
-	}
-
 	if cmd.Parquet {
-		cmd.db = parquet.New(hunter.Storage)
+		cmd.storage = parquet.New(hunter.Storage)
 	}
 
 	if cmd.Elastic {
@@ -170,7 +163,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		}
 
 		if len(cmd.Mqtt) > 0 {
-			cmd.net = mqtt.New(&mqtt.Options{
+			cmd.streamer = mqtt.New(&mqtt.Options{
 				Url:      cmd.Url,
 				Topic:    cmd.Mqtt,
 				Username: cmd.Username,
@@ -179,7 +172,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 				Schema:   shm,
 			})
 		} else {
-			cmd.net = http.New(&http.Options{
+			cmd.streamer = http.New(&http.Options{
 				Url:    cmd.Url,
 				Token:  cmd.Auth,
 				Schema: shm,
@@ -240,16 +233,16 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		log.Printf("hunt: using %d worker(s)\n", cli.Parallel)
 	}
 
-	if cli.Verbose > 1 && cmd.db != nil {
-		log.Printf("hunt: using storage %s\n", cmd.db)
-	}
-
 	if cli.Verbose > 1 {
 		log.Printf("hunt: using rule \"%s\"\n", cmd.rule.Title)
 	}
 
-	if cli.Verbose > 1 && cmd.net != nil {
-		log.Printf("hunt: streaming as %s\n", cmd.net)
+	if cli.Verbose > 1 && cmd.storage != nil {
+		log.Printf("hunt: using storage %s\n", cmd.storage)
+	}
+
+	if cli.Verbose > 1 && cmd.streamer != nil {
+		log.Printf("hunt: streaming as %s\n", cmd.streamer)
 	}
 
 	if !rules.IsSupported(&cmd.rule) {
@@ -281,18 +274,18 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			continue // not matched
 		}
 
-		if cmd.db == nil {
+		if cmd.storage == nil {
 			text.Match(cmd.format(e), cli.Regexp)
 		} else {
-			err = cmd.db.Store(e)
+			err = cmd.storage.Store(e)
 
 			if err != nil {
 				log.Println(err)
 			}
 		}
 
-		if cmd.net != nil {
-			err = cmd.net.Stream(e)
+		if cmd.streamer != nil {
+			err = cmd.streamer.Stream(e)
 
 			if err != nil {
 				log.Println(err)
@@ -325,16 +318,16 @@ func (cmd *Hunt) format(e *event.Event) string {
 }
 
 func (cmd *Hunt) discard(cli *cli.Globals) {
-	if cmd.net != nil {
-		err := cmd.net.Close()
+	if cmd.streamer != nil {
+		err := cmd.streamer.Close()
 
 		if err != nil {
 			log.Println(err)
 		}
 	}
 
-	if cmd.db != nil {
-		err := cmd.db.Close()
+	if cmd.storage != nil {
+		err := cmd.storage.Close()
 
 		if err != nil {
 			log.Println(err)
@@ -344,7 +337,7 @@ func (cmd *Hunt) discard(cli *cli.Globals) {
 			return
 		}
 
-		err = receipt.Generate(cmd.db.String())
+		err = receipt.Generate(cmd.storage.String())
 
 		if err != nil {
 			log.Println(err)

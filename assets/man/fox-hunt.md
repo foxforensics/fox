@@ -38,20 +38,16 @@ FLAGS
 
 :   Show logs as JSON lines.
 
-**-P, --parquet**
+**-p, --parquet**
 
-:   Save logs as Parquet (very fast).
-
-**-S, --sqlite**
-
-:   Save logs as SQLite3 (very slow).
+:   Save logs as Parquet file.
 
 Block Flags
 -----------
 
-**-b, --block**=_size_
+**-B, --block**=_size_
 
-:   Block _size_ for event carving.
+:   Block _size_ for event carving. The _size_ can be either defined as raw bytes or with a size suffix.
 
 Filter Flags
 ------------
@@ -82,11 +78,11 @@ Stream Flags
 Schema Flags
 ------------
 
-**-E, --ecs**
+**-e, --ecs**
 
 :   Use ECS schema while streaming.
 
-**-H, --hec**
+**-h, --hec**
 
 :   Use HEC schema while streaming.
 
@@ -128,7 +124,7 @@ $ fox hunt -u *.dd
 
 :   Hunt down critical events.
 
-$ fox hunt -aP *.evtx
+$ fox hunt -ap *.evtx
 
 :   Save all events as Parquet.
 

@@ -10,18 +10,16 @@ import (
 )
 
 type Std struct {
-	// unique
-	Uniq bool    `short:"u" xor:"uniq,dist"`
-	Dist float64 `short:"D" xor:"uniq,dist"`
+	// force
+	Text bool `short:"t" xor:"text,hex"`
+	Hex  bool `short:"x" xor:"text,hex"`
 
 	// filter
-	Context uint `short:"C"`
-	Before  uint `short:"B"`
-	After   uint `short:"A"`
-
-	// display
-	ForceText bool `short:"T" xor:"force-text,force-hex" long:"force-text"`
-	ForceHex  bool `short:"X" xor:"force-text,force-hex" long:"force-hex"`
+	Uniq    bool    `short:"u" xor:"uniq,dist"`
+	Dist    float64 `short:"D" xor:"uniq,dist"`
+	Context uint    `short:"C"`
+	Before  uint    `short:"B"`
+	After   uint    `short:"A"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -51,13 +49,13 @@ func (cmd *Std) Run(cli *cli.Globals) error {
 
 	ch := cli.Load(cmd.Paths, false)
 
-	if cmd.ForceText || cmd.ForceHex {
+	if cmd.Text || cmd.Hex {
 		cli.NoConvert = true
 	}
 
 	// apply command specific context
-	cli.Filter.Before = cmd.Before
-	cli.Filter.After = cmd.After
+	cli.Filters.Before = cmd.Before
+	cli.Filters.After = cmd.After
 
 	defer cli.Discard()
 
@@ -66,7 +64,7 @@ func (cmd *Std) Run(cli *cli.Globals) error {
 			text.Title(h.String())
 		}
 
-		if (h.IsText() && !cmd.ForceHex) || cmd.ForceText {
+		if (h.IsText() && !cmd.Hex) || cmd.Text {
 			cmd.renderText(cli, h.Bytes(), h.Hint)
 		} else {
 			cmd.renderHex(cli, h.Bytes())

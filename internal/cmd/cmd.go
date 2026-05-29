@@ -62,27 +62,21 @@ import (
 
 type Globals struct {
 	// file flags
-	In  []byte `short:"i" long:"in" type:"filecontent"`
-	Out string `short:"o" long:"out" xor:"out,quiet"`
-
-	// limit flags
-	Head   bool   `short:"h" xor:"head,tail,offset"`
-	Tail   bool   `short:"t" xor:"head,tail,offset"`
-	Lines  string `short:"l" xor:"lines,bytes"`
-	Bytes  string `short:"c" xor:"lines,bytes"`
-	Offset string `short:"O" xor:"head,tail,offset"`
+	In  []byte `short:"I" long:"in" type:"filecontent"`
+	Out string `short:"O" long:"out" xor:"out,quiet"`
 
 	// filter flags
-	Regex string `short:"e"`
+	Limit string `short:"L"`
+	Find  string `short:"F"`
 
-	// special flags
-	Password string `short:"p"`
-	Parallel int    `short:"z" default:"${cores}"`
+	// process flags
+	Password string `short:"P"`
+	Parallel int    `short:"Z" default:"${cores}"`
 
 	// disable flags
 	Raw       int  `short:"r" type:"counter"`
 	Quiet     bool `short:"q" xor:"out,quiet"`
-	NoPretty  bool `short:"N" long:"no-pretty"`
+	NoPretty  bool `short:"n" long:"no-pretty"`
 	NoStrict  bool `long:"no-strict"`
 	NoDeflate bool `long:"no-deflate"`
 	NoExtract bool `long:"no-extract"`
@@ -102,11 +96,11 @@ type Globals struct {
 	Style  string `hidden:""`
 
 	// internal
-	Regexp *regexp2.Regexp `kong:"-"`
-	Loader *loader.Loader  `kong:"-"`
-	Filter *types.Filters  `kong:"-"`
-	Limit  *types.Limits   `kong:"-"`
-	Input  []string        `kong:"-"`
+	Regexp  *regexp2.Regexp `kong:"-"`
+	Loader  *loader.Loader  `kong:"-"`
+	Filters *types.Filters  `kong:"-"`
+	Limits  *types.Limits   `kong:"-"`
+	Input   []string        `kong:"-"`
 }
 
 func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
@@ -118,8 +112,8 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		cli.NoPretty = true
 	}
 
-	if len(cli.Regex) > 0 {
-		cli.Regexp = regexp2.MustCompile(cli.Regex)
+	if len(cli.Find) > 0 {
+		cli.Regexp = regexp2.MustCompile(cli.Find)
 	}
 
 	if len(cli.Lexer) > 0 {
@@ -130,15 +124,9 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		text.Style = cli.Style
 	}
 
-	cli.Limit = types.NewLimits(
-		cli.Head,
-		cli.Tail,
-		cli.Bytes,
-		cli.Lines,
-		cli.Offset,
-	)
+	cli.Limits = types.NewLimits(cli.Limit)
 
-	cli.Filter = &types.Filters{
+	cli.Filters = &types.Filters{
 		Regex: cli.Regexp,
 	}
 
@@ -218,8 +206,8 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 	}
 
 	cli.Loader = loader.New(&loader.Options{
-		Limit:    cli.Limit,
-		Filter:   cli.Filter,
+		Limits:   cli.Limits,
+		Filters:  cli.Filters,
 		Password: cli.Password,
 		Parallel: cli.Parallel,
 		Verbose:  cli.Verbose,

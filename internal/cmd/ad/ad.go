@@ -23,24 +23,24 @@ Flags:
   -J, --jsonl              Show AD records as JSON lines
 
 Record flags:
-  -U, --users              Extract all user records
-  -G, --groups             Extract all group records
-  -C, --computers          Extract all computer records
+  -u, --users              Extract all user records
+  -g, --groups             Extract all group records
+  -c, --computers          Extract all computer records
 
 Secret flags:
-  -L, --lookup             Lookup hashes with rainbow tables
-  -H, --history            Extract also the users hash history
+  -l, --lookup             Lookup hashes in rainbow tables
+  -h, --history            Extract also the users hash history
       --only-lm            Extract only the LM hashes (Hashcat mode 3000)
       --only-nt            Extract only the NT hashes (Hashcat mode 1000)
 
 Remarks:
   If no records are specified, hashes will be shown in secretsdump manner.
 
-Example: Show user records
-  $ fox ad -jU NTDS.dit SYSTEM
-
 Example: Show NTLM hashes
-  $ fox ad -LH NTDS.dit SYSTEM
+  $ fox ad -hl NTDS.dit SYSTEM
+
+Example: Show user records
+  $ fox ad -uj NTDS.dit SYSTEM
 `)
 
 type Ad struct {
@@ -48,13 +48,13 @@ type Ad struct {
 	Jsonl bool `short:"J" xor:"json,jsonl"`
 
 	// record flags
-	Users     bool `short:"U" xor:"users,groups,computers"`
-	Groups    bool `short:"G" xor:"users,groups,computers"`
-	Computers bool `short:"C" xor:"users,groups,computers"`
+	Users     bool `short:"u" xor:"users,groups,computers"`
+	Groups    bool `short:"g" xor:"users,groups,computers"`
+	Computers bool `short:"c" xor:"users,groups,computers"`
 
 	// secret flags
-	Lookup  bool `short:"L"`
-	History bool `short:"H"`
+	Lookup  bool `short:"l"`
+	History bool `short:"h"`
 	OnlyLm  bool `long:"only-lm" xor:"only-lm,only-nt"`
 	OnlyNt  bool `long:"only-nt" xor:"only-lm,only-nt"`
 

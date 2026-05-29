@@ -29,26 +29,26 @@ FLAGS
 Record Flags
 ------------
 
-**-U, --users**
+**-u, --users**
 
 :   Extract all user records.
 
-**-G, --groups**
+**-g, --groups**
 
 :   Extract all group records.
 
-**-C, --computers**
+**-c, --computers**
 
 :   Extract all computer records.
 
 Secret Flags
 ------------
 
-**-L, --lookup**
+**-l, --lookup**
 
-:   Lookup hashes with rainbow tables.
+:   Lookup hashes in rainbow tables.
 
-**-H, --history**
+**-h, --history**
 
 :   Extract also the users hash history.
 
@@ -75,13 +75,13 @@ ENVIRONMENT
 EXAMPLES
 ========
 
-$ fox ad -jU NTDS.dit SYSTEM
-
-:   Show user records.
-
-$ fox ad -LH NTDS.dit SYSTEM
+$ fox ad -hl NTDS.dit SYSTEM
 
 :   Show NTLM hashes.
+
+$ fox ad -uj NTDS.dit SYSTEM
+
+:   Show user records.
 
 BUGS
 ====

@@ -14,49 +14,42 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-fox str [FLAGS...] <PATHS...>
+fox str [FLAGS...] <list|PATHS...>
 
 Flags:
-  -n, --min=LENGTH         Minimum string length (default: 3)
-  -x, --max=LENGTH         Maximal string length (default: 256)
+  -l, --lookup             Lookup strings via VirusTotal (IP/DNS/URL) 
   -a, --ascii              Show only strings with ASCII encoding
   -s, --sort               Sort strings alphabetically
-  -m, --trim               Trim strings whitespaces
+  -t, --trim               Trim strings whitespaces
+  -N, --min=LENGTH         Minimum string length (default: 3)
+  -X, --max=LENGTH         Maximal string length (default: 256)
 
 Class flags:
   -w, --what[=LEVEL]       Show string classifications (w/ww/www)
-  -F, --find=CLASS,...     Show only strings that match class(es)
-  -1, --first              Show only strings first class
-      --list               Show only classification list
-
-Lookup flags:
-  -L, --lookup             Lookup URLs, IPs and domains via VirusTotal
+  -C, --class=NAME,...     Show only classes that match name(es)
 
 Remarks:
-  A VirusTotal API key is required for lookup. 
+  If 'list' is specified as path, only the list of built-in classifications
+  list will be shown. A VirusTotal API key is required for lookup.
 
 Example: Show only long ASCII strings
-  $ fox str -ant8 sample.exe
+  $ fox str -atN8 sample.exe
 
 Example: Show all URLs in a binary
-  $ fox str -wFurl sample.exe
+  $ fox str -wCurl sample.exe
 `)
 
 type Str struct {
-	Min   uint `short:"n" default:"3"`
-	Max   uint `short:"x" default:"256"`
-	Ascii bool `short:"a"`
-	Sort  bool `short:"s"`
-	Trim  bool `short:"m"`
+	Lookup bool `short:"l"`
+	Ascii  bool `short:"a"`
+	Sort   bool `short:"s"`
+	Trim   bool `short:"t"`
+	Min    uint `short:"N" default:"3"`
+	Max    uint `short:"X" default:"256"`
 
 	// class flags
 	What  int      `short:"w" type:"counter"`
-	Find  []string `short:"F" sep:","`
-	First bool     `short:"1" and:"first,what"`
-	List  bool
-
-	// lookup flags
-	Lookup bool `short:"L"`
+	Class []string `short:"C" sep:","`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -67,27 +60,16 @@ func (cmd *Str) Validate() error {
 		log.Fatalln("invalid range")
 	}
 
-	if (len(cmd.Find) > 0 || cmd.First) && cmd.What == 0 {
-		log.Fatalln("what required")
-	}
-
 	return nil
 }
 
-func (cmd *Str) AfterApply(app *kong.Kong, _ kong.Vars) error {
-	if cmd.List {
-		db := text.BuildDB(3)
-
-		for _, s := range db.List() {
-			text.Write(s)
-		}
-
-		// exit early
-		app.Exit(0)
-	}
-
+func (cmd *Str) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if cmd.Lookup && cmd.What == 0 {
 		cmd.What = 1
+	}
+
+	if len(cmd.Class) > 0 {
+		cmd.What = 3
 	}
 
 	return nil
@@ -96,8 +78,19 @@ func (cmd *Str) AfterApply(app *kong.Kong, _ kong.Vars) error {
 func (cmd *Str) Run(cli *cli.Globals) error {
 	cmd.Paths = append(cmd.Paths, cli.Input...)
 
-	if len(cmd.Paths) == 0 && !cmd.List {
+	if len(cmd.Paths) == 0 {
 		return text.Usage(Usage)
+	}
+
+	if cmd.Paths[0] == "list" {
+		db := text.BuildDB(3)
+
+		for _, s := range db.List() {
+			text.Write(s)
+		}
+
+		// exit early
+		return nil
 	}
 
 	ch := cli.Load(cmd.Paths, true)
@@ -115,8 +108,7 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			Sort:     cmd.Sort,
 			Trim:     cmd.Trim,
 			What:     cmd.What,
-			Find:     cmd.Find,
-			First:    cmd.First,
+			Class:    cmd.Class,
 			Parallel: cli.Parallel,
 		}).Carve(h.Bytes()) {
 			if cli.Regexp != nil {

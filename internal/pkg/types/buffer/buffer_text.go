@@ -40,7 +40,7 @@ func Text(cli *cli.Globals, ctx *TextContext) *TextBuffer {
 	}
 
 	ctx.SMap = smap.Map(data)
-	ctx.SMap = cli.Filter.Filter(ctx.SMap).Render()
+	ctx.SMap = cli.Filters.Filter(ctx.SMap).Render()
 
 	if len(ctx.SMap) > 0 {
 		last = ctx.SMap[len(ctx.SMap)-1].Line
@@ -51,8 +51,8 @@ func Text(cli *cli.Globals, ctx *TextContext) *TextBuffer {
 		uint(math.Log10(float64(last))) + 1,
 	}
 
-	if cli.Tail {
-		ctx.Delta = cli.Limit.Values.Lines
+	if cli.Limits.IsTail {
+		ctx.Delta = cli.Limits.Values.Lines
 	}
 
 	go streamText(buf, ctx)
