@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"slices"
 	"strings"
 
@@ -61,17 +62,21 @@ type FileInfo struct {
 func (fi *FileInfo) String() string {
 	var sb strings.Builder
 
+	e := strings.Repeat("#", int(math.Round(fi.Entropy*2)))
+
 	sb.WriteString(fmt.Sprintf("%7dl ", fi.Lines))
-	sb.WriteString(fmt.Sprintf("%6s ", text.Humanize(fi.Bytes)))
+	sb.WriteString(fmt.Sprintf("%7s ", text.Humanize(fi.Bytes)))
 
 	if fi.Entropy > Threshold {
-		sb.WriteString(text.AsWarn(fmt.Sprintf("%.1fe ", fi.Entropy)))
+		sb.WriteString(text.AsWarn(fmt.Sprintf(" %.1fe ", fi.Entropy)))
+		sb.WriteString(text.AsWarn(fmt.Sprintf("[%-16s] ", e)))
 	} else {
-		sb.WriteString(fmt.Sprintf("%.1fe ", fi.Entropy))
+		sb.WriteString(fmt.Sprintf(" %.1fe ", fi.Entropy))
+		sb.WriteString(fmt.Sprintf("[%-16s] ", e))
 	}
 
 	if fi.Offset != NoOffset {
-		sb.WriteString(fmt.Sprintf("%.08x:", fi.Offset))
+		sb.WriteString(fmt.Sprintf("%.08x ", fi.Offset))
 	}
 
 	if fi.Suspect {
@@ -100,6 +105,7 @@ func (fi *FileInfo) ToJSONL() string {
 type Info struct {
 	Lookup bool `short:"l" xor:"lookup,block"`
 	Sort   bool `short:"s"`
+	Bars   bool `short:"b"`
 	Json   bool `short:"j" xor:"json,jsonl"`
 	Jsonl  bool `short:"J" xor:"json,jsonl"`
 

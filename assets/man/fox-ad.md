@@ -18,35 +18,35 @@ Extract **NTLM** password hashes and records from Active Directory offline datab
 FLAGS
 =====
 
-**-j, --json**
-
-:   Show AD records as JSON objects.
-
-**-J, --jsonl**
-
-:   Show AD records as JSON lines.
-
 Record Flags
 ------------
 
 **-u, --users**
 
-:   Extract all user records.
+:   Show all user records.
 
 **-g, --groups**
 
-:   Extract all group records.
+:   Show all group records.
 
 **-c, --computers**
 
-:   Extract all computer records.
+:   Show all computer records.
+
+**-j, --json**
+
+:   Show records as JSON objects.
+
+**-J, --jsonl**
+
+:   Show records as JSON lines.
 
 Secret Flags
 ------------
 
 **-l, --lookup**
 
-:   Lookup hashes in rainbow tables.
+:   Lookup hashes using rainbow tables.
 
 **-h, --history**
 
