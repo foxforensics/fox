@@ -18,17 +18,15 @@ import (
 var Usage = strings.TrimSpace(`
 fox ad [FLAGS...] NTDS SYSTEM
 
-Flags:
-  -j, --json               Show AD records as JSON objects
-  -J, --jsonl              Show AD records as JSON lines
-
 Record flags:
-  -u, --users              Extract all user records
-  -g, --groups             Extract all group records
-  -c, --computers          Extract all computer records
+  -u, --users              Show all user records
+  -g, --groups             Show all group records
+  -c, --computers          Show all computer records
+  -j, --json               Show records as JSON objects
+  -J, --jsonl              Show records as JSON lines
 
 Secret flags:
-  -l, --lookup             Lookup hashes in rainbow tables
+  -l, --lookup             Lookup hashes using rainbow tables
   -h, --history            Extract also the users hash history
       --only-lm            Extract only the LM hashes (Hashcat mode 3000)
       --only-nt            Extract only the NT hashes (Hashcat mode 1000)
@@ -44,13 +42,12 @@ Example: Show user records
 `)
 
 type Ad struct {
-	Json  bool `short:"j" xor:"json,jsonl"`
-	Jsonl bool `short:"J" xor:"json,jsonl"`
-
 	// record flags
 	Users     bool `short:"u" xor:"users,groups,computers"`
 	Groups    bool `short:"g" xor:"users,groups,computers"`
 	Computers bool `short:"c" xor:"users,groups,computers"`
+	Json      bool `short:"j" xor:"json,jsonl"`
+	Jsonl     bool `short:"J" xor:"json,jsonl"`
 
 	// secret flags
 	Lookup  bool `short:"l"`
