@@ -71,10 +71,11 @@ func Title(s ...string) {
 func Match(s string, re *regexp2.Regexp) {
 	if re != nil {
 		if ok, _ := re.MatchString(s); ok {
-			s = MarkMatch(s, re)
+			Write(MarkMatch(s, re))
 		}
+	} else {
+		Write(s)
 	}
-	Write(s)
 }
 
 func Write(f string, a ...any) {
