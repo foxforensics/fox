@@ -10,7 +10,7 @@
 ![Terminal](assets/img/term.png)
 
 ## Abstract
-Fox is a versatile CLI tool, built to support the examination process of file-based forensic evidence. It provides a wide spectrum of forensic capabilities in a cross-platform standalone binary.
+Fox is a powerful CLI tool, built to support the examination process of file-based forensic artifacts. It provides a wide spectrum of forensic capabilities in a cross-platform standalone binary.
 
 ## Features
 * [x] Restricted read-only access
