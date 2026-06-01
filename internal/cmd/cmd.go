@@ -70,8 +70,8 @@ type Globals struct {
 	Find  string `short:"F"`
 
 	// process flags
+	Threads  int    `short:"T" default:"${cores}"`
 	Password string `short:"P"`
-	Parallel int    `short:"Z" default:"${cores}"`
 
 	// disable flags
 	Raw       int  `short:"r" type:"counter"`
@@ -143,8 +143,8 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		cli.NoStrict = true
 	}
 
-	if cli.Parallel <= 0 {
-		cli.Parallel = 1 // must be at least one
+	if cli.Threads <= 0 {
+		cli.Threads = 1 // must be at least one
 	}
 
 	if !cli.NoDeflate {
@@ -209,7 +209,7 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		Limits:   cli.Limits,
 		Filters:  cli.Filters,
 		Password: cli.Password,
-		Parallel: cli.Parallel,
+		Threads:  cli.Threads,
 		Verbose:  cli.Verbose,
 		Strict:   !cli.NoStrict,
 	})
@@ -232,9 +232,9 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 	}
 
 	vt.Key = cli.ApiKey
-	smap.Parallel = cli.Parallel
-	client.MaxIdle = cli.Parallel
-	tables.Parallel = cli.Parallel
+	smap.Threads = cli.Threads
+	client.MaxIdle = cli.Threads
+	tables.Threads = cli.Threads
 
 	return cli.Loader.Load(args)
 }

@@ -26,9 +26,9 @@ var Local = []string{
 }
 
 type Options struct {
-	Sort     bool
-	Parallel int
-	Verbose  int
+	Sort    bool
+	Threads int
+	Verbose int
 }
 
 type Hunter struct {
@@ -41,7 +41,7 @@ func New(opts *Options) *Hunter {
 	return &Hunter{
 		opts:   opts,
 		cache:  make(map[string]*event.Event),
-		events: make(chan *event.Event, opts.Parallel*1024),
+		events: make(chan *event.Event, opts.Threads*1024),
 	}
 }
 
@@ -49,7 +49,7 @@ func (htr *Hunter) Hunt(heaps <-chan *heap.Heap) <-chan *event.Event {
 	go func() {
 		defer close(htr.events)
 
-		p := pool.New().WithMaxGoroutines(htr.opts.Parallel)
+		p := pool.New().WithMaxGoroutines(htr.opts.Threads)
 
 		for h := range heaps {
 			p.Go(func() {
@@ -92,7 +92,7 @@ func (htr *Hunter) sort() <-chan *event.Event {
 func (htr *Hunter) carve(h *heap.Heap) {
 	defer h.Discard()
 
-	p := pool.New().WithMaxGoroutines(htr.opts.Parallel)
+	p := pool.New().WithMaxGoroutines(htr.opts.Threads)
 
 	p.Go(func() {
 		htr.carveEvtx(h)
@@ -126,7 +126,7 @@ func (htr *Hunter) carveJournal(h *heap.Heap) {
 }
 
 func (htr *Hunter) findOffset(h *heap.Heap, seq []byte) <-chan int64 {
-	out := make(chan int64, 64*htr.opts.Parallel)
+	out := make(chan int64, 64*htr.opts.Threads)
 
 	go func(r io.ReaderAt, n uint64) {
 		var off, idx int64

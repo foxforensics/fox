@@ -25,7 +25,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-fox hunt [FLAGS...] <local|PATHS...>
+Usage: fox hunt [FLAGS...] <local|PATHS...>
 
 Flags:
   -a, --all                Show logs with all severities
@@ -69,6 +69,8 @@ Example: Send local events to a server
 
 Example: Send local events to a broker
   $ fox hunt -U tcp://127.0.0.1:1883 -M events local
+
+Report bugs at: foxforensics.dev/issues
 `)
 
 type Hunt struct {
@@ -230,7 +232,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("hunt: using %d worker(s)\n", cli.Parallel)
+		log.Printf("hunt: using %d thread(s)\n", cli.Threads)
 	}
 
 	if cli.Verbose > 1 {
@@ -255,9 +257,9 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	var sig = evaluator.ForRule(cmd.rule)
 
 	for e := range hunter.New(&hunter.Options{
-		Sort:     cmd.Sort,
-		Parallel: cli.Parallel,
-		Verbose:  cli.Verbose,
+		Sort:    cmd.Sort,
+		Threads: cli.Threads,
+		Verbose: cli.Verbose,
 	}).Hunt(ch) {
 		m, err := sig.Matches(ctx, e.Fields)
 

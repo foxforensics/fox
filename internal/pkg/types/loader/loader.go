@@ -28,7 +28,7 @@ type Options struct {
 	Limits   *types.Limits
 	Filters  *types.Filters
 	Password string
-	Parallel int
+	Threads  int
 	Verbose  int
 	Strict   bool
 }
@@ -44,7 +44,7 @@ type Loader struct {
 func New(opts *Options) *Loader {
 	return &Loader{
 		opts:  opts,
-		heaps: make(chan *heap.Heap, opts.Parallel),
+		heaps: make(chan *heap.Heap, opts.Threads),
 	}
 }
 
@@ -103,7 +103,7 @@ func (ldr *Loader) loadPath(path, part string) {
 		return
 	}
 
-	p := pool.New().WithMaxGoroutines(ldr.opts.Parallel)
+	p := pool.New().WithMaxGoroutines(ldr.opts.Threads)
 
 	for _, path := range match {
 		fi, err := os.Stat(path)
@@ -133,7 +133,7 @@ func (ldr *Loader) loadDir(path, part string) {
 		return
 	}
 
-	p := pool.New().WithMaxGoroutines(ldr.opts.Parallel)
+	p := pool.New().WithMaxGoroutines(ldr.opts.Threads)
 
 	for _, f := range dir {
 		if !f.IsDir() {
@@ -232,7 +232,7 @@ func (ldr *Loader) extractData(path, part string, b []byte) bool {
 				log.Printf("archive detected as possibly %s\n", a.Name)
 			}
 
-			p := pool.New().WithMaxGoroutines(ldr.opts.Parallel)
+			p := pool.New().WithMaxGoroutines(ldr.opts.Threads)
 
 			for _, e := range a.Extract(b, path, ldr.opts.Password) {
 				p.Go(func() {

@@ -11,14 +11,14 @@ import (
 )
 
 type Options struct {
-	Min      uint
-	Max      uint
-	Ascii    bool
-	Sort     bool
-	Trim     bool
-	What     int
-	Class    []string
-	Parallel int
+	Min     uint
+	Max     uint
+	Ascii   bool
+	Sort    bool
+	Trim    bool
+	What    int
+	Class   []string
+	Threads int
 }
 
 type String struct {
@@ -38,7 +38,7 @@ func New(opts *Options) *Carver {
 	return &Carver{
 		opts:    opts,
 		list:    make([]String, 0),
-		strings: make(chan *String, opts.Parallel*64),
+		strings: make(chan *String, opts.Threads*64),
 		entries: text.BuildDB(opts.What),
 	}
 }

@@ -100,7 +100,7 @@ ALIASES
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**. If the path **local** is specified, a built-in list of known locations will be processed.
+Globbing paths to open or '-' to read from **STDIN(4)**. If **local** is specified as _path_, a built-in list of known locations will be processed.
 
 ENVIRONMENT
 ===========
@@ -140,7 +140,7 @@ BUGS
 ====
 
 Please submit any issues with fox to the project's bug tracker:
-<_https://foxforensics.dev/fox/issues_>
+<_https://foxforensics.dev/issues_>
 
 WWW
 ===

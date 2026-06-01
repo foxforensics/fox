@@ -16,7 +16,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-fox ad [FLAGS...] NTDS SYSTEM
+Usage: fox ad [FLAGS...] NTDS SYSTEM
 
 Record flags:
   -u, --users              Show all user records
@@ -39,6 +39,8 @@ Example: Show NTLM hashes
 
 Example: Show user records
   $ fox ad -uj NTDS.dit SYSTEM
+
+Report bugs at: foxforensics.dev/issues
 `)
 
 type Ad struct {

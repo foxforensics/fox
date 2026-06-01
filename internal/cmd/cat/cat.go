@@ -1,6 +1,8 @@
-package std
+package cat
 
 import (
+	"strings"
+
 	"github.com/alecthomas/kong"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
@@ -9,12 +11,37 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/buffer"
 )
 
-type Std struct {
-	// force
+var Usage = strings.TrimSpace(`
+Usage: fox cat [FLAGS...] <PATHS...>
+
+Flags:
+  -t, --text               Force output as text
+  -x, --hex                Force output as hex
+
+Unique flags:
+  -u, --uniq               Unique by XXH3 hash sum
+  -D, --dist=LENGTH        Unique by Levenshtein distance
+
+Filter flags:
+  -F, --find=PATTERN       Filter using regular expression
+  -C, --context=LINES      Lines surrounding a match
+  -B, --before=LINES       Lines leading before a match
+  -A, --after=LINES        Lines trailing after a match
+
+Example: Show occurrences in event logs
+  $ fox cat -FWinlogon ./**/*.evtx
+
+Example: Show MBR in canonical hex
+  $ fox cat -L512b image.dd
+
+Report bugs at: foxforensics.dev/issues
+`)
+
+type Cat struct {
 	Text bool `short:"t" xor:"text,hex"`
 	Hex  bool `short:"x" xor:"text,hex"`
 
-	// filter
+	// filter flags
 	Uniq    bool    `short:"u" xor:"uniq,dist"`
 	Dist    float64 `short:"D" xor:"uniq,dist"`
 	Context uint    `short:"C"`
@@ -28,7 +55,7 @@ type Std struct {
 	uniq text.Unique `kong:"-"`
 }
 
-func (cmd *Std) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	switch {
 	case cmd.Uniq:
 		cmd.uniq = text.ByHash()
@@ -44,8 +71,12 @@ func (cmd *Std) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	return nil
 }
 
-func (cmd *Std) Run(cli *cli.Globals) error {
+func (cmd *Cat) Run(cli *cli.Globals) error {
 	cmd.Paths = append(cmd.Paths, cli.Input...)
+
+	if len(cmd.Paths) == 0 {
+		return text.Usage(Usage)
+	}
 
 	ch := cli.Load(cmd.Paths, false)
 
@@ -76,7 +107,7 @@ func (cmd *Std) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func (cmd *Std) renderText(cli *cli.Globals, b []byte, hint string) {
+func (cmd *Cat) renderText(cli *cli.Globals, b []byte, hint string) {
 	for l := range buffer.Text(cli, &buffer.TextContext{
 		Data: b,
 		Hint: hint,
@@ -101,7 +132,7 @@ func (cmd *Std) renderText(cli *cli.Globals, b []byte, hint string) {
 	}
 }
 
-func (cmd *Std) renderHex(cli *cli.Globals, b []byte) {
+func (cmd *Cat) renderHex(cli *cli.Globals, b []byte) {
 	lastHex, wasCut := "", false
 
 	for l := range buffer.Hex(cli, &buffer.HexContext{

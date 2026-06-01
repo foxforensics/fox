@@ -42,9 +42,9 @@ func TestHunt(t *testing.T) {
 			})
 
 			ldr := loader.New(&loader.Options{
-				Limits:   &types.Limits{},
-				Filters:  &types.Filters{},
-				Parallel: 1,
+				Limits:  &types.Limits{},
+				Filters: &types.Filters{},
+				Threads: 1,
 			})
 
 			file := test.FixtureFile(tt.file)
