@@ -27,7 +27,7 @@ type HexContext struct {
 }
 
 func Hex(cli *cli.Globals, ctx *HexContext) *HexBuffer {
-	var buf = &HexBuffer{make(chan HexLine, cli.Parallel*1024)}
+	var buf = &HexBuffer{make(chan HexLine, cli.Threads*1024)}
 
 	if cli.Limits.IsTail {
 		ctx.Delta = cli.Limits.Values.Bytes

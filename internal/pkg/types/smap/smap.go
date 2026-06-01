@@ -11,7 +11,7 @@ import (
 
 const Size = 1024 * 1025 * 4 // 4m
 
-var Parallel = 2 // default
+var Threads = 2 // default
 
 var tab = []byte{'\t'}
 var spc = []byte("  ")
@@ -64,7 +64,7 @@ func (s SMap) do(fn action) SMap {
 
 	go func(chan<- String) {
 		it := iter.Iterator[String]{
-			MaxGoroutines: Parallel,
+			MaxGoroutines: Threads,
 		}
 
 		it.ForEach(s, func(s *String) {

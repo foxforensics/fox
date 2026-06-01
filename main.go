@@ -19,47 +19,38 @@ import (
 
 	"go.foxforensics.dev/fox/v4/internal/cmd"
 	"go.foxforensics.dev/fox/v4/internal/cmd/ad"
+	"go.foxforensics.dev/fox/v4/internal/cmd/cat"
 	"go.foxforensics.dev/fox/v4/internal/cmd/hash"
 	"go.foxforensics.dev/fox/v4/internal/cmd/help"
 	"go.foxforensics.dev/fox/v4/internal/cmd/hunt"
 	"go.foxforensics.dev/fox/v4/internal/cmd/info"
-	"go.foxforensics.dev/fox/v4/internal/cmd/std"
 	"go.foxforensics.dev/fox/v4/internal/cmd/str"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 	"go.foxforensics.dev/fox/v4/internal/pkg/version"
 )
 
 var Usage = strings.TrimSpace(`
-Usage:
-  fox [COMMAND] [FLAGS...] <PATHS...>
+Usage: fox [COMMAND] [FLAGS...] <PATHS...>
 
 Commands:
    a, ad                   Show Active Directory infos
+   c, cat                  Show file contents (default)
    s, str                  Show file contained strings
    i, info                 Show file infos and entropy
    h, hash                 Show file hashes and checksums
-   e, hunt                 Hunt critical system events
+   x, hunt                 Hunt critical system events
 
 File flags:
   -I, --in=FILE            Read paths from file
   -O, --out=FILE           Write output to file (receipted)
 
-Force flags:
-  -t, --text               Force output as text
-  -x, --hex                Force output as hex
-
 Filter flags:
-  -u, --uniq               Filter using unique hash
-  -D, --dist=LENGTH        Filter using Levenshtein distance
   -L, --limit=NUMBER       Filter using byte or line count
   -F, --find=PATTERN       Filter using regular expression
-  -C, --context=LINES      Lines surrounding a match
-  -B, --before=LINES       Lines leading before a match
-  -A, --after=LINES        Lines trailing after a match
 
 Process flags:
-  -P, --password=TEXT      Use archive password (7Z, RAR, ZIP)
-  -Z, --parallel=CORES     Use parallel processing
+  -T, --threads=CORES      Use parallel threads
+  -P, --password=TEXT      Use archive password (7z, Rar, Zip)
 
 Disable flags:
   -r, --raw                Don't process files (r/rr/rrr)
@@ -83,30 +74,30 @@ Positional arguments:
 Example: Find occurrences in event logs
   $ fox -FWinlogon ./**/*.evtx
 
-Example: List only high entropy files
-  $ fox info -N6.0 ./**/*
-
 Example: Hunt down critical events
   $ fox hunt -u *.dd
 
-Use "fox help <COMMAND>" for sub commands.
+Example: Show help on sub commands
+  $ fox help info
+
+Report bugs at: foxforensics.dev/issues
 `)
 
 type fox struct {
 	Ad   ad.Ad     `cmd:"" aliases:"a"`
+	Cat  cat.Cat   `cmd:"" aliases:"c" default:"withargs"`
 	Hash hash.Hash `cmd:"" aliases:"h"`
-	Hunt hunt.Hunt `cmd:"" aliases:"e"`
+	Hunt hunt.Hunt `cmd:"" aliases:"x"`
 	Info info.Info `cmd:"" aliases:"i"`
 	Str  str.Str   `cmd:"" aliases:"s"`
-	Std  std.Std   `cmd:"" default:"withargs"`
 
 	// hidden commands
 	Help help.Help `cmd:"" hidden:""`
 
-	// support flags
+	// support
 	Version bool
 
-	// global flags
+	// global
 	cmd.Globals
 }
 
@@ -131,7 +122,8 @@ func main() {
 	case cli.Globals.Help, ctx.Command() == "help":
 		_ = text.Usage(Usage)
 	case cli.Version:
-		fmt.Printf("fox %s\n", version.Number)
+		fmt.Printf("© %d Fox Forensics\n", time.Now().Year())
+		fmt.Printf("Version %s %s\n", version.Number, version.Commit)
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())

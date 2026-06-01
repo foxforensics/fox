@@ -13,16 +13,20 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Fox is a versatile commandline tool, built to support the examination process of file-based forensic evidence. It provides a wide spectrum of forensic capabilities in a cross-platform standalone binary. All files will only be processed read-only. A Chain-of-Custody receipt is generated upon every file output.
+Fox is a powerful CLI tool, built to support the examination process of file-based forensic artifacts. It provides a wide spectrum of forensic capabilities in a cross-platform standalone binary. All files will only be processed read-only. A Chain-of-Custody receipt is generated upon every file output.
 
 COMMANDS
 ========
 
-If no command is passed, then the file contents will be shown by default.
+If no command is passed, then the **cat** command will be used by default and the file contents will be shown as either text or hex output according to their content type.
 
 **a, ad**
 
 :   Show Active Directory infos.
+
+**c, cat**
+
+:   Show file contents (default).
 
 **s, str**
 
@@ -36,7 +40,7 @@ If no command is passed, then the file contents will be shown by default.
 
 :   Show file hashes and checksums.
 
-**e, hunt**
+**x, hunt**
 
 :   Hunt critical system events.
 
@@ -45,33 +49,14 @@ FLAGS
 
 **-I, --in**=_file_
 
-:   Read paths from _file_.
+:   Read paths from _file_. **~** expansion is applied.
 
 **-O, --out**=_file_
 
-:   Write output to _file_ (receipted).
-
-Force Flags
------------
-
-**-t, --text**
-
-:   Force output exclusively as text (in default mode).
-
-**-x, --hex**
-
-:   Force output exclusively as hex (in default mode).
+:   Write output to _file_. A receipt of the written file will be created automatically alongside.
 
 Filter Flags
 ------------
-
-**-u, --uniq**
-
-:   Filter using unique **XXH3** hash.
-
-**-D, --dist**=_length_
-
-:   Filter using Levenshtein distance.
 
 **-L, --limit**=_number_
 
@@ -81,35 +66,23 @@ Filter Flags
 
 :   Filter using regular expression _pattern_. Regular expressions do not have constant time guarantees and allow backtracking. All regular expressions are compatible with Perl5 and .NET.
 
-**-C, --context**=_lines_
-
-:   _Lines_ surrounding a match. Includes **-B** and **-A** flag.
-
-**-B, --before**=_lines_
-
-:   _Lines_ leading before a match.
-
-**-A, --after**=_lines_
-
-:   _Lines_ trailing after a match.
-
 Process Flags
 -------------
 
-**-P, --password**=_password_
+**-T, --threads**=_number_
 
-:   Use archive _password_ (only supported for **7Z**, **RAR**, **ZIP** archives).
+:   Use _number_ of threads for parallel processing. The default is the number of logical CPUs available for the process.
 
-**-Z, --parallel**=_cores_
+**-P, --password**=_text_
 
-:   Use number of _cores_ for parallel processing.
+:   Use _text_ to decrypt encrypted archives. This is only supported for **7z**, **Rar** and **Zip** archives.
 
 Disable Flags
 -------------
 
 **-r, --raw**[=_level_]
 
-:   Don't process files (**r**/**rr**/**rrr**).
+:   Don't process files (**r**/**rr**/**rrr**). Level _1_ implies **--no-convert**. Level _2_ implies **--no-deflate** and **--no-extract** additional. Level _3_ implies **--no-strict** additional.
 
 **-q, --quiet**
 
@@ -117,7 +90,7 @@ Disable Flags
 
 **-n, --no-pretty**
 
-:   Don't prettify the output.
+:   Don't prettify the output. Header line and colors will be turned off.
 
 **--no-strict**
 
@@ -187,7 +160,7 @@ EXAMPLES
 
 $ fox -FWinlogon ./**/*.evtx
 
-:   Find occurrences in event logs.
+:   Show occurrences in event logs.
 
 $ fox -L512b image.dd
 
@@ -213,11 +186,15 @@ $ fox hunt -u *.dd
 
 :   Hunt down critical events.
 
+$ fox help info
+
+:   Show help on sub commands.
+
 BUGS
 ====
 
 Please submit any issues with fox to the project's bug tracker:
-<_https://foxforensics.dev/fox/issues_>
+<_https://foxforensics.dev/issues_>
 
 WWW
 ===

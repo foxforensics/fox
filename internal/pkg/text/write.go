@@ -19,7 +19,7 @@ import (
 
 var Banner = `
   .-------.----.--.  .--. 
-  |   ___/ .__. \  \/  /   Created by Fox Forensics
+  |   ___/ .__. \  \/  /   © %d by Fox Forensics
   |   __|  |  |  >    <    https://foxforensics.eu
   |  |   \ '--' /  /\  \   Version %s
   '--'    '----'--'  '--'
@@ -37,7 +37,7 @@ func Setup(w io.WriteCloser, err error) {
 }
 
 func Usage(msg string) error {
-	_, _ = fmt.Println(fmt.Sprintf(Banner, version.Number))
+	_, _ = fmt.Println(fmt.Sprintf(Banner, time.Now().Year(), version.Number))
 	_, _ = fmt.Println(msg)
 
 	return nil

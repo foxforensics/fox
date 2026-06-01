@@ -8,7 +8,7 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **hash** \[_flags_ ...] \[_paths_ ...]
+| **fox** **hash** \[_flags_ ...] \[**list** | _paths_ ...]
 
 DESCRIPTION
 ===========
@@ -20,7 +20,7 @@ FLAGS
 
 **-H, --hash**=_name_,...
 
-:   Show a specific hash (default: **SHA256**).
+:   Use hash algorithm(s) (default: **SHA256**).
 
 **-a, --all**
 
@@ -37,7 +37,7 @@ FLAGS
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**.
+Globbing paths to open or '-' to read from **STDIN(4)**. If **list** is specified as _path_, only the list of the built-in algorithms will be shown. To refer to paths inside archives, use the archive:file notation.
 
 ALGORITHMS
 ==========
@@ -105,7 +105,7 @@ BUGS
 ====
 
 Please submit any issues with fox to the project's bug tracker:
-<_https://foxforensics.dev/fox/issues_>
+<_https://foxforensics.dev/issues_>
 
 WWW
 ===

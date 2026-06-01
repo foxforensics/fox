@@ -10,7 +10,7 @@ import (
 	"go.foxforensics.dev/wordlist"
 )
 
-var Parallel = 2 // default
+var Threads = 2 // default
 
 var hashesLm sync.Map
 var hashesNt sync.Map
@@ -29,7 +29,7 @@ func Build(b []byte) (uint64, error) {
 	}
 
 	it := iter.Iterator[[]byte]{
-		MaxGoroutines: Parallel,
+		MaxGoroutines: Threads,
 	}
 
 	it.ForEach(bytes.Split(b, []byte{'\n'}), func(b *[]byte) {

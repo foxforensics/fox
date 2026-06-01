@@ -25,7 +25,7 @@ const Threshold = 7.2
 const NoOffset = -1
 
 var Usage = strings.TrimSpace(`
-fox info [FLAGS...] <PATHS...>
+Usage: fox info [FLAGS...] <PATHS...>
 
 Flags:
   -l, --lookup             Lookup files via VirusTotal
@@ -48,6 +48,8 @@ Example: List only high entropy files
 
 Example: List blocks by one megabyte
   $ fox info -B1m backup.mdf
+
+Report bugs at: foxforensics.dev/issues
 `)
 
 type FileInfo struct {
@@ -147,7 +149,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Sort {
-		cli.Parallel = 1 // single threaded
+		cli.Threads = 1 // single threaded
 	}
 
 	if !cli.NoPretty {

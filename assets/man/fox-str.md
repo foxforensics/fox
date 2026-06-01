@@ -56,7 +56,7 @@ Class Flags
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**. If the path **list** is specified, only the list of build-in classifications will be shown.
+Globbing paths to open or '-' to read from **STDIN(4)**. If **list** is specified as _path_, only the list of the built-in classifications will be shown. To refer to paths inside archives, use the archive:file notation.
 
 EXAMPLES
 ========
@@ -73,7 +73,7 @@ BUGS
 ====
 
 Please submit any issues with fox to the project's bug tracker:
-<_https://foxforensics.dev/fox/issues_>
+<_https://foxforensics.dev/issues_>
 
 WWW
 ===

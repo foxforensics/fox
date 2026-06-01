@@ -14,7 +14,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-fox str [FLAGS...] <list|PATHS...>
+Usage: fox str [FLAGS...] <list|PATHS...>
 
 Flags:
   -l, --lookup             Lookup strings via VirusTotal (IP/DNS/URL) 
@@ -29,14 +29,16 @@ Class flags:
   -C, --class=NAME,...     Show only classes that match name(es)
 
 Remarks:
-  If 'list' is specified as path, only the list of built-in classifications
-  list will be shown. A VirusTotal API key is required for lookup.
+  If 'list' is specified as path, only the built-in classifications
+  will be shown. A VirusTotal API key is required for lookup.
 
 Example: Show only long ASCII strings
   $ fox str -atN8 sample.exe
 
 Example: Show all URLs in a binary
   $ fox str -wCurl sample.exe
+
+Report bugs at: foxforensics.dev/issues
 `)
 
 type Str struct {
@@ -102,14 +104,14 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 		}
 
 		for str := range carver.New(&carver.Options{
-			Min:      cmd.Min,
-			Max:      cmd.Max,
-			Ascii:    cmd.Ascii,
-			Sort:     cmd.Sort,
-			Trim:     cmd.Trim,
-			What:     cmd.What,
-			Class:    cmd.Class,
-			Parallel: cli.Parallel,
+			Min:     cmd.Min,
+			Max:     cmd.Max,
+			Ascii:   cmd.Ascii,
+			Sort:    cmd.Sort,
+			Trim:    cmd.Trim,
+			What:    cmd.What,
+			Class:   cmd.Class,
+			Threads: cli.Threads,
 		}).Carve(h.Bytes()) {
 			if cli.Regexp != nil {
 				if ok, _ := cli.Regexp.MatchString(str.Value); !ok {
