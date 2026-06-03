@@ -18,8 +18,8 @@ Fox is a powerful CLI tool, built to support the examination process of file-bas
 * [x] String carving and automatic classification
 * [x] With 290+ classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
 * [x] Parse Fortinet binary firewall logs
-* [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files
-* [x] Parse [NTFS MFT](https://ntfs.com/ntfs-mft.htm), Shortcut and Prefetch files
+* [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files 
+* [x] Parse [NTFS MFT](https://ntfs.com/ntfs-mft.htm), LNK, PF, PST binary files
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * [x] Extract [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes, users, groups, computers  
 * [x] Lookup NTLM hashes using 210000+ entry rainbow table
@@ -104,7 +104,7 @@ Log Formats
 > EVTX, Journal, Fortigate
 
 Binary Formats
-> PE / COFF, ELF, ESE / EDB, MFT, LNK, PF
+> PE / COFF, ELF, ESE / EDB, MFT, LNK, PF, PST
 
 Archive Formats
 > 7-Zip, AR, CAB, CFB, CPIO, ISO, MSI, RAR, RPM, TAR, XAR, ZIP

@@ -19,6 +19,7 @@ require (
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/dlclark/regexp2/v2 v2.1.1
 	github.com/eclipse/paho.golang v0.23.0
+	github.com/emersion/go-message v0.18.2
 	github.com/fatih/color v1.19.0
 	github.com/flanglet/kanzi-go/v2 v2.5.1
 	github.com/hooklift/iso9660 v1.0.0
@@ -33,7 +34,7 @@ require (
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
 	github.com/saferwall/elf v0.3.1
 	github.com/saferwall/pe v1.6.5
-	github.com/secDre4mer/go-cab v0.0.0-20250826110853-e3fbafae92cd
+	github.com/secDre4mer/go-cab v0.0.0-20260602061637-8f8e7163d35b
 	github.com/sorairolake/lzip-go v0.3.8
 	github.com/sourcegraph/conc v0.3.0
 	github.com/ulikunitz/xz v0.5.15
@@ -50,6 +51,7 @@ require (
 	go.foxforensics.dev/go-mft v0.1.0
 	go.foxforensics.dev/go-mmap v0.2.1
 	go.foxforensics.dev/go-msi v0.3.1
+	go.foxforensics.dev/go-pst/v6 v6.0.0-20260602215120-7ab8345f0376
 	go.foxforensics.dev/go-zip v0.6.2
 	go.foxforensics.dev/hashdump v0.9.4
 	go.foxforensics.dev/hasher v0.2.5
@@ -82,17 +84,22 @@ require (
 	github.com/edsrzf/mmap-go v1.2.0 // indirect
 	github.com/glaslos/ssdeep v1.0.0 // indirect
 	github.com/glaslos/tlsh v0.4.0 // indirect
+	github.com/godzie44/go-uring v0.0.0-20250501163612-d16a9e597639 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hooklift/assert v0.1.0 // indirect
 	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f // indirect
 	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
+	github.com/libp2p/go-sockaddr v0.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
 	github.com/mattn/go-isatty v0.0.22 // indirect
 	github.com/parquet-go/bitpack v1.0.0 // indirect
 	github.com/parquet-go/jsonlite v1.5.2 // indirect
 	github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4 // indirect
+	github.com/philhofer/fwd v1.2.0 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
+	github.com/rotisserie/eris v0.5.4 // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
@@ -101,6 +108,8 @@ require (
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/stangelandcl/ppmd v0.1.1 // indirect
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2 // indirect
+	github.com/tidwall/btree v1.8.1 // indirect
+	github.com/tinylib/msgp v1.6.4 // indirect
 	github.com/tjfoc/gmsm/v2 v2.0.0 // indirect
 	github.com/twpayne/go-geom v1.6.1 // indirect
 	github.com/zeebo/blake3 v0.2.4 // indirect
@@ -114,6 +123,7 @@ require (
 	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/exp v0.0.0-20260529124908-c761662dc8c9 // indirect
 	golang.org/x/image v0.41.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

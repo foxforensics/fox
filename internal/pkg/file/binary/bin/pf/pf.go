@@ -32,5 +32,5 @@ func Convert(b []byte) ([]byte, error) {
 		return b, err
 	}
 
-	return json.MarshalIndent(pi, "", "  ")
+	return json.Marshal(pi)
 }
