@@ -123,7 +123,7 @@ func main() {
 		_ = text.Usage(Usage)
 	case cli.Version:
 		fmt.Printf("© %d Fox Forensics\n", time.Now().Year())
-		fmt.Printf("Version %s %s\n", version.Number, version.Commit)
+		fmt.Printf("Version %s %s\n", version.Number, version.ID())
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())
