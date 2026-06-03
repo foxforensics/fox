@@ -26,6 +26,7 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/bin/mft"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/bin/pe"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/bin/pf"
+	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/bin/pst"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/evtx"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/fortinet"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/journal"
@@ -188,6 +189,7 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		register.Convert("mft", mft.Detect, mft.Convert)
 		register.Convert("pe", pe.Detect, pe.Convert)
 		register.Convert("pf", pf.Detect, pf.Convert)
+		register.Convert("pst", pst.Detect, pst.Convert)
 		register.Convert("evtx", evtx.Detect, evtx.Convert)
 		register.Convert("fortinet", fortinet.Detect, fortinet.Convert)
 		register.Convert("journal", journal.Detect, journal.Convert)

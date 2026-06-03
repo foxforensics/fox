@@ -29,22 +29,22 @@ type Event struct {
 	Fields   map[string]string `json:"fields,omitempty"`
 }
 
-func (evt *Event) String() string {
+func (e *Event) String() string {
 	return fmt.Sprintf("%s:%s:%s",
-		evt.Host,
-		evt.Message,
-		evt.Sequence,
+		e.Host,
+		e.Message,
+		e.Sequence,
 	)
 }
 
-func (evt *Event) SortKey() string {
-	return fmt.Sprintf("%d-%d", evt.Time.UnixNano(), xxh3.HashString(evt.String()))
+func (e *Event) SortKey() string {
+	return fmt.Sprintf("%d-%d", e.Time.UnixNano(), xxh3.HashString(e.String()))
 }
 
-func (evt *Event) ToCEF() string {
+func (e *Event) ToCEF() string {
 	var sb strings.Builder
 
-	msg := text.Sanitize(evt.Message)
+	msg := text.Sanitize(e.Message)
 	msg = strings.ReplaceAll(msg, `\`, `\\`)
 	msg = strings.ReplaceAll(msg, `|`, `\|`)
 	msg = strings.ReplaceAll(msg, `\t`, ` `)
@@ -55,15 +55,15 @@ func (evt *Event) ToCEF() string {
 	}
 
 	sb.WriteString(fmt.Sprintf(CEF,
-		evt.Time.Format("Jan 02 2006 15:04:05.000"),
-		evt.Host,
+		e.Time.Format("Jan 02 2006 15:04:05.000"),
+		e.Host,
 		version.Number,
 		msg,
-		evt.Severity,
+		e.Severity,
 	))
 
-	for _, k := range slices.Sorted(maps.Keys(evt.Fields)) {
-		if v := evt.Fields[k]; len(v) > 0 {
+	for _, k := range slices.Sorted(maps.Keys(e.Fields)) {
+		if v := e.Fields[k]; len(v) > 0 {
 			k = strings.ReplaceAll(k, `=`, `\=`)
 			v = strings.ReplaceAll(v, `=`, `\=`)
 			v = strings.ReplaceAll(v, "\n", " ")
@@ -77,12 +77,12 @@ func (evt *Event) ToCEF() string {
 	return strings.TrimSpace(sb.String())
 }
 
-func (evt *Event) ToJSON() string {
-	b, _ := json.MarshalIndent(evt, "", "  ")
+func (e *Event) ToJSON() string {
+	b, _ := json.MarshalIndent(e, "", "  ")
 	return string(b)
 }
 
-func (evt *Event) ToJSONL() string {
-	b, _ := json.Marshal(evt)
+func (e *Event) ToJSONL() string {
+	b, _ := json.Marshal(e)
 	return string(b)
 }
