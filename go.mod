@@ -32,6 +32,7 @@ require (
 	github.com/parquet-go/parquet-go v0.30.1
 	github.com/pierrec/lz4/v4 v4.1.27
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
+	github.com/rotisserie/eris v0.5.4
 	github.com/saferwall/elf v0.3.1
 	github.com/saferwall/pe v1.6.5
 	github.com/secDre4mer/go-cab v0.0.0-20260602061637-8f8e7163d35b
@@ -54,7 +55,7 @@ require (
 	go.foxforensics.dev/go-pst/v6 v6.0.0-20260602215120-7ab8345f0376
 	go.foxforensics.dev/go-zip v0.6.2
 	go.foxforensics.dev/hashdump v0.9.4
-	go.foxforensics.dev/hasher v0.2.5
+	go.foxforensics.dev/hasher v0.2.6
 	go.foxforensics.dev/rhash v1.7.2
 	go.foxforensics.dev/strings v0.5.3
 	go.foxforensics.dev/wordlist v0.1.2
@@ -99,7 +100,6 @@ require (
 	github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4 // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rotisserie/eris v0.5.4 // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
@@ -121,7 +121,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/crypto v0.52.0 // indirect
-	golang.org/x/exp v0.0.0-20260529124908-c761662dc8c9 // indirect
+	golang.org/x/exp v0.0.0-20260603202125-055de637280b // indirect
 	golang.org/x/image v0.41.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect

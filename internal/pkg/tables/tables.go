@@ -2,8 +2,8 @@ package tables
 
 import (
 	"bytes"
+	"maps"
 	"sync"
-	"sync/atomic"
 
 	"github.com/sourcegraph/conc/iter"
 	"go.foxforensics.dev/hasher/hash"
@@ -12,11 +12,33 @@ import (
 
 var Threads = 2 // default
 
-var hashesLm sync.Map
-var hashesNt sync.Map
+var tables = make(map[string]*table, 2)
 
-func Build(b []byte) (uint64, error) {
-	var n atomic.Uint64
+type table struct {
+	m sync.Map
+}
+
+func newTable(algo string, w [][]byte) *table {
+	t := new(table)
+
+	iter.Iterator[[]byte]{
+		MaxGoroutines: Threads,
+	}.ForEach(w, func(b *[]byte) {
+		t.m.Store(hash.MustSum(algo, *b), string(*b))
+	})
+
+	return t
+}
+
+func (t *table) Lookup(s string) string {
+	if v, ok := t.m.Load(s); ok {
+		return v.(string)
+	}
+
+	return ""
+}
+
+func Build(b []byte, algos ...string) (int, error) {
 	var err error
 
 	// use built-in wordlist for rainbow tables
@@ -28,27 +50,21 @@ func Build(b []byte) (uint64, error) {
 		}
 	}
 
-	it := iter.Iterator[[]byte]{
-		MaxGoroutines: Threads,
+	w := bytes.Split(b, []byte{'\n'})
+
+	for _, algo := range algos {
+		tables[algo] = newTable(algo, w)
 	}
 
-	it.ForEach(bytes.Split(b, []byte{'\n'}), func(b *[]byte) {
-		hashesNt.Store(hash.MustSum(hash.NT, *b), string(*b))
-		hashesLm.Store(hash.MustSum(hash.LM, *b), string(*b))
-		n.Add(1)
-	})
-
-	return n.Load(), nil
+	return len(w), nil
 }
 
-func Lookup(sum string) string {
-	if v, ok := hashesNt.Load(sum); ok {
-		return v.(string)
+func Lookup(s string) (string, string) {
+	for k, t := range maps.All(tables) {
+		if v := t.Lookup(s); len(v) > 0 {
+			return k, v
+		}
 	}
 
-	if v, ok := hashesLm.Load(sum); ok {
-		return v.(string)
-	}
-
-	return ""
+	return "", ""
 }

@@ -46,7 +46,7 @@ Secret Flags
 
 **-l, --lookup**
 
-:   Lookup hashes using rainbow tables.
+:   Lookup hashes using the built-in wordlist.
 
 **-h, --history**
 

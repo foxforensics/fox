@@ -7,6 +7,7 @@ import (
 
 	"go.foxforensics.dev/bootkey/bootkey"
 	"go.foxforensics.dev/hashdump/extract"
+	"go.foxforensics.dev/hasher/hash"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
@@ -26,7 +27,7 @@ Record flags:
   -J, --jsonl              Show records as JSON lines
 
 Secret flags:
-  -l, --lookup             Lookup hashes using rainbow tables
+  -l, --lookup             Lookup hashes using wordlist
   -h, --history            Extract also the users hash history
       --only-lm            Extract only the LM hashes (Hashcat mode 3000)
       --only-nt            Extract only the NT hashes (Hashcat mode 1000)
@@ -95,7 +96,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 			log.Println("building tables")
 		}
 
-		n, err := tables.Build(cmd.Wordlist)
+		n, err := tables.Build(cmd.Wordlist, hash.LM, hash.NT)
 
 		if err != nil {
 			return err
