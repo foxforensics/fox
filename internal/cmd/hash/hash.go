@@ -140,7 +140,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		for _, k := range cmd.Hash {
 			if cmd.Lookup {
 				a, v := tables.Lookup(string(h.Bytes()))
-				text.Match(fmt.Sprintf("%s  %s", v, a), cli.Regexp)
+				text.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), cli.Regexp)
 				break
 			} else if cmd.Guess {
 				for _, a := range collect(database.Lookup(string(h.Bytes()))) {
