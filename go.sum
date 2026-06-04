@@ -305,8 +305,10 @@ go.foxforensics.dev/go-zip v0.6.2 h1:oOJOdcEnkL7OHLrnRJA45yJjeYGWBKhU7EX7b6Yu3SY
 go.foxforensics.dev/go-zip v0.6.2/go.mod h1:lciPKpFtI7fYu5UateHiUC/p2D/W57LzCCR18VwdvMk=
 go.foxforensics.dev/hashdump v0.9.4 h1:hdzvt69no2Iyjrb3jvk6UECaV6JsaMXoI7Ih7TyOSes=
 go.foxforensics.dev/hashdump v0.9.4/go.mod h1:oCmTqxyBKvCDoF08W8lpeR0axUzRqpG2L1N6SCXv+Lc=
-go.foxforensics.dev/hasher v0.2.8 h1:0jZdwA4O/NI7PqAF07yKz67u0ABhyMMJgu/TW4YAm5Y=
-go.foxforensics.dev/hasher v0.2.8/go.mod h1:NUOUWb2ZJEAPewXNTV0/wNvxX1a9pXBthDwe7lDyuZk=
+go.foxforensics.dev/hasher v0.2.5 h1:tkiMTWT4ucbX68ZsX1fEM6gGpcGtBWp87Z/OUwUrxQM=
+go.foxforensics.dev/hasher v0.2.5/go.mod h1:PT7mDjZ++NUxHKxlNjvQVw6ADU6OHEIyNCIoZyca/NY=
+go.foxforensics.dev/hasher v0.2.6 h1:q/HKrYgQZb+yifTwn12zMGr6g7XatTGk/8ZytFHjr6M=
+go.foxforensics.dev/hasher v0.2.6/go.mod h1:PT7mDjZ++NUxHKxlNjvQVw6ADU6OHEIyNCIoZyca/NY=
 go.foxforensics.dev/rhash v1.7.2 h1:k0bWJ0d9yWkDVHwaUib1zhd2HFKpILd1E20iLTBJ7II=
 go.foxforensics.dev/rhash v1.7.2/go.mod h1:biH8czWYc1pXO/TJLZ3jydYomeIgz+IqslLuVN9TgPM=
 go.foxforensics.dev/strings v0.5.3 h1:PNaVw23p+hpq8JEOFNakx/h8KO94FJ1DCKYQOUZDAJE=
@@ -333,10 +335,12 @@ golang.org/x/crypto v0.33.0/go.mod h1:bVdXmD7IV/4GdElGPozy6U7lWdRXA4qyRVGJV57uQ5
 golang.org/x/crypto v0.53.0 h1:QZ4Muo8THX6CizN2vPPd5fBGHyogrdK9fG4wLPFUsto=
 golang.org/x/crypto v0.53.0/go.mod h1:DNLU434OwVakk9PzuwV8w62mAJpRJL3vsgcfp4Qnsio=
 golang.org/x/exp v0.0.0-20190121172915-509febef88a4/go.mod h1:CJ0aWSM057203Lf6IL+f9T1iT9GByDxfZKAQTCR3kQA=
+golang.org/x/exp v0.0.0-20260529124908-c761662dc8c9 h1:4d4PbuBNwaxMXkXI8yiIYjydtMU+04RHeuSxJdgKftM=
+golang.org/x/exp v0.0.0-20260529124908-c761662dc8c9/go.mod h1:d2fgXJLVs4dYDHUk5lwMIfzRzSrWCfGZb0ZqeLa/Vcw=
 golang.org/x/exp v0.0.0-20260603202125-055de637280b h1:v1uXiEBHo8QA0LiGCo7UgHMzHT4Kdfpl2zmtH5vaP1Q=
 golang.org/x/exp v0.0.0-20260603202125-055de637280b/go.mod h1:d2fgXJLVs4dYDHUk5lwMIfzRzSrWCfGZb0ZqeLa/Vcw=
-golang.org/x/image v0.42.0 h1:1gSs6ehNWXLbkHBIPcWztk3D/6aIA/8hauiAYtlodVY=
-golang.org/x/image v0.42.0/go.mod h1:rrpelvGFt+kLPAjPM4HeWPgrl0FtafueU//e5N0qk/Q=
+golang.org/x/image v0.41.0 h1:8wS72eGJMJaBxK6okTzd4WaXumUlTVlb753MlsSvTCo=
+golang.org/x/image v0.41.0/go.mod h1:uIc348UZMSvS5Z65CVZ7iDPaNobNFEPeJ4kbqTOszmA=
 golang.org/x/lint v0.0.0-20181026193005-c67002cb31c3/go.mod h1:UVdnD1Gm6xHRNCYTkRU2/jEulfH38KcIWyp/GAMgvoE=
 golang.org/x/lint v0.0.0-20190227174305-5b3e6a55c961/go.mod h1:wehouNa3lNwaWXcvxsM5YxQ5yQlVC4a0KAMCusXpPoU=
 golang.org/x/lint v0.0.0-20190313153728-d0100b6bd8b3/go.mod h1:6SW0HCj/g11FgYtHlgUYUwCkIfeOF89ocIRzGO/8vkc=

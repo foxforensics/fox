@@ -55,7 +55,7 @@ require (
 	go.foxforensics.dev/go-pst/v6 v6.0.0-20260602215120-7ab8345f0376
 	go.foxforensics.dev/go-zip v0.6.2
 	go.foxforensics.dev/hashdump v0.9.4
-	go.foxforensics.dev/hasher v0.2.8
+	go.foxforensics.dev/hasher v0.2.6
 	go.foxforensics.dev/rhash v1.7.2
 	go.foxforensics.dev/strings v0.5.3
 	go.foxforensics.dev/wordlist v0.1.2
@@ -121,9 +121,9 @@ require (
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
-	golang.org/x/crypto v0.53.0 // indirect
+	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/exp v0.0.0-20260603202125-055de637280b // indirect
-	golang.org/x/image v0.42.0 // indirect
+	golang.org/x/image v0.41.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
