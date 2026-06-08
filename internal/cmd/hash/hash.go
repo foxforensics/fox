@@ -67,7 +67,7 @@ type Hash struct {
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if cmd.All || slices.Contains(cmd.Hash, "*") {
-		cmd.Hash = hash.Algorithms // use all
+		cmd.Hash = list(true) // use all
 	}
 
 	// default algorithm
@@ -86,7 +86,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 	}
 
 	if cmd.Paths[0] == "list" {
-		for _, s := range hash.Algorithms {
+		for _, s := range list(true) {
 			text.Write(s)
 		}
 
@@ -172,4 +172,16 @@ func (cmd *Hash) format(fh *FileHash) string {
 	default:
 		return ""
 	}
+}
+
+func list(all bool) []string {
+	v := make([]string, 0, len(hash.Algorithms))
+
+	for _, a := range hash.Algorithms {
+		if all || a.Type == hash.Cryptographic {
+			v = append(v, a.Name)
+		}
+	}
+
+	return v
 }
