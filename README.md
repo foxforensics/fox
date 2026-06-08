@@ -122,13 +122,16 @@ Perceptual Hashes
 > Average, Difference, Median, PHash, WHash, MarrHildreth, BlockMean, PDQ, RASH
 
 Similarity Hashes
-> ImpFuzzy, ImpHashO, ImpHashS, SSDeep, TLSH
+> ImpFuzzy, ImpHashO, ImpHashS, sdhash, SSDeep, TLSH
 
-Windows Hashes
+Windows Specific
 > LM, NT, PE
 
+Unix Specific
+> BSD, ELF, SYSV
+
 Checksums
-> Adler32, Fletcher4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+> Adler32, Fletcher4, Luhn, CRC16-CCITT, CRC32-C, CRC32-K, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 Wordlists
 > English / German / French / Spanish Common Passwords, Most Common Passwords, Most Used Passwords, Default Passwords, Corporate Passwords, Production Passwords, Milw0rm Dictionary, Conficker Dictionary, Medical Devices, Seasons 

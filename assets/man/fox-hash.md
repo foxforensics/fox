@@ -87,15 +87,19 @@ Perceptual hashes
 
 Similarity hashes
 
-:   IMPFUZZY, IMPHASHO, IMPHASHS, SSDEEP, TLSH
+:   IMPFUZZY, IMPHASHO, IMPHASHS, SDHASH, SSDEEP, TLSH
 
-Windows hashes
+Windows specific
 
 :   LM, NT, PE
 
+Unix specific
+
+:   BSD, ELF, SYSV
+
 Checksums
 
-:   ADLER32, FLETCHER4, CRC16-CCITT, CRC32-C, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
+:   ADLER32, FLETCHER4, LUHN, CRC16-CCITT, CRC32-C, CRC32-K, CRC32-IEEE, CRC64-ECMA, CRC64-ISO
 
 EXAMPLES
 ========
@@ -131,4 +135,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**fox(1)**, **md5sum(1)**, **sha1sum(1)**, **sha256sum(1)**
+**fox(1)**, **sum(1)**, **md5sum(1)**, **sha1sum(1)**, **sha256sum(1)**
