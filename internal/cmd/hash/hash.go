@@ -44,7 +44,7 @@ Example: Hash binary inside an archive
   $ fox hash -Pinfected ioc.zip:ioc.exe
 
 Example: Lookup hash sum in wordlist
-  $ fox hash -Hsha1 -l dump.sha1
+  $ fox hash -Hsha1 -l sha1.txt
 
 Report bugs at: foxforensics.dev/issues
 `)
