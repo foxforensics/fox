@@ -17,7 +17,7 @@ require (
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
-	github.com/dlclark/regexp2/v2 v2.1.1
+	github.com/dlclark/regexp2/v2 v2.2.1
 	github.com/eclipse/paho.golang v0.23.0
 	github.com/emersion/go-message v0.18.2
 	github.com/fatih/color v1.19.0
@@ -54,12 +54,12 @@ require (
 	go.foxforensics.dev/go-pst/v6 v6.0.0-20260602215120-7ab8345f0376
 	go.foxforensics.dev/go-zip v0.6.2
 	go.foxforensics.dev/hashdump v0.9.4
-	go.foxforensics.dev/hasher v0.2.5
+	go.foxforensics.dev/hasher v0.2.8
 	go.foxforensics.dev/rhash v1.7.2
 	go.foxforensics.dev/strings v0.5.3
 	go.foxforensics.dev/wordlist v0.1.2
-	golang.org/x/term v0.43.0
-	golang.org/x/text v0.37.0
+	golang.org/x/term v0.44.0
+	golang.org/x/text v0.38.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
@@ -92,6 +92,7 @@ require (
 	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/libp2p/go-sockaddr v0.2.0 // indirect
+	github.com/malwarology/sdhash v0.5.0 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
 	github.com/mattn/go-isatty v0.0.22 // indirect
 	github.com/parquet-go/bitpack v1.0.0 // indirect
@@ -120,11 +121,11 @@ require (
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
-	golang.org/x/crypto v0.52.0 // indirect
-	golang.org/x/exp v0.0.0-20260529124908-c761662dc8c9 // indirect
-	golang.org/x/image v0.41.0 // indirect
+	golang.org/x/crypto v0.53.0 // indirect
+	golang.org/x/exp v0.0.0-20260603202125-055de637280b // indirect
+	golang.org/x/image v0.42.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
-	golang.org/x/sys v0.45.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	www.velocidex.com/golang/regparser v0.0.0-20250203141505-31e704a67ef7 // indirect
