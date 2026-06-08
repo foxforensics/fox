@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/0xrawsec/golang-evtx v1.2.9
-	github.com/Velocidex/go-journalctl v0.0.0-20250902002606-881a5f66df10
+	github.com/Velocidex/go-journalctl v0.0.0-20260608120136-20835635c054
 	github.com/Velocidex/ordereddict v0.0.0-20250821063524-02dc06e46238
 	github.com/agnivade/levenshtein v1.2.1
 	github.com/aixiansheng/lzfse v0.2.4
@@ -32,6 +32,7 @@ require (
 	github.com/parquet-go/parquet-go v0.30.1
 	github.com/pierrec/lz4/v4 v4.1.27
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
+	github.com/rotisserie/eris v0.5.4
 	github.com/saferwall/elf v0.3.1
 	github.com/saferwall/pe v1.6.5
 	github.com/secDre4mer/go-cab v0.0.0-20260602061637-8f8e7163d35b
@@ -100,7 +101,6 @@ require (
 	github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4 // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rotisserie/eris v0.5.4 // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
