@@ -9,9 +9,11 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.dev/hasher/hash"
+	"go.foxforensics.dev/rhash/database"
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
+	"go.foxforensics.dev/fox/v4/internal/pkg/tables"
 	"go.foxforensics.dev/fox/v4/internal/pkg/text"
 )
 
@@ -23,6 +25,10 @@ Flags:
   -a, --all                Show all hashes and checksums
   -j, --json               Show results as JSON objects
   -J, --jsonl              Show results as JSON lines
+
+Reverse flags:
+  -l, --lookup             Lookup hash using wordlist
+  -g, --guess              Guess the used algorithm(s)
 
 Remarks:
   If 'list' is specified as path, only the built-in algorithms will be shown.
@@ -36,6 +42,9 @@ Example: Hash binaries for similarity
 
 Example: Hash binary inside an archive
   $ fox hash -Pinfected ioc.zip:ioc.exe
+
+Example: Guess hash algorithm from sum
+  $ fox hash -Hsha1 -g sum.txt
 
 Report bugs at: foxforensics.dev/issues
 `)
@@ -58,16 +67,22 @@ func (fh *FileHash) ToJSONL() string {
 type Hash struct {
 	Hash  []string `short:"H" sep:","`
 	All   bool     `short:"a"`
-	Json  bool     `short:"j" xor:"json,jsonl"`
-	Jsonl bool     `short:"J" xor:"json,jsonl"`
+	Json  bool     `short:"j" xor:"json,jsonl,lookup,guess"`
+	Jsonl bool     `short:"J" xor:"json,jsonl,lookup,guess"`
+
+	// reverse flags
+	Lookup bool `short:"l" xor:"json,jsonl,lookup,guess"`
+	Guess  bool `short:"g" xor:"json,jsonl,lookup,guess"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
 }
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+	var err error
+
 	if cmd.All || slices.Contains(cmd.Hash, "*") {
-		cmd.Hash = list(true) // use all
+		cmd.Hash = list(!cmd.Lookup) // use all
 	}
 
 	// default algorithm
@@ -75,7 +90,12 @@ func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		cmd.Hash = []string{hash.SHA256}
 	}
 
-	return nil
+	// build tables
+	if cmd.Lookup {
+		_, err = tables.Build(nil, cmd.Hash...)
+	}
+
+	return err
 }
 
 func (cmd *Hash) Run(cli *cli.Globals) error {
@@ -118,6 +138,17 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		}
 
 		for _, k := range cmd.Hash {
+			if cmd.Lookup {
+				a, v := tables.Lookup(string(h.Bytes()))
+				text.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), cli.Regexp)
+				break
+			} else if cmd.Guess {
+				for _, a := range collect(database.Lookup(string(h.Bytes()))) {
+					text.Match(a, cli.Regexp)
+				}
+				continue
+			}
+
 			sum, err := hash.Sum(k, h.Bytes())
 
 			if errors.Is(err, hash.NotSupported) {
@@ -172,6 +203,16 @@ func (cmd *Hash) format(fh *FileHash) string {
 	default:
 		return ""
 	}
+}
+
+func collect(ch <-chan string) []string {
+	v := make([]string, len(hash.Algorithms))
+
+	for s := range ch {
+		v = append(v, strings.Split(s, "\n")...)
+	}
+
+	return v
 }
 
 func list(all bool) []string {

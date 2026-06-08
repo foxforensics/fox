@@ -111,7 +111,7 @@ func (s *Secret) OnlyNT() string {
 }
 
 func (s *Secret) format(sum string, def []byte) string {
-	if pwd := tables.Lookup(sum); len(pwd) > 0 {
+	if _, pwd := tables.Lookup(sum); len(pwd) > 0 {
 		return text.AsBold(pwd)
 	}
 

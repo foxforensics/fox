@@ -34,6 +34,17 @@ FLAGS
 
 :   Show results as JSON lines.
 
+Reverse Flags
+-------------
+
+**-l, --lookup**
+
+:   Lookup using the built-in wordlist. The file contents will be interpreted as value to lookup. Can be combined with **--hash** to lookup only specific hashes or with **--all** the lookup all cryptographic hashes. Excludes **--json** and **--jsonl** flags.
+
+**-g, --guess**
+
+:   Guess the used algorithm(s). Excludes **--json** and **--jsonl** flags.
+
 POSITIONAL ARGUMENTS
 ====================
 
@@ -104,6 +115,10 @@ $ fox hash -Himpfuzzy *.exe
 $ fox hash -Pinfected ioc.zip:ioc.exe
 
 :   Hash binary inside an archive.
+
+$ fox hash -Hsha1 -g sum.txt
+
+:   Guess hash algorithm from sum.
 
 BUGS
 ====

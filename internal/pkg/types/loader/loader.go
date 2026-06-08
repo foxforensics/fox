@@ -65,7 +65,7 @@ func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
 					log.Fatalln(err)
 				}
 
-				ldr.processData("STDIN", "", bytes.TrimSpace(buf))
+				ldr.processData(Stdin, "", bytes.TrimSpace(buf))
 				break
 			}
 
