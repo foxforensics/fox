@@ -206,7 +206,7 @@ func (cmd *Hash) format(fh *FileHash) string {
 }
 
 func collect(ch <-chan string) []string {
-	v := make([]string, len(hash.Algorithms))
+	v := make([]string, 0, len(hash.Algorithms))
 
 	for s := range ch {
 		v = append(v, strings.Split(s, "\n")...)
