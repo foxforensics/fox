@@ -116,7 +116,7 @@ $ fox hash -Pinfected ioc.zip:ioc.exe
 
 :   Hash binary inside an archive.
 
-$ fox hash -Hsha1 -l dump.sha1
+$ fox hash -Hsha1 -l sha1.txt
 
 :   Lookup hash sum in wordlist.
 
