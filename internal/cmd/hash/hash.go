@@ -216,7 +216,7 @@ func collect(ch <-chan string) []string {
 }
 
 func list(all bool) []string {
-	v := make([]string, len(hash.Algorithms))
+	v := make([]string, 0, len(hash.Algorithms))
 
 	for _, a := range hash.Algorithms {
 		if all || a.Type == hash.Cryptographic {
