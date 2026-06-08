@@ -43,8 +43,8 @@ Example: Hash binaries for similarity
 Example: Hash binary inside an archive
   $ fox hash -Pinfected ioc.zip:ioc.exe
 
-Example: Lookup hash sum in wordlist
-  $ fox hash -Hsha1 -l sha1.txt
+Example: Guess hash algorithm from sum
+  $ fox hash -Hsha1 -g sum.txt
 
 Report bugs at: foxforensics.dev/issues
 `)
