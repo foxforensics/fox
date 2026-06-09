@@ -153,7 +153,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 	}
 
 	if !cli.NoPretty {
-		text.Title(cmd.Paths...)
+		text.Stdout.Title(cmd.Paths...)
 	}
 
 	ch := cli.Load(cmd.Paths, true)
@@ -177,7 +177,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		// because empty files will cause errors
 		if h.Size == 0 {
 			if cmd.Min == 0 {
-				text.Match(cmd.format(fi), cli.Regexp)
+				text.Stdout.Match(cmd.format(fi), cli.Regexp)
 			}
 			h.Discard()
 			continue
@@ -195,7 +195,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 			fi.Entropy = entropy.Calculate(block)
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
-				text.Match(cmd.format(fi), cli.Regexp)
+				text.Stdout.Match(cmd.format(fi), cli.Regexp)
 			}
 
 			fi.Offset += n

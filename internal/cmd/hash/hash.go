@@ -107,7 +107,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 
 	if cmd.Paths[0] == "list" {
 		for _, s := range list(true) {
-			text.Write(s)
+			text.Stdout.Write(s)
 		}
 
 		// exit early
@@ -115,7 +115,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 	}
 
 	if !cli.NoPretty && len(cmd.Hash) == 1 {
-		text.Title(cmd.Paths...)
+		text.Stdout.Title(cmd.Paths...)
 	}
 
 	plain, n := !cmd.Json && !cmd.Jsonl, 0
@@ -134,17 +134,17 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		}
 
 		if !cli.NoPretty && len(cmd.Hash) > 1 {
-			text.Title(h.String())
+			text.Stdout.Title(h.String())
 		}
 
 		for _, k := range cmd.Hash {
 			if cmd.Lookup {
 				a, v := tables.Lookup(string(h.Bytes()))
-				text.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), cli.Regexp)
+				text.Stdout.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), cli.Regexp)
 				break
 			} else if cmd.Guess {
 				for _, a := range collect(database.Lookup(string(h.Bytes()))) {
-					text.Match(a, cli.Regexp)
+					text.Stdout.Match(a, cli.Regexp)
 				}
 				continue
 			}
@@ -181,11 +181,11 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				sum = fmt.Sprintf("%s  %s", sum, fh.File)
 			}
 
-			text.Match(sum, cli.Regexp)
+			text.Stdout.Match(sum, cli.Regexp)
 		}
 
 		if !plain {
-			text.Match(cmd.format(fh), cli.Regexp)
+			text.Stdout.Match(cmd.format(fh), cli.Regexp)
 		}
 
 		h.Discard()

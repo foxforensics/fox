@@ -31,6 +31,5 @@ func (cmd *Help) Run(_ *cli.Globals) error {
 	if v, ok := usage[strings.ToLower(cmd.Name)]; ok {
 		return text.Usage(v)
 	}
-
 	return nil
 }

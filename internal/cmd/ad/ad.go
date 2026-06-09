@@ -128,7 +128,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 	}
 
 	if !cli.NoPretty {
-		text.Title(ntds.String())
+		text.Stdout.Title(ntds.String())
 	}
 
 	n, err := cmd.extract(cli, key, ntds.Bytes())
@@ -186,7 +186,7 @@ func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
 	}
 
 	for _, v := range a {
-		text.Match(cmd.format(v), cli.Regexp)
+		text.Stdout.Match(cmd.format(v), cli.Regexp)
 	}
 
 	return len(a), nil

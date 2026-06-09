@@ -1,12 +1,14 @@
 package text
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/dlclark/regexp2/v2"
@@ -25,29 +27,33 @@ var Banner = `
   '--'    '----'--'  '--'
 `
 
-// standard output
-var stdout io.Writer = os.Stdout
+// Stdout default output.
+var Stdout = &Writer{wc: os.Stdout}
 
-func Setup(w io.WriteCloser, err error) {
-	stdout = w
+type Writer struct {
+	sync.Mutex
+	wc io.WriteCloser
+}
 
-	if err != nil {
+func Usage(msg string) error {
+	_, err1 := fmt.Println(fmt.Sprintf(Banner, time.Now().Year(), version.Number))
+	_, err2 := fmt.Println(msg)
+	return errors.Join(err1, err2)
+}
+
+func SetOutput(wc io.WriteCloser, err error) {
+	if err == nil {
+		Stdout = &Writer{wc: wc}
+	} else {
 		log.Fatalln(err)
 	}
 }
 
-func Usage(msg string) error {
-	_, _ = fmt.Println(fmt.Sprintf(Banner, time.Now().Year(), version.Number))
-	_, _ = fmt.Println(msg)
-
-	return nil
-}
-
-func Title(s ...string) {
-	w, _, err := term.GetSize(int(os.Stdin.Fd()))
+func (w *Writer) Title(s ...string) {
+	n, _, err := term.GetSize(int(os.Stdin.Fd()))
 
 	if err != nil {
-		w = 78 // default
+		n = 78 // default
 	}
 
 	title := s[0]
@@ -62,35 +68,40 @@ func Title(s ...string) {
 
 	stamp := time.Now().UTC().Format(time.RFC3339)
 
-	_, _ = fmt.Fprint(stdout, Surface1.Sprint(" FOX "))
-	_, _ = fmt.Fprint(stdout, Surface2.Sprintf(" %-*s ", w-29, title))
-	_, _ = fmt.Fprint(stdout, Surface3.Sprintf(" %s ", stamp))
-	_, _ = fmt.Fprintln(stdout)
+	w.Lock()
+	_, _ = fmt.Fprint(w.wc, Surface1.Sprint(" FOX "))
+	_, _ = fmt.Fprint(w.wc, Surface2.Sprintf(" %-*s ", n-29, title))
+	_, _ = fmt.Fprint(w.wc, Surface3.Sprintf(" %s ", stamp))
+	_, _ = fmt.Fprintln(w.wc)
+	w.Unlock()
 }
 
-func Match(s string, re *regexp2.Regexp) {
+func (w *Writer) Match(s string, re *regexp2.Regexp) {
 	if re != nil {
-		if ok, _ := re.MatchString(s); ok {
-			Write(MarkMatch(s, re))
+		if ok, _ := re.MatchString(s); !ok {
+			return
 		}
-	} else {
-		Write(s)
+		s = MarkMatch(s, re)
 	}
+
+	w.Lock()
+	_, _ = fmt.Fprintln(w.wc, s)
+	w.Unlock()
 }
 
-func Write(f string, a ...any) {
-	_, _ = fmt.Fprintf(stdout, fmt.Sprintf("%s\n", f), a...)
+func (w *Writer) Write(f string, a ...any) {
+	w.Lock()
+	_, _ = fmt.Fprintf(w.wc, fmt.Sprintf("%s\n", f), a...)
+	w.Unlock()
 }
 
-func Close(p string, r bool) {
-	if v, is := stdout.(io.Closer); is {
+func (w *Writer) Close(p string, r bool) {
+	if v, is := w.wc.(io.Closer); is {
 		_ = v.Close()
 	}
 
 	if r && len(p) > 0 {
-		err := receipt.Generate(p)
-
-		if err != nil {
+		if err := receipt.Generate(p); err != nil {
 			log.Println(err)
 		}
 	}

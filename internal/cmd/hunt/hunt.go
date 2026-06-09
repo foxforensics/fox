@@ -219,7 +219,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if !cli.NoPretty {
-		text.Title(cmd.Paths...)
+		text.Stdout.Title(cmd.Paths...)
 	}
 
 	ch := cli.Load(cmd.Paths, true)
@@ -277,7 +277,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.storage == nil {
-			text.Match(cmd.format(e), cli.Regexp)
+			text.Stdout.Match(cmd.format(e), cli.Regexp)
 		} else {
 			err = cmd.storage.Store(e)
 
