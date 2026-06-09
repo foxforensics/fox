@@ -54,7 +54,7 @@ require (
 	go.foxforensics.dev/go-msi v0.3.1
 	go.foxforensics.dev/go-pst/v6 v6.0.0-20260602215120-7ab8345f0376
 	go.foxforensics.dev/go-zip v0.6.2
-	go.foxforensics.dev/hashdump v0.9.4
+	go.foxforensics.dev/hashdump v1.0.0
 	go.foxforensics.dev/hasher v0.2.8
 	go.foxforensics.dev/rhash v1.7.2
 	go.foxforensics.dev/strings v0.5.3
@@ -72,7 +72,7 @@ require (
 	github.com/Velocidex/json v0.0.0-20220224052537-92f3c0326e5a // indirect
 	github.com/Velocidex/yaml/v2 v2.2.8 // indirect
 	github.com/VirusTotal/vt-go v1.1.0 // indirect
-	github.com/ajdnik/imghash/v2 v2.4.0 // indirect
+	github.com/ajdnik/imghash/v2 v2.5.2 // indirect
 	github.com/akavel/rsrc v0.10.2 // indirect
 	github.com/alecthomas/participle v0.7.1 // indirect
 	github.com/ayoubfaouzi/pkcs7 v0.2.3 // indirect
@@ -126,6 +126,7 @@ require (
 	golang.org/x/image v0.42.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
+	gonum.org/v1/gonum v0.17.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	www.velocidex.com/golang/regparser v0.0.0-20250203141505-31e704a67ef7 // indirect
