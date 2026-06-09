@@ -92,7 +92,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			text.Title(h.String())
+			text.Stdout.Title(h.String())
 		}
 
 		if (h.IsText() && !cmd.Hex) || cmd.Text {
@@ -123,11 +123,11 @@ func (cmd *Cat) renderText(cli *cli.Globals, b []byte, hint string) {
 		}
 
 		if !cli.NoPretty {
-			text.Write("%s %s", text.AsGray(l.Line), s)
+			text.Stdout.Write("%s %s", text.AsGray(l.Line), s)
 		} else if l.Line == buffer.Sep {
-			text.Write(text.AsGray(buffer.Sep))
+			text.Stdout.Write(text.AsGray(buffer.Sep))
 		} else {
-			text.Write(s)
+			text.Stdout.Write(s)
 		}
 	}
 }
@@ -151,15 +151,15 @@ func (cmd *Cat) renderHex(cli *cli.Globals, b []byte) {
 		if !cli.NoPretty && l.Values == lastHex {
 			if !wasCut {
 				wasCut = true
-				text.Write(text.AsGray("*"))
+				text.Stdout.Write(text.AsGray("*"))
 			}
 			continue
 		}
 
 		if !cli.NoPretty {
-			text.Write("%s  %s%s", text.AsGray(l.Address), l.Values, l.String)
+			text.Stdout.Write("%s  %s%s", text.AsGray(l.Address), l.Values, l.String)
 		} else {
-			text.Write(l.Values)
+			text.Stdout.Write(l.Values)
 		}
 
 		lastHex, wasCut = l.Values, false

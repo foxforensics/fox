@@ -136,13 +136,13 @@ func main() {
 
 		// redirect output
 		if len(cli.Out) > 0 {
-			text.Setup(os.OpenFile(cli.Out, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
+			text.SetOutput(os.OpenFile(cli.Out, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
 		} else if cli.Quiet {
-			text.Setup(os.Open(os.DevNull))
+			text.SetOutput(os.Open(os.DevNull))
 			log.SetOutput(io.Discard)
 		}
 
-		defer text.Close(cli.Out, !cli.NoReceipt)
+		defer text.Stdout.Close(cli.Out, !cli.NoReceipt)
 
 		ctx.FatalIfErrorf(ctx.Run(&cli.Globals))
 	}

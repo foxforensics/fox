@@ -88,7 +88,7 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 		db := text.BuildDB(3)
 
 		for _, s := range db.List() {
-			text.Write(s)
+			text.Stdout.Write(s)
 		}
 
 		// exit early
@@ -100,7 +100,7 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			text.Title(h.String())
+			text.Stdout.Title(h.String())
 		}
 
 		for str := range carver.New(&carver.Options{
@@ -122,15 +122,15 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			str.Value = text.MarkMatch(str.Value, cli.Regexp)
 
 			if !cli.NoPretty && cmd.Lookup && lookup.Lookup(str, cli.Verbose) {
-				text.Write("%s  %s [%s]", text.AsGray(str.Address), text.AsWarn(str.Value), text.AsBold(str.Classes))
+				text.Stdout.Write("%s  %s [%s]", text.AsGray(str.Address), text.AsWarn(str.Value), text.AsBold(str.Classes))
 			} else if !cli.NoPretty && len(str.Classes) > 0 {
-				text.Write("%s  %s [%s]", text.AsGray(str.Address), str.Value, text.AsBold(str.Classes))
+				text.Stdout.Write("%s  %s [%s]", text.AsGray(str.Address), str.Value, text.AsBold(str.Classes))
 			} else if !cli.NoPretty {
-				text.Write("%s  %s", text.AsGray(str.Address), str.Value)
+				text.Stdout.Write("%s  %s", text.AsGray(str.Address), str.Value)
 			} else if len(str.Classes) > 0 {
-				text.Write("%s [%s]", str.Value, str.Classes)
+				text.Stdout.Write("%s [%s]", str.Value, str.Classes)
 			} else {
-				text.Write(str.Value)
+				text.Stdout.Write(str.Value)
 			}
 		}
 

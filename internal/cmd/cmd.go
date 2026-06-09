@@ -218,7 +218,7 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 
 	if cli.DryRun {
 		for h := range cli.Loader.Load(args) {
-			text.Write(h.Name)
+			text.Stdout.Write(h.Name)
 		}
 
 		// exit early
