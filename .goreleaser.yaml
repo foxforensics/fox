@@ -82,7 +82,7 @@ signs:
 nfpms:
   - vendor: Fox Forensics
     homepage: https://foxforensics.eu
-    maintainer: Christian Uhsat <christian@uhsat.de>
+    maintainer: Fox Forensics <noreply@foxforensics.eu>
     description: The Forensic Examiners Swiss Army Knife.
     license: GPL-3.0
     file_name_template: "{{ .Binary }}_{{ .Os }}_{{ .Arch }}"
