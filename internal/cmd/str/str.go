@@ -62,6 +62,10 @@ func (cmd *Str) Validate() error {
 		log.Fatalln("invalid range")
 	}
 
+	if cmd.Lookup {
+		log.Println("warning: data will be transmitted to a third-party service!")
+	}
+
 	return nil
 }
 
