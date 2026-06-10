@@ -2,9 +2,11 @@ package hunt
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
@@ -139,7 +141,9 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	}
 
 	if cmd.Parquet {
-		cmd.storage = parquet.New(hunter.Storage)
+		cmd.storage = parquet.New(fmt.Sprintf("fox_hunt_%s",
+			time.Now().UTC().Format("20060102150405"),
+		))
 	}
 
 	if cmd.Elastic {
@@ -218,7 +222,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		cmd.Paths = append(hunter.Local, cmd.Paths[1:]...)
 	}
 
-	if !cli.NoPretty {
+	if !cli.NoPretty && !cmd.Parquet {
 		text.Stdout.Title(cmd.Paths...)
 	}
 
