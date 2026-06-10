@@ -19,10 +19,6 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Install UPX
-        uses: crazy-max/ghaction-upx@v4
-        with:
-          install-only: true
       - name: Setup Syft
         uses: anchore/sbom-action/download-syft@v0
       - name: Setup Cosign
