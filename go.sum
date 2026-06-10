@@ -283,8 +283,12 @@ go.foxforensics.dev/go-bgzf v0.3.1 h1:Q84Ldwukf99K+ZrIFwbjssPCCm6CynxA338LXKvGTA
 go.foxforensics.dev/go-bgzf v0.3.1/go.mod h1:+rJuP6A/qmFa1etuG2Bf3A0uYLWti4pfypKIcrbnhg0=
 go.foxforensics.dev/go-ese v0.4.1 h1:FGY9yhoi9InaS/BWYUzaCMCB5xBZmGXFmyF63W+imbU=
 go.foxforensics.dev/go-ese v0.4.1/go.mod h1:ZEHuXxpG2NGrWgZ8JdNccLWLvxgtTtAse64e3ZQs6y0=
+go.foxforensics.dev/go-ese v0.4.2 h1:bpg8agE/op/GsMeuzlN6chL+2Fs/ZqQgGsN0do7PDHk=
+go.foxforensics.dev/go-ese v0.4.2/go.mod h1:ZEHuXxpG2NGrWgZ8JdNccLWLvxgtTtAse64e3ZQs6y0=
 go.foxforensics.dev/go-fortilog v0.2.1 h1:+8Qb+jl+3cY8vccFTkeqD/NjHtyRzMVaHzJASDeU/nM=
 go.foxforensics.dev/go-fortilog v0.2.1/go.mod h1:kyc/8F3VZ5Ao7119c/UFzdFB77wwKNnA0u5D9LgoGjY=
+go.foxforensics.dev/go-fortilog v1.0.1 h1:cYl4nrdH6AIY5XgEDRI829LtAZai1u3ykFo6eUrmGbY=
+go.foxforensics.dev/go-fortilog v1.0.1/go.mod h1:KFm0u+KfUhpvwyUCcdWZzlog5sGyRlBQgah6SqxIkZ4=
 go.foxforensics.dev/go-hash v0.3.1 h1:XCE0VJFOCACWXidXpz6DugFQ5WrzwqxoJOZhl62Jfno=
 go.foxforensics.dev/go-hash v0.3.1/go.mod h1:KWpgAg0d8zNQeRHzV4Ko9uqKclgqSckLcSsQoa2327U=
 go.foxforensics.dev/go-krypto v0.3.1 h1:2nPhYZP0LqhWVr3f9bjJRRxIbSlzB+skJSkLEqNX85A=
@@ -315,6 +319,8 @@ go.foxforensics.dev/strings v0.5.3 h1:PNaVw23p+hpq8JEOFNakx/h8KO94FJ1DCKYQOUZDAJ
 go.foxforensics.dev/strings v0.5.3/go.mod h1:TY6G3qfo0ffdjI2rQyGJLEZhAyUMsVHRybHdKnbx1h0=
 go.foxforensics.dev/wordlist v0.1.2 h1:75dVFYr7vVftOGdaijYYvZgh2Q/gRscAKGVUzG2ZeQg=
 go.foxforensics.dev/wordlist v0.1.2/go.mod h1:7EUElhiILSKQwJ/fNwAs9UWFcoHChAE7mYs42cg6skQ=
+go.foxforensics.dev/wordlist v1.0.0 h1:lzLNZcJIlGeq7pzwbH+XyFJhpeQnAqO4gXERNruTvvA=
+go.foxforensics.dev/wordlist v1.0.0/go.mod h1:GaKBlA0hr0R2dAEQWI2pzzFkWDFYPKjjHsjuW4aDGbE=
 go.solidsystem.no/fletcher4 v0.2.0 h1:fHXw/8DSN0I41shMiRnP2zb8tCfts75Bh0S2YGueWBk=
 go.solidsystem.no/fletcher4 v0.2.0/go.mod h1:O3AlHhoAY2aHvZ/yjwzufMXWJ7+a6vYds5LDm1Er+2k=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
