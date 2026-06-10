@@ -136,5 +136,11 @@ Checksums
 Wordlists
 > English / German / French / Spanish Common Passwords, Most Common Passwords, Most Used Passwords, Default Passwords, Corporate Passwords, Production Passwords, Milw0rm Dictionary, Conficker Dictionary, Medical Devices, Seasons 
 
+## Building
+To build the lastest development version execute:
+```console
+go build && fox --version
+```
+
 ---
 🦊 is released under the [GPL-3.0](LICENSE.md). All code is entirely written by human authors.
