@@ -33,11 +33,6 @@ builds:
         goarch: arm
         goarm: 7
 
-upx:
-  - enabled: true
-    compress: best
-    lzma: true
-
 archives:
   - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
     formats: [tar.gz]
