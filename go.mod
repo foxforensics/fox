@@ -46,8 +46,8 @@ require (
 	go.foxforensics.dev/entropy v0.3.2
 	go.foxforensics.dev/eventid v0.4.3
 	go.foxforensics.dev/go-bgzf v0.3.1
-	go.foxforensics.dev/go-ese v0.4.1
-	go.foxforensics.dev/go-fortilog v0.2.1
+	go.foxforensics.dev/go-ese v0.4.2
+	go.foxforensics.dev/go-fortilog v1.0.1
 	go.foxforensics.dev/go-lnk v0.2.2
 	go.foxforensics.dev/go-mft v0.1.0
 	go.foxforensics.dev/go-mmap v0.2.1
@@ -58,7 +58,7 @@ require (
 	go.foxforensics.dev/hasher v0.2.8
 	go.foxforensics.dev/rhash v1.7.2
 	go.foxforensics.dev/strings v0.5.3
-	go.foxforensics.dev/wordlist v0.1.2
+	go.foxforensics.dev/wordlist v1.0.0
 	golang.org/x/term v0.44.0
 	golang.org/x/text v0.38.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
