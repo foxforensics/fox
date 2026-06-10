@@ -16,8 +16,6 @@ import (
 	"go.foxforensics.dev/fox/v4/internal/pkg/types/heap"
 )
 
-const Storage = "hunt"
-
 var Block = 4096 * 16 // NTFS block size multiple
 var Local = []string{
 	"/Windows/System32/winevt/Logs",
