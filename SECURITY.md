@@ -1,13 +1,9 @@
 # Security Policy
-If you believe you have found a security vulnerability in this repository, please report it to through coordinated disclosure.
-
-**Please do not report security vulnerabilities through public GitHub issues, discussions, or pull requests.**
-
-Instead, please email security[@]uhsat.de.
+**If you believe you have found a security vulnerability in this repository, please report it to through our dedicated [issues](https://github.com/foxforensics/issues) repository.**
 
 Please include as much of the information listed below as you can to help to resolve the issue:
 
-* The type of issue (e.g., buffer overflow, SQL injection, or cross-site scripting)
+* The type of issue (e.g., buffer overflow, parser corruption, etc.)
 * Full paths of source file(s) related to the manifestation of the issue
 * The location of the affected source code (tag/branch/commit or direct URL)
 * Any special configuration required to reproduce the issue

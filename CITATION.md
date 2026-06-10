@@ -3,8 +3,7 @@ title: "fox: The Forensic Examiners Swiss Army Knife"
 message: "If you use this software, please cite it as below."
 type: software
 authors:
-  - given-names: Christian
-    family-names: Uhsat
+  - name: "Fox Forensics"
 url: "https://foxforensics.eu"
 version: 4
 abstract: "fox: The Forensic Examiners Swiss Army Knife."
