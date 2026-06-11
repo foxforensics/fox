@@ -38,18 +38,7 @@ var children = []string{
 	"DwordVal",
 }
 
-var db events.Providers
-
-func Preload() error {
-	var err error
-
-	// only load once
-	if len(db) == 0 {
-		db, err = events.Load()
-	}
-
-	return err
-}
+var providers events.Providers
 
 func Detect(b []byte) bool {
 	return file.HasMagic(b, 0, Magic)
@@ -76,6 +65,19 @@ func Convert(b []byte) ([]byte, error) {
 
 func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 	ch := make(chan *event.Event, cap)
+
+	var err error
+
+	// init once
+	if len(providers) == 0 {
+		providers, err = events.Load()
+
+		if err != nil {
+			defer close(ch)
+			log.Println(err)
+			return ch
+		}
+	}
 
 	chk, err := newChunk(sr, off)
 
@@ -180,7 +182,7 @@ func newEvent(evt *evtx.GoEvtxMap) *event.Event {
 		addMapDeep(&e, v, "")
 	}
 
-	if provider, ok := db[e.Service]; ok {
+	if provider, ok := providers[e.Service]; ok {
 		if message, ok := provider[evt.EventID()]; ok {
 			e.Message = tryReplace(&e, message)
 		}

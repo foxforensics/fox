@@ -15,7 +15,6 @@ import (
 
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/evtx"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage/parquet"
@@ -201,17 +200,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 	cmd.rule, err = sigma.ParseRule(rule)
 
-	if err != nil {
-		return err
-	}
-
-	err = evtx.Preload()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 func (cmd *Hunt) Run(cli *cli.Globals) error {
