@@ -161,6 +161,10 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		text.Stdout.Title(cmd.Paths...)
 	}
 
+	// don't process files for counts
+	cli.NoConvert = true
+	cli.NoPretty = true
+
 	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
 
