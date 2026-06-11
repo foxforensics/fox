@@ -1,6 +1,7 @@
 package str
 
 import (
+	"errors"
 	"log"
 	"strings"
 
@@ -59,7 +60,7 @@ type Str struct {
 
 func (cmd *Str) Validate() error {
 	if cmd.Min > cmd.Max {
-		log.Fatalln("invalid range")
+		return errors.New("invalid range")
 	}
 
 	if cmd.Lookup {

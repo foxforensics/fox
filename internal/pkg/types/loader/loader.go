@@ -348,7 +348,8 @@ func isPiped(f *os.File) bool {
 	fi, err := f.Stat()
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return false
 	}
 
 	return (fi.Mode() & os.ModeCharDevice) != os.ModeCharDevice

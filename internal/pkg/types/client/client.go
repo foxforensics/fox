@@ -34,13 +34,15 @@ func ID() string {
 	id, err := os.Hostname()
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return "unknown"
 	}
 
 	in, err := net.Interfaces()
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return "unknown"
 	}
 
 	for _, i := range in {

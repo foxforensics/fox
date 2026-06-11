@@ -3,6 +3,7 @@ package info
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"math"
@@ -127,7 +128,7 @@ type Info struct {
 
 func (cmd *Info) Validate() error {
 	if cmd.Min > cmd.Max {
-		log.Fatalln("invalid range")
+		return errors.New("invalid range")
 	}
 
 	if cmd.Lookup {

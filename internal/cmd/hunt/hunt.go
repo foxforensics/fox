@@ -2,6 +2,7 @@ package hunt
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -11,7 +12,9 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
+
 	cli "go.foxforensics.dev/fox/v4/internal/cmd"
+
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/evtx"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema"
 	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage"
@@ -120,7 +123,7 @@ type Hunt struct {
 
 func (cmd *Hunt) Validate() error {
 	if cmd.Hec && (len(cmd.Auth)+len(cmd.Mqtt) == 0) {
-		log.Fatalln("auth required")
+		return errors.New("auth required")
 	}
 
 	return nil
@@ -192,20 +195,20 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		rule, err = os.ReadFile(cmd.Rule)
 
 		if err != nil {
-			log.Fatalln(err)
+			return err
 		}
 	}
 
 	cmd.rule, err = sigma.ParseRule(rule)
 
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
 	err = evtx.Preload()
 
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
 	return nil
