@@ -102,11 +102,11 @@ func (s *Secret) ToNTLM(history bool) string {
 	return sb.String()
 }
 
-func (s *Secret) OnlyLM() string {
+func (s *Secret) LmOnly() string {
 	return s.format(s.LMHash, extract.DefaultLM)
 }
 
-func (s *Secret) OnlyNT() string {
+func (s *Secret) NtOnly() string {
 	return s.format(s.NTHash, extract.DefaultNT)
 }
 

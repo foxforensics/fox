@@ -52,13 +52,13 @@ Secret Flags
 
 :   Extract also the users hash history.
 
-**--only-lm**
+**--lm-only**
 
-:   Extract only the **LM** hashes (Hashcat mode _3000_). Excludes **--only-nt** flag.
+:   Extract only the **LM** hashes (Hashcat mode _3000_). Excludes **--nt-only** flag.
 
-**--only-nt**
+**--nt-only**
 
-:   Extract only the **NT** hashes (Hashcat mode _1000_). Excludes **--only-lm** flag.
+:   Extract only the **NT** hashes (Hashcat mode _1000_). Excludes **--lm-only** flag.
 
 POSITIONAL ARGUMENTS
 ====================

@@ -29,8 +29,8 @@ Record flags:
 Secret flags:
   -l, --lookup             Lookup hashes using wordlist
   -h, --history            Extract also the users hash history
-      --only-lm            Extract only the LM hashes (Hashcat mode 3000)
-      --only-nt            Extract only the NT hashes (Hashcat mode 1000)
+      --lm-only            Extract only the LM hashes (Hashcat mode 3000)
+      --nt-only            Extract only the NT hashes (Hashcat mode 1000)
 
 Remarks:
   If no records are specified, hashes will be shown in secretsdump manner.
@@ -55,8 +55,8 @@ type Ad struct {
 	// secret flags
 	Lookup  bool `short:"l"`
 	History bool `short:"h"`
-	OnlyLm  bool `long:"only-lm" xor:"only-lm,only-nt"`
-	OnlyNt  bool `long:"only-nt" xor:"only-lm,only-nt"`
+	LmOnly  bool `long:"lm-only" xor:"lm-only,nt-only"`
+	NtOnly  bool `long:"nt-only" xor:"lm-only,nt-only"`
 
 	// hidden
 	Wordlist []byte `hidden:"" type:"filecontent"`
@@ -125,10 +125,6 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		for i, k := range pek {
 			log.Printf("PEK #%d %x\n", i, k)
 		}
-	}
-
-	if !cli.NoPretty {
-		text.Stdout.Title(ntds.String())
 	}
 
 	n, err := cmd.extract(cli, key, ntds.Bytes())
@@ -206,10 +202,10 @@ func (cmd *Ad) format(a any) string {
 
 	case *record.Secret:
 		switch {
-		case cmd.OnlyLm:
-			return v.OnlyLM()
-		case cmd.OnlyNt:
-			return v.OnlyNT()
+		case cmd.LmOnly:
+			return v.LmOnly()
+		case cmd.NtOnly:
+			return v.NtOnly()
 		default:
 			return v.ToNTLM(cmd.History)
 		}
