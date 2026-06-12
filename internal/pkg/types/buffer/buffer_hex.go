@@ -55,6 +55,8 @@ func formatStd(ctx *HexContext) HexLine {
 	var val strings.Builder
 	var str strings.Builder
 
+	j := 0
+
 	for i := range 16 {
 		if ctx.Index+i >= len(ctx.Data) {
 			break
@@ -71,12 +73,15 @@ func formatStd(ctx *HexContext) HexLine {
 
 		if (i+1)%8 == 0 {
 			val.WriteString(" ") // middle separator
+			j += 4
+		} else {
+			j += 3
 		}
 
 		str.WriteString(fmt.Sprintf("%c", ctx.Data[ctx.Index+i]))
 	}
 
-	val.WriteString(strings.Repeat(" ", max(0, 50-val.Len())))
+	val.WriteString(strings.Repeat(" ", max(0, 50-j)))
 
 	return HexLine{adr, val.String(), text.ToAscii(str.String(), "·")}
 }
