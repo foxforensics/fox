@@ -130,7 +130,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		}
 
 		if !cli.NoPretty && len(cmd.Hash) > 1 {
-			text.Stdout.Title(h.String())
+			text.Stdout.Header(h.String())
 		}
 
 		for _, k := range cmd.Hash {
@@ -167,12 +167,15 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				continue // will be formated
 			}
 
+			pad := strings.Repeat(" ", n-len(k))
+			typ := text.AsGray(strings.ToUpper(k))
+
 			if err != nil {
 				sum = text.AsGray(err.Error())
 			}
 
 			if len(cmd.Hash) > 1 {
-				sum = fmt.Sprintf("%-*s  %s", n, strings.ToUpper(k), sum)
+				sum = fmt.Sprintf("%s%s  %s", typ, pad, sum)
 			} else {
 				sum = fmt.Sprintf("%s  %s", sum, fh.File)
 			}

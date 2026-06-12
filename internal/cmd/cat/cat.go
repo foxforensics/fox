@@ -92,7 +92,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			text.Stdout.Title(h.String())
+			text.Stdout.Header(h.String())
 		}
 
 		if (h.IsText() && !cmd.Hex) || cmd.Text {

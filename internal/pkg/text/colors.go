@@ -16,13 +16,19 @@ var Lexer = ""
 // Style global setting (default)
 var Style = "monokai"
 
+// Fox terminal logo
+var Fox = color.New(color.Bold).AddRGB(
+	0xff, 0xff, 0xff,
+).AddBgRGB(
+	0x0f, 0x88, 0xcd,
+).Sprint(" FOX ")
+
 var (
 	AsGray = color.New(color.FgHiBlack).SprintfFunc()
 	AsWarn = color.New(color.FgHiRed).SprintfFunc()
 	AsBold = color.New(color.Bold).SprintfFunc()
 )
 
-var fox = color.New(color.Bold).AddRGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd).Sprint(" FOX ")
 var cef = regexp2.MustCompile(`[^|]+$`)
 
 func ColorizeAs(s, hint string) string {

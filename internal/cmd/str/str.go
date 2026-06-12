@@ -105,7 +105,7 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			text.Stdout.Title(h.String())
+			text.Stdout.Header(h.String())
 		}
 
 		for str := range carver.New(&carver.Options{

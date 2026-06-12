@@ -47,14 +47,14 @@ func SetOutput(wc io.WriteCloser, err error) {
 	}
 }
 
-func (w *Writer) Title(s string) {
+func (w *Writer) Header(s string) {
 	s = strings.TrimPrefix(s, "/")
 	s = strings.TrimSuffix(s, "/")
 	s = strings.ReplaceAll(s, file.Separator, " > ")
 	s = strings.ReplaceAll(s, string(filepath.Separator), " > ")
 
 	w.Lock()
-	_, _ = fmt.Fprintf(w.wc, "%s %s\n", fox, AsBold(s))
+	_, _ = fmt.Fprintf(w.wc, "%s %s\n", Fox, AsBold(s))
 	w.Unlock()
 }
 
