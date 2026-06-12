@@ -214,10 +214,6 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		cmd.Paths = append(hunter.Local, cmd.Paths[1:]...)
 	}
 
-	if !cli.NoPretty && !cmd.Parquet {
-		text.Stdout.Title(cmd.Paths...)
-	}
-
 	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
 
