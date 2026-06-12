@@ -6,7 +6,7 @@ import (
 
 	"github.com/pierrec/lz4/v4"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
 )
 
 func Detect(b []byte) bool {

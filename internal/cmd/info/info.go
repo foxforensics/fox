@@ -11,12 +11,12 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"go.foxforensics.dev/entropy/entropy"
+	"go.foxforensics.eu/entropy/entropy"
 
-	cli "go.foxforensics.dev/fox/v4/internal/cmd"
+	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/lookup"
+	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/lookup"
 )
 
 // Threshold for high entropy files
@@ -50,7 +50,7 @@ Example: List only high entropy files
 Example: List blocks by one megabyte
   $ fox info -B1m backup.mdf
 
-Report bugs at: foxforensics.dev/issues
+Report bugs at: foxforensics.eu/issues
 `)
 
 type FileInfo struct {

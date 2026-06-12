@@ -7,12 +7,12 @@ import (
 	"log"
 
 	set "github.com/emersion/go-message/charset"
-	pst "go.foxforensics.dev/go-pst/v6/pkg"
 
 	"github.com/rotisserie/eris"
+	"go.foxforensics.eu/go-pst/v6/pst"
 	"golang.org/x/text/encoding"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
 )
 
 type Folder struct {

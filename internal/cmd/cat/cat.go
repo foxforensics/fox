@@ -5,10 +5,10 @@ import (
 
 	"github.com/alecthomas/kong"
 
-	cli "go.foxforensics.dev/fox/v4/internal/cmd"
+	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/buffer"
+	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/buffer"
 )
 
 var Usage = strings.TrimSpace(`
@@ -34,7 +34,7 @@ Example: Show occurrences in event logs
 Example: Show MBR in canonical hex
   $ fox cat -L512b image.dd
 
-Report bugs at: foxforensics.dev/issues
+Report bugs at: foxforensics.eu/issues
 `)
 
 type Cat struct {

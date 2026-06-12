@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"time"
 
-	"go.foxforensics.dev/hasher/hash"
+	"go.foxforensics.eu/hasher/hash"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
-	"go.foxforensics.dev/fox/v4/internal/pkg/version"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.eu/fox/v4/internal/pkg/version"
 )
 
 type Ecs struct {

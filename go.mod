@@ -1,4 +1,4 @@
-module go.foxforensics.dev/fox/v4
+module go.foxforensics.eu/fox/v4
 
 go 1.26.0
 
@@ -41,24 +41,24 @@ require (
 	github.com/ulikunitz/xz v0.5.15
 	github.com/xxtea/xxtea-go v1.0.0
 	github.com/zeebo/xxh3 v1.1.0
-	go.foxforensics.dev/bootkey v0.3.4
-	go.foxforensics.dev/checker v0.3.2
-	go.foxforensics.dev/entropy v0.3.2
-	go.foxforensics.dev/eventid v0.4.3
-	go.foxforensics.dev/go-bgzf v0.3.1
-	go.foxforensics.dev/go-ese v0.4.2
-	go.foxforensics.dev/go-fortilog v1.0.1
-	go.foxforensics.dev/go-lnk v0.2.2
-	go.foxforensics.dev/go-mft v0.1.0
-	go.foxforensics.dev/go-mmap v0.2.1
-	go.foxforensics.dev/go-msi v0.3.1
-	go.foxforensics.dev/go-pst/v6 v6.0.0-20260602215120-7ab8345f0376
-	go.foxforensics.dev/go-zip v0.6.2
-	go.foxforensics.dev/hashdump v1.0.0
-	go.foxforensics.dev/hasher v0.2.8
-	go.foxforensics.dev/rhash v1.7.2
-	go.foxforensics.dev/strings v0.5.3
-	go.foxforensics.dev/wordlist v1.0.0
+	go.foxforensics.eu/bootkey v1.0.0
+	go.foxforensics.eu/checker v1.0.0
+	go.foxforensics.eu/entropy v1.0.0
+	go.foxforensics.eu/eventid v1.0.0
+	go.foxforensics.eu/go-bgzf v1.0.0
+	go.foxforensics.eu/go-ese v1.0.0
+	go.foxforensics.eu/go-fortilog v1.0.2
+	go.foxforensics.eu/go-lnk v1.0.0
+	go.foxforensics.eu/go-mft v1.0.0
+	go.foxforensics.eu/go-mmap v1.0.0
+	go.foxforensics.eu/go-msi v1.0.0
+	go.foxforensics.eu/go-pst/v6 v6.0.1
+	go.foxforensics.eu/go-zip v1.0.0
+	go.foxforensics.eu/hashdump v1.0.1
+	go.foxforensics.eu/hasher v1.0.0
+	go.foxforensics.eu/rhash v1.7.3
+	go.foxforensics.eu/strings v1.0.0
+	go.foxforensics.eu/wordlist v1.0.1
 	golang.org/x/term v0.44.0
 	golang.org/x/text v0.38.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
@@ -115,14 +115,14 @@ require (
 	github.com/twpayne/go-geom v1.6.1 // indirect
 	github.com/zeebo/blake3 v0.2.4 // indirect
 	go.dw1.io/rapidhash v0.3.0 // indirect
-	go.foxforensics.dev/go-hash v0.3.1 // indirect
-	go.foxforensics.dev/go-krypto v0.3.1 // indirect
-	go.foxforensics.dev/go-mscfb v0.3.1 // indirect
+	go.foxforensics.eu/go-hash v1.0.0 // indirect
+	go.foxforensics.eu/go-krypto v1.0.1 // indirect
+	go.foxforensics.eu/go-mscfb v1.0.0 // indirect
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/crypto v0.53.0 // indirect
-	golang.org/x/exp v0.0.0-20260603202125-055de637280b // indirect
+	golang.org/x/exp v0.0.0-20260611194520-c48552f49976 // indirect
 	golang.org/x/image v0.42.0 // indirect
 	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect

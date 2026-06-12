@@ -6,7 +6,7 @@ import (
 	"os"
 	"syscall"
 
-	"go.foxforensics.dev/go-mmap"
+	"go.foxforensics.eu/go-mmap"
 )
 
 type MMap mmap.MMap

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	"go.foxforensics.dev/hashdump/extract"
+	"go.foxforensics.eu/hashdump/extract"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/tables"
-	"go.foxforensics.dev/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/pkg/tables"
+	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 )
 
 type Record interface {

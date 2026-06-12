@@ -8,7 +8,7 @@ import (
 
 	"github.com/hooklift/iso9660"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
 )
 
 func Detect(b []byte) bool {

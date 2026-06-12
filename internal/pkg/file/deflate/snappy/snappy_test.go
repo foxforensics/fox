@@ -3,7 +3,7 @@ package snappy
 import (
 	"testing"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/test"
+	"go.foxforensics.eu/fox/v4/internal/pkg/test"
 )
 
 const src = "deflate/fox.sz"

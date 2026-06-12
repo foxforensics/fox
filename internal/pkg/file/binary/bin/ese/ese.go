@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	"github.com/Velocidex/ordereddict"
-	"go.foxforensics.dev/go-ese/parser"
+	"go.foxforensics.eu/go-ese/parser"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
 )
 
 // row attributes

@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/dlclark/regexp2/v2"
-	"go.foxforensics.dev/rhash/database"
+	"go.foxforensics.eu/rhash/database"
 )
 
 type Database []database.Entry

@@ -140,13 +140,13 @@ BUGS
 ====
 
 Please submit any issues with fox to the project's bug tracker:
-<_https://foxforensics.dev/issues_>
+<_https://foxforensics.eu/issues_>
 
 WWW
 ===
 
 Please visit the project's homepage at:
-<_https://foxforensics.dev/fox_>
+<_https://foxforensics.eu_>
 
 SEE ALSO
 ========

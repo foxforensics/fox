@@ -6,7 +6,7 @@ import (
 
 	"github.com/saferwall/elf"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
 )
 
 const Magic = "\x7FELF"

@@ -7,11 +7,11 @@ import (
 
 	"github.com/alecthomas/kong"
 
-	cli "go.foxforensics.dev/fox/v4/internal/cmd"
+	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/carver"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/lookup"
+	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/carver"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/lookup"
 )
 
 var Usage = strings.TrimSpace(`
@@ -39,7 +39,7 @@ Example: Show only long ASCII strings
 Example: Show all URLs in a binary
   $ fox str -wCurl sample.exe
 
-Report bugs at: foxforensics.dev/issues
+Report bugs at: foxforensics.eu/issues
 `)
 
 type Str struct {

@@ -7,12 +7,12 @@ import (
 
 	mqtt "github.com/eclipse/paho.golang/paho"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema/ecs"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema/hec"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema/raw"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/client"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/schema"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/schema/ecs"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/schema/hec"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/schema/raw"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/client"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 )
 
 type Options struct {

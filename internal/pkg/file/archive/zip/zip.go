@@ -6,9 +6,9 @@ import (
 	"log"
 	"strings"
 
-	"go.foxforensics.dev/go-zip/pkg/zip"
+	"go.foxforensics.eu/go-zip/zip"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
 )
 
 func Detect(b []byte) bool {

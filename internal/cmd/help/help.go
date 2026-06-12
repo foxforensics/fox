@@ -3,15 +3,15 @@ package help
 import (
 	"strings"
 
-	cli "go.foxforensics.dev/fox/v4/internal/cmd"
+	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/cmd/ad"
-	"go.foxforensics.dev/fox/v4/internal/cmd/cat"
-	"go.foxforensics.dev/fox/v4/internal/cmd/hash"
-	"go.foxforensics.dev/fox/v4/internal/cmd/hunt"
-	"go.foxforensics.dev/fox/v4/internal/cmd/info"
-	"go.foxforensics.dev/fox/v4/internal/cmd/str"
-	"go.foxforensics.dev/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/cmd/ad"
+	"go.foxforensics.eu/fox/v4/internal/cmd/cat"
+	"go.foxforensics.eu/fox/v4/internal/cmd/hash"
+	"go.foxforensics.eu/fox/v4/internal/cmd/hunt"
+	"go.foxforensics.eu/fox/v4/internal/cmd/info"
+	"go.foxforensics.eu/fox/v4/internal/cmd/str"
+	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 )
 
 var usage = map[string]string{

@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/version"
+	"go.foxforensics.eu/fox/v4/internal/pkg/version"
 )
 
 var header = strings.TrimSpace(`

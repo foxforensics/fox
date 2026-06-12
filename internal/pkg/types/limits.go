@@ -8,7 +8,7 @@ import (
 
 	"github.com/dlclark/regexp2/v2"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/mmap"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/mmap"
 )
 
 const CR = '\n'

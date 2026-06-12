@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"io"
 
-	"go.foxforensics.dev/go-bgzf/bgzf"
+	"go.foxforensics.eu/go-bgzf/bgzf"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
 )
 
 func Detect(b []byte) bool {

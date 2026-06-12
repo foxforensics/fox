@@ -7,8 +7,8 @@ import (
 
 	"github.com/parquet-go/parquet-go"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/storage"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 )
 
 type File struct {

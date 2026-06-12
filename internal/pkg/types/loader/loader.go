@@ -14,12 +14,12 @@ import (
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/sourcegraph/conc/pool"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
-	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/heap"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/mmap"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/register"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/heap"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/mmap"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/register"
 )
 
 const Stdin = "-"

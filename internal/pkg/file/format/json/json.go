@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/format"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/format"
 )
 
 func Detect(b []byte) bool {

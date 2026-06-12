@@ -3,9 +3,9 @@ package hunter
 import (
 	"testing"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/test"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/loader"
+	"go.foxforensics.eu/fox/v4/internal/pkg/test"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/loader"
 )
 
 func TestHunt(t *testing.T) {

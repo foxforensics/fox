@@ -5,9 +5,9 @@ import (
 	"slices"
 	"strings"
 
-	fstrings "go.foxforensics.dev/strings/strings"
+	fstrings "go.foxforensics.eu/strings/strings"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 )
 
 type Options struct {

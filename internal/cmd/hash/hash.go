@@ -8,13 +8,13 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"go.foxforensics.dev/hasher/hash"
-	"go.foxforensics.dev/rhash/database"
+	"go.foxforensics.eu/hasher/hash"
+	"go.foxforensics.eu/rhash/database"
 
-	cli "go.foxforensics.dev/fox/v4/internal/cmd"
+	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/tables"
-	"go.foxforensics.dev/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/pkg/tables"
+	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 )
 
 var Usage = strings.TrimSpace(`
@@ -46,7 +46,7 @@ Example: Hash binary inside an archive
 Example: Guess hash algorithm from sum
   $ fox hash -Hsha1 -g sum.txt
 
-Report bugs at: foxforensics.dev/issues
+Report bugs at: foxforensics.eu/issues
 `)
 
 type FileHash struct {

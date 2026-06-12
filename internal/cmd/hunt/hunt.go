@@ -13,19 +13,19 @@ import (
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
 
-	cli "go.foxforensics.dev/fox/v4/internal/cmd"
+	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/schema"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/storage/parquet"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/http"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/stream/mqtt"
-	"go.foxforensics.dev/fox/v4/internal/pkg/rules"
-	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/hunter"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/receipt"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/schema"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/storage"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/storage/parquet"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/stream"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/stream/http"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/stream/mqtt"
+	"go.foxforensics.eu/fox/v4/internal/pkg/rules"
+	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/receipt"
 )
 
 var Usage = strings.TrimSpace(`
@@ -74,7 +74,7 @@ Example: Send local events to a server
 Example: Send local events to a broker
   $ fox hunt -U tcp://127.0.0.1:1883 -M events local
 
-Report bugs at: foxforensics.dev/issues
+Report bugs at: foxforensics.eu/issues
 `)
 
 type Hunt struct {

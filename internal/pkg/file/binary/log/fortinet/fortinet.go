@@ -3,9 +3,9 @@ package fortinet
 import (
 	"bytes"
 
-	"go.foxforensics.dev/go-fortilog/fortilog"
+	"go.foxforensics.eu/go-fortilog/fortilog"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
 )
 
 func Detect(b []byte) bool {

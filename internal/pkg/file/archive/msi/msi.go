@@ -5,9 +5,9 @@ import (
 	"io"
 	"log"
 
-	"go.foxforensics.dev/go-msi/pkg/msi"
+	"go.foxforensics.eu/go-msi/msi"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
 )
 
 func Detect(b []byte) bool {

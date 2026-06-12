@@ -10,10 +10,10 @@ import (
 
 	"github.com/sourcegraph/conc/pool"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/evtx"
-	"go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log/journal"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/heap"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/evtx"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/journal"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/heap"
 )
 
 var Block = 4096 * 16 // NTFS block size multiple

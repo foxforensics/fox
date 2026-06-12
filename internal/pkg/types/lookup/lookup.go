@@ -5,11 +5,11 @@ import (
 	"log"
 	"strings"
 
-	"go.foxforensics.dev/checker/services"
-	"go.foxforensics.dev/checker/services/vt"
-	"go.foxforensics.dev/hasher/hash"
+	"go.foxforensics.eu/checker/services"
+	"go.foxforensics.eu/checker/services/vt"
+	"go.foxforensics.eu/hasher/hash"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/carver"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/carver"
 )
 
 func Lookup(a any, verbose int) bool {

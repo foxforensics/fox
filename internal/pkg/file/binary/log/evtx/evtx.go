@@ -13,12 +13,12 @@ import (
 	"time"
 
 	"github.com/0xrawsec/golang-evtx/evtx"
-	"go.foxforensics.dev/eventid/events"
+	"go.foxforensics.eu/eventid/events"
 
-	logs "go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log"
+	logs "go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 )
 
 var (

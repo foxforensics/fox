@@ -15,10 +15,10 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
-	logs "go.foxforensics.dev/fox/v4/internal/pkg/file/binary/log"
+	logs "go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 )
 
 var Magic = []byte("LPKSHHRH")

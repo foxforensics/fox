@@ -6,8 +6,8 @@ import (
 	"sync"
 
 	"github.com/sourcegraph/conc/iter"
-	"go.foxforensics.dev/hasher/hash"
-	"go.foxforensics.dev/wordlist"
+	"go.foxforensics.eu/hasher/hash"
+	"go.foxforensics.eu/wordlist"
 )
 
 var Threads = 2 // default

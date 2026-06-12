@@ -17,16 +17,16 @@ import (
 	"github.com/alecthomas/kong"
 	_ "github.com/josephspurrier/goversioninfo"
 
-	"go.foxforensics.dev/fox/v4/internal/cmd"
-	"go.foxforensics.dev/fox/v4/internal/cmd/ad"
-	"go.foxforensics.dev/fox/v4/internal/cmd/cat"
-	"go.foxforensics.dev/fox/v4/internal/cmd/hash"
-	"go.foxforensics.dev/fox/v4/internal/cmd/help"
-	"go.foxforensics.dev/fox/v4/internal/cmd/hunt"
-	"go.foxforensics.dev/fox/v4/internal/cmd/info"
-	"go.foxforensics.dev/fox/v4/internal/cmd/str"
-	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/version"
+	"go.foxforensics.eu/fox/v4/internal/cmd"
+	"go.foxforensics.eu/fox/v4/internal/cmd/ad"
+	"go.foxforensics.eu/fox/v4/internal/cmd/cat"
+	"go.foxforensics.eu/fox/v4/internal/cmd/hash"
+	"go.foxforensics.eu/fox/v4/internal/cmd/help"
+	"go.foxforensics.eu/fox/v4/internal/cmd/hunt"
+	"go.foxforensics.eu/fox/v4/internal/cmd/info"
+	"go.foxforensics.eu/fox/v4/internal/cmd/str"
+	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/pkg/version"
 )
 
 var Usage = strings.TrimSpace(`
@@ -80,7 +80,7 @@ Example: Hunt down critical events
 Example: Show help on sub commands
   $ fox help info
 
-Report bugs at: foxforensics.dev/issues
+Report bugs at: foxforensics.eu/issues
 `)
 
 type fox struct {

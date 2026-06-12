@@ -14,9 +14,9 @@ import (
 	"github.com/dlclark/regexp2/v2"
 	"golang.org/x/term"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/file"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/receipt"
-	"go.foxforensics.dev/fox/v4/internal/pkg/version"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/receipt"
+	"go.foxforensics.eu/fox/v4/internal/pkg/version"
 )
 
 var Banner = `

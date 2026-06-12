@@ -5,15 +5,15 @@ import (
 	"log"
 	"strings"
 
-	"go.foxforensics.dev/bootkey/bootkey"
-	"go.foxforensics.dev/hashdump/extract"
-	"go.foxforensics.dev/hasher/hash"
+	"go.foxforensics.eu/bootkey/bootkey"
+	"go.foxforensics.eu/hashdump/extract"
+	"go.foxforensics.eu/hasher/hash"
 
-	cli "go.foxforensics.dev/fox/v4/internal/cmd"
+	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
-	"go.foxforensics.dev/fox/v4/internal/pkg/tables"
-	"go.foxforensics.dev/fox/v4/internal/pkg/text"
-	"go.foxforensics.dev/fox/v4/internal/pkg/types/record"
+	"go.foxforensics.eu/fox/v4/internal/pkg/tables"
+	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/record"
 )
 
 var Usage = strings.TrimSpace(`
@@ -41,7 +41,7 @@ Example: Show NTLM hashes
 Example: Show user records
   $ fox ad -uj NTDS.dit SYSTEM
 
-Report bugs at: foxforensics.dev/issues
+Report bugs at: foxforensics.eu/issues
 `)
 
 type Ad struct {
