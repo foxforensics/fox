@@ -9,10 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/dlclark/regexp2/v2"
-	"golang.org/x/term"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/file"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/receipt"
@@ -21,7 +19,7 @@ import (
 
 var Banner = `
   .-------.----.--.  .--. 
-  |   ___/ .__. \  \/  /   © %d by Fox Forensics
+  |   ___/ .__. \  \/  /   © 2026 by Fox Forensics
   |   __|  |  |  >    <    https://foxforensics.eu
   |  |   \ '--' /  /\  \   Version %s
   '--'    '----'--'  '--'
@@ -36,7 +34,7 @@ type Writer struct {
 }
 
 func Usage(msg string) error {
-	_, err1 := fmt.Println(fmt.Sprintf(Banner, time.Now().Year(), version.Number))
+	_, err1 := fmt.Println(fmt.Sprintf(Banner, version.Number))
 	_, err2 := fmt.Println(msg)
 	return errors.Join(err1, err2)
 }
@@ -49,30 +47,14 @@ func SetOutput(wc io.WriteCloser, err error) {
 	}
 }
 
-func (w *Writer) Title(s ...string) {
-	n, _, err := term.GetSize(int(os.Stdin.Fd()))
-
-	if err != nil {
-		n = 78 // default
-	}
-
-	title := s[0]
-	title = strings.TrimPrefix(title, "/")
-	title = strings.TrimSuffix(title, "/")
-	title = strings.ReplaceAll(title, file.Separator, " ❱ ")
-	title = strings.ReplaceAll(title, string(filepath.Separator), " ❱ ")
-
-	if len(s) > 1 {
-		title += " …"
-	}
-
-	stamp := time.Now().UTC().Format(time.RFC3339)
+func (w *Writer) Title(s string) {
+	s = strings.TrimPrefix(s, "/")
+	s = strings.TrimSuffix(s, "/")
+	s = strings.ReplaceAll(s, file.Separator, " > ")
+	s = strings.ReplaceAll(s, string(filepath.Separator), " > ")
 
 	w.Lock()
-	_, _ = fmt.Fprint(w.wc, Surface1.Sprint(" FOX "))
-	_, _ = fmt.Fprint(w.wc, Surface2.Sprintf(" %-*s ", n-29, title))
-	_, _ = fmt.Fprint(w.wc, Surface3.Sprintf(" %s ", stamp))
-	_, _ = fmt.Fprintln(w.wc)
+	_, _ = fmt.Fprintf(w.wc, "%s %s\n", fox, AsBold(s))
 	w.Unlock()
 }
 

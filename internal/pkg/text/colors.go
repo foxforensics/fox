@@ -17,17 +17,12 @@ var Lexer = ""
 var Style = "monokai"
 
 var (
-	Surface1 = color.New(color.Bold).AddRGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd)
-	Surface2 = color.New(color.FgHiWhite).AddBgRGB(0x33, 0x33, 0x33)
-	Surface3 = color.New(color.FgHiBlack).AddBgRGB(0x33, 0x33, 0x33)
-)
-
-var (
 	AsGray = color.New(color.FgHiBlack).SprintfFunc()
 	AsWarn = color.New(color.FgHiRed).SprintfFunc()
 	AsBold = color.New(color.Bold).SprintfFunc()
 )
 
+var fox = color.New(color.Bold).AddRGB(0xff, 0xff, 0xff).AddBgRGB(0x0f, 0x88, 0xcd).Sprint(" FOX ")
 var cef = regexp2.MustCompile(`[^|]+$`)
 
 func ColorizeAs(s, hint string) string {

@@ -122,8 +122,7 @@ func main() {
 	case cli.Globals.Help, ctx.Command() == "help":
 		_ = text.Usage(Usage)
 	case cli.Version:
-		fmt.Printf("© %d Fox Forensics\n", time.Now().Year())
-		fmt.Printf("Version %s %s\n", version.Number, version.ID())
+		fmt.Printf("© 2026 Fox Forensics\nVersion %s %s\n", version.Number, version.ID())
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())
