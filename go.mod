@@ -59,7 +59,6 @@ require (
 	go.foxforensics.eu/rhash v1.7.3
 	go.foxforensics.eu/strings v1.0.0
 	go.foxforensics.eu/wordlist v1.0.1
-	golang.org/x/term v0.44.0
 	golang.org/x/text v0.38.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
