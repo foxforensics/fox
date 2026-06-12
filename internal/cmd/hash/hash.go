@@ -114,10 +114,6 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	if !cli.NoPretty && len(cmd.Hash) == 1 {
-		text.Stdout.Title(cmd.Paths...)
-	}
-
 	plain, n := !cmd.Json && !cmd.Jsonl, 0
 
 	for _, algo := range cmd.Hash {
@@ -155,7 +151,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				return fmt.Errorf("%s: %s", err, k)
 			}
 
-			if cli.Regexp != nil {
+			if cli.Regexp != nil && !plain {
 				if ok, _ := cli.Regexp.MatchString(sum); !ok {
 					continue // do not include hash
 				}
