@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"github.com/fatih/color"
 	"go.foxforensics.eu/entropy/entropy"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
@@ -157,16 +158,16 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		cli.Threads = 1 // single threaded
 	}
 
-	if !cli.NoPretty {
-		text.Stdout.Title(cmd.Paths...)
-	}
+	// turn off for calculations
+	v := cli.NoPretty
 
-	// don't process files for counts
 	cli.NoConvert = true
 	cli.NoPretty = true
 
 	ch := cli.Load(cmd.Paths, true)
 	defer cli.Discard()
+
+	color.NoColor = v
 
 	for h := range ch {
 		fi := &FileInfo{File: h.String()}
