@@ -1,16 +1,14 @@
 <div align="center">
   <img src="assets/img/fox.svg" width="160" alt=""/>
-  <br/><br/>The Forensic Examiners Swiss Army Knife<br/><br/>
+  <br/><br/><b>The Forensic Examiners Swiss Army Knife</b><br/><br/>
 
   [![Report](https://goreportcard.com/badge/github.com/foxforensics/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/foxforensics/fox/v4)
   [![Build](https://img.shields.io/github/actions/workflow/status/foxforensics/fox/tests.yaml?style=for-the-badge&label=build)](https://github.com/foxforensics/fox/actions)
   [![Release](https://img.shields.io/github/release/foxforensics/fox.svg?style=for-the-badge&label=release)](https://github.com/foxforensics/fox/releases)
+
+  Fox is a powerful CLI tool, built to support the examination process of file-based forensic artifacts.</br>
+  It provides a wide spectrum of forensic capabilities in a cross-platform standalone binary.
 </div>
-
-![Terminal](assets/img/term.png)
-
-## Abstract
-Fox is a powerful CLI tool, built to support the examination process of file-based forensic artifacts. It provides a wide spectrum of forensic capabilities in a cross-platform standalone binary.
 
 ## Features
 * [x] Restricted read-only access
@@ -139,7 +137,7 @@ Wordlists
 ## Building
 To build the lastest development version execute:
 ```console
-go build && fox --version
+go build && ./fox --version
 ```
 
 ---
