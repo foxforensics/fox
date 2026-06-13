@@ -13,5 +13,4 @@
 * ~~Done~~
 
 ## 5. Ideas
-* Add animated console image to README
-  * https://docs.asciinema.org/manual/cli/
+* ~~Done~~

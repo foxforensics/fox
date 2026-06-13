@@ -39,9 +39,6 @@ Flags:
   -J, --jsonl              Show logs as JSON lines
   -p, --parquet            Save logs as Parquet
 
-Block flags:
-  -B, --block=SIZE         Block size for event carving
-
 Filter flags:
   -R, --rule=FILE          Filter using Sigma Rules file
   -D, --dist=LENGTH        Filter using Levenshtein distance (slow)
@@ -85,9 +82,6 @@ type Hunt struct {
 	Jsonl   bool `short:"J" xor:"json,jsonl"`
 	Parquet bool `short:"p"`
 
-	// block flags
-	Block string `short:"B" default:"65536"`
-
 	// filter flags
 	Rule string  `short:"R"`
 	Dist float64 `short:"D" xor:"uniq,dist"`
@@ -130,10 +124,6 @@ func (cmd *Hunt) Validate() error {
 
 func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
-
-	if len(cmd.Block) > 0 {
-		hunter.Block = int(text.Mechanize(cmd.Block))
-	}
 
 	switch {
 	case cmd.Uniq:

@@ -2,7 +2,6 @@ package hunter
 
 import (
 	"bytes"
-	"errors"
 	"io"
 	"log"
 	"maps"
@@ -16,7 +15,6 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/heap"
 )
 
-var Block = 4096 * 16 // NTFS block size multiple
 var Local = []string{
 	"/Windows/System32/winevt/Logs",
 	"/var/log/journal",
@@ -126,31 +124,14 @@ func (htr *Hunter) carveJournal(h *heap.Heap) {
 func (htr *Hunter) findOffset(h *heap.Heap, seq []byte) <-chan int64 {
 	out := make(chan int64, 64*htr.opts.Threads)
 
-	go func(r io.ReaderAt, n uint64) {
+	go func(b []byte) {
 		var off, idx int64
-
-		blk := make([]byte, Block)
-
-		for off < int64(n) {
-			n, err := r.ReadAt(blk, off)
-
-			if errors.Is(err, io.EOF) {
+		for off < int64(len(b)) {
+			if idx = int64(bytes.Index(b[off:], seq)); idx == -1 {
 				break
 			}
 
-			if err != nil {
-				log.Println(err)
-			}
-
-			idx = int64(bytes.Index(blk, seq))
-
-			if idx == -1 {
-				off += int64(n)
-				continue
-			}
-
 			off += idx
-
 			out <- off
 
 			if htr.opts.Verbose > 2 {
@@ -161,7 +142,7 @@ func (htr *Hunter) findOffset(h *heap.Heap, seq []byte) <-chan int64 {
 		}
 
 		close(out)
-	}(h.Reader(), h.Size)
+	}(h.Bytes())
 
 	return out
 }

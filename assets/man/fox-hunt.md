@@ -42,13 +42,6 @@ FLAGS
 
 :   Save logs as Parquet file.
 
-Block Flags
------------
-
-**-B, --block**=_size_
-
-:   Block _size_ for event carving. The _size_ can be either defined as raw bytes or with a size suffix.
-
 Filter Flags
 ------------
 
