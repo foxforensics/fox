@@ -2,10 +2,13 @@ package hunter
 
 import (
 	"bytes"
+	"context"
+	"errors"
 	"io"
 	"log"
 	"maps"
 	"slices"
+	"sync"
 
 	"github.com/sourcegraph/conc/pool"
 
@@ -14,6 +17,8 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/heap"
 )
+
+var Latency = int64(1024 * 1024) // 1mb
 
 var Local = []string{
 	"/Windows/System32/winevt/Logs",
@@ -41,23 +46,37 @@ func New(opts *Options) *Hunter {
 	}
 }
 
-func (htr *Hunter) Hunt(heaps <-chan *heap.Heap) <-chan *event.Event {
+func (htr *Hunter) Hunt(ctx context.Context, ch <-chan *heap.Heap) <-chan *event.Event {
 	go func() {
 		defer close(htr.events)
 
-		p := pool.New().WithMaxGoroutines(htr.opts.Threads)
+		p := pool.New().
+			WithContext(ctx).
+			WithFirstError().
+			WithMaxGoroutines(htr.opts.Threads)
 
-		for h := range heaps {
-			p.Go(func() {
+		for h := range ch {
+			p.Go(func(ctx context.Context) error {
 				if htr.opts.Verbose > 0 {
 					log.Printf("hunt: carving heap %s\n", h.String())
 				}
 
-				htr.carve(h)
+				select {
+				case <-ctx.Done():
+					return ctx.Err()
+				default:
+					return htr.carve(ctx, h)
+				}
 			})
 		}
 
-		p.Wait()
+		if err := p.Wait(); err != nil {
+			if errors.Is(err, context.Canceled) && htr.opts.Verbose > 0 {
+				log.Println("hunt: canceled")
+			} else {
+				log.Println(err)
+			}
+		}
 	}()
 
 	if htr.opts.Sort {
@@ -85,46 +104,64 @@ func (htr *Hunter) sort() <-chan *event.Event {
 	return sorted
 }
 
-func (htr *Hunter) carve(h *heap.Heap) {
+func (htr *Hunter) carve(ctx context.Context, h *heap.Heap) error {
 	defer h.Discard()
 
-	p := pool.New().WithMaxGoroutines(htr.opts.Threads)
+	sync.OnceFunc(evtx.Preload)()
 
-	p.Go(func() {
-		htr.carveEvtx(h)
+	p := pool.New().
+		WithContext(ctx).
+		WithMaxGoroutines(htr.opts.Threads)
+
+	p.Go(func(ctx context.Context) error {
+		return htr.carveEvtx(ctx, h)
 	})
 
-	p.Go(func() {
-		htr.carveJournal(h)
+	p.Go(func(ctx context.Context) error {
+		return htr.carveJournal(ctx, h)
 	})
 
-	p.Wait()
+	return p.Wait()
 }
 
-func (htr *Hunter) carveEvtx(h *heap.Heap) {
+func (htr *Hunter) carveEvtx(ctx context.Context, h *heap.Heap) error {
 	sr := io.NewSectionReader(h.Reader(), 0, int64(h.Size))
-
-	for off := range htr.findOffset(h, evtx.Chunk) {
+	for off := range htr.findOffset(ctx, h, evtx.Chunk) {
 		for evt := range evtx.Carve(sr, off, cap(htr.events)) {
-			htr.events <- evt
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			default:
+				htr.events <- evt
+			}
 		}
 	}
+
+	return nil
 }
 
-func (htr *Hunter) carveJournal(h *heap.Heap) {
+func (htr *Hunter) carveJournal(ctx context.Context, h *heap.Heap) error {
 	sr := io.NewSectionReader(h.Reader(), 0, int64(h.Size))
-
-	for off := range htr.findOffset(h, journal.Magic) {
+	for off := range htr.findOffset(ctx, h, journal.Magic) {
 		for evt := range journal.Carve(sr, off, cap(htr.events)) {
-			htr.events <- evt
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			default:
+				htr.events <- evt
+			}
 		}
 	}
+
+	return nil
 }
 
-func (htr *Hunter) findOffset(h *heap.Heap, seq []byte) <-chan int64 {
+func (htr *Hunter) findOffset(ctx context.Context, h *heap.Heap, seq []byte) <-chan int64 {
 	out := make(chan int64, 64*htr.opts.Threads)
 
 	go func(b []byte) {
+		defer close(out)
+
 		var off, idx int64
 		for off < int64(len(b)) {
 			if idx = int64(bytes.Index(b[off:], seq)); idx == -1 {
@@ -139,9 +176,16 @@ func (htr *Hunter) findOffset(h *heap.Heap, seq []byte) <-chan int64 {
 			}
 
 			off += int64(len(seq))
-		}
 
-		close(out)
+			if off%Latency == 0 {
+				select {
+				case <-ctx.Done():
+					return // hunt canceled
+				default:
+					continue
+				}
+			}
+		}
 	}(h.Bytes())
 
 	return out

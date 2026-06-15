@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/alecthomas/kong"
@@ -235,14 +237,17 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	var n int64
 
-	var ctx = context.Background()
+	// handle CTRC+C
+	var ctx, stop = signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	var sig = evaluator.ForRule(cmd.rule)
+
+	defer stop()
 
 	for e := range hunter.New(&hunter.Options{
 		Sort:    cmd.Sort,
 		Threads: cli.Threads,
 		Verbose: cli.Verbose,
-	}).Hunt(ch) {
+	}).Hunt(ctx, ch) {
 		m, err := sig.Matches(ctx, e.Fields)
 
 		if err != nil {

@@ -1,6 +1,7 @@
 package hunter
 
 import (
+	"context"
 	"testing"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/test"
@@ -41,6 +42,8 @@ func TestHunt(t *testing.T) {
 				0,
 			})
 
+			ctx := context.Background()
+
 			ldr := loader.New(&loader.Options{
 				Limits:  &types.Limits{},
 				Filters: &types.Filters{},
@@ -49,7 +52,7 @@ func TestHunt(t *testing.T) {
 
 			file := test.FixtureFile(tt.file)
 
-			for range htr.Hunt(ldr.Load([]string{file})) {
+			for range htr.Hunt(ctx, ldr.Load([]string{file})) {
 				n++
 			}
 
