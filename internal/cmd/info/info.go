@@ -24,7 +24,7 @@ import (
 const Threshold = 7.2
 
 // NoOffset is used for analysis
-const NoOffset = -1
+const NoOffset = math.MaxInt64
 
 var Usage = strings.TrimSpace(`
 Usage: fox info [FLAGS...] <PATHS...>
@@ -56,9 +56,9 @@ Report bugs at: foxforensics.eu/issues
 
 type FileInfo struct {
 	File    string  `json:"file,omitempty"`
-	Bytes   int64   `json:"bytes,omitempty"`
-	Lines   int64   `json:"lines,omitempty"`
-	Offset  int64   `json:"offset,omitempty"`
+	Bytes   uint64  `json:"bytes,omitempty"`
+	Lines   uint64  `json:"lines,omitempty"`
+	Offset  uint64  `json:"offset,omitempty"`
 	Entropy float64 `json:"entropy,omitempty"`
 	Suspect bool    `json:"suspect,omitempty"`
 }
@@ -194,8 +194,8 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		}
 
 		for block := range slices.Chunk(h.Bytes(), int(n)) {
-			fi.Bytes = int64(len(block))
-			fi.Lines = int64(bytes.Count(block, []byte{'\n'}))
+			fi.Bytes = uint64(len(block))
+			fi.Lines = uint64(bytes.Count(block, []byte{'\n'}))
 
 			// add possibly remaining end
 			if block[len(block)-1] != '\n' {
@@ -208,7 +208,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 				text.Stdout.Match(cmd.format(fi), cli.Regexp)
 			}
 
-			fi.Offset += n
+			fi.Offset += uint64(n)
 		}
 
 		h.Discard()
