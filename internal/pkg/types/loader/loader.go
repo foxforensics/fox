@@ -35,7 +35,7 @@ type Options struct {
 
 type Loader struct {
 	sync.RWMutex
-	size  int64
+	size  uint64
 	opts  *Options
 	paths []string
 	heaps chan *heap.Heap
@@ -87,6 +87,12 @@ func (ldr *Loader) Exit() {
 }
 
 func (ldr *Loader) loadPath(path, part string) {
+	v, err := filepath.Abs(path)
+
+	if err == nil {
+		path = v
+	}
+
 	if ldr.opts.Verbose > 0 {
 		log.Printf("looking for %s\n", path)
 	}
@@ -220,6 +226,7 @@ func (ldr *Loader) processData(path, part string, b []byte) {
 
 func (ldr *Loader) extractData(path, part string, b []byte) bool {
 	defer func() {
+		// most libraries can not differentiate between invalid data and wrong passwords
 		if err := recover(); err != nil {
 			log.Println("archive corrupt or password wrong")
 			return
@@ -335,7 +342,7 @@ func (ldr *Loader) createHeap(path, hint string, size uint64, b []byte) {
 
 	b = ldr.opts.Limits.Reduce(b)
 
-	ldr.size += int64(size)
+	ldr.size += size
 	ldr.paths = append(ldr.paths, path)
 	ldr.heaps <- heap.New(path, hint, size, b)
 
