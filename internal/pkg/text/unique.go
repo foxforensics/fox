@@ -1,6 +1,8 @@
 package text
 
 import (
+	"strings"
+
 	"github.com/agnivade/levenshtein"
 	"github.com/zeebo/xxh3"
 )
@@ -34,28 +36,31 @@ func (u *Hash) IsUnique(s string) bool {
 
 type Distance struct {
 	limit float64
-	lines []string
+	dedup []string
 }
 
 func ByDistance(limit float64) *Distance {
 	return &Distance{
 		limit: limit,
-		lines: make([]string, 0),
+		dedup: make([]string, 0),
 	}
 }
 
 func (u *Distance) IsUnique(s string) bool {
-	for i := len(u.lines) - 1; i >= 0; i-- {
-		l := u.lines[i]
-		d := levenshtein.ComputeDistance(l, s)
+	s = strings.ToLower(strings.TrimSpace(s))
+
+	// search latest strings first to improve performance
+	for i := len(u.dedup) - 1; i >= 0; i-- {
+		v := u.dedup[i]
+		d := levenshtein.ComputeDistance(v, s)
 
 		// normalize distance
-		if float64(d)/(float64(len(s)+len(l))) <= u.limit {
+		if float64(d)/(float64(len(s)+len(v))) <= u.limit {
 			return false
 		}
 	}
 
-	u.lines = append(u.lines, s)
+	u.dedup = append(u.dedup, s)
 
 	return true
 }

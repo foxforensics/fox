@@ -55,8 +55,8 @@ func Sanitize(s string) string {
 	return sb.String()
 }
 
-func Humanize(i int64) string {
-	const m = int64(1024) // IEC prefix
+func Humanize(i uint64) string {
+	const m = uint64(1024) // IEC prefix
 
 	if i < m {
 		return fmt.Sprintf("%db", i)
