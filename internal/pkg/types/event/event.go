@@ -14,7 +14,14 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/version"
 )
 
-const CEF = "%s %s CEF:1|fox|hunt|%s|100|%s|%d|"
+var replacer = strings.NewReplacer(
+	"\t", " ", // remove tabs
+	"\n", " ", // remove line breaks
+	"\r", " ", // remove line breaks
+	`\`, `\\`, // mask backslashes
+	`|`, `\|`, // mask pipes
+	`=`, `\=`, // mask equal
+)
 
 type Event struct {
 	Time     time.Time         `json:"time,omitempty"`
@@ -44,33 +51,22 @@ func (e *Event) SortKey() string {
 func (e *Event) ToCEF() string {
 	var sb strings.Builder
 
-	msg := text.Sanitize(e.Message)
-	msg = strings.ReplaceAll(msg, `\`, `\\`)
-	msg = strings.ReplaceAll(msg, `|`, `\|`)
-	msg = strings.ReplaceAll(msg, `\t`, ` `)
-	msg = strings.ReplaceAll(msg, `\n`, ``)
-
-	if len(msg) > 512 {
-		msg = msg[:512]
-	}
-
-	sb.WriteString(fmt.Sprintf(CEF,
+	sb.WriteString(fmt.Sprintf("%s %s CEF:1|fox|hunt|%s|100|",
 		e.Time.Format("Jan 02 2006 15:04:05.000"),
 		e.Host,
 		version.Number,
-		msg,
-		e.Severity,
 	))
+
+	_, _ = replacer.WriteString(&sb, text.Sanitize(e.Message[:min(len(e.Message), 512)]))
+
+	sb.WriteString(fmt.Sprintf("|%d|", e.Severity))
 
 	for _, k := range slices.Sorted(maps.Keys(e.Fields)) {
 		if v := e.Fields[k]; len(v) > 0 {
-			k = strings.ReplaceAll(k, `=`, `\=`)
-			v = strings.ReplaceAll(v, `=`, `\=`)
-			v = strings.ReplaceAll(v, "\n", " ")
-			v = strings.ReplaceAll(v, "\r", "")
-			v = strings.ReplaceAll(v, "\t", "")
-
-			sb.WriteString(fmt.Sprintf("%s=%s ", k, v))
+			sb.WriteString(fmt.Sprintf("%s=%s ",
+				replacer.Replace(k),
+				replacer.Replace(v),
+			))
 		}
 	}
 
