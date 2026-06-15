@@ -63,21 +63,18 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
-	ch := make(chan *event.Event, cap)
-
+func Preload() {
 	var err error
 
-	// init once
-	if len(providers) == 0 {
-		providers, err = events.Load()
+	providers, err = events.Load()
 
-		if err != nil {
-			defer close(ch)
-			log.Println(err)
-			return ch
-		}
+	if err != nil {
+		log.Println(err)
 	}
+}
+
+func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
+	ch := make(chan *event.Event, cap)
 
 	chk, err := newChunk(sr, off)
 
@@ -199,7 +196,7 @@ func addMapDeep(e *event.Event, em *evtx.GoEvtxMap, p string) {
 
 		case *evtx.UTCTime, evtx.UTCTime:
 			u := v.(evtx.UTCTime)
-			e.Fields[k] = fmt.Sprintf("%s", time.Time(u))
+			e.Fields[k] = time.Time(u).Format(time.RFC3339Nano)
 
 		default:
 			if slices.Contains(children, k) {
