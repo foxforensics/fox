@@ -1,63 +1,23 @@
 package cmd
 
 import (
-	"log"
+	"context"
+	"errors"
+	"log/slog"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
 	"go.foxforensics.eu/checker/services/vt"
 
-	_zip "go.foxforensics.eu/fox/v4/internal/pkg/file/archive/7z"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/ar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/cab"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/cpio"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/iso"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/msi"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/rar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/rpm"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/tar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/xar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/zip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/elf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/ese"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/lnk"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/mft"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/pe"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/pf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/pst"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/evtx"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/fortinet"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/journal"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/bgzf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/br"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/bzip2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/gzip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/kanzi"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lz4"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzfse"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lznt1"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzo"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzw"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/minlz"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/s2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/snappy"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/xz"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/zlib"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/zstd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/format/json"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/format/jsonl"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/format/xml"
 	"go.foxforensics.eu/fox/v4/internal/pkg/tables"
-	"go.foxforensics.eu/fox/v4/internal/pkg/test"
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/client"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/heap"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/loader"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/register"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/smap"
 )
 
@@ -91,20 +51,22 @@ type Globals struct {
 
 	// hidden
 	ApiKey string `hidden:"" long:"api-key"`
-	Test1  string `hidden:"" long:"test1" xor:"test1,test2"`
-	Test2  string `hidden:"" long:"test2" xor:"test1,test2"`
 	Lexer  string `hidden:""`
 	Style  string `hidden:""`
 
 	// internal
-	Regexp  *regexp2.Regexp `kong:"-"`
-	Loader  *loader.Loader  `kong:"-"`
-	Filters *types.Filters  `kong:"-"`
-	Limits  *types.Limits   `kong:"-"`
-	Input   []string        `kong:"-"`
+	Context context.Context    `kong:"-"`
+	Cancel  context.CancelFunc `kong:"-"`
+	Regexp  *regexp2.Regexp    `kong:"-"`
+	Loader  *loader.Loader     `kong:"-"`
+	Filters *types.Filters     `kong:"-"`
+	Limits  *types.Limits      `kong:"-"`
+	Input   []string           `kong:"-"`
 }
 
-func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
+func (cli *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
+	var err error
+
 	if raw {
 		cli.NoConvert = true
 	}
@@ -114,18 +76,16 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 	}
 
 	if len(cli.Find) > 0 {
-		cli.Regexp = regexp2.MustCompile(cli.Find)
+		if cli.Regexp, err = regexp2.Compile(cli.Find); err != nil {
+			return nil, errors.New("invalid regex syntax")
+		}
 	}
 
-	if len(cli.Lexer) > 0 {
-		text.Lexer = cli.Lexer
-	}
+	cli.Limits, err = types.NewLimits(cli.Limit)
 
-	if len(cli.Style) > 0 {
-		text.Style = cli.Style
+	if err != nil {
+		return nil, err
 	}
-
-	cli.Limits = types.NewLimits(cli.Limit)
 
 	cli.Filters = &types.Filters{
 		Regex: cli.Regexp,
@@ -148,63 +108,34 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		cli.Threads = 1 // must be at least one
 	}
 
+	if len(cli.Lexer) > 0 {
+		text.Lexer = cli.Lexer
+	}
+
+	if len(cli.Style) > 0 {
+		text.Style = cli.Style
+	}
+
 	if !cli.NoDeflate {
-		register.Deflate("bgzf", bgzf.Detect, bgzf.Deflate)
-		register.Deflate("br", br.Detect, br.Deflate)
-		register.Deflate("bzip2", bzip2.Detect, bzip2.Deflate)
-		register.Deflate("gzip", gzip.Detect, gzip.Deflate)
-		register.Deflate("kanzi", kanzi.Detect, kanzi.Deflate)
-		register.Deflate("lz4", lz4.Detect, lz4.Deflate)
-		register.Deflate("lzip", lzip.Detect, lzip.Deflate)
-		register.Deflate("lzo", lzo.Detect, lzo.Deflate)
-		register.Deflate("lzfse", lzfse.Detect, lzfse.Deflate)
-		register.Deflate("lznt1", lznt1.Detect, lznt1.Deflate)
-		register.Deflate("lzw", lzw.Detect, lzw.Deflate)
-		register.Deflate("minlz", minlz.Detect, minlz.Deflate)
-		register.Deflate("s2", s2.Detect, s2.Deflate)
-		register.Deflate("snappy", snappy.Detect, snappy.Deflate)
-		register.Deflate("xz", xz.Detect, xz.Deflate)
-		register.Deflate("zlib", zlib.Detect, zlib.Deflate)
-		register.Deflate("zstd", zstd.Detect, zstd.Deflate)
+		loader.RegisterDeflates()
 	}
 
 	if !cli.NoExtract {
-		register.Extract("7z", _zip.Detect, _zip.Extract)
-		register.Extract("ar", ar.Detect, ar.Extract)
-		register.Extract("cab", cab.Detect, cab.Extract)
-		register.Extract("cpio", cpio.Detect, cpio.Extract)
-		register.Extract("iso", iso.Detect, iso.Extract)
-		register.Extract("msi", msi.Detect, msi.Extract)
-		register.Extract("rar", rar.Detect, rar.Extract)
-		register.Extract("rpm", rpm.Detect, rpm.Extract)
-		register.Extract("tar", tar.Detect, tar.Extract)
-		register.Extract("xar", xar.Detect, xar.Extract)
-		register.Extract("zip", zip.Detect, zip.Extract)
+		loader.RegisterExtracts()
 	}
 
 	if !cli.NoConvert {
-		register.Convert("elf", elf.Detect, elf.Convert)
-		register.Convert("ese", ese.Detect, ese.Convert)
-		register.Convert("lnk", lnk.Detect, lnk.Convert)
-		register.Convert("mft", mft.Detect, mft.Convert)
-		register.Convert("pe", pe.Detect, pe.Convert)
-		register.Convert("pf", pf.Detect, pf.Convert)
-		register.Convert("pst", pst.Detect, pst.Convert)
-		register.Convert("evtx", evtx.Detect, evtx.Convert)
-		register.Convert("fortinet", fortinet.Detect, fortinet.Convert)
-		register.Convert("journal", journal.Detect, journal.Convert)
+		loader.RegisterConverts()
 	}
 
 	if !cli.NoPretty {
-		register.Format("json", json.Detect, json.Format)
-		register.Format("jsonl", jsonl.Detect, jsonl.Format)
-		register.Format("xml", xml.Detect, xml.Format)
+		loader.RegisterFormats()
 	} else {
 		color.NoColor = true // turn off color package
 	}
 
 	if cli.NoReceipt && len(cli.Out) > 0 {
-		log.Println("warning: receipts has been disabled!")
+		slog.Warn("receipts has been disabled")
 	}
 
 	cli.Loader = loader.New(&loader.Options{
@@ -216,8 +147,24 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		Strict:   !cli.NoStrict,
 	})
 
+	// handle CTRC+C
+	cli.Context, cli.Cancel = signal.NotifyContext(
+		context.Background(),
+		os.Kill,
+		os.Interrupt,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+	)
+
+	vt.Key = cli.ApiKey
+	smap.Threads = cli.Threads
+	client.MaxIdle = cli.Threads
+	tables.Threads = cli.Threads
+
+	heaps := cli.Loader.Load(cli.Context, args)
+
 	if cli.DryRun {
-		for h := range cli.Loader.Load(args) {
+		for h := range heaps {
 			text.Stdout.Write(h.Name)
 		}
 
@@ -225,20 +172,7 @@ func (cli *Globals) Load(args []string, raw bool) <-chan *heap.Heap {
 		cli.Exit(0)
 	}
 
-	switch {
-	case len(cli.Test1) > 0:
-		cli.ApiKey = test.Reserve(1, cli.Test1)
-
-	case len(cli.Test2) > 0:
-		cli.ApiKey = test.Reserve(2, cli.Test2)
-	}
-
-	vt.Key = cli.ApiKey
-	smap.Threads = cli.Threads
-	client.MaxIdle = cli.Threads
-	tables.Threads = cli.Threads
-
-	return cli.Loader.Load(args)
+	return heaps, nil
 }
 
 func (cli *Globals) Exit(code int) {
@@ -247,5 +181,6 @@ func (cli *Globals) Exit(code int) {
 }
 
 func (cli *Globals) Discard() {
+	cli.Cancel()
 	cli.Loader.Exit()
 }

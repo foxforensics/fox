@@ -3,18 +3,62 @@ package loader
 import (
 	"bufio"
 	"bytes"
+	"context"
+	"errors"
+	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"os"
 	"path/filepath"
-	"slices"
 	"strings"
 	"sync"
 
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/sourcegraph/conc/pool"
 
+	_zip "go.foxforensics.eu/fox/v4/internal/pkg/file/archive/7z"
+
 	"go.foxforensics.eu/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/ar"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/cab"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/cpio"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/iso"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/msi"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/rar"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/rpm"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/tar"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/xar"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/zip"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/elf"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/ese"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/lnk"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/mft"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/pe"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/pf"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/pst"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/evtx"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/fortinet"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/journal"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/bgzf"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/br"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/bzip2"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/gzip"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/kanzi"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lz4"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzfse"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzip"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lznt1"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzo"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzw"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/minlz"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/s2"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/snappy"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/xz"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/zlib"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/zstd"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/format/json"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/format/jsonl"
+	"go.foxforensics.eu/fox/v4/internal/pkg/file/format/xml"
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/heap"
@@ -23,6 +67,10 @@ import (
 )
 
 const Stdin = "-"
+const MaxDepth = 3
+const MaxFiles = 10000
+
+var registry = register.Registry
 
 type Options struct {
 	Limits   *types.Limits
@@ -37,39 +85,60 @@ type Loader struct {
 	sync.RWMutex
 	size  uint64
 	opts  *Options
-	paths []string
+	paths types.Set
 	heaps chan *heap.Heap
 }
 
 func New(opts *Options) *Loader {
 	return &Loader{
 		opts:  opts,
+		paths: make(types.Set),
 		heaps: make(chan *heap.Heap, opts.Threads),
 	}
 }
 
-func (ldr *Loader) Load(paths []string) <-chan *heap.Heap {
+func (ldr *Loader) Load(ctx context.Context, paths []string) <-chan *heap.Heap {
 	go func() {
 		defer close(ldr.heaps)
 
 		for _, path := range paths {
 			// read file content from stdin
 			if path == Stdin {
-				if !isPiped(os.Stdin) {
-					log.Fatalln("stdin not open")
+				fi, err := os.Stdin.Stat()
+
+				if err != nil {
+					slog.Error(err.Error())
+					continue
+				}
+
+				if (fi.Mode() & os.ModeCharDevice) == os.ModeCharDevice {
+					slog.Error("stdin is not open")
+					continue
 				}
 
 				buf, err := io.ReadAll(bufio.NewReader(os.Stdin))
 
 				if err != nil {
-					log.Fatalln(err)
+					slog.Error(err.Error())
+					continue
 				}
 
-				ldr.processData(Stdin, "", bytes.TrimSpace(buf))
-				break
+				err = ldr.processData(Stdin, "", bytes.TrimSpace(buf), 0)
+
+				if err != nil {
+					slog.Error(err.Error())
+				}
+
+				break // use only stdin
 			}
 
-			ldr.loadPath(file.SplitPart(path))
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				p1, p2 := file.SplitPart(path)
+				ldr.loadPath(ctx, p1, p2)
+			}
 		}
 	}()
 
@@ -80,13 +149,13 @@ func (ldr *Loader) Exit() {
 	ldr.RLock()
 
 	if ldr.opts.Verbose > 0 {
-		log.Printf("size %s\n", text.Humanize(ldr.size))
+		slog.Info(fmt.Sprintf("size %s", text.Humanize(ldr.size)))
 	}
 
 	ldr.RUnlock()
 }
 
-func (ldr *Loader) loadPath(path, part string) {
+func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
 	v, err := filepath.Abs(path)
 
 	if err == nil {
@@ -94,70 +163,85 @@ func (ldr *Loader) loadPath(path, part string) {
 	}
 
 	if ldr.opts.Verbose > 0 {
-		log.Printf("looking for %s\n", path)
+		slog.Info(fmt.Sprintf("looking for %s", path))
 	}
 
-	match, err := doublestar.FilepathGlob(filepath.Clean(path))
+	match, err := doublestar.FilepathGlob(path)
 
 	if err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 		return
 	}
 
 	if len(match) == 0 {
-		log.Printf("no files found for %s\n", path)
+		slog.Error(fmt.Sprintf("no files found for %s", path))
 		return
 	}
 
-	p := pool.New().WithMaxGoroutines(ldr.opts.Threads)
+	p := pool.New().
+		WithContext(ctx).
+		WithFirstError().
+		WithMaxGoroutines(ldr.opts.Threads)
 
 	for _, path := range match {
 		fi, err := os.Stat(path)
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 
-		p.Go(func() {
+		p.Go(func(ctx context.Context) error {
 			if fi.IsDir() {
-				ldr.loadDir(path, part)
+				return ldr.loadDir(ctx, path, part)
 			} else {
-				ldr.loadFile(path, part)
+				return ldr.loadFile(ctx, path, part)
 			}
 		})
 	}
 
-	p.Wait()
+	if err = p.Wait(); err != nil {
+		if errors.Is(err, context.Canceled) && ldr.opts.Verbose > 0 {
+			slog.Info("user canceled")
+		} else {
+			slog.Error(err.Error())
+		}
+	}
 }
 
-func (ldr *Loader) loadDir(path, part string) {
+func (ldr *Loader) loadDir(ctx context.Context, path, part string) error {
 	dir, err := os.ReadDir(path)
 
 	if err != nil {
-		log.Println(err)
-		return
+		return err
 	}
 
-	p := pool.New().WithMaxGoroutines(ldr.opts.Threads)
+	p := pool.New().
+		WithContext(ctx).
+		WithFirstError().
+		WithMaxGoroutines(ldr.opts.Threads)
 
 	for _, f := range dir {
 		if !f.IsDir() {
-			p.Go(func() {
-				ldr.loadFile(filepath.Join(path, f.Name()), part)
-			})
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			default:
+				p.Go(func(ctx context.Context) error {
+					return ldr.loadFile(ctx, filepath.Join(path, f.Name()), part)
+				})
+			}
 		}
 	}
 
-	p.Wait()
+	return p.Wait()
 }
 
-func (ldr *Loader) loadFile(path, part string) {
+func (ldr *Loader) loadFile(ctx context.Context, path, part string) error {
 	f, err := os.Open(path)
 
 	if err != nil {
-		log.Println(err)
-		return
+		return err
 	}
 
 	defer func() {
@@ -167,39 +251,51 @@ func (ldr *Loader) loadFile(path, part string) {
 	fi, err := f.Stat()
 
 	if err != nil {
-		log.Println(err)
-		return
+		return err
 	}
 
 	// empty files will cause issues
 	if fi.Size() == 0 {
-		ldr.createHeap(path, "", 0, []byte{})
-		return
+		return ldr.createHeap(path, "", []byte{})
 	}
 
-	b := mmap.Map(f)
+	b, err := mmap.Map(f)
+
+	if err != nil {
+		return err
+	}
 
 	if ldr.opts.Verbose > 2 {
-		log.Printf("mapped file %s\n", path)
+		slog.Info(fmt.Sprintf("mapped file %s", path))
 	}
 
-	ldr.processData(path, part, b)
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	default:
+		return ldr.processData(path, part, b, 0)
+	}
 }
 
-func (ldr *Loader) processData(path, part string, b []byte) {
+func (ldr *Loader) processData(path, part string, b []byte, i int) error {
 	var hint string
 	var ok bool
 
-	// 1. deflate data (recursive)
+	// check depth to protect against zip bombs
+	if ldr.opts.Strict && i > MaxDepth {
+		return errors.New("max depth reached")
+	}
+
+	// 1. deflate data
 	for {
 		if b, ok = ldr.deflateData(b); !ok {
 			break
 		}
 	}
 
-	// 2. extract data (multiply)
-	if ldr.extractData(path, part, b) {
-		return
+	// 2. extract data (recursive)
+	if ldr.extractData(path, part, b, i) {
+		return nil
 	}
 
 	// 3. convert data
@@ -220,38 +316,45 @@ func (ldr *Loader) processData(path, part string, b []byte) {
 
 	// filter for specific streams
 	if strings.Contains(path, part) {
-		ldr.createHeap(path, hint, uint64(len(b)), b)
+		return ldr.createHeap(path, hint, b)
 	}
+
+	return nil
 }
 
-func (ldr *Loader) extractData(path, part string, b []byte) bool {
+func (ldr *Loader) extractData(path, part string, b []byte, i int) bool {
 	defer func() {
 		// most libraries can not differentiate between invalid data and wrong passwords
 		if err := recover(); err != nil {
-			log.Println("archive corrupt or password wrong")
+			slog.Error("archive corrupt or password wrong")
 			return
 		}
 	}()
 
-	for _, a := range register.Extracts {
+	for _, a := range registry.Extracts {
 		if a.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("archive detected as possibly %s\n", a.Name)
+				slog.Info(fmt.Sprintf("archive detected as possibly %s", a.Name))
 			}
 
-			p := pool.New().WithMaxGoroutines(ldr.opts.Threads)
+			p := pool.New().
+				WithErrors().
+				WithFirstError().
+				WithMaxGoroutines(ldr.opts.Threads)
 
 			for _, e := range a.Extract(b, path, ldr.opts.Password) {
-				p.Go(func() {
+				p.Go(func() error {
 					if ldr.opts.Verbose > 2 {
-						log.Printf("stream detected as %s\n", e.Path)
+						slog.Info(fmt.Sprintf("stream detected as %s", e.Path))
 					}
 
-					ldr.processData(e.Path, part, e.Data)
+					return ldr.processData(e.Path, part, e.Data, i+1)
 				})
 			}
 
-			p.Wait()
+			if err := p.Wait(); err != nil {
+				slog.Error(err.Error())
+			}
 
 			return true
 		}
@@ -261,16 +364,16 @@ func (ldr *Loader) extractData(path, part string, b []byte) bool {
 }
 
 func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
-	for _, e := range register.Deflates {
+	for _, e := range registry.Deflates {
 		if e.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("deflate detected as possibly %s\n", e.Name)
+				slog.Info(fmt.Sprintf("deflate detected as possibly %s", e.Name))
 			}
 
 			r, err := e.Deflate(b)
 
 			if err != nil {
-				log.Println(err)
+				slog.Error(err.Error())
 
 				if ldr.opts.Strict {
 					r = b // ignore partly result
@@ -285,16 +388,16 @@ func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
 }
 
 func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
-	for _, e := range register.Converts {
+	for _, e := range registry.Converts {
 		if e.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("convert detected as possibly %s\n", e.Name)
+				slog.Warn(fmt.Sprintf("convert detected as possibly %s", e.Name))
 			}
 
 			r, err := e.Convert(b)
 
 			if err != nil {
-				log.Println(err)
+				slog.Error(err.Error())
 
 				if ldr.opts.Strict {
 					r = b // ignore partly result
@@ -309,16 +412,16 @@ func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
 }
 
 func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
-	for _, e := range register.Formats {
+	for _, e := range registry.Formats {
 		if e.Detect(b) {
 			if ldr.opts.Verbose > 1 {
-				log.Printf("format detected as possibly %s\n", e.Name)
+				slog.Info(fmt.Sprintf("format detected as possibly %s", e.Name))
 			}
 
 			r, err := e.Format(b)
 
 			if err != nil {
-				log.Println(err)
+				slog.Error(err.Error())
 
 				if ldr.opts.Strict {
 					r = b // ignore partly result
@@ -332,32 +435,83 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 	return b, false
 }
 
-func (ldr *Loader) createHeap(path, hint string, size uint64, b []byte) {
+func (ldr *Loader) createHeap(path, hint string, b []byte) error {
 	ldr.Lock()
 	defer ldr.Unlock()
 
-	if slices.Contains(ldr.paths, path) {
-		return // already loaded
+	if ldr.paths.Has(path) {
+		return nil // already loaded
 	}
+
+	// check files to protect against zip bombs
+	if ldr.opts.Strict && len(ldr.paths) >= MaxFiles {
+		return errors.New("max files reached")
+	}
+
+	// add original size
+	ldr.size += uint64(len(b))
 
 	b = ldr.opts.Limits.Reduce(b)
 
-	ldr.size += size
-	ldr.paths = append(ldr.paths, path)
-	ldr.heaps <- heap.New(path, hint, size, b)
+	ldr.paths.Set(path)
+	ldr.heaps <- heap.New(path, hint, b)
 
 	if ldr.opts.Verbose > 1 {
-		log.Printf("loaded heap %s\n", path)
+		slog.Info(fmt.Sprintf("loaded heap %s", path))
 	}
+
+	return nil
 }
 
-func isPiped(f *os.File) bool {
-	fi, err := f.Stat()
+func RegisterDeflates() {
+	register.Deflate("bgzf", bgzf.Detect, bgzf.Deflate)
+	register.Deflate("br", br.Detect, br.Deflate)
+	register.Deflate("bzip2", bzip2.Detect, bzip2.Deflate)
+	register.Deflate("gzip", gzip.Detect, gzip.Deflate)
+	register.Deflate("kanzi", kanzi.Detect, kanzi.Deflate)
+	register.Deflate("lz4", lz4.Detect, lz4.Deflate)
+	register.Deflate("lzip", lzip.Detect, lzip.Deflate)
+	register.Deflate("lzo", lzo.Detect, lzo.Deflate)
+	register.Deflate("lzfse", lzfse.Detect, lzfse.Deflate)
+	register.Deflate("lznt1", lznt1.Detect, lznt1.Deflate)
+	register.Deflate("lzw", lzw.Detect, lzw.Deflate)
+	register.Deflate("minlz", minlz.Detect, minlz.Deflate)
+	register.Deflate("s2", s2.Detect, s2.Deflate)
+	register.Deflate("snappy", snappy.Detect, snappy.Deflate)
+	register.Deflate("xz", xz.Detect, xz.Deflate)
+	register.Deflate("zlib", zlib.Detect, zlib.Deflate)
+	register.Deflate("zstd", zstd.Detect, zstd.Deflate)
+}
 
-	if err != nil {
-		log.Println(err)
-		return false
-	}
+func RegisterExtracts() {
+	register.Extract("7z", _zip.Detect, _zip.Extract)
+	register.Extract("ar", ar.Detect, ar.Extract)
+	register.Extract("cab", cab.Detect, cab.Extract)
+	register.Extract("cpio", cpio.Detect, cpio.Extract)
+	register.Extract("iso", iso.Detect, iso.Extract)
+	register.Extract("msi", msi.Detect, msi.Extract)
+	register.Extract("rar", rar.Detect, rar.Extract)
+	register.Extract("rpm", rpm.Detect, rpm.Extract)
+	register.Extract("tar", tar.Detect, tar.Extract)
+	register.Extract("xar", xar.Detect, xar.Extract)
+	register.Extract("zip", zip.Detect, zip.Extract)
+}
 
-	return (fi.Mode() & os.ModeCharDevice) != os.ModeCharDevice
+func RegisterConverts() {
+	register.Convert("elf", elf.Detect, elf.Convert)
+	register.Convert("ese", ese.Detect, ese.Convert)
+	register.Convert("lnk", lnk.Detect, lnk.Convert)
+	register.Convert("mft", mft.Detect, mft.Convert)
+	register.Convert("pe", pe.Detect, pe.Convert)
+	register.Convert("pf", pf.Detect, pf.Convert)
+	register.Convert("pst", pst.Detect, pst.Convert)
+	register.Convert("evtx", evtx.Detect, evtx.Convert)
+	register.Convert("fortinet", fortinet.Detect, fortinet.Convert)
+	register.Convert("journal", journal.Detect, journal.Convert)
+}
+
+func RegisterFormats() {
+	register.Format("json", json.Detect, json.Format)
+	register.Format("jsonl", jsonl.Detect, jsonl.Format)
+	register.Format("xml", xml.Detect, xml.Format)
 }
