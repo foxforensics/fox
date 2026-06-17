@@ -3,6 +3,7 @@ package smap
 import (
 	"bufio"
 	"bytes"
+	"cmp"
 	"slices"
 
 	"github.com/dlclark/regexp2/v2"
@@ -86,10 +87,10 @@ func sort(ch <-chan String) SMap {
 
 	slices.SortStableFunc(s, func(a, b String) int {
 		if a.Group != b.Group {
-			return int(a.Group - b.Group)
+			return cmp.Compare(a.Group, b.Group)
 		}
 
-		return int(a.Line - b.Line)
+		return cmp.Compare(a.Line, b.Line)
 	})
 
 	return s

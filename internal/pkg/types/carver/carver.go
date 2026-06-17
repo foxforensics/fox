@@ -1,6 +1,8 @@
 package carver
 
 import (
+	"cmp"
+	"context"
 	"fmt"
 	"slices"
 	"strings"
@@ -25,6 +27,7 @@ type String struct {
 	fstrings.String
 	Address string
 	Classes string
+	Suspect bool
 }
 
 type Carver struct {
@@ -43,7 +46,7 @@ func New(opts *Options) *Carver {
 	}
 }
 
-func (crv *Carver) Carve(block []byte) <-chan *String {
+func (crv *Carver) Carve(ctx context.Context, block []byte) <-chan *String {
 	go func() {
 		defer close(crv.strings)
 
@@ -70,7 +73,12 @@ func (crv *Carver) Carve(block []byte) <-chan *String {
 				cls = strings.Join(v, " ")
 			}
 
-			crv.strings <- &String{*str, adr, cls}
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				crv.strings <- &String{*str, adr, cls, false}
+			}
 		}
 	}()
 
@@ -115,7 +123,7 @@ func contains(a, b []string) bool {
 
 func compare(a, b String) int {
 	if a.Value == b.Value {
-		return int(a.Offset - b.Offset)
+		return cmp.Compare(a.Offset, b.Offset)
 	}
 
 	return strings.Compare(a.Value, b.Value)
