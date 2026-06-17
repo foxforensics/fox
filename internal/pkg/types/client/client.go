@@ -1,18 +1,18 @@
 package client
 
 import (
-	"bytes"
 	"context"
-	"crypto/sha256"
+	"crypto/tls"
+	"errors"
 	"fmt"
-	"log"
-	"net"
+	"log/slog"
 	"net/http"
 	"net/url"
-	"os"
 	"time"
 
 	mqtt "github.com/eclipse/paho.golang/paho"
+
+	"github.com/segmentio/ksuid"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/version"
 )
@@ -23,36 +23,15 @@ var Timeout = time.Second * 30
 // MaxIdle connections at once.
 var MaxIdle = 0
 
-// ID returns the clients unique and reproducible id. It is build from
-// the programs name and version number, followed by the SHA256 hash of
-// the hostname and the first interface found that is up.
-//
-// Example:
-//
-//	fox 1.2.3 42fee663a1683b00383ec69d91e4880335cd6b265611e4e7b4cdf5e5e4ae22d7
 func ID() string {
-	id, err := os.Hostname()
+	uid, err := ksuid.NewRandomWithTime(time.Now().UTC())
 
 	if err != nil {
-		log.Println(err)
-		return "unknown"
+		slog.Error(err.Error())
+		return Name()
 	}
 
-	in, err := net.Interfaces()
-
-	if err != nil {
-		log.Println(err)
-		return "unknown"
-	}
-
-	for _, i := range in {
-		if i.Flags&net.FlagUp != 0 && bytes.Compare(i.HardwareAddr, nil) != 0 {
-			id = fmt.Sprintf("%s-%s", id, i.HardwareAddr.String())
-			break
-		}
-	}
-
-	return fmt.Sprintf("%s %x", Name(), sha256.Sum256([]byte(id)))
+	return fmt.Sprintf("%s %s", Name(), uid.String())
 }
 
 // Name returns the clients name including the version number.
@@ -69,22 +48,27 @@ func Http() *http.Client {
 			IdleConnTimeout:     Timeout,
 			TLSHandshakeTimeout: Timeout,
 			MaxIdleConnsPerHost: MaxIdle,
+			TLSClientConfig: &tls.Config{
+				MinVersion: tls.VersionTLS12, // pinned
+			},
 		},
 	}
 }
 
 // Mqtt returns the default mqtt client.
-func Mqtt(adr, usr, pwd string) *mqtt.Client {
+func Mqtt(adr, usr, pwd string) (*mqtt.Client, error) {
 	u, err := url.Parse(adr)
 
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 
-	con, err := net.Dial("tcp", u.Host)
+	con, err := tls.Dial("tcp", u.Host, &tls.Config{
+		MinVersion: tls.VersionTLS12, // pinned
+	})
 
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 
 	client := mqtt.NewClient(mqtt.ClientConfig{Conn: con})
@@ -108,12 +92,12 @@ func Mqtt(adr, usr, pwd string) *mqtt.Client {
 	ack, err := client.Connect(context.Background(), pkg)
 
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 
 	if ack.ReasonCode > 0 {
-		log.Fatalln(ack.Properties.ReasonString)
+		return nil, errors.New(ack.Properties.ReasonString)
 	}
 
-	return client
+	return client, nil
 }
