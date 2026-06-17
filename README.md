@@ -27,9 +27,10 @@
 * [x] Integral fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * [x] Integral *Chain-of-Custody* receipt generation
 * [x] Support of path globbing and file streams
+* [x] Support of archive and file path sanitization
 * [x] Support of encrypted `7z`, `Rar`, `Zip` archives
 * [x] Many popular archive and compression formats
-* [x] Many popular cryptographic, image, fuzzy and fast hashes
+* [x] Many popular cryptographic, image, fuzzy, fast and OS hashes
 * [x] With [man pages](assets/man) for every command
 * [x] Advanced [Hunt](assets/man/fox-hunt.md) command
   * [x] Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
