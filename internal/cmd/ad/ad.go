@@ -2,7 +2,8 @@ package ad
 
 import (
 	"errors"
-	"log"
+	"fmt"
+	"log/slog"
 	"strings"
 
 	"go.foxforensics.eu/bootkey/bootkey"
@@ -72,7 +73,12 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		return text.Usage(Usage)
 	}
 
-	ch := cli.Load(cmd.Paths, true)
+	ch, err := cli.Init(cmd.Paths, true)
+
+	if err != nil {
+		return err
+	}
+
 	defer cli.Discard()
 
 	ntds := <-ch
@@ -93,7 +99,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 
 	if cmd.Lookup {
 		if cli.Verbose > 0 {
-			log.Println("building tables")
+			slog.Info("building tables")
 		}
 
 		n, err := tables.Build(cmd.Wordlist, hash.LM, hash.NT)
@@ -103,7 +109,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		}
 
 		if cli.Verbose > 0 {
-			log.Printf("using %d NTLM hashes\n", n)
+			slog.Info(fmt.Sprintf("using %d NTLM hashes", n))
 		}
 	}
 
@@ -114,7 +120,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("BootKey %x\n", key)
+		slog.Info(fmt.Sprintf("BootKey %x", key))
 
 		pek, err := extract.Keys(ntds.Bytes(), key)
 
@@ -123,7 +129,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		}
 
 		for i, k := range pek {
-			log.Printf("PEK #%d %x\n", i, k)
+			slog.Info(fmt.Sprintf("PEK #%d %x", i, k))
 		}
 	}
 
@@ -134,7 +140,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("found %d records(s)\n", n)
+		slog.Info(fmt.Sprintf("found %d records(s)", n))
 	}
 
 	return nil
