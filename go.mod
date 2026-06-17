@@ -17,7 +17,7 @@ require (
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
-	github.com/dlclark/regexp2/v2 v2.2.1
+	github.com/dlclark/regexp2/v2 v2.2.2
 	github.com/eclipse/paho.golang v0.23.0
 	github.com/emersion/go-message v0.18.2
 	github.com/fatih/color v1.19.0
@@ -28,7 +28,7 @@ require (
 	github.com/korylprince/goxar v0.1.2
 	github.com/minio/minlz v1.1.1
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
-	github.com/nwaples/rardecode/v2 v2.2.3
+	github.com/nwaples/rardecode/v2 v2.2.5
 	github.com/parquet-go/parquet-go v0.30.1
 	github.com/pierrec/lz4/v4 v4.1.27
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
@@ -39,7 +39,6 @@ require (
 	github.com/sorairolake/lzip-go v0.3.8
 	github.com/sourcegraph/conc v0.3.0
 	github.com/ulikunitz/xz v0.5.15
-	github.com/xxtea/xxtea-go v1.0.0
 	github.com/zeebo/xxh3 v1.1.0
 	go.foxforensics.eu/bootkey v1.0.0
 	go.foxforensics.eu/checker v1.0.0
@@ -102,6 +101,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
+	github.com/segmentio/ksuid v1.0.4 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
