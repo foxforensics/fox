@@ -78,7 +78,13 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 		return text.Usage(Usage)
 	}
 
-	ch := cli.Load(cmd.Paths, false)
+	ch, err := cli.Init(cmd.Paths, false)
+
+	if err != nil {
+		return err
+	}
+
+	defer cli.Discard()
 
 	if cmd.Text || cmd.Hex {
 		cli.NoConvert = true
@@ -87,8 +93,6 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 	// apply command specific context
 	cli.Filters.Before = cmd.Before
 	cli.Filters.After = cmd.After
-
-	defer cli.Discard()
 
 	for h := range ch {
 		if !cli.NoPretty {

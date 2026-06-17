@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log/slog"
 	"slices"
 	"strings"
 
@@ -55,12 +56,22 @@ type FileHash struct {
 }
 
 func (fh *FileHash) ToJSON() string {
-	b, _ := json.MarshalIndent(fh, "", "  ")
+	b, err := json.MarshalIndent(fh, "", "  ")
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }
 
 func (fh *FileHash) ToJSONL() string {
-	b, _ := json.Marshal(fh)
+	b, err := json.Marshal(fh)
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }
 
@@ -120,7 +131,12 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		n = max(n, len(algo))
 	}
 
-	ch := cli.Load(cmd.Paths, true)
+	ch, err := cli.Init(cmd.Paths, true)
+
+	if err != nil {
+		return err
+	}
+
 	defer cli.Discard()
 
 	for h := range ch {
