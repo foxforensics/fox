@@ -3,7 +3,7 @@ package szip
 import (
 	"bytes"
 	"io"
-	"log"
+	"log/slog"
 
 	"github.com/bodgit/sevenzip"
 
@@ -20,7 +20,7 @@ func Extract(b []byte, root, pass string) (e []file.Stream) {
 	r, err := sevenzip.NewReaderWithPassword(bytes.NewReader(b), int64(len(b)), pass)
 
 	if err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 		return
 	}
 
@@ -32,7 +32,7 @@ func Extract(b []byte, root, pass string) (e []file.Stream) {
 		if v, err := extractFile(f, root); err == nil {
 			e = append(e, v)
 		} else {
-			log.Println(err)
+			slog.Error(err.Error())
 		}
 	}
 

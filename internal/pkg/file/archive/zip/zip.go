@@ -3,7 +3,7 @@ package zip
 import (
 	"bytes"
 	"io"
-	"log"
+	"log/slog"
 	"strings"
 
 	"go.foxforensics.eu/go-zip/zip"
@@ -29,7 +29,7 @@ func Extract(b []byte, root, pass string) (e []file.Stream) {
 	r, err := zip.NewReader(bytes.NewReader(b), int64(len(b)))
 
 	if err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 		return
 	}
 
@@ -45,7 +45,7 @@ func Extract(b []byte, root, pass string) (e []file.Stream) {
 		a, err := f.Open()
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 
@@ -54,7 +54,7 @@ func Extract(b []byte, root, pass string) (e []file.Stream) {
 		_ = a.Close()
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 

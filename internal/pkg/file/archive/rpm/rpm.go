@@ -3,8 +3,9 @@ package rpm
 import (
 	"bytes"
 	"compress/bzip2"
+	"fmt"
 	"io"
-	"log"
+	"log/slog"
 
 	"github.com/cavaliergopher/cpio"
 	"github.com/cavaliergopher/rpm"
@@ -29,7 +30,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 	pkg, err := rpm.Read(br)
 
 	if err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 		return
 	}
 
@@ -51,7 +52,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 	case "uncompressed":
 		r1 = br
 	default:
-		log.Printf("%s not supported\n", v)
+		slog.Warn(fmt.Sprintf("%s not supported", v))
 	}
 
 	// prevent resource leaks
@@ -62,12 +63,12 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 	}
 
 	if err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 		return
 	}
 
 	if pkg.PayloadFormat() != "cpio" {
-		log.Printf("%s not supported\n", pkg.PayloadFormat())
+		slog.Warn(fmt.Sprintf("%s not supported", pkg.PayloadFormat()))
 		return
 	}
 
@@ -81,7 +82,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 		}
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			break
 		}
 
@@ -94,7 +95,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 		_, err = r2.Read(buf)
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 

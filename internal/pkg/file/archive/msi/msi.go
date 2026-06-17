@@ -3,7 +3,7 @@ package msi
 import (
 	"bytes"
 	"io"
-	"log"
+	"log/slog"
 
 	"go.foxforensics.eu/go-msi/msi"
 
@@ -20,7 +20,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 	r, err := msi.Open(bytes.NewReader(b))
 
 	if err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 		return
 	}
 
@@ -36,14 +36,14 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 		str, err := r.ReadStream(name)
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 
 		buf, err := io.ReadAll(str)
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 

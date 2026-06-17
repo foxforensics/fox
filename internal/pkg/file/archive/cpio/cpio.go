@@ -3,7 +3,7 @@ package cpio
 import (
 	"bytes"
 	"io"
-	"log"
+	"log/slog"
 
 	"github.com/cavaliergopher/cpio"
 
@@ -34,7 +34,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 		}
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			break
 		}
 
@@ -45,7 +45,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 		buf, err := io.ReadAll(r)
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 

@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"strings"
 	"time"
 
@@ -57,7 +57,7 @@ func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 	if err != nil {
 		defer close(ch)
 		if !errors.Is(err, io.EOF) {
-			log.Println(err)
+			slog.Error(err.Error())
 		}
 		return ch
 	}
@@ -66,7 +66,7 @@ func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 
 	if err != nil {
 		defer close(ch)
-		log.Println(err)
+		slog.Error(err.Error())
 		return ch
 	}
 
@@ -77,7 +77,7 @@ func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 			e, err := newEvent(evt)
 
 			if err != nil {
-				log.Println(err)
+				slog.Error(err.Error())
 				continue
 			}
 

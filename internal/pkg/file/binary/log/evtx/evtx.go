@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"maps"
 	"slices"
 	"strconv"
@@ -69,7 +69,7 @@ func Preload() {
 	providers, err = events.Load()
 
 	if err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 	}
 }
 
@@ -81,7 +81,7 @@ func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 	if err != nil {
 		defer close(ch)
 		if !errors.Is(err, io.EOF) {
-			log.Println(err)
+			slog.Error(err.Error())
 		}
 		return ch
 	}

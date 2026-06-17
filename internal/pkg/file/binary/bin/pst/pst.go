@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
-	"log"
+	"log/slog"
 
 	set "github.com/emersion/go-message/charset"
 
@@ -71,7 +71,7 @@ func getFolders(pf *pst.File) ([]Folder, error) {
 		f := &Folder{Name: v.Name}
 
 		if f.Messages, err = getMessages(v); err != nil {
-			log.Printf("warning: %s!\n", err)
+			slog.Warn(err.Error())
 		}
 
 		res = append(res, *f)
@@ -99,7 +99,7 @@ func getMessages(f *pst.Folder) ([]Message, error) {
 		m := &Message{Content: v.Properties}
 
 		if m.Attachments, err = getAttachments(v); err != nil {
-			log.Printf("warning: %s!\n", err)
+			slog.Warn(err.Error())
 		}
 
 		res = append(res, *m)
@@ -134,7 +134,7 @@ func getAttachments(m *pst.Message) ([]Attachment, error) {
 		if _, err = v.WriteTo(buf); err == nil {
 			a.Data = base64.StdEncoding.EncodeToString(buf.Bytes())
 		} else {
-			log.Printf("warning: %s!\n", err)
+			slog.Warn(err.Error())
 		}
 
 		res = append(res, *a)

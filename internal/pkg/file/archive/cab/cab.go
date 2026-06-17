@@ -3,7 +3,7 @@ package cab
 import (
 	"bytes"
 	"io"
-	"log"
+	"log/slog"
 	"strings"
 
 	"github.com/secDre4mer/go-cab"
@@ -21,7 +21,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 	r, err := cab.Open(bytes.NewReader(b), int64(len(b)))
 
 	if err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 		return
 	}
 
@@ -33,14 +33,14 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 		h, err := f.Open()
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 
 		buf, err := io.ReadAll(h)
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 

@@ -3,7 +3,7 @@ package rar
 import (
 	"bytes"
 	"io"
-	"log"
+	"log/slog"
 	"strings"
 
 	"github.com/nwaples/rardecode/v2"
@@ -21,7 +21,7 @@ func Extract(b []byte, root, pass string) (e []file.Stream) {
 	r, err := rardecode.NewReader(bytes.NewBuffer(b), rardecode.Password(pass))
 
 	if err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 		return
 	}
 
@@ -33,7 +33,7 @@ func Extract(b []byte, root, pass string) (e []file.Stream) {
 		}
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			break
 		}
 
@@ -44,7 +44,7 @@ func Extract(b []byte, root, pass string) (e []file.Stream) {
 		buf, err := io.ReadAll(r)
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 

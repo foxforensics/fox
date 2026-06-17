@@ -3,7 +3,7 @@ package iso
 import (
 	"bytes"
 	"io"
-	"log"
+	"log/slog"
 	"path/filepath"
 
 	"github.com/hooklift/iso9660"
@@ -29,7 +29,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 	r, err := iso9660.NewReader(bytes.NewReader(b))
 
 	if err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 		return
 	}
 
@@ -41,7 +41,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 		}
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			break
 		}
 
@@ -52,7 +52,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 		buf, err := io.ReadAll(f.Sys().(io.Reader))
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"io"
 	"io/fs"
-	"log"
+	"log/slog"
 
 	"github.com/mkrautz/goar"
 
@@ -28,7 +28,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 		}
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			break
 		}
 
@@ -39,7 +39,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 		buf, err := io.ReadAll(r)
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue
 		}
 

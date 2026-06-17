@@ -3,7 +3,7 @@ package xar
 import (
 	"bytes"
 	"io"
-	"log"
+	"log/slog"
 	"strings"
 
 	"github.com/korylprince/goxar"
@@ -25,7 +25,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 	}()
 
 	if err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 		return
 	}
 
@@ -37,7 +37,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 		if v, err := extractFile(f, root); err == nil {
 			e = append(e, v)
 		} else {
-			log.Println(err)
+			slog.Error(err.Error())
 		}
 	}
 

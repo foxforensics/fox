@@ -1,7 +1,7 @@
 package elf
 
 import (
-	"log"
+	"log/slog"
 	"strings"
 
 	"github.com/saferwall/elf"
@@ -25,7 +25,7 @@ func Convert(b []byte) ([]byte, error) {
 	err = p.Parse()
 
 	if err != nil {
-		log.Printf("warning: %s!\n", err)
+		slog.Warn(err.Error())
 	}
 
 	raw, err := p.DumpRawJSON()
