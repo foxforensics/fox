@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"log/slog"
 	"os"
 	"runtime"
 	"runtime/debug"
@@ -28,6 +29,11 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 	"go.foxforensics.eu/fox/v4/internal/pkg/version"
 )
+
+var About = strings.TrimSpace(`
+© 2026 Fox Forensics
+Version %s %s
+`)
 
 var Usage = strings.TrimSpace(`
 Usage: fox [COMMAND] [FLAGS...] <PATHS...>
@@ -105,7 +111,7 @@ func main() {
 	defer trace()
 
 	log.SetFlags(0)
-	log.SetPrefix("fox: ")
+	log.SetPrefix("FOX ") // 🦊
 
 	cli := new(fox)
 	ctx := kong.Parse(cli,
@@ -119,10 +125,13 @@ func main() {
 	switch {
 	case len(ctx.Args) == 0, ctx.Error != nil:
 		fallthrough // show usage
+
 	case cli.Globals.Help, ctx.Command() == "help":
 		_ = text.Usage(Usage)
+
 	case cli.Version:
-		fmt.Printf("© 2026 Fox Forensics\nVersion %s %s\n", version.Number, version.ID())
+		fmt.Printf(About, version.Number, version.ID())
+
 	default:
 		if cli.Verbose > 0 {
 			defer timer(time.Now())
@@ -130,15 +139,14 @@ func main() {
 
 		// parse input
 		if len(cli.In) > 0 {
-			cli.Input = strings.Split(strings.TrimSpace(string(cli.In)), "\n")
+			cli.Input = split(cli.In)
 		}
 
 		// redirect output
 		if len(cli.Out) > 0 {
-			text.SetOutput(os.OpenFile(cli.Out, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
+			store(cli.Out)
 		} else if cli.Quiet {
-			text.SetOutput(os.Open(os.DevNull))
-			log.SetOutput(io.Discard)
+			quiet()
 		}
 
 		defer text.Stdout.Close(cli.Out, !cli.NoReceipt)
@@ -147,17 +155,39 @@ func main() {
 	}
 }
 
+func split(b []byte) []string {
+	v := strings.Split(strings.TrimSpace(string(b)), "\n")
+
+	// normalize Windows paths
+	for i, s := range v {
+		v[i] = strings.TrimRight(s, "\r")
+	}
+
+	return v
+}
+
+func store(f string) {
+	text.SetOutput(os.OpenFile(f, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
+}
+
 func timer(t time.Time) {
-	log.Printf("time %v\n", time.Since(t))
+	slog.Info(fmt.Sprintf("time %v", time.Since(t)))
+}
+
+func quiet() {
+	text.SetOutput(os.Open(os.DevNull))
+	log.SetOutput(io.Discard)
 }
 
 func trace() {
 	if err := recover(); err != nil {
-		log.Printf("%+v\n", err)
+		slog.Error(fmt.Sprintf("%+v", err), err)
 
 		// print stack trace only in dev
 		if version.Number == "dev" {
-			log.Printf("\n%s\n", debug.Stack())
+			slog.Error("--")
+			slog.Error(string(debug.Stack()))
+			slog.Error("--")
 		}
 	}
 }
