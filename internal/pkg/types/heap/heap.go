@@ -19,8 +19,8 @@ type Heap struct {
 	m mmap.MMap // memory map
 }
 
-func New(name, hint string, size uint64, m mmap.MMap) *Heap {
-	return &Heap{Name: name, Hint: hint, Size: size, m: m}
+func New(name, hint string, m mmap.MMap) *Heap {
+	return &Heap{Name: name, Hint: hint, Size: uint64(len(m)), m: m}
 }
 
 func (h *Heap) String() string {
@@ -42,11 +42,15 @@ func (h *Heap) Bytes() []byte {
 func (h *Heap) IsText() bool {
 	h.RLock()
 	defer h.RUnlock()
-	b := h.Bytes()[:min(len(h.Bytes()), 4096)]
+	b := h.m[:min(h.Size, 4096)]
 	return !bytes.ContainsRune(b, 0)
 }
 
 func (h *Heap) Discard() {
+	defer func() {
+		_ = recover()
+	}()
+
 	h.Lock()
 
 	// unmap memory

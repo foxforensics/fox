@@ -52,7 +52,7 @@ func TestHunt(t *testing.T) {
 
 			file := test.FixtureFile(tt.file)
 
-			for range htr.Hunt(ctx, ldr.Load([]string{file})) {
+			for range htr.Hunt(ctx, ldr.Load(ctx, []string{file})) {
 				n++
 			}
 

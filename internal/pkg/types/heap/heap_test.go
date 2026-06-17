@@ -14,7 +14,7 @@ const (
 )
 
 func TestNew(t *testing.T) {
-	h := New(name, hint, size, test.Fixture(file))
+	h := New(name, hint, test.Fixture(file))
 
 	defer h.Discard()
 
@@ -31,8 +31,18 @@ func TestNew(t *testing.T) {
 	}
 }
 
+func TestIsText(t *testing.T) {
+	h := New(name, hint, test.Fixture(file))
+
+	defer h.Discard()
+
+	if !h.IsText() {
+		t.Fatal("not text")
+	}
+}
+
 func TestBytes(t *testing.T) {
-	h := New(name, hint, size, test.Fixture(file))
+	h := New(name, hint, test.Fixture(file))
 
 	defer h.Discard()
 
@@ -42,7 +52,7 @@ func TestBytes(t *testing.T) {
 }
 
 func TestString(t *testing.T) {
-	h := New(name, hint, size, test.Fixture(file))
+	h := New(name, hint, test.Fixture(file))
 
 	defer h.Discard()
 
@@ -52,7 +62,7 @@ func TestString(t *testing.T) {
 }
 
 func TestDiscard(t *testing.T) {
-	h := New(name, hint, size, test.Fixture(file))
+	h := New(name, hint, test.Fixture(file))
 	h.Discard()
 
 	if h.Size > 0 {

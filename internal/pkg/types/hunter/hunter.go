@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"io"
-	"log"
-	"maps"
+	"log/slog"
 	"slices"
+	"strings"
 	"sync"
 
 	"github.com/sourcegraph/conc/pool"
@@ -34,14 +35,12 @@ type Options struct {
 
 type Hunter struct {
 	opts   *Options
-	cache  map[string]*event.Event
 	events chan *event.Event
 }
 
 func New(opts *Options) *Hunter {
 	return &Hunter{
 		opts:   opts,
-		cache:  make(map[string]*event.Event),
 		events: make(chan *event.Event, opts.Threads*1024),
 	}
 }
@@ -58,7 +57,7 @@ func (htr *Hunter) Hunt(ctx context.Context, ch <-chan *heap.Heap) <-chan *event
 		for h := range ch {
 			p.Go(func(ctx context.Context) error {
 				if htr.opts.Verbose > 0 {
-					log.Printf("hunt: carving heap %s\n", h.String())
+					slog.Info(fmt.Sprintf("hunt: carving heap %s", h.String()))
 				}
 
 				select {
@@ -72,9 +71,9 @@ func (htr *Hunter) Hunt(ctx context.Context, ch <-chan *heap.Heap) <-chan *event
 
 		if err := p.Wait(); err != nil {
 			if errors.Is(err, context.Canceled) && htr.opts.Verbose > 0 {
-				log.Println("hunt: canceled")
+				slog.Info("hunt: canceled")
 			} else {
-				log.Println(err)
+				slog.Error(err.Error())
 			}
 		}
 	}()
@@ -92,12 +91,18 @@ func (htr *Hunter) sort() <-chan *event.Event {
 	go func() {
 		defer close(sorted)
 
+		var src []*event.Event
+
 		for e := range htr.events {
-			htr.cache[e.SortKey()] = e
+			src = append(src, e)
 		}
 
-		for _, k := range slices.Sorted(maps.Keys(htr.cache)) {
-			sorted <- htr.cache[k]
+		slices.SortStableFunc(src, func(a, b *event.Event) int {
+			return strings.Compare(a.SortKey(), b.SortKey())
+		})
+
+		for _, e := range src {
+			sorted <- e
 		}
 	}()
 
@@ -172,7 +177,7 @@ func (htr *Hunter) findOffset(ctx context.Context, h *heap.Heap, seq []byte) <-c
 			out <- off
 
 			if htr.opts.Verbose > 2 {
-				log.Printf("hunt: found at offset 0x%08x\n", off)
+				slog.Info(fmt.Sprintf("hunt: found at offset 0x%08x", off))
 			}
 
 			off += int64(len(seq))

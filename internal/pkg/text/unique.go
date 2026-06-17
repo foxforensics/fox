@@ -2,32 +2,37 @@ package text
 
 import (
 	"strings"
+	"sync"
 
 	"github.com/agnivade/levenshtein"
 	"github.com/zeebo/xxh3"
+
+	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 )
 
 type Unique interface {
 	IsUnique(string) bool
 }
 
-type null struct{}
-
 type Hash struct {
-	cache map[uint64]null
+	sync.Mutex
+	cache types.Set
 }
 
 func ByHash() *Hash {
 	return &Hash{
-		cache: make(map[uint64]null),
+		cache: make(types.Set),
 	}
 }
 
 func (u *Hash) IsUnique(s string) bool {
 	h := xxh3.HashString(s)
 
+	u.Lock()
+	defer u.Unlock()
+
 	if _, ok := u.cache[h]; !ok {
-		u.cache[h] = null{}
+		u.cache.Set(h)
 		return true
 	}
 
@@ -35,6 +40,7 @@ func (u *Hash) IsUnique(s string) bool {
 }
 
 type Distance struct {
+	sync.Mutex
 	limit float64
 	dedup []string
 }
@@ -49,6 +55,8 @@ func ByDistance(limit float64) *Distance {
 func (u *Distance) IsUnique(s string) bool {
 	s = strings.ToLower(strings.TrimSpace(s))
 
+	u.Lock()
+
 	// search latest strings first to improve performance
 	for i := len(u.dedup) - 1; i >= 0; i-- {
 		v := u.dedup[i]
@@ -61,6 +69,8 @@ func (u *Distance) IsUnique(s string) bool {
 	}
 
 	u.dedup = append(u.dedup, s)
+
+	u.Unlock()
 
 	return true
 }
