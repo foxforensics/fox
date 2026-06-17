@@ -112,10 +112,11 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 }
 
 func (cmd *Cat) renderText(cli *cli.Globals, b []byte, hint string) {
-	for l := range buffer.Text(cli, &buffer.TextContext{
-		Data: b,
-		Hint: hint,
-	}).Lines {
+	for l := range buffer.Text(&buffer.TextContext{
+		Parent: cli.Context,
+		Data:   b,
+		Hint:   hint,
+	}, cli).Lines {
 		s := l.String
 
 		if cmd.uniq != nil && !cmd.uniq.IsUnique(s) {
@@ -139,10 +140,11 @@ func (cmd *Cat) renderText(cli *cli.Globals, b []byte, hint string) {
 func (cmd *Cat) renderHex(cli *cli.Globals, b []byte) {
 	lastHex, wasCut := "", false
 
-	for l := range buffer.Hex(cli, &buffer.HexContext{
+	for l := range buffer.Hex(&buffer.HexContext{
+		Parent: cli.Context,
 		Data:   b,
 		Pretty: !cli.NoPretty,
-	}).Lines {
+	}, cli).Lines {
 		if cli.Regexp != nil {
 			if ok, _ := cli.Regexp.MatchString(l.Values); !ok {
 				continue // not matched afterward

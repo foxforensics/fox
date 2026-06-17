@@ -1,6 +1,7 @@
 package buffer
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
@@ -20,32 +21,38 @@ type HexBuffer struct {
 }
 
 type HexContext struct {
+	Parent context.Context
 	Data   []byte
 	Delta  int
 	Index  int
 	Pretty bool
 }
 
-func Hex(cli *cli.Globals, ctx *HexContext) *HexBuffer {
+func Hex(ctx *HexContext, cli *cli.Globals) *HexBuffer {
 	var buf = &HexBuffer{make(chan HexLine, cli.Threads*1024)}
 
 	if cli.Limits.IsTail {
 		ctx.Delta = cli.Limits.Values.Bytes
 	}
 
-	go streamHex(buf, ctx)
+	go streamHex(ctx, buf)
 
 	return buf
 }
 
-func streamHex(buf *HexBuffer, ctx *HexContext) {
+func streamHex(ctx *HexContext, buf *HexBuffer) {
 	defer close(buf.Lines)
 
 	for ; ctx.Index < len(ctx.Data); ctx.Index += 16 {
-		if ctx.Pretty {
-			buf.Lines <- formatStd(ctx)
-		} else {
-			buf.Lines <- formatRaw(ctx)
+		select {
+		case <-ctx.Parent.Done():
+			return
+		default:
+			if ctx.Pretty {
+				buf.Lines <- formatStd(ctx)
+			} else {
+				buf.Lines <- formatRaw(ctx)
+			}
 		}
 	}
 }

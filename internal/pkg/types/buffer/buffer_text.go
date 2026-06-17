@@ -1,6 +1,7 @@
 package buffer
 
 import (
+	"context"
 	"fmt"
 	"math"
 
@@ -24,13 +25,14 @@ type TextBuffer struct {
 }
 
 type TextContext struct {
-	SMap  smap.SMap
-	Data  []byte
-	Delta int
-	Hint  string
+	Parent context.Context
+	SMap   smap.SMap
+	Data   []byte
+	Delta  int
+	Hint   string
 }
 
-func Text(cli *cli.Globals, ctx *TextContext) *TextBuffer {
+func Text(ctx *TextContext, cli *cli.Globals) *TextBuffer {
 	var data = ctx.Data
 	var last uint
 
@@ -55,12 +57,12 @@ func Text(cli *cli.Globals, ctx *TextContext) *TextBuffer {
 		ctx.Delta = cli.Limits.Values.Lines
 	}
 
-	go streamText(buf, ctx)
+	go streamText(ctx, buf)
 
 	return buf
 }
 
-func streamText(buf *TextBuffer, ctx *TextContext) {
+func streamText(ctx *TextContext, buf *TextBuffer) {
 	defer close(buf.Lines)
 
 	var numSep uint = 0
@@ -68,7 +70,6 @@ func streamText(buf *TextBuffer, ctx *TextContext) {
 	var tmpGrp uint = 0
 
 	for _, str := range ctx.SMap {
-
 		// insert context separator
 		if tmpGrp != str.Group && numGrp > 1 {
 			buf.Lines <- &TextLine{Sep, str.Group, ""}
@@ -83,7 +84,12 @@ func streamText(buf *TextBuffer, ctx *TextContext) {
 			text.Sanitize(string(str.Bytes)),
 		}
 
-		tmpGrp = str.Group
-		numGrp++
+		select {
+		case <-ctx.Parent.Done():
+			return
+		default:
+			tmpGrp = str.Group
+			numGrp++
+		}
 	}
 }
