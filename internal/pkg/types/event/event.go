@@ -3,6 +3,7 @@ package event
 import (
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"maps"
 	"slices"
 	"strings"
@@ -74,11 +75,21 @@ func (e *Event) ToCEF() string {
 }
 
 func (e *Event) ToJSON() string {
-	b, _ := json.MarshalIndent(e, "", "  ")
+	b, err := json.MarshalIndent(e, "", "  ")
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }
 
 func (e *Event) ToJSONL() string {
-	b, _ := json.Marshal(e)
+	b, err := json.Marshal(e)
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }

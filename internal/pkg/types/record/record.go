@@ -3,6 +3,7 @@ package record
 import (
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"strings"
 
 	"go.foxforensics.eu/hashdump/extract"
@@ -26,12 +27,22 @@ func (c *Computer) String() string {
 }
 
 func (c *Computer) ToJSON() string {
-	b, _ := json.MarshalIndent(c, "", "  ")
+	b, err := json.MarshalIndent(c, "", "  ")
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }
 
 func (c *Computer) ToJSONL() string {
-	b, _ := json.Marshal(c)
+	b, err := json.Marshal(c)
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }
 
@@ -44,12 +55,22 @@ func (g *Group) String() string {
 }
 
 func (g *Group) ToJSON() string {
-	b, _ := json.MarshalIndent(g, "", "  ")
+	b, err := json.MarshalIndent(g, "", "  ")
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }
 
 func (g *Group) ToJSONL() string {
-	b, _ := json.Marshal(g)
+	b, err := json.Marshal(g)
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }
 
@@ -62,12 +83,22 @@ func (u *User) String() string {
 }
 
 func (u *User) ToJSON() string {
-	b, _ := json.MarshalIndent(u, "", "  ")
+	b, err := json.MarshalIndent(u, "", "  ")
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }
 
 func (u *User) ToJSONL() string {
-	b, _ := json.Marshal(u)
+	b, err := json.Marshal(u)
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }
 

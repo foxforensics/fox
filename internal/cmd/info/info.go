@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
+	"log/slog"
 	"math"
 	"slices"
 	"strings"
@@ -97,12 +97,22 @@ func (fi *FileInfo) String() string {
 }
 
 func (fi *FileInfo) ToJSON() string {
-	b, _ := json.MarshalIndent(fi, "", "  ")
+	b, err := json.MarshalIndent(fi, "", "  ")
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }
 
 func (fi *FileInfo) ToJSONL() string {
-	b, _ := json.Marshal(fi)
+	b, err := json.Marshal(fi)
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
 	return string(b)
 }
 
@@ -133,15 +143,19 @@ func (cmd *Info) Validate() error {
 	}
 
 	if cmd.Lookup {
-		log.Println("warning: data will be transmitted to a third-party service!")
+		slog.Warn("data will be transmitted to a third-party service")
 	}
 
 	return nil
 }
 
 func (cmd *Info) AfterApply(_ *kong.Kong, _ kong.Vars) error {
+	var ok bool
+
 	if len(cmd.Block) > 0 {
-		cmd.block = text.Mechanize(cmd.Block)
+		if cmd.block, ok = text.Mechanize(cmd.Block); !ok {
+			return errors.New("invalid block syntax")
+		}
 	}
 
 	return nil
@@ -164,7 +178,12 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 	cli.NoConvert = true
 	cli.NoPretty = true
 
-	ch := cli.Load(cmd.Paths, true)
+	ch, err := cli.Init(cmd.Paths, true)
+
+	if err != nil {
+		return err
+	}
+
 	defer cli.Discard()
 
 	color.NoColor = v
@@ -181,7 +200,11 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.Lookup {
-			fi.Suspect = lookup.Lookup(h.Bytes(), cli.Verbose)
+			fi.Suspect, err = lookup.Lookup(h.Bytes(), cli.Verbose)
+
+			if err != nil {
+				slog.Error(err.Error())
+			}
 		}
 
 		// because empty files will cause errors
