@@ -79,5 +79,9 @@ func macAddr() string {
 }
 
 func pad(s string) string {
-	return fmt.Sprintf("%s %s", s, strings.Repeat(".", 70-len(s)))
+	if len(s) < 70 {
+		s = fmt.Sprintf("%s %s", s, strings.Repeat(".", 70-len(s)))
+	}
+
+	return s
 }
