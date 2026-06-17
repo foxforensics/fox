@@ -4,7 +4,10 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"io"
+	"log/slog"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/file/schema"
@@ -26,8 +29,8 @@ type Http struct {
 	opts   *Options
 }
 
-func New(opts *Options) *Http {
-	return &Http{client.Http(), opts}
+func Create(opts *Options) (*Http, error) {
+	return &Http{client.Http(), opts}, nil
 }
 
 func (h Http) String() string {
@@ -51,6 +54,20 @@ func (h Http) Stream(evt *event.Event) error {
 		return err
 	}
 
+	u, err := url.Parse(h.opts.Url)
+
+	if err != nil {
+		return err
+	}
+
+	if !strings.HasPrefix(u.Scheme, "http") {
+		return errors.New("unsupported scheme")
+	}
+
+	if u.Scheme == "http" {
+		slog.Warn("data will be streamed unencrypted")
+	}
+
 	req, err := http.NewRequest("POST", h.opts.Url, bytes.NewReader(buf))
 
 	if err != nil {
@@ -68,7 +85,7 @@ func (h Http) Stream(evt *event.Event) error {
 
 	// add authorization for Splunk
 	if h.opts.Schema == schema.Hec && len(h.opts.Token) > 0 {
-		req.Header.Set("Authorization", fmt.Sprintf("Splunk %s", strings.ToLower(h.opts.Token)))
+		req.Header.Set("Authorization", fmt.Sprintf("Splunk %s", h.opts.Token))
 	}
 
 	res, err := h.client.Do(req)
@@ -76,6 +93,9 @@ func (h Http) Stream(evt *event.Event) error {
 	if err != nil {
 		return err
 	}
+
+	// drain body
+	_, _ = io.Copy(io.Discard, res.Body)
 
 	defer func() {
 		_ = res.Body.Close()

@@ -29,8 +29,9 @@ type Mqtt struct {
 	opts   *Options
 }
 
-func New(opts *Options) *Mqtt {
-	return &Mqtt{client.Mqtt(opts.Url, opts.Username, opts.Password), opts}
+func Create(opts *Options) (*Mqtt, error) {
+	v, err := client.Mqtt(opts.Url, opts.Username, opts.Password)
+	return &Mqtt{v, opts}, err
 }
 
 func (m Mqtt) String() string {
