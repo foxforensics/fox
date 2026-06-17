@@ -2,7 +2,6 @@ package text
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -72,11 +71,11 @@ func Humanize(i uint64) string {
 	return fmt.Sprintf("%.1f%c", float64(i)/float64(v), "kmgtpezyrq"[e])
 }
 
-func Mechanize(s string) int64 {
+func Mechanize(s string) (int64, bool) {
 	s = strings.ToLower(s)
 
 	if ok, _ := isValue.MatchString(s); !ok {
-		log.Fatalln("value invalid")
+		return 0, false
 	}
 
 	unit := s[len(s)-1]
@@ -90,14 +89,14 @@ func Mechanize(s string) int64 {
 	v, err := strconv.Atoi(s)
 
 	if err != nil {
-		log.Fatalln(err)
+		return 0, true
 	}
 
 	if !has {
-		return int64(v)
+		return int64(v), true
 	}
 
 	exp := float64(strings.IndexByte("bkmgtpezyrq", unit))
 
-	return int64(v * int(math.Pow(1024, exp)))
+	return int64(v * int(math.Pow(1024, exp))), true
 }

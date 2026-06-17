@@ -21,7 +21,7 @@ func BenchmarkMMap(b *testing.B) {
 	}()
 
 	for b.Loop() {
-		Map(f)
+		_, _ = Map(f)
 	}
 }
 
@@ -38,7 +38,11 @@ func TestMMap(t *testing.T) {
 		_ = f.Close()
 	}()
 
-	m := Map(f)
+	m, err := Map(f)
+
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	defer Unmap(m)
 

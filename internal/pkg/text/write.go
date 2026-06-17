@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
@@ -43,7 +43,7 @@ func SetOutput(wc io.WriteCloser, err error) {
 	if err == nil {
 		Stdout = &Writer{wc: wc}
 	} else {
-		log.Fatalln(err)
+		slog.Error(err.Error())
 	}
 }
 
@@ -84,7 +84,7 @@ func (w *Writer) Close(p string, r bool) {
 
 	if r && len(p) > 0 {
 		if err := receipt.Generate(p); err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 		}
 	}
 }

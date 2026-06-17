@@ -2,7 +2,7 @@ package types
 
 import (
 	"bytes"
-	"log"
+	"errors"
 	"strconv"
 	"strings"
 
@@ -26,7 +26,7 @@ type Limits struct {
 	}
 }
 
-func NewLimits(s string) *Limits {
+func NewLimits(s string) (*Limits, error) {
 	s = strings.TrimSpace(strings.ToLower(s))
 
 	neg := strings.HasPrefix(s, "-")
@@ -37,11 +37,11 @@ func NewLimits(s string) *Limits {
 	}
 
 	if len(s) == 0 {
-		return limits // empty
+		return limits, nil // empty
 	}
 
 	if ok, _ := re.MatchString(s); !ok {
-		log.Fatalf("invalid syntax: %s", s)
+		return nil, errors.New("invalid limit syntax")
 	}
 
 	var val int64
@@ -59,7 +59,7 @@ func NewLimits(s string) *Limits {
 	}
 
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 
 	if val < 0 {
@@ -73,7 +73,7 @@ func NewLimits(s string) *Limits {
 		limits.Bytes = uint(val)
 	}
 
-	return limits
+	return limits, nil
 }
 
 func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {

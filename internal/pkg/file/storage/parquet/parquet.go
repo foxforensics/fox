@@ -2,7 +2,6 @@ package parquet
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/parquet-go/parquet-go"
@@ -17,7 +16,7 @@ type File struct {
 	w    *parquet.GenericWriter[event.Event]
 }
 
-func New(name string) storage.Storage {
+func Create(name string) (storage.Storage, error) {
 	var err error
 
 	name = fmt.Sprintf("%s.parquet", name)
@@ -26,12 +25,12 @@ func New(name string) storage.Storage {
 	f.f, err = os.OpenFile(name, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 
 	f.w = parquet.NewGenericWriter[event.Event](f.f)
 
-	return f
+	return f, nil
 }
 
 func (f *File) String() string {

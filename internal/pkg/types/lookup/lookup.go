@@ -1,8 +1,8 @@
 package lookup
 
 import (
-	"errors"
-	"log"
+	"fmt"
+	"log/slog"
 	"strings"
 
 	"go.foxforensics.eu/checker/services"
@@ -12,7 +12,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/carver"
 )
 
-func Lookup(a any, verbose int) bool {
+func Lookup(a any, verbose int) (bool, error) {
 	var res *services.Result
 	var err error
 
@@ -23,25 +23,23 @@ func Lookup(a any, verbose int) bool {
 		res, err = checkBytes(v)
 	}
 
-	if errors.Is(err, services.ErrNoApiKey) {
-		log.Fatalln("VirusTotal API key not set")
-	} else if err != nil {
-		log.Fatalln(err)
+	if err != nil {
+		return false, err
 	}
 
 	if res != nil {
 		switch {
 		case verbose > 2:
-			log.Printf("lookup:\n%s\n", res.ToJSON())
+			slog.Info(fmt.Sprintf("lookup:\n%s\n", res.ToJSON()))
 		case verbose > 1:
-			log.Printf("lookup: %s [%d/%d]\n", res.Verdict, res.Stats.Bad, res.Stats.All)
+			slog.Info(fmt.Sprintf("lookup: %s [%d/%d]", res.Verdict, res.Stats.Bad, res.Stats.All))
 		case verbose > 0:
-			log.Printf("lookup: %s\n", res.Verdict)
+			slog.Info(fmt.Sprintf("lookup: %s", res.Verdict))
 		}
-		return res.Stats.Bad > 0
+		return res.Stats.Bad > 0, nil
 	}
 
-	return false
+	return false, nil
 }
 
 func checkString(s *carver.String) (*services.Result, error) {
