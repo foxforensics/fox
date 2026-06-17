@@ -2,7 +2,7 @@ package str
 
 import (
 	"errors"
-	"log"
+	"log/slog"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -64,7 +64,7 @@ func (cmd *Str) Validate() error {
 	}
 
 	if cmd.Lookup {
-		log.Println("warning: data will be transmitted to a third-party service!")
+		slog.Warn("data will be transmitted to a third-party service")
 	}
 
 	return nil
@@ -100,7 +100,12 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	ch := cli.Load(cmd.Paths, true)
+	ch, err := cli.Init(cmd.Paths, true)
+
+	if err != nil {
+		return err
+	}
+
 	defer cli.Discard()
 
 	for h := range ch {
@@ -117,16 +122,24 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			What:    cmd.What,
 			Class:   cmd.Class,
 			Threads: cli.Threads,
-		}).Carve(h.Bytes()) {
+		}).Carve(cli.Context, h.Bytes()) {
 			if cli.Regexp != nil {
 				if ok, _ := cli.Regexp.MatchString(str.Value); !ok {
 					continue // not matched afterward
 				}
 			}
 
+			if cmd.Lookup {
+				str.Suspect, err = lookup.Lookup(str, cli.Verbose)
+
+				if err != nil {
+					slog.Error(err.Error())
+				}
+			}
+
 			str.Value = text.MarkMatch(str.Value, cli.Regexp)
 
-			if !cli.NoPretty && cmd.Lookup && lookup.Lookup(str, cli.Verbose) {
+			if !cli.NoPretty && len(str.Classes) > 0 && str.Suspect {
 				text.Stdout.Write("%s  %s [%s]", text.AsGray(str.Address), text.AsWarn(str.Value), text.AsBold(str.Classes))
 			} else if !cli.NoPretty && len(str.Classes) > 0 {
 				text.Stdout.Write("%s  %s [%s]", text.AsGray(str.Address), str.Value, text.AsBold(str.Classes))

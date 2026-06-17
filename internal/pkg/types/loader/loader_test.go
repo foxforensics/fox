@@ -1,99 +1,21 @@
 package loader
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"slices"
 	"testing"
 
-	_zip "go.foxforensics.eu/fox/v4/internal/pkg/file/archive/7z"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/ar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/cab"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/cpio"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/iso"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/rar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/rpm"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/tar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/xar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/zip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/elf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/ese"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/lnk"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/mft"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/pe"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/pf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/bin/pst"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/evtx"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/journal"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/bgzf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/br"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/bzip2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/gzip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/kanzi"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lz4"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzfse"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lznt1"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzo"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/lzw"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/minlz"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/s2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/snappy"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/xz"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/zlib"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/deflate/zstd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/format/json"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/format/jsonl"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/format/xml"
 	"go.foxforensics.eu/fox/v4/internal/pkg/test"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/register"
 )
 
 func TestMain(m *testing.M) {
-	register.Deflate("bgzf", bgzf.Detect, bgzf.Deflate)
-	register.Deflate("br", br.Detect, br.Deflate)
-	register.Deflate("bzip2", bzip2.Detect, bzip2.Deflate)
-	register.Deflate("gzip", gzip.Detect, gzip.Deflate)
-	register.Deflate("kanzi", kanzi.Detect, kanzi.Deflate)
-	register.Deflate("lz4", lz4.Detect, lz4.Deflate)
-	register.Deflate("lzip", lzip.Detect, lzip.Deflate)
-	register.Deflate("lzo", lzo.Detect, lzo.Deflate)
-	register.Deflate("lzfse", lzfse.Detect, lzfse.Deflate)
-	register.Deflate("lznt1", lznt1.Detect, lznt1.Deflate)
-	register.Deflate("lzw", lzw.Detect, lzw.Deflate)
-	register.Deflate("minlz", minlz.Detect, minlz.Deflate)
-	register.Deflate("s2", s2.Detect, s2.Deflate)
-	register.Deflate("snappy", snappy.Detect, snappy.Deflate)
-	register.Deflate("xz", xz.Detect, xz.Deflate)
-	register.Deflate("zlib", zlib.Detect, zlib.Deflate)
-	register.Deflate("zstd", zstd.Detect, zstd.Deflate)
-
-	register.Extract("7z", _zip.Detect, _zip.Extract)
-	register.Extract("ar", ar.Detect, ar.Extract)
-	register.Extract("cab", cab.Detect, cab.Extract)
-	register.Extract("cpio", cpio.Detect, cpio.Extract)
-	register.Extract("iso", iso.Detect, iso.Extract)
-	register.Extract("rar", rar.Detect, rar.Extract)
-	register.Extract("rpm", rpm.Detect, rpm.Extract)
-	register.Extract("tar", tar.Detect, tar.Extract)
-	register.Extract("xar", xar.Detect, xar.Extract)
-	register.Extract("zip", zip.Detect, zip.Extract)
-
-	register.Convert("elf", elf.Detect, elf.Convert)
-	register.Convert("ese", ese.Detect, ese.Convert)
-	register.Convert("lnk", lnk.Detect, lnk.Convert)
-	register.Convert("mft", mft.Detect, mft.Convert)
-	register.Convert("pe", pe.Detect, pe.Convert)
-	register.Convert("pf", pf.Detect, pf.Convert)
-	register.Convert("pst", pst.Detect, pst.Convert)
-	register.Convert("evtx", evtx.Detect, evtx.Convert)
-	register.Convert("journal", journal.Detect, journal.Convert)
-
-	register.Format("json", json.Detect, json.Format)
-	register.Format("jsonl", jsonl.Detect, jsonl.Format)
-	register.Format("xml", xml.Detect, xml.Format)
+	RegisterDeflates()
+	RegisterExtracts()
+	RegisterConverts()
+	RegisterFormats()
 
 	os.Exit(m.Run())
 }
@@ -194,7 +116,7 @@ func newOpts() *Options {
 }
 
 func consume(ldr *Loader, in []string) (out []string) {
-	for h := range ldr.Load(in) {
+	for h := range ldr.Load(context.Background(), in) {
 		out = append(out, filepath.Base(h.Name))
 		h.Discard()
 	}

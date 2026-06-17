@@ -1,14 +1,11 @@
 package hunt
 
 import (
-	"context"
 	"errors"
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
-	"os/signal"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/alecthomas/kong"
@@ -135,9 +132,13 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	}
 
 	if cmd.Parquet {
-		cmd.storage = parquet.New(fmt.Sprintf("fox_hunt_%s",
+		cmd.storage, err = parquet.Create(fmt.Sprintf("fox_hunt_%s",
 			time.Now().UTC().Format("20060102150405"),
 		))
+
+		if err != nil {
+			return err
+		}
 	}
 
 	if cmd.Elastic {
@@ -163,7 +164,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		}
 
 		if len(cmd.Mqtt) > 0 {
-			cmd.streamer = mqtt.New(&mqtt.Options{
+			cmd.streamer, err = mqtt.Create(&mqtt.Options{
 				Url:      cmd.Url,
 				Topic:    cmd.Mqtt,
 				Username: cmd.Username,
@@ -172,11 +173,15 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 				Schema:   shm,
 			})
 		} else {
-			cmd.streamer = http.New(&http.Options{
+			cmd.streamer, err = http.Create(&http.Options{
 				Url:    cmd.Url,
 				Token:  cmd.Auth,
 				Schema: shm,
 			})
+		}
+
+		if err != nil {
+			return err
 		}
 	}
 
@@ -206,52 +211,52 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		cmd.Paths = append(hunter.Local, cmd.Paths[1:]...)
 	}
 
-	ch := cli.Load(cmd.Paths, true)
-	defer cli.Discard()
+	ch, err := cli.Init(cmd.Paths, true)
 
+	if err != nil {
+		return err
+	}
+
+	defer cli.Discard()
 	defer cmd.discard(cli)
 
 	if cli.Verbose > 0 {
-		log.Println("hunt: started")
+		slog.Info("hunt: started")
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("hunt: using %d thread(s)\n", cli.Threads)
+		slog.Info(fmt.Sprintf("hunt: using %d thread(s)", cli.Threads))
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("hunt: using rule \"%s\"\n", cmd.rule.Title)
+		slog.Info(fmt.Sprintf("hunt: using rule '%s'", cmd.rule.Title))
 	}
 
 	if cli.Verbose > 1 && cmd.storage != nil {
-		log.Printf("hunt: using storage %s\n", cmd.storage)
+		slog.Info(fmt.Sprintf("hunt: using storage %s", cmd.storage))
 	}
 
 	if cli.Verbose > 1 && cmd.streamer != nil {
-		log.Printf("hunt: streaming as %s\n", cmd.streamer)
+		slog.Info(fmt.Sprintf("hunt: streaming as %s", cmd.streamer))
 	}
 
 	if !rules.IsSupported(&cmd.rule) {
-		log.Println("warning: rule is not supported!")
+		slog.Warn("rule is not supported")
 	}
 
 	var n int64
 
-	// handle CTRC+C
-	var ctx, stop = signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	var sig = evaluator.ForRule(cmd.rule)
-
-	defer stop()
 
 	for e := range hunter.New(&hunter.Options{
 		Sort:    cmd.Sort,
 		Threads: cli.Threads,
 		Verbose: cli.Verbose,
-	}).Hunt(ctx, ch) {
-		m, err := sig.Matches(ctx, e.Fields)
+	}).Hunt(cli.Context, ch) {
+		m, err := sig.Matches(cli.Context, e.Fields)
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			continue // not successful
 		}
 
@@ -269,7 +274,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			err = cmd.storage.Store(e)
 
 			if err != nil {
-				log.Println(err)
+				slog.Error(err.Error())
 			}
 		}
 
@@ -277,7 +282,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 			err = cmd.streamer.Stream(e)
 
 			if err != nil {
-				log.Println(err)
+				slog.Error(err.Error())
 			}
 		}
 
@@ -285,11 +290,11 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	}
 
 	if cli.Verbose > 0 {
-		log.Println("hunt: finished")
+		slog.Info("hunt: finished")
 	}
 
 	if cli.Verbose > 1 {
-		log.Printf("hunt: found %d event(s)\n", n)
+		slog.Info(fmt.Sprintf("hunt: found %d event(s)", n))
 	}
 
 	return nil
@@ -311,7 +316,7 @@ func (cmd *Hunt) discard(cli *cli.Globals) {
 		err := cmd.streamer.Close()
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 		}
 	}
 
@@ -319,7 +324,7 @@ func (cmd *Hunt) discard(cli *cli.Globals) {
 		err := cmd.storage.Close()
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 		}
 
 		if cli.NoReceipt {
@@ -329,7 +334,7 @@ func (cmd *Hunt) discard(cli *cli.Globals) {
 		err = receipt.Generate(cmd.storage.String())
 
 		if err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 		}
 	}
 }
