@@ -66,7 +66,7 @@ func Convert(b []byte) ([]byte, error) {
 func Preload() {
 	var err error
 
-	providers, err = events.Load()
+	providers, err = events.Get()
 
 	if err != nil {
 		slog.Error(err.Error())
