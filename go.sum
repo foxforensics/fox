@@ -283,6 +283,8 @@ go.foxforensics.eu/checker v1.0.0 h1:2auZ9jN71xP1k9a7U28jf5S6nKLsY9sEVr8oCMmz71M
 go.foxforensics.eu/checker v1.0.0/go.mod h1:YfCTJWGzeHPzWrKyONeSox8clBmbAV9C94alr2m+br0=
 go.foxforensics.eu/entropy v1.0.0 h1:PgS4X6JYkYVUaZppRzac9X0bdbl1dPbMH8R+myVKVnA=
 go.foxforensics.eu/entropy v1.0.0/go.mod h1:j9IbEUSlr5pSN5KeEPvbNbC+/F9Gd0l93TCBASzJUoE=
+go.foxforensics.eu/entropy v1.0.1 h1:EOSEbiAQkCXPUThkgDSy6W98xadGkMIQaylTlD0NV3A=
+go.foxforensics.eu/entropy v1.0.1/go.mod h1:j9IbEUSlr5pSN5KeEPvbNbC+/F9Gd0l93TCBASzJUoE=
 go.foxforensics.eu/eventid v1.0.0 h1:8k96DV75mTDmu81+E4wu0S4iq8tyvvZAGteIR/g4U8g=
 go.foxforensics.eu/eventid v1.0.0/go.mod h1:1RaU2C5j8gtvo89RHqRr6KS97/kTAci1nIy5rKBRxUc=
 go.foxforensics.eu/go-bgzf v1.0.0 h1:fjAvloCUO//5xIWRX/PqQK6CjcQlxmAI2KiZdgn7u5M=
