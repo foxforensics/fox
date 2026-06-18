@@ -2,6 +2,7 @@ package tables
 
 import (
 	"bytes"
+	"io"
 	"maps"
 	"sync"
 
@@ -39,11 +40,15 @@ func (t *table) Lookup(s string) string {
 }
 
 func Build(b []byte, algos ...string) (int, error) {
-	var err error
-
 	// use built-in wordlist for rainbow tables
 	if b == nil {
-		b, err = wordlist.Deflate()
+		r, err := wordlist.Reader()
+
+		if err != nil {
+			return 0, err
+		}
+
+		b, err = io.ReadAll(r)
 
 		if err != nil {
 			return 0, err

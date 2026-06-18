@@ -325,6 +325,8 @@ go.foxforensics.eu/strings v1.0.1 h1:Sax/kl+7AUHiutWQ4q2dNoN8RGJP3Vz1ejKJn8euEXI
 go.foxforensics.eu/strings v1.0.1/go.mod h1:IKzz3E6mPVPhhpnAwv14++1ajy7g7pW6aK0aqNoGgz0=
 go.foxforensics.eu/wordlist v1.0.1 h1:PaPHb9kEC3cQmbWGQFXu+os8q+vra9ipRsXcygq+XDw=
 go.foxforensics.eu/wordlist v1.0.1/go.mod h1:2pdltbsFXlg2F7ym3wkcjOWfJVD2frnBFs4M093kKtk=
+go.foxforensics.eu/wordlist v1.0.2 h1:QCEjgYOKF46USpy6N60TIXcTEYRyhRwXw9RMU4f6waU=
+go.foxforensics.eu/wordlist v1.0.2/go.mod h1:2pdltbsFXlg2F7ym3wkcjOWfJVD2frnBFs4M093kKtk=
 go.solidsystem.no/fletcher4 v0.2.0 h1:fHXw/8DSN0I41shMiRnP2zb8tCfts75Bh0S2YGueWBk=
 go.solidsystem.no/fletcher4 v0.2.0/go.mod h1:O3AlHhoAY2aHvZ/yjwzufMXWJ7+a6vYds5LDm1Er+2k=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
