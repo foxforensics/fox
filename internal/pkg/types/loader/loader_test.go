@@ -110,7 +110,6 @@ func newOpts() *Options {
 		&types.Filters{},
 		"",
 		1,
-		0,
 		false,
 	}
 }

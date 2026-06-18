@@ -39,7 +39,6 @@ func TestHunt(t *testing.T) {
 			htr := New(&Options{
 				true, // provides also uniqueness
 				1,
-				0,
 			})
 
 			ctx := context.Background()
