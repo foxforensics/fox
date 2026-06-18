@@ -177,7 +177,7 @@ func (htr *Hunter) findOffset(ctx context.Context, h *heap.Heap, seq []byte) <-c
 			out <- off
 
 			if htr.opts.Verbose > 2 {
-				slog.Info(fmt.Sprintf("hunt: found at offset 0x%08x", off))
+				slog.Debug(fmt.Sprintf("hunt: found at offset 0x%08x", off))
 			}
 
 			off += int64(len(seq))

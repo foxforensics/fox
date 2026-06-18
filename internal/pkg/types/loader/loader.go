@@ -266,7 +266,7 @@ func (ldr *Loader) loadFile(ctx context.Context, path, part string) error {
 	}
 
 	if ldr.opts.Verbose > 2 {
-		slog.Info(fmt.Sprintf("mapped file %s", path))
+		slog.Debug(fmt.Sprintf("mapped file %s", path))
 	}
 
 	select {
@@ -345,7 +345,7 @@ func (ldr *Loader) extractData(path, part string, b []byte, i int) bool {
 			for _, e := range a.Extract(b, path, ldr.opts.Password) {
 				p.Go(func() error {
 					if ldr.opts.Verbose > 2 {
-						slog.Info(fmt.Sprintf("stream detected as %s", e.Path))
+						slog.Debug(fmt.Sprintf("stream detected as %s", e.Path))
 					}
 
 					return ldr.processData(e.Path, part, e.Data, i+1)
