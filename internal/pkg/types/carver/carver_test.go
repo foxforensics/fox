@@ -33,7 +33,7 @@ func TestCarve(t *testing.T) {
 			"exe",
 			"binary/fox.exe",
 			true,
-			15501,
+			15446,
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {

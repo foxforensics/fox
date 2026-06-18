@@ -113,7 +113,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		}
 	}
 
-	key, err := bootkey.ReadData(hive.Reader())
+	key, err := bootkey.ExtractFromReader(hive.Reader())
 
 	if err != nil {
 		return err
@@ -122,7 +122,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 	if cli.Verbose > 1 {
 		slog.Info(fmt.Sprintf("BootKey %x", key))
 
-		pek, err := extract.Keys(ntds.Bytes(), key)
+		pek, err := extract.Keys(cli.Context, ntds.Bytes(), key)
 
 		if err != nil {
 			return err
@@ -151,7 +151,7 @@ func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
 
 	switch {
 	case cmd.Users:
-		if v, err := extract.Accounts(b, k); err != nil {
+		if v, err := extract.Accounts(cli.Context, b, k); err != nil {
 			return 0, err
 		} else {
 			for _, r := range v {
@@ -160,7 +160,7 @@ func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
 		}
 
 	case cmd.Groups:
-		if v, err := extract.Groups(b); err != nil {
+		if v, err := extract.Groups(cli.Context, b); err != nil {
 			return 0, err
 		} else {
 			for _, r := range v {
@@ -169,7 +169,7 @@ func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
 		}
 
 	case cmd.Computers:
-		if v, err := extract.Computers(b); err != nil {
+		if v, err := extract.Computers(cli.Context, b); err != nil {
 			return 0, err
 		} else {
 			for _, r := range v {
@@ -178,7 +178,7 @@ func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
 		}
 
 	default:
-		if v, err := extract.Accounts(b, k); err != nil {
+		if v, err := extract.Accounts(cli.Context, b, k); err != nil {
 			return 0, err
 		} else {
 			for _, r := range v {

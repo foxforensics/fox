@@ -51,6 +51,7 @@ func (crv *Carver) Carve(ctx context.Context, block []byte) <-chan *String {
 		defer close(crv.strings)
 
 		for str := range fstrings.Carve(
+			ctx,
 			block,
 			crv.opts.Min,
 			crv.opts.Max,
