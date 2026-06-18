@@ -39,20 +39,19 @@ func Lookup(key string, a any) (bool, error) {
 }
 
 func request(key string, url *url.URL) (bool, error) {
-	vtc := vt.NewClient(key, vt.WithHTTPClient(client.Http()))
+	c := vt.NewClient(key, vt.WithHTTPClient(client.Http()))
 
-	obj, err := vtc.GetObject(url)
+	obj, err := c.GetObject(url)
 
 	if err != nil {
-		if strings.Contains(err.Error(), "X-Apikey header is missing") {
+		switch {
+		case strings.Contains(err.Error(), "X-Apikey header is missing"):
 			return false, errors.New("API key is missing")
-		}
-
-		if strings.Contains(err.Error(), "not found") {
+		case strings.Contains(err.Error(), "not found"):
 			return false, nil
+		default:
+			return false, err
 		}
-
-		return false, err
 	}
 
 	if b, err := obj.MarshalJSON(); err == nil {
