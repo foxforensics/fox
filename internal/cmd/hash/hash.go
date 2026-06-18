@@ -155,7 +155,7 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				text.Stdout.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), cli.Regexp)
 				break
 			} else if cmd.Guess {
-				for _, a := range collect(database.Lookup(string(h.Bytes()))) {
+				for _, a := range collect(database.Lookup(cli.Context, string(h.Bytes()))) {
 					text.Stdout.Match(a, cli.Regexp)
 				}
 				continue
