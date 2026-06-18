@@ -279,7 +279,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.streamer != nil {
-			err = cmd.streamer.Stream(e)
+			err = cmd.streamer.Stream(cli.Context, e)
 
 			if err != nil {
 				slog.Error(err.Error())

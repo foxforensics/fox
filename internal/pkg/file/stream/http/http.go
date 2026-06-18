@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -37,7 +38,7 @@ func (h Http) String() string {
 	return fmt.Sprintf("%s@%s", h.opts.Schema, h.opts.Url)
 }
 
-func (h Http) Stream(evt *event.Event) error {
+func (h Http) Stream(ctx context.Context, evt *event.Event) error {
 	var buf []byte
 	var err error
 
@@ -68,7 +69,7 @@ func (h Http) Stream(evt *event.Event) error {
 		slog.Warn("data will be streamed unencrypted")
 	}
 
-	req, err := http.NewRequest("POST", h.opts.Url, bytes.NewReader(buf))
+	req, err := http.NewRequestWithContext(ctx, "POST", h.opts.Url, bytes.NewReader(buf))
 
 	if err != nil {
 		return err

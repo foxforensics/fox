@@ -1,6 +1,10 @@
 package stream
 
-import "go.foxforensics.eu/fox/v4/internal/pkg/types/event"
+import (
+	"context"
+
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
+)
 
 // local urls
 const (
@@ -9,6 +13,6 @@ const (
 )
 
 type Streamer interface {
-	Stream(*event.Event) error
+	Stream(context.Context, *event.Event) error
 	Close() error
 }

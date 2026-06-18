@@ -38,7 +38,7 @@ func (m Mqtt) String() string {
 	return fmt.Sprintf("%s@%s/%s", m.opts.Schema, m.opts.Url, m.opts.Topic)
 }
 
-func (m Mqtt) Stream(evt *event.Event) error {
+func (m Mqtt) Stream(ctx context.Context, evt *event.Event) error {
 	var buf []byte
 	var err error
 
@@ -55,7 +55,7 @@ func (m Mqtt) Stream(evt *event.Event) error {
 		return err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), client.Timeout)
+	ctx, cancel := context.WithTimeout(ctx, client.Timeout)
 	defer cancel()
 
 	res, err := m.client.Publish(ctx, &mqtt.Publish{
