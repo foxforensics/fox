@@ -111,7 +111,7 @@ func main() {
 	defer trace()
 
 	log.SetFlags(0)
-	log.SetPrefix("FOX ") // 🦊
+	log.SetPrefix("FOX ")
 
 	cli := new(fox)
 	ctx := kong.Parse(cli,
@@ -169,7 +169,7 @@ func store(f string) {
 }
 
 func timer(t time.Time) {
-	slog.Debug(fmt.Sprintf("time %v", time.Since(t)))
+	slog.Debug(fmt.Sprintf("total time %v", time.Since(t)))
 }
 
 func quiet() {

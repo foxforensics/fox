@@ -146,7 +146,7 @@ func (ldr *Loader) Load(ctx context.Context, paths []string) <-chan *heap.Heap {
 
 func (ldr *Loader) Exit() {
 	ldr.RLock()
-	slog.Debug(fmt.Sprintf("size %s", text.Humanize(ldr.size)))
+	slog.Debug(fmt.Sprintf("total size %s", text.Humanize(ldr.size)))
 	ldr.RUnlock()
 }
 
