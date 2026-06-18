@@ -77,7 +77,6 @@ type Options struct {
 	Filters  *types.Filters
 	Password string
 	Threads  int
-	Verbose  int
 	Strict   bool
 }
 
@@ -147,11 +146,7 @@ func (ldr *Loader) Load(ctx context.Context, paths []string) <-chan *heap.Heap {
 
 func (ldr *Loader) Exit() {
 	ldr.RLock()
-
-	if ldr.opts.Verbose > 0 {
-		slog.Info(fmt.Sprintf("size %s", text.Humanize(ldr.size)))
-	}
-
+	slog.Debug(fmt.Sprintf("size %s", text.Humanize(ldr.size)))
 	ldr.RUnlock()
 }
 
@@ -162,9 +157,7 @@ func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
 		path = v
 	}
 
-	if ldr.opts.Verbose > 0 {
-		slog.Info(fmt.Sprintf("looking for %s", path))
-	}
+	slog.Debug(fmt.Sprintf("looking for %s", path))
 
 	match, err := doublestar.FilepathGlob(path)
 
@@ -201,8 +194,8 @@ func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
 	}
 
 	if err = p.Wait(); err != nil {
-		if errors.Is(err, context.Canceled) && ldr.opts.Verbose > 0 {
-			slog.Info("user canceled")
+		if errors.Is(err, context.Canceled) {
+			slog.Info("canceled")
 		} else {
 			slog.Error(err.Error())
 		}
@@ -265,9 +258,7 @@ func (ldr *Loader) loadFile(ctx context.Context, path, part string) error {
 		return err
 	}
 
-	if ldr.opts.Verbose > 2 {
-		slog.Debug(fmt.Sprintf("mapped file %s", path))
-	}
+	slog.Debug(fmt.Sprintf("loaded file %s", path))
 
 	select {
 	case <-ctx.Done():
@@ -333,9 +324,7 @@ func (ldr *Loader) extractData(path, part string, b []byte, i int) bool {
 
 	for _, a := range registry.Extracts {
 		if a.Detect(b) {
-			if ldr.opts.Verbose > 1 {
-				slog.Info(fmt.Sprintf("archive detected as possibly %s", a.Name))
-			}
+			slog.Debug(fmt.Sprintf("archive detected as possibly %s", a.Name))
 
 			p := pool.New().
 				WithErrors().
@@ -344,10 +333,7 @@ func (ldr *Loader) extractData(path, part string, b []byte, i int) bool {
 
 			for _, e := range a.Extract(b, path, ldr.opts.Password) {
 				p.Go(func() error {
-					if ldr.opts.Verbose > 2 {
-						slog.Debug(fmt.Sprintf("stream detected as %s", e.Path))
-					}
-
+					slog.Debug(fmt.Sprintf("stream detected as possibly %s", e.Path))
 					return ldr.processData(e.Path, part, e.Data, i+1)
 				})
 			}
@@ -366,9 +352,7 @@ func (ldr *Loader) extractData(path, part string, b []byte, i int) bool {
 func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
 	for _, e := range registry.Deflates {
 		if e.Detect(b) {
-			if ldr.opts.Verbose > 1 {
-				slog.Info(fmt.Sprintf("deflate detected as possibly %s", e.Name))
-			}
+			slog.Debug(fmt.Sprintf("deflate detected as possibly %s", e.Name))
 
 			r, err := e.Deflate(b)
 
@@ -390,9 +374,7 @@ func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
 func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
 	for _, e := range registry.Converts {
 		if e.Detect(b) {
-			if ldr.opts.Verbose > 1 {
-				slog.Warn(fmt.Sprintf("convert detected as possibly %s", e.Name))
-			}
+			slog.Debug(fmt.Sprintf("convert detected as possibly %s", e.Name))
 
 			r, err := e.Convert(b)
 
@@ -414,9 +396,7 @@ func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
 func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 	for _, e := range registry.Formats {
 		if e.Detect(b) {
-			if ldr.opts.Verbose > 1 {
-				slog.Info(fmt.Sprintf("format detected as possibly %s", e.Name))
-			}
+			slog.Debug(fmt.Sprintf("format detected as possibly %s", e.Name))
 
 			r, err := e.Format(b)
 
@@ -456,9 +436,7 @@ func (ldr *Loader) createHeap(path, hint string, b []byte) error {
 	ldr.paths.Set(path)
 	ldr.heaps <- heap.New(path, hint, b)
 
-	if ldr.opts.Verbose > 1 {
-		slog.Info(fmt.Sprintf("loaded heap %s", path))
-	}
+	slog.Debug(fmt.Sprintf("loaded heap %s", path))
 
 	return nil
 }

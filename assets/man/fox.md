@@ -117,7 +117,7 @@ Standard Flags
 
 **-v, --verbose**[=_level_]
 
-:   Print more details (**v**/**vv**/**vvv**).
+:   Print more details (**v**/**vv**).
 
 **-d, --dry-run**
 

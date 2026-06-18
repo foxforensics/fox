@@ -66,7 +66,7 @@ func (h Http) Stream(ctx context.Context, evt *event.Event) error {
 	}
 
 	if u.Scheme == "http" {
-		slog.Warn("data will be streamed unencrypted")
+		slog.Warn("data will be streamed unencrypted!")
 	}
 
 	req, err := http.NewRequestWithContext(ctx, "POST", h.opts.Url, bytes.NewReader(buf))

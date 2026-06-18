@@ -98,9 +98,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 	defer hive.Discard()
 
 	if cmd.Lookup {
-		if cli.Verbose > 0 {
-			slog.Info("building tables")
-		}
+		slog.Info("building tables")
 
 		n, err := tables.Build(cmd.Wordlist, hash.LM, hash.NT)
 
@@ -108,9 +106,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 			return err
 		}
 
-		if cli.Verbose > 0 {
-			slog.Info(fmt.Sprintf("using %d NTLM hashes", n))
-		}
+		slog.Debug(fmt.Sprintf("using %d NTLM hashes", n))
 	}
 
 	key, err := bootkey.ExtractFromReader(hive.Reader())
@@ -119,18 +115,16 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		return err
 	}
 
-	if cli.Verbose > 1 {
-		slog.Info(fmt.Sprintf("BootKey %x", key))
+	slog.Debug(fmt.Sprintf("BootKey %x", key))
 
-		pek, err := extract.Keys(cli.Context, ntds.Bytes(), key)
+	pek, err := extract.Keys(cli.Context, ntds.Bytes(), key)
 
-		if err != nil {
-			return err
-		}
+	if err != nil {
+		return err
+	}
 
-		for i, k := range pek {
-			slog.Info(fmt.Sprintf("PEK #%d %x", i, k))
-		}
+	for i, k := range pek {
+		slog.Debug(fmt.Sprintf("PEK #%d %x", i, k))
 	}
 
 	n, err := cmd.extract(cli, key, ntds.Bytes())
@@ -139,9 +133,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		return err
 	}
 
-	if cli.Verbose > 1 {
-		slog.Info(fmt.Sprintf("found %d records(s)", n))
-	}
+	slog.Info(fmt.Sprintf("found %d records(s)", n))
 
 	return nil
 }

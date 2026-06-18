@@ -30,7 +30,6 @@ var Local = []string{
 type Options struct {
 	Sort    bool
 	Threads int
-	Verbose int
 }
 
 type Hunter struct {
@@ -56,9 +55,7 @@ func (htr *Hunter) Hunt(ctx context.Context, ch <-chan *heap.Heap) <-chan *event
 
 		for h := range ch {
 			p.Go(func(ctx context.Context) error {
-				if htr.opts.Verbose > 0 {
-					slog.Info(fmt.Sprintf("hunt: carving heap %s", h.String()))
-				}
+				slog.Info(fmt.Sprintf("hunt: carving %s", h.String()))
 
 				select {
 				case <-ctx.Done():
@@ -70,7 +67,7 @@ func (htr *Hunter) Hunt(ctx context.Context, ch <-chan *heap.Heap) <-chan *event
 		}
 
 		if err := p.Wait(); err != nil {
-			if errors.Is(err, context.Canceled) && htr.opts.Verbose > 0 {
+			if errors.Is(err, context.Canceled) {
 				slog.Info("hunt: canceled")
 			} else {
 				slog.Error(err.Error())
@@ -176,9 +173,7 @@ func (htr *Hunter) findOffset(ctx context.Context, h *heap.Heap, seq []byte) <-c
 			off += idx
 			out <- off
 
-			if htr.opts.Verbose > 2 {
-				slog.Debug(fmt.Sprintf("hunt: found at offset 0x%08x", off))
-			}
+			slog.Debug(fmt.Sprintf("hunt: found at offset 0x%08x", off))
 
 			off += int64(len(seq))
 

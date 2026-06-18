@@ -2,7 +2,6 @@ package lookup
 
 import (
 	"errors"
-	"fmt"
 	"log/slog"
 	"net/url"
 	"strings"
@@ -54,10 +53,10 @@ func request(key string, url *url.URL) (bool, error) {
 		}
 	}
 
-	if b, err := obj.MarshalJSON(); err == nil {
-		slog.Debug(fmt.Sprintf("lookup: %s\n", b))
-	} else {
+	if b, err := obj.MarshalJSON(); err != nil {
 		slog.Error(err.Error())
+	} else {
+		slog.Debug(string(b))
 	}
 
 	for _, k := range []string{

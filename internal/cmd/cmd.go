@@ -69,12 +69,10 @@ func (cli *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	switch cli.Verbose {
 	case 0:
-		lvl = slog.LevelError
-	case 1:
 		lvl = slog.LevelWarn
-	case 2:
+	case 1:
 		lvl = slog.LevelInfo
-	case 3:
+	case 2:
 		lvl = slog.LevelDebug
 	}
 
@@ -148,7 +146,7 @@ func (cli *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	}
 
 	if cli.NoReceipt && len(cli.Out) > 0 {
-		slog.Warn("receipts has been disabled")
+		slog.Warn("receipts has been disabled!")
 	}
 
 	cli.Loader = loader.New(&loader.Options{
@@ -156,7 +154,6 @@ func (cli *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 		Filters:  cli.Filters,
 		Password: cli.Password,
 		Threads:  cli.Threads,
-		Verbose:  cli.Verbose,
 		Strict:   !cli.NoStrict,
 	})
 

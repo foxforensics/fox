@@ -2,6 +2,7 @@ package pe
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 
 	"github.com/saferwall/pe"
@@ -37,7 +38,7 @@ func Convert(b []byte) ([]byte, error) {
 	}
 
 	for _, a := range p.Anomalies {
-		slog.Warn(a)
+		slog.Warn(fmt.Sprintf("anomaly: %s!", a))
 	}
 
 	return json.Marshal(p)

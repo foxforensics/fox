@@ -220,28 +220,20 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	defer cli.Discard()
 	defer cmd.discard(cli)
 
-	if cli.Verbose > 0 {
-		slog.Info("hunt: started")
+	slog.Info("hunt: started")
+	slog.Debug(fmt.Sprintf("hunt: using %d thread(s)", cli.Threads))
+	slog.Debug(fmt.Sprintf("hunt: using rule '%s'", cmd.rule.Title))
+
+	if cmd.storage != nil {
+		slog.Debug(fmt.Sprintf("hunt: using storage %s", cmd.storage))
 	}
 
-	if cli.Verbose > 1 {
-		slog.Info(fmt.Sprintf("hunt: using %d thread(s)", cli.Threads))
-	}
-
-	if cli.Verbose > 1 {
-		slog.Info(fmt.Sprintf("hunt: using rule '%s'", cmd.rule.Title))
-	}
-
-	if cli.Verbose > 1 && cmd.storage != nil {
-		slog.Info(fmt.Sprintf("hunt: using storage %s", cmd.storage))
-	}
-
-	if cli.Verbose > 1 && cmd.streamer != nil {
-		slog.Info(fmt.Sprintf("hunt: streaming as %s", cmd.streamer))
+	if cmd.streamer != nil {
+		slog.Debug(fmt.Sprintf("hunt: streaming as %s", cmd.streamer))
 	}
 
 	if !rules.IsSupported(&cmd.rule) {
-		slog.Warn("rule is not supported")
+		slog.Warn("rule is not supported!")
 	}
 
 	var n int64
@@ -251,7 +243,6 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	for e := range hunter.New(&hunter.Options{
 		Sort:    cmd.Sort,
 		Threads: cli.Threads,
-		Verbose: cli.Verbose,
 	}).Hunt(cli.Context, ch) {
 		m, err := sig.Matches(cli.Context, e.Fields)
 
@@ -289,13 +280,8 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		n++
 	}
 
-	if cli.Verbose > 0 {
-		slog.Info("hunt: finished")
-	}
-
-	if cli.Verbose > 1 {
-		slog.Info(fmt.Sprintf("hunt: found %d event(s)", n))
-	}
+	slog.Info("hunt: finished")
+	slog.Info(fmt.Sprintf("hunt: found %d event(s)", n))
 
 	return nil
 }

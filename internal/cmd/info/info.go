@@ -143,7 +143,7 @@ func (cmd *Info) Validate() error {
 	}
 
 	if cmd.Lookup {
-		slog.Warn("data will be transmitted to a third-party service")
+		slog.Warn("data will be transmitted to a third-party service!")
 	}
 
 	return nil

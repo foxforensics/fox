@@ -69,7 +69,7 @@ Disable flags:
       --no-receipt         Don't write the receipt
 
 Standard flags:
-  -v, --verbose[=LEVEL]    Print more details (v/vv/vvv)
+  -v, --verbose[=LEVEL]    Print more details (v/vv)
   -d, --dry-run            Print only the found files
       --version            Print the version number
       --help               Print this help message
@@ -133,9 +133,7 @@ func main() {
 		fmt.Printf(About, version.Number, version.ID())
 
 	default:
-		if cli.Verbose > 0 {
-			defer timer(time.Now())
-		}
+		defer timer(time.Now())
 
 		// parse input
 		if len(cli.In) > 0 {
@@ -171,7 +169,7 @@ func store(f string) {
 }
 
 func timer(t time.Time) {
-	slog.Info(fmt.Sprintf("time %v", time.Since(t)))
+	slog.Debug(fmt.Sprintf("time %v", time.Since(t)))
 }
 
 func quiet() {
@@ -182,12 +180,8 @@ func quiet() {
 func trace() {
 	if err := recover(); err != nil {
 		slog.Error(fmt.Sprintf("%+v", err), err)
-
-		// print stack trace only in dev
-		if version.Number == "dev" {
-			slog.Error("--")
-			slog.Error(string(debug.Stack()))
-			slog.Error("--")
-		}
+		slog.Debug("--")
+		slog.Debug(string(debug.Stack()))
+		slog.Debug("--")
 	}
 }

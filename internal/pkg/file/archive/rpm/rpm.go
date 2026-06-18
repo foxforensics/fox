@@ -52,7 +52,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 	case "uncompressed":
 		r1 = br
 	default:
-		slog.Warn(fmt.Sprintf("%s not supported", v))
+		slog.Warn(fmt.Sprintf("%s not supported!", v))
 	}
 
 	// prevent resource leaks
@@ -68,7 +68,7 @@ func Extract(b []byte, root, _ string) (e []file.Stream) {
 	}
 
 	if pkg.PayloadFormat() != "cpio" {
-		slog.Warn(fmt.Sprintf("%s not supported", pkg.PayloadFormat()))
+		slog.Warn(fmt.Sprintf("%s not supported!", pkg.PayloadFormat()))
 		return
 	}
 
