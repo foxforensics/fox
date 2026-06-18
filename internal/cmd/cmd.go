@@ -10,7 +10,6 @@ import (
 
 	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
-	"go.foxforensics.eu/checker/services/vt"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/tables"
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
@@ -66,6 +65,20 @@ type Globals struct {
 
 func (cli *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	var err error
+	var lvl slog.Level
+
+	switch cli.Verbose {
+	case 0:
+		lvl = slog.LevelError
+	case 1:
+		lvl = slog.LevelWarn
+	case 2:
+		lvl = slog.LevelInfo
+	case 3:
+		lvl = slog.LevelDebug
+	}
+
+	slog.SetLogLoggerLevel(lvl)
 
 	if raw {
 		cli.NoConvert = true
@@ -152,11 +165,9 @@ func (cli *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 		context.Background(),
 		os.Kill,
 		os.Interrupt,
-		syscall.SIGINT,
 		syscall.SIGTERM,
 	)
 
-	vt.Key = cli.ApiKey
 	smap.Threads = cli.Threads
 	client.MaxIdle = cli.Threads
 	tables.Threads = cli.Threads

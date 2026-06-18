@@ -42,7 +42,6 @@ require (
 	github.com/ulikunitz/xz v0.5.15
 	github.com/zeebo/xxh3 v1.1.0
 	go.foxforensics.eu/bootkey v1.0.1
-	go.foxforensics.eu/checker v1.0.0
 	go.foxforensics.eu/entropy v1.0.1
 	go.foxforensics.eu/eventid v1.0.1
 	go.foxforensics.eu/go-bgzf v1.0.0

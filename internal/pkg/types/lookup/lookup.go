@@ -1,62 +1,77 @@
 package lookup
 
 import (
+	"errors"
 	"fmt"
 	"log/slog"
+	"net/url"
 	"strings"
 
-	"go.foxforensics.eu/checker/services"
-	"go.foxforensics.eu/checker/services/vt"
+	"github.com/VirusTotal/vt-go"
 	"go.foxforensics.eu/hasher/hash"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/carver"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/client"
 )
 
-func Lookup(a any, verbose int) (bool, error) {
-	var res *services.Result
-	var err error
-
+func Lookup(key string, a any) (bool, error) {
 	switch v := a.(type) {
-	case *carver.String:
-		res, err = checkString(v)
 	case []byte:
-		res, err = checkBytes(v)
+		return request(key, vt.URL("files/%s", hash.MustSum(hash.SHA256, v)))
+
+	case *carver.String:
+		switch {
+		case strings.Contains(v.Classes, "IPv6"):
+			return request(key, vt.URL("ip_addresses/%s", v.Value))
+		case strings.Contains(v.Classes, "IPv4"):
+			return request(key, vt.URL("ip_addresses/%s", v.Value))
+		case strings.Contains(v.Classes, "DNS"):
+			return request(key, vt.URL("domains/%s", v.Value))
+		case strings.Contains(v.Classes, "URL"):
+			return request(key, vt.URL("urls/%s", v.Value))
+		default:
+			return false, nil
+		}
+
+	default:
+		return false, nil
 	}
+}
+
+func request(key string, url *url.URL) (bool, error) {
+	vtc := vt.NewClient(key, vt.WithHTTPClient(client.Http()))
+
+	obj, err := vtc.GetObject(url)
 
 	if err != nil {
+		if strings.Contains(err.Error(), "X-Apikey header is missing") {
+			return false, errors.New("API key is missing")
+		}
+
+		if strings.Contains(err.Error(), "not found") {
+			return false, nil
+		}
+
 		return false, err
 	}
 
-	if res != nil {
-		switch {
-		case verbose > 2:
-			slog.Info(fmt.Sprintf("lookup:\n%s\n", res.ToJSON()))
-		case verbose > 1:
-			slog.Info(fmt.Sprintf("lookup: %s [%d/%d]", res.Verdict, res.Stats.Bad, res.Stats.All))
-		case verbose > 0:
-			slog.Info(fmt.Sprintf("lookup: %s", res.Verdict))
+	if b, err := obj.MarshalJSON(); err == nil {
+		slog.Debug(fmt.Sprintf("lookup: %s\n", b))
+	} else {
+		slog.Error(err.Error())
+	}
+
+	for _, k := range []string{
+		"last_analysis_stats.malicious",
+		"last_analysis_stats.suspicious",
+	} {
+		v, _ := obj.GetInt64(k)
+
+		// at least one bad stat
+		if int(v) > 0 {
+			return true, nil
 		}
-		return res.Stats.Bad > 0, nil
 	}
 
 	return false, nil
-}
-
-func checkString(s *carver.String) (*services.Result, error) {
-	switch {
-	case strings.Contains(s.Classes, "IPv6"):
-		return vt.CheckIp(s.Value)
-	case strings.Contains(s.Classes, "IPv4"):
-		return vt.CheckIp(s.Value)
-	case strings.Contains(s.Classes, "DNS"):
-		return vt.CheckDns(s.Value)
-	case strings.Contains(s.Classes, "URL"):
-		return vt.CheckUrl(s.Value)
-	default:
-		return nil, nil
-	}
-}
-
-func checkBytes(b []byte) (*services.Result, error) {
-	return vt.CheckHash(hash.MustSum(hash.SHA256, b))
 }

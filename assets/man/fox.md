@@ -145,7 +145,7 @@ ENVIRONMENT
 
 **FOX_API_KEY**
 
-:   The VirusTotal API key used for lookups. Available for all modes.
+:   The VirusTotal API key used for lookups. Only available in specific modes.
 
 **FOX_LEXER**
 

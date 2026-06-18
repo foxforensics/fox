@@ -200,7 +200,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.Lookup {
-			fi.Suspect, err = lookup.Lookup(h.Bytes(), cli.Verbose)
+			fi.Suspect, err = lookup.Lookup(cli.ApiKey, h.Bytes())
 
 			if err != nil {
 				slog.Error(err.Error())

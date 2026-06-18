@@ -130,7 +130,7 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			}
 
 			if cmd.Lookup {
-				str.Suspect, err = lookup.Lookup(str, cli.Verbose)
+				str.Suspect, err = lookup.Lookup(cli.ApiKey, str)
 
 				if err != nil {
 					slog.Error(err.Error())
