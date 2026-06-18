@@ -8,7 +8,7 @@ require (
 	github.com/Velocidex/ordereddict v0.0.0-20250821063524-02dc06e46238
 	github.com/agnivade/levenshtein v1.2.1
 	github.com/aixiansheng/lzfse v0.2.4
-	github.com/alecthomas/chroma/v2 v2.26.1
+	github.com/alecthomas/chroma/v2 v2.27.0
 	github.com/alecthomas/kong v1.15.0
 	github.com/andybalholm/brotli v1.2.1
 	github.com/bmatcuk/doublestar/v4 v4.10.0
@@ -36,11 +36,12 @@ require (
 	github.com/saferwall/elf v0.3.1
 	github.com/saferwall/pe v1.6.5
 	github.com/secDre4mer/go-cab v0.0.0-20260602061637-8f8e7163d35b
+	github.com/segmentio/ksuid v1.0.4
 	github.com/sorairolake/lzip-go v0.3.8
 	github.com/sourcegraph/conc v0.3.0
 	github.com/ulikunitz/xz v0.5.15
 	github.com/zeebo/xxh3 v1.1.0
-	go.foxforensics.eu/bootkey v1.0.0
+	go.foxforensics.eu/bootkey v1.0.1
 	go.foxforensics.eu/checker v1.0.0
 	go.foxforensics.eu/entropy v1.0.0
 	go.foxforensics.eu/eventid v1.0.0
@@ -53,7 +54,7 @@ require (
 	go.foxforensics.eu/go-msi v1.0.0
 	go.foxforensics.eu/go-pst/v6 v6.0.1
 	go.foxforensics.eu/go-zip v1.0.0
-	go.foxforensics.eu/hashdump v1.0.1
+	go.foxforensics.eu/hashdump v1.0.2
 	go.foxforensics.eu/hasher v1.0.0
 	go.foxforensics.eu/rhash v1.7.3
 	go.foxforensics.eu/strings v1.0.0
@@ -101,7 +102,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
-	github.com/segmentio/ksuid v1.0.4 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/smallstep/pkcs7 v0.2.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
