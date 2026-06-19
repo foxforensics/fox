@@ -7,14 +7,14 @@ import (
 	"strings"
 
 	"go.foxforensics.eu/bootkey/bootkey"
+	"go.foxforensics.eu/fox/v4/internal/cmd/ad/record"
+	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
 	"go.foxforensics.eu/hashdump/extract"
 	"go.foxforensics.eu/hasher/hash"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/tables"
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/record"
 )
 
 var Usage = strings.TrimSpace(`

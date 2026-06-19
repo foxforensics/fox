@@ -9,12 +9,12 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
 	"go.foxforensics.eu/hasher/hash"
 	"go.foxforensics.eu/rhash/database"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/tables"
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 )
 

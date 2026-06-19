@@ -4,11 +4,11 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+	buffer2 "go.foxforensics.eu/fox/v4/internal/cmd/cat/buffer"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/buffer"
 )
 
 var Usage = strings.TrimSpace(`
@@ -112,7 +112,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 }
 
 func (cmd *Cat) renderText(cli *cli.Globals, b []byte, hint string) {
-	for l := range buffer.Text(&buffer.TextContext{
+	for l := range buffer2.Text(&buffer2.TextContext{
 		Parent: cli.Context,
 		Data:   b,
 		Hint:   hint,
@@ -123,14 +123,14 @@ func (cmd *Cat) renderText(cli *cli.Globals, b []byte, hint string) {
 			continue // not unique
 		}
 
-		if cli.Regexp != nil && l.Line != buffer.Sep {
+		if cli.Regexp != nil && l.Line != buffer2.Sep {
 			s = text.MarkMatch(s, cli.Regexp)
 		}
 
 		if !cli.NoPretty {
 			text.Stdout.Write("%s %s", text.AsGray(l.Line), s)
-		} else if l.Line == buffer.Sep {
-			text.Stdout.Write(text.AsGray(buffer.Sep))
+		} else if l.Line == buffer2.Sep {
+			text.Stdout.Write(text.AsGray(buffer2.Sep))
 		} else {
 			text.Stdout.Write(s)
 		}
@@ -140,7 +140,7 @@ func (cmd *Cat) renderText(cli *cli.Globals, b []byte, hint string) {
 func (cmd *Cat) renderHex(cli *cli.Globals, b []byte) {
 	lastHex, wasCut := "", false
 
-	for l := range buffer.Hex(&buffer.HexContext{
+	for l := range buffer2.Hex(&buffer2.HexContext{
 		Parent: cli.Context,
 		Data:   b,
 		Pretty: !cli.NoPretty,

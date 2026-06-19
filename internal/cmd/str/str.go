@@ -6,12 +6,12 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"go.foxforensics.eu/fox/v4/internal/cmd/str/carver"
+	"go.foxforensics.eu/fox/v4/internal/net/lookup"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/carver"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/lookup"
 )
 
 var Usage = strings.TrimSpace(`

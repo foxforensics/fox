@@ -11,7 +11,7 @@ import (
 	"sync"
 
 	"github.com/dlclark/regexp2/v2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file"
+	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
 )
@@ -57,7 +57,7 @@ func SetOutput(wc io.WriteCloser, err error) {
 func (w *Writer) Header(s string) {
 	s = strings.TrimPrefix(s, "/")
 	s = strings.TrimSuffix(s, "/")
-	s = strings.ReplaceAll(s, file.Separator, " > ")
+	s = strings.ReplaceAll(s, sys.Separator, " > ")
 	s = strings.ReplaceAll(s, string(filepath.Separator), " > ")
 
 	w.Lock()

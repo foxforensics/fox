@@ -13,11 +13,11 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/fatih/color"
 	"go.foxforensics.eu/entropy/entropy"
+	"go.foxforensics.eu/fox/v4/internal/net/lookup"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/lookup"
 )
 
 // Threshold for high entropy files

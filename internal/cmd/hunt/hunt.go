@@ -11,20 +11,18 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
-	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
-
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/schema"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/storage"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/storage/parquet"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/stream"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/stream/http"
-	"go.foxforensics.eu/fox/v4/internal/pkg/file/stream/mqtt"
-	"go.foxforensics.eu/fox/v4/internal/pkg/rules"
+	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/event"
+	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/hunter"
+	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/rules"
+	"go.foxforensics.eu/fox/v4/internal/net/schema"
+	"go.foxforensics.eu/fox/v4/internal/net/stream"
+	"go.foxforensics.eu/fox/v4/internal/net/stream/http"
+	"go.foxforensics.eu/fox/v4/internal/net/stream/mqtt"
+	"go.foxforensics.eu/fox/v4/internal/pkg/storage"
+	"go.foxforensics.eu/fox/v4/internal/pkg/storage/parquet"
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
+	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
 )
 
 var Usage = strings.TrimSpace(`
