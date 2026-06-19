@@ -10,7 +10,6 @@ import (
 
 	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
-
 	"go.foxforensics.eu/fox/v4/internal/pkg/tables"
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
