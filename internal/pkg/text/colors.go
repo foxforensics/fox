@@ -67,7 +67,7 @@ func MarkMatch(s string, re *regexp2.Regexp) string {
 		return s
 	}
 
-	return marker.Mark(s, match(re), color.RGB(0x0f, 0x88, 0xcd))
+	return marker.Mark(s, match(re), color.New(color.Bold).AddRGB(0x0f, 0x88, 0xcd))
 }
 
 func MarkEvent(s string) string {
