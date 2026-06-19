@@ -283,6 +283,8 @@ go.foxforensics.eu/go-ese v1.0.0 h1:BGTe27G/SvQeRkX5D6fXZyNelg+gMe3UNprCFqgS/h0=
 go.foxforensics.eu/go-ese v1.0.0/go.mod h1:GbIqZhJRR+9d+zlPiwKv6mIPXwIUL/UJq6E5/H2nsCE=
 go.foxforensics.eu/go-fortilog v1.0.2 h1:Y3K9OHOj0oJ/zoe+ZycYMTMOoQcBL0RycyGzfL9UmOs=
 go.foxforensics.eu/go-fortilog v1.0.2/go.mod h1:/dhHIMB2KNEhrLzTohC0Usgjdv1M7Zj4b42lGpK31T8=
+go.foxforensics.eu/go-fortilog v1.1.2 h1:sTuEsyiqjGs/rIRdLwBPhZhepIH7ksTqN7Njp2rkbwc=
+go.foxforensics.eu/go-fortilog v1.1.2/go.mod h1:/dhHIMB2KNEhrLzTohC0Usgjdv1M7Zj4b42lGpK31T8=
 go.foxforensics.eu/go-hash v1.0.0 h1:SKaLNa+Sa0E8sSex/IGzxGt1mOMDrWddYONNNLXHNmM=
 go.foxforensics.eu/go-hash v1.0.0/go.mod h1:Kb3l+EHNM8tPZGVGPpKHZtdU60hCkZatAP2fXgmkhA0=
 go.foxforensics.eu/go-krypto v1.0.1 h1:XOTwb9muvUvytvZEb/WuWyHC928S+waGrVYjuk8CqCA=
@@ -335,6 +337,8 @@ golang.org/x/exp v0.0.0-20260611194520-c48552f49976 h1:X8Hz2ImujgbmetVuW+w2YkyZC
 golang.org/x/exp v0.0.0-20260611194520-c48552f49976/go.mod h1:vnf4pv9iKZXY58sQE1L86zmNWJ4159e1RkcWiLCkeEY=
 golang.org/x/image v0.42.0 h1:1gSs6ehNWXLbkHBIPcWztk3D/6aIA/8hauiAYtlodVY=
 golang.org/x/image v0.42.0/go.mod h1:rrpelvGFt+kLPAjPM4HeWPgrl0FtafueU//e5N0qk/Q=
+golang.org/x/image v0.43.0 h1:FLxcP4ec2350nTfOC8ysKtqYSIFbk/QGjw1ZHNP4tsY=
+golang.org/x/image v0.43.0/go.mod h1:rrpelvGFt+kLPAjPM4HeWPgrl0FtafueU//e5N0qk/Q=
 golang.org/x/lint v0.0.0-20181026193005-c67002cb31c3/go.mod h1:UVdnD1Gm6xHRNCYTkRU2/jEulfH38KcIWyp/GAMgvoE=
 golang.org/x/lint v0.0.0-20190227174305-5b3e6a55c961/go.mod h1:wehouNa3lNwaWXcvxsM5YxQ5yQlVC4a0KAMCusXpPoU=
 golang.org/x/lint v0.0.0-20190313153728-d0100b6bd8b3/go.mod h1:6SW0HCj/g11FgYtHlgUYUwCkIfeOF89ocIRzGO/8vkc=

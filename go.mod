@@ -6,6 +6,7 @@ require (
 	github.com/0xrawsec/golang-evtx v1.2.9
 	github.com/Velocidex/go-journalctl v0.0.0-20260608120136-20835635c054
 	github.com/Velocidex/ordereddict v0.0.0-20250821063524-02dc06e46238
+	github.com/VirusTotal/vt-go v1.1.0
 	github.com/agnivade/levenshtein v1.2.1
 	github.com/aixiansheng/lzfse v0.2.4
 	github.com/alecthomas/chroma/v2 v2.27.0
@@ -46,7 +47,7 @@ require (
 	go.foxforensics.eu/eventid v1.0.1
 	go.foxforensics.eu/go-bgzf v1.0.0
 	go.foxforensics.eu/go-ese v1.0.0
-	go.foxforensics.eu/go-fortilog v1.0.2
+	go.foxforensics.eu/go-fortilog v1.1.2
 	go.foxforensics.eu/go-lnk v1.0.0
 	go.foxforensics.eu/go-mft v1.0.0
 	go.foxforensics.eu/go-mmap v1.0.0
@@ -69,7 +70,6 @@ require (
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
 	github.com/Velocidex/json v0.0.0-20220224052537-92f3c0326e5a // indirect
 	github.com/Velocidex/yaml/v2 v2.2.8 // indirect
-	github.com/VirusTotal/vt-go v1.1.0 // indirect
 	github.com/ajdnik/imghash/v2 v2.5.2 // indirect
 	github.com/akavel/rsrc v0.10.2 // indirect
 	github.com/alecthomas/participle v0.7.1 // indirect
@@ -121,7 +121,7 @@ require (
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
 	golang.org/x/crypto v0.53.0 // indirect
 	golang.org/x/exp v0.0.0-20260611194520-c48552f49976 // indirect
-	golang.org/x/image v0.42.0 // indirect
+	golang.org/x/image v0.43.0 // indirect
 	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
