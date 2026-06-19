@@ -11,7 +11,6 @@ import (
 	"sync"
 
 	"github.com/dlclark/regexp2/v2"
-
 	"go.foxforensics.eu/fox/v4/internal/pkg/file"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/receipt"
 	"go.foxforensics.eu/fox/v4/internal/pkg/version"
@@ -25,12 +24,20 @@ var Banner = `
   '--'    '----'--'  '--'
 `
 
+var Version = "Version %s %s"
+
 // Stdout default output.
 var Stdout = &Writer{wc: os.Stdout}
 
 type Writer struct {
 	sync.Mutex
 	wc io.WriteCloser
+}
+
+func About(msg string) error {
+	_, err1 := fmt.Println(msg)
+	_, err2 := fmt.Println(fmt.Sprintf(Version, version.Number, version.ID()))
+	return errors.Join(err1, err2)
 }
 
 func Usage(msg string) error {

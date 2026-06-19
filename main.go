@@ -17,7 +17,6 @@ import (
 
 	"github.com/alecthomas/kong"
 	_ "github.com/josephspurrier/goversioninfo"
-
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/cmd/ad"
 	"go.foxforensics.eu/fox/v4/internal/cmd/cat"
@@ -27,12 +26,10 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd/info"
 	"go.foxforensics.eu/fox/v4/internal/cmd/str"
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
-	"go.foxforensics.eu/fox/v4/internal/pkg/version"
 )
 
 var About = strings.TrimSpace(`
 © 2026 Fox Forensics
-Version %s %s
 `)
 
 var Usage = strings.TrimSpace(`
@@ -130,7 +127,7 @@ func main() {
 		_ = text.Usage(Usage)
 
 	case cli.Version:
-		fmt.Printf(About, version.Number, version.ID())
+		_ = text.About(About)
 
 	default:
 		defer timer(time.Now())
