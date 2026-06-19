@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/test"
+	"go.foxforensics.eu/fox/v4/internal/test"
 )
 
 const src = "format/fox.jsonl"

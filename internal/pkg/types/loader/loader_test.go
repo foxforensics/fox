@@ -7,8 +7,8 @@ import (
 	"slices"
 	"testing"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/test"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
+	"go.foxforensics.eu/fox/v4/internal/test"
 )
 
 func TestMain(m *testing.M) {
