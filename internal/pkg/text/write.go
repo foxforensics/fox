@@ -12,8 +12,8 @@ import (
 
 	"github.com/dlclark/regexp2/v2"
 	"go.foxforensics.eu/fox/v4/internal/pkg/file"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/receipt"
-	"go.foxforensics.eu/fox/v4/internal/pkg/version"
+	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
+	"go.foxforensics.eu/fox/v4/internal/sys/version"
 )
 
 var Banner = `

@@ -11,10 +11,9 @@ import (
 	"time"
 
 	mqtt "github.com/eclipse/paho.golang/paho"
+	"go.foxforensics.eu/fox/v4/internal/sys/version"
 
 	"github.com/segmentio/ksuid"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/version"
 )
 
 // Timeout for everything network related.

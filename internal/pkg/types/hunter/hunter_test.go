@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/loader"
+	"go.foxforensics.eu/fox/v4/internal/sys/loader"
 	"go.foxforensics.eu/fox/v4/internal/test"
 )
 

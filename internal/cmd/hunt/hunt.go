@@ -11,6 +11,7 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
+	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 
@@ -24,7 +25,6 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/receipt"
 )
 
 var Usage = strings.TrimSpace(`

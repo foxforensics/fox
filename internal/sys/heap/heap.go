@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"sync"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/mmap"
+	"go.foxforensics.eu/fox/v4/internal/sys/mmap"
 )
 
 type Heap struct {

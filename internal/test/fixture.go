@@ -10,7 +10,7 @@ import (
 
 const Sample = "fox.txt"
 
-const root = "../../../testdata"
+const root = "../../testdata"
 
 func Assert(b []byte) bool {
 	return bytes.Equal(b, Fixture(filepath.Join("format", Sample)))

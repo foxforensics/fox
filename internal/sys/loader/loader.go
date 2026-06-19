@@ -15,10 +15,8 @@ import (
 
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/sourcegraph/conc/pool"
-
-	_zip "go.foxforensics.eu/fox/v4/internal/pkg/file/archive/7z"
-
 	"go.foxforensics.eu/fox/v4/internal/pkg/file"
+	_zip "go.foxforensics.eu/fox/v4/internal/pkg/file/archive/7z"
 	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/ar"
 	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/cab"
 	"go.foxforensics.eu/fox/v4/internal/pkg/file/archive/cpio"
@@ -61,9 +59,9 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/file/format/xml"
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/heap"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/mmap"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/register"
+	"go.foxforensics.eu/fox/v4/internal/sys/heap"
+	"go.foxforensics.eu/fox/v4/internal/sys/mmap"
+	"go.foxforensics.eu/fox/v4/internal/sys/register"
 )
 
 const Stdin = "-"

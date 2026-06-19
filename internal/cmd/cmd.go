@@ -14,9 +14,9 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/client"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/heap"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/loader"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/smap"
+	"go.foxforensics.eu/fox/v4/internal/sys/heap"
+	"go.foxforensics.eu/fox/v4/internal/sys/loader"
 )
 
 type Globals struct {

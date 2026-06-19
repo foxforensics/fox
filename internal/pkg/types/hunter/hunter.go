@@ -12,11 +12,11 @@ import (
 	"sync"
 
 	"github.com/sourcegraph/conc/pool"
+	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/evtx"
 	"go.foxforensics.eu/fox/v4/internal/pkg/file/binary/log/journal"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/heap"
 )
 
 var Latency = int64(1024 * 1024) // 1mb
