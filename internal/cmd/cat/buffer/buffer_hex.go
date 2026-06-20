@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	cli "go.foxforensics.eu/fox/v4/internal/cmd"
+	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/output"
 )
@@ -28,11 +28,11 @@ type HexContext struct {
 	Pretty bool
 }
 
-func Hex(ctx *HexContext, cli *cli.Globals) *HexBuffer {
-	var buf = &HexBuffer{make(chan HexLine, cli.Threads*1024)}
+func Hex(ctx *HexContext, fox *cmd.Globals) *HexBuffer {
+	var buf = &HexBuffer{make(chan HexLine, fox.Threads*1024)}
 
-	if cli.Limits.IsTail {
-		ctx.Delta = cli.Limits.Values.Bytes
+	if fox.Limits.IsTail {
+		ctx.Delta = fox.Limits.Values.Bytes
 	}
 
 	go streamHex(ctx, buf)

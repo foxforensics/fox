@@ -63,11 +63,11 @@ type Globals struct {
 	Input   []string           `kong:"-"`
 }
 
-func (cli *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
+func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	var err error
 	var lvl slog.Level
 
-	switch cli.Verbose {
+	switch fox.Verbose {
 	case 0:
 		lvl = slog.LevelWarn
 	case 1:
@@ -79,116 +79,116 @@ func (cli *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	slog.SetLogLoggerLevel(lvl)
 
 	if raw {
-		cli.NoConvert = true
+		fox.NoConvert = true
 	}
 
-	if len(cli.Out) > 0 {
-		cli.NoPretty = true
+	if len(fox.Out) > 0 {
+		fox.NoPretty = true
 	}
 
-	if len(cli.Find) > 0 {
-		if cli.Regexp, err = regexp2.Compile(cli.Find); err != nil {
+	if len(fox.Find) > 0 {
+		if fox.Regexp, err = regexp2.Compile(fox.Find); err != nil {
 			return nil, errors.New("invalid regex syntax")
 		}
 	}
 
-	cli.Limits, err = types.NewLimits(cli.Limit)
+	fox.Limits, err = types.NewLimits(fox.Limit)
 
 	if err != nil {
 		return nil, err
 	}
 
-	cli.Filters = &types.Filters{
-		Regex: cli.Regexp,
+	fox.Filters = &types.Filters{
+		Regex: fox.Regexp,
 	}
 
-	if cli.Raw > 0 {
-		cli.NoConvert = true
+	if fox.Raw > 0 {
+		fox.NoConvert = true
 	}
 
-	if cli.Raw > 1 {
-		cli.NoDeflate = true
-		cli.NoExtract = true
+	if fox.Raw > 1 {
+		fox.NoDeflate = true
+		fox.NoExtract = true
 	}
 
-	if cli.Raw > 2 {
-		cli.NoStrict = true
+	if fox.Raw > 2 {
+		fox.NoStrict = true
 	}
 
-	if cli.Threads <= 0 {
-		cli.Threads = 1 // must be at least one
+	if fox.Threads <= 0 {
+		fox.Threads = 1 // must be at least one
 	}
 
-	if len(cli.Lexer) > 0 {
-		output.Lexer = cli.Lexer
+	if len(fox.Lexer) > 0 {
+		output.Lexer = fox.Lexer
 	}
 
-	if len(cli.Style) > 0 {
-		output.Style = cli.Style
+	if len(fox.Style) > 0 {
+		output.Style = fox.Style
 	}
 
-	if !cli.NoDeflate {
+	if !fox.NoDeflate {
 		loader.RegisterDeflates()
 	}
 
-	if !cli.NoExtract {
+	if !fox.NoExtract {
 		loader.RegisterExtracts()
 	}
 
-	if !cli.NoConvert {
+	if !fox.NoConvert {
 		loader.RegisterConverts()
 	}
 
-	if !cli.NoPretty {
+	if !fox.NoPretty {
 		loader.RegisterFormats()
 	} else {
 		color.NoColor = true // turn off color package
 	}
 
-	if cli.NoReceipt && len(cli.Out) > 0 {
+	if fox.NoReceipt && len(fox.Out) > 0 {
 		slog.Warn("receipts has been disabled!")
 	}
 
-	cli.Loader = loader.New(&loader.Options{
-		Limits:   cli.Limits,
-		Filters:  cli.Filters,
-		Password: cli.Password,
-		Threads:  cli.Threads,
-		Strict:   !cli.NoStrict,
+	fox.Loader = loader.New(&loader.Options{
+		Limits:   fox.Limits,
+		Filters:  fox.Filters,
+		Password: fox.Password,
+		Threads:  fox.Threads,
+		Strict:   !fox.NoStrict,
 	})
 
 	// handle CTRC+C
-	cli.Context, cli.Cancel = signal.NotifyContext(
+	fox.Context, fox.Cancel = signal.NotifyContext(
 		context.Background(),
 		os.Kill,
 		os.Interrupt,
 		syscall.SIGTERM,
 	)
 
-	smap.Threads = cli.Threads
-	client.MaxIdle = cli.Threads
-	tables.Threads = cli.Threads
+	smap.Threads = fox.Threads
+	client.MaxIdle = fox.Threads
+	tables.Threads = fox.Threads
 
-	heaps := cli.Loader.Load(cli.Context, args)
+	heaps := fox.Loader.Load(fox.Context, args)
 
-	if cli.DryRun {
+	if fox.DryRun {
 		for h := range heaps {
 			sys.Stdout.Write(h.Name)
 		}
 
 		// exit early
-		cli.Exit(0)
+		fox.Exit(0)
 	}
 
 	return heaps, nil
 }
 
-func (cli *Globals) Exit(code int) {
-	cli.Discard()
+func (fox *Globals) Exit(code int) {
+	fox.Discard()
 	os.Exit(code)
 }
 
-func (cli *Globals) Discard() {
-	cli.Cancel()
-	cli.Loader.Exit()
+func (fox *Globals) Discard() {
+	fox.Cancel()
+	fox.Loader.Exit()
 }

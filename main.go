@@ -86,7 +86,7 @@ Example: Show help on sub commands
 Report bugs at: foxforensics.eu/issues
 `)
 
-type fox struct {
+type Fox struct {
 	Ad   ad.Ad     `cmd:"" aliases:"a"`
 	Cat  cat.Cat   `cmd:"" aliases:"c" default:"withargs"`
 	Hash hash.Hash `cmd:"" aliases:"h"`
@@ -110,8 +110,8 @@ func main() {
 	log.SetFlags(0)
 	log.SetPrefix("FOX ")
 
-	cli := new(fox)
-	ctx := kong.Parse(cli,
+	fox := new(Fox)
+	ctx := kong.Parse(fox,
 		kong.NoDefaultHelp(),
 		kong.Name("fox"),
 		kong.DefaultEnvars("FOX"),
@@ -123,30 +123,30 @@ func main() {
 	case len(ctx.Args) == 0, ctx.Error != nil:
 		fallthrough // show usage
 
-	case cli.Globals.Help, ctx.Command() == "help":
+	case fox.Globals.Help, ctx.Command() == "help":
 		_ = sys.Usage(Usage)
 
-	case cli.Version:
+	case fox.Version:
 		_ = sys.About(About)
 
 	default:
 		defer timer(time.Now())
 
 		// parse input
-		if len(cli.In) > 0 {
-			cli.Input = split(cli.In)
+		if len(fox.In) > 0 {
+			fox.Input = split(fox.In)
 		}
 
 		// redirect output
-		if len(cli.Out) > 0 {
-			store(cli.Out)
-		} else if cli.Quiet {
+		if len(fox.Out) > 0 {
+			store(fox.Out)
+		} else if fox.Quiet {
 			quiet()
 		}
 
-		defer sys.Stdout.Close(cli.Out, !cli.NoReceipt)
+		defer sys.Stdout.Close(fox.Out, !fox.NoReceipt)
 
-		ctx.FatalIfErrorf(ctx.Run(&cli.Globals))
+		ctx.FatalIfErrorf(ctx.Run(&fox.Globals))
 	}
 }
 

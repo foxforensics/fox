@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"math"
 
-	cli "go.foxforensics.eu/fox/v4/internal/cmd"
+	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/cmd/cat/smap"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/output"
@@ -32,7 +32,7 @@ type TextContext struct {
 	Hint   string
 }
 
-func Text(ctx *TextContext, cli *cli.Globals) *TextBuffer {
+func Text(ctx *TextContext, fox *cmd.Globals) *TextBuffer {
 	var data = ctx.Data
 	var last uint
 
@@ -42,19 +42,19 @@ func Text(ctx *TextContext, cli *cli.Globals) *TextBuffer {
 	}
 
 	ctx.SMap = smap.Map(data)
-	ctx.SMap = cli.Filters.Filter(ctx.SMap).Render()
+	ctx.SMap = fox.Filters.Filter(ctx.SMap).Render()
 
 	if len(ctx.SMap) > 0 {
 		last = ctx.SMap[len(ctx.SMap)-1].Line
 	}
 
 	var buf = &TextBuffer{
-		make(chan *TextLine, cli.Threads*1024),
+		make(chan *TextLine, fox.Threads*1024),
 		uint(math.Log10(float64(last))) + 1,
 	}
 
-	if cli.Limits.IsTail {
-		ctx.Delta = cli.Limits.Values.Lines
+	if fox.Limits.IsTail {
+		ctx.Delta = fox.Limits.Values.Lines
 	}
 
 	go streamText(ctx, buf)

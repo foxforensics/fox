@@ -4,12 +4,11 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-	buffer2 "go.foxforensics.eu/fox/v4/internal/cmd/cat/buffer"
+	"go.foxforensics.eu/fox/v4/internal/cmd"
+	"go.foxforensics.eu/fox/v4/internal/cmd/cat/buffer"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/unique"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/output"
-
-	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 )
 
 var Usage = strings.TrimSpace(`
@@ -72,38 +71,38 @@ func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	return nil
 }
 
-func (cmd *Cat) Run(cli *cli.Globals) error {
-	cmd.Paths = append(cmd.Paths, cli.Input...)
+func (cmd *Cat) Run(fox *cmd.Globals) error {
+	cmd.Paths = append(cmd.Paths, fox.Input...)
 
 	if len(cmd.Paths) == 0 {
 		return sys.Usage(Usage)
 	}
 
-	ch, err := cli.Init(cmd.Paths, false)
+	ch, err := fox.Init(cmd.Paths, false)
 
 	if err != nil {
 		return err
 	}
 
-	defer cli.Discard()
+	defer fox.Discard()
 
 	if cmd.Text || cmd.Hex {
-		cli.NoConvert = true
+		fox.NoConvert = true
 	}
 
 	// apply command specific context
-	cli.Filters.Before = cmd.Before
-	cli.Filters.After = cmd.After
+	fox.Filters.Before = cmd.Before
+	fox.Filters.After = cmd.After
 
 	for h := range ch {
-		if !cli.NoPretty {
+		if !fox.NoPretty {
 			sys.Stdout.Header(h.String())
 		}
 
 		if (h.IsText() && !cmd.Hex) || cmd.Text {
-			cmd.renderText(cli, h.Bytes(), h.Hint)
+			cmd.renderText(fox, h.Bytes(), h.Hint)
 		} else {
-			cmd.renderHex(cli, h.Bytes())
+			cmd.renderHex(fox, h.Bytes())
 		}
 
 		h.Discard()
@@ -112,50 +111,50 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func (cmd *Cat) renderText(cli *cli.Globals, b []byte, hint string) {
-	for l := range buffer2.Text(&buffer2.TextContext{
-		Parent: cli.Context,
+func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
+	for l := range buffer.Text(&buffer.TextContext{
+		Parent: fox.Context,
 		Data:   b,
 		Hint:   hint,
-	}, cli).Lines {
+	}, fox).Lines {
 		s := l.String
 
 		if cmd.uniq != nil && !cmd.uniq.IsUnique(s) {
 			continue // not unique
 		}
 
-		if cli.Regexp != nil && l.Line != buffer2.Sep {
-			s = output.MarkMatch(s, cli.Regexp)
+		if fox.Regexp != nil && l.Line != buffer.Sep {
+			s = output.MarkMatch(s, fox.Regexp)
 		}
 
-		if !cli.NoPretty {
+		if !fox.NoPretty {
 			sys.Stdout.Write("%s %s", output.AsGray(l.Line), s)
-		} else if l.Line == buffer2.Sep {
-			sys.Stdout.Write(output.AsGray(buffer2.Sep))
+		} else if l.Line == buffer.Sep {
+			sys.Stdout.Write(output.AsGray(buffer.Sep))
 		} else {
 			sys.Stdout.Write(s)
 		}
 	}
 }
 
-func (cmd *Cat) renderHex(cli *cli.Globals, b []byte) {
+func (cmd *Cat) renderHex(fox *cmd.Globals, b []byte) {
 	lastHex, wasCut := "", false
 
-	for l := range buffer2.Hex(&buffer2.HexContext{
-		Parent: cli.Context,
+	for l := range buffer.Hex(&buffer.HexContext{
+		Parent: fox.Context,
 		Data:   b,
-		Pretty: !cli.NoPretty,
-	}, cli).Lines {
-		if cli.Regexp != nil {
-			if ok, _ := cli.Regexp.MatchString(l.Values); !ok {
+		Pretty: !fox.NoPretty,
+	}, fox).Lines {
+		if fox.Regexp != nil {
+			if ok, _ := fox.Regexp.MatchString(l.Values); !ok {
 				continue // not matched afterward
 			}
 		}
 
-		l.Values = output.MarkMatch(l.Values, cli.Regexp)
+		l.Values = output.MarkMatch(l.Values, fox.Regexp)
 
 		// cut similar lines for better readability
-		if !cli.NoPretty && l.Values == lastHex {
+		if !fox.NoPretty && l.Values == lastHex {
 			if !wasCut {
 				wasCut = true
 				sys.Stdout.Write(output.AsGray("*"))
@@ -163,7 +162,7 @@ func (cmd *Cat) renderHex(cli *cli.Globals, b []byte) {
 			continue
 		}
 
-		if !cli.NoPretty {
+		if !fox.NoPretty {
 			sys.Stdout.Write("%s  %s%s", output.AsGray(l.Address), l.Values, l.String)
 		} else {
 			sys.Stdout.Write(l.Values)

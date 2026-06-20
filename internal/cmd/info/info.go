@@ -13,7 +13,7 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/fatih/color"
 	"go.foxforensics.eu/entropy/entropy"
-	cli "go.foxforensics.eu/fox/v4/internal/cmd"
+	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/net/lookup"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/output"
@@ -160,30 +160,30 @@ func (cmd *Info) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	return nil
 }
 
-func (cmd *Info) Run(cli *cli.Globals) error {
-	cmd.Paths = append(cmd.Paths, cli.Input...)
+func (cmd *Info) Run(fox *cmd.Globals) error {
+	cmd.Paths = append(cmd.Paths, fox.Input...)
 
 	if len(cmd.Paths) == 0 {
 		return sys.Usage(Usage)
 	}
 
 	if cmd.Sort {
-		cli.Threads = 1 // single threaded
+		fox.Threads = 1 // single threaded
 	}
 
 	// turn off for calculations
-	v := cli.NoPretty
+	v := fox.NoPretty
 
-	cli.NoConvert = true
-	cli.NoPretty = true
+	fox.NoConvert = true
+	fox.NoPretty = true
 
-	ch, err := cli.Init(cmd.Paths, true)
+	ch, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	defer cli.Discard()
+	defer fox.Discard()
 
 	color.NoColor = v
 
@@ -199,7 +199,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.Lookup {
-			fi.Suspect, err = lookup.Lookup(cli.ApiKey, h.Bytes())
+			fi.Suspect, err = lookup.Lookup(fox.ApiKey, h.Bytes())
 
 			if err != nil {
 				slog.Error(err.Error())
@@ -209,7 +209,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		// because empty files will cause errors
 		if h.Size == 0 {
 			if cmd.Min == 0 {
-				sys.Stdout.Match(cmd.format(fi), cli.Regexp)
+				sys.Stdout.Match(cmd.format(fi), fox.Regexp)
 			}
 			h.Discard()
 			continue
@@ -227,7 +227,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 			fi.Entropy = entropy.Calculate(block)
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
-				sys.Stdout.Match(cmd.format(fi), cli.Regexp)
+				sys.Stdout.Match(cmd.format(fi), fox.Regexp)
 			}
 
 			fi.Offset += uint64(n)

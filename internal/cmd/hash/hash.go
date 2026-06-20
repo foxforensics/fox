@@ -9,13 +9,12 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/output"
 	"go.foxforensics.eu/hasher/hash"
 	"go.foxforensics.eu/rhash/database"
-
-	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 )
 
 var Usage = strings.TrimSpace(`
@@ -109,8 +108,8 @@ func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	return err
 }
 
-func (cmd *Hash) Run(cli *cli.Globals) error {
-	cmd.Paths = append(cmd.Paths, cli.Input...)
+func (cmd *Hash) Run(fox *cmd.Globals) error {
+	cmd.Paths = append(cmd.Paths, fox.Input...)
 
 	if len(cmd.Paths) == 0 {
 		return sys.Usage(Usage)
@@ -131,13 +130,13 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		n = max(n, len(algo))
 	}
 
-	ch, err := cli.Init(cmd.Paths, true)
+	ch, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	defer cli.Discard()
+	defer fox.Discard()
 
 	for h := range ch {
 		fh := &FileHash{
@@ -145,18 +144,18 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			Hash: make(map[string]string),
 		}
 
-		if !cli.NoPretty && len(cmd.Hash) > 1 {
+		if !fox.NoPretty && len(cmd.Hash) > 1 {
 			sys.Stdout.Header(h.String())
 		}
 
 		for _, k := range cmd.Hash {
 			if cmd.Lookup {
 				a, v := tables.Lookup(string(h.Bytes()))
-				sys.Stdout.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), cli.Regexp)
+				sys.Stdout.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), fox.Regexp)
 				break
 			} else if cmd.Guess {
-				for _, a := range collect(database.Lookup(cli.Context, string(h.Bytes()))) {
-					sys.Stdout.Match(a, cli.Regexp)
+				for _, a := range collect(database.Lookup(fox.Context, string(h.Bytes()))) {
+					sys.Stdout.Match(a, fox.Regexp)
 				}
 				continue
 			}
@@ -167,8 +166,8 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				return fmt.Errorf("%s: %s", err, k)
 			}
 
-			if cli.Regexp != nil && !plain {
-				if ok, _ := cli.Regexp.MatchString(sum); !ok {
+			if fox.Regexp != nil && !plain {
+				if ok, _ := fox.Regexp.MatchString(sum); !ok {
 					continue // do not include hash
 				}
 			}
@@ -196,11 +195,11 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				sum = fmt.Sprintf("%s  %s", sum, fh.File)
 			}
 
-			sys.Stdout.Match(sum, cli.Regexp)
+			sys.Stdout.Match(sum, fox.Regexp)
 		}
 
 		if !plain {
-			sys.Stdout.Match(cmd.format(fh), cli.Regexp)
+			sys.Stdout.Match(cmd.format(fh), fox.Regexp)
 		}
 
 		h.Discard()

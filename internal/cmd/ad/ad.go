@@ -7,14 +7,13 @@ import (
 	"strings"
 
 	"go.foxforensics.eu/bootkey/bootkey"
+	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/cmd/ad/record"
 	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/output"
 	"go.foxforensics.eu/hashdump/extract"
 	"go.foxforensics.eu/hasher/hash"
-
-	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 )
 
 var Usage = strings.TrimSpace(`
@@ -66,20 +65,20 @@ type Ad struct {
 	Paths []string `arg:"" optional:""`
 }
 
-func (cmd *Ad) Run(cli *cli.Globals) error {
-	cmd.Paths = append(cmd.Paths, cli.Input...)
+func (cmd *Ad) Run(fox *cmd.Globals) error {
+	cmd.Paths = append(cmd.Paths, fox.Input...)
 
 	if len(cmd.Paths) < 2 {
 		return sys.Usage(Usage)
 	}
 
-	ch, err := cli.Init(cmd.Paths, true)
+	ch, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	defer cli.Discard()
+	defer fox.Discard()
 
 	ntds := <-ch
 
@@ -117,7 +116,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 
 	slog.Debug(fmt.Sprintf("BootKey %x", key))
 
-	pek, err := extract.Keys(cli.Context, ntds.Bytes(), key)
+	pek, err := extract.Keys(fox.Context, ntds.Bytes(), key)
 
 	if err != nil {
 		return err
@@ -127,7 +126,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 		slog.Debug(fmt.Sprintf("PEK #%d %x", i, k))
 	}
 
-	n, err := cmd.extract(cli, key, ntds.Bytes())
+	n, err := cmd.extract(fox, key, ntds.Bytes())
 
 	if err != nil {
 		return err
@@ -138,12 +137,12 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 	return nil
 }
 
-func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
+func (cmd *Ad) extract(fox *cmd.Globals, k, b []byte) (int, error) {
 	var a []any
 
 	switch {
 	case cmd.Users:
-		if v, err := extract.Accounts(cli.Context, b, k); err != nil {
+		if v, err := extract.Accounts(fox.Context, b, k); err != nil {
 			return 0, err
 		} else {
 			for _, r := range v {
@@ -152,7 +151,7 @@ func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
 		}
 
 	case cmd.Groups:
-		if v, err := extract.Groups(cli.Context, b); err != nil {
+		if v, err := extract.Groups(fox.Context, b); err != nil {
 			return 0, err
 		} else {
 			for _, r := range v {
@@ -161,7 +160,7 @@ func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
 		}
 
 	case cmd.Computers:
-		if v, err := extract.Computers(cli.Context, b); err != nil {
+		if v, err := extract.Computers(fox.Context, b); err != nil {
 			return 0, err
 		} else {
 			for _, r := range v {
@@ -170,7 +169,7 @@ func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
 		}
 
 	default:
-		if v, err := extract.Accounts(cli.Context, b, k); err != nil {
+		if v, err := extract.Accounts(fox.Context, b, k); err != nil {
 			return 0, err
 		} else {
 			for _, r := range v {
@@ -180,7 +179,7 @@ func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
 	}
 
 	for _, v := range a {
-		sys.Stdout.Match(cmd.format(v), cli.Regexp)
+		sys.Stdout.Match(cmd.format(v), fox.Regexp)
 	}
 
 	return len(a), nil

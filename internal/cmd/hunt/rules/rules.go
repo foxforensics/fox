@@ -1,10 +1,9 @@
 package rules
 
 import (
+	_ "embed"
 	"slices"
 	"strings"
-
-	_ "embed"
 
 	"github.com/bradleyjkemp/sigma-go"
 )

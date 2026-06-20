@@ -11,7 +11,7 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
-	cli "go.foxforensics.eu/fox/v4/internal/cmd"
+	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/event"
 	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/hunter"
 	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/rules"
@@ -200,8 +200,8 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	return err
 }
 
-func (cmd *Hunt) Run(cli *cli.Globals) error {
-	cmd.Paths = append(cmd.Paths, cli.Input...)
+func (cmd *Hunt) Run(fox *cmd.Globals) error {
+	cmd.Paths = append(cmd.Paths, fox.Input...)
 
 	if len(cmd.Paths) == 0 {
 		return sys.Usage(Usage)
@@ -211,17 +211,17 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		cmd.Paths = append(hunter.Local, cmd.Paths[1:]...)
 	}
 
-	ch, err := cli.Init(cmd.Paths, true)
+	ch, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	defer cli.Discard()
-	defer cmd.discard(cli)
+	defer fox.Discard()
+	defer cmd.discard(fox)
 
 	slog.Info("hunt: started")
-	slog.Debug(fmt.Sprintf("hunt: using %d thread(s)", cli.Threads))
+	slog.Debug(fmt.Sprintf("hunt: using %d thread(s)", fox.Threads))
 	slog.Debug(fmt.Sprintf("hunt: using rule '%s'", cmd.rule.Title))
 
 	if cmd.storage != nil {
@@ -242,9 +242,9 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 
 	for e := range hunter.New(&hunter.Options{
 		Sort:    cmd.Sort,
-		Threads: cli.Threads,
-	}).Hunt(cli.Context, ch) {
-		m, err := sig.Matches(cli.Context, e.Fields)
+		Threads: fox.Threads,
+	}).Hunt(fox.Context, ch) {
+		m, err := sig.Matches(fox.Context, e.Fields)
 
 		if err != nil {
 			slog.Error(err.Error())
@@ -260,7 +260,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.storage == nil {
-			sys.Stdout.Match(cmd.format(e), cli.Regexp)
+			sys.Stdout.Match(cmd.format(e), fox.Regexp)
 		} else {
 			err = cmd.storage.Store(e)
 
@@ -270,7 +270,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.streamer != nil {
-			err = cmd.streamer.Stream(cli.Context, e)
+			err = cmd.streamer.Stream(fox.Context, e)
 
 			if err != nil {
 				slog.Error(err.Error())
@@ -297,7 +297,7 @@ func (cmd *Hunt) format(e *event.Event) string {
 	}
 }
 
-func (cmd *Hunt) discard(cli *cli.Globals) {
+func (cmd *Hunt) discard(fox *cmd.Globals) {
 	if cmd.streamer != nil {
 		err := cmd.streamer.Close()
 
@@ -313,7 +313,7 @@ func (cmd *Hunt) discard(cli *cli.Globals) {
 			slog.Error(err.Error())
 		}
 
-		if cli.NoReceipt {
+		if fox.NoReceipt {
 			return
 		}
 

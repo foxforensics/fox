@@ -6,12 +6,11 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/cmd/str/carver"
 	"go.foxforensics.eu/fox/v4/internal/net/lookup"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/output"
-
-	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 )
 
 var Usage = strings.TrimSpace(`
@@ -82,8 +81,8 @@ func (cmd *Str) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	return nil
 }
 
-func (cmd *Str) Run(cli *cli.Globals) error {
-	cmd.Paths = append(cmd.Paths, cli.Input...)
+func (cmd *Str) Run(fox *cmd.Globals) error {
+	cmd.Paths = append(cmd.Paths, fox.Input...)
 
 	if len(cmd.Paths) == 0 {
 		return sys.Usage(Usage)
@@ -100,16 +99,16 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 		return nil
 	}
 
-	ch, err := cli.Init(cmd.Paths, true)
+	ch, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	defer cli.Discard()
+	defer fox.Discard()
 
 	for h := range ch {
-		if !cli.NoPretty {
+		if !fox.NoPretty {
 			sys.Stdout.Header(h.String())
 		}
 
@@ -121,29 +120,29 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 			Trim:    cmd.Trim,
 			What:    cmd.What,
 			Class:   cmd.Class,
-			Threads: cli.Threads,
-		}).Carve(cli.Context, h.Bytes()) {
-			if cli.Regexp != nil {
-				if ok, _ := cli.Regexp.MatchString(str.Value); !ok {
+			Threads: fox.Threads,
+		}).Carve(fox.Context, h.Bytes()) {
+			if fox.Regexp != nil {
+				if ok, _ := fox.Regexp.MatchString(str.Value); !ok {
 					continue // not matched afterward
 				}
 			}
 
 			if cmd.Lookup {
-				str.Suspect, err = lookup.Lookup(cli.ApiKey, str)
+				str.Suspect, err = lookup.Lookup(fox.ApiKey, str)
 
 				if err != nil {
 					slog.Error(err.Error())
 				}
 			}
 
-			str.Value = output.MarkMatch(str.Value, cli.Regexp)
+			str.Value = output.MarkMatch(str.Value, fox.Regexp)
 
-			if !cli.NoPretty && len(str.Classes) > 0 && str.Suspect {
+			if !fox.NoPretty && len(str.Classes) > 0 && str.Suspect {
 				sys.Stdout.Write("%s  %s [%s]", output.AsGray(str.Address), output.AsWarn(str.Value), output.AsBold(str.Classes))
-			} else if !cli.NoPretty && len(str.Classes) > 0 {
+			} else if !fox.NoPretty && len(str.Classes) > 0 {
 				sys.Stdout.Write("%s  %s [%s]", output.AsGray(str.Address), str.Value, output.AsBold(str.Classes))
-			} else if !cli.NoPretty {
+			} else if !fox.NoPretty {
 				sys.Stdout.Write("%s  %s", output.AsGray(str.Address), str.Value)
 			} else if len(str.Classes) > 0 {
 				sys.Stdout.Write("%s [%s]", str.Value, str.Classes)
