@@ -10,9 +10,8 @@ import (
 	"time"
 
 	"github.com/zeebo/xxh3"
+	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 )
 
 var replacer = strings.NewReplacer(
@@ -58,7 +57,7 @@ func (e *Event) ToCEF() string {
 		version.Number,
 	))
 
-	_, _ = replacer.WriteString(&sb, text.Sanitize(e.Message[:min(len(e.Message), 512)]))
+	_, _ = replacer.WriteString(&sb, sys.Sanitize(e.Message[:min(len(e.Message), 512)]))
 
 	sb.WriteString(fmt.Sprintf("|%d|", e.Severity))
 

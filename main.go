@@ -25,7 +25,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd/hunt"
 	"go.foxforensics.eu/fox/v4/internal/cmd/info"
 	"go.foxforensics.eu/fox/v4/internal/cmd/str"
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/sys"
 )
 
 var About = strings.TrimSpace(`
@@ -124,10 +124,10 @@ func main() {
 		fallthrough // show usage
 
 	case cli.Globals.Help, ctx.Command() == "help":
-		_ = text.Usage(Usage)
+		_ = sys.Usage(Usage)
 
 	case cli.Version:
-		_ = text.About(About)
+		_ = sys.About(About)
 
 	default:
 		defer timer(time.Now())
@@ -144,7 +144,7 @@ func main() {
 			quiet()
 		}
 
-		defer text.Stdout.Close(cli.Out, !cli.NoReceipt)
+		defer sys.Stdout.Close(cli.Out, !cli.NoReceipt)
 
 		ctx.FatalIfErrorf(ctx.Run(&cli.Globals))
 	}
@@ -162,7 +162,7 @@ func split(b []byte) []string {
 }
 
 func store(f string) {
-	text.SetOutput(os.OpenFile(f, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
+	sys.SetOutput(os.OpenFile(f, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
 }
 
 func timer(t time.Time) {
@@ -170,7 +170,7 @@ func timer(t time.Time) {
 }
 
 func quiet() {
-	text.SetOutput(os.Open(os.DevNull))
+	sys.SetOutput(os.Open(os.DevNull))
 	log.SetOutput(io.Discard)
 }
 

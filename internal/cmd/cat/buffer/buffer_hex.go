@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/output"
 )
 
 type HexLine struct {
@@ -62,7 +62,8 @@ func formatStd(ctx *HexContext) HexLine {
 	var val strings.Builder
 	var str strings.Builder
 
-	j := 0
+	var r rune
+	var j int
 
 	for i := range 16 {
 		if ctx.Index+i >= len(ctx.Data) {
@@ -71,9 +72,9 @@ func formatStd(ctx *HexContext) HexLine {
 
 		switch v := ctx.Data[ctx.Index+i]; {
 		case v == 0:
-			val.WriteString(text.AsGray("%02x ", v))
+			val.WriteString(output.AsGray("%02x ", v))
 		case v >= 1 && v <= 31:
-			val.WriteString(text.AsBold("%02x ", v))
+			val.WriteString(output.AsBold("%02x ", v))
 		default:
 			val.WriteString(fmt.Sprintf("%02x ", v))
 		}
@@ -85,12 +86,18 @@ func formatStd(ctx *HexContext) HexLine {
 			j += 3
 		}
 
-		str.WriteString(fmt.Sprintf("%c", ctx.Data[ctx.Index+i]))
+		r = rune(ctx.Data[ctx.Index+i])
+
+		if r < sys.SP || r > sys.DEL {
+			str.WriteString(output.AsGray("·"))
+		} else {
+			str.WriteRune(r)
+		}
 	}
 
 	val.WriteString(strings.Repeat(" ", max(0, 50-j)))
 
-	return HexLine{adr, val.String(), text.ToAscii(str.String(), "·")}
+	return HexLine{adr, val.String(), str.String()}
 }
 
 func formatRaw(ctx *HexContext) HexLine {

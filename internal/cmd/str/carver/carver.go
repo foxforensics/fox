@@ -7,7 +7,6 @@ import (
 	"slices"
 	"strings"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 	fstrings "go.foxforensics.eu/strings/strings"
 )
 
@@ -33,7 +32,7 @@ type Carver struct {
 	opts    *Options
 	list    []String
 	strings chan *String
-	entries text.Database
+	entries Database
 }
 
 func New(opts *Options) *Carver {
@@ -41,7 +40,7 @@ func New(opts *Options) *Carver {
 		opts:    opts,
 		list:    make([]String, 0),
 		strings: make(chan *String, opts.Threads*64),
-		entries: text.BuildDB(opts.What),
+		entries: BuildDB(opts.What),
 	}
 }
 

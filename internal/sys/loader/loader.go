@@ -56,7 +56,6 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/format/json"
 	"go.foxforensics.eu/fox/v4/internal/pkg/format/jsonl"
 	"go.foxforensics.eu/fox/v4/internal/pkg/format/xml"
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
@@ -144,7 +143,7 @@ func (ldr *Loader) Load(ctx context.Context, paths []string) <-chan *heap.Heap {
 
 func (ldr *Loader) Exit() {
 	ldr.RLock()
-	slog.Debug(fmt.Sprintf("total size %s", text.Humanize(ldr.size)))
+	slog.Debug(fmt.Sprintf("total size %s", sys.Humanize(ldr.size)))
 	ldr.RUnlock()
 }
 

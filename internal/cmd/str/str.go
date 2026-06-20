@@ -8,10 +8,10 @@ import (
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd/str/carver"
 	"go.foxforensics.eu/fox/v4/internal/net/lookup"
+	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/output"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 )
 
 var Usage = strings.TrimSpace(`
@@ -86,14 +86,14 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 	cmd.Paths = append(cmd.Paths, cli.Input...)
 
 	if len(cmd.Paths) == 0 {
-		return text.Usage(Usage)
+		return sys.Usage(Usage)
 	}
 
 	if cmd.Paths[0] == "list" {
-		db := text.BuildDB(3)
+		db := carver.BuildDB(3)
 
 		for _, s := range db.List() {
-			text.Stdout.Write(s)
+			sys.Stdout.Write(s)
 		}
 
 		// exit early
@@ -110,7 +110,7 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			text.Stdout.Header(h.String())
+			sys.Stdout.Header(h.String())
 		}
 
 		for str := range carver.New(&carver.Options{
@@ -137,18 +137,18 @@ func (cmd *Str) Run(cli *cli.Globals) error {
 				}
 			}
 
-			str.Value = text.MarkMatch(str.Value, cli.Regexp)
+			str.Value = output.MarkMatch(str.Value, cli.Regexp)
 
 			if !cli.NoPretty && len(str.Classes) > 0 && str.Suspect {
-				text.Stdout.Write("%s  %s [%s]", text.AsGray(str.Address), text.AsWarn(str.Value), text.AsBold(str.Classes))
+				sys.Stdout.Write("%s  %s [%s]", output.AsGray(str.Address), output.AsWarn(str.Value), output.AsBold(str.Classes))
 			} else if !cli.NoPretty && len(str.Classes) > 0 {
-				text.Stdout.Write("%s  %s [%s]", text.AsGray(str.Address), str.Value, text.AsBold(str.Classes))
+				sys.Stdout.Write("%s  %s [%s]", output.AsGray(str.Address), str.Value, output.AsBold(str.Classes))
 			} else if !cli.NoPretty {
-				text.Stdout.Write("%s  %s", text.AsGray(str.Address), str.Value)
+				sys.Stdout.Write("%s  %s", output.AsGray(str.Address), str.Value)
 			} else if len(str.Classes) > 0 {
-				text.Stdout.Write("%s [%s]", str.Value, str.Classes)
+				sys.Stdout.Write("%s [%s]", str.Value, str.Classes)
 			} else {
-				text.Stdout.Write(str.Value)
+				sys.Stdout.Write(str.Value)
 			}
 		}
 

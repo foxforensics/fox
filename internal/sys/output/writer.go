@@ -1,63 +1,30 @@
-package text
+package output
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"log/slog"
-	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 
 	"github.com/dlclark/regexp2/v2"
-	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
-	"go.foxforensics.eu/fox/v4/internal/sys/version"
 )
-
-var Banner = `
-  .-------.----.--.  .--. 
-  |   ___/ .__. \  \/  /   © 2026 by Fox Forensics
-  |   __|  |  |  >    <    https://foxforensics.eu
-  |  |   \ '--' /  /\  \   Version %s
-  '--'    '----'--'  '--'
-`
-
-var Version = "Version %s %s"
-
-// Stdout default output.
-var Stdout = &Writer{wc: os.Stdout}
 
 type Writer struct {
 	sync.Mutex
 	wc io.WriteCloser
 }
 
-func About(msg string) error {
-	_, err1 := fmt.Println(msg)
-	_, err2 := fmt.Println(fmt.Sprintf(Version, version.Number, version.ID()))
-	return errors.Join(err1, err2)
-}
-
-func Usage(msg string) error {
-	_, err1 := fmt.Println(fmt.Sprintf(Banner, version.Number))
-	_, err2 := fmt.Println(msg)
-	return errors.Join(err1, err2)
-}
-
-func SetOutput(wc io.WriteCloser, err error) {
-	if err == nil {
-		Stdout = &Writer{wc: wc}
-	} else {
-		slog.Error(err.Error())
-	}
+func NewWriter(wc io.WriteCloser) *Writer {
+	return &Writer{wc: wc}
 }
 
 func (w *Writer) Header(s string) {
 	s = strings.TrimPrefix(s, "/")
 	s = strings.TrimSuffix(s, "/")
-	s = strings.ReplaceAll(s, sys.Separator, " > ")
+	s = strings.ReplaceAll(s, ":", " > ")
 	s = strings.ReplaceAll(s, string(filepath.Separator), " > ")
 
 	w.Lock()

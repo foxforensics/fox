@@ -4,14 +4,13 @@ import (
 	"strings"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
-
 	"go.foxforensics.eu/fox/v4/internal/cmd/ad"
 	"go.foxforensics.eu/fox/v4/internal/cmd/cat"
 	"go.foxforensics.eu/fox/v4/internal/cmd/hash"
 	"go.foxforensics.eu/fox/v4/internal/cmd/hunt"
 	"go.foxforensics.eu/fox/v4/internal/cmd/info"
 	"go.foxforensics.eu/fox/v4/internal/cmd/str"
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/sys"
 )
 
 var usage = map[string]string{
@@ -29,7 +28,7 @@ type Help struct {
 
 func (cmd *Help) Run(_ *cli.Globals) error {
 	if v, ok := usage[strings.ToLower(cmd.Name)]; ok {
-		return text.Usage(v)
+		return sys.Usage(v)
 	}
 	return nil
 }

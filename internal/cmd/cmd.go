@@ -13,10 +13,11 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd/cat/smap"
 	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
 	"go.foxforensics.eu/fox/v4/internal/net/client"
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
+	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 	"go.foxforensics.eu/fox/v4/internal/sys/loader"
+	"go.foxforensics.eu/fox/v4/internal/sys/output"
 )
 
 type Globals struct {
@@ -119,11 +120,11 @@ func (cli *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	}
 
 	if len(cli.Lexer) > 0 {
-		text.Lexer = cli.Lexer
+		output.Lexer = cli.Lexer
 	}
 
 	if len(cli.Style) > 0 {
-		text.Style = cli.Style
+		output.Style = cli.Style
 	}
 
 	if !cli.NoDeflate {
@@ -172,7 +173,7 @@ func (cli *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	if cli.DryRun {
 		for h := range heaps {
-			text.Stdout.Write(h.Name)
+			sys.Stdout.Write(h.Name)
 		}
 
 		// exit early

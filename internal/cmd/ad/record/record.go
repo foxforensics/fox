@@ -7,9 +7,8 @@ import (
 	"strings"
 
 	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
+	"go.foxforensics.eu/fox/v4/internal/sys/output"
 	"go.foxforensics.eu/hashdump/extract"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 )
 
 type Record interface {
@@ -143,11 +142,11 @@ func (s *Secret) NtOnly() string {
 
 func (s *Secret) format(sum string, def []byte) string {
 	if _, pwd := tables.Lookup(sum); len(pwd) > 0 {
-		return text.AsBold(pwd)
+		return output.AsBold(pwd)
 	}
 
 	if sum == fmt.Sprintf("%x", def) {
-		return text.AsGray(sum)
+		return output.AsGray(sum)
 	}
 
 	return sum

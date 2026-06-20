@@ -21,7 +21,9 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/net/stream/mqtt"
 	"go.foxforensics.eu/fox/v4/internal/pkg/storage"
 	"go.foxforensics.eu/fox/v4/internal/pkg/storage/parquet"
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/unique"
+	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/output"
 	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
 )
 
@@ -108,7 +110,7 @@ type Hunt struct {
 	storage  storage.Storage `kong:"-"`
 	streamer stream.Streamer `kong:"-"`
 	rule     sigma.Rule      `kong:"-"`
-	uniq     text.Unique     `kong:"-"`
+	uniq     unique.Unique   `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
@@ -124,9 +126,9 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 	switch {
 	case cmd.Uniq:
-		cmd.uniq = text.ByHash()
+		cmd.uniq = unique.ByHash()
 	case cmd.Dist > 0:
-		cmd.uniq = text.ByDistance(cmd.Dist)
+		cmd.uniq = unique.ByDistance(cmd.Dist)
 	}
 
 	if cmd.Parquet {
@@ -202,7 +204,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 	cmd.Paths = append(cmd.Paths, cli.Input...)
 
 	if len(cmd.Paths) == 0 {
-		return text.Usage(Usage)
+		return sys.Usage(Usage)
 	}
 
 	if cmd.Paths[0] == "local" {
@@ -258,7 +260,7 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 		}
 
 		if cmd.storage == nil {
-			text.Stdout.Match(cmd.format(e), cli.Regexp)
+			sys.Stdout.Match(cmd.format(e), cli.Regexp)
 		} else {
 			err = cmd.storage.Store(e)
 
@@ -287,11 +289,11 @@ func (cmd *Hunt) Run(cli *cli.Globals) error {
 func (cmd *Hunt) format(e *event.Event) string {
 	switch {
 	case cmd.Jsonl:
-		return text.ColorizeAs(e.ToJSONL(), "json")
+		return output.ColorizeAs(e.ToJSONL(), "json")
 	case cmd.Json:
-		return text.ColorizeAs(e.ToJSON(), "json")
+		return output.ColorizeAs(e.ToJSON(), "json")
 	default:
-		return text.MarkEvent(e.ToCEF())
+		return output.MarkEvent(e.ToCEF())
 	}
 }
 

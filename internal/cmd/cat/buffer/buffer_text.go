@@ -7,8 +7,8 @@ import (
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/cmd/cat/smap"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/output"
 )
 
 var Limit = 1024 * 1024 * 4
@@ -38,7 +38,7 @@ func Text(ctx *TextContext, cli *cli.Globals) *TextBuffer {
 
 	// turn off color for big files
 	if len(data) < Limit {
-		data = []byte(text.ColorizeAs(string(data), ctx.Hint))
+		data = []byte(output.ColorizeAs(string(data), ctx.Hint))
 	}
 
 	ctx.SMap = smap.Map(data)
@@ -81,7 +81,7 @@ func streamText(ctx *TextContext, buf *TextBuffer) {
 		buf.Lines <- &TextLine{
 			fmt.Sprintf("%0*d ", buf.Pad, uint(ctx.Delta)+str.Line),
 			str.Group,
-			text.Sanitize(string(str.Bytes)),
+			sys.Sanitize(string(str.Bytes)),
 		}
 
 		select {

@@ -1,4 +1,4 @@
-package text
+package output
 
 import (
 	"bytes"
@@ -17,11 +17,10 @@ var Lexer = ""
 var Style = "monokai"
 
 // Fox terminal logo
-var Fox = color.New(color.Bold).AddRGB(
-	0xff, 0xff, 0xff,
-).AddBgRGB(
-	0x0f, 0x88, 0xcd,
-).Sprint(" FOX ")
+var Fox = color.New(color.Bold).
+	AddBgRGB(0x0f, 0x88, 0xcd).
+	AddRGB(0xff, 0xff, 0xff).
+	Sprint(" FOX ")
 
 var (
 	AsGray = color.New(color.FgHiBlack).SprintfFunc()
@@ -81,8 +80,25 @@ func MarkEvent(s string) string {
 func match(re *regexp2.Regexp) marker.MatcherFunc {
 	return func(s string) marker.Match {
 		return marker.Match{
-			Template: ReplaceAllString(re, s),
-			Patterns: FindAllString(re, s),
+			Template: replaceAll(re, s),
+			Patterns: findAll(re, s),
 		}
 	}
+}
+
+// regexp compatibility function
+func replaceAll(re *regexp2.Regexp, s string) string {
+	v, _ := re.Replace(s, "%s", 0, -1)
+	return v
+}
+
+// regexp compatibility function
+func findAll(re *regexp2.Regexp, s string) []string {
+	var v []string
+	m, _ := re.FindStringMatch(s)
+	for m != nil {
+		v = append(v, m.String())
+		m, _ = re.FindNextMatch(m)
+	}
+	return v
 }

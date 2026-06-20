@@ -1,4 +1,4 @@
-package text
+package sys
 
 import (
 	"fmt"
@@ -23,21 +23,7 @@ const (
 	PDI = 0x2069
 )
 
-var isValue = regexp2.MustCompile(`^[-+]?\d+[bkmgtpezyrq]?$`)
-
-func ToAscii(s, c string) string {
-	var sb strings.Builder
-
-	for _, r := range s {
-		if r < SP || r > DEL {
-			sb.WriteString(AsGray(c))
-		} else {
-			sb.WriteRune(r)
-		}
-	}
-
-	return sb.String()
-}
+var mask = regexp2.MustCompile(`^[-+]?\d+[bkmgtpezyrq]?$`)
 
 func Sanitize(s string) string {
 	var sb strings.Builder
@@ -74,7 +60,7 @@ func Humanize(i uint64) string {
 func Mechanize(s string) (int64, bool) {
 	s = strings.ToLower(s)
 
-	if ok, _ := isValue.MatchString(s); !ok {
+	if ok, _ := mask.MatchString(s); !ok {
 		return 0, false
 	}
 

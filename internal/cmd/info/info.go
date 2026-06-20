@@ -13,11 +13,10 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/fatih/color"
 	"go.foxforensics.eu/entropy/entropy"
-	"go.foxforensics.eu/fox/v4/internal/net/lookup"
-
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
+	"go.foxforensics.eu/fox/v4/internal/net/lookup"
+	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/output"
 )
 
 // Threshold for high entropy files
@@ -69,11 +68,11 @@ func (fi *FileInfo) String() string {
 	e := strings.Repeat("#", int(math.Round(fi.Entropy*2)))
 
 	sb.WriteString(fmt.Sprintf("%7dl ", fi.Lines))
-	sb.WriteString(fmt.Sprintf("%7s ", text.Humanize(fi.Bytes)))
+	sb.WriteString(fmt.Sprintf("%7s ", sys.Humanize(fi.Bytes)))
 
 	if fi.Entropy > Threshold {
-		sb.WriteString(text.AsWarn(fmt.Sprintf(" %.1fe ", fi.Entropy)))
-		sb.WriteString(text.AsWarn(fmt.Sprintf("[%-16s] ", e)))
+		sb.WriteString(output.AsWarn(fmt.Sprintf(" %.1fe ", fi.Entropy)))
+		sb.WriteString(output.AsWarn(fmt.Sprintf("[%-16s] ", e)))
 	} else {
 		sb.WriteString(fmt.Sprintf(" %.1fe ", fi.Entropy))
 		sb.WriteString(fmt.Sprintf("[%-16s] ", e))
@@ -84,13 +83,13 @@ func (fi *FileInfo) String() string {
 	}
 
 	if fi.Suspect {
-		sb.WriteString(text.AsWarn(fi.File))
+		sb.WriteString(output.AsWarn(fi.File))
 	} else {
 		sb.WriteString(fi.File)
 	}
 
 	if fi.Bytes == 0 {
-		return text.AsGray(sb.String())
+		return output.AsGray(sb.String())
 	}
 
 	return sb.String()
@@ -153,7 +152,7 @@ func (cmd *Info) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var ok bool
 
 	if len(cmd.Block) > 0 {
-		if cmd.block, ok = text.Mechanize(cmd.Block); !ok {
+		if cmd.block, ok = sys.Mechanize(cmd.Block); !ok {
 			return errors.New("invalid block syntax")
 		}
 	}
@@ -165,7 +164,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 	cmd.Paths = append(cmd.Paths, cli.Input...)
 
 	if len(cmd.Paths) == 0 {
-		return text.Usage(Usage)
+		return sys.Usage(Usage)
 	}
 
 	if cmd.Sort {
@@ -210,7 +209,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 		// because empty files will cause errors
 		if h.Size == 0 {
 			if cmd.Min == 0 {
-				text.Stdout.Match(cmd.format(fi), cli.Regexp)
+				sys.Stdout.Match(cmd.format(fi), cli.Regexp)
 			}
 			h.Discard()
 			continue
@@ -228,7 +227,7 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 			fi.Entropy = entropy.Calculate(block)
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
-				text.Stdout.Match(cmd.format(fi), cli.Regexp)
+				sys.Stdout.Match(cmd.format(fi), cli.Regexp)
 			}
 
 			fi.Offset += uint64(n)
@@ -243,9 +242,9 @@ func (cmd *Info) Run(cli *cli.Globals) error {
 func (cmd *Info) format(fi *FileInfo) string {
 	switch {
 	case cmd.Jsonl:
-		return text.ColorizeAs(fi.ToJSONL(), "json")
+		return output.ColorizeAs(fi.ToJSONL(), "json")
 	case cmd.Json:
-		return text.ColorizeAs(fi.ToJSON(), "json")
+		return output.ColorizeAs(fi.ToJSON(), "json")
 	default:
 		return fi.String()
 	}

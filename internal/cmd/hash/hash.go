@@ -10,12 +10,12 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
+	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/output"
 	"go.foxforensics.eu/hasher/hash"
 	"go.foxforensics.eu/rhash/database"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 )
 
 var Usage = strings.TrimSpace(`
@@ -113,12 +113,12 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 	cmd.Paths = append(cmd.Paths, cli.Input...)
 
 	if len(cmd.Paths) == 0 {
-		return text.Usage(Usage)
+		return sys.Usage(Usage)
 	}
 
 	if cmd.Paths[0] == "list" {
 		for _, s := range list(true) {
-			text.Stdout.Write(s)
+			sys.Stdout.Write(s)
 		}
 
 		// exit early
@@ -146,17 +146,17 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 		}
 
 		if !cli.NoPretty && len(cmd.Hash) > 1 {
-			text.Stdout.Header(h.String())
+			sys.Stdout.Header(h.String())
 		}
 
 		for _, k := range cmd.Hash {
 			if cmd.Lookup {
 				a, v := tables.Lookup(string(h.Bytes()))
-				text.Stdout.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), cli.Regexp)
+				sys.Stdout.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), cli.Regexp)
 				break
 			} else if cmd.Guess {
 				for _, a := range collect(database.Lookup(cli.Context, string(h.Bytes()))) {
-					text.Stdout.Match(a, cli.Regexp)
+					sys.Stdout.Match(a, cli.Regexp)
 				}
 				continue
 			}
@@ -184,10 +184,10 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 			}
 
 			pad := strings.Repeat(" ", n-len(k))
-			typ := text.AsGray(strings.ToUpper(k))
+			typ := output.AsGray(strings.ToUpper(k))
 
 			if err != nil {
-				sum = text.AsGray(err.Error())
+				sum = output.AsGray(err.Error())
 			}
 
 			if len(cmd.Hash) > 1 {
@@ -196,11 +196,11 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 				sum = fmt.Sprintf("%s  %s", sum, fh.File)
 			}
 
-			text.Stdout.Match(sum, cli.Regexp)
+			sys.Stdout.Match(sum, cli.Regexp)
 		}
 
 		if !plain {
-			text.Stdout.Match(cmd.format(fh), cli.Regexp)
+			sys.Stdout.Match(cmd.format(fh), cli.Regexp)
 		}
 
 		h.Discard()
@@ -212,9 +212,9 @@ func (cmd *Hash) Run(cli *cli.Globals) error {
 func (cmd *Hash) format(fh *FileHash) string {
 	switch {
 	case cmd.Jsonl:
-		return text.ColorizeAs(fh.ToJSONL(), "json")
+		return output.ColorizeAs(fh.ToJSONL(), "json")
 	case cmd.Json:
-		return text.ColorizeAs(fh.ToJSON(), "json")
+		return output.ColorizeAs(fh.ToJSON(), "json")
 	default:
 		return ""
 	}

@@ -5,10 +5,11 @@ import (
 
 	"github.com/alecthomas/kong"
 	buffer2 "go.foxforensics.eu/fox/v4/internal/cmd/cat/buffer"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/unique"
+	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/output"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 )
 
 var Usage = strings.TrimSpace(`
@@ -52,15 +53,15 @@ type Cat struct {
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	uniq text.Unique `kong:"-"`
+	uniq unique.Unique `kong:"-"`
 }
 
 func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	switch {
 	case cmd.Uniq:
-		cmd.uniq = text.ByHash()
+		cmd.uniq = unique.ByHash()
 	case cmd.Dist > 0:
-		cmd.uniq = text.ByDistance(cmd.Dist)
+		cmd.uniq = unique.ByDistance(cmd.Dist)
 	}
 
 	if cmd.Context > 0 {
@@ -75,7 +76,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 	cmd.Paths = append(cmd.Paths, cli.Input...)
 
 	if len(cmd.Paths) == 0 {
-		return text.Usage(Usage)
+		return sys.Usage(Usage)
 	}
 
 	ch, err := cli.Init(cmd.Paths, false)
@@ -96,7 +97,7 @@ func (cmd *Cat) Run(cli *cli.Globals) error {
 
 	for h := range ch {
 		if !cli.NoPretty {
-			text.Stdout.Header(h.String())
+			sys.Stdout.Header(h.String())
 		}
 
 		if (h.IsText() && !cmd.Hex) || cmd.Text {
@@ -124,15 +125,15 @@ func (cmd *Cat) renderText(cli *cli.Globals, b []byte, hint string) {
 		}
 
 		if cli.Regexp != nil && l.Line != buffer2.Sep {
-			s = text.MarkMatch(s, cli.Regexp)
+			s = output.MarkMatch(s, cli.Regexp)
 		}
 
 		if !cli.NoPretty {
-			text.Stdout.Write("%s %s", text.AsGray(l.Line), s)
+			sys.Stdout.Write("%s %s", output.AsGray(l.Line), s)
 		} else if l.Line == buffer2.Sep {
-			text.Stdout.Write(text.AsGray(buffer2.Sep))
+			sys.Stdout.Write(output.AsGray(buffer2.Sep))
 		} else {
-			text.Stdout.Write(s)
+			sys.Stdout.Write(s)
 		}
 	}
 }
@@ -151,21 +152,21 @@ func (cmd *Cat) renderHex(cli *cli.Globals, b []byte) {
 			}
 		}
 
-		l.Values = text.MarkMatch(l.Values, cli.Regexp)
+		l.Values = output.MarkMatch(l.Values, cli.Regexp)
 
 		// cut similar lines for better readability
 		if !cli.NoPretty && l.Values == lastHex {
 			if !wasCut {
 				wasCut = true
-				text.Stdout.Write(text.AsGray("*"))
+				sys.Stdout.Write(output.AsGray("*"))
 			}
 			continue
 		}
 
 		if !cli.NoPretty {
-			text.Stdout.Write("%s  %s%s", text.AsGray(l.Address), l.Values, l.String)
+			sys.Stdout.Write("%s  %s%s", output.AsGray(l.Address), l.Values, l.String)
 		} else {
-			text.Stdout.Write(l.Values)
+			sys.Stdout.Write(l.Values)
 		}
 
 		lastHex, wasCut = l.Values, false

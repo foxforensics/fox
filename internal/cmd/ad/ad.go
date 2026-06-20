@@ -9,12 +9,12 @@ import (
 	"go.foxforensics.eu/bootkey/bootkey"
 	"go.foxforensics.eu/fox/v4/internal/cmd/ad/record"
 	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
+	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/output"
 	"go.foxforensics.eu/hashdump/extract"
 	"go.foxforensics.eu/hasher/hash"
 
 	cli "go.foxforensics.eu/fox/v4/internal/cmd"
-
-	"go.foxforensics.eu/fox/v4/internal/pkg/text"
 )
 
 var Usage = strings.TrimSpace(`
@@ -70,7 +70,7 @@ func (cmd *Ad) Run(cli *cli.Globals) error {
 	cmd.Paths = append(cmd.Paths, cli.Input...)
 
 	if len(cmd.Paths) < 2 {
-		return text.Usage(Usage)
+		return sys.Usage(Usage)
 	}
 
 	ch, err := cli.Init(cmd.Paths, true)
@@ -180,7 +180,7 @@ func (cmd *Ad) extract(cli *cli.Globals, k, b []byte) (int, error) {
 	}
 
 	for _, v := range a {
-		text.Stdout.Match(cmd.format(v), cli.Regexp)
+		sys.Stdout.Match(cmd.format(v), cli.Regexp)
 	}
 
 	return len(a), nil
@@ -191,9 +191,9 @@ func (cmd *Ad) format(a any) string {
 	case record.Record:
 		switch {
 		case cmd.Jsonl:
-			return text.ColorizeAs(v.ToJSONL(), "json")
+			return output.ColorizeAs(v.ToJSONL(), "json")
 		case cmd.Json:
-			return text.ColorizeAs(v.ToJSON(), "json")
+			return output.ColorizeAs(v.ToJSON(), "json")
 		default:
 			return v.String()
 		}
