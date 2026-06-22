@@ -2,7 +2,7 @@ package types
 
 import (
 	"github.com/dlclark/regexp2/v2"
-	"go.foxforensics.eu/fox/v4/internal/cmd/cat/smap"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/smap"
 )
 
 type Filters struct {

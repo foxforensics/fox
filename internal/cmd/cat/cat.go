@@ -5,10 +5,10 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/cmd/cat/buffer"
+	buffer2 "go.foxforensics.eu/fox/v4/internal/pkg/types/buffer"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/unique"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/output"
+	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 )
 
 var Usage = strings.TrimSpace(`
@@ -112,7 +112,7 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 }
 
 func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
-	for l := range buffer.Text(&buffer.TextContext{
+	for l := range buffer2.Text(&buffer2.TextContext{
 		Parent: fox.Context,
 		Data:   b,
 		Hint:   hint,
@@ -123,14 +123,14 @@ func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
 			continue // not unique
 		}
 
-		if fox.Regexp != nil && l.Line != buffer.Sep {
-			s = output.MarkMatch(s, fox.Regexp)
+		if fox.Regexp != nil && l.Line != buffer2.Sep {
+			s = terminal.MarkMatch(s, fox.Regexp)
 		}
 
 		if !fox.NoPretty {
-			sys.Stdout.Write("%s %s", output.AsGray(l.Line), s)
-		} else if l.Line == buffer.Sep {
-			sys.Stdout.Write(output.AsGray(buffer.Sep))
+			sys.Stdout.Write("%s %s", terminal.AsGray(l.Line), s)
+		} else if l.Line == buffer2.Sep {
+			sys.Stdout.Write(terminal.AsGray(buffer2.Sep))
 		} else {
 			sys.Stdout.Write(s)
 		}
@@ -140,7 +140,7 @@ func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
 func (cmd *Cat) renderHex(fox *cmd.Globals, b []byte) {
 	lastHex, wasCut := "", false
 
-	for l := range buffer.Hex(&buffer.HexContext{
+	for l := range buffer2.Hex(&buffer2.HexContext{
 		Parent: fox.Context,
 		Data:   b,
 		Pretty: !fox.NoPretty,
@@ -151,19 +151,19 @@ func (cmd *Cat) renderHex(fox *cmd.Globals, b []byte) {
 			}
 		}
 
-		l.Values = output.MarkMatch(l.Values, fox.Regexp)
+		l.Values = terminal.MarkMatch(l.Values, fox.Regexp)
 
 		// cut similar lines for better readability
 		if !fox.NoPretty && l.Values == lastHex {
 			if !wasCut {
 				wasCut = true
-				sys.Stdout.Write(output.AsGray("*"))
+				sys.Stdout.Write(terminal.AsGray("*"))
 			}
 			continue
 		}
 
 		if !fox.NoPretty {
-			sys.Stdout.Write("%s  %s%s", output.AsGray(l.Address), l.Values, l.String)
+			sys.Stdout.Write("%s  %s%s", terminal.AsGray(l.Address), l.Values, l.String)
 		} else {
 			sys.Stdout.Write(l.Values)
 		}

@@ -4,8 +4,8 @@ package hec
 import (
 	"encoding/json"
 
-	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/event"
 	"go.foxforensics.eu/fox/v4/internal/net/client"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 )
 
 type Hec struct {

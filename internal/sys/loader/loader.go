@@ -15,59 +15,15 @@ import (
 
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/sourcegraph/conc/pool"
-	_zip "go.foxforensics.eu/fox/v4/internal/pkg/archive/7z"
-	"go.foxforensics.eu/fox/v4/internal/pkg/archive/ar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/archive/cab"
-	"go.foxforensics.eu/fox/v4/internal/pkg/archive/cpio"
-	"go.foxforensics.eu/fox/v4/internal/pkg/archive/iso"
-	"go.foxforensics.eu/fox/v4/internal/pkg/archive/msi"
-	"go.foxforensics.eu/fox/v4/internal/pkg/archive/rar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/archive/rpm"
-	"go.foxforensics.eu/fox/v4/internal/pkg/archive/tar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/archive/xar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/archive/zip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/binary/bin/elf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/binary/bin/ese"
-	"go.foxforensics.eu/fox/v4/internal/pkg/binary/bin/lnk"
-	"go.foxforensics.eu/fox/v4/internal/pkg/binary/bin/mft"
-	"go.foxforensics.eu/fox/v4/internal/pkg/binary/bin/pe"
-	"go.foxforensics.eu/fox/v4/internal/pkg/binary/bin/pf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/binary/bin/pst"
-	"go.foxforensics.eu/fox/v4/internal/pkg/binary/log/evtx"
-	"go.foxforensics.eu/fox/v4/internal/pkg/binary/log/fortinet"
-	"go.foxforensics.eu/fox/v4/internal/pkg/binary/log/journal"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/bgzf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/br"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/bzip2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/gzip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/kanzi"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/lz4"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/lzfse"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/lzip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/lznt1"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/lzo"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/lzw"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/minlz"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/s2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/snappy"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/xz"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/zlib"
-	"go.foxforensics.eu/fox/v4/internal/pkg/deflate/zstd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/format/json"
-	"go.foxforensics.eu/fox/v4/internal/pkg/format/jsonl"
-	"go.foxforensics.eu/fox/v4/internal/pkg/format/xml"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 	"go.foxforensics.eu/fox/v4/internal/sys/mmap"
-	"go.foxforensics.eu/fox/v4/internal/sys/register"
 )
 
 const Stdin = "-"
 const MaxDepth = 3
 const MaxFiles = 10000
-
-var registry = register.Registry
 
 type Options struct {
 	Limits   *types.Limits
@@ -436,57 +392,4 @@ func (ldr *Loader) createHeap(path, hint string, b []byte) error {
 	slog.Debug(fmt.Sprintf("loaded heap %s", path))
 
 	return nil
-}
-
-func RegisterDeflates() {
-	register.Deflate("bgzf", bgzf.Detect, bgzf.Deflate)
-	register.Deflate("br", br.Detect, br.Deflate)
-	register.Deflate("bzip2", bzip2.Detect, bzip2.Deflate)
-	register.Deflate("gzip", gzip.Detect, gzip.Deflate)
-	register.Deflate("kanzi", kanzi.Detect, kanzi.Deflate)
-	register.Deflate("lz4", lz4.Detect, lz4.Deflate)
-	register.Deflate("lzip", lzip.Detect, lzip.Deflate)
-	register.Deflate("lzo", lzo.Detect, lzo.Deflate)
-	register.Deflate("lzfse", lzfse.Detect, lzfse.Deflate)
-	register.Deflate("lznt1", lznt1.Detect, lznt1.Deflate)
-	register.Deflate("lzw", lzw.Detect, lzw.Deflate)
-	register.Deflate("minlz", minlz.Detect, minlz.Deflate)
-	register.Deflate("s2", s2.Detect, s2.Deflate)
-	register.Deflate("snappy", snappy.Detect, snappy.Deflate)
-	register.Deflate("xz", xz.Detect, xz.Deflate)
-	register.Deflate("zlib", zlib.Detect, zlib.Deflate)
-	register.Deflate("zstd", zstd.Detect, zstd.Deflate)
-}
-
-func RegisterExtracts() {
-	register.Extract("7z", _zip.Detect, _zip.Extract)
-	register.Extract("ar", ar.Detect, ar.Extract)
-	register.Extract("cab", cab.Detect, cab.Extract)
-	register.Extract("cpio", cpio.Detect, cpio.Extract)
-	register.Extract("iso", iso.Detect, iso.Extract)
-	register.Extract("msi", msi.Detect, msi.Extract)
-	register.Extract("rar", rar.Detect, rar.Extract)
-	register.Extract("rpm", rpm.Detect, rpm.Extract)
-	register.Extract("tar", tar.Detect, tar.Extract)
-	register.Extract("xar", xar.Detect, xar.Extract)
-	register.Extract("zip", zip.Detect, zip.Extract)
-}
-
-func RegisterConverts() {
-	register.Convert("elf", elf.Detect, elf.Convert)
-	register.Convert("ese", ese.Detect, ese.Convert)
-	register.Convert("lnk", lnk.Detect, lnk.Convert)
-	register.Convert("mft", mft.Detect, mft.Convert)
-	register.Convert("pe", pe.Detect, pe.Convert)
-	register.Convert("pf", pf.Detect, pf.Convert)
-	register.Convert("pst", pst.Detect, pst.Convert)
-	register.Convert("evtx", evtx.Detect, evtx.Convert)
-	register.Convert("fortinet", fortinet.Detect, fortinet.Convert)
-	register.Convert("journal", journal.Detect, journal.Convert)
-}
-
-func RegisterFormats() {
-	register.Format("json", json.Detect, json.Format)
-	register.Format("jsonl", jsonl.Detect, jsonl.Format)
-	register.Format("xml", xml.Detect, xml.Format)
 }

@@ -6,8 +6,8 @@ import (
 	"log/slog"
 	"strings"
 
-	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
-	"go.foxforensics.eu/fox/v4/internal/sys/output"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
+	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 	"go.foxforensics.eu/hashdump/extract"
 )
 
@@ -142,11 +142,11 @@ func (s *Secret) NtOnly() string {
 
 func (s *Secret) format(sum string, def []byte) string {
 	if _, pwd := tables.Lookup(sum); len(pwd) > 0 {
-		return output.AsBold(pwd)
+		return terminal.AsBold(pwd)
 	}
 
 	if sum == fmt.Sprintf("%x", def) {
-		return output.AsGray(sum)
+		return terminal.AsGray(sum)
 	}
 
 	return sum

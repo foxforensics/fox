@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/VirusTotal/vt-go"
-	"go.foxforensics.eu/fox/v4/internal/cmd/str/carver"
 	"go.foxforensics.eu/fox/v4/internal/net/client"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/carver"
 	"go.foxforensics.eu/hasher/hash"
 )
 

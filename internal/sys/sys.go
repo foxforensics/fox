@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"go.foxforensics.eu/fox/v4/internal/sys/output"
+	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
 )
 
@@ -22,7 +22,7 @@ const Banner = `
 `
 
 // Stdout default output.
-var Stdout = output.NewWriter(os.Stdout)
+var Stdout = terminal.NewWriter(os.Stdout)
 
 func About(msg string) error {
 	_, err1 := fmt.Println(msg)
@@ -38,7 +38,7 @@ func Usage(msg string) error {
 
 func SetOutput(wc io.WriteCloser, err error) {
 	if err == nil {
-		Stdout = output.NewWriter(wc)
+		Stdout = terminal.NewWriter(wc)
 	} else {
 		slog.Error(err.Error())
 	}

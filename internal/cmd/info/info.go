@@ -16,7 +16,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/net/lookup"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/output"
+	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 )
 
 // Threshold for high entropy files
@@ -71,8 +71,8 @@ func (fi *FileInfo) String() string {
 	sb.WriteString(fmt.Sprintf("%7s ", sys.Humanize(fi.Bytes)))
 
 	if fi.Entropy > Threshold {
-		sb.WriteString(output.AsWarn(fmt.Sprintf(" %.1fe ", fi.Entropy)))
-		sb.WriteString(output.AsWarn(fmt.Sprintf("[%-16s] ", e)))
+		sb.WriteString(terminal.AsWarn(fmt.Sprintf(" %.1fe ", fi.Entropy)))
+		sb.WriteString(terminal.AsWarn(fmt.Sprintf("[%-16s] ", e)))
 	} else {
 		sb.WriteString(fmt.Sprintf(" %.1fe ", fi.Entropy))
 		sb.WriteString(fmt.Sprintf("[%-16s] ", e))
@@ -83,13 +83,13 @@ func (fi *FileInfo) String() string {
 	}
 
 	if fi.Suspect {
-		sb.WriteString(output.AsWarn(fi.File))
+		sb.WriteString(terminal.AsWarn(fi.File))
 	} else {
 		sb.WriteString(fi.File)
 	}
 
 	if fi.Bytes == 0 {
-		return output.AsGray(sb.String())
+		return terminal.AsGray(sb.String())
 	}
 
 	return sb.String()
@@ -242,9 +242,9 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 func (cmd *Info) format(fi *FileInfo) string {
 	switch {
 	case cmd.Jsonl:
-		return output.ColorizeAs(fi.ToJSONL(), "json")
+		return terminal.ColorizeAs(fi.ToJSONL(), "json")
 	case cmd.Json:
-		return output.ColorizeAs(fi.ToJSON(), "json")
+		return terminal.ColorizeAs(fi.ToJSON(), "json")
 	default:
 		return fi.String()
 	}

@@ -10,9 +10,9 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/output"
+	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 	"go.foxforensics.eu/hasher/hash"
 	"go.foxforensics.eu/rhash/database"
 )
@@ -183,10 +183,10 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 			}
 
 			pad := strings.Repeat(" ", n-len(k))
-			typ := output.AsGray(strings.ToUpper(k))
+			typ := terminal.AsGray(strings.ToUpper(k))
 
 			if err != nil {
-				sum = output.AsGray(err.Error())
+				sum = terminal.AsGray(err.Error())
 			}
 
 			if len(cmd.Hash) > 1 {
@@ -211,9 +211,9 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 func (cmd *Hash) format(fh *FileHash) string {
 	switch {
 	case cmd.Jsonl:
-		return output.ColorizeAs(fh.ToJSONL(), "json")
+		return terminal.ColorizeAs(fh.ToJSONL(), "json")
 	case cmd.Json:
-		return output.ColorizeAs(fh.ToJSON(), "json")
+		return terminal.ColorizeAs(fh.ToJSON(), "json")
 	default:
 		return ""
 	}

@@ -6,12 +6,12 @@ import (
 	"fmt"
 
 	mqtt "github.com/eclipse/paho.golang/paho"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/event"
 	"go.foxforensics.eu/fox/v4/internal/net/client"
 	"go.foxforensics.eu/fox/v4/internal/net/schema"
 	"go.foxforensics.eu/fox/v4/internal/net/schema/ecs"
 	"go.foxforensics.eu/fox/v4/internal/net/schema/hec"
 	"go.foxforensics.eu/fox/v4/internal/net/schema/raw"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 )
 
 type Options struct {

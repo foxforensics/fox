@@ -12,9 +12,9 @@ import (
 
 	"github.com/Velocidex/go-journalctl/parser"
 	"github.com/Velocidex/ordereddict"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/event"
 	"go.foxforensics.eu/fox/v4/internal/pkg"
-	logs "go.foxforensics.eu/fox/v4/internal/pkg/binary/log"
+	logs "go.foxforensics.eu/fox/v4/internal/pkg/files/binary/log"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )

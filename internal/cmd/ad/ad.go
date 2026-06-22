@@ -8,10 +8,10 @@ import (
 
 	"go.foxforensics.eu/bootkey/bootkey"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/cmd/ad/record"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/record"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/output"
+	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 	"go.foxforensics.eu/hashdump/extract"
 	"go.foxforensics.eu/hasher/hash"
 )
@@ -190,9 +190,9 @@ func (cmd *Ad) format(a any) string {
 	case record.Record:
 		switch {
 		case cmd.Jsonl:
-			return output.ColorizeAs(v.ToJSONL(), "json")
+			return terminal.ColorizeAs(v.ToJSONL(), "json")
 		case cmd.Json:
-			return output.ColorizeAs(v.ToJSON(), "json")
+			return terminal.ColorizeAs(v.ToJSON(), "json")
 		default:
 			return v.String()
 		}

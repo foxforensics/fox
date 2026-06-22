@@ -6,9 +6,9 @@ import (
 	"math"
 
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/cmd/cat/smap"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/smap"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/output"
+	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 )
 
 var Limit = 1024 * 1024 * 4
@@ -38,7 +38,7 @@ func Text(ctx *TextContext, fox *cmd.Globals) *TextBuffer {
 
 	// turn off color for big files
 	if len(data) < Limit {
-		data = []byte(output.ColorizeAs(string(data), ctx.Hint))
+		data = []byte(terminal.ColorizeAs(string(data), ctx.Hint))
 	}
 
 	ctx.SMap = smap.Map(data)

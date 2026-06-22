@@ -3,7 +3,7 @@ package stream
 import (
 	"context"
 
-	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/event"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 )
 
 // local urls

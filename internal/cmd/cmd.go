@@ -10,14 +10,14 @@ import (
 
 	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
-	"go.foxforensics.eu/fox/v4/internal/cmd/cat/smap"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hash/tables"
 	"go.foxforensics.eu/fox/v4/internal/net/client"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/smap"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 	"go.foxforensics.eu/fox/v4/internal/sys/loader"
-	"go.foxforensics.eu/fox/v4/internal/sys/output"
+	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 )
 
 type Globals struct {
@@ -72,7 +72,7 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 		lvl = slog.LevelWarn
 	case 1:
 		lvl = slog.LevelInfo
-	case 2:
+	default:
 		lvl = slog.LevelDebug
 	}
 
@@ -120,11 +120,11 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	}
 
 	if len(fox.Lexer) > 0 {
-		output.Lexer = fox.Lexer
+		terminal.Lexer = fox.Lexer
 	}
 
 	if len(fox.Style) > 0 {
-		output.Style = fox.Style
+		terminal.Style = fox.Style
 	}
 
 	if !fox.NoDeflate {

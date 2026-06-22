@@ -7,10 +7,10 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/cmd/str/carver"
 	"go.foxforensics.eu/fox/v4/internal/net/lookup"
+	carver2 "go.foxforensics.eu/fox/v4/internal/pkg/types/carver"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/output"
+	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 )
 
 var Usage = strings.TrimSpace(`
@@ -89,7 +89,7 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 	}
 
 	if cmd.Paths[0] == "list" {
-		db := carver.BuildDB(3)
+		db := carver2.BuildDB(3)
 
 		for _, s := range db.List() {
 			sys.Stdout.Write(s)
@@ -112,7 +112,7 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 			sys.Stdout.Header(h.String())
 		}
 
-		for str := range carver.New(&carver.Options{
+		for str := range carver2.New(&carver2.Options{
 			Min:     cmd.Min,
 			Max:     cmd.Max,
 			Ascii:   cmd.Ascii,
@@ -136,14 +136,14 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 				}
 			}
 
-			str.Value = output.MarkMatch(str.Value, fox.Regexp)
+			str.Value = terminal.MarkMatch(str.Value, fox.Regexp)
 
 			if !fox.NoPretty && len(str.Classes) > 0 && str.Suspect {
-				sys.Stdout.Write("%s  %s [%s]", output.AsGray(str.Address), output.AsWarn(str.Value), output.AsBold(str.Classes))
+				sys.Stdout.Write("%s  %s [%s]", terminal.AsGray(str.Address), terminal.AsWarn(str.Value), terminal.AsBold(str.Classes))
 			} else if !fox.NoPretty && len(str.Classes) > 0 {
-				sys.Stdout.Write("%s  %s [%s]", output.AsGray(str.Address), str.Value, output.AsBold(str.Classes))
+				sys.Stdout.Write("%s  %s [%s]", terminal.AsGray(str.Address), str.Value, terminal.AsBold(str.Classes))
 			} else if !fox.NoPretty {
-				sys.Stdout.Write("%s  %s", output.AsGray(str.Address), str.Value)
+				sys.Stdout.Write("%s  %s", terminal.AsGray(str.Address), str.Value)
 			} else if len(str.Classes) > 0 {
 				sys.Stdout.Write("%s [%s]", str.Value, str.Classes)
 			} else {

@@ -1,10 +1,10 @@
 package hunt
 
 import (
+	_ "embed"
 	"errors"
 	"fmt"
 	"log/slog"
-	"os"
 	"strings"
 	"time"
 
@@ -12,19 +12,17 @@ import (
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/event"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/hunter"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hunt/rules"
 	"go.foxforensics.eu/fox/v4/internal/net/schema"
 	"go.foxforensics.eu/fox/v4/internal/net/stream"
 	"go.foxforensics.eu/fox/v4/internal/net/stream/http"
 	"go.foxforensics.eu/fox/v4/internal/net/stream/mqtt"
-	"go.foxforensics.eu/fox/v4/internal/pkg/storage"
-	"go.foxforensics.eu/fox/v4/internal/pkg/storage/parquet"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/unique"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/output"
+	"go.foxforensics.eu/fox/v4/internal/sys/parquet"
 	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
+	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 )
 
 var Usage = strings.TrimSpace(`
@@ -73,6 +71,9 @@ Example: Send local events to a broker
 Report bugs at: foxforensics.eu/issues
 `)
 
+//go:embed hunt.yml
+var Default []byte
+
 type Hunt struct {
 	All     bool `short:"a"`
 	Sort    bool `short:"s"`
@@ -82,7 +83,7 @@ type Hunt struct {
 	Parquet bool `short:"p"`
 
 	// filter flags
-	Rule string  `short:"R"`
+	Rule []byte  `short:"R" type:"filecontent"`
 	Dist float64 `short:"D" xor:"uniq,dist"`
 
 	// stream flags
@@ -107,10 +108,10 @@ type Hunt struct {
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	storage  storage.Storage `kong:"-"`
-	streamer stream.Streamer `kong:"-"`
-	rule     sigma.Rule      `kong:"-"`
-	uniq     unique.Unique   `kong:"-"`
+	streamer stream.Streamer  `kong:"-"`
+	file     *parquet.Parquet `kong:"-"`
+	rule     sigma.Rule       `kong:"-"`
+	uniq     unique.Unique    `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
@@ -132,7 +133,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	}
 
 	if cmd.Parquet {
-		cmd.storage, err = parquet.Create(fmt.Sprintf("fox_hunt_%s",
+		cmd.file, err = parquet.New(fmt.Sprintf("fox_hunt_%s",
 			time.Now().UTC().Format("20060102150405"),
 		))
 
@@ -185,17 +186,11 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		}
 	}
 
-	rule := rules.Critical
-
 	if len(cmd.Rule) > 0 {
-		rule, err = os.ReadFile(cmd.Rule)
-
-		if err != nil {
-			return err
-		}
+		cmd.rule, err = sigma.ParseRule(cmd.Rule)
+	} else {
+		cmd.rule, err = sigma.ParseRule(Default)
 	}
-
-	cmd.rule, err = sigma.ParseRule(rule)
 
 	return err
 }
@@ -224,16 +219,16 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 	slog.Debug(fmt.Sprintf("hunt: using %d thread(s)", fox.Threads))
 	slog.Debug(fmt.Sprintf("hunt: using rule '%s'", cmd.rule.Title))
 
-	if cmd.storage != nil {
-		slog.Debug(fmt.Sprintf("hunt: using storage %s", cmd.storage))
+	if cmd.rule.Logsource.Product != "fox" {
+		slog.Warn("hunt: rule is not officially supported!")
+	}
+
+	if cmd.file != nil {
+		slog.Debug(fmt.Sprintf("hunt: using storage %s", cmd.file))
 	}
 
 	if cmd.streamer != nil {
 		slog.Debug(fmt.Sprintf("hunt: streaming as %s", cmd.streamer))
-	}
-
-	if !rules.IsSupported(&cmd.rule) {
-		slog.Warn("rule is not supported!")
 	}
 
 	var n int64
@@ -259,10 +254,10 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 			continue // not matched
 		}
 
-		if cmd.storage == nil {
+		if cmd.file == nil {
 			sys.Stdout.Match(cmd.format(e), fox.Regexp)
 		} else {
-			err = cmd.storage.Store(e)
+			err = cmd.file.Write(e)
 
 			if err != nil {
 				slog.Error(err.Error())
@@ -289,11 +284,11 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 func (cmd *Hunt) format(e *event.Event) string {
 	switch {
 	case cmd.Jsonl:
-		return output.ColorizeAs(e.ToJSONL(), "json")
+		return terminal.ColorizeAs(e.ToJSONL(), "json")
 	case cmd.Json:
-		return output.ColorizeAs(e.ToJSON(), "json")
+		return terminal.ColorizeAs(e.ToJSON(), "json")
 	default:
-		return output.MarkEvent(e.ToCEF())
+		return terminal.MarkEvent(e.ToCEF())
 	}
 }
 
@@ -306,8 +301,8 @@ func (cmd *Hunt) discard(fox *cmd.Globals) {
 		}
 	}
 
-	if cmd.storage != nil {
-		err := cmd.storage.Close()
+	if cmd.file != nil {
+		err := cmd.file.Close()
 
 		if err != nil {
 			slog.Error(err.Error())
@@ -317,7 +312,7 @@ func (cmd *Hunt) discard(fox *cmd.Globals) {
 			return
 		}
 
-		err = receipt.Generate(cmd.storage.String())
+		err = receipt.Generate(cmd.file.String())
 
 		if err != nil {
 			slog.Error(err.Error())
