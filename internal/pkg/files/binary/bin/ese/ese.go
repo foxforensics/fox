@@ -46,16 +46,16 @@ func Convert(b []byte) ([]byte, error) {
 	buf.WriteByte('[')
 
 	for i, table := range ctl.Tables.Keys() {
-		var json [][]byte
+		var v [][]byte
 
 		_ = ctl.DumpTable(table, func(row *ordereddict.Dict) error {
 			if b, err := row.MarshalJSON(); err == nil {
-				json = append(json, b)
+				v = append(v, b)
 			}
 			return nil
 		})
 
-		rows := bytes.Join(json, []byte(",\n"))
+		rows := bytes.Join(v, []byte(",\n"))
 
 		buf.WriteString(rep.Replace(fmt.Sprintf(wrapper, table, rows)))
 

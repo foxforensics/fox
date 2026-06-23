@@ -190,7 +190,8 @@ func addMapDeep(e *event.Event, em *evtx.GoEvtxMap, p string) {
 	for k, v := range maps.All(*em) {
 		switch v.(type) {
 		case *evtx.GoEvtxMap, evtx.GoEvtxMap:
-			addMapDeep(e, new(v.(evtx.GoEvtxMap)), k)
+			m := v.(evtx.GoEvtxMap)
+			addMapDeep(e, &m, k)
 
 		case *evtx.UTCTime, evtx.UTCTime:
 			u := v.(evtx.UTCTime)
@@ -221,6 +222,7 @@ func tryReplace(e *event.Event, msg string) string {
 }
 
 func getString(em *evtx.GoEvtxMap, path string) string {
-	v, _ := em.GetString(new(evtx.Path(path)))
+	p := evtx.Path(path)
+	v, _ := em.GetString(&p)
 	return v
 }
