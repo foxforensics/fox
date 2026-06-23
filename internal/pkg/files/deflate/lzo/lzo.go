@@ -18,6 +18,10 @@ func Detect(b []byte) bool {
 func Deflate(b []byte) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 
+	if len(b) < 34 {
+		return buf.Bytes(), errors.New("invalid length")
+	}
+
 	// remove header
 	// 89 4c 5a 4f 00 0d 0a 1a 0a
 	// 10 40
