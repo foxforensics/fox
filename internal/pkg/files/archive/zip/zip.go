@@ -15,7 +15,6 @@ func Detect(b []byte) bool {
 	for _, m := range [][]byte{
 		{'P', 'K', 0x03, 0x04}, // default
 		{'P', 'K', 0x03, 0x06}, // empty
-		{'P', 'K', 0x03, 0x08}, // spanned
 	} {
 		if pkg.HasMagic(b, 0, m) {
 			return true
