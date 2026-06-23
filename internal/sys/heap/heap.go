@@ -46,10 +46,6 @@ func (h *Heap) IsText() bool {
 }
 
 func (h *Heap) Discard() {
-	defer func() {
-		_ = recover()
-	}()
-
 	h.Lock()
 	defer h.Unlock()
 
