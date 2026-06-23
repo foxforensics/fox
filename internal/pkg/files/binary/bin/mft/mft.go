@@ -8,6 +8,8 @@ import (
 	"go.foxforensics.eu/go-mft"
 )
 
+const cluster = 1024 // default size
+
 func Detect(b []byte) bool {
 	for _, m := range [][]byte{
 		{'F', 'I', 'L', 'E', '*'}, // NT 4.0 & 5.0
@@ -30,9 +32,9 @@ func Convert(b []byte) ([]byte, error) {
 
 	ch := make(chan mft.UsefulMftFields)
 
-	go mft.ParseMftRecords(bytes.NewReader(b), 4096, dt, &ch)
+	go mft.ParseMftRecords(bytes.NewReader(b), cluster, dt, &ch)
 
-	v := make([]mft.UsefulMftFields, 0, len(b)/1024)
+	v := make([]mft.UsefulMftFields, 0, len(b)/cluster)
 
 	for record := range ch {
 		if len(record.FilePath) > 0 {
