@@ -75,7 +75,7 @@ func (ldr *Loader) Load(ctx context.Context, paths []string) <-chan *heap.Heap {
 					continue
 				}
 
-				err = ldr.processData(Stdin, "", bytes.TrimSpace(buf), 0)
+				err = ldr.processData(ctx, Stdin, "", bytes.TrimSpace(buf), 0)
 
 				if err != nil {
 					slog.Error(err.Error())
@@ -223,11 +223,11 @@ func (ldr *Loader) loadFile(ctx context.Context, path, part string) error {
 	case <-ctx.Done():
 		return ctx.Err()
 	default:
-		return ldr.processData(path, part, b, 0)
+		return ldr.processData(ctx, path, part, b, 0)
 	}
 }
 
-func (ldr *Loader) processData(path, part string, b []byte, i int) error {
+func (ldr *Loader) processData(ctx context.Context, path, part string, b []byte, i int) error {
 	var hint string
 	var ok bool
 
@@ -244,7 +244,7 @@ func (ldr *Loader) processData(path, part string, b []byte, i int) error {
 	}
 
 	// 2. extract data (recursive)
-	if ldr.extractData(path, part, b, i) {
+	if ldr.extractData(ctx, path, part, b, i) {
 		return nil
 	}
 
@@ -272,7 +272,7 @@ func (ldr *Loader) processData(path, part string, b []byte, i int) error {
 	return nil
 }
 
-func (ldr *Loader) extractData(path, part string, b []byte, i int) bool {
+func (ldr *Loader) extractData(ctx context.Context, path, part string, b []byte, i int) bool {
 	defer func() {
 		// most libraries can not differentiate between invalid data and wrong passwords
 		if err := recover(); err != nil {
@@ -286,14 +286,20 @@ func (ldr *Loader) extractData(path, part string, b []byte, i int) bool {
 			slog.Debug(fmt.Sprintf("archive detected as possibly %s", a.Name))
 
 			p := pool.New().
-				WithErrors().
+				WithContext(ctx).
 				WithFirstError().
 				WithMaxGoroutines(ldr.opts.Threads)
 
 			for _, e := range a.Extract(b, path, ldr.opts.Password) {
-				p.Go(func() error {
+				p.Go(func(ctx context.Context) error {
 					slog.Debug(fmt.Sprintf("stream detected as possibly %s", e.Path))
-					return ldr.processData(e.Path, part, e.Data, i+1)
+
+					select {
+					case <-ctx.Done():
+						return ctx.Err()
+					default:
+						return ldr.processData(ctx, e.Path, part, e.Data, i+1)
+					}
 				})
 			}
 

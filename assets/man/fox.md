@@ -64,7 +64,7 @@ Filter Flags
 
 **-F, --find**=_pattern_
 
-:   Filter using regular expression _pattern_. Regular expressions do not have constant time guarantees and allow backtracking. All regular expressions are compatible with Perl5 and .NET.
+:   Filter using regular expression _pattern_. Regular expressions do not have constant time guarantees and allow backtracking. All regular expressions are PCRE-compatible with .NET and Perl5.
 
 Process Flags
 -------------
