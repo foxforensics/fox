@@ -35,7 +35,7 @@ type Hunter struct {
 }
 
 func New(opts *Options) *Hunter {
-	evtx.Preload()
+	evtx.Prepare()
 
 	return &Hunter{
 		opts: opts,

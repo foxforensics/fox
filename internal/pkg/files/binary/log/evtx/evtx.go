@@ -61,7 +61,7 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func Preload() {
+func Prepare() {
 	var err error
 
 	providers, err = events.Get()
@@ -69,6 +69,8 @@ func Preload() {
 	if err != nil {
 		slog.Error(err.Error())
 	}
+
+	evtx.SetModeCarving(true)
 }
 
 func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
@@ -95,7 +97,6 @@ func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 }
 
 func newChunk(sr *io.SectionReader, off int64) (*evtx.Chunk, error) {
-	evtx.SetModeCarving(true)
 	evtx.GoToSeeker(sr, off)
 
 	chk := evtx.NewChunk()
