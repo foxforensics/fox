@@ -31,7 +31,6 @@ type String struct {
 type Carver struct {
 	opts    *Options
 	list    []String
-	strings chan *String
 	entries Database
 }
 
@@ -39,14 +38,15 @@ func New(opts *Options) *Carver {
 	return &Carver{
 		opts:    opts,
 		list:    make([]String, 0),
-		strings: make(chan *String, opts.Threads*64),
 		entries: BuildDB(opts.What),
 	}
 }
 
 func (crv *Carver) Carve(ctx context.Context, block []byte) <-chan *String {
+	ch := make(chan *String, crv.opts.Threads*64)
+
 	go func() {
-		defer close(crv.strings)
+		defer close(ch)
 
 		for str := range fstrings.Carve(
 			ctx,
@@ -76,25 +76,25 @@ func (crv *Carver) Carve(ctx context.Context, block []byte) <-chan *String {
 			case <-ctx.Done():
 				return
 			default:
-				crv.strings <- &String{*str, adr, cls, false}
+				ch <- &String{*str, adr, cls, false}
 			}
 		}
 	}()
 
 	if crv.opts.Sort {
-		return crv.sort()
+		return crv.sort(ch)
 	}
 
-	return crv.strings
+	return ch
 }
 
-func (crv *Carver) sort() <-chan *String {
-	sorted := make(chan *String, cap(crv.strings))
+func (crv *Carver) sort(ch <-chan *String) <-chan *String {
+	sorted := make(chan *String, cap(ch))
 
 	go func() {
 		defer close(sorted)
 
-		for s := range crv.strings {
+		for s := range ch {
 			crv.list = append(crv.list, *s)
 		}
 
