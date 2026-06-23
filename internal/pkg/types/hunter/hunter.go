@@ -31,29 +31,29 @@ type Options struct {
 }
 
 type Hunter struct {
-	opts   *Options
-	events chan *event.Event
+	opts *Options
 }
 
 func New(opts *Options) *Hunter {
 	evtx.Preload()
 
 	return &Hunter{
-		opts:   opts,
-		events: make(chan *event.Event, opts.Threads*1024),
+		opts: opts,
 	}
 }
 
-func (htr *Hunter) Hunt(ctx context.Context, ch <-chan *heap.Heap) <-chan *event.Event {
+func (htr *Hunter) Hunt(ctx context.Context, heaps <-chan *heap.Heap) <-chan *event.Event {
+	ch := make(chan *event.Event, htr.opts.Threads*1024)
+
 	go func() {
-		defer close(htr.events)
+		defer close(ch)
 
 		p := pool.New().
 			WithContext(ctx).
 			WithFirstError().
 			WithMaxGoroutines(htr.opts.Threads)
 
-		for h := range ch {
+		for h := range heaps {
 			p.Go(func(ctx context.Context) error {
 				slog.Info(fmt.Sprintf("hunt: carving %s", h.String()))
 
@@ -61,7 +61,7 @@ func (htr *Hunter) Hunt(ctx context.Context, ch <-chan *heap.Heap) <-chan *event
 				case <-ctx.Done():
 					return ctx.Err()
 				default:
-					return htr.carve(ctx, h)
+					return htr.carve(ctx, ch, h)
 				}
 			})
 		}
@@ -76,21 +76,21 @@ func (htr *Hunter) Hunt(ctx context.Context, ch <-chan *heap.Heap) <-chan *event
 	}()
 
 	if htr.opts.Sort {
-		return htr.sort()
+		return htr.sort(ch)
 	}
 
-	return htr.events
+	return ch
 }
 
-func (htr *Hunter) sort() <-chan *event.Event {
-	sorted := make(chan *event.Event, cap(htr.events))
+func (htr *Hunter) sort(ch <-chan *event.Event) <-chan *event.Event {
+	sorted := make(chan *event.Event, cap(ch))
 
 	go func() {
 		defer close(sorted)
 
 		var src []*event.Event
 
-		for e := range htr.events {
+		for e := range ch {
 			src = append(src, e)
 		}
 
@@ -106,7 +106,7 @@ func (htr *Hunter) sort() <-chan *event.Event {
 	return sorted
 }
 
-func (htr *Hunter) carve(ctx context.Context, h *heap.Heap) error {
+func (htr *Hunter) carve(ctx context.Context, ch chan<- *event.Event, h *heap.Heap) error {
 	defer h.Discard()
 
 	p := pool.New().
@@ -114,25 +114,25 @@ func (htr *Hunter) carve(ctx context.Context, h *heap.Heap) error {
 		WithMaxGoroutines(htr.opts.Threads)
 
 	p.Go(func(ctx context.Context) error {
-		return htr.carveEvtx(ctx, h)
+		return htr.carveEvtx(ctx, ch, h)
 	})
 
 	p.Go(func(ctx context.Context) error {
-		return htr.carveJournal(ctx, h)
+		return htr.carveJournal(ctx, ch, h)
 	})
 
 	return p.Wait()
 }
 
-func (htr *Hunter) carveEvtx(ctx context.Context, h *heap.Heap) error {
+func (htr *Hunter) carveEvtx(ctx context.Context, ch chan<- *event.Event, h *heap.Heap) error {
 	sr := io.NewSectionReader(h.Reader(), 0, int64(h.Size))
 	for off := range htr.findOffset(ctx, h, evtx.Chunk) {
-		for evt := range evtx.Carve(sr, off, cap(htr.events)) {
+		for evt := range evtx.Carve(sr, off, cap(ch)) {
 			select {
 			case <-ctx.Done():
 				return ctx.Err()
 			default:
-				htr.events <- evt
+				ch <- evt
 			}
 		}
 	}
@@ -140,15 +140,15 @@ func (htr *Hunter) carveEvtx(ctx context.Context, h *heap.Heap) error {
 	return nil
 }
 
-func (htr *Hunter) carveJournal(ctx context.Context, h *heap.Heap) error {
+func (htr *Hunter) carveJournal(ctx context.Context, ch chan<- *event.Event, h *heap.Heap) error {
 	sr := io.NewSectionReader(h.Reader(), 0, int64(h.Size))
 	for off := range htr.findOffset(ctx, h, journal.Magic) {
-		for evt := range journal.Carve(sr, off, cap(htr.events)) {
+		for evt := range journal.Carve(sr, off, cap(ch)) {
 			select {
 			case <-ctx.Done():
 				return ctx.Err()
 			default:
-				htr.events <- evt
+				ch <- evt
 			}
 		}
 	}
