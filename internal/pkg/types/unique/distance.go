@@ -24,6 +24,7 @@ func (u *Distance) IsUnique(s string) bool {
 	s = strings.ToLower(strings.TrimSpace(s))
 
 	u.Lock()
+	defer u.Unlock()
 
 	// search latest strings first to improve performance
 	for i := len(u.dedup) - 1; i >= 0; i-- {
@@ -37,7 +38,6 @@ func (u *Distance) IsUnique(s string) bool {
 	}
 
 	u.dedup = append(u.dedup, s)
-	u.Unlock()
 
 	return true
 }
