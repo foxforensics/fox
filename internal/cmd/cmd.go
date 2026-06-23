@@ -160,7 +160,6 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	// handle CTRC+C
 	fox.Context, fox.Cancel = signal.NotifyContext(
 		context.Background(),
-		os.Kill,
 		os.Interrupt,
 		syscall.SIGTERM,
 	)
