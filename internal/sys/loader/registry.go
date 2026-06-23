@@ -145,7 +145,7 @@ func RegisterConverts() {
 
 func RegisterFormats() {
 	registry.Lock()
-	registry.Deflates = []DeflateEntry{
+	registry.Formats = []FormatEntry{
 		{"json", json.Detect, json.Format},
 		{"jsonl", jsonl.Detect, jsonl.Format},
 		{"xml", xml.Detect, xml.Format},
