@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log/slog"
+	"net/url"
 
 	mqtt "github.com/eclipse/paho.golang/paho"
 	"go.foxforensics.eu/fox/v4/internal/net/client"
@@ -29,6 +31,16 @@ type Mqtt struct {
 }
 
 func Create(opts *Options) (*Mqtt, error) {
+	u, err := url.Parse(opts.Url)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if u.Scheme == "tcp" {
+		slog.Warn("data will be streamed unencrypted!")
+	}
+
 	v, err := client.Mqtt(opts.Url, opts.Username, opts.Password)
 	return &Mqtt{v, opts}, err
 }

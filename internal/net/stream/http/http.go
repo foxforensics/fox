@@ -31,6 +31,16 @@ type Http struct {
 }
 
 func Create(opts *Options) (*Http, error) {
+	u, err := url.Parse(opts.Url)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if u.Scheme == "http" {
+		slog.Warn("data will be streamed unencrypted!")
+	}
+
 	return &Http{client.Http(), opts}, nil
 }
 
