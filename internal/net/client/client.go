@@ -88,7 +88,10 @@ func Mqtt(adr, usr, pwd string) (*mqtt.Client, error) {
 		pkg.PasswordFlag = true
 	}
 
-	ack, err := client.Connect(context.Background(), pkg)
+	ctx, stop := context.WithTimeout(context.Background(), Timeout)
+	defer stop()
+
+	ack, err := client.Connect(ctx, pkg)
 
 	if err != nil {
 		return nil, err
