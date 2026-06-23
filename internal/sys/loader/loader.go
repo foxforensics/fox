@@ -22,8 +22,9 @@ import (
 )
 
 const Stdin = "-"
-const MaxDepth = 3
-const MaxFiles = 10000
+const MaxFiles = 8192
+const MaxFolders = 64
+const MaxArchives = 4
 
 type Options struct {
 	Limits   *types.Limits
@@ -139,7 +140,7 @@ func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
 
 		p.Go(func(ctx context.Context) error {
 			if fi.IsDir() {
-				return ldr.loadDir(ctx, path, part)
+				return ldr.loadDir(ctx, path, part, 1)
 			} else {
 				return ldr.loadFile(ctx, path, part)
 			}
@@ -155,7 +156,11 @@ func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
 	}
 }
 
-func (ldr *Loader) loadDir(ctx context.Context, path, part string) error {
+func (ldr *Loader) loadDir(ctx context.Context, path, part string, i int) error {
+	if ldr.opts.Strict && i > MaxFolders {
+		return errors.New("max folders reached")
+	}
+
 	dir, err := os.ReadDir(path)
 
 	if err != nil {
@@ -172,13 +177,13 @@ func (ldr *Loader) loadDir(ctx context.Context, path, part string) error {
 		case <-ctx.Done():
 			return ctx.Err()
 		default:
-			if !f.IsDir() {
+			if f.IsDir() {
 				p.Go(func(ctx context.Context) error {
-					return ldr.loadFile(ctx, filepath.Join(path, f.Name()), part)
+					return ldr.loadDir(ctx, filepath.Join(path, f.Name()), part, i+1)
 				})
 			} else {
 				p.Go(func(ctx context.Context) error {
-					return ldr.loadDir(ctx, filepath.Join(path, f.Name()), part)
+					return ldr.loadFile(ctx, filepath.Join(path, f.Name()), part)
 				})
 			}
 		}
@@ -230,8 +235,8 @@ func (ldr *Loader) processData(path, part string, b []byte, i int) error {
 	var ok bool
 
 	// check depth to protect against zip bombs
-	if ldr.opts.Strict && i > MaxDepth {
-		return errors.New("max depth reached")
+	if ldr.opts.Strict && i > MaxArchives {
+		return errors.New("max archives reached")
 	}
 
 	// 1. deflate data
