@@ -16,6 +16,8 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
 )
 
+var Buffer = bytes.NewBuffer(nil)
+
 var header = strings.TrimSpace(`
 ┏━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ FILE │ %-71s ┃
@@ -27,7 +29,7 @@ var header = strings.TrimSpace(`
 ┠──────┼─────────────────────────────────────────────────────────────────────────┨
 ┃ INFO │ %-71s ┃
 ┗━━━━━━┴━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-`)
+%s`)
 
 func Generate(path string) error {
 	buf, err := os.ReadFile(path)
@@ -61,7 +63,8 @@ func Generate(path string) error {
 		pad(fmt.Sprintf("%s (%s)", hst, macAddr())),
 		fmt.Sprintf("%x SHA256", sha256.Sum256(buf)),
 		fmt.Sprintf("Fox Version %s (%s-%s)", version.Number, runtime.GOOS, runtime.GOARCH),
-	)+"\n"), 0600)
+		strings.TrimSpace(Buffer.String()),
+	)), 0600)
 }
 
 func macAddr() string {
@@ -69,7 +72,7 @@ func macAddr() string {
 
 	if err == nil {
 		for _, i := range iff {
-			if i.Flags&net.FlagUp != 0 && bytes.Compare(i.HardwareAddr, nil) != 0 {
+			if i.Flags&net.FlagUp != 0 && !bytes.Equal(i.HardwareAddr, nil) {
 				return i.HardwareAddr.String()
 			}
 		}
