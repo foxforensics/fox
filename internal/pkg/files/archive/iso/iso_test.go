@@ -39,7 +39,7 @@ func TestExtract(t *testing.T) {
 	}
 
 	if e[0].Path != sys.JoinPart("", test.Sample) {
-		t.Fatal("invalid entry path")
+		t.Fatal("invalid entry path", e[0].Path)
 	}
 
 	if !test.Assert(e[0].Data) {
