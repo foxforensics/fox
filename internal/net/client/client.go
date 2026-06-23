@@ -48,7 +48,7 @@ func Http() *http.Client {
 			TLSHandshakeTimeout: Timeout,
 			MaxIdleConnsPerHost: MaxIdle,
 			TLSClientConfig: &tls.Config{
-				MinVersion: tls.VersionTLS12, // pinned
+				MinVersion: tls.VersionTLS13, // pinned
 			},
 		},
 	}
@@ -63,7 +63,7 @@ func Mqtt(adr, usr, pwd string) (*mqtt.Client, error) {
 	}
 
 	con, err := tls.Dial("tcp", u.Host, &tls.Config{
-		MinVersion: tls.VersionTLS12, // pinned
+		MinVersion: tls.VersionTLS13, // pinned
 	})
 
 	if err != nil {
