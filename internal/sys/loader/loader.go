@@ -11,7 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"sync"
+	"sync/atomic"
 
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/sourcegraph/conc/pool"
@@ -35,17 +35,16 @@ type Options struct {
 }
 
 type Loader struct {
-	sync.RWMutex
-	size  uint64
 	opts  *Options
-	paths types.Set
+	size  atomic.Uint64
+	paths *types.Set
 	heaps chan *heap.Heap
 }
 
 func New(opts *Options) *Loader {
 	return &Loader{
 		opts:  opts,
-		paths: make(types.Set),
+		paths: types.NewSet(),
 		heaps: make(chan *heap.Heap, opts.Threads),
 	}
 }
@@ -99,9 +98,7 @@ func (ldr *Loader) Load(ctx context.Context, paths []string) <-chan *heap.Heap {
 }
 
 func (ldr *Loader) Exit() {
-	ldr.RLock()
-	slog.Debug(fmt.Sprintf("total size %s", sys.Humanize(ldr.size)))
-	ldr.RUnlock()
+	slog.Debug(fmt.Sprintf("total size %s", sys.Humanize(ldr.size.Load())))
 }
 
 func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
@@ -378,20 +375,17 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 }
 
 func (ldr *Loader) createHeap(path, hint string, b []byte) error {
-	ldr.Lock()
-	defer ldr.Unlock()
-
 	if ldr.paths.Has(path) {
 		return nil // already loaded
 	}
 
 	// check files to protect against zip bombs
-	if ldr.opts.Strict && len(ldr.paths) >= MaxFiles {
+	if ldr.opts.Strict && ldr.paths.Len() >= MaxFiles {
 		return errors.New("max files reached")
 	}
 
 	// add original size
-	ldr.size += uint64(len(b))
+	ldr.size.Add(uint64(len(b)))
 
 	b = ldr.opts.Limits.Reduce(b)
 
