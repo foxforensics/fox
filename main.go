@@ -163,7 +163,7 @@ func split(b []byte) []string {
 }
 
 func store(f string) {
-	sys.SetOutput(os.OpenFile(f, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600))
+	sys.SetOutput(os.OpenFile(f, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600))
 	log.SetOutput(io.MultiWriter(os.Stdout, receipt.Buffer))
 }
 
