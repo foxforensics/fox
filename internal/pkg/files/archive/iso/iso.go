@@ -49,7 +49,14 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 			continue
 		}
 
-		buf, err := io.ReadAll(f.Sys().(io.Reader))
+		sr, ok := f.Sys().(io.Reader)
+
+		if !ok {
+			slog.Error("invalid type")
+			continue
+		}
+
+		buf, err := io.ReadAll(sr)
 
 		if err != nil {
 			slog.Error(err.Error())
