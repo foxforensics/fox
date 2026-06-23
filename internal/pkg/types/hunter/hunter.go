@@ -9,7 +9,6 @@ import (
 	"log/slog"
 	"slices"
 	"strings"
-	"sync"
 
 	"github.com/sourcegraph/conc/pool"
 	"go.foxforensics.eu/fox/v4/internal/pkg/files/binary/log/evtx"
@@ -37,6 +36,8 @@ type Hunter struct {
 }
 
 func New(opts *Options) *Hunter {
+	evtx.Preload()
+
 	return &Hunter{
 		opts:   opts,
 		events: make(chan *event.Event, opts.Threads*1024),
@@ -107,8 +108,6 @@ func (htr *Hunter) sort() <-chan *event.Event {
 
 func (htr *Hunter) carve(ctx context.Context, h *heap.Heap) error {
 	defer h.Discard()
-
-	sync.OnceFunc(evtx.Preload)()
 
 	p := pool.New().
 		WithContext(ctx).
