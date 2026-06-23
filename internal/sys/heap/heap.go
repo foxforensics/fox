@@ -51,15 +51,13 @@ func (h *Heap) Discard() {
 	}()
 
 	h.Lock()
+	defer h.Unlock()
+
+	h.Size = 0
 
 	// unmap memory
 	if h.m != nil {
 		mmap.Unmap(h.m)
 		h.m = nil
 	}
-
-	h.Size = 0
-	h.Unlock()
-
-	// runtime.GC()
 }
