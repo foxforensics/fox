@@ -2,7 +2,6 @@ package info
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log/slog"
@@ -15,6 +14,7 @@ import (
 	"go.foxforensics.eu/entropy/entropy"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/net/lookup"
+	"go.foxforensics.eu/fox/v4/internal/pkg/files/format"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 )
@@ -93,26 +93,6 @@ func (fi *FileInfo) String() string {
 	}
 
 	return sb.String()
-}
-
-func (fi *FileInfo) ToJSON() string {
-	b, err := json.MarshalIndent(fi, "", "  ")
-
-	if err != nil {
-		slog.Error(err.Error())
-	}
-
-	return string(b)
-}
-
-func (fi *FileInfo) ToJSONL() string {
-	b, err := json.Marshal(fi)
-
-	if err != nil {
-		slog.Error(err.Error())
-	}
-
-	return string(b)
 }
 
 type Info struct {
@@ -241,9 +221,9 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 func (cmd *Info) format(fi *FileInfo) string {
 	switch {
 	case cmd.Jsonl:
-		return terminal.ColorizeAs(fi.ToJSONL(), "json")
+		return terminal.ColorizeAs(format.AsJSONL(fi), "json")
 	case cmd.Json:
-		return terminal.ColorizeAs(fi.ToJSON(), "json")
+		return terminal.ColorizeAs(format.AsJSON(fi), "json")
 	default:
 		return fi.String()
 	}

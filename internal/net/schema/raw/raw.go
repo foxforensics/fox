@@ -5,5 +5,5 @@ import (
 )
 
 func Apply(evt *event.Event) ([]byte, error) {
-	return []byte(evt.ToCEF()), nil
+	return []byte(evt.AsCEF()), nil
 }

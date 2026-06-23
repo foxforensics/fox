@@ -1,9 +1,7 @@
 package record
 
 import (
-	"encoding/json"
 	"fmt"
-	"log/slog"
 	"strings"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
@@ -13,8 +11,6 @@ import (
 
 type Record interface {
 	String() string
-	ToJSON() string
-	ToJSONL() string
 }
 
 type Computer struct {
@@ -25,26 +21,6 @@ func (c *Computer) String() string {
 	return c.Name
 }
 
-func (c *Computer) ToJSON() string {
-	b, err := json.MarshalIndent(c, "", "  ")
-
-	if err != nil {
-		slog.Error(err.Error())
-	}
-
-	return string(b)
-}
-
-func (c *Computer) ToJSONL() string {
-	b, err := json.Marshal(c)
-
-	if err != nil {
-		slog.Error(err.Error())
-	}
-
-	return string(b)
-}
-
 type Group struct {
 	extract.Group
 }
@@ -53,52 +29,12 @@ func (g *Group) String() string {
 	return g.Name
 }
 
-func (g *Group) ToJSON() string {
-	b, err := json.MarshalIndent(g, "", "  ")
-
-	if err != nil {
-		slog.Error(err.Error())
-	}
-
-	return string(b)
-}
-
-func (g *Group) ToJSONL() string {
-	b, err := json.Marshal(g)
-
-	if err != nil {
-		slog.Error(err.Error())
-	}
-
-	return string(b)
-}
-
 type User struct {
 	extract.Account
 }
 
 func (u *User) String() string {
 	return u.Name
-}
-
-func (u *User) ToJSON() string {
-	b, err := json.MarshalIndent(u, "", "  ")
-
-	if err != nil {
-		slog.Error(err.Error())
-	}
-
-	return string(b)
-}
-
-func (u *User) ToJSONL() string {
-	b, err := json.Marshal(u)
-
-	if err != nil {
-		slog.Error(err.Error())
-	}
-
-	return string(b)
 }
 
 type Secret struct {

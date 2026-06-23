@@ -1,9 +1,7 @@
 package event
 
 import (
-	"encoding/json"
 	"fmt"
-	"log/slog"
 	"maps"
 	"slices"
 	"strings"
@@ -48,7 +46,7 @@ func (e *Event) SortKey() string {
 	return fmt.Sprintf("%d-%d", e.Time.UnixNano(), xxh3.HashString(e.String()))
 }
 
-func (e *Event) ToCEF() string {
+func (e *Event) AsCEF() string {
 	var sb strings.Builder
 
 	sb.WriteString(fmt.Sprintf("%s %s CEF:1|fox|hunt|%s|100|",
@@ -71,24 +69,4 @@ func (e *Event) ToCEF() string {
 	}
 
 	return strings.TrimSpace(sb.String())
-}
-
-func (e *Event) ToJSON() string {
-	b, err := json.MarshalIndent(e, "", "  ")
-
-	if err != nil {
-		slog.Error(err.Error())
-	}
-
-	return string(b)
-}
-
-func (e *Event) ToJSONL() string {
-	b, err := json.Marshal(e)
-
-	if err != nil {
-		slog.Error(err.Error())
-	}
-
-	return string(b)
 }

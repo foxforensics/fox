@@ -16,6 +16,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/net/stream"
 	"go.foxforensics.eu/fox/v4/internal/net/stream/http"
 	"go.foxforensics.eu/fox/v4/internal/net/stream/mqtt"
+	"go.foxforensics.eu/fox/v4/internal/pkg/files/format"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/unique"
@@ -284,11 +285,11 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 func (cmd *Hunt) format(e *event.Event) string {
 	switch {
 	case cmd.Jsonl:
-		return terminal.ColorizeAs(e.ToJSONL(), "json")
+		return terminal.ColorizeAs(format.AsJSONL(e), "json")
 	case cmd.Json:
-		return terminal.ColorizeAs(e.ToJSON(), "json")
+		return terminal.ColorizeAs(format.AsJSON(e), "json")
 	default:
-		return terminal.MarkEvent(e.ToCEF())
+		return terminal.MarkEvent(e.AsCEF())
 	}
 }
 

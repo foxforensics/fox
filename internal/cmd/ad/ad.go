@@ -8,6 +8,7 @@ import (
 
 	"go.foxforensics.eu/bootkey/bootkey"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
+	"go.foxforensics.eu/fox/v4/internal/pkg/files/format"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/record"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
@@ -190,9 +191,9 @@ func (cmd *Ad) format(a any) string {
 	case record.Record:
 		switch {
 		case cmd.Jsonl:
-			return terminal.ColorizeAs(v.ToJSONL(), "json")
+			return terminal.ColorizeAs(format.AsJSONL(v), "json")
 		case cmd.Json:
-			return terminal.ColorizeAs(v.ToJSON(), "json")
+			return terminal.ColorizeAs(format.AsJSON(v), "json")
 		default:
 			return v.String()
 		}

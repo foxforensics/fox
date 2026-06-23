@@ -44,7 +44,7 @@ type Ecs struct {
 }
 
 func Apply(evt *event.Event) ([]byte, error) {
-	cef := evt.ToCEF()
+	cef := evt.AsCEF()
 	ecs := &Ecs{
 		Labels:    make(map[string]any),
 		Timestamp: evt.Time.UTC(),
