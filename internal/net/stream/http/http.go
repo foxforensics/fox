@@ -95,12 +95,12 @@ func (h Http) Stream(ctx context.Context, evt *event.Event) error {
 		return err
 	}
 
-	// drain body
-	_, _ = io.Copy(io.Discard, res.Body)
-
 	defer func() {
 		_ = res.Body.Close()
 	}()
+
+	// drain body
+	_, _ = io.Copy(io.Discard, res.Body)
 
 	if res.StatusCode != http.StatusOK {
 		return errors.New(http.StatusText(res.StatusCode))
