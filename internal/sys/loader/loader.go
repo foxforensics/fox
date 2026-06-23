@@ -168,13 +168,17 @@ func (ldr *Loader) loadDir(ctx context.Context, path, part string) error {
 		WithMaxGoroutines(ldr.opts.Threads)
 
 	for _, f := range dir {
-		if !f.IsDir() {
-			select {
-			case <-ctx.Done():
-				return ctx.Err()
-			default:
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		default:
+			if !f.IsDir() {
 				p.Go(func(ctx context.Context) error {
 					return ldr.loadFile(ctx, filepath.Join(path, f.Name()), part)
+				})
+			} else {
+				p.Go(func(ctx context.Context) error {
+					return ldr.loadDir(ctx, filepath.Join(path, f.Name()), part)
 				})
 			}
 		}
