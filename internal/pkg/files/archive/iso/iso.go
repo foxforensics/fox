@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io"
 	"log/slog"
-	"path/filepath"
 
 	"github.com/hooklift/iso9660"
 	"go.foxforensics.eu/fox/v4/internal/pkg"
@@ -64,7 +63,7 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 		}
 
 		e = append(e, pkg.Stream{
-			Path: sys.JoinPart(root, filepath.Base(f.Name())),
+			Path: sys.JoinPart(root, f.Name()),
 			Data: buf,
 		})
 	}
