@@ -10,7 +10,7 @@ import (
 	"github.com/sourcegraph/conc/iter"
 )
 
-const Size = 1024 * 1025 * 4 // 4m
+const Size = 1024 * 1024 * 4 // 4m
 
 var Threads = 2 // default
 
