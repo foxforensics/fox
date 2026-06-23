@@ -3,6 +3,7 @@ package lzo
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 
 	"github.com/rasky/go-lzo"
 	"go.foxforensics.eu/fox/v4/internal/pkg"
@@ -33,9 +34,17 @@ func Deflate(b []byte) ([]byte, error) {
 	// 61 e8 07 3a
 	head := 34 + int(b[33]) + 4
 
+	if len(b) <= head {
+		return buf.Bytes(), errors.New("invalid length")
+	}
+
 	// remove end
 	// 00 00 00 00
 	end := len(b) - 4
+
+	if len(b) <= end {
+		return buf.Bytes(), errors.New("invalid length")
+	}
 
 	body := b[head:end]
 
