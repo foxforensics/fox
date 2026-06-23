@@ -61,7 +61,7 @@ func (s SMap) Grep(re *regexp2.Regexp) SMap {
 }
 
 func (s SMap) do(fn action) SMap {
-	ch := make(chan String, len(s))
+	ch := make(chan String, max(1, len(s)))
 
 	go func(chan<- String) {
 		it := iter.Iterator[String]{
