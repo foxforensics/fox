@@ -3,7 +3,6 @@ package heap
 import (
 	"bytes"
 	"io"
-	"runtime"
 	"sync"
 
 	"go.foxforensics.eu/fox/v4/internal/sys/mmap"
@@ -62,5 +61,5 @@ func (h *Heap) Discard() {
 	h.Size = 0
 	h.Unlock()
 
-	runtime.GC()
+	// runtime.GC()
 }
