@@ -26,7 +26,6 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd/info"
 	"go.foxforensics.eu/fox/v4/internal/cmd/str"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
 )
 
 var About = strings.TrimSpace(`
@@ -164,7 +163,7 @@ func split(b []byte) []string {
 
 func store(f string) {
 	sys.SetOutput(os.OpenFile(f, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600))
-	log.SetOutput(io.MultiWriter(os.Stdout, receipt.Buffer))
+	log.SetOutput(io.Discard)
 }
 
 func quiet() {
