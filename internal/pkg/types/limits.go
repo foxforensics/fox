@@ -134,7 +134,7 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 func count(m mmap.MMap) int {
 	v := bytes.Count(m, []byte{CR})
 
-	if m[len(m)-1] != CR {
+	if len(m) > 0 && m[len(m)-1] != CR {
 		v++ // last line
 	}
 
