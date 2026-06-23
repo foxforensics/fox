@@ -118,7 +118,6 @@ func (fi *FileInfo) ToJSONL() string {
 type Info struct {
 	Lookup bool `short:"l" xor:"lookup,block"`
 	Sort   bool `short:"s"`
-	Bars   bool `short:"b"`
 	Json   bool `short:"j" xor:"json,jsonl"`
 	Jsonl  bool `short:"J" xor:"json,jsonl"`
 
