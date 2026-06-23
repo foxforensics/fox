@@ -20,14 +20,14 @@ func Detect(b []byte) bool {
 func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 	r, err := xar.NewReader(nop(bytes.NewReader(b)), int64(len(b)))
 
-	defer func() {
-		_ = r.Close()
-	}()
-
 	if err != nil {
 		slog.Error(err.Error())
 		return
 	}
+
+	defer func() {
+		_ = r.Close()
+	}()
 
 	for _, f := range r.File {
 		if strings.HasSuffix(f.Name, "/") {
