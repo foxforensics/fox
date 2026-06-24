@@ -324,7 +324,7 @@ func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
 			if err != nil {
 				slog.Error(err.Error())
 
-				if ldr.opts.Strict {
+				if !ldr.opts.Strict {
 					r = b // ignore partly result
 				}
 			}
@@ -346,7 +346,7 @@ func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
 			if err != nil {
 				slog.Error(err.Error())
 
-				if ldr.opts.Strict {
+				if !ldr.opts.Strict {
 					r = b // ignore partly result
 				}
 			}
@@ -368,7 +368,7 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 			if err != nil {
 				slog.Error(err.Error())
 
-				if ldr.opts.Strict {
+				if !ldr.opts.Strict {
 					r = b // ignore partly result
 				}
 			}
