@@ -1,8 +1,6 @@
 package loader
 
 import (
-	"sync"
-
 	"go.foxforensics.eu/fox/v4/internal/pkg"
 	_zip "go.foxforensics.eu/fox/v4/internal/pkg/files/archive/7z"
 	"go.foxforensics.eu/fox/v4/internal/pkg/files/archive/ar"
@@ -48,7 +46,6 @@ import (
 )
 
 var registry = &struct {
-	sync.Mutex
 	Formats  []FormatEntry
 	Deflates []DeflateEntry
 	Extracts []ExtractEntry
@@ -85,7 +82,6 @@ type ConvertEntry struct {
 }
 
 func RegisterDeflates() {
-	registry.Lock()
 	registry.Deflates = []DeflateEntry{
 		{"bgzf", bgzf.Detect, bgzf.Deflate},
 		{"br", br.Detect, br.Deflate},
@@ -105,11 +101,9 @@ func RegisterDeflates() {
 		{"zlib", zlib.Detect, zlib.Deflate},
 		{"zstd", zstd.Detect, zstd.Deflate},
 	}
-	registry.Unlock()
 }
 
 func RegisterExtracts() {
-	registry.Lock()
 	registry.Extracts = []ExtractEntry{
 		{"7z", _zip.Detect, _zip.Extract},
 		{"ar", ar.Detect, ar.Extract},
@@ -123,11 +117,9 @@ func RegisterExtracts() {
 		{"xar", xar.Detect, xar.Extract},
 		{"zip", zip.Detect, zip.Extract},
 	}
-	registry.Unlock()
 }
 
 func RegisterConverts() {
-	registry.Lock()
 	registry.Converts = []ConvertEntry{
 		{"elf", elf.Detect, elf.Convert},
 		{"ese", ese.Detect, ese.Convert},
@@ -140,15 +132,12 @@ func RegisterConverts() {
 		{"fortinet", fortinet.Detect, fortinet.Convert},
 		{"journal", journal.Detect, journal.Convert},
 	}
-	registry.Unlock()
 }
 
 func RegisterFormats() {
-	registry.Lock()
 	registry.Formats = []FormatEntry{
 		{"json", json.Detect, json.Format},
 		{"jsonl", jsonl.Detect, jsonl.Format},
 		{"xml", xml.Detect, xml.Format},
 	}
-	registry.Unlock()
 }
