@@ -22,13 +22,13 @@ func Convert(b []byte) ([]byte, error) {
 		OmitRelocDirectory:     true, // cut for clarity
 	})
 
-	defer func() {
-		_ = p.Close()
-	}()
-
 	if err != nil {
 		return b, err
 	}
+
+	defer func() {
+		_ = p.Close()
+	}()
 
 	err = p.Parse()
 
