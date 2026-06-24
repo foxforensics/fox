@@ -11,16 +11,9 @@ import (
 const cluster = 4096 // sane size
 
 func Detect(b []byte) bool {
-	for _, m := range [][]byte{
-		{'F', 'I', 'L', 'E', '*'}, // NT 4.0 & 5.0
-		{'F', 'I', 'L', 'E', 0},   // NT 5.1
-	} {
-		if pkg.HasMagic(b, 0, m) {
-			return true
-		}
-	}
-
-	return false
+	return pkg.HasMagic(b, 0, []byte{
+		'F', 'I', 'L', 'E',
+	})
 }
 
 func Convert(b []byte) ([]byte, error) {
