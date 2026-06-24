@@ -28,7 +28,7 @@ func Convert(b []byte) ([]byte, error) {
 	err := fortilog.DecodeLLogV5(b, &buf)
 
 	if err != nil {
-		return nil, err
+		return b, err
 	}
 
 	return buf.Bytes(), nil
