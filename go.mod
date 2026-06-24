@@ -17,6 +17,7 @@ require (
 	github.com/bradleyjkemp/sigma-go v0.6.6
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
+	github.com/cenkalti/backoff v2.2.1+incompatible
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/dlclark/regexp2/v2 v2.2.2
 	github.com/eclipse/paho.golang v0.23.0
@@ -49,7 +50,7 @@ require (
 	go.foxforensics.eu/go-ese v1.0.0
 	go.foxforensics.eu/go-fortilog v1.1.2
 	go.foxforensics.eu/go-lnk v1.0.0
-	go.foxforensics.eu/go-mft v1.0.0
+	go.foxforensics.eu/go-mft v1.0.1
 	go.foxforensics.eu/go-mmap v1.0.0
 	go.foxforensics.eu/go-msi v1.0.0
 	go.foxforensics.eu/go-pst/v6 v6.0.1

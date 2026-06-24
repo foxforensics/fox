@@ -75,6 +75,8 @@ github.com/cavaliergopher/cpio v1.0.1 h1:KQFSeKmZhv0cr+kawA3a0xTQCU4QxXF1vhU7P7a
 github.com/cavaliergopher/cpio v1.0.1/go.mod h1:pBdaqQjnvXxdS/6CvNDwIANIFSP0xRKI16PX4xejRQc=
 github.com/cavaliergopher/rpm v1.3.0 h1:UHX46sasX8MesUXXQ+UbkFLUX4eUWTlEcX8jcnRBIgI=
 github.com/cavaliergopher/rpm v1.3.0/go.mod h1:vEumo1vvtrHM1Ov86f6+k8j7zNKOxQfHDCAIcR/36ZI=
+github.com/cenkalti/backoff v2.2.1+incompatible h1:tNowT99t7UNflLxfYYSlKYsBpXdEet03Pg2g16Swow4=
+github.com/cenkalti/backoff v2.2.1+incompatible/go.mod h1:90ReRw6GdpyfrHakVjL/QHaoyV4aDUVVkXQJJJ3NXXM=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/cespare/xxhash v1.1.0 h1:a6HrQnmkObjyL+Gs60czilIUGqrzKutQD6XZog3p+ko=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
@@ -293,6 +295,8 @@ go.foxforensics.eu/go-lnk v1.0.0 h1:zFLro7Ue/aXPdLu9Q/C53/kQxE0cQjIMb8hTEwknVjI=
 go.foxforensics.eu/go-lnk v1.0.0/go.mod h1:4Gf+F8Jjc8bpvrVZO0956y/1RoMRh8CwfyBR1hrBYWw=
 go.foxforensics.eu/go-mft v1.0.0 h1:AAjvp5WzbPGdaXwlgmPByfO/82AbKAYJJglH1opaVWE=
 go.foxforensics.eu/go-mft v1.0.0/go.mod h1:bbApb2nM3gT/q/fl3izl/X4P9dm3xUYQhN3pn/q/+XM=
+go.foxforensics.eu/go-mft v1.0.1 h1:si2aLecEl+TjV0fiIVGuazfZ16ivzEY+iYzUv5MRG6c=
+go.foxforensics.eu/go-mft v1.0.1/go.mod h1:bbApb2nM3gT/q/fl3izl/X4P9dm3xUYQhN3pn/q/+XM=
 go.foxforensics.eu/go-mmap v1.0.0 h1:0rpRaoAF0DnqN07Hkd+JQref28fdCOrX6wQEALHgMpg=
 go.foxforensics.eu/go-mmap v1.0.0/go.mod h1:NACaG/H+bLx5IMVTQfmqTHm4DYMZj4MIvc8Lwm6iVwY=
 go.foxforensics.eu/go-mscfb v1.0.0 h1:KGkyNJOzdeXjDT22QJNK9th3Y5O8haLV5w5ZHrZNsjw=
