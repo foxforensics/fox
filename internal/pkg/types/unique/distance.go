@@ -7,6 +7,8 @@ import (
 	"github.com/agnivade/levenshtein"
 )
 
+const window = 4096
+
 type Distance struct {
 	sync.Mutex
 	limit float64
@@ -27,7 +29,7 @@ func (u *Distance) IsUnique(s string) bool {
 	defer u.Unlock()
 
 	// search latest strings first to improve performance
-	for i := len(u.dedup) - 1; i >= 0; i-- {
+	for i := len(u.dedup) - 1; i >= max(0, len(u.dedup)-window); i-- {
 		v := u.dedup[i]
 		d := levenshtein.ComputeDistance(v, s)
 
