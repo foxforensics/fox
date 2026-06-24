@@ -8,6 +8,8 @@ import (
 
 	"go.foxforensics.eu/bootkey/bootkey"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
+	"go.foxforensics.eu/fox/v4/internal/pkg/files/binary/bin/ese"
+	"go.foxforensics.eu/fox/v4/internal/pkg/files/binary/bin/reg"
 	"go.foxforensics.eu/fox/v4/internal/pkg/files/format"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/record"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
@@ -87,12 +89,20 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		return errors.New("required file(s) missing")
 	}
 
+	if !ese.Detect(ntds.Bytes()) {
+		return errors.New("invalid file format")
+	}
+
 	defer ntds.Discard()
 
 	hive := <-ch
 
 	if hive == nil {
 		return errors.New("required file(s) missing")
+	}
+
+	if !reg.Detect(hive.Bytes()) {
+		return errors.New("invalid file format")
 	}
 
 	defer hive.Discard()
