@@ -65,16 +65,14 @@ func Text(ctx *TextContext, fox *cmd.Globals) *TextBuffer {
 func streamText(ctx *TextContext, buf *TextBuffer) {
 	defer close(buf.Lines)
 
-	var numSep uint = 0
-	var numGrp uint = 1
-	var tmpGrp uint = 0
+	var num uint = 1
+	var grp uint = 0
 
 	for _, str := range ctx.SMap {
 		// insert context separator
-		if tmpGrp != str.Group && numGrp > 1 {
+		if grp != str.Group && num > 1 {
 			buf.Lines <- &TextLine{Sep, str.Group, ""}
-			numGrp = 1
-			numSep++
+			num = 1
 		}
 
 		// build line
@@ -88,8 +86,8 @@ func streamText(ctx *TextContext, buf *TextBuffer) {
 		case <-ctx.Parent.Done():
 			return
 		default:
-			tmpGrp = str.Group
-			numGrp++
+			grp = str.Group
+			num++
 		}
 	}
 }
