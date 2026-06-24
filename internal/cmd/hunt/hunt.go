@@ -120,6 +120,10 @@ func (cmd *Hunt) Validate() error {
 		return errors.New("auth required")
 	}
 
+	if cmd.QoS > 2 {
+		return errors.New("mqtt qos invalid")
+	}
+
 	return nil
 }
 
