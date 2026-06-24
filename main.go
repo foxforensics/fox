@@ -120,7 +120,7 @@ func main() {
 		})
 
 	switch {
-	case len(ctx.Args) == 0, ctx.Error != nil:
+	case len(ctx.Args) == 0:
 		fallthrough // show usage
 
 	case fox.Globals.Help, ctx.Command() == "help":
@@ -128,6 +128,9 @@ func main() {
 
 	case fox.Version:
 		_ = sys.About(About)
+
+	case ctx.Error != nil:
+		slog.Error(ctx.Error.Error())
 
 	default:
 		defer timer(time.Now())
@@ -146,7 +149,10 @@ func main() {
 
 		defer sys.Stdout.Close(fox.Out, !fox.NoReceipt)
 
-		ctx.FatalIfErrorf(ctx.Run(&fox.Globals))
+		if err := ctx.Run(&fox.Globals); err != nil {
+			slog.Error(err.Error())
+			os.Exit(1)
+		}
 	}
 }
 
