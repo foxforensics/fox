@@ -66,19 +66,19 @@ func Mechanize(s string) (int64, bool) {
 
 	unit := s[len(s)-1]
 
-	has := unit < '0' || unit > '9'
+	hasUnit := unit < '0' || unit > '9'
 
-	if has {
-		s = s[:len(s)-1]
+	if hasUnit {
+		s = s[:len(s)-1] // cut unit
 	}
 
 	v, err := strconv.Atoi(s)
 
 	if err != nil {
-		return 0, true
+		return 0, false
 	}
 
-	if !has {
+	if !hasUnit {
 		return int64(v), true
 	}
 
