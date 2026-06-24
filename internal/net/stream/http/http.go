@@ -70,6 +70,9 @@ func (h Http) Stream(ctx context.Context, evt *event.Event) error {
 		return err
 	}
 
+	bo := backoff.NewExponentialBackOff()
+	bo.MaxElapsedTime = client.Timeout
+
 	return backoff.Retry(func() error {
 		req, err := http.NewRequestWithContext(ctx, "POST", h.opts.Url, bytes.NewReader(buf))
 
@@ -112,7 +115,7 @@ func (h Http) Stream(ctx context.Context, evt *event.Event) error {
 		default: // success
 			return nil
 		}
-	}, backoff.NewExponentialBackOff())
+	}, bo)
 }
 
 func (h Http) Close() error {
