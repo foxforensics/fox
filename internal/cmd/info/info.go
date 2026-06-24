@@ -151,7 +151,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 	}
 
 	// turn off for calculations
-	v := fox.NoPretty
+	v := color.NoColor
 
 	fox.NoConvert = true
 	fox.NoPretty = true
