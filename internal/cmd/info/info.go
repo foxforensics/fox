@@ -45,7 +45,7 @@ Remarks:
   A VirusTotal API key is required for lookup. 
 
 Example: List only high entropy files
-  $ fox info -N6.0 ./**/*
+  $ fox info -sN6.0 ./
 
 Example: List blocks by one megabyte
   $ fox info -B1m backup.mdf

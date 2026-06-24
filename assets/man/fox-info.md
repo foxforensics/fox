@@ -60,7 +60,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths insid
 EXAMPLES
 ========
 
-$ fox info -N6.0 ./**/*
+$ fox info -sN6.0 ./
 
 :   List only high entropy files.
 

@@ -174,7 +174,7 @@ $ fox str -w sample.exe
 
 :   Show all strings in a binary.
 
-$ fox info -N6.0 ./**/*
+$ fox info -sN6.0 ./
 
 :   List only high entropy files.
 
