@@ -208,7 +208,7 @@ func (ldr *Loader) loadFile(ctx context.Context, path, part string) error {
 
 	// empty files will cause issues
 	if fi.Size() == 0 {
-		return ldr.createHeap(path, "", []byte{})
+		return ldr.createHeap(ctx, path, "", []byte{})
 	}
 
 	b, err := mmap.Map(f)
@@ -266,7 +266,7 @@ func (ldr *Loader) processData(ctx context.Context, path, part string, b []byte,
 
 	// filter for specific streams
 	if strings.Contains(path, part) {
-		return ldr.createHeap(path, hint, b)
+		return ldr.createHeap(ctx, path, hint, b)
 	}
 
 	return nil
@@ -380,7 +380,7 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 	return b, false
 }
 
-func (ldr *Loader) createHeap(path, hint string, b []byte) error {
+func (ldr *Loader) createHeap(ctx context.Context, path, hint string, b []byte) error {
 	if ldr.paths.Has(path) {
 		return nil // already loaded
 	}
@@ -396,7 +396,13 @@ func (ldr *Loader) createHeap(path, hint string, b []byte) error {
 	b = ldr.opts.Limits.Reduce(b)
 
 	ldr.paths.Set(path)
-	ldr.heaps <- heap.New(path, hint, b)
+
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	default:
+		ldr.heaps <- heap.New(path, hint, b)
+	}
 
 	slog.Debug(fmt.Sprintf("loaded heap %s", path))
 
