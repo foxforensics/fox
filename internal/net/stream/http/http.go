@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/cenkalti/backoff"
 	"go.foxforensics.eu/fox/v4/internal/net/client"
 	"go.foxforensics.eu/fox/v4/internal/net/schema"
 	"go.foxforensics.eu/fox/v4/internal/net/schema/ecs"
@@ -35,6 +36,10 @@ func Create(opts *Options) (*Http, error) {
 
 	if err != nil {
 		return nil, err
+	}
+
+	if !strings.HasPrefix(u.Scheme, "http") {
+		return nil, errors.New("unsupported scheme")
 	}
 
 	if u.Scheme == "http" {
@@ -65,58 +70,49 @@ func (h Http) Stream(ctx context.Context, evt *event.Event) error {
 		return err
 	}
 
-	u, err := url.Parse(h.opts.Url)
+	return backoff.Retry(func() error {
+		req, err := http.NewRequestWithContext(ctx, "POST", h.opts.Url, bytes.NewReader(buf))
 
-	if err != nil {
-		return err
-	}
+		if err != nil {
+			return err
+		}
 
-	if !strings.HasPrefix(u.Scheme, "http") {
-		return errors.New("unsupported scheme")
-	}
+		req.Header.Add("User-Agent", client.Name())
 
-	if u.Scheme == "http" {
-		slog.Warn("data will be streamed unencrypted!")
-	}
+		switch h.opts.Schema {
+		case schema.Ecs, schema.Hec:
+			req.Header.Set("Content-Type", "application/json")
+		default:
+			req.Header.Set("Content-Type", "text/plain")
+		}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", h.opts.Url, bytes.NewReader(buf))
+		// add authorization for Splunk
+		if h.opts.Schema == schema.Hec && len(h.opts.Token) > 0 {
+			req.Header.Set("Authorization", fmt.Sprintf("Splunk %s", h.opts.Token))
+		}
 
-	if err != nil {
-		return err
-	}
+		res, err := h.client.Do(req)
 
-	req.Header.Add("User-Agent", client.Name())
+		if err != nil {
+			return err
+		}
 
-	switch h.opts.Schema {
-	case schema.Ecs, schema.Hec:
-		req.Header.Set("Content-Type", "application/json")
-	default:
-		req.Header.Set("Content-Type", "text/plain")
-	}
+		defer func() {
+			_ = res.Body.Close()
+		}()
 
-	// add authorization for Splunk
-	if h.opts.Schema == schema.Hec && len(h.opts.Token) > 0 {
-		req.Header.Set("Authorization", fmt.Sprintf("Splunk %s", h.opts.Token))
-	}
+		// drain body
+		_, _ = io.Copy(io.Discard, res.Body)
 
-	res, err := h.client.Do(req)
-
-	if err != nil {
-		return err
-	}
-
-	defer func() {
-		_ = res.Body.Close()
-	}()
-
-	// drain body
-	_, _ = io.Copy(io.Discard, res.Body)
-
-	if res.StatusCode != http.StatusOK {
-		return errors.New(http.StatusText(res.StatusCode))
-	}
-
-	return nil
+		switch {
+		case res.StatusCode >= 500: // retry
+			return errors.New(res.Status)
+		case res.StatusCode >= 400: // halt
+			return backoff.Permanent(errors.New(res.Status))
+		default: // success
+			return nil
+		}
+	}, backoff.NewExponentialBackOff())
 }
 
 func (h Http) Close() error {
