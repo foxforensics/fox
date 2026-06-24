@@ -125,12 +125,15 @@ func main() {
 
 	case fox.Globals.Help, ctx.Command() == "help":
 		_ = sys.Usage(Usage)
+		os.Exit(0)
 
 	case fox.Version:
 		_ = sys.About(About)
+		os.Exit(0)
 
 	case ctx.Error != nil:
 		slog.Error(ctx.Error.Error())
+		os.Exit(1)
 
 	default:
 		defer timer(time.Now())
