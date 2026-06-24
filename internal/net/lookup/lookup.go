@@ -12,6 +12,11 @@ import (
 	"go.foxforensics.eu/hasher/hash"
 )
 
+const (
+	errKeyMissing = "X-Apikey header is missing"
+	errNotFound   = "not found"
+)
+
 func Lookup(key string, a any) (bool, error) {
 	switch v := a.(type) {
 	case []byte:
@@ -43,9 +48,9 @@ func request(key string, url *url.URL) (bool, error) {
 
 	if err != nil {
 		switch {
-		case strings.Contains(err.Error(), "X-Apikey header is missing"):
+		case strings.Contains(err.Error(), errKeyMissing):
 			return false, errors.New("API key is missing")
-		case strings.Contains(err.Error(), "not found"):
+		case strings.Contains(err.Error(), errNotFound):
 			return false, nil
 		default:
 			return false, err
