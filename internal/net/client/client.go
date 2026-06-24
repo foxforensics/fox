@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"net"
 	"net/http"
 	"net/url"
 	"time"
@@ -56,21 +57,27 @@ func Http() *http.Client {
 
 // Mqtt returns the default mqtt client.
 func Mqtt(adr, usr, pwd string) (*mqtt.Client, error) {
+	var conn net.Conn
+
 	u, err := url.Parse(adr)
 
 	if err != nil {
 		return nil, err
 	}
 
-	con, err := tls.Dial("tcp", u.Host, &tls.Config{
-		MinVersion: tls.VersionTLS13, // pinned
-	})
+	if u.Scheme == "tcp" {
+		conn, err = net.Dial("tcp", u.Host)
+	} else {
+		conn, err = tls.Dial("tcp", u.Host, &tls.Config{
+			MinVersion: tls.VersionTLS13, // pinned
+		})
+	}
 
 	if err != nil {
 		return nil, err
 	}
 
-	client := mqtt.NewClient(mqtt.ClientConfig{Conn: con})
+	client := mqtt.NewClient(mqtt.ClientConfig{Conn: conn})
 
 	pkg := &mqtt.Connect{
 		KeepAlive:  uint16(Timeout.Seconds()),
