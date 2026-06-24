@@ -30,14 +30,12 @@ type String struct {
 
 type Carver struct {
 	opts    *Options
-	list    []String
 	entries Database
 }
 
 func New(opts *Options) *Carver {
 	return &Carver{
 		opts:    opts,
-		list:    make([]String, 0),
 		entries: BuildDB(opts.What),
 	}
 }
@@ -94,13 +92,15 @@ func (crv *Carver) sort(ch <-chan *String) <-chan *String {
 	go func() {
 		defer close(sorted)
 
+		v := make([]String, 0)
+
 		for s := range ch {
-			crv.list = append(crv.list, *s)
+			v = append(v, *s)
 		}
 
-		slices.SortStableFunc(crv.list, compare)
+		slices.SortStableFunc(v, compare)
 
-		for _, s := range crv.list {
+		for _, s := range v {
 			sorted <- &s
 		}
 	}()
