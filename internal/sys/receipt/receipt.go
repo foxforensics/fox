@@ -11,7 +11,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-	"time"
 
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
 )
@@ -30,6 +29,12 @@ var header = strings.TrimSpace(`
 `)
 
 func Generate(path string) error {
+	fi, err := os.Stat(path)
+
+	if err != nil {
+		return err
+	}
+
 	buf, err := os.ReadFile(path)
 
 	if err != nil {
@@ -56,7 +61,7 @@ func Generate(path string) error {
 
 	return os.WriteFile(path+".cc", []byte(fmt.Sprintf(header,
 		abs,
-		pad(time.Now().UTC().String()),
+		pad(fi.ModTime().UTC().String()),
 		pad(fmt.Sprintf("%s (%s)", usr.Name, usr.Username)),
 		pad(fmt.Sprintf("%s (%s)", hst, macAddr())),
 		fmt.Sprintf("%x SHA256", sha256.Sum256(buf)),
