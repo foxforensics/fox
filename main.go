@@ -107,13 +107,13 @@ type Fox struct {
 func main() {
 	defer trace()
 
-	log.SetFlags(0)
-	log.SetPrefix("FOX ")
+	log.SetFlags(log.LstdFlags | log.LUTC)
+	log.SetPrefix("FOX: ")
 
 	fox := new(Fox)
 	ctx := kong.Parse(fox,
 		kong.NoDefaultHelp(),
-		kong.Name("fox"),
+		kong.Name("FOX"),
 		kong.DefaultEnvars("FOX"),
 		kong.Vars{
 			"cores": strconv.Itoa(runtime.NumCPU()),
@@ -185,7 +185,7 @@ func timer(t time.Time) {
 
 func trace() {
 	if err := recover(); err != nil {
-		slog.Error(fmt.Sprintf("%+v", err), err)
+		slog.Error(fmt.Sprintf("%+v", err))
 		slog.Debug("--")
 		slog.Debug(string(debug.Stack()))
 		slog.Debug("--")
