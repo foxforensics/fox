@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"errors"
+	"io"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -11,7 +12,6 @@ import (
 	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
-	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 	"go.foxforensics.eu/fox/v4/internal/sys/loader"
 	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
@@ -52,6 +52,7 @@ type Globals struct {
 	// internal
 	Context context.Context    `kong:"-"`
 	Cancel  context.CancelFunc `kong:"-"`
+	Stdout  *terminal.Writer   `kong:"-"`
 	Regexp  *regexp2.Regexp    `kong:"-"`
 	Loader  *loader.Loader     `kong:"-"`
 	Query   *types.Query       `kong:"-"`
@@ -158,7 +159,7 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	if fox.DryRun {
 		for h := range heaps {
-			sys.Stdout.Write(h.Name)
+			fox.Stdout.Write(h.Name)
 		}
 
 		// exit early
@@ -173,7 +174,16 @@ func (fox *Globals) Exit(code int) {
 	os.Exit(code)
 }
 
+func (fox *Globals) Writer(wc io.WriteCloser, err error) {
+	if err == nil {
+		fox.Stdout = terminal.NewWriter(wc)
+	} else {
+		slog.Error(err.Error())
+	}
+}
+
 func (fox *Globals) Discard() {
 	fox.Cancel()
+	fox.Stdout.Close(fox.Out, !fox.NoReceipt)
 	fox.Loader.Exit()
 }

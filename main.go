@@ -5,7 +5,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"log/slog"
 	"os"
@@ -145,12 +144,14 @@ func main() {
 
 		// redirect output
 		if len(fox.Out) > 0 {
-			store(fox.Out)
+			fox.Writer(os.OpenFile(fox.Out, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600))
 		} else if fox.Quiet {
-			quiet()
+			fox.Writer(os.Open(os.DevNull))
+		} else {
+			fox.Writer(os.Stdout, nil)
 		}
 
-		defer sys.Stdout.Close(fox.Out, !fox.NoReceipt)
+		defer fox.Discard()
 
 		if err := ctx.Run(&fox.Globals); err != nil {
 			slog.Error(err.Error())
@@ -168,15 +169,6 @@ func split(b []byte) []string {
 	}
 
 	return v
-}
-
-func store(f string) {
-	sys.SetOutput(os.OpenFile(f, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600))
-}
-
-func quiet() {
-	sys.SetOutput(os.Open(os.DevNull))
-	log.SetOutput(io.Discard)
 }
 
 func timer(t time.Time) {

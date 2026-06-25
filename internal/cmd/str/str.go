@@ -80,7 +80,7 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 		db := carver2.BuildDB(3)
 
 		for _, s := range db.List() {
-			sys.Stdout.Write(s)
+			fox.Stdout.Write(s)
 		}
 
 		// exit early
@@ -93,11 +93,9 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 		return err
 	}
 
-	defer fox.Discard()
-
 	for h := range ch {
 		if !fox.NoPretty {
-			sys.Stdout.Header(h.String())
+			fox.Stdout.Header(h.String())
 		}
 
 		for str := range carver2.New(&carver2.Options{
@@ -119,13 +117,13 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 			str.Value = terminal.MarkMatch(str.Value, fox.Regexp)
 
 			if !fox.NoPretty && len(str.Classes) > 0 {
-				sys.Stdout.Write("%s  %s [%s]", terminal.AsGray(str.Address), str.Value, terminal.AsBold(str.Classes))
+				fox.Stdout.Write("%s  %s [%s]", terminal.AsGray(str.Address), str.Value, terminal.AsBold(str.Classes))
 			} else if !fox.NoPretty {
-				sys.Stdout.Write("%s  %s", terminal.AsGray(str.Address), str.Value)
+				fox.Stdout.Write("%s  %s", terminal.AsGray(str.Address), str.Value)
 			} else if len(str.Classes) > 0 {
-				sys.Stdout.Write("%s [%s]", str.Value, str.Classes)
+				fox.Stdout.Write("%s [%s]", str.Value, str.Classes)
 			} else {
-				sys.Stdout.Write(str.Value)
+				fox.Stdout.Write(str.Value)
 			}
 		}
 

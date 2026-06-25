@@ -85,8 +85,6 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		return err
 	}
 
-	defer fox.Discard()
-
 	ntds := <-ch
 
 	if ntds == nil {
@@ -194,7 +192,7 @@ func (cmd *Ad) extract(fox *cmd.Globals, k, b []byte) (int, error) {
 	}
 
 	for _, v := range a {
-		sys.Stdout.Match(cmd.format(v), fox.Regexp)
+		fox.Stdout.Match(cmd.format(v), fox.Regexp)
 	}
 
 	return len(a), nil

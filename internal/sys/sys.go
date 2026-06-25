@@ -3,12 +3,8 @@ package sys
 import (
 	"errors"
 	"fmt"
-	"io"
-	"log/slog"
-	"os"
 	"strings"
 
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
 )
 
@@ -21,9 +17,6 @@ const Banner = `
   '--'    '----'--'  '--'
 `
 
-// Stdout default output.
-var Stdout = terminal.NewWriter(os.Stdout)
-
 func About(msg string) error {
 	_, err1 := fmt.Println(msg)
 	_, err2 := fmt.Println(fmt.Sprintf(Version, version.Number, version.ID()))
@@ -34,14 +27,6 @@ func Usage(msg string) error {
 	_, err1 := fmt.Println(fmt.Sprintf(Banner, version.Number))
 	_, err2 := fmt.Println(msg)
 	return errors.Join(err1, err2)
-}
-
-func SetOutput(wc io.WriteCloser, err error) {
-	if err == nil {
-		Stdout = terminal.NewWriter(wc)
-	} else {
-		slog.Error(err.Error())
-	}
 }
 
 func JoinPart(path, part string) string {

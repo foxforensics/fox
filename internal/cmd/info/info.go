@@ -148,8 +148,6 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 		return err
 	}
 
-	defer fox.Discard()
-
 	for h := range ch {
 		fi := &FileInfo{File: h.String()}
 
@@ -164,7 +162,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 		// because empty files will cause errors
 		if h.Size == 0 {
 			if cmd.Min == 0 {
-				sys.Stdout.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
+				fox.Stdout.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
 			}
 			h.Discard()
 			continue
@@ -182,7 +180,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 			fi.Entropy = entropy.Calculate(block)
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
-				sys.Stdout.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
+				fox.Stdout.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
 			}
 
 			fi.Offset += uint64(n)

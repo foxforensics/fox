@@ -13,17 +13,17 @@ import (
 
 	"github.com/cenkalti/backoff"
 	"go.foxforensics.eu/fox/v4/internal/net/client"
-	"go.foxforensics.eu/fox/v4/internal/net/schema"
-	"go.foxforensics.eu/fox/v4/internal/net/schema/ecs"
-	"go.foxforensics.eu/fox/v4/internal/net/schema/hec"
-	"go.foxforensics.eu/fox/v4/internal/net/schema/raw"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas/ecs"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas/hec"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas/raw"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 )
 
 type Options struct {
 	Url    string
 	Token  string
-	Schema schema.Schema
+	Schema schemas.Schema
 }
 
 type Http struct {
@@ -58,11 +58,11 @@ func (h Http) Stream(ctx context.Context, evt *event.Event) error {
 	var err error
 
 	switch h.opts.Schema {
-	case schema.Ecs:
+	case schemas.Ecs:
 		buf, err = ecs.Apply(evt)
-	case schema.Hec:
+	case schemas.Hec:
 		buf, err = hec.Apply(evt)
-	case schema.Raw:
+	case schemas.Raw:
 		buf, err = raw.Apply(evt)
 	}
 
@@ -83,14 +83,14 @@ func (h Http) Stream(ctx context.Context, evt *event.Event) error {
 		req.Header.Add("User-Agent", client.Name())
 
 		switch h.opts.Schema {
-		case schema.Ecs, schema.Hec:
+		case schemas.Ecs, schemas.Hec:
 			req.Header.Set("Content-Type", "application/json")
 		default:
 			req.Header.Set("Content-Type", "text/plain")
 		}
 
 		// add authorization for Splunk
-		if h.opts.Schema == schema.Hec && len(h.opts.Token) > 0 {
+		if h.opts.Schema == schemas.Hec && len(h.opts.Token) > 0 {
 			req.Header.Set("Authorization", fmt.Sprintf("Splunk %s", h.opts.Token))
 		}
 

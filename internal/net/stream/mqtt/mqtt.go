@@ -9,10 +9,10 @@ import (
 
 	mqtt "github.com/eclipse/paho.golang/paho"
 	"go.foxforensics.eu/fox/v4/internal/net/client"
-	"go.foxforensics.eu/fox/v4/internal/net/schema"
-	"go.foxforensics.eu/fox/v4/internal/net/schema/ecs"
-	"go.foxforensics.eu/fox/v4/internal/net/schema/hec"
-	"go.foxforensics.eu/fox/v4/internal/net/schema/raw"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas/ecs"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas/hec"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas/raw"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 )
 
@@ -22,7 +22,7 @@ type Options struct {
 	Username string
 	Password string
 	QoS      byte
-	Schema   schema.Schema
+	Schema   schemas.Schema
 }
 
 type Mqtt struct {
@@ -54,11 +54,11 @@ func (m Mqtt) Stream(ctx context.Context, evt *event.Event) error {
 	var err error
 
 	switch m.opts.Schema {
-	case schema.Ecs:
+	case schemas.Ecs:
 		buf, err = ecs.Apply(evt)
-	case schema.Hec:
+	case schemas.Hec:
 		buf, err = hec.Apply(evt)
-	case schema.Raw:
+	case schemas.Raw:
 		buf, err = raw.Apply(evt)
 	}
 

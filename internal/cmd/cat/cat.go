@@ -77,15 +77,13 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 		return err
 	}
 
-	defer fox.Discard()
-
 	// apply command specific params
 	fox.Query.Before = cmd.Before
 	fox.Query.After = cmd.After
 
 	for h := range ch {
 		if !fox.NoPretty {
-			sys.Stdout.Header(h.String())
+			fox.Stdout.Header(h.String())
 		}
 
 		if (h.IsText() && !cmd.Hex) || cmd.Text {
@@ -117,11 +115,11 @@ func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
 		}
 
 		if !fox.NoPretty {
-			sys.Stdout.Write("%s %s", terminal.AsGray(l.Line), s)
+			fox.Stdout.Write("%s %s", terminal.AsGray(l.Line), s)
 		} else if l.Line == buffer2.Sep {
-			sys.Stdout.Write(terminal.AsGray(buffer2.Sep))
+			fox.Stdout.Write(terminal.AsGray(buffer2.Sep))
 		} else {
-			sys.Stdout.Write(s)
+			fox.Stdout.Write(s)
 		}
 	}
 }
@@ -146,15 +144,15 @@ func (cmd *Cat) renderHex(fox *cmd.Globals, b []byte) {
 		if !fox.NoPretty && l.Values == lastHex {
 			if !wasCut {
 				wasCut = true
-				sys.Stdout.Write(terminal.AsGray("*"))
+				fox.Stdout.Write(terminal.AsGray("*"))
 			}
 			continue
 		}
 
 		if !fox.NoPretty {
-			sys.Stdout.Write("%s  %s%s", terminal.AsGray(l.Address), l.Values, l.String)
+			fox.Stdout.Write("%s  %s%s", terminal.AsGray(l.Address), l.Values, l.String)
 		} else {
-			sys.Stdout.Write(l.Values)
+			fox.Stdout.Write(l.Values)
 		}
 
 		lastHex, wasCut = l.Values, false

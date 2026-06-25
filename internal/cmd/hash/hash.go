@@ -93,7 +93,7 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 
 	if cmd.Paths[0] == "list" {
 		for _, s := range list(true) {
-			sys.Stdout.Write(s)
+			fox.Stdout.Write(s)
 		}
 
 		// exit early
@@ -120,8 +120,6 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 		return err
 	}
 
-	defer fox.Discard()
-
 	for h := range ch {
 		fh := &FileHash{
 			File: h.String(),
@@ -129,17 +127,17 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 		}
 
 		if !fox.NoPretty && len(cmd.Hash) > 1 {
-			sys.Stdout.Header(h.String())
+			fox.Stdout.Header(h.String())
 		}
 
 		for _, k := range cmd.Hash {
 			if cmd.Lookup {
 				a, v := tables.Lookup(string(h.Bytes()))
-				sys.Stdout.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), fox.Regexp)
+				fox.Stdout.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), fox.Regexp)
 				break
 			} else if cmd.Guess {
 				for _, a := range collect(database.Lookup(fox.Context, string(h.Bytes()))) {
-					sys.Stdout.Match(a, fox.Regexp)
+					fox.Stdout.Match(a, fox.Regexp)
 				}
 				continue
 			}
@@ -179,11 +177,11 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 				sum = fmt.Sprintf("%s  %s", sum, fh.File)
 			}
 
-			sys.Stdout.Match(sum, fox.Regexp)
+			fox.Stdout.Match(sum, fox.Regexp)
 		}
 
 		if !plain {
-			sys.Stdout.Match(formats.Auto(fh, cmd.Json, cmd.Jsonl), fox.Regexp)
+			fox.Stdout.Match(formats.Auto(fh, cmd.Json, cmd.Jsonl), fox.Regexp)
 		}
 
 		h.Discard()

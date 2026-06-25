@@ -12,11 +12,11 @@ import (
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/net/schema"
 	"go.foxforensics.eu/fox/v4/internal/net/stream"
 	"go.foxforensics.eu/fox/v4/internal/net/stream/http"
 	"go.foxforensics.eu/fox/v4/internal/net/stream/mqtt"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
 	"go.foxforensics.eu/fox/v4/internal/sys"
@@ -155,15 +155,15 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	}
 
 	if len(cmd.Url) > 0 {
-		var shm schema.Schema
+		var shm schemas.Schema
 
 		switch {
 		case cmd.Hec:
-			shm = schema.Hec
+			shm = schemas.Hec
 		case cmd.Ecs:
-			shm = schema.Ecs
+			shm = schemas.Ecs
 		default:
-			shm = schema.Raw
+			shm = schemas.Raw
 		}
 
 		if len(cmd.Mqtt) > 0 {
@@ -214,7 +214,6 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 		return err
 	}
 
-	defer fox.Discard()
 	defer cmd.discard(fox)
 
 	slog.Info("hunt: started")
@@ -257,7 +256,7 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 		}
 
 		if cmd.file == nil {
-			sys.Stdout.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
+			fox.Stdout.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
 		} else {
 			if err = cmd.file.Write(e); err != nil {
 				slog.Error(err.Error())
