@@ -250,18 +250,12 @@ func (ldr *Loader) processData(ctx context.Context, path, part string, b []byte,
 	}
 
 	// 3. convert data
-	b, ok = ldr.convertData(b)
-
-	// default conversion format
-	if ok {
+	if b, ok = ldr.convertData(b); ok {
 		hint = "json"
 	}
 
 	// 4. format data
-	b, ok = ldr.formatData(b)
-
-	// only formating style
-	if ok {
+	if b, ok = ldr.formatData(b); ok {
 		hint = "json"
 	}
 
