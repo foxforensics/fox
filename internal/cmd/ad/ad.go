@@ -14,7 +14,6 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/record"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 	"go.foxforensics.eu/hashdump/extract"
 	"go.foxforensics.eu/hasher/hash"
 )
@@ -154,7 +153,7 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 }
 
 func (cmd *Ad) extract(fox *cmd.Globals, k, b []byte) (int, error) {
-	var a []any
+	var a []fmt.Stringer
 
 	switch {
 	case cmd.Users:
@@ -201,9 +200,8 @@ func (cmd *Ad) extract(fox *cmd.Globals, k, b []byte) (int, error) {
 	return len(a), nil
 }
 
-func (cmd *Ad) format(a any) string {
-	switch v := a.(type) {
-	case *record.Secret:
+func (cmd *Ad) format(a fmt.Stringer) string {
+	if v, is := a.(*record.Secret); is {
 		switch {
 		case cmd.LmOnly:
 			return v.LmOnly()
@@ -212,17 +210,7 @@ func (cmd *Ad) format(a any) string {
 		default:
 			return v.ToNTLM(cmd.History)
 		}
-
-	case record.Record:
-		switch {
-		case cmd.Jsonl:
-			return terminal.ColorizeAs(formats.AsJSONL(v), "json")
-		case cmd.Json:
-			return terminal.ColorizeAs(formats.AsJSON(v), "json")
-		default:
-			return v.String()
-		}
 	}
 
-	return ""
+	return formats.Auto(a, cmd.Json, cmd.Jsonl)
 }

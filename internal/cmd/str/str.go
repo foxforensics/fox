@@ -2,12 +2,10 @@ package str
 
 import (
 	"errors"
-	"log/slog"
 	"strings"
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/net/lookup"
 	carver2 "go.foxforensics.eu/fox/v4/internal/pkg/types/carver"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
@@ -17,7 +15,6 @@ var Usage = strings.TrimSpace(`
 Usage: fox str [FLAGS...] <list|PATHS...>
 
 Flags:
-  -l, --lookup             Lookup strings via VirusTotal (IP/DNS/URL) 
   -a, --ascii              Show only strings with ASCII encoding
   -s, --sort               Sort strings alphabetically
   -t, --trim               Trim strings whitespaces
@@ -30,7 +27,7 @@ Class flags:
 
 Remarks:
   If 'list' is specified as path, only the built-in classifications
-  will be shown. A VirusTotal API key is required for lookup.
+  will be shown.
 
 Example: Show only long ASCII strings
   $ fox str -atN8 sample.exe
@@ -42,12 +39,11 @@ Report bugs at: foxforensics.eu/issues
 `)
 
 type Str struct {
-	Lookup bool `short:"l"`
-	Ascii  bool `short:"a"`
-	Sort   bool `short:"s"`
-	Trim   bool `short:"t"`
-	Min    uint `short:"N" default:"3"`
-	Max    uint `short:"X" default:"256"`
+	Ascii bool `short:"a"`
+	Sort  bool `short:"s"`
+	Trim  bool `short:"t"`
+	Min   uint `short:"N" default:"3"`
+	Max   uint `short:"X" default:"256"`
 
 	// class flags
 	What  int      `short:"w" type:"counter"`
@@ -62,18 +58,10 @@ func (cmd *Str) Validate() error {
 		return errors.New("invalid range")
 	}
 
-	if cmd.Lookup {
-		slog.Warn("data will be transmitted to a third-party service!")
-	}
-
 	return nil
 }
 
 func (cmd *Str) AfterApply(_ *kong.Kong, _ kong.Vars) error {
-	if cmd.Lookup && cmd.What == 0 {
-		cmd.What = 1
-	}
-
 	if len(cmd.Class) > 0 {
 		cmd.What = 3
 	}
@@ -128,19 +116,9 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 				}
 			}
 
-			if cmd.Lookup {
-				str.Suspect, err = lookup.Lookup(fox.ApiKey, str)
-
-				if err != nil {
-					slog.Error(err.Error())
-				}
-			}
-
 			str.Value = terminal.MarkMatch(str.Value, fox.Regexp)
 
-			if !fox.NoPretty && len(str.Classes) > 0 && str.Suspect {
-				sys.Stdout.Write("%s  %s [%s]", terminal.AsGray(str.Address), terminal.AsWarn(str.Value), terminal.AsBold(str.Classes))
-			} else if !fox.NoPretty && len(str.Classes) > 0 {
+			if !fox.NoPretty && len(str.Classes) > 0 {
 				sys.Stdout.Write("%s  %s [%s]", terminal.AsGray(str.Address), str.Value, terminal.AsBold(str.Classes))
 			} else if !fox.NoPretty {
 				sys.Stdout.Write("%s  %s", terminal.AsGray(str.Address), str.Value)

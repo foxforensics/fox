@@ -18,10 +18,6 @@ Show file infos and entropy. If the **--sort** flag is used, the files will be p
 FLAGS
 =====
 
-**-l, --lookup**
-
-:   Lookup the files **SHA256** hash via VirusTotal. Excludes **--block** flag.
-
 **-s, --sort**
 
 :   Sort files by path (slower).
@@ -39,7 +35,7 @@ Block Flags
 
 **-B, --block**=_size_
 
-:   Block _size_ for analysis (default: all). The _size_ can be either defined as raw bytes or with a size suffix. Excludes **--lookup** flag.
+:   Block _size_ for analysis (default: all). The _size_ can be either defined as raw bytes or with a size suffix.
 
 Filter Flags
 ------------

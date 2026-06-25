@@ -6,8 +6,6 @@ require (
 	github.com/0xrawsec/golang-evtx v1.2.9
 	github.com/Velocidex/go-journalctl v0.0.0-20260608120136-20835635c054
 	github.com/Velocidex/ordereddict v0.0.0-20250821063524-02dc06e46238
-	github.com/VirusTotal/vt-go v1.1.0
-	github.com/agnivade/levenshtein v1.2.1
 	github.com/aixiansheng/lzfse v0.2.4
 	github.com/alecthomas/chroma/v2 v2.27.0
 	github.com/alecthomas/kong v1.15.0
@@ -107,7 +105,6 @@ require (
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/stangelandcl/ppmd v0.1.1 // indirect
-	github.com/thedevsaddam/gojsonq/v2 v2.5.2 // indirect
 	github.com/tidwall/btree v1.8.1 // indirect
 	github.com/tinylib/msgp v1.6.4 // indirect
 	github.com/tjfoc/gmsm/v2 v2.0.0 // indirect

@@ -43,7 +43,7 @@ func Text(ctx *TextContext, fox *cmd.Globals) *TextBuffer {
 	}
 
 	ctx.SMap = smap.Map(data)
-	ctx.SMap = fox.Filters.Filter(ctx.SMap, fox.Threads).Render(fox.Threads)
+	ctx.SMap = fox.Query.Filter(ctx.SMap, fox.Threads).Render(fox.Threads)
 
 	if len(ctx.SMap) > 0 {
 		last = ctx.SMap[len(ctx.SMap)-1].Line
@@ -54,8 +54,8 @@ func Text(ctx *TextContext, fox *cmd.Globals) *TextBuffer {
 		uint(math.Log10(float64(max(1, last)))) + 1,
 	}
 
-	if fox.Limits.IsTail {
-		ctx.Delta = fox.Limits.Values.Lines
+	if fox.Query.IsTail {
+		ctx.Delta = fox.Query.Values.Lines
 	}
 
 	go streamText(ctx, buf)

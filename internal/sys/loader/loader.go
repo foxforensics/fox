@@ -28,8 +28,7 @@ const MaxFolders = 64
 const MaxArchives = 4
 
 type Options struct {
-	Limits   *types.Limits
-	Filters  *types.Filters
+	Query    *types.Query
 	Password string
 	Threads  int
 	Strict   bool
@@ -388,7 +387,7 @@ func (ldr *Loader) createHeap(ctx context.Context, path, hint string, b []byte) 
 	// add original size
 	ldr.size.Add(uint64(len(b)))
 
-	b = ldr.opts.Limits.Reduce(b)
+	b = ldr.opts.Query.Reduce(b)
 
 	ldr.paths.Store(path, types.Nil{})
 	ldr.files.Add(1)

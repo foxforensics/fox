@@ -62,16 +62,16 @@ Filter Flags
 
 :   Filter using byte or line count. The value can be either specified as decimal (_b_), hexadecimal (_h_) or line count (_l_). A positive value implies only to show the leading _number_ of bytes or lines. A negative value implies only to show the trailing _number_ of bytes or lines. 
 
-**-F, --find**=_pattern_
+**-F, --find**=_regex_
 
-:   Filter using regular expression _pattern_. Regular expressions do not have constant time guarantees and allow backtracking. All regular expressions are PCRE-compatible with .NET and Perl5.
+:   Filter using regular expression _regex_. Regular expressions do not have constant time guarantees and allow backtracking. All regular expressions are PCRE-compatible with .NET and Perl5.
 
 Process Flags
 -------------
 
-**-T, --threads**=_number_
+**-T, --threads**=_cores_
 
-:   Use _number_ of threads for parallel processing. The default is the number of logical CPUs available for the process.
+:   Use _cores_ for parallel threads. The default is the number of logical CPUs available for the process.
 
 **-P, --password**=_text_
 
@@ -142,10 +142,6 @@ ENVIRONMENT
 **FOX_VAR_NAME**
 
 :   Global flags can be set through environment variables. The variable name must be prefixed with _FOX_ followed by an underscore and the flags name. All dots must be replaced with underscores. A general proxy server can be set through the environment variables _HTTPS_PROXY_, _HTTP_PROXY_ and _NO_PROXY_.
-
-**FOX_API_KEY**
-
-:   The VirusTotal API key used for lookups. Only available in specific modes.
 
 **FOX_LEXER**
 

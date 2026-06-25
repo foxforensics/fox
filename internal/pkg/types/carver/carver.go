@@ -25,7 +25,6 @@ type String struct {
 	fstrings.String
 	Address string
 	Classes string
-	Suspect bool
 }
 
 type Carver struct {
@@ -74,7 +73,7 @@ func (crv *Carver) Carve(ctx context.Context, block []byte) <-chan *String {
 			case <-ctx.Done():
 				return
 			default:
-				ch <- &String{*str, adr, cls, false}
+				ch <- &String{*str, adr, cls}
 			}
 		}
 	}()

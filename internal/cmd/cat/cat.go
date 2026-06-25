@@ -15,15 +15,12 @@ var Usage = strings.TrimSpace(`
 Usage: fox cat [FLAGS...] <PATHS...>
 
 Flags:
+  -u, --uniq               Show only unique lines
   -t, --text               Force output as text
   -x, --hex                Force output as hex
 
-Unique flags:
-  -u, --uniq               Unique by XXH3 hash sum
-  -D, --dist=LENGTH        Unique by Levenshtein distance
-
 Filter flags:
-  -F, --find=PATTERN       Filter using regular expression
+  -F, --find=REGEX         Filter using regular expression
   -C, --context=LINES      Lines surrounding a match
   -B, --before=LINES       Lines leading before a match
   -A, --after=LINES        Lines trailing after a match
@@ -38,15 +35,14 @@ Report bugs at: foxforensics.eu/issues
 `)
 
 type Cat struct {
+	Uniq bool `short:"u"`
 	Text bool `short:"t" xor:"text,hex"`
 	Hex  bool `short:"x" xor:"text,hex"`
 
 	// filter flags
-	Uniq    bool    `short:"u" xor:"uniq,dist"`
-	Dist    float64 `short:"D" xor:"uniq,dist"`
-	Context uint    `short:"C"`
-	Before  uint    `short:"B"`
-	After   uint    `short:"A"`
+	Context uint `short:"C"`
+	Before  uint `short:"B"`
+	After   uint `short:"A"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -56,12 +52,8 @@ type Cat struct {
 }
 
 func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
-	switch {
-	case cmd.Uniq:
-		cmd.uniq = types.NewUnique(types.Hash)
-	case cmd.Dist > 0:
-		cmd.uniq = types.NewUnique(types.Distance)
-		cmd.uniq.SetLimit(cmd.Dist)
+	if cmd.Uniq {
+		cmd.uniq = types.NewUnique()
 	}
 
 	if cmd.Context > 0 {
@@ -87,9 +79,9 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 
 	defer fox.Discard()
 
-	// apply command specific context
-	fox.Filters.Before = cmd.Before
-	fox.Filters.After = cmd.After
+	// apply command specific params
+	fox.Query.Before = cmd.Before
+	fox.Query.After = cmd.After
 
 	for h := range ch {
 		if !fox.NoPretty {
@@ -116,7 +108,7 @@ func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
 	}, fox).Lines {
 		s := l.String
 
-		if cmd.uniq != nil && !cmd.uniq.IsUnique(s) {
+		if cmd.uniq != nil && !cmd.uniq.Is(s) {
 			continue // not unique
 		}
 

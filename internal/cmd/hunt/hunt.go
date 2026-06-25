@@ -18,12 +18,10 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/net/stream/mqtt"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/parquet"
 	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 )
 
 var Usage = strings.TrimSpace(`
@@ -37,9 +35,8 @@ Flags:
   -J, --jsonl              Show logs as JSON lines
   -p, --parquet            Save logs as Parquet
 
-Filter flags:
-  -R, --rule=FILE          Filter using Sigma Rules file
-  -D, --dist=LENGTH        Filter using Levenshtein distance
+Sigma flags:
+  -R, --rule=FILE          Filter using Sigma rules file
 
 Stream flags:
   -U, --url=SERVER         Stream events to a server or broker
@@ -83,9 +80,8 @@ type Hunt struct {
 	Jsonl   bool `short:"J" xor:"json,jsonl"`
 	Parquet bool `short:"p"`
 
-	// filter flags
-	Rule []byte  `short:"R" type:"filecontent"`
-	Dist float64 `short:"D" xor:"uniq,dist"`
+	// sigma flags
+	Rule []byte `short:"R" type:"filecontent"`
 
 	// stream flags
 	Url  string `short:"U"`
@@ -134,12 +130,8 @@ func (cmd *Hunt) Validate() error {
 func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
 
-	switch {
-	case cmd.Uniq:
-		cmd.uniq = types.NewUnique(types.Hash)
-	case cmd.Dist > 0:
-		cmd.uniq = types.NewUnique(types.Distance)
-		cmd.uniq.SetLimit(cmd.Dist)
+	if cmd.Uniq {
+		cmd.uniq = types.NewUnique()
 	}
 
 	if cmd.Parquet {
@@ -256,7 +248,7 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 			continue // not successful
 		}
 
-		if cmd.uniq != nil && !cmd.uniq.IsUnique(e.String()) {
+		if cmd.uniq != nil && !cmd.uniq.Is(e.String()) {
 			continue // not unique
 		}
 
@@ -265,11 +257,9 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 		}
 
 		if cmd.file == nil {
-			sys.Stdout.Match(cmd.format(e), fox.Regexp)
+			sys.Stdout.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
 		} else {
-			err = cmd.file.Write(e)
-
-			if err != nil {
+			if err = cmd.file.Write(e); err != nil {
 				slog.Error(err.Error())
 			}
 		}
@@ -289,17 +279,6 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 	slog.Info(fmt.Sprintf("hunt: found %d event(s)", n))
 
 	return nil
-}
-
-func (cmd *Hunt) format(e *event.Event) string {
-	switch {
-	case cmd.Jsonl:
-		return terminal.ColorizeAs(formats.AsJSONL(e), "json")
-	case cmd.Json:
-		return terminal.ColorizeAs(formats.AsJSON(e), "json")
-	default:
-		return terminal.MarkEvent(e.AsCEF())
-	}
 }
 
 func (cmd *Hunt) discard(fox *cmd.Globals) {

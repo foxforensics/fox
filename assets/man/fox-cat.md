@@ -18,6 +18,10 @@ Show content of file(s) as text or hexdump. This command will be used as default
 FLAGS
 =====
 
+**-u, --uniq**
+
+:   Show only unique lines by **XXH3** hash (in default mode).
+
 **-t, --text**
 
 :   Force output exclusively as text (in default mode).
@@ -26,23 +30,12 @@ FLAGS
 
 :   Force output exclusively as hex (in default mode).
 
-Unique Flags
-------------
-
-**-u, --uniq**
-
-:   Unique by **XXH3** hash sum.
-
-**-D, --dist**=_length_
-
-:   Unique by Levenshtein distance by using a context window of the last 4096 lines.
-
 Filter Flags
 ------------
 
-**-F, --find**=_pattern_
+**-F, --find**=_regex_
 
-:   Filter using regular expression _pattern_. Regular expressions do not have constant time guarantees and allow backtracking. All regular expressions are compatible with Perl5 and .NET.
+:   Filter using a _regular expression_. Regular expressions do not have constant time guarantees and allow backtracking. All regular expressions are compatible with Perl5 and .NET.
 
 **-C, --context**=_lines_
 

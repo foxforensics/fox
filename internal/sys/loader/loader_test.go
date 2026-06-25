@@ -107,8 +107,7 @@ func TestLoadFiles(t *testing.T) {
 
 func newOpts() *Options {
 	return &Options{
-		&types.Limits{},
-		&types.Filters{},
+		&types.Query{},
 		"",
 		1,
 		false,

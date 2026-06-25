@@ -44,8 +44,7 @@ func TestHunt(t *testing.T) {
 			ctx := context.Background()
 
 			ldr := loader.New(&loader.Options{
-				Limits:  &types.Limits{},
-				Filters: &types.Filters{},
+				Query:   &types.Query{},
 				Threads: 1,
 			})
 
