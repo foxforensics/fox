@@ -17,7 +17,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 )
 
-var Latency = int64(1024 * 1024) // 1mb
+var Latency = int64(1024 * 64) // 1mb
 
 var Local = []string{
 	"/Windows/System32/winevt/Logs",
