@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binary/log"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/format"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/log"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
 	"go.foxforensics.eu/hasher/hash"
@@ -45,7 +45,7 @@ type Ecs struct {
 }
 
 func Apply(evt *event.Event) ([]byte, error) {
-	original := format.AsJSONL(evt)
+	original := formats.AsJSONL(evt)
 
 	ecs := &Ecs{
 		Labels:    make(map[string]any),

@@ -8,7 +8,7 @@ import (
 	"io"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/format"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
 )
 
 func Detect(b []byte) bool {
@@ -20,7 +20,7 @@ func Detect(b []byte) bool {
 func Format(b []byte) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 
-	err := indent(buf, bytes.NewReader(b), format.Prefix, format.Indent)
+	err := indent(buf, bytes.NewReader(b), formats.Prefix, formats.Indent)
 
 	if err != nil {
 		return b, err

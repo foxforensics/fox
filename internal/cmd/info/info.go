@@ -14,7 +14,7 @@ import (
 	"go.foxforensics.eu/entropy/entropy"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/net/lookup"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/format"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 )
@@ -221,9 +221,9 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 func (cmd *Info) format(fi *FileInfo) string {
 	switch {
 	case cmd.Jsonl:
-		return terminal.ColorizeAs(format.AsJSONL(fi), "json")
+		return terminal.ColorizeAs(formats.AsJSONL(fi), "json")
 	case cmd.Json:
-		return terminal.ColorizeAs(format.AsJSON(fi), "json")
+		return terminal.ColorizeAs(formats.AsJSON(fi), "json")
 	default:
 		return fi.String()
 	}

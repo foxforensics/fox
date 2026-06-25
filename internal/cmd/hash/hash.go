@@ -8,7 +8,7 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/format"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
@@ -191,9 +191,9 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 func (cmd *Hash) format(fh *FileHash) string {
 	switch {
 	case cmd.Jsonl:
-		return terminal.ColorizeAs(format.AsJSONL(fh), "json")
+		return terminal.ColorizeAs(formats.AsJSONL(fh), "json")
 	case cmd.Json:
-		return terminal.ColorizeAs(format.AsJSON(fh), "json")
+		return terminal.ColorizeAs(formats.AsJSON(fh), "json")
 	default:
 		return ""
 	}

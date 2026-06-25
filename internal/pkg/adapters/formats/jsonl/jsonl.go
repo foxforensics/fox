@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/format"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
 )
 
 func Detect(b []byte) bool {
@@ -33,7 +33,7 @@ func Format(b []byte) ([]byte, error) {
 			break
 		}
 
-		err = json.Indent(buf, line, format.Prefix, format.Indent)
+		err = json.Indent(buf, line, formats.Prefix, formats.Indent)
 
 		if err != nil {
 			buf.Write(line)
