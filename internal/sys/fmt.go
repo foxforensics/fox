@@ -23,7 +23,7 @@ const (
 	PDI = 0x2069
 )
 
-var mask = regexp2.MustCompile(`^[-+]?\d+[bkmgtpezyrq]?$`)
+var mask = regexp2.MustCompile(`^[-+]?\d+[bkmgtpezyr]?$`)
 
 func Sanitize(s string) string {
 	var sb strings.Builder
@@ -54,7 +54,7 @@ func Humanize(i uint64) string {
 		e++
 	}
 
-	return fmt.Sprintf("%.1f%c", float64(i)/float64(v), "kmgtpezyrq"[e])
+	return fmt.Sprintf("%.1f%c", float64(i)/float64(v), "kmgtpezyr"[e])
 }
 
 func Mechanize(s string) (int64, bool) {
@@ -82,7 +82,7 @@ func Mechanize(s string) (int64, bool) {
 		return int64(v), true
 	}
 
-	exp := float64(strings.IndexByte("bkmgtpezyrq", unit))
+	exp := float64(strings.IndexByte("bkmgtpezyr", unit))
 
 	return int64(v * int(math.Pow(1024, exp))), true
 }

@@ -150,7 +150,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 		fox.Threads = 1 // single threaded
 	}
 
-	// turn off for calculations
+	// turn off for calculations while loading
 	v := color.NoColor
 
 	fox.NoConvert = true
@@ -158,13 +158,13 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 
 	ch, err := fox.Init(cmd.Paths, true)
 
+	color.NoColor = v
+
 	if err != nil {
 		return err
 	}
 
 	defer fox.Discard()
-
-	color.NoColor = v
 
 	for h := range ch {
 		fi := &FileInfo{File: h.String()}

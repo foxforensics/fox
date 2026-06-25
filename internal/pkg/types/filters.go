@@ -11,12 +11,12 @@ type Filters struct {
 	After  uint            // lines after
 }
 
-func (f *Filters) Filter(s smap.SMap) smap.SMap {
+func (f *Filters) Filter(s smap.SMap, n int) smap.SMap {
 	if f.Regex == nil {
 		return s // not filtered
 	}
 
-	v := s.Grep(f.Regex)
+	v := s.Grep(f.Regex, n)
 
 	if f.Before+f.After == 0 {
 		return v // without context
@@ -26,7 +26,7 @@ func (f *Filters) Filter(s smap.SMap) smap.SMap {
 
 	for grp, str := range v {
 		for _, b := range (s)[max(int((str.Line-1)-f.Before), 0) : str.Line-1] {
-			b.Group = uint(grp + 1)
+			b.Group = uint(grp + 1) // modify copy
 			r = append(r, b)
 		}
 
@@ -34,7 +34,7 @@ func (f *Filters) Filter(s smap.SMap) smap.SMap {
 		r = append(r, str)
 
 		for _, a := range (s)[str.Line:min(int(str.Line+f.After), len(s))] {
-			a.Group = uint(grp + 1)
+			a.Group = uint(grp + 1) // modify copy
 			r = append(r, a)
 		}
 	}
