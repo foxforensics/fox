@@ -24,7 +24,6 @@ var Fox = color.New(color.Bold).
 
 var (
 	AsGray = color.New(color.FgHiBlack).SprintfFunc()
-	AsWarn = color.New(color.FgHiRed).SprintfFunc()
 	AsBold = color.New(color.Bold).SprintfFunc()
 )
 

@@ -18,10 +18,6 @@ Show file string contents by carving the file(s).
 FLAGS
 =====
 
-**-l, --lookup**
-
-:   Lookup URLs, IPs and domains directly via VirusTotal. Implies **--what** flag.
-
 **-a, --ascii**
 
 :   Show only strings with ASCII encoding.

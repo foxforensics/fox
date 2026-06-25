@@ -42,16 +42,12 @@ FLAGS
 
 :   Save logs as Parquet file.
 
-Filter Flags
-------------
+Sigma Flags
+-----------
 
 **-R, --rule**=_file_
 
-:   Filter using Sigma Rules _file_.
-
-**-D, --dist**=_length_
-
-:   Filter using Levenshtein distance by using a context window of the last 4096 lines.
+:   Filter using Sigma rules _file_.
 
 Stream Flags
 ------------

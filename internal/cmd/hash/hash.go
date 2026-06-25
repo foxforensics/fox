@@ -53,6 +53,10 @@ type FileHash struct {
 	Hash map[string]string `json:"hash,omitempty"`
 }
 
+func (fh *FileHash) String() string {
+	return fh.File
+}
+
 type Hash struct {
 	Hash  []string `short:"H" sep:","`
 	All   bool     `short:"a"`
@@ -179,24 +183,13 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 		}
 
 		if !plain {
-			sys.Stdout.Match(cmd.format(fh), fox.Regexp)
+			sys.Stdout.Match(formats.Auto(fh, cmd.Json, cmd.Jsonl), fox.Regexp)
 		}
 
 		h.Discard()
 	}
 
 	return nil
-}
-
-func (cmd *Hash) format(fh *FileHash) string {
-	switch {
-	case cmd.Jsonl:
-		return terminal.ColorizeAs(formats.AsJSONL(fh), "json")
-	case cmd.Json:
-		return terminal.ColorizeAs(formats.AsJSON(fh), "json")
-	default:
-		return ""
-	}
 }
 
 func collect(ch <-chan string) []string {

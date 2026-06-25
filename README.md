@@ -21,7 +21,6 @@
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * [x] Extract [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes, users, groups, computers  
 * [x] Lookup NTLM hashes using 210000+ entry wordlists
-* [x] Lookup URLs, IPs, domains and files via the [VirusTotal API](https://www.virustotal.com/)
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
 * [x] Integral syntax highlighting for many different formats
 * [x] Integral fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
@@ -38,7 +37,6 @@
   * [x] Built-in translation of 51600+ event ids
   * [x] Built-in warning of critical system events
   * [x] Filter events with [Sigma Rules](https://sigmahq.io/) syntax
-  * [x] Filter anomalies using [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
   * [x] Stream events in [Splunk](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [Elastic](https://www.elastic.co/docs/reference/ecs) format
   * [x] Stream events using HTTPS or MQTT protocol
   * [x] Save as `JSON`, `JSON Lines` or `Parquet` 

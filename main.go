@@ -49,10 +49,10 @@ File flags:
 
 Filter flags:
   -L, --limit=NUMBER       Filter using byte or line count
-  -F, --find=PATTERN       Filter using regular expression
+  -F, --find=REGEX         Filter using regular expression
 
 Process flags:
-  -T, --threads=CORES      Use parallel threads
+  -T, --threads=CORES      Use cores for parallel threads
   -P, --password=TEXT      Use archive password (7z, Rar, Zip)
 
 Disable flags:

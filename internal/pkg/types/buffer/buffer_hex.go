@@ -31,8 +31,8 @@ type HexContext struct {
 func Hex(ctx *HexContext, fox *cmd.Globals) *HexBuffer {
 	var buf = &HexBuffer{make(chan HexLine, fox.Threads*1024)}
 
-	if fox.Limits.IsTail {
-		ctx.Delta = fox.Limits.Values.Bytes
+	if fox.Query.IsTail {
+		ctx.Delta = fox.Query.Values.Bytes
 	}
 
 	go streamHex(ctx, buf)

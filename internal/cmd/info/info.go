@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"log/slog"
 	"math"
 	"slices"
 	"strings"
@@ -13,7 +12,6 @@ import (
 	"github.com/fatih/color"
 	"go.foxforensics.eu/entropy/entropy"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/net/lookup"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
@@ -29,7 +27,6 @@ var Usage = strings.TrimSpace(`
 Usage: fox info [FLAGS...] <PATHS...>
 
 Flags:
-  -l, --lookup             Lookup files via VirusTotal
   -s, --sort               Sort files by path (slower)
   -j, --json               Show infos as JSON objects
   -J, --jsonl              Show infos as JSON lines
@@ -40,9 +37,6 @@ Block flags:
 Filter flags:
   -N, --min=VALUE          Minimum entropy value (default: 0.0)
   -X, --max=VALUE          Maximal entropy value (default: 8.0)
-
-Remarks:
-  A VirusTotal API key is required for lookup. 
 
 Example: List only high entropy files
   $ fox info -sN6.0 ./
@@ -59,7 +53,6 @@ type FileInfo struct {
 	Lines   uint64  `json:"lines,omitempty"`
 	Offset  uint64  `json:"offset,omitempty"`
 	Entropy float64 `json:"entropy,omitempty"`
-	Suspect bool    `json:"suspect,omitempty"`
 }
 
 func (fi *FileInfo) String() string {
@@ -71,8 +64,8 @@ func (fi *FileInfo) String() string {
 	sb.WriteString(fmt.Sprintf("%7s ", sys.Humanize(fi.Bytes)))
 
 	if fi.Entropy > Threshold {
-		sb.WriteString(terminal.AsWarn(fmt.Sprintf(" %.1fe ", fi.Entropy)))
-		sb.WriteString(terminal.AsWarn(fmt.Sprintf("[%-16s] ", e)))
+		sb.WriteString(terminal.AsBold(fmt.Sprintf(" %.1fe ", fi.Entropy)))
+		sb.WriteString(terminal.AsBold(fmt.Sprintf("[%-16s] ", e)))
 	} else {
 		sb.WriteString(fmt.Sprintf(" %.1fe ", fi.Entropy))
 		sb.WriteString(fmt.Sprintf("[%-16s] ", e))
@@ -82,11 +75,7 @@ func (fi *FileInfo) String() string {
 		sb.WriteString(fmt.Sprintf("%.08x ", fi.Offset))
 	}
 
-	if fi.Suspect {
-		sb.WriteString(terminal.AsWarn(fi.File))
-	} else {
-		sb.WriteString(fi.File)
-	}
+	sb.WriteString(fi.File)
 
 	if fi.Bytes == 0 {
 		return terminal.AsGray(sb.String())
@@ -96,13 +85,12 @@ func (fi *FileInfo) String() string {
 }
 
 type Info struct {
-	Lookup bool `short:"l" xor:"lookup,block"`
-	Sort   bool `short:"s"`
-	Json   bool `short:"j" xor:"json,jsonl"`
-	Jsonl  bool `short:"J" xor:"json,jsonl"`
+	Sort  bool `short:"s"`
+	Json  bool `short:"j" xor:"json,jsonl"`
+	Jsonl bool `short:"J" xor:"json,jsonl"`
 
 	// block flags
-	Block string `short:"B" xor:"lookup,block"`
+	Block string `short:"B" xor:"block"`
 
 	// filter flags
 	Min float64 `short:"N" default:"0.0"`
@@ -118,10 +106,6 @@ type Info struct {
 func (cmd *Info) Validate() error {
 	if cmd.Min > cmd.Max {
 		return errors.New("invalid range")
-	}
-
-	if cmd.Lookup {
-		slog.Warn("data will be transmitted to a third-party service!")
 	}
 
 	return nil
@@ -177,18 +161,10 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 			fi.Offset = NoOffset
 		}
 
-		if cmd.Lookup {
-			fi.Suspect, err = lookup.Lookup(fox.ApiKey, h.Bytes())
-
-			if err != nil {
-				slog.Error(err.Error())
-			}
-		}
-
 		// because empty files will cause errors
 		if h.Size == 0 {
 			if cmd.Min == 0 {
-				sys.Stdout.Match(cmd.format(fi), fox.Regexp)
+				sys.Stdout.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
 			}
 			h.Discard()
 			continue
@@ -206,7 +182,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 			fi.Entropy = entropy.Calculate(block)
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
-				sys.Stdout.Match(cmd.format(fi), fox.Regexp)
+				sys.Stdout.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
 			}
 
 			fi.Offset += uint64(n)
@@ -216,15 +192,4 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 	}
 
 	return nil
-}
-
-func (cmd *Info) format(fi *FileInfo) string {
-	switch {
-	case cmd.Jsonl:
-		return terminal.ColorizeAs(formats.AsJSONL(fi), "json")
-	case cmd.Json:
-		return terminal.ColorizeAs(formats.AsJSON(fi), "json")
-	default:
-		return fi.String()
-	}
 }

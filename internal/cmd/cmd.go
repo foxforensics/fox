@@ -46,17 +46,15 @@ type Globals struct {
 	Help    bool
 
 	// hidden
-	ApiKey string `hidden:"" long:"api-key"`
-	Lexer  string `hidden:""`
-	Style  string `hidden:""`
+	Lexer string `hidden:""`
+	Style string `hidden:""`
 
 	// internal
 	Context context.Context    `kong:"-"`
 	Cancel  context.CancelFunc `kong:"-"`
 	Regexp  *regexp2.Regexp    `kong:"-"`
 	Loader  *loader.Loader     `kong:"-"`
-	Filters *types.Filters     `kong:"-"`
-	Limits  *types.Limits      `kong:"-"`
+	Query   *types.Query       `kong:"-"`
 	Input   []string           `kong:"-"`
 }
 
@@ -89,14 +87,10 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 		}
 	}
 
-	fox.Limits, err = types.NewLimits(fox.Limit)
+	fox.Query, err = types.NewQuery(fox.Limit, fox.Regexp)
 
 	if err != nil {
 		return nil, err
-	}
-
-	fox.Filters = &types.Filters{
-		Regex: fox.Regexp,
 	}
 
 	if fox.Raw > 0 {
@@ -147,8 +141,7 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	}
 
 	fox.Loader = loader.New(&loader.Options{
-		Limits:   fox.Limits,
-		Filters:  fox.Filters,
+		Query:    fox.Query,
 		Password: fox.Password,
 		Threads:  fox.Threads,
 		Strict:   !fox.NoStrict,
