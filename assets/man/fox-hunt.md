@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Hunt suspicious activities by carving events from file(s).
+Hunt suspicious activities by carving events from file(s). Please be aware that, using the **--sort** flag will buffer all found events in memory. For large sets of data this could be very slow and take a serious amount of memory.
 
 FLAGS
 =====
@@ -24,7 +24,7 @@ FLAGS
 
 **-s, --sort**
 
-:   Show logs sorted by timestamp (slow).
+:   Show logs sorted by timestamp.
 
 **-u, --uniq**
 
@@ -51,7 +51,7 @@ Filter Flags
 
 **-D, --dist**=_length_
 
-:   Filter using Levenshtein distance (slow).
+:   Filter using Levenshtein distance by using a context window of the last 4096 lines.
 
 Stream Flags
 ------------

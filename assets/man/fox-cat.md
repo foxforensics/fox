@@ -35,7 +35,7 @@ Unique Flags
 
 **-D, --dist**=_length_
 
-:   Unique by Levenshtein distance.
+:   Unique by Levenshtein distance by using a context window of the last 4096 lines.
 
 Filter Flags
 ------------

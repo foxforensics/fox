@@ -5,8 +5,8 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	buffer2 "go.foxforensics.eu/fox/v4/internal/pkg/types/buffer"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/unique"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 )
@@ -52,15 +52,16 @@ type Cat struct {
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	uniq unique.Unique `kong:"-"`
+	uniq *types.Unique `kong:"-"`
 }
 
 func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	switch {
 	case cmd.Uniq:
-		cmd.uniq = unique.ByHash()
+		cmd.uniq = types.NewUnique(types.Hash)
 	case cmd.Dist > 0:
-		cmd.uniq = unique.ByDistance(cmd.Dist)
+		cmd.uniq = types.NewUnique(types.Distance)
+		cmd.uniq.SetLimit(cmd.Dist)
 	}
 
 	if cmd.Context > 0 {
@@ -78,17 +79,13 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 		return sys.Usage(Usage)
 	}
 
-	ch, err := fox.Init(cmd.Paths, false)
+	ch, err := fox.Init(cmd.Paths, cmd.Text || cmd.Hex)
 
 	if err != nil {
 		return err
 	}
 
 	defer fox.Discard()
-
-	if cmd.Text || cmd.Hex {
-		fox.NoConvert = true
-	}
 
 	// apply command specific context
 	fox.Filters.Before = cmd.Before

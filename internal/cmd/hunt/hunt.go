@@ -17,9 +17,9 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/net/stream/http"
 	"go.foxforensics.eu/fox/v4/internal/net/stream/mqtt"
 	"go.foxforensics.eu/fox/v4/internal/pkg/files/format"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/unique"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/parquet"
 	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
@@ -39,7 +39,7 @@ Flags:
 
 Filter flags:
   -R, --rule=FILE          Filter using Sigma Rules file
-  -D, --dist=LENGTH        Filter using Levenshtein distance (slow)
+  -D, --dist=LENGTH        Filter using Levenshtein distance
 
 Stream flags:
   -U, --url=SERVER         Stream events to a server or broker
@@ -111,13 +111,17 @@ type Hunt struct {
 	// internal
 	streamer stream.Streamer  `kong:"-"`
 	file     *parquet.Parquet `kong:"-"`
+	uniq     *types.Unique    `kong:"-"`
 	rule     sigma.Rule       `kong:"-"`
-	uniq     unique.Unique    `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
-	if cmd.Hec && (len(cmd.Auth)+len(cmd.Mqtt) == 0) {
+	if cmd.Hec && len(cmd.Auth) == 0 && len(cmd.Mqtt) == 0 {
 		return errors.New("auth required")
+	}
+
+	if cmd.Hec && len(cmd.Auth) > 0 && len(cmd.Mqtt) > 0 {
+		return errors.New("no auth required")
 	}
 
 	if cmd.QoS > 2 {
@@ -132,9 +136,10 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 	switch {
 	case cmd.Uniq:
-		cmd.uniq = unique.ByHash()
+		cmd.uniq = types.NewUnique(types.Hash)
 	case cmd.Dist > 0:
-		cmd.uniq = unique.ByDistance(cmd.Dist)
+		cmd.uniq = types.NewUnique(types.Distance)
+		cmd.uniq.SetLimit(cmd.Dist)
 	}
 
 	if cmd.Parquet {
