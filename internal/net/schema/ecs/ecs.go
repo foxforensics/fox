@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/files/binary/log"
+	"go.foxforensics.eu/fox/v4/internal/pkg/files/format"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
 	"go.foxforensics.eu/hasher/hash"
@@ -44,7 +45,8 @@ type Ecs struct {
 }
 
 func Apply(evt *event.Event) ([]byte, error) {
-	cef := evt.AsCEF()
+	original := format.AsJSONL(evt)
+
 	ecs := &Ecs{
 		Labels:    make(map[string]any),
 		Timestamp: evt.Time.UTC(),
@@ -63,8 +65,8 @@ func Apply(evt *event.Event) ([]byte, error) {
 	ecs.Event.Severity = int64(evt.Severity)
 	ecs.Event.Provider = evt.Service
 	ecs.Event.Ingested = time.Now().UTC()
-	ecs.Event.Original = cef
-	ecs.Event.Hash = hash.MustSum(hash.MURMUR3, []byte(cef))
+	ecs.Event.Original = original
+	ecs.Event.Hash = hash.MustSum(hash.MURMUR3, []byte(original))
 
 	if evt.Source == log.Eventlog {
 		ecs.Event.Code = evt.Fields["EventID"]
