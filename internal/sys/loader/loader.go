@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"sync/atomic"
 
 	"github.com/bmatcuk/doublestar/v4"
@@ -37,14 +38,14 @@ type Options struct {
 type Loader struct {
 	opts  *Options
 	size  atomic.Uint64
-	paths *types.Set
+	files atomic.Uint64
+	paths sync.Map
 	heaps chan *heap.Heap
 }
 
 func New(opts *Options) *Loader {
 	return &Loader{
 		opts:  opts,
-		paths: types.NewSet(),
 		heaps: make(chan *heap.Heap, opts.Threads),
 	}
 }
@@ -381,12 +382,12 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 }
 
 func (ldr *Loader) createHeap(ctx context.Context, path, hint string, b []byte) error {
-	if ldr.paths.Has(path) {
+	if _, ok := ldr.paths.Load(path); ok {
 		return nil // already loaded
 	}
 
 	// check files to protect against zip bombs
-	if ldr.opts.Strict && ldr.paths.Len() >= MaxFiles {
+	if ldr.opts.Strict && ldr.files.Load() >= MaxFiles {
 		return errors.New("max files reached")
 	}
 
@@ -395,7 +396,8 @@ func (ldr *Loader) createHeap(ctx context.Context, path, hint string, b []byte) 
 
 	b = ldr.opts.Limits.Reduce(b)
 
-	ldr.paths.Set(path)
+	ldr.paths.Store(path, types.Nil{})
+	ldr.files.Add(1)
 
 	select {
 	case <-ctx.Done():

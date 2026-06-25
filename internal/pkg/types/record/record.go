@@ -55,6 +55,7 @@ func (s *Secret) ToNTLM(history bool) string {
 	// append historic hashes
 	if history {
 		for i := range s.NTHashHistory {
+			// LM and NT history have always the same length
 			sb.WriteString(fmt.Sprintf("\n%s_history%d:%d:%s:%s:::",
 				s.SAMAccountName,
 				i,

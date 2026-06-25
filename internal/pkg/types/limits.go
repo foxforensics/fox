@@ -89,6 +89,7 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 	if l.IsTail && l.Bytes > 0 {
 		a = max(len(m)-int(l.Bytes), 0)
 
+		// save last lines
 		l.Values.Bytes = a
 		l.Values.Lines = count(m) - count(m[a:])
 	}
@@ -124,6 +125,7 @@ func (l *Limits) Reduce(m mmap.MMap) mmap.MMap {
 			n++ // add first line
 		}
 
+		// save last lines
 		l.Values.Bytes = a
 		l.Values.Lines = count(m) - n
 	}

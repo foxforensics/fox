@@ -75,6 +75,7 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		return sys.Usage(Usage)
 	}
 
+	// paths will be loaded in order
 	ch, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
@@ -110,7 +111,7 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 	if cmd.Lookup {
 		slog.Info("building tables")
 
-		n, err := tables.Build(cmd.Wordlist, hash.LM, hash.NT)
+		n, err := tables.Build(cmd.Wordlist, fox.Threads, hash.LM, hash.NT)
 
 		if err != nil {
 			return err
@@ -198,16 +199,6 @@ func (cmd *Ad) extract(fox *cmd.Globals, k, b []byte) (int, error) {
 
 func (cmd *Ad) format(a any) string {
 	switch v := a.(type) {
-	case record.Record:
-		switch {
-		case cmd.Jsonl:
-			return terminal.ColorizeAs(format.AsJSONL(v), "json")
-		case cmd.Json:
-			return terminal.ColorizeAs(format.AsJSON(v), "json")
-		default:
-			return v.String()
-		}
-
 	case *record.Secret:
 		switch {
 		case cmd.LmOnly:
@@ -216,6 +207,16 @@ func (cmd *Ad) format(a any) string {
 			return v.NtOnly()
 		default:
 			return v.ToNTLM(cmd.History)
+		}
+
+	case record.Record:
+		switch {
+		case cmd.Jsonl:
+			return terminal.ColorizeAs(format.AsJSONL(v), "json")
+		case cmd.Json:
+			return terminal.ColorizeAs(format.AsJSON(v), "json")
+		default:
+			return v.String()
 		}
 	}
 
