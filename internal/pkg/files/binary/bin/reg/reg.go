@@ -9,3 +9,5 @@ func Detect(b []byte) bool {
 		'r', 'e', 'g', 'f',
 	})
 }
+
+// convert not implemented yet

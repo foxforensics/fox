@@ -3,6 +3,7 @@ package tar
 import (
 	"archive/tar"
 	"bytes"
+	"errors"
 	"io"
 	"log/slog"
 	"strings"
@@ -23,7 +24,7 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 	for {
 		h, err := r.Next()
 
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			break
 		}
 

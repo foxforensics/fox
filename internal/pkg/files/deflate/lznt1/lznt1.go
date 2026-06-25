@@ -82,6 +82,10 @@ func Deflate(b []byte) ([]byte, error) {
 				symbolLength := int(v&(0xFFF>>d)) + 2
 				symbolStart := buf.Len() - symbolOffset
 
+				if symbolStart < 0 {
+					return nil, ErrDeflate
+				}
+
 				i += 2
 
 				for j := 0; j < symbolLength+1; j++ {

@@ -41,16 +41,16 @@ func Extract(b []byte, root, pass string) (e []pkg.Stream) {
 			f.SetPassword(pass)
 		}
 
-		a, err := f.Open()
+		rc, err := f.Open()
 
 		if err != nil {
 			slog.Error(err.Error())
 			continue
 		}
 
-		buf, err := io.ReadAll(a)
+		buf, err := io.ReadAll(rc)
 
-		_ = a.Close()
+		_ = rc.Close()
 
 		if err != nil {
 			slog.Error(err.Error())

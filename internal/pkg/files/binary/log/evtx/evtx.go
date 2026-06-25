@@ -49,14 +49,16 @@ func Convert(b []byte) ([]byte, error) {
 		return b, err
 	}
 
+	defer func() {
+		_ = r.Close()
+	}()
+
 	buf := bytes.NewBuffer(nil)
 
 	for e := range r.Events() {
 		buf.Write(evtx.ToJSON(e))
 		buf.WriteRune('\n')
 	}
-
-	_ = r.Close()
 
 	return buf.Bytes(), nil
 }

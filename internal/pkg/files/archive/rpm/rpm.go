@@ -3,6 +3,7 @@ package rpm
 import (
 	"bytes"
 	"compress/bzip2"
+	"errors"
 	"fmt"
 	"io"
 	"log/slog"
@@ -77,7 +78,7 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 	for {
 		h, err := r2.Next()
 
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			break
 		}
 

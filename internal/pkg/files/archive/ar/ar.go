@@ -2,6 +2,7 @@ package ar
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"io/fs"
 	"log/slog"
@@ -23,7 +24,7 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 	for {
 		h, err := r.Next()
 
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			break
 		}
 

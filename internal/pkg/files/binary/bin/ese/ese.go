@@ -3,6 +3,7 @@ package ese
 import (
 	"bytes"
 	"fmt"
+	"log/slog"
 	"strconv"
 	"strings"
 
@@ -48,12 +49,15 @@ func Convert(b []byte) ([]byte, error) {
 	for i, table := range ctl.Tables.Keys() {
 		var v [][]byte
 
-		_ = ctl.DumpTable(table, func(row *ordereddict.Dict) error {
+		if err = ctl.DumpTable(table, func(row *ordereddict.Dict) error {
+			// TODO: write own marshal to JSON
 			if b, err := row.MarshalJSON(); err == nil {
 				v = append(v, b)
 			}
 			return nil
-		})
+		}); err != nil {
+			slog.Warn(err.Error())
+		}
 
 		rows := bytes.Join(v, []byte(",\n"))
 
@@ -76,7 +80,7 @@ func translate(ctl *parser.Catalog) []string {
 	names := make([]string, 0)
 
 	// build name attribute cache
-	_ = ctl.DumpTable("MSysObjects", func(row *ordereddict.Dict) error {
+	if err := ctl.DumpTable("MSysObjects", func(row *ordereddict.Dict) error {
 		if v, ok := row.GetString("Name"); ok {
 			if strings.HasPrefix(v, "ATT") {
 				if k, err := strconv.Atoi(v[4:]); err == nil {
@@ -85,10 +89,12 @@ func translate(ctl *parser.Catalog) []string {
 			}
 		}
 		return nil
-	})
+	}); err != nil {
+		slog.Warn(err.Error())
+	}
 
 	// generate translations
-	_ = ctl.DumpTable("datatable", func(row *ordereddict.Dict) error {
+	if err := ctl.DumpTable("datatable", func(row *ordereddict.Dict) error {
 		if i, ok := row.GetInt64(attribId); ok {
 			if v, ok := row.GetString(ldapName); ok {
 				if k, ok := cache[i]; ok {
@@ -97,7 +103,9 @@ func translate(ctl *parser.Catalog) []string {
 			}
 		}
 		return nil
-	})
+	}); err != nil {
+		slog.Warn(err.Error())
+	}
 
 	return names
 }

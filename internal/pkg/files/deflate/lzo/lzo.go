@@ -56,6 +56,10 @@ func Deflate(b []byte) ([]byte, error) {
 		ul := int(binary.BigEndian.Uint32(body[0:4]))
 		cl := int(binary.BigEndian.Uint32(body[4:8]))
 
+		if len(body) < 12+cl {
+			return buf.Bytes(), errors.New("invalid block")
+		}
+
 		r := bytes.NewReader(body[12 : 12+cl])
 
 		// decompress every block

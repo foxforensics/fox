@@ -24,15 +24,16 @@ func Convert(b []byte) ([]byte, error) {
 	err = p.Parse()
 
 	if err != nil {
-		slog.Warn(err.Error())
+		slog.Warn(err.Error()) // only warn about missing sections
 	}
 
 	raw, err := p.DumpRawJSON()
 
 	if err != nil {
-		return []byte(raw), err
+		return b, err
 	}
 
+	// remove for valid JSON
 	raw = strings.TrimSuffix(raw, "{}")
 
 	return []byte(raw), nil

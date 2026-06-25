@@ -2,6 +2,7 @@ package rar
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"log/slog"
 	"strings"
@@ -28,7 +29,7 @@ func Extract(b []byte, root, pass string) (e []pkg.Stream) {
 	for {
 		h, err := r.Next()
 
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			break
 		}
 
