@@ -68,8 +68,6 @@ type Hash struct {
 }
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
-	var err error
-
 	if cmd.All || slices.Contains(cmd.Hash, "*") {
 		cmd.Hash = list(!cmd.Lookup) // use all
 	}
@@ -79,12 +77,7 @@ func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		cmd.Hash = []string{hash.SHA256}
 	}
 
-	// build tables
-	if cmd.Lookup {
-		_, err = tables.Build(nil, cmd.Hash...)
-	}
-
-	return err
+	return nil
 }
 
 func (cmd *Hash) Run(fox *cmd.Globals) error {
@@ -101,6 +94,14 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 
 		// exit early
 		return nil
+	}
+
+	if cmd.Lookup {
+		_, err := tables.Build(nil, fox.Threads, cmd.Hash...)
+
+		if err != nil {
+			return err
+		}
 	}
 
 	plain, n := !cmd.Json && !cmd.Jsonl, 0

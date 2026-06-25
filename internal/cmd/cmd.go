@@ -10,10 +10,7 @@ import (
 
 	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
-	"go.foxforensics.eu/fox/v4/internal/net/client"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/smap"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 	"go.foxforensics.eu/fox/v4/internal/sys/loader"
@@ -157,16 +154,12 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 		Strict:   !fox.NoStrict,
 	})
 
-	// handle CTRC+C
+	// handle ctrl+c
 	fox.Context, fox.Cancel = signal.NotifyContext(
 		context.Background(),
 		os.Interrupt,
 		syscall.SIGTERM,
 	)
-
-	smap.Threads = fox.Threads
-	client.MaxIdle = fox.Threads
-	tables.Threads = fox.Threads
 
 	heaps := fox.Loader.Load(fox.Context, args)
 

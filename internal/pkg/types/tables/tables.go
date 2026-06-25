@@ -2,7 +2,9 @@ package tables
 
 import (
 	"bytes"
+	"fmt"
 	"io"
+	"log/slog"
 	"maps"
 	"sync"
 
@@ -11,19 +13,17 @@ import (
 	"go.foxforensics.eu/wordlist"
 )
 
-var Threads = 2 // default
-
 var tables = make(map[string]*table, 2)
 
 type table struct {
 	m sync.Map
 }
 
-func newTable(algo string, w [][]byte) *table {
+func newTable(algo string, n int, w [][]byte) *table {
 	t := new(table)
 
 	iter.Iterator[[]byte]{
-		MaxGoroutines: Threads,
+		MaxGoroutines: n,
 	}.ForEach(w, func(b *[]byte) {
 		t.m.Store(hash.MustSum(algo, *b), string(*b))
 	})
@@ -39,7 +39,7 @@ func (t *table) Lookup(s string) string {
 	return ""
 }
 
-func Build(b []byte, algos ...string) (int, error) {
+func Build(b []byte, n int, algos ...string) (int, error) {
 	// use built-in wordlist for rainbow tables
 	if b == nil {
 		r, err := wordlist.Reader()
@@ -58,7 +58,7 @@ func Build(b []byte, algos ...string) (int, error) {
 	w := bytes.Split(b, []byte{'\n'})
 
 	for _, algo := range algos {
-		tables[algo] = newTable(algo, w)
+		tables[algo] = newTable(algo, n, w)
 	}
 
 	return len(w), nil
@@ -67,6 +67,7 @@ func Build(b []byte, algos ...string) (int, error) {
 func Lookup(s string) (string, string) {
 	for k, t := range maps.All(tables) {
 		if v := t.Lookup(s); len(v) > 0 {
+			slog.Debug(fmt.Sprintf("%s hash found for: %s", k, v))
 			return k, v
 		}
 	}

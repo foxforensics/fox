@@ -20,9 +20,6 @@ import (
 // Timeout for everything network related.
 var Timeout = time.Second * 30
 
-// MaxIdle connections at once.
-var MaxIdle = 0
-
 func ID() string {
 	uid, err := ksuid.NewRandomWithTime(time.Now().UTC())
 
@@ -47,7 +44,7 @@ func Http() *http.Client {
 			Proxy:               http.ProxyFromEnvironment,
 			IdleConnTimeout:     Timeout,
 			TLSHandshakeTimeout: Timeout,
-			MaxIdleConnsPerHost: MaxIdle,
+			MaxIdleConnsPerHost: 10,
 			TLSClientConfig: &tls.Config{
 				MinVersion: tls.VersionTLS13, // pinned
 			},

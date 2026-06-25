@@ -23,7 +23,7 @@ func BenchmarkGrep(b *testing.B) {
 	re := regexp2.MustCompile(".*")
 
 	for b.Loop() {
-		s.Grep(re)
+		s.Grep(re, 2)
 	}
 }
 
@@ -40,7 +40,7 @@ func TestGrep(t *testing.T) {
 
 	re := regexp2.MustCompile("King James")
 
-	s := Map(v).Grep(re)
+	s := Map(v).Grep(re, 2)
 
 	if len(s) != 1 {
 		t.Fatal("wrong length")

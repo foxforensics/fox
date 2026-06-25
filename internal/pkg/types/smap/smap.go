@@ -12,8 +12,6 @@ import (
 
 const Size = 1024 * 1024 * 4 // 4m
 
-var Threads = 2 // default
-
 var tab = []byte{'\t'}
 var spc = []byte("  ")
 
@@ -46,26 +44,26 @@ func Map(m []byte) (s SMap) {
 	return
 }
 
-func (s SMap) Render() SMap {
+func (s SMap) Render(n int) SMap {
 	return s.do(func(ch chan<- String, str *String) {
 		ch <- String{str.Line, str.Group, bytes.ReplaceAll(str.Bytes, tab, spc)}
-	})
+	}, n)
 }
 
-func (s SMap) Grep(re *regexp2.Regexp) SMap {
+func (s SMap) Grep(re *regexp2.Regexp, n int) SMap {
 	return s.do(func(ch chan<- String, str *String) {
 		if ok, _ := re.MatchString(string(str.Bytes)); ok {
 			ch <- *str
 		}
-	})
+	}, n)
 }
 
-func (s SMap) do(fn action) SMap {
-	ch := make(chan String, max(1, Threads*64))
+func (s SMap) do(fn action, n int) SMap {
+	ch := make(chan String, max(1, n*64))
 
 	go func(chan<- String) {
 		it := iter.Iterator[String]{
-			MaxGoroutines: Threads,
+			MaxGoroutines: n,
 		}
 
 		it.ForEach(s, func(s *String) {
@@ -79,7 +77,7 @@ func (s SMap) do(fn action) SMap {
 }
 
 func sort(ch <-chan String) SMap {
-	s := make(SMap, 0, len(ch))
+	s := make(SMap, 0, cap(ch))
 
 	for str := range ch {
 		s = append(s, str)
