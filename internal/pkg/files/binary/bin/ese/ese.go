@@ -2,6 +2,7 @@ package ese
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"strconv"
@@ -18,8 +19,7 @@ const (
 	ldapName = "ATTm131532"
 )
 
-// table wrapper
-var wrapper = "{\"table\":\"%s\",\"rows\":[\n%s\n]}"
+var wrapper = `{"table":"%s","rows":[%s]}`
 
 func Detect(b []byte) bool {
 	return pkg.HasMagic(b, 4, []byte{
@@ -50,8 +50,7 @@ func Convert(b []byte) ([]byte, error) {
 		var v [][]byte
 
 		if err = ctl.DumpTable(table, func(row *ordereddict.Dict) error {
-			// TODO: write own marshal to JSON
-			if b, err := row.MarshalJSON(); err == nil {
+			if b, err := marshal(row, rep); err == nil {
 				v = append(v, b)
 			}
 			return nil
@@ -59,12 +58,12 @@ func Convert(b []byte) ([]byte, error) {
 			slog.Warn(err.Error())
 		}
 
-		rows := bytes.Join(v, []byte(",\n"))
+		rows := bytes.Join(v, []byte(","))
 
-		buf.WriteString(rep.Replace(fmt.Sprintf(wrapper, table, rows)))
+		buf.WriteString(fmt.Sprintf(wrapper, table, rows))
 
 		if i < ctl.Tables.Len()-1 {
-			buf.WriteString(",\n")
+			buf.WriteByte(',')
 		}
 	}
 
@@ -108,4 +107,44 @@ func translate(ctl *parser.Catalog) []string {
 	}
 
 	return names
+}
+
+func marshal(od *ordereddict.Dict, rep *strings.Replacer) ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	buf.WriteByte('{')
+
+	for _, item := range od.Items() {
+		key, err := json.Marshal(rep.Replace(item.Key))
+
+		if err != nil {
+			continue
+		}
+
+		// Check for back references and skip them
+		sub, ok := item.Value.(*ordereddict.Dict)
+
+		if ok && sub == od {
+			continue
+		}
+
+		buf.Write(key)
+		buf.WriteByte(':')
+
+		val, err := json.Marshal(item.Value)
+
+		if err == nil {
+			buf.Write(val)
+			buf.WriteByte(',')
+		} else {
+			buf.WriteString("null,")
+		}
+	}
+
+	if len(od.Items()) > 0 {
+		buf.Truncate(buf.Len() - 1)
+	}
+
+	buf.WriteByte('}')
+
+	return buf.Bytes(), nil
 }
