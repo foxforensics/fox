@@ -29,7 +29,7 @@ func TestLoadFiles(t *testing.T) {
 		{
 			"Empty file",
 			[]string{
-				"binary/test.nil",
+				"binaries/test.nil",
 			},
 			[]string{
 				"test.nil",
@@ -37,7 +37,7 @@ func TestLoadFiles(t *testing.T) {
 		}, {
 			"Single file",
 			[]string{
-				"string/bible.txt",
+				"texts/bible.txt",
 			},
 			[]string{
 				"bible.txt",
@@ -45,8 +45,8 @@ func TestLoadFiles(t *testing.T) {
 		}, {
 			"Multiple files",
 			[]string{
-				"binary/test.mbr",
-				"binary/test.rnd",
+				"binaries/test.mbr",
+				"binaries/test.rnd",
 			},
 			[]string{
 				"test.mbr",
@@ -55,7 +55,7 @@ func TestLoadFiles(t *testing.T) {
 		}, {
 			"Multiple file streams",
 			[]string{
-				"archive/test.zip",
+				"archives/test.zip",
 			},
 			[]string{
 				"test.zip:hello.rar:hello.txt",
@@ -68,10 +68,11 @@ func TestLoadFiles(t *testing.T) {
 		}, {
 			"Directory",
 			[]string{
-				"string",
+				"texts",
 			},
 			[]string{
 				"bible.txt",
+				"fox.txt",
 				"nasty.txt",
 				"test.txt",
 			},

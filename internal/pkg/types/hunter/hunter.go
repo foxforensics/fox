@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	"github.com/sourcegraph/conc/pool"
-	"go.foxforensics.eu/fox/v4/internal/pkg/files/binary/log/evtx"
-	"go.foxforensics.eu/fox/v4/internal/pkg/files/binary/log/journal"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binary/log/evtx"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binary/log/journal"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 )

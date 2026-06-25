@@ -16,7 +16,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/net/stream"
 	"go.foxforensics.eu/fox/v4/internal/net/stream/http"
 	"go.foxforensics.eu/fox/v4/internal/net/stream/mqtt"
-	"go.foxforensics.eu/fox/v4/internal/pkg/files/format"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/format"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"

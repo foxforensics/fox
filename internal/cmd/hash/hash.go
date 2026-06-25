@@ -8,7 +8,7 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/files/format"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/format"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/terminal"

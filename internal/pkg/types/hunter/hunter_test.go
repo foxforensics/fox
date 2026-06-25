@@ -17,19 +17,19 @@ func TestHunt(t *testing.T) {
 	}{
 		{
 			"empty",
-			"binary/test.nil",
+			"binaries/test.nil",
 			0,
 		}, {
 			"evtx",
-			"binary/test.evtx",
+			"binaries/test.evtx",
 			3170,
 		}, {
 			"journal",
-			"binary/test.journal",
+			"binaries/test.journal",
 			1922,
 		}, {
 			"raw",
-			"binary/test.dd",
+			"binaries/test.dd",
 			919,
 		},
 	} {

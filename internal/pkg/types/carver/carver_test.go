@@ -16,22 +16,22 @@ func TestCarve(t *testing.T) {
 	}{
 		{
 			"empty",
-			"binary/test.nil",
+			"binaries/test.nil",
 			false,
 			0,
 		}, {
 			"strings",
-			"string/test.txt",
+			"texts/test.txt",
 			false,
 			14,
 		}, {
 			"nasty",
-			"string/nasty.txt",
+			"texts/nasty.txt",
 			false,
 			582,
 		}, {
 			"exe",
-			"binary/fox.exe",
+			"binaries/fox.exe",
 			true,
 			15446,
 		},

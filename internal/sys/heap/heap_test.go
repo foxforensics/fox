@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	file = "string/bible.txt"
+	file = "texts/bible.txt"
 	name = "test"
 	hint = "text"
 	size = 4633983

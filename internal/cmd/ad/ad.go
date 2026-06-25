@@ -8,9 +8,9 @@ import (
 
 	"go.foxforensics.eu/bootkey/bootkey"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/files/binary/bin/ese"
-	"go.foxforensics.eu/fox/v4/internal/pkg/files/binary/bin/reg"
-	"go.foxforensics.eu/fox/v4/internal/pkg/files/format"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binary/bin/ese"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binary/bin/reg"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/format"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/record"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
@@ -73,6 +73,10 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 
 	if len(cmd.Paths) < 2 {
 		return sys.Usage(Usage)
+	}
+
+	if len(cmd.Paths) > 2 {
+		slog.Warn("additional paths will be ignored")
 	}
 
 	// paths will be loaded in order

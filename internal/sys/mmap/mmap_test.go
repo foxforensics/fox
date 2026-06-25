@@ -8,7 +8,7 @@ import (
 )
 
 func BenchmarkMMap(b *testing.B) {
-	v := test.FixtureFile("string/bible.txt")
+	v := test.FixtureFile("texts/bible.txt")
 
 	f, err := os.Open(v)
 
@@ -26,7 +26,7 @@ func BenchmarkMMap(b *testing.B) {
 }
 
 func TestMMap(t *testing.T) {
-	v := test.FixtureFile("string/bible.txt")
+	v := test.FixtureFile("texts/bible.txt")
 
 	f, err := os.Open(v)
 
