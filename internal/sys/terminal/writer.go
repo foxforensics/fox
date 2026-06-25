@@ -47,7 +47,7 @@ func (w *Writer) Match(s string, re *regexp2.Regexp) {
 
 func (w *Writer) Write(f string, a ...any) {
 	w.Lock()
-	_, _ = fmt.Fprintf(w.wc, fmt.Sprintf("%s\n", f), a...)
+	_, _ = fmt.Fprintf(w.wc, f+"\n", a...)
 	w.Unlock()
 }
 
