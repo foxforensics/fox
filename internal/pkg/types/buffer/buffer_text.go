@@ -36,7 +36,8 @@ func Text(ctx *TextContext, fox *cmd.Globals) *TextBuffer {
 	var data = ctx.Data
 	var last uint
 
-	// turn off color for big files
+	// turn off color for big files. color must be applied to raw data,
+	// so that grep results may still have syntax highlighting.
 	if len(data) < Limit {
 		data = []byte(terminal.ColorizeAs(string(data), ctx.Hint))
 	}
