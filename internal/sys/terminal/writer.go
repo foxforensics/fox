@@ -28,8 +28,12 @@ func (w *Writer) Header(s string) {
 	s = strings.ReplaceAll(s, string(filepath.Separator), " > ")
 
 	w.Lock()
-	_, _ = fmt.Fprintf(w.wc, "%s %s\n", Fox, AsBold(s))
+	_, err := fmt.Fprintf(w.wc, "%s %s\n", Fox, AsBold(s))
 	w.Unlock()
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
 }
 
 func (w *Writer) Match(s string, re *regexp2.Regexp) {
@@ -41,19 +45,29 @@ func (w *Writer) Match(s string, re *regexp2.Regexp) {
 	}
 
 	w.Lock()
-	_, _ = fmt.Fprintln(w.wc, s)
+	_, err := fmt.Fprintln(w.wc, s)
 	w.Unlock()
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
 }
 
 func (w *Writer) Write(f string, a ...any) {
 	w.Lock()
-	_, _ = fmt.Fprintf(w.wc, f+"\n", a...)
+	_, err := fmt.Fprintf(w.wc, f+"\n", a...)
 	w.Unlock()
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
 }
 
 func (w *Writer) Close(p string, r bool) {
 	if v, is := w.wc.(io.Closer); is {
-		_ = v.Close()
+		if err := v.Close(); err != nil {
+			slog.Error(err.Error())
+		}
 	}
 
 	if r && len(p) > 0 {
