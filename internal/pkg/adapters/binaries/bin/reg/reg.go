@@ -1,6 +1,8 @@
 package reg
 
 import (
+	"errors"
+
 	"go.foxforensics.eu/fox/v4/internal/pkg"
 )
 
@@ -10,4 +12,6 @@ func Detect(b []byte) bool {
 	})
 }
 
-// convert not implemented yet
+func Convert(b []byte) ([]byte, error) {
+	return b, errors.New("not implemented")
+}
