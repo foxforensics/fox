@@ -11,7 +11,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
 )
 
-var Limit = 1024 * 1024 * 4
+var Limit = 1024 * 1024 * 4 // 4mb
 
 type TextLine struct {
 	Line   string
@@ -42,7 +42,7 @@ func Text(ctx *TextContext, fox *cmd.Globals) *TextBuffer {
 	}
 
 	ctx.SMap = smap.Map(data)
-	ctx.SMap = fox.Filters.Filter(ctx.SMap).Render()
+	ctx.SMap = fox.Filters.Filter(ctx.SMap, fox.Threads).Render(fox.Threads)
 
 	if len(ctx.SMap) > 0 {
 		last = ctx.SMap[len(ctx.SMap)-1].Line
@@ -50,7 +50,7 @@ func Text(ctx *TextContext, fox *cmd.Globals) *TextBuffer {
 
 	var buf = &TextBuffer{
 		make(chan *TextLine, fox.Threads*1024),
-		uint(math.Log10(float64(last))) + 1,
+		uint(math.Log10(float64(max(1, last)))) + 1,
 	}
 
 	if fox.Limits.IsTail {
@@ -69,23 +69,23 @@ func streamText(ctx *TextContext, buf *TextBuffer) {
 	var grp uint = 0
 
 	for _, str := range ctx.SMap {
-		// insert context separator
-		if grp != str.Group && num > 1 {
-			buf.Lines <- &TextLine{Sep, str.Group, ""}
-			num = 1
-		}
-
-		// build line
-		buf.Lines <- &TextLine{
-			fmt.Sprintf("%0*d ", buf.Pad, uint(ctx.Delta)+str.Line),
-			str.Group,
-			sys.Sanitize(string(str.Bytes)),
-		}
-
 		select {
 		case <-ctx.Parent.Done():
 			return
 		default:
+			// insert context separator
+			if grp != str.Group && num > 1 {
+				buf.Lines <- &TextLine{Sep, str.Group, ""}
+				num = 1
+			}
+
+			// build line
+			buf.Lines <- &TextLine{
+				fmt.Sprintf("%0*d ", buf.Pad, uint(ctx.Delta)+str.Line),
+				str.Group,
+				sys.Sanitize(string(str.Bytes)),
+			}
+
 			grp = str.Group
 			num++
 		}
