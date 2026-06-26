@@ -55,5 +55,9 @@ func extractFile(f *sevenzip.File, root string) (e pkg.Stream, err error) {
 	e.Path = sys.JoinPart(root, f.Name)
 	e.Data, err = io.ReadAll(r)
 
-	return e, archives.ErrCorruptPassword
+	if err != nil {
+		err = archives.ErrCorruptPassword
+	}
+
+	return e, err
 }
