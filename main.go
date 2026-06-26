@@ -106,7 +106,7 @@ type Fox struct {
 func main() {
 	defer trace()
 
-	log.SetFlags(log.LstdFlags | log.LUTC)
+	log.SetFlags(0)
 	log.SetPrefix("FOX: ")
 
 	fox := new(Fox)
@@ -136,39 +136,10 @@ func main() {
 
 	default:
 		defer timer(time.Now())
-
-		// parse input
-		if len(fox.In) > 0 {
-			fox.Input = split(fox.In)
-		}
-
-		// redirect output
-		if len(fox.Out) > 0 {
-			fox.Writer(os.OpenFile(fox.Out, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600))
-		} else if fox.Quiet {
-			fox.Writer(os.Open(os.DevNull))
-		} else {
-			fox.Writer(os.Stdout, nil)
-		}
-
 		defer fox.Discard()
 
-		if err := ctx.Run(&fox.Globals); err != nil {
-			slog.Error(err.Error())
-			os.Exit(1)
-		}
+		ctx.FatalIfErrorf(ctx.Run(&fox.Globals))
 	}
-}
-
-func split(b []byte) []string {
-	v := strings.Split(strings.TrimSpace(string(b)), "\n")
-
-	// normalize Windows paths
-	for i, s := range v {
-		v[i] = strings.TrimRight(s, "\r")
-	}
-
-	return v
 }
 
 func timer(t time.Time) {
@@ -178,8 +149,6 @@ func timer(t time.Time) {
 func trace() {
 	if err := recover(); err != nil {
 		slog.Error(fmt.Sprintf("%+v", err))
-		slog.Debug("--")
 		slog.Debug(string(debug.Stack()))
-		slog.Debug("--")
 	}
 }

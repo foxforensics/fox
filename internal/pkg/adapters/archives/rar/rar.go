@@ -9,6 +9,7 @@ import (
 
 	"github.com/nwaples/rardecode/v2"
 	"go.foxforensics.eu/fox/v4/internal/pkg"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 )
 
@@ -45,7 +46,7 @@ func Extract(b []byte, root, pass string) (e []pkg.Stream) {
 		buf, err := io.ReadAll(r)
 
 		if err != nil {
-			slog.Error(err.Error())
+			slog.Error(archives.ErrCorruptPassword.Error())
 			continue
 		}
 

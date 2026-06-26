@@ -1,4 +1,4 @@
-package terminal
+package writer
 
 import (
 	"bytes"
@@ -22,10 +22,8 @@ var Fox = color.New(color.Bold).
 	AddRGB(0xff, 0xff, 0xff).
 	Sprint(" FOX ")
 
-var (
-	AsGray = color.New(color.FgHiBlack).SprintfFunc()
-	AsBold = color.New(color.Bold).SprintfFunc()
-)
+var AsGray = color.New(color.FgHiBlack).SprintfFunc()
+var AsBold = color.New(color.Bold).SprintfFunc()
 
 var cef = regexp2.MustCompile(`[^|]+$`)
 

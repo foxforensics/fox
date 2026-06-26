@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/go-zip/zip"
 )
@@ -41,7 +42,7 @@ func Extract(b []byte, root, pass string) (e []pkg.Stream) {
 			f.SetPassword(pass)
 		}
 
-		rc, err := f.Open()
+		rc, err := saveOpen(f)
 
 		if err != nil {
 			slog.Error(err.Error())
@@ -62,6 +63,18 @@ func Extract(b []byte, root, pass string) (e []pkg.Stream) {
 			Data: buf,
 		})
 	}
+
+	return
+}
+
+func saveOpen(f *zip.File) (rc io.ReadCloser, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			rc, err = nil, archives.ErrCorruptPassword
+		}
+	}()
+
+	rc, err = f.Open()
 
 	return
 }

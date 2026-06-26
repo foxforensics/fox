@@ -7,7 +7,7 @@ import (
 
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
+	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
 
 type HexLine struct {
@@ -72,9 +72,9 @@ func formatStd(ctx *HexContext) HexLine {
 
 		switch v := ctx.Data[ctx.Index+i]; {
 		case v == 0:
-			val.WriteString(terminal.AsGray("%02x ", v))
+			val.WriteString(writer.AsGray("%02x ", v))
 		case v >= 1 && v <= 31:
-			val.WriteString(terminal.AsBold("%02x ", v))
+			val.WriteString(writer.AsBold("%02x ", v))
 		default:
 			val.WriteString(fmt.Sprintf("%02x ", v))
 		}
@@ -89,7 +89,7 @@ func formatStd(ctx *HexContext) HexLine {
 		r = rune(ctx.Data[ctx.Index+i])
 
 		if r < sys.SP || r > sys.DEL {
-			str.WriteString(terminal.AsGray("·"))
+			str.WriteString(writer.AsGray("·"))
 		} else {
 			str.WriteRune(r)
 		}

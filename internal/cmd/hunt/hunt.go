@@ -198,7 +198,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Hunt) Run(fox *cmd.Globals) error {
-	cmd.Paths = append(cmd.Paths, fox.Input...)
+	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
 		return sys.Usage(Usage)
@@ -256,7 +256,7 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 		}
 
 		if cmd.file == nil {
-			fox.Stdout.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
+			fox.Writer.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
 		} else {
 			if err = cmd.file.Write(e); err != nil {
 				slog.Error(err.Error())

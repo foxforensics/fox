@@ -267,14 +267,6 @@ func (ldr *Loader) processData(ctx context.Context, path, part string, b []byte,
 }
 
 func (ldr *Loader) extractData(ctx context.Context, path, part string, b []byte, i int) bool {
-	defer func() {
-		// most libraries can not differentiate between invalid data and wrong passwords
-		if err := recover(); err != nil {
-			slog.Error("archive corrupt or password wrong")
-			return
-		}
-	}()
-
 	for _, a := range registry.Extracts {
 		if a.Detect(b) {
 			slog.Debug(fmt.Sprintf("archive detected as possibly %s", a.Name))

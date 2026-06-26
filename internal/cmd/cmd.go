@@ -7,14 +7,16 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
+	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 	"go.foxforensics.eu/fox/v4/internal/sys/loader"
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
+	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
 
 type Globals struct {
@@ -52,11 +54,11 @@ type Globals struct {
 	// internal
 	Context context.Context    `kong:"-"`
 	Cancel  context.CancelFunc `kong:"-"`
-	Stdout  *terminal.Writer   `kong:"-"`
+	Writer  *writer.Writer     `kong:"-"`
 	Regexp  *regexp2.Regexp    `kong:"-"`
 	Loader  *loader.Loader     `kong:"-"`
 	Query   *types.Query       `kong:"-"`
-	Input   []string           `kong:"-"`
+	Paths   []string           `kong:"-"`
 }
 
 func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
@@ -78,8 +80,23 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 		fox.NoConvert = true
 	}
 
+	// parse paths
+	if len(fox.In) > 0 {
+		fox.Paths = strings.Split(strings.TrimSpace(string(fox.In)), "\n")
+
+		for i, s := range fox.Paths {
+			fox.Paths[i] = strings.TrimRight(s, "\r") // Windows paths
+		}
+	}
+
+	// redirect output
 	if len(fox.Out) > 0 {
 		fox.NoPretty = true
+		fox.Writer = writer.New(sys.CreateFile(fox.Out))
+	} else if fox.Quiet {
+		fox.Writer = writer.New(io.Discard)
+	} else {
+		fox.Writer = writer.New(os.Stdout)
 	}
 
 	if len(fox.Find) > 0 {
@@ -112,11 +129,11 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	}
 
 	if len(fox.Lexer) > 0 {
-		terminal.Lexer = fox.Lexer
+		writer.Lexer = fox.Lexer
 	}
 
 	if len(fox.Style) > 0 {
-		terminal.Style = fox.Style
+		writer.Style = fox.Style
 	}
 
 	if !fox.NoDeflate {
@@ -159,7 +176,7 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	if fox.DryRun {
 		for h := range heaps {
-			fox.Stdout.Write(h.Name)
+			fox.Writer.Write(h.Name)
 		}
 
 		// exit early
@@ -174,16 +191,8 @@ func (fox *Globals) Exit(code int) {
 	os.Exit(code)
 }
 
-func (fox *Globals) Writer(wc io.WriteCloser, err error) {
-	if err == nil {
-		fox.Stdout = terminal.NewWriter(wc)
-	} else {
-		slog.Error(err.Error())
-	}
-}
-
 func (fox *Globals) Discard() {
 	fox.Cancel()
-	fox.Stdout.Close(fox.Out, !fox.NoReceipt)
+	fox.Writer.Close(fox.Out, !fox.NoReceipt)
 	fox.Loader.Exit()
 }

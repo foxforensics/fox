@@ -68,7 +68,7 @@ type Ad struct {
 }
 
 func (cmd *Ad) Run(fox *cmd.Globals) error {
-	cmd.Paths = append(cmd.Paths, fox.Input...)
+	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) < 2 {
 		return sys.Usage(Usage)
@@ -192,7 +192,7 @@ func (cmd *Ad) extract(fox *cmd.Globals, k, b []byte) (int, error) {
 	}
 
 	for _, v := range a {
-		fox.Stdout.Match(cmd.format(v), fox.Regexp)
+		fox.Writer.Match(cmd.format(v), fox.Regexp)
 	}
 
 	return len(a), nil

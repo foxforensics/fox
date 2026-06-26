@@ -7,6 +7,7 @@ import (
 
 	"github.com/bodgit/sevenzip"
 	"go.foxforensics.eu/fox/v4/internal/pkg"
+	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 )
 
@@ -54,5 +55,5 @@ func extractFile(f *sevenzip.File, root string) (e pkg.Stream, err error) {
 	e.Path = sys.JoinPart(root, f.Name)
 	e.Data, err = io.ReadAll(r)
 
-	return e, err
+	return e, archives.ErrCorruptPassword
 }

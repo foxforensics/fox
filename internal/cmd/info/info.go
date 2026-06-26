@@ -14,7 +14,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
+	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
 
 // Threshold for high entropy files
@@ -64,8 +64,8 @@ func (fi *FileInfo) String() string {
 	sb.WriteString(fmt.Sprintf("%7s ", sys.Humanize(fi.Bytes)))
 
 	if fi.Entropy > Threshold {
-		sb.WriteString(terminal.AsBold(fmt.Sprintf(" %.1fe ", fi.Entropy)))
-		sb.WriteString(terminal.AsBold(fmt.Sprintf("[%-16s] ", e)))
+		sb.WriteString(writer.AsBold(fmt.Sprintf(" %.1fe ", fi.Entropy)))
+		sb.WriteString(writer.AsBold(fmt.Sprintf("[%-16s] ", e)))
 	} else {
 		sb.WriteString(fmt.Sprintf(" %.1fe ", fi.Entropy))
 		sb.WriteString(fmt.Sprintf("[%-16s] ", e))
@@ -78,7 +78,7 @@ func (fi *FileInfo) String() string {
 	sb.WriteString(fi.File)
 
 	if fi.Bytes == 0 {
-		return terminal.AsGray(sb.String())
+		return writer.AsGray(sb.String())
 	}
 
 	return sb.String()
@@ -124,7 +124,7 @@ func (cmd *Info) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Info) Run(fox *cmd.Globals) error {
-	cmd.Paths = append(cmd.Paths, fox.Input...)
+	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
 		return sys.Usage(Usage)
@@ -137,7 +137,6 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 	// turn off for calculations while loading
 	v := color.NoColor
 
-	fox.NoConvert = true
 	fox.NoPretty = true
 
 	ch, err := fox.Init(cmd.Paths, true)
@@ -162,7 +161,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 		// because empty files will cause errors
 		if h.Size == 0 {
 			if cmd.Min == 0 {
-				fox.Stdout.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
+				fox.Writer.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
 			}
 			h.Discard()
 			continue
@@ -180,7 +179,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 			fi.Entropy = entropy.Calculate(block)
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
-				fox.Stdout.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
+				fox.Writer.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
 			}
 
 			fi.Offset += uint64(n)

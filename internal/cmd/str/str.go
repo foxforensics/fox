@@ -8,7 +8,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	carver2 "go.foxforensics.eu/fox/v4/internal/pkg/types/carver"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
+	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
 
 var Usage = strings.TrimSpace(`
@@ -70,7 +70,7 @@ func (cmd *Str) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Str) Run(fox *cmd.Globals) error {
-	cmd.Paths = append(cmd.Paths, fox.Input...)
+	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
 		return sys.Usage(Usage)
@@ -80,7 +80,7 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 		db := carver2.BuildDB(3)
 
 		for _, s := range db.List() {
-			fox.Stdout.Write(s)
+			fox.Writer.Write(s)
 		}
 
 		// exit early
@@ -95,7 +95,7 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 
 	for h := range ch {
 		if !fox.NoPretty {
-			fox.Stdout.Header(h.String())
+			fox.Writer.Header(h.String())
 		}
 
 		for str := range carver2.New(&carver2.Options{
@@ -114,16 +114,16 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 				}
 			}
 
-			str.Value = terminal.MarkMatch(str.Value, fox.Regexp)
+			str.Value = writer.MarkMatch(str.Value, fox.Regexp)
 
 			if !fox.NoPretty && len(str.Classes) > 0 {
-				fox.Stdout.Write("%s  %s [%s]", terminal.AsGray(str.Address), str.Value, terminal.AsBold(str.Classes))
+				fox.Writer.Write("%s  %s [%s]", writer.AsGray(str.Address), str.Value, writer.AsBold(str.Classes))
 			} else if !fox.NoPretty {
-				fox.Stdout.Write("%s  %s", terminal.AsGray(str.Address), str.Value)
+				fox.Writer.Write("%s  %s", writer.AsGray(str.Address), str.Value)
 			} else if len(str.Classes) > 0 {
-				fox.Stdout.Write("%s [%s]", str.Value, str.Classes)
+				fox.Writer.Write("%s [%s]", str.Value, str.Classes)
 			} else {
-				fox.Stdout.Write(str.Value)
+				fox.Writer.Write(str.Value)
 			}
 		}
 

@@ -8,7 +8,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/smap"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
+	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
 
 var Limit = 1024 * 1024 * 4 // 4mb
@@ -39,7 +39,7 @@ func Text(ctx *TextContext, fox *cmd.Globals) *TextBuffer {
 	// turn off color for big files. color must be applied to raw data,
 	// so that grep results may still have syntax highlighting.
 	if len(data) < Limit {
-		data = []byte(terminal.ColorizeAs(string(data), ctx.Hint))
+		data = []byte(writer.ColorizeAs(string(data), ctx.Hint))
 	}
 
 	ctx.SMap = smap.Map(data)

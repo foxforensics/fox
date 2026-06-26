@@ -1,4 +1,4 @@
-package terminal
+package writer
 
 import (
 	"fmt"
@@ -14,11 +14,11 @@ import (
 
 type Writer struct {
 	sync.Mutex
-	wc io.WriteCloser
+	w io.Writer
 }
 
-func NewWriter(wc io.WriteCloser) *Writer {
-	return &Writer{wc: wc}
+func New(w io.Writer) *Writer {
+	return &Writer{w: w}
 }
 
 func (w *Writer) Header(s string) {
@@ -28,7 +28,7 @@ func (w *Writer) Header(s string) {
 	s = strings.ReplaceAll(s, string(filepath.Separator), " > ")
 
 	w.Lock()
-	_, err := fmt.Fprintf(w.wc, "%s %s\n", Fox, AsBold(s))
+	_, err := fmt.Fprintf(w.w, "%s %s\n", Fox, AsBold(s))
 	w.Unlock()
 
 	if err != nil {
@@ -45,7 +45,7 @@ func (w *Writer) Match(s string, re *regexp2.Regexp) {
 	}
 
 	w.Lock()
-	_, err := fmt.Fprintln(w.wc, s)
+	_, err := fmt.Fprintln(w.w, s)
 	w.Unlock()
 
 	if err != nil {
@@ -55,7 +55,7 @@ func (w *Writer) Match(s string, re *regexp2.Regexp) {
 
 func (w *Writer) Write(f string, a ...any) {
 	w.Lock()
-	_, err := fmt.Fprintf(w.wc, f+"\n", a...)
+	_, err := fmt.Fprintf(w.w, f+"\n", a...)
 	w.Unlock()
 
 	if err != nil {
@@ -64,7 +64,7 @@ func (w *Writer) Write(f string, a ...any) {
 }
 
 func (w *Writer) Close(p string, r bool) {
-	if v, is := w.wc.(io.Closer); is {
+	if v, is := w.w.(io.Closer); is {
 		if err := v.Close(); err != nil {
 			slog.Error(err.Error())
 		}

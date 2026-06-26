@@ -11,7 +11,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
+	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 	"go.foxforensics.eu/hasher/hash"
 	"go.foxforensics.eu/rhash/database"
 )
@@ -85,7 +85,7 @@ func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Hash) Run(fox *cmd.Globals) error {
-	cmd.Paths = append(cmd.Paths, fox.Input...)
+	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
 		return sys.Usage(Usage)
@@ -93,7 +93,7 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 
 	if cmd.Paths[0] == "list" {
 		for _, s := range list(true) {
-			fox.Stdout.Write(s)
+			fox.Writer.Write(s)
 		}
 
 		// exit early
@@ -127,17 +127,17 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 		}
 
 		if !fox.NoPretty && len(cmd.Hash) > 1 {
-			fox.Stdout.Header(h.String())
+			fox.Writer.Header(h.String())
 		}
 
 		for _, k := range cmd.Hash {
 			if cmd.Lookup {
 				a, v := tables.Lookup(string(h.Bytes()))
-				fox.Stdout.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), fox.Regexp)
+				fox.Writer.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), fox.Regexp)
 				break
 			} else if cmd.Guess {
 				for _, a := range collect(database.Lookup(fox.Context, string(h.Bytes()))) {
-					fox.Stdout.Match(a, fox.Regexp)
+					fox.Writer.Match(a, fox.Regexp)
 				}
 				continue
 			}
@@ -165,10 +165,10 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 			}
 
 			pad := strings.Repeat(" ", n-len(k))
-			typ := terminal.AsGray(strings.ToUpper(k))
+			typ := writer.AsGray(strings.ToUpper(k))
 
 			if err != nil {
-				sum = terminal.AsGray(err.Error())
+				sum = writer.AsGray(err.Error())
 			}
 
 			if len(cmd.Hash) > 1 {
@@ -177,11 +177,11 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 				sum = fmt.Sprintf("%s  %s", sum, fh.File)
 			}
 
-			fox.Stdout.Match(sum, fox.Regexp)
+			fox.Writer.Match(sum, fox.Regexp)
 		}
 
 		if !plain {
-			fox.Stdout.Match(formats.Auto(fh, cmd.Json, cmd.Jsonl), fox.Regexp)
+			fox.Writer.Match(formats.Auto(fh, cmd.Json, cmd.Jsonl), fox.Regexp)
 		}
 
 		h.Discard()

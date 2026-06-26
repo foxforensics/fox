@@ -3,6 +3,9 @@ package sys
 import (
 	"errors"
 	"fmt"
+	"io"
+	"log/slog"
+	"os"
 	"strings"
 
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
@@ -27,6 +30,16 @@ func Usage(msg string) error {
 	_, err1 := fmt.Println(fmt.Sprintf(Banner, version.Number))
 	_, err2 := fmt.Println(msg)
 	return errors.Join(err1, err2)
+}
+
+func CreateFile(path string) io.Writer {
+	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
+	return f
 }
 
 func JoinPart(path, part string) string {

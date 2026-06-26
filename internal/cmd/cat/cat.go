@@ -8,7 +8,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	buffer2 "go.foxforensics.eu/fox/v4/internal/pkg/types/buffer"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
+	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
 
 var Usage = strings.TrimSpace(`
@@ -65,7 +65,7 @@ func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Cat) Run(fox *cmd.Globals) error {
-	cmd.Paths = append(cmd.Paths, fox.Input...)
+	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
 		return sys.Usage(Usage)
@@ -83,7 +83,7 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 
 	for h := range ch {
 		if !fox.NoPretty {
-			fox.Stdout.Header(h.String())
+			fox.Writer.Header(h.String())
 		}
 
 		if (h.IsText() && !cmd.Hex) || cmd.Text {
@@ -111,15 +111,15 @@ func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
 		}
 
 		if fox.Regexp != nil && l.Line != buffer2.Sep {
-			s = terminal.MarkMatch(s, fox.Regexp)
+			s = writer.MarkMatch(s, fox.Regexp)
 		}
 
 		if !fox.NoPretty {
-			fox.Stdout.Write("%s %s", terminal.AsGray(l.Line), s)
+			fox.Writer.Write("%s %s", writer.AsGray(l.Line), s)
 		} else if l.Line == buffer2.Sep {
-			fox.Stdout.Write(terminal.AsGray(buffer2.Sep))
+			fox.Writer.Write(writer.AsGray(buffer2.Sep))
 		} else {
-			fox.Stdout.Write(s)
+			fox.Writer.Write(s)
 		}
 	}
 }
@@ -138,21 +138,21 @@ func (cmd *Cat) renderHex(fox *cmd.Globals, b []byte) {
 			}
 		}
 
-		l.Values = terminal.MarkMatch(l.Values, fox.Regexp)
+		l.Values = writer.MarkMatch(l.Values, fox.Regexp)
 
 		// cut similar lines for better readability
 		if !fox.NoPretty && l.Values == lastHex {
 			if !wasCut {
 				wasCut = true
-				fox.Stdout.Write(terminal.AsGray("*"))
+				fox.Writer.Write(writer.AsGray("*"))
 			}
 			continue
 		}
 
 		if !fox.NoPretty {
-			fox.Stdout.Write("%s  %s%s", terminal.AsGray(l.Address), l.Values, l.String)
+			fox.Writer.Write("%s  %s%s", writer.AsGray(l.Address), l.Values, l.String)
 		} else {
-			fox.Stdout.Write(l.Values)
+			fox.Writer.Write(l.Values)
 		}
 
 		lastHex, wasCut = l.Values, false
