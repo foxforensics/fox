@@ -18,7 +18,6 @@ require (
 	github.com/cenkalti/backoff v2.2.1+incompatible
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
 	github.com/dlclark/regexp2/v2 v2.2.2
-	github.com/eclipse/paho.golang v0.23.0
 	github.com/emersion/go-message v0.18.2
 	github.com/fatih/color v1.19.0
 	github.com/flanglet/kanzi-go/v2 v2.5.1
@@ -36,7 +35,6 @@ require (
 	github.com/saferwall/elf v0.3.1
 	github.com/saferwall/pe v1.6.5
 	github.com/secDre4mer/go-cab v0.0.0-20260602061637-8f8e7163d35b
-	github.com/segmentio/ksuid v1.0.4
 	github.com/sorairolake/lzip-go v0.3.8
 	github.com/sourcegraph/conc v0.3.0
 	github.com/ulikunitz/xz v0.5.15

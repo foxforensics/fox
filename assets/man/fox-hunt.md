@@ -52,59 +52,26 @@ Sigma Flags
 Stream Flags
 ------------
 
-**-U, --url**=_server_
+**-U, --url**=_url_
 
-:   Stream events to a server or broker. Streaming via HTTP(S) is set as the default. To stream via the MQTT V5 protocol, use the **--mqtt** flag and specify a topic. 
+:   Stream events to a server or broker.
+
+**-E, --ecs**=_url_
+
+:   Stream events with **ECS** schema to _URL_.
+
+**-H, --hec**=_url_
+
+:   Stream events with **HEC** schema to _URL_.
 
 **-A, --auth**=_token_
 
-:   Authentication _token_ used for Splunk servers. Must be specified without the 'Splunk' prefix.
-
-**-M, --mqtt**=_topic_
-
-:   Use the MQTT protocol V5 for streaming. Currently only streaming via **TCP** is supported. A _topic_ is required.
-
-Schema Flags
-------------
-
-**-e, --ecs**
-
-:   Use ECS schema while streaming.
-
-**-h, --hec**
-
-:   Use HEC schema while streaming.
-
-ALIASES
-=======
-
-**--elastic**
-
-:   Alias for **--ecs --url http://localhost:8080**.
-
-**--splunk**
-
-:   Alias for **--hec --url http://localhost:8088/...**.
+:   Use auth _token_ for **HEC** streaming. Must be specified without the 'Splunk' prefix.
 
 POSITIONAL ARGUMENTS
 ====================
 
 Globbing paths to open or '-' to read from **STDIN(4)**. If **local** is specified as _path_, a built-in list of known locations will be processed.
-
-ENVIRONMENT
-===========
-
-**FOX_MQTT_QOS**
-
-:   The MQTT protocol Quality of Service level. Range 0 to 2 (default: 1).
-
-**FOX_MQTT_USERNAME**
-
-:   The username used to connect to the given MQTT broker.
-
-**FOX_MQTT_PASSWORD**
-
-:   The password used to connect to the given MQTT broker.
 
 EXAMPLES
 ========
@@ -113,17 +80,13 @@ $ fox hunt -u *.dd
 
 :   Hunt down critical events.
 
-$ fox hunt -ap *.evtx
+$ fox hunt -ap local
 
-:   Save all events as Parquet.
+:   Save local events as Parquet.
 
-$ fox hunt -U http://127.0.0.1:8080 local
+$ fox hunt -E http://127.0.0.1:8080 *.evtx
 
-:   Send local events to a server.
-
-$ fox hunt -U tcp://127.0.0.1:1883 -M events local
-
-:   Send local events to a broker.
+:   Send events to an Elastic Stack.
 
 BUGS
 ====

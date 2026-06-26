@@ -16,8 +16,8 @@
 * [x] String carving and automatic classification
 * [x] With 290+ classes in [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes) notation
 * [x] Parse Fortinet binary firewall logs
+* [x] Parse MFT, LNK, PF, PST binary files
 * [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files 
-* [x] Parse [NTFS MFT](https://ntfs.com/ntfs-mft.htm), LNK, PF, PST binary files
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
 * [x] Extract [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes, users, groups, computers  
 * [x] Lookup NTLM hashes using 210000+ entry wordlists
@@ -38,7 +38,7 @@
   * [x] Built-in warning of critical system events
   * [x] Filter events with [Sigma Rules](https://sigmahq.io/) syntax
   * [x] Stream events in [Splunk](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [Elastic](https://www.elastic.co/docs/reference/ecs) format
-  * [x] Stream events using HTTPS or MQTT protocol
+  * [x] Stream events using HTTPS protocol
   * [x] Save as `JSON`, `JSON Lines` or `Parquet` 
 
 ## Install

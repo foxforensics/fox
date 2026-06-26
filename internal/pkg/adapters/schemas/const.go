@@ -1,5 +1,9 @@
 package schemas
 
+import "go.foxforensics.eu/fox/v4/internal/pkg/types/event"
+
+type Apply func(*event.Event) ([]byte, error)
+
 type Schema int
 
 const (

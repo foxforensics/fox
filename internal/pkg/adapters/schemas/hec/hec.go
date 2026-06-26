@@ -3,9 +3,10 @@ package hec
 
 import (
 	"encoding/json"
+	"fmt"
 
-	"go.foxforensics.eu/fox/v4/internal/net/client"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
+	"go.foxforensics.eu/fox/v4/internal/sys/version"
 )
 
 type Hec struct {
@@ -25,7 +26,7 @@ func Apply(evt *event.Event) ([]byte, error) {
 	hec := &Hec{
 		Time:       evt.Time.UTC().UnixMilli(),
 		Host:       evt.Host,
-		Source:     client.Name(),
+		Source:     fmt.Sprintf("fox %s", version.Number),
 		Sourcetype: "_json",
 		Index:      "main",
 		Fields:     make(map[string]any),
