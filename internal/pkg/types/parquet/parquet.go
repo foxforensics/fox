@@ -1,7 +1,9 @@
 package parquet
 
 import (
+	"context"
 	"fmt"
+	"log/slog"
 	"os"
 
 	"github.com/parquet-go/parquet-go"
@@ -31,14 +33,22 @@ func New(name string) (*Parquet, error) {
 	return prq, nil
 }
 
-func (prq *Parquet) String() string {
-	return prq.path
+func (prq *Parquet) Run(ctx context.Context, ch <-chan *event.Event) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+
+		case e := <-ch:
+			if _, err := prq.writer.Write([]event.Event{*e}); err != nil {
+				slog.Error(err.Error())
+			}
+		}
+	}
 }
 
-func (prq *Parquet) Write(evt *event.Event) error {
-	_, err := prq.writer.Write([]event.Event{*evt})
-
-	return err
+func (prq *Parquet) String() string {
+	return prq.path
 }
 
 func (prq *Parquet) Close() error {

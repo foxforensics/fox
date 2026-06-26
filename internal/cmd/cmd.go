@@ -192,7 +192,15 @@ func (fox *Globals) Exit(code int) {
 }
 
 func (fox *Globals) Discard() {
-	fox.Cancel()
-	fox.Writer.Close(fox.Out, !fox.NoReceipt)
-	fox.Loader.Exit()
+	if fox.Cancel != nil {
+		fox.Cancel()
+	}
+
+	if fox.Writer != nil {
+		fox.Writer.Close(fox.Out, !fox.NoReceipt)
+	}
+
+	if fox.Loader != nil {
+		fox.Loader.Exit()
+	}
 }

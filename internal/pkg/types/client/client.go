@@ -96,11 +96,25 @@ func New(opts *Options) (*Client, error) {
 	return cli, nil
 }
 
+func (cli *Client) Run(ctx context.Context, ch <-chan *event.Event) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+
+		case e := <-ch:
+			if err := cli.stream(ctx, e); err != nil {
+				slog.Error(err.Error())
+			}
+		}
+	}
+}
+
 func (cli *Client) String() string {
 	return fmt.Sprintf("%s@%s", cli.opts.Schema, cli.opts.Url)
 }
 
-func (cli *Client) Stream(ctx context.Context, evt *event.Event) error {
+func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
 	buf, err := cli.apply(evt)
 
 	if err != nil {

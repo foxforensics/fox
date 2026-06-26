@@ -16,10 +16,11 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/client"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/parquet"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/receipt"
 	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/parquet"
-	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
 )
 
 var Usage = strings.TrimSpace(`
@@ -37,10 +38,10 @@ Sigma flags:
   -R, --rule=FILE          Filter using Sigma rules file
 
 Stream flags:
-  -U, --url=URL            Stream events with CEF schema to URL
-  -E, --ecs=URL            Stream events with ECS schema to URL
-  -H, --hec=URL            Stream events with HEC schema to URL
-  -A, --auth=TOKEN         Use auth token for HEC streaming
+  -U, --url=URL            Stream events using CEF schema
+  -E, --ecs=URL            Stream events using ECS schema
+  -H, --hec=URL            Stream events using HEC schema
+  -A, --auth=TOKEN         Use auth token with HEC streaming
 
 Remarks:
   If 'local' is specified as path, built-in paths will be used.
@@ -81,10 +82,10 @@ type Hunt struct {
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	net  *client.Client   `kong:"-"`
-	file *parquet.Parquet `kong:"-"`
-	uniq *types.Unique    `kong:"-"`
-	rule sigma.Rule       `kong:"-"`
+	client  *client.Client   `kong:"-"`
+	parquet *parquet.Parquet `kong:"-"`
+	unique  *types.Unique    `kong:"-"`
+	rule    sigma.Rule       `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
@@ -103,11 +104,11 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
 
 	if cmd.Uniq {
-		cmd.uniq = types.NewUnique()
+		cmd.unique = types.NewUnique()
 	}
 
 	if cmd.Parquet {
-		cmd.file, err = parquet.New(fmt.Sprintf("fox_hunt_%s",
+		cmd.parquet, err = parquet.New(fmt.Sprintf("fox_hunt_%s",
 			time.Now().UTC().Format("20060102150405"),
 		))
 
@@ -126,22 +127,21 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 		return err
 	}
 
-	if len(cmd.Url) > 0 {
-		cmd.net, err = client.New(&client.Options{
+	switch {
+	case len(cmd.Url) > 0:
+		cmd.client, err = client.New(&client.Options{
 			Url:    cmd.Url,
 			Schema: schemas.Raw,
 		})
-	}
 
-	if len(cmd.Ecs) > 0 {
-		cmd.net, err = client.New(&client.Options{
+	case len(cmd.Ecs) > 0:
+		cmd.client, err = client.New(&client.Options{
 			Url:    cmd.Ecs,
 			Schema: schemas.Ecs,
 		})
-	}
 
-	if len(cmd.Hec) > 0 {
-		cmd.net, err = client.New(&client.Options{
+	case len(cmd.Hec) > 0:
+		cmd.client, err = client.New(&client.Options{
 			Url:    cmd.Hec,
 			Token:  cmd.Auth,
 			Schema: schemas.Hec,
@@ -168,7 +168,12 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 		return err
 	}
 
+	ch1 := make(chan *event.Event, fox.Threads*1024)
+	ch2 := make(chan *event.Event, fox.Threads*1024)
+
 	defer cmd.discard(fox)
+	defer close(ch1)
+	defer close(ch2)
 
 	slog.Info("hunt: started")
 	slog.Debug(fmt.Sprintf("hunt: using %d thread(s)", fox.Threads))
@@ -178,12 +183,14 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 		slog.Warn("hunt: rule is not officially supported!")
 	}
 
-	if cmd.file != nil {
-		slog.Debug(fmt.Sprintf("hunt: using storage %s", cmd.file))
+	if cmd.parquet != nil {
+		slog.Debug(fmt.Sprintf("hunt: using storage %s", cmd.parquet))
+		go cmd.parquet.Run(fox.Context, ch1)
 	}
 
-	if cmd.net != nil {
-		slog.Debug(fmt.Sprintf("hunt: streaming to %s", cmd.net))
+	if cmd.client != nil {
+		slog.Debug(fmt.Sprintf("hunt: streaming to %s", cmd.client))
+		go cmd.client.Run(fox.Context, ch2)
 	}
 
 	var n int64
@@ -201,7 +208,7 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 			continue // not successful
 		}
 
-		if cmd.uniq != nil && !cmd.uniq.Is(e.String()) {
+		if cmd.unique != nil && !cmd.unique.Is(e.String()) {
 			continue // not unique
 		}
 
@@ -209,19 +216,15 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 			continue // not matched
 		}
 
-		if cmd.file == nil {
-			fox.Writer.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
-		} else {
-			if err = cmd.file.Write(e); err != nil {
-				slog.Error(err.Error())
-			}
+		if cmd.parquet != nil {
+			ch1 <- e
 		}
 
-		if cmd.net != nil {
-			if err = cmd.net.Stream(fox.Context, e); err != nil {
-				slog.Error(err.Error())
-			}
+		if cmd.client != nil {
+			ch2 <- e
 		}
+
+		fox.Writer.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
 
 		n++
 	}
@@ -233,8 +236,8 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 }
 
 func (cmd *Hunt) discard(fox *cmd.Globals) {
-	if cmd.file != nil {
-		err := cmd.file.Close()
+	if cmd.parquet != nil {
+		err := cmd.parquet.Close()
 
 		if err != nil {
 			slog.Error(err.Error())
@@ -244,7 +247,7 @@ func (cmd *Hunt) discard(fox *cmd.Globals) {
 			return
 		}
 
-		err = receipt.Generate(cmd.file.String())
+		err = receipt.Generate(cmd.parquet.String())
 
 		if err != nil {
 			slog.Error(err.Error())

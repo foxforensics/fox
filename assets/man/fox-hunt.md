@@ -54,19 +54,19 @@ Stream Flags
 
 **-U, --url**=_url_
 
-:   Stream events to a server or broker.
+:   Stream events using **CEF** schema to _url_.
 
 **-E, --ecs**=_url_
 
-:   Stream events with **ECS** schema to _URL_.
+:   Stream events using **ECS** schema to _url_.
 
 **-H, --hec**=_url_
 
-:   Stream events with **HEC** schema to _URL_.
+:   Stream events using **HEC** schema to _url_.
 
 **-A, --auth**=_token_
 
-:   Use auth _token_ for **HEC** streaming. Must be specified without the 'Splunk' prefix.
+:   Use auth _token_ with **HEC** streaming. Must be specified without the 'Splunk' prefix.
 
 POSITIONAL ARGUMENTS
 ====================
@@ -103,4 +103,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**fox(1)**, **uniq(1)**
+**fox(1)**, **sort(1)**, **uniq(1)**
