@@ -118,27 +118,11 @@ func Hec(url, token string) (*Client, error) {
 	})
 }
 
-func (cli *Client) Run(ctx context.Context, ch <-chan *event.Event) error {
-	for e := range ch {
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-
-		default:
-			if err := cli.send(ctx, e); err != nil {
-				slog.Error(err.Error())
-			}
-		}
-	}
-
-	return nil
-}
-
 func (cli *Client) String() string {
 	return fmt.Sprintf("%s@%s", cli.opts.Schema, cli.opts.Url)
 }
 
-func (cli *Client) send(ctx context.Context, evt *event.Event) error {
+func (cli *Client) Send(ctx context.Context, evt *event.Event) error {
 	buf, err := cli.apply(evt)
 
 	if err != nil {

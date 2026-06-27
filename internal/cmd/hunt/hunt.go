@@ -12,13 +12,13 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
-	"github.com/sourcegraph/conc/pool"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/client"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
+	"go.foxforensics.eu/fox/v4/internal/pkg/types/muxer"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/parquet"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/receipt"
 	"go.foxforensics.eu/fox/v4/internal/sys"
@@ -159,12 +159,12 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 
 	defer cmd.discard(fox)
 
-	p := pool.New().
-		WithContext(fox.Context).
-		WithMaxGoroutines(fox.Threads)
-
-	ch1 := make(chan *event.Event, fox.Threads*hunter.Scale)
-	ch2 := make(chan *event.Event, fox.Threads*hunter.Scale)
+	sig := evaluator.ForRule(cmd.rule)
+	mux := muxer.New(
+		fox.Context,
+		fox.Threads,
+		hunter.Scale,
+	)
 
 	slog.Info("hunt: started")
 	slog.Debug(fmt.Sprintf("hunt: using %d thread(s)", fox.Threads))
@@ -174,25 +174,24 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 		slog.Warn("hunt: rule is not officially supported!")
 	}
 
-	if cmd.parquet != nil {
-		slog.Debug(fmt.Sprintf("hunt: using storage %s", cmd.parquet))
-
-		p.Go(func(ctx context.Context) error {
-			return cmd.parquet.Run(ctx, ch1)
-		})
-	}
-
 	if cmd.client != nil {
 		slog.Debug(fmt.Sprintf("hunt: streaming to %s", cmd.client))
+		mux.AddHandler(cmd.client.Send)
+	}
 
-		p.Go(func(ctx context.Context) error {
-			return cmd.client.Run(ctx, ch2)
+	if cmd.parquet != nil {
+		slog.Debug(fmt.Sprintf("hunt: using storage %s", cmd.parquet))
+		mux.AddHandler(cmd.parquet.Write)
+	}
+
+	if !fox.Quiet {
+		mux.AddHandler(func(_ context.Context, e *event.Event) error {
+			fox.Writer.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
+			return nil
 		})
 	}
 
 	var n int64
-
-	var sig = evaluator.ForRule(cmd.rule)
 
 	for e := range hunter.New(&hunter.Options{
 		Sort:    cmd.Sort,
@@ -213,26 +212,14 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 			continue // not matched
 		}
 
-		if cmd.parquet != nil {
-			ch1 <- e
-		}
-
-		if cmd.client != nil {
-			ch2 <- e
-		}
-
-		fox.Writer.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
-
+		mux.Handle(fox.Context, e)
 		n++
 	}
-
-	close(ch1)
-	close(ch2)
 
 	slog.Info("hunt: finished")
 	slog.Info(fmt.Sprintf("hunt: found %d event(s)", n))
 
-	return p.Wait()
+	return mux.Wait()
 }
 
 func (cmd *Hunt) discard(fox *cmd.Globals) {
