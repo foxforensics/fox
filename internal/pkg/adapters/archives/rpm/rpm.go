@@ -57,6 +57,11 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 		return
 	}
 
+	if err != nil {
+		slog.Error(err.Error())
+		return
+	}
+
 	// prevent resource leaks
 	switch r1.(type) {
 	case *gzip.Reader:
@@ -68,11 +73,6 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 
 	case *zstd.Decoder:
 		defer r1.(*zstd.Decoder).Close()
-	}
-
-	if err != nil {
-		slog.Error(err.Error())
-		return
 	}
 
 	if rp.PayloadFormat() != "cpio" {
