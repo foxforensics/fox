@@ -37,6 +37,7 @@ func CreateFile(path string) io.Writer {
 
 	if err != nil {
 		slog.Error(err.Error())
+		return io.Discard
 	}
 
 	return f
