@@ -33,18 +33,20 @@ func New(name string) (*Parquet, error) {
 	return prq, nil
 }
 
-func (prq *Parquet) Run(ctx context.Context, ch <-chan *event.Event) {
-	for {
+func (prq *Parquet) Run(ctx context.Context, ch <-chan *event.Event) error {
+	for e := range ch {
 		select {
 		case <-ctx.Done():
-			return
+			return ctx.Err()
 
-		case e := <-ch:
+		default:
 			if _, err := prq.writer.Write([]event.Event{*e}); err != nil {
 				slog.Error(err.Error())
 			}
 		}
 	}
+
+	return nil
 }
 
 func (prq *Parquet) String() string {

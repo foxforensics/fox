@@ -96,18 +96,20 @@ func New(opts *Options) (*Client, error) {
 	return cli, nil
 }
 
-func (cli *Client) Run(ctx context.Context, ch <-chan *event.Event) {
-	for {
+func (cli *Client) Run(ctx context.Context, ch <-chan *event.Event) error {
+	for e := range ch {
 		select {
 		case <-ctx.Done():
-			return
+			return ctx.Err()
 
-		case e := <-ch:
+		default:
 			if err := cli.stream(ctx, e); err != nil {
 				slog.Error(err.Error())
 			}
 		}
 	}
+
+	return nil
 }
 
 func (cli *Client) String() string {
