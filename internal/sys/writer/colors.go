@@ -2,6 +2,7 @@ package writer
 
 import (
 	"bytes"
+	"log/slog"
 
 	"github.com/alecthomas/chroma/v2/lexers"
 	"github.com/alecthomas/chroma/v2/quick"
@@ -85,17 +86,24 @@ func match(re *regexp2.Regexp) marker.MatcherFunc {
 
 // regexp compatibility function
 func replaceAll(re *regexp2.Regexp, s string) string {
-	v, _ := re.Replace(s, "%s", 0, -1)
+	v, err := re.Replace(s, "%s", 0, -1)
+	if err != nil {
+		slog.Error(err.Error())
+	}
 	return v
 }
 
 // regexp compatibility function
 func findAll(re *regexp2.Regexp, s string) []string {
 	var v []string
+	var err error
 	m, _ := re.FindStringMatch(s)
 	for m != nil {
 		v = append(v, m.String())
-		m, _ = re.FindNextMatch(m)
+		m, err = re.FindNextMatch(m)
+		if err != nil {
+			slog.Error(err.Error())
+		}
 	}
 	return v
 }
