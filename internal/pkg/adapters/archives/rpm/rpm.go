@@ -57,12 +57,16 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 	}
 
 	// prevent resource leaks
-	if r, ok := r1.(*gzip.Reader); ok {
+	switch r1.(type) {
+	case *gzip.Reader:
 		defer func() {
-			if err := r.Close(); err != nil {
+			if err := r1.(*gzip.Reader).Close(); err != nil {
 				slog.Error(err.Error())
 			}
 		}()
+
+	case *zstd.Decoder:
+		defer r1.(*zstd.Decoder).Close()
 	}
 
 	if err != nil {
