@@ -209,7 +209,7 @@ func (ldr *Loader) loadFile(ctx context.Context, path, part string) error {
 
 	// empty files will cause issues
 	if fi.Size() == 0 {
-		return ldr.createHeap(ctx, path, "", []byte{})
+		return ldr.createHeap(ctx, path, "", []byte(nil))
 	}
 
 	b, err := mmap.Map(f)

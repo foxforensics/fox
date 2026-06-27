@@ -2,7 +2,8 @@ package test
 
 import (
 	"bytes"
-	"log"
+	"fmt"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -20,7 +21,8 @@ func FixtureFile(name string) string {
 	_, c, _, ok := runtime.Caller(0)
 
 	if !ok {
-		log.Fatal("Fixture: runtime error")
+		slog.Error("fixture: runtime error")
+		return ""
 	}
 
 	return filepath.Join(filepath.Dir(c), root, name)
@@ -40,7 +42,8 @@ func Fixture(name string) []byte {
 	buf, err := os.ReadFile(FixtureFile(name))
 
 	if err != nil {
-		log.Fatalf("Fixture: %v", err)
+		slog.Error(fmt.Sprintf("fixture: %s", err.Error()))
+		return []byte(nil)
 	}
 
 	return buf
