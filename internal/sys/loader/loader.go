@@ -26,6 +26,7 @@ const Stdin = "-"
 const MaxFiles = 8192
 const MaxFolders = 64
 const MaxArchives = 4
+const MaxDeflates = 4
 
 type Options struct {
 	Query    *types.Query
@@ -237,7 +238,11 @@ func (ldr *Loader) processData(ctx context.Context, path, part string, b []byte,
 	}
 
 	// 1. deflate data (nested)
-	for {
+	for j := 1; ; j++ {
+		if ldr.opts.Strict && j >= MaxDeflates {
+			return errors.New("max deflates reached")
+		}
+
 		if b, ok = ldr.deflateData(b); !ok {
 			break // no more nested
 		}
