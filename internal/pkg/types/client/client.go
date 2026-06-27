@@ -148,11 +148,7 @@ func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
 		}()
 
 		// drain body
-		_, err = io.Copy(io.Discard, res.Body)
-
-		if err != nil {
-			slog.Error(err.Error())
-		}
+		_, _ = io.Copy(io.Discard, res.Body)
 
 		switch {
 		case res.StatusCode >= 500: // retry
