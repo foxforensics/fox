@@ -264,7 +264,7 @@ func (ldr *Loader) processData(ctx context.Context, path, part string, b []byte,
 	}
 
 	// filter for specific streams
-	if strings.Contains(path, part) {
+	if len(part) == 0 || strings.Contains(path, part) {
 		return ldr.createHeap(ctx, path, hint, b)
 	}
 
