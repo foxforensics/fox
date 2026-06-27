@@ -53,7 +53,8 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 	case "uncompressed":
 		r1 = br
 	default:
-		slog.Warn(fmt.Sprintf("%s not supported!", v))
+		slog.Error(fmt.Sprintf("%s not supported!", v))
+		return
 	}
 
 	// prevent resource leaks
