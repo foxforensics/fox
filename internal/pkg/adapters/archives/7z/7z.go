@@ -1,4 +1,4 @@
-package szip
+package sevenzip
 
 import (
 	"bytes"

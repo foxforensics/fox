@@ -2,7 +2,7 @@ package loader
 
 import (
 	"go.foxforensics.eu/fox/v4/internal/pkg"
-	_zip "go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/7z"
+	sevenzip "go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/7z"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/ar"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/cab"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/cpio"
@@ -103,7 +103,7 @@ func RegisterDeflates() {
 
 func RegisterExtracts() {
 	registry.Extracts = []ExtractEntry{
-		{"7z", _zip.Detect, _zip.Extract},
+		{"7z", sevenzip.Detect, sevenzip.Extract},
 		{"ar", ar.Detect, ar.Extract},
 		{"cab", cab.Detect, cab.Extract},
 		{"cpio", cpio.Detect, cpio.Extract},
