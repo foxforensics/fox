@@ -32,7 +32,7 @@ func Deflate(b []byte) ([]byte, error) {
 	}
 
 	defer func() {
-		if err = r.Close(); err != nil {
+		if err := r.Close(); err != nil {
 			slog.Error(err.Error())
 		}
 	}()

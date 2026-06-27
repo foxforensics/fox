@@ -49,7 +49,7 @@ func extractFile(f *sevenzip.File, root string) (e pkg.Stream, err error) {
 	}
 
 	defer func() {
-		if err = r.Close(); err != nil {
+		if err := r.Close(); err != nil {
 			slog.Error(err.Error())
 		}
 	}()

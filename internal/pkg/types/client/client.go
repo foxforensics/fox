@@ -142,13 +142,17 @@ func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
 		}
 
 		defer func() {
-			if err = res.Body.Close(); err != nil {
+			if err := res.Body.Close(); err != nil {
 				slog.Error(err.Error())
 			}
 		}()
 
 		// drain body
-		_, _ = io.Copy(io.Discard, res.Body)
+		_, err = io.Copy(io.Discard, res.Body)
+
+		if err != nil {
+			slog.Error(err.Error())
+		}
 
 		switch {
 		case res.StatusCode >= 500: // retry

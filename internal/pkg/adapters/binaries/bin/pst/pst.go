@@ -48,9 +48,7 @@ func Convert(b []byte) ([]byte, error) {
 		return b, err
 	}
 
-	defer func() {
-		pf.Cleanup()
-	}()
+	defer pf.Cleanup()
 
 	v, err := getFolders(pf)
 

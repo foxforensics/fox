@@ -22,11 +22,11 @@ func Deflate(b []byte) ([]byte, error) {
 		return b, err
 	}
 
-	defer func(r io.Closer) {
-		if err = r.Close(); err != nil {
+	defer func() {
+		if err := r.Close(); err != nil {
 			slog.Error(err.Error())
 		}
-	}(r)
+	}()
 
 	return io.ReadAll(r)
 }

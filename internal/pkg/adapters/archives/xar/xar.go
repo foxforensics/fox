@@ -26,7 +26,7 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 	}
 
 	defer func() {
-		if err = r.Close(); err != nil {
+		if err := r.Close(); err != nil {
 			slog.Error(err.Error())
 		}
 	}()
@@ -54,7 +54,7 @@ func extractFile(f *xar.File, root string) (e pkg.Stream, err error) {
 	}
 
 	defer func() {
-		if err = r.Close(); err != nil {
+		if err := r.Close(); err != nil {
 			slog.Error(err.Error())
 		}
 	}()
