@@ -26,7 +26,9 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 	}
 
 	defer func() {
-		_ = r.Close()
+		if err = r.Close(); err != nil {
+			slog.Error(err.Error())
+		}
 	}()
 
 	for _, f := range r.File {
@@ -51,9 +53,11 @@ func extractFile(f *xar.File, root string) (e pkg.Stream, err error) {
 		return e, err
 	}
 
-	defer func(r io.Closer) {
-		_ = r.Close()
-	}(r)
+	defer func() {
+		if err = r.Close(); err != nil {
+			slog.Error(err.Error())
+		}
+	}()
 
 	e.Path = sys.JoinPart(root, f.Name)
 	e.Data, err = io.ReadAll(r)

@@ -39,7 +39,9 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 
 		buf, err := io.ReadAll(rc)
 
-		_ = rc.Close()
+		if err := rc.Close(); err != nil {
+			slog.Error(err.Error())
+		}
 
 		if err != nil {
 			slog.Error(err.Error())

@@ -5,6 +5,7 @@ import (
 	"compress/lzw"
 	"errors"
 	"io"
+	"log/slog"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg"
 )
@@ -19,9 +20,11 @@ func Deflate(b []byte) ([]byte, error) {
 	// compress compatible settings
 	r := lzw.NewReader(bytes.NewReader(b[3:]), lzw.LSB, 8)
 
-	defer func(r io.Closer) {
-		_ = r.Close()
-	}(r)
+	defer func() {
+		if err := r.Close(); err != nil {
+			slog.Error(err.Error())
+		}
+	}()
 
 	buf, err := io.ReadAll(r)
 

@@ -59,7 +59,9 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 	// prevent resource leaks
 	if r, ok := r1.(*gzip.Reader); ok {
 		defer func() {
-			_ = r.Close()
+			if err = r.Close(); err != nil {
+				slog.Error(err.Error())
+			}
 		}()
 	}
 

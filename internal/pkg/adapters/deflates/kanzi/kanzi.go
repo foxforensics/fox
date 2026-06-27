@@ -3,6 +3,7 @@ package kanzi
 import (
 	"bytes"
 	"io"
+	"log/slog"
 
 	kio "github.com/flanglet/kanzi-go/v2/io"
 	"go.foxforensics.eu/fox/v4/internal/pkg"
@@ -22,7 +23,9 @@ func Deflate(b []byte) ([]byte, error) {
 	}
 
 	defer func(r io.Closer) {
-		_ = r.Close()
+		if err = r.Close(); err != nil {
+			slog.Error(err.Error())
+		}
 	}(r)
 
 	return io.ReadAll(r)

@@ -142,7 +142,9 @@ func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
 		}
 
 		defer func() {
-			_ = res.Body.Close()
+			if err = res.Body.Close(); err != nil {
+				slog.Error(err.Error())
+			}
 		}()
 
 		// drain body

@@ -50,7 +50,9 @@ func Convert(b []byte) ([]byte, error) {
 	}
 
 	defer func() {
-		_ = r.Close()
+		if err = r.Close(); err != nil {
+			slog.Error(err.Error())
+		}
 	}()
 
 	buf := bytes.NewBuffer(nil)

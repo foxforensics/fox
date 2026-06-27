@@ -3,6 +3,7 @@ package gzip
 import (
 	"bytes"
 	"io"
+	"log/slog"
 
 	"github.com/klauspost/compress/gzip"
 	"go.foxforensics.eu/fox/v4/internal/pkg"
@@ -21,9 +22,11 @@ func Deflate(b []byte) ([]byte, error) {
 		return b, err
 	}
 
-	defer func(r *gzip.Reader) {
-		_ = r.Close()
-	}(r)
+	defer func() {
+		if err = r.Close(); err != nil {
+			slog.Error(err.Error())
+		}
+	}()
 
 	return io.ReadAll(r)
 }

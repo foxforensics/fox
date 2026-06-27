@@ -3,6 +3,7 @@ package zlib
 import (
 	"bytes"
 	"io"
+	"log/slog"
 
 	"github.com/klauspost/compress/zlib"
 	"go.foxforensics.eu/fox/v4/internal/pkg"
@@ -30,9 +31,11 @@ func Deflate(b []byte) ([]byte, error) {
 		return b, err
 	}
 
-	defer func(r io.Closer) {
-		_ = r.Close()
-	}(r)
+	defer func() {
+		if err = r.Close(); err != nil {
+			slog.Error(err.Error())
+		}
+	}()
 
 	return io.ReadAll(r)
 }

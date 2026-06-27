@@ -48,9 +48,11 @@ func extractFile(f *sevenzip.File, root string) (e pkg.Stream, err error) {
 		return e, err
 	}
 
-	defer func(r io.Closer) {
-		_ = r.Close()
-	}(r)
+	defer func() {
+		if err = r.Close(); err != nil {
+			slog.Error(err.Error())
+		}
+	}()
 
 	e.Path = sys.JoinPart(root, f.Name)
 	e.Data, err = io.ReadAll(r)

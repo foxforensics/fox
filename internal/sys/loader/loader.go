@@ -197,7 +197,9 @@ func (ldr *Loader) loadFile(ctx context.Context, path, part string) error {
 	}
 
 	defer func() {
-		_ = f.Close()
+		if err = f.Close(); err != nil {
+			slog.Error(err.Error())
+		}
 	}()
 
 	fi, err := f.Stat()

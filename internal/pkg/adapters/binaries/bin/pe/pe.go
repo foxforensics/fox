@@ -27,7 +27,9 @@ func Convert(b []byte) ([]byte, error) {
 	}
 
 	defer func() {
-		_ = p.Close()
+		if err = p.Close(); err != nil {
+			slog.Error(err.Error())
+		}
 	}()
 
 	err = p.Parse()
