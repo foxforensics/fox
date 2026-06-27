@@ -17,7 +17,10 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 )
 
-var Latency = int64(1024 * 64) // 1mb
+const (
+	Latency = int64(1024 * 64) // 64kb
+	Scale   = 1024
+)
 
 var Local = []string{
 	"/Windows/System32/winevt/Logs",
@@ -43,7 +46,7 @@ func New(opts *Options) *Hunter {
 }
 
 func (htr *Hunter) Hunt(ctx context.Context, heaps <-chan *heap.Heap) <-chan *event.Event {
-	ch := make(chan *event.Event, htr.opts.Threads*1024)
+	ch := make(chan *event.Event, htr.opts.Threads*Scale)
 
 	go func() {
 		defer close(ch)

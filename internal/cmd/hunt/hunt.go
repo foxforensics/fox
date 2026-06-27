@@ -66,7 +66,7 @@ var Default []byte
 type Hunt struct {
 	All     bool `short:"a"`
 	Sort    bool `short:"s"`
-	Uniq    bool `short:"u" xor:"uniq"`
+	Uniq    bool `short:"u"`
 	Json    bool `short:"j" xor:"json,jsonl"`
 	Jsonl   bool `short:"J" xor:"json,jsonl"`
 	Parquet bool `short:"p"`
@@ -176,8 +176,8 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 		WithContext(fox.Context).
 		WithMaxGoroutines(fox.Threads)
 
-	ch1 := make(chan *event.Event, fox.Threads*1024)
-	ch2 := make(chan *event.Event, fox.Threads*1024)
+	ch1 := make(chan *event.Event, fox.Threads*hunter.Scale)
+	ch2 := make(chan *event.Event, fox.Threads*hunter.Scale)
 
 	slog.Info("hunt: started")
 	slog.Debug(fmt.Sprintf("hunt: using %d thread(s)", fox.Threads))
@@ -249,21 +249,23 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 }
 
 func (cmd *Hunt) discard(fox *cmd.Globals) {
-	if cmd.parquet != nil {
-		err := cmd.parquet.Close()
+	if cmd.parquet == nil {
+		return
+	}
 
-		if err != nil {
-			slog.Error(err.Error())
-		}
+	err := cmd.parquet.Close()
 
-		if fox.NoReceipt {
-			return
-		}
+	if err != nil {
+		slog.Error(err.Error())
+	}
 
-		err = receipt.Generate(cmd.parquet.String())
+	if fox.NoReceipt {
+		return
+	}
 
-		if err != nil {
-			slog.Error(err.Error())
-		}
+	err = receipt.Generate(cmd.parquet.String())
+
+	if err != nil {
+		slog.Error(err.Error())
 	}
 }
