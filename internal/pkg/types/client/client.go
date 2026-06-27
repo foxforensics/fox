@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cenkalti/backoff"
+	"github.com/cenkalti/backoff/v6"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas/ecs"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas/hec"
@@ -124,13 +124,13 @@ func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
 	}
 
 	bo := backoff.NewExponentialBackOff()
-	bo.MaxElapsedTime = Timeout
+	bo.InitialInterval = Timeout
 
-	return backoff.Retry(func() error {
+	_, err = backoff.Retry(ctx, func() (any, error) {
 		req, err := http.NewRequestWithContext(ctx, "POST", cli.opts.Url, bytes.NewReader(buf))
 
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		req.Header = cli.header
@@ -138,7 +138,7 @@ func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
 		res, err := cli.client.Do(req)
 
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		defer func() {
@@ -152,16 +152,18 @@ func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
 
 		switch {
 		case res.StatusCode >= 500: // retry
-			return errors.New(res.Status)
+			return nil, errors.New(res.Status)
 		case res.StatusCode >= 400: // halt
-			return backoff.Permanent(errors.New(res.Status))
+			return nil, backoff.Permanent(errors.New(res.Status))
 		}
 
 		select {
 		case <-ctx.Done():
-			return backoff.Permanent(ctx.Err())
+			return nil, backoff.Permanent(ctx.Err())
 		default:
-			return nil
+			return nil, nil
 		}
-	}, bo)
+	}, backoff.WithBackOff(bo))
+
+	return err
 }
