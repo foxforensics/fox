@@ -236,10 +236,10 @@ func (ldr *Loader) processData(ctx context.Context, path, part string, b []byte,
 		return errors.New("max archives reached")
 	}
 
-	// 1. deflate data
+	// 1. deflate data (nested)
 	for {
 		if b, ok = ldr.deflateData(b); !ok {
-			break
+			break // no more nested
 		}
 	}
 
@@ -308,10 +308,7 @@ func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
 
 			if err != nil {
 				slog.Error(err.Error())
-
-				if !ldr.opts.Strict {
-					r = b // ignore partly result
-				}
+				return b, false
 			}
 
 			return r, true
@@ -330,10 +327,7 @@ func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
 
 			if err != nil {
 				slog.Error(err.Error())
-
-				if !ldr.opts.Strict {
-					r = b // ignore partly result
-				}
+				return b, false
 			}
 
 			return r, true
@@ -352,10 +346,7 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 
 			if err != nil {
 				slog.Error(err.Error())
-
-				if !ldr.opts.Strict {
-					r = b // ignore partly result
-				}
+				return b, false
 			}
 
 			return r, true
