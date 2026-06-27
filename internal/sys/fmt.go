@@ -82,7 +82,15 @@ func Mechanize(s string) (int64, bool) {
 		return int64(v), true
 	}
 
-	exp := float64(strings.IndexByte("bkmgtpezyr", unit))
+	n := int64(v)
 
-	return int64(v * int(math.Pow(1024, exp))), true
+	for range strings.IndexByte("bkmgtpezyr", unit) {
+		if n > math.MaxInt64/1024 || n < math.MinInt64/1024 {
+			return 0, false // check for overflow and underflow
+		}
+
+		n *= 1024
+	}
+
+	return n, true
 }
