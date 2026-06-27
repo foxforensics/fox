@@ -23,8 +23,7 @@ func Detect(b []byte) bool {
 		return false // header invalid
 	}
 
-	_, err := Deflate(b)
-	return err == nil
+	return true
 }
 
 func Deflate(b []byte) ([]byte, error) {
