@@ -80,7 +80,7 @@ func macAddr() string {
 		}
 	}
 
-	return ""
+	return "unknown"
 }
 
 func pad(s string) string {
