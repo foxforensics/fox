@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"log/slog"
 	"maps"
 	"slices"
 	"strings"
@@ -55,7 +56,11 @@ func (e *Event) AsCEF() string {
 		version.Number,
 	))
 
-	_, _ = replacer.WriteString(&sb, sys.Sanitize(e.Message[:min(len(e.Message), 512)]))
+	_, err := replacer.WriteString(&sb, sys.Sanitize(e.Message[:min(len(e.Message), 512)]))
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
 
 	sb.WriteString(fmt.Sprintf("|%d|", e.Severity))
 
