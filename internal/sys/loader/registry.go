@@ -31,7 +31,6 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/lz4"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/lzfse"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/lzip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/lznt1"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/lzo"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/lzw"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/minlz"
@@ -92,7 +91,6 @@ func RegisterDeflates() {
 		{"lzip", lzip.Detect, lzip.Deflate},
 		{"lzo", lzo.Detect, lzo.Deflate},
 		{"lzfse", lzfse.Detect, lzfse.Deflate},
-		{"lznt1", lznt1.Detect, lznt1.Deflate},
 		{"lzw", lzw.Detect, lzw.Deflate},
 		{"minlz", minlz.Detect, minlz.Deflate},
 		{"s2", s2.Detect, s2.Deflate},
