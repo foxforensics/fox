@@ -73,7 +73,7 @@ func Deflate(b []byte) ([]byte, error) {
 
 		body = body[12+cl:]
 
-		if len(body) == 0 {
+		if len(body) < 8 {
 			break
 		}
 	}
