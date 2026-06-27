@@ -53,7 +53,6 @@ func (htr *Hunter) Hunt(ctx context.Context, heaps <-chan *heap.Heap) <-chan *ev
 
 		p := pool.New().
 			WithContext(ctx).
-			WithFirstError().
 			WithMaxGoroutines(htr.opts.Threads)
 
 		for h := range heaps {

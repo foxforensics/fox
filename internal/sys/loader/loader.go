@@ -124,7 +124,6 @@ func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
 
 	p := pool.New().
 		WithContext(ctx).
-		WithFirstError().
 		WithMaxGoroutines(ldr.opts.Threads)
 
 	for _, path := range match {
@@ -154,7 +153,7 @@ func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
 }
 
 func (ldr *Loader) loadDir(ctx context.Context, path, part string, i int) error {
-	if ldr.opts.Strict && i > MaxFolders {
+	if ldr.opts.Strict && i >= MaxFolders {
 		return errors.New("max folders reached")
 	}
 
@@ -166,7 +165,6 @@ func (ldr *Loader) loadDir(ctx context.Context, path, part string, i int) error 
 
 	p := pool.New().
 		WithContext(ctx).
-		WithFirstError().
 		WithMaxGoroutines(ldr.opts.Threads)
 
 	for _, f := range dir {
@@ -234,7 +232,7 @@ func (ldr *Loader) processData(ctx context.Context, path, part string, b []byte,
 	var ok bool
 
 	// check depth to protect against zip bombs
-	if ldr.opts.Strict && i > MaxArchives {
+	if ldr.opts.Strict && i >= MaxArchives {
 		return errors.New("max archives reached")
 	}
 
@@ -275,7 +273,6 @@ func (ldr *Loader) extractData(ctx context.Context, path, part string, b []byte,
 
 			p := pool.New().
 				WithContext(ctx).
-				WithFirstError().
 				WithMaxGoroutines(ldr.opts.Threads)
 
 			for _, e := range a.Extract(b, path, ldr.opts.Password) {
