@@ -100,7 +100,7 @@ func Extract(b []byte, root, _ string) (e []pkg.Stream) {
 
 		buf := make([]byte, h.Size)
 
-		_, err = r2.Read(buf)
+		_, err = io.ReadFull(r2, buf)
 
 		if err != nil {
 			slog.Error(err.Error())
