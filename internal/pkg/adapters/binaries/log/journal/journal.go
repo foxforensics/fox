@@ -135,7 +135,11 @@ func newEvent(od *ordereddict.Dict) (*event.Event, error) {
 	}
 
 	if v, ok := evt.GetInt64("PRIORITY"); ok {
-		e.Severity = 10 - int(v) // minimum 3
+		if v <= 7 {
+			e.Severity = 10 - int(v) // minimum 3
+		} else {
+			e.Severity = 2 // malformed means critical
+		}
 	}
 
 	d := ordereddict.NewDict()
