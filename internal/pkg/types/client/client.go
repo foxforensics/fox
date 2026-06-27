@@ -96,6 +96,28 @@ func New(opts *Options) (*Client, error) {
 	return cli, nil
 }
 
+func Raw(url string) (*Client, error) {
+	return New(&Options{
+		Url:    url,
+		Schema: schemas.Raw,
+	})
+}
+
+func Ecs(url string) (*Client, error) {
+	return New(&Options{
+		Url:    url,
+		Schema: schemas.Ecs,
+	})
+}
+
+func Hec(url, token string) (*Client, error) {
+	return New(&Options{
+		Url:    url,
+		Token:  token,
+		Schema: schemas.Hec,
+	})
+}
+
 func (cli *Client) Run(ctx context.Context, ch <-chan *event.Event) error {
 	for e := range ch {
 		select {
@@ -103,7 +125,7 @@ func (cli *Client) Run(ctx context.Context, ch <-chan *event.Event) error {
 			return ctx.Err()
 
 		default:
-			if err := cli.stream(ctx, e); err != nil {
+			if err := cli.send(ctx, e); err != nil {
 				slog.Error(err.Error())
 			}
 		}
@@ -116,7 +138,7 @@ func (cli *Client) String() string {
 	return fmt.Sprintf("%s@%s", cli.opts.Schema, cli.opts.Url)
 }
 
-func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
+func (cli *Client) send(ctx context.Context, evt *event.Event) error {
 	buf, err := cli.apply(evt)
 
 	if err != nil {
@@ -127,12 +149,6 @@ func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
 	bo.MaxInterval = Timeout
 
 	_, err = backoff.Retry(ctx, func() (any, error) {
-		select {
-		case <-ctx.Done():
-			return nil, backoff.Permanent(ctx.Err())
-		default:
-		}
-
 		req, err := http.NewRequestWithContext(ctx, "POST", cli.opts.Url, bytes.NewReader(buf))
 
 		if err != nil {

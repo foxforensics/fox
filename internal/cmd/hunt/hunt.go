@@ -15,7 +15,6 @@ import (
 	"github.com/sourcegraph/conc/pool"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/schemas"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/client"
 	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
@@ -131,23 +130,11 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 	switch {
 	case len(cmd.Url) > 0:
-		cmd.client, err = client.New(&client.Options{
-			Url:    cmd.Url,
-			Schema: schemas.Raw,
-		})
-
+		cmd.client, err = client.Raw(cmd.Url)
 	case len(cmd.Ecs) > 0:
-		cmd.client, err = client.New(&client.Options{
-			Url:    cmd.Ecs,
-			Schema: schemas.Ecs,
-		})
-
+		cmd.client, err = client.Ecs(cmd.Ecs)
 	case len(cmd.Hec) > 0:
-		cmd.client, err = client.New(&client.Options{
-			Url:    cmd.Hec,
-			Token:  cmd.Auth,
-			Schema: schemas.Hec,
-		})
+		cmd.client, err = client.Hec(cmd.Hec, cmd.Auth)
 	}
 
 	return err
