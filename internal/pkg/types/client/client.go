@@ -124,7 +124,7 @@ func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
 	}
 
 	bo := backoff.NewExponentialBackOff()
-	bo.InitialInterval = Timeout
+	bo.MaxInterval = Timeout
 
 	_, err = backoff.Retry(ctx, func() (any, error) {
 		req, err := http.NewRequestWithContext(ctx, "POST", cli.opts.Url, bytes.NewReader(buf))
