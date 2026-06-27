@@ -101,7 +101,7 @@ func getMessages(f *pst.Folder) ([]Message, error) {
 		res = append(res, *m)
 	}
 
-	return res, nil
+	return res, it.Err()
 }
 
 func getAttachments(m *pst.Message) ([]Attachment, error) {
@@ -136,5 +136,5 @@ func getAttachments(m *pst.Message) ([]Attachment, error) {
 		res = append(res, *a)
 	}
 
-	return res, nil
+	return res, it.Err()
 }
