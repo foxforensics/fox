@@ -150,5 +150,6 @@ func trace() {
 	if err := recover(); err != nil {
 		slog.Error(fmt.Sprintf("%+v", err))
 		slog.Debug(string(debug.Stack()))
+		os.Exit(1)
 	}
 }
