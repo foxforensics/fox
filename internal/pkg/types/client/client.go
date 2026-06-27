@@ -127,6 +127,12 @@ func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
 	bo.MaxInterval = Timeout
 
 	_, err = backoff.Retry(ctx, func() (any, error) {
+		select {
+		case <-ctx.Done():
+			return nil, backoff.Permanent(ctx.Err())
+		default:
+		}
+
 		req, err := http.NewRequestWithContext(ctx, "POST", cli.opts.Url, bytes.NewReader(buf))
 
 		if err != nil {
@@ -148,18 +154,17 @@ func (cli *Client) stream(ctx context.Context, evt *event.Event) error {
 		}()
 
 		// drain body
-		_, _ = io.Copy(io.Discard, res.Body)
+		_, err = io.Copy(io.Discard, res.Body)
+
+		if err != nil {
+			slog.Error(err.Error())
+		}
 
 		switch {
 		case res.StatusCode >= 500: // retry
 			return nil, errors.New(res.Status)
 		case res.StatusCode >= 400: // halt
 			return nil, backoff.Permanent(errors.New(res.Status))
-		}
-
-		select {
-		case <-ctx.Done():
-			return nil, backoff.Permanent(ctx.Err())
 		default:
 			return nil, nil
 		}
