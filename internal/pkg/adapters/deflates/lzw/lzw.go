@@ -17,6 +17,10 @@ func Detect(b []byte) bool {
 }
 
 func Deflate(b []byte) ([]byte, error) {
+	if len(b) < 4 {
+		return b, errors.New("invalid length")
+	}
+
 	// compress compatible settings
 	r := lzw.NewReader(bytes.NewReader(b[3:]), lzw.LSB, 8)
 
