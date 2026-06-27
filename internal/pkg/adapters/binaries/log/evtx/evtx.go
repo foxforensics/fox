@@ -71,6 +71,8 @@ func Prepare() {
 	providers, err = events.Get()
 
 	if err != nil {
+		// use empty fallback on errors
+		providers = make(events.Providers)
 		slog.Error(err.Error())
 	}
 
