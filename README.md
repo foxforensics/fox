@@ -38,7 +38,6 @@
   * [x] Built-in warning of critical system events
   * [x] Filter events with [Sigma Rules](https://sigmahq.io/) syntax
   * [x] Stream events in [Splunk](https://help.splunk.com/en/splunk-enterprise/leverage-rest-apis/rest-api-reference/10.0/input-endpoints/input-endpoint-descriptions) or [Elastic](https://www.elastic.co/docs/reference/ecs) format
-  * [x] Stream events using HTTPS protocol
   * [x] Save as `JSON`, `JSON Lines` or `Parquet` 
 
 ## Install
