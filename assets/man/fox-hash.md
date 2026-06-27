@@ -112,7 +112,7 @@ $ fox hash -Himpfuzzy *.exe
 
 :   Hash binaries for similarity.
 
-$ fox hash -Pinfected ioc.zip:ioc.exe
+$ fox hash -Pinfected ioc.zip::ioc.exe
 
 :   Hash binary inside an archive.
 

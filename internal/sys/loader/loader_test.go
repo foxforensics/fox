@@ -58,12 +58,12 @@ func TestLoadFiles(t *testing.T) {
 				"archives/test.zip",
 			},
 			[]string{
-				"test.zip:hello.rar:hello.txt",
-				"test.zip:hello.txt.bz2",
-				"test.zip:hello.txt.gz",
-				"test.zip:hello.txt.lz4",
-				"test.zip:hello.txt.xz",
-				"test.zip:hello.txt.zst",
+				"test.zip::hello.rar::hello.txt",
+				"test.zip::hello.txt.bz2",
+				"test.zip::hello.txt.gz",
+				"test.zip::hello.txt.lz4",
+				"test.zip::hello.txt.xz",
+				"test.zip::hello.txt.zst",
 			},
 		}, {
 			"Directory",

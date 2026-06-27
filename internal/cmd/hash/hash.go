@@ -40,7 +40,7 @@ Example: Hash binaries for similarity
   $ fox hash -Himpfuzzy *.exe
 
 Example: Hash binary inside an archive
-  $ fox hash -Pinfected ioc.zip:ioc.exe
+  $ fox hash -Pinfected ioc.zip::ioc.exe
 
 Example: Guess hash algorithm from sum
   $ fox hash -Hsha1 -g sum.txt
