@@ -94,7 +94,7 @@ Disable Flags
 
 **--no-strict**
 
-:   Don't stop on parser errors (**-rrr**).
+:   Don't apply loader checks (**-rrr**). This effectively removes all resource limiting safeguards from the loading pipeline, which are in place to mitigate malicious crafted files like zip bombs.
 
 **--no-deflate**
 

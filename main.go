@@ -58,7 +58,7 @@ Disable flags:
   -r, --raw                Don't process files (r/rr/rrr)
   -q, --quiet              Don't print anything
   -n, --no-pretty          Don't prettify the output
-      --no-strict          Don't stop on parser errors
+      --no-strict          Don't apply loader checks
       --no-deflate         Don't deflate automatically
       --no-extract         Don't extract automatically
       --no-convert         Don't convert automatically
