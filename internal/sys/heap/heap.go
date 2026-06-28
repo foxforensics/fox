@@ -8,6 +8,8 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/sys/mmap"
 )
 
+const block = 4096
+
 type Heap struct {
 	sync.RWMutex
 
@@ -29,20 +31,26 @@ func (h *Heap) String() string {
 func (h *Heap) Reader() io.ReaderAt {
 	h.RLock()
 	defer h.RUnlock()
+
 	return bytes.NewReader(h.m)
 }
 
 func (h *Heap) Bytes() []byte {
 	h.RLock()
 	defer h.RUnlock()
+
 	return h.m
 }
 
 func (h *Heap) IsText() bool {
 	h.RLock()
 	defer h.RUnlock()
-	b := h.m[:min(h.Size, 4096)]
-	return !bytes.ContainsRune(b, 0)
+
+	if h.m == nil {
+		return false
+	}
+
+	return bytes.IndexRune(h.m[:min(h.Size, block)], 0) > 0
 }
 
 func (h *Heap) Discard() {
