@@ -9,6 +9,11 @@ import (
 	"go.foxforensics.eu/hashdump/extract"
 )
 
+var (
+	defaultLM = fmt.Sprintf("%x", extract.DefaultLM)
+	defaultNT = fmt.Sprintf("%x", extract.DefaultNT)
+)
+
 type Record interface {
 	String() string
 }
@@ -48,20 +53,30 @@ func (s *Secret) ToNTLM(history bool) string {
 	sb.WriteString(fmt.Sprintf("%s:%d:%s:%s:::",
 		s.SAMAccountName,
 		s.RID,
-		s.format(s.LMHash, extract.DefaultLM),
-		s.format(s.NTHash, extract.DefaultNT),
+		s.format(s.LMHash, defaultLM),
+		s.format(s.NTHash, defaultNT),
 	))
 
 	// append historic hashes
 	if history {
 		for i := range s.NTHashHistory {
-			// LM and NT history have always the same length
+			var lm = defaultLM
+			var nt = defaultNT
+
+			if i < len(s.LMHashHistory) {
+				lm = s.LMHashHistory[i]
+			}
+
+			if i < len(s.NTHashHistory) {
+				nt = s.NTHashHistory[i]
+			}
+
 			sb.WriteString(fmt.Sprintf("\n%s_history%d:%d:%s:%s:::",
 				s.SAMAccountName,
 				i,
 				s.RID,
-				s.format(s.LMHashHistory[i], extract.DefaultLM),
-				s.format(s.NTHashHistory[i], extract.DefaultNT),
+				s.format(lm, defaultLM),
+				s.format(nt, defaultNT),
 			))
 		}
 	}
@@ -70,19 +85,19 @@ func (s *Secret) ToNTLM(history bool) string {
 }
 
 func (s *Secret) LmOnly() string {
-	return s.format(s.LMHash, extract.DefaultLM)
+	return s.format(s.LMHash, defaultLM)
 }
 
 func (s *Secret) NtOnly() string {
-	return s.format(s.NTHash, extract.DefaultNT)
+	return s.format(s.NTHash, defaultNT)
 }
 
-func (s *Secret) format(sum string, def []byte) string {
+func (s *Secret) format(sum, def string) string {
 	if _, pwd := tables.Lookup(sum); len(pwd) > 0 {
 		return writer.AsBold(pwd)
 	}
 
-	if sum == fmt.Sprintf("%x", def) {
+	if sum == def {
 		return writer.AsGray(sum)
 	}
 
