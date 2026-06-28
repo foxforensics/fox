@@ -8,7 +8,11 @@ import (
 )
 
 func Detect(b []byte) bool {
-	return json.Valid(b)
+	if len(b) > 0 && (b[0] == '{' || b[0] == '[') {
+		return json.Valid(b)
+	}
+
+	return false
 }
 
 func Format(b []byte) ([]byte, error) {
