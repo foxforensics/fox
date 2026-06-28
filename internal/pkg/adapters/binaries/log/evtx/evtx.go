@@ -109,7 +109,7 @@ func newChunk(sr *io.SectionReader, off int64) (*evtx.Chunk, error) {
 	chk.Offset = off
 	chk.Data = make([]byte, evtx.ChunkSize)
 
-	if _, err := sr.Read(chk.Data); err != nil {
+	if _, err := io.ReadFull(sr, chk.Data); err != nil {
 		return nil, err
 	}
 
