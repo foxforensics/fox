@@ -160,11 +160,7 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 	defer cmd.discard(fox)
 
 	sig := evaluator.ForRule(cmd.rule)
-	mux := muxer.New(
-		fox.Context,
-		fox.Threads,
-		hunter.Scale,
-	)
+	mux := muxer.New(fox.Context, hunter.Scale)
 
 	slog.Info("hunt: started")
 	slog.Debug(fmt.Sprintf("hunt: using %d thread(s)", fox.Threads))

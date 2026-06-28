@@ -11,25 +11,21 @@ import (
 type Handler func(context.Context, *event.Event) error
 
 type Muxer struct {
-	scale    int
-	threads  int
+	buffer   int
 	handlers *pool.ContextPool
 	channels []chan *event.Event
 }
 
-func New(ctx context.Context, t, n int) *Muxer {
+func New(ctx context.Context, n int) *Muxer {
 	return &Muxer{
-		scale:   max(1, n),
-		threads: max(1, t),
-		handlers: pool.New().
-			WithContext(ctx).
-			WithMaxGoroutines(t),
-		channels: make([]chan *event.Event, 0, t),
+		buffer:   max(1, n),
+		handlers: pool.New().WithContext(ctx),
+		channels: make([]chan *event.Event, 0),
 	}
 }
 
 func (m *Muxer) AddHandler(h Handler) {
-	ch := make(chan *event.Event, m.threads*m.scale)
+	ch := make(chan *event.Event, m.buffer)
 
 	m.channels = append(m.channels, ch)
 	m.handlers.Go(func(ctx context.Context) error {
@@ -54,9 +50,15 @@ func (m *Muxer) AddHandler(h Handler) {
 func (m *Muxer) Handle(ctx context.Context, e *event.Event) {
 	select {
 	case <-ctx.Done():
+		return
+
 	default:
 		for _, ch := range m.channels {
-			ch <- e
+			select {
+			case ch <- e:
+			case <-ctx.Done():
+				return
+			}
 		}
 	}
 }
