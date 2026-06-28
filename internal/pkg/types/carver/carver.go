@@ -79,13 +79,13 @@ func (crv *Carver) Carve(ctx context.Context, block []byte) <-chan *String {
 	}()
 
 	if crv.opts.Sort {
-		return crv.sort(ch)
+		return crv.sort(ctx, ch)
 	}
 
 	return ch
 }
 
-func (crv *Carver) sort(ch <-chan *String) <-chan *String {
+func (crv *Carver) sort(ctx context.Context, ch <-chan *String) <-chan *String {
 	sorted := make(chan *String, cap(ch))
 
 	go func() {
@@ -100,7 +100,11 @@ func (crv *Carver) sort(ch <-chan *String) <-chan *String {
 		slices.SortStableFunc(v, compare)
 
 		for _, s := range v {
-			sorted <- &s
+			select {
+			case <-ctx.Done():
+				return
+			case sorted <- &s:
+			}
 		}
 	}()
 
