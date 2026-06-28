@@ -2,30 +2,41 @@
 package receipt
 
 import (
-	"bytes"
 	"crypto/sha256"
 	"fmt"
-	"net"
 	"os"
 	"os/user"
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
 )
 
 var header = strings.TrimSpace(`
-┏━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ FILE │ %-71s ┃
-┠──────┼─────────────────────────────────────────────────────────────────────────┨
-┃ TIME │ %s ┃
-┃ USER │ %s ┃
-┃ HOST │ %s ┃
-┃ HASH │ %s ┃
-┠──────┼─────────────────────────────────────────────────────────────────────────┨
-┃ INFO │ %-71s ┃
-┗━━━━━━┴━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+FOX CHAIN OF CUSTODY
+====================
+v%s (%s-%s)
+
+ARTIFACT
+--------
+%s
+
+METADATA
+--------
+Acquired : %s
+Examiner : %s (%s)
+Host     : %s
+Size     : %d
+
+INTEGRITY
+---------
+SHA-256 : %x
+
+COMMAND
+-------
+%s
 `)
 
 func Generate(path string) error {
@@ -60,33 +71,13 @@ func Generate(path string) error {
 	}
 
 	return os.WriteFile(path+".cc", []byte(fmt.Sprintf(header,
+		version.Number, runtime.GOOS, runtime.GOARCH,
 		abs,
-		pad(fi.ModTime().UTC().String()),
-		pad(fmt.Sprintf("%s (%s)", usr.Name, usr.Username)),
-		pad(fmt.Sprintf("%s (%s)", hst, macAddr())),
-		fmt.Sprintf("%x SHA256", sha256.Sum256(buf)),
-		fmt.Sprintf("Fox Version %s (%s-%s)", version.Number, runtime.GOOS, runtime.GOARCH),
+		fi.ModTime().UTC().Format(time.RFC3339Nano),
+		usr.Name, usr.Username,
+		hst,
+		len(buf),
+		sha256.Sum256(buf),
+		strings.Join(os.Args, " "),
 	)), 0600)
-}
-
-func macAddr() string {
-	iff, err := net.Interfaces()
-
-	if err == nil {
-		for _, i := range iff {
-			if i.Flags&net.FlagUp != 0 && !bytes.Equal(i.HardwareAddr, nil) {
-				return i.HardwareAddr.String()
-			}
-		}
-	}
-
-	return "unknown"
-}
-
-func pad(s string) string {
-	if len(s) < 71 {
-		s = fmt.Sprintf("%s %s", s, strings.Repeat(".", 70-len(s)))
-	}
-
-	return s
 }
