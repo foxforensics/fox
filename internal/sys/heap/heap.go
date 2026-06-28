@@ -50,7 +50,7 @@ func (h *Heap) IsText() bool {
 		return false
 	}
 
-	return bytes.IndexRune(h.m[:min(h.Size, block)], 0) > 0
+	return !bytes.ContainsRune(h.m[:min(h.Size, block)], 0)
 }
 
 func (h *Heap) Discard() {
