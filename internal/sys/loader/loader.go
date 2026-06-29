@@ -262,7 +262,7 @@ func (ldr *Loader) extractData(ctx context.Context, path, part string, b []byte,
 			slog.Debug(fmt.Sprintf("archive detected as possibly %s", a.Name))
 
 			for _, e := range a.Extract(b, path, ldr.opts.Password) {
-				slog.Debug(fmt.Sprintf("stream detected as possibly %s", e.Path))
+				slog.Debug(fmt.Sprintf("stream found %s", e.Path))
 
 				select {
 				case <-ctx.Done():
@@ -341,31 +341,28 @@ func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
 }
 
 func (ldr *Loader) createHeap(ctx context.Context, path, hint string, b []byte) error {
-	if _, ok := ldr.paths.Load(path); ok {
-		return nil // already loaded
-	}
-
-	// check files to protect against zip bombs
 	if ldr.opts.Guarded && ldr.files.Load() >= MaxFiles {
 		return errors.New("max files reached")
 	}
 
-	// add original size
-	ldr.size.Add(uint64(len(b)))
-
-	b = ldr.opts.Query.Reduce(b)
-
-	ldr.paths.Store(path, pkg.Nil{})
-	ldr.files.Add(1)
+	if _, ok := ldr.paths.LoadOrStore(path, pkg.Nil{}); ok {
+		return nil // already loaded
+	}
 
 	select {
 	case <-ctx.Done():
 		return ctx.Err()
-	default:
-		ldr.heaps <- heap.New(path, hint, b)
-	}
 
-	slog.Debug(fmt.Sprintf("loaded heap %s", path))
+	default:
+		ldr.size.Add(uint64(len(b))) // add original size
+		ldr.files.Add(1)
+
+		b = ldr.opts.Query.Reduce(b)
+
+		ldr.heaps <- heap.New(path, hint, b)
+
+		slog.Debug(fmt.Sprintf("loaded heap %s", path))
+	}
 
 	return nil
 }
