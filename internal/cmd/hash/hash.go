@@ -54,8 +54,8 @@ func (fh *FileHash) String() string {
 }
 
 type Hash struct {
-	Hash  []string `short:"H" sep:","`
-	All   bool     `short:"a"`
+	Hash  []string `short:"H" xor:"hash,all" sep:","`
+	All   bool     `short:"a" xor:"hash,all"`
 	Json  bool     `short:"j" xor:"json,jsonl"`
 	Jsonl bool     `short:"J" xor:"json,jsonl"`
 
