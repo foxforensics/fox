@@ -34,21 +34,22 @@ FLAGS
 
 :   Show results as JSON lines.
 
-Reverse Flags
--------------
+Filter Flags
+------------
+All filter flags can only be used while using a single hash algorithm. 
 
-**-l, --lookup**
+**-B, --include**=_file_
 
-:   Lookup using the built-in wordlist. The file contents will be interpreted as value to lookup. Can be combined with **--hash** to lookup only specific hashes or with **--all** the lookup all cryptographic hashes. Excludes **--json** and **--jsonl** flags.
+:   Include only known bad hashes, which are loaded from the given _file_.
 
-**-g, --guess**
+**-G, --exclude**=_file_
 
-:   Guess the used algorithm(s). Excludes **--json** and **--jsonl** flags.
+:   Exclude all known good hashes, which are loaded from the given _file_. For a list of known good hashes, visit the **National Software Reference Library** at <_https://www.nist.gov/itl/csd/secure-systems-and-applications/national-software-reference-library-nsrl_>.
 
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**. If **list** is specified as _path_, only the list of the built-in algorithms will be shown. To refer to paths inside archives, use the archive:file notation.
+Globbing paths to open or '-' to read from **STDIN(4)**. If **list** is specified as _path_, only the list of the built-in algorithms will be shown. To refer to paths inside archives, use the archive::file notation.
 
 ALGORITHMS
 ==========
@@ -115,10 +116,6 @@ $ fox hash -Himpfuzzy *.exe
 $ fox hash -Pinfected ioc.zip::ioc.exe
 
 :   Hash binary inside an archive.
-
-$ fox hash -Hsha1 -g sum.txt
-
-:   Guess hash algorithm from sum.
 
 BUGS
 ====

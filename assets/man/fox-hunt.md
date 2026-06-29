@@ -28,7 +28,7 @@ FLAGS
 
 **-u, --uniq**
 
-:   Show logs that are unique.
+:   Show logs that are unique by **XXH3** hash. The calculated hash has 64-bits and is highly unlikely, but still possible, to collide with the another key.
 
 **-j, --json**
 

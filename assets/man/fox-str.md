@@ -52,7 +52,7 @@ Class Flags
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**. If **list** is specified as _path_, only the list of the built-in classifications will be shown. To refer to paths inside archives, use the archive:file notation.
+Globbing paths to open or '-' to read from **STDIN(4)**. If **list** is specified as _path_, only the list of the built-in classifications will be shown. To refer to paths inside archives, use the archive::file notation.
 
 EXAMPLES
 ========

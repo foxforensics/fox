@@ -20,7 +20,7 @@ FLAGS
 
 **-u, --uniq**
 
-:   Show only unique lines by **XXH3** hash (in default mode).
+:   Show only unique lines by **XXH3** hash (in default mode). The calculated hash has 64-bits and is highly unlikely, but still possible, to collide with the another key. 
 
 **-t, --text**
 
@@ -52,7 +52,7 @@ Filter Flags
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths inside archives, use the archive:file notation.
+Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths inside archives, use the archive::file notation.
 
 EXAMPLES
 ========
