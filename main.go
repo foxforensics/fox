@@ -148,8 +148,7 @@ func timer(t time.Time) {
 
 func trace() {
 	if err := recover(); err != nil {
-		slog.Error(fmt.Sprintf("%+v", err))
-		slog.Debug(string(debug.Stack()))
+		slog.Error(fmt.Sprintf("%+v\n%s", err, debug.Stack()))
 		os.Exit(1)
 	}
 }
