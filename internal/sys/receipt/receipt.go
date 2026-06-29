@@ -19,20 +19,20 @@ FOX CHAIN OF CUSTODY
 ====================
 v%s (%s-%s)
 
-ARTIFACT
+EVIDENCE
 --------
 %s
 
 METADATA
 --------
-Acquired : %s
-Examiner : %s (%s)
-Host     : %s
-Size     : %d
+Acquired  %s
+Examiner  %s (%s)
+Host      %s
+Size      %d
 
 INTEGRITY
 ---------
-SHA-256 : %x
+SHA-256   %x
 
 COMMAND
 -------
