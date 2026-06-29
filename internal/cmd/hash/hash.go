@@ -151,7 +151,9 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 			}
 
 			if len(sum) == 0 {
-				if len(cmd.Exclude) > 0 || len(cmd.Include) > 0 {
+				if len(cmd.Exclude)+len(cmd.Include) == 0 {
+					slog.Debug(fmt.Sprintf("hash was empty"))
+				} else {
 					continue
 				}
 			}
