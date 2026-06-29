@@ -2,6 +2,7 @@ package elf
 
 import (
 	"log/slog"
+	"strings"
 
 	"github.com/saferwall/elf"
 	"go.foxforensics.eu/fox/v4/internal/pkg/lib"
@@ -31,6 +32,9 @@ func Convert(b []byte) ([]byte, error) {
 	if err != nil {
 		return b, err
 	}
+
+	// the marshaled JSON is invalid, so we must wrap it
+	raw = `{"binary":` + strings.Replace(raw, "}{", `},"symbols":{`, 1) + "}"
 
 	return []byte(raw), nil
 }
