@@ -171,12 +171,6 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 		for block := range slices.Chunk(h.Bytes(), int(n)) {
 			fi.Bytes = uint64(len(block))
 			fi.Lines = uint64(bytes.Count(block, []byte{'\n'}))
-
-			// add possibly remaining end
-			if block[len(block)-1] != '\n' {
-				fi.Lines++
-			}
-
 			fi.Entropy = entropy.Calculate(block)
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
