@@ -72,11 +72,11 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 		return nil
 	}
 
-	ch, err := fox.Init(cmd.Paths, cmd.Text || cmd.Hex)
-
 	// apply command specific params
 	fox.Query.Before = cmd.Before
 	fox.Query.After = cmd.After
+
+	ch, err := fox.Init(cmd.Paths, cmd.Text || cmd.Hex)
 
 	if err != nil {
 		return err

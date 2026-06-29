@@ -29,7 +29,7 @@ const MaxArchives = 4
 const MaxDeflates = 4
 
 type Options struct {
-	Query    *pkg.Query
+	Query    pkg.Query
 	Guarded  bool
 	Password string
 }

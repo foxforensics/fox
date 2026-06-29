@@ -107,7 +107,7 @@ func TestLoadFiles(t *testing.T) {
 
 func newOpts() *Options {
 	return &Options{
-		new(pkg.Query),
+		pkg.Query{},
 		true,
 		"",
 	}

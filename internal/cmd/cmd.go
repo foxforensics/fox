@@ -56,7 +56,7 @@ type Globals struct {
 	Writer  *writer.Writer     `kong:"-"`
 	Regexp  *regexp2.Regexp    `kong:"-"`
 	Loader  *loader.Loader     `kong:"-"`
-	Query   *pkg.Query         `kong:"-"`
+	Query   pkg.Query          `kong:"-"`
 	Paths   []string           `kong:"-"`
 }
 
@@ -106,7 +106,7 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 		}
 	}
 
-	fox.Query, err = pkg.NewQuery(fox.Limit, fox.Regexp)
+	err = pkg.SetQuery(&fox.Query, fox.Limit, fox.Regexp)
 
 	if err != nil {
 		return nil, err

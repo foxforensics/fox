@@ -29,23 +29,21 @@ type Query struct {
 	}
 }
 
-func NewQuery(s string, re *regexp2.Regexp) (*Query, error) {
+func SetQuery(q *Query, s string, re *regexp2.Regexp) error {
 	s = strings.TrimSpace(strings.ToLower(s))
 
 	neg := strings.HasPrefix(s, "-")
 
-	query := &Query{
-		Regex:  re,
-		IsHead: !neg,
-		IsTail: neg,
-	}
+	q.Regex = re
+	q.IsHead = !neg
+	q.IsTail = neg
 
 	if len(s) == 0 {
-		return query, nil // empty
+		return nil // empty
 	}
 
 	if ok, _ := limit.MatchString(s); !ok {
-		return nil, errors.New("invalid limit syntax")
+		return errors.New("invalid limit syntax")
 	}
 
 	var val int64
@@ -63,7 +61,7 @@ func NewQuery(s string, re *regexp2.Regexp) (*Query, error) {
 	}
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if val < 0 {
@@ -72,12 +70,12 @@ func NewQuery(s string, re *regexp2.Regexp) (*Query, error) {
 
 	switch {
 	case s[len(s)-1] == 'l':
-		query.Lines = uint(val)
+		q.Lines = uint(val)
 	default:
-		query.Bytes = uint(val)
+		q.Bytes = uint(val)
 	}
 
-	return query, nil
+	return nil
 }
 
 func (q *Query) Filter(s smap.SMap, n int) smap.SMap {
