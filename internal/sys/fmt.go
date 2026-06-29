@@ -78,6 +78,10 @@ func Mechanize(s string) (int64, bool) {
 		return 0, false
 	}
 
+	if v < 0 {
+		return 0, false
+	}
+
 	if !hasUnit {
 		return int64(v), true
 	}

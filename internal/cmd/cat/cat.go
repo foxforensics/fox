@@ -5,8 +5,8 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types"
-	buffer2 "go.foxforensics.eu/fox/v4/internal/pkg/types/buffer"
+	"go.foxforensics.eu/fox/v4/internal/pkg"
+	"go.foxforensics.eu/fox/v4/internal/pkg/cat/buffer"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
@@ -48,12 +48,12 @@ type Cat struct {
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	uniq *types.Unique `kong:"-"`
+	uniq *pkg.Unique `kong:"-"`
 }
 
 func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if cmd.Uniq {
-		cmd.uniq = types.NewUnique()
+		cmd.uniq = pkg.NewUnique()
 	}
 
 	if cmd.Context > 0 {
@@ -68,18 +68,19 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		return sys.Usage(Usage)
+		sys.Usage(Usage)
+		return nil
 	}
+
+	// apply command specific params
+	fox.Query.Before = cmd.Before
+	fox.Query.After = cmd.After
 
 	ch, err := fox.Init(cmd.Paths, cmd.Text || cmd.Hex)
 
 	if err != nil {
 		return err
 	}
-
-	// apply command specific params
-	fox.Query.Before = cmd.Before
-	fox.Query.After = cmd.After
 
 	for h := range ch {
 		if !fox.NoPretty {
@@ -99,7 +100,7 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 }
 
 func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
-	for l := range buffer2.Text(&buffer2.TextContext{
+	for l := range buffer.Text(&buffer.TextContext{
 		Parent: fox.Context,
 		Data:   b,
 		Hint:   hint,
@@ -110,14 +111,14 @@ func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
 			continue // not unique
 		}
 
-		if fox.Regexp != nil && l.Line != buffer2.Sep {
+		if fox.Regexp != nil && l.Line != buffer.Sep {
 			s = writer.MarkMatch(s, fox.Regexp)
 		}
 
 		if !fox.NoPretty {
 			fox.Writer.Write("%s %s", writer.AsGray(l.Line), s)
-		} else if l.Line == buffer2.Sep {
-			fox.Writer.Write(writer.AsGray(buffer2.Sep))
+		} else if l.Line == buffer.Sep {
+			fox.Writer.Write(writer.AsGray(buffer.Sep))
 		} else {
 			fox.Writer.Write(s)
 		}
@@ -127,7 +128,7 @@ func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
 func (cmd *Cat) renderHex(fox *cmd.Globals, b []byte) {
 	lastHex, wasCut := "", false
 
-	for l := range buffer2.Hex(&buffer2.HexContext{
+	for l := range buffer.Hex(&buffer.HexContext{
 		Parent: fox.Context,
 		Data:   b,
 		Pretty: !fox.NoPretty,

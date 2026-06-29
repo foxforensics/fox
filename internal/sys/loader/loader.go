@@ -15,24 +15,23 @@ import (
 	"sync/atomic"
 
 	"github.com/bmatcuk/doublestar/v4"
-	"github.com/sourcegraph/conc/pool"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types"
+	"go.foxforensics.eu/fox/v4/internal/pkg"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 	"go.foxforensics.eu/fox/v4/internal/sys/mmap"
 )
 
 const Stdin = "-"
+const Buffer = 256
 const MaxFiles = 8192
 const MaxFolders = 64
 const MaxArchives = 4
 const MaxDeflates = 4
 
 type Options struct {
-	Query    *types.Query
+	Query    *pkg.Query
+	Guarded  bool
 	Password string
-	Threads  int
-	Strict   bool
 }
 
 type Loader struct {
@@ -46,7 +45,7 @@ type Loader struct {
 func New(opts *Options) *Loader {
 	return &Loader{
 		opts:  opts,
-		heaps: make(chan *heap.Heap, opts.Threads),
+		heaps: make(chan *heap.Heap, Buffer),
 	}
 }
 
@@ -123,38 +122,33 @@ func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
 		return
 	}
 
-	p := pool.New().
-		WithContext(ctx).
-		WithMaxGoroutines(ldr.opts.Threads)
-
 	for _, path := range match {
-		fi, err := os.Stat(path)
+		select {
+		case <-ctx.Done():
+			return
+		default:
+			fi, err := os.Stat(path)
 
-		if err != nil {
-			slog.Error(err.Error())
-			continue
-		}
-
-		p.Go(func(ctx context.Context) error {
-			if fi.IsDir() {
-				return ldr.loadDir(ctx, path, part, 1)
-			} else {
-				return ldr.loadFile(ctx, path, part)
+			if err != nil {
+				slog.Error(err.Error())
+				continue
 			}
-		})
-	}
 
-	if err = p.Wait(); err != nil {
-		if errors.Is(err, context.Canceled) {
-			slog.Info("canceled")
-		} else {
-			slog.Error(err.Error())
+			if fi.IsDir() {
+				err = ldr.loadDir(ctx, path, part, 1)
+			} else {
+				err = ldr.loadFile(ctx, path, part)
+			}
+
+			if err != nil {
+				slog.Error(err.Error())
+			}
 		}
 	}
 }
 
 func (ldr *Loader) loadDir(ctx context.Context, path, part string, i int) error {
-	if ldr.opts.Strict && i >= MaxFolders {
+	if ldr.opts.Guarded && i >= MaxFolders {
 		return errors.New("max folders reached")
 	}
 
@@ -164,28 +158,24 @@ func (ldr *Loader) loadDir(ctx context.Context, path, part string, i int) error 
 		return err
 	}
 
-	p := pool.New().
-		WithContext(ctx).
-		WithMaxGoroutines(ldr.opts.Threads)
-
 	for _, f := range dir {
 		select {
 		case <-ctx.Done():
 			return ctx.Err()
 		default:
 			if f.IsDir() {
-				p.Go(func(ctx context.Context) error {
-					return ldr.loadDir(ctx, filepath.Join(path, f.Name()), part, i+1)
-				})
+				err = ldr.loadDir(ctx, filepath.Join(path, f.Name()), part, i+1)
 			} else {
-				p.Go(func(ctx context.Context) error {
-					return ldr.loadFile(ctx, filepath.Join(path, f.Name()), part)
-				})
+				err = ldr.loadFile(ctx, filepath.Join(path, f.Name()), part)
+			}
+
+			if err != nil {
+				slog.Error(err.Error())
 			}
 		}
 	}
 
-	return p.Wait()
+	return nil
 }
 
 func (ldr *Loader) loadFile(ctx context.Context, path, part string) error {
@@ -220,12 +210,7 @@ func (ldr *Loader) loadFile(ctx context.Context, path, part string) error {
 
 	slog.Debug(fmt.Sprintf("loaded file %s", path))
 
-	select {
-	case <-ctx.Done():
-		return ctx.Err()
-	default:
-		return ldr.processData(ctx, path, part, b, 0)
-	}
+	return ldr.processData(ctx, path, part, b, 0)
 }
 
 func (ldr *Loader) processData(ctx context.Context, path, part string, b []byte, i int) error {
@@ -233,13 +218,13 @@ func (ldr *Loader) processData(ctx context.Context, path, part string, b []byte,
 	var ok bool
 
 	// check depth to protect against zip bombs
-	if ldr.opts.Strict && i >= MaxArchives {
+	if ldr.opts.Guarded && i >= MaxArchives {
 		return errors.New("max archives reached")
 	}
 
 	// 1. deflate data (nested)
 	for j := 1; ; j++ {
-		if ldr.opts.Strict && j >= MaxDeflates {
+		if ldr.opts.Guarded && j >= MaxDeflates {
 			return errors.New("max deflates reached")
 		}
 
@@ -276,25 +261,19 @@ func (ldr *Loader) extractData(ctx context.Context, path, part string, b []byte,
 		if a.Detect(b) {
 			slog.Debug(fmt.Sprintf("archive detected as possibly %s", a.Name))
 
-			p := pool.New().
-				WithContext(ctx).
-				WithMaxGoroutines(ldr.opts.Threads)
-
 			for _, e := range a.Extract(b, path, ldr.opts.Password) {
-				p.Go(func(ctx context.Context) error {
-					slog.Debug(fmt.Sprintf("stream detected as possibly %s", e.Path))
+				slog.Debug(fmt.Sprintf("stream detected as possibly %s", e.Path))
 
-					select {
-					case <-ctx.Done():
-						return ctx.Err()
-					default:
-						return ldr.processData(ctx, e.Path, part, e.Data, i+1)
+				select {
+				case <-ctx.Done():
+					break
+				default:
+					err := ldr.processData(ctx, e.Path, part, e.Data, i+1)
+
+					if err != nil {
+						slog.Error(err.Error())
 					}
-				})
-			}
-
-			if err := p.Wait(); err != nil {
-				slog.Error(err.Error())
+				}
 			}
 
 			return true
@@ -367,7 +346,7 @@ func (ldr *Loader) createHeap(ctx context.Context, path, hint string, b []byte) 
 	}
 
 	// check files to protect against zip bombs
-	if ldr.opts.Strict && ldr.files.Load() >= MaxFiles {
+	if ldr.opts.Guarded && ldr.files.Load() >= MaxFiles {
 		return errors.New("max files reached")
 	}
 
@@ -376,7 +355,7 @@ func (ldr *Loader) createHeap(ctx context.Context, path, hint string, b []byte) 
 
 	b = ldr.opts.Query.Reduce(b)
 
-	ldr.paths.Store(path, types.Nil{})
+	ldr.paths.Store(path, pkg.Nil{})
 	ldr.files.Add(1)
 
 	select {

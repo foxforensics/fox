@@ -2,11 +2,13 @@ package str
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	carver2 "go.foxforensics.eu/fox/v4/internal/pkg/types/carver"
+	"go.foxforensics.eu/fox/v4/internal/pkg/str"
+	"go.foxforensics.eu/fox/v4/internal/pkg/str/carver"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
@@ -73,14 +75,15 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		return sys.Usage(Usage)
+		sys.Usage(Usage)
+		return nil
 	}
 
 	if cmd.Paths[0] == "list" {
-		db := carver2.BuildDB(3)
+		db := str.BuildDB(3)
 
 		for _, s := range db.List() {
-			fox.Writer.Write(s)
+			fmt.Println(s)
 		}
 
 		// exit early
@@ -98,7 +101,7 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 			fox.Writer.Header(h.String())
 		}
 
-		for str := range carver2.New(&carver2.Options{
+		for str := range carver.New(&carver.Options{
 			Min:     cmd.Min,
 			Max:     cmd.Max,
 			Ascii:   cmd.Ascii,

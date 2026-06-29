@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/types"
+	"go.foxforensics.eu/fox/v4/internal/pkg"
 	"go.foxforensics.eu/fox/v4/internal/test"
 )
 
@@ -107,10 +107,9 @@ func TestLoadFiles(t *testing.T) {
 
 func newOpts() *Options {
 	return &Options{
-		&types.Query{},
+		new(pkg.Query),
+		true,
 		"",
-		1,
-		false,
 	}
 }
 

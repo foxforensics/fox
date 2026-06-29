@@ -12,7 +12,7 @@ import (
 	"github.com/fatih/color"
 	"go.foxforensics.eu/entropy/entropy"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/formats"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
@@ -127,7 +127,8 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		return sys.Usage(Usage)
+		sys.Usage(Usage)
+		return nil
 	}
 
 	if cmd.Sort {

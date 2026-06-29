@@ -123,11 +123,11 @@ func main() {
 		fallthrough // show usage
 
 	case fox.Globals.Help, ctx.Command() == "help":
-		_ = sys.Usage(Usage)
+		sys.Usage(Usage)
 		os.Exit(0)
 
 	case fox.Version:
-		_ = sys.About(About)
+		sys.About(About)
 		os.Exit(0)
 
 	case ctx.Error != nil:

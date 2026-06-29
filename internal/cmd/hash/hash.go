@@ -3,17 +3,16 @@ package hash
 import (
 	"errors"
 	"fmt"
+	"log/slog"
 	"slices"
 	"strings"
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/formats"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 	"go.foxforensics.eu/hasher/hash"
-	"go.foxforensics.eu/rhash/database"
 )
 
 var Usage = strings.TrimSpace(`
@@ -25,9 +24,9 @@ Flags:
   -j, --json               Show results as JSON objects
   -J, --jsonl              Show results as JSON lines
 
-Reverse flags:
-  -l, --lookup             Lookup hash using wordlist
-  -g, --guess              Guess the used algorithm(s)
+Filter flags
+  -B, --include=FILE       Include only known bad hashes
+  -G, --exclude=FILE       Exclude all known good hashes
 
 Remarks:
   If 'list' is specified as path, only the built-in algorithms will be shown.
@@ -41,9 +40,6 @@ Example: Hash binaries for similarity
 
 Example: Hash binary inside an archive
   $ fox hash -Pinfected ioc.zip::ioc.exe
-
-Example: Guess hash algorithm from sum
-  $ fox hash -Hsha1 -g sum.txt
 
 Report bugs at: foxforensics.eu/issues
 `)
@@ -60,25 +56,43 @@ func (fh *FileHash) String() string {
 type Hash struct {
 	Hash  []string `short:"H" sep:","`
 	All   bool     `short:"a"`
-	Json  bool     `short:"j" xor:"json,jsonl,lookup,guess"`
-	Jsonl bool     `short:"J" xor:"json,jsonl,lookup,guess"`
+	Json  bool     `short:"j" xor:"json,jsonl"`
+	Jsonl bool     `short:"J" xor:"json,jsonl"`
 
-	// reverse flags
-	Lookup bool `short:"l" xor:"json,jsonl,lookup,guess"`
-	Guess  bool `short:"g" xor:"json,jsonl,lookup,guess"`
+	// filter flags
+	Include []byte `short:"B" xor:"include,exclude" type:"filecontent"`
+	Exclude []byte `short:"G" xor:"include,exclude" type:"filecontent"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
+
+	// internal
+	include []string `kong:"-"`
+	exclude []string `kong:"-"`
 }
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
-	if cmd.All || slices.Contains(cmd.Hash, "*") {
-		cmd.Hash = list(!cmd.Lookup) // use all
+	if cmd.All {
+		for _, a := range hash.Algorithms {
+			cmd.Hash = append(cmd.Hash, a.Name)
+		}
 	}
 
 	// default algorithm
 	if len(cmd.Hash) == 0 {
 		cmd.Hash = []string{hash.SHA256}
+	}
+
+	if len(cmd.Hash) > 1 && (len(cmd.Include)+len(cmd.Exclude) > 0) {
+		return errors.New("filters can not be used with multiple algorithms")
+	}
+
+	if len(cmd.Include) > 0 {
+		cmd.include = strings.Split(string(cmd.Include), "\n")
+	}
+
+	if len(cmd.Exclude) > 0 {
+		cmd.exclude = strings.Split(string(cmd.Exclude), "\n")
 	}
 
 	return nil
@@ -88,24 +102,17 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		return sys.Usage(Usage)
+		sys.Usage(Usage)
+		return nil
 	}
 
 	if cmd.Paths[0] == "list" {
-		for _, s := range list(true) {
-			fox.Writer.Write(s)
+		for _, a := range hash.Algorithms {
+			fmt.Println(a.Name)
 		}
 
 		// exit early
 		return nil
-	}
-
-	if cmd.Lookup {
-		_, err := tables.Build(nil, fox.Threads, cmd.Hash...)
-
-		if err != nil {
-			return err
-		}
 	}
 
 	plain, n := !cmd.Json && !cmd.Jsonl, 0
@@ -131,15 +138,10 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 		}
 
 		for _, k := range cmd.Hash {
-			if cmd.Lookup {
-				a, v := tables.Lookup(string(h.Bytes()))
-				fox.Writer.Match(fmt.Sprintf("%s  %s", v, strings.ToUpper(a)), fox.Regexp)
-				break
-			} else if cmd.Guess {
-				for _, a := range collect(database.Lookup(fox.Context, string(h.Bytes()))) {
-					fox.Writer.Match(a, fox.Regexp)
-				}
-				continue
+			select {
+			case <-fox.Context.Done():
+				return nil // canceled
+			default:
 			}
 
 			sum, err := hash.Sum(k, h.Bytes())
@@ -148,9 +150,30 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 				return fmt.Errorf("%s: %s", err, k)
 			}
 
+			if len(sum) == 0 {
+				if len(cmd.Exclude) > 0 || len(cmd.Include) > 0 {
+					continue
+				}
+			}
+
+			if len(cmd.Exclude) > 0 {
+				if slices.Contains(cmd.exclude, sum) {
+					slog.Debug(fmt.Sprintf("hash was excluded %s", sum))
+					continue // was excluded
+				}
+			}
+
+			if len(cmd.Include) > 0 {
+				if slices.Contains(cmd.include, sum) {
+					slog.Debug(fmt.Sprintf("hash was included %s", sum))
+				} else {
+					continue // not included
+				}
+			}
+
 			if fox.Regexp != nil && !plain {
 				if ok, _ := fox.Regexp.MatchString(sum); !ok {
-					continue // do not include hash
+					continue // hash does not match
 				}
 			}
 
@@ -180,7 +203,8 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 			fox.Writer.Match(sum, fox.Regexp)
 		}
 
-		if !plain {
+		// show only valid entries
+		if !plain && len(fh.Hash) > 0 {
 			fox.Writer.Match(formats.Auto(fh, cmd.Json, cmd.Jsonl), fox.Regexp)
 		}
 
@@ -188,26 +212,4 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 	}
 
 	return nil
-}
-
-func collect(ch <-chan string) []string {
-	v := make([]string, 0, len(hash.Algorithms))
-
-	for s := range ch {
-		v = append(v, strings.Split(s, "\n")...)
-	}
-
-	return v
-}
-
-func list(all bool) []string {
-	v := make([]string, 0, len(hash.Algorithms))
-
-	for _, a := range hash.Algorithms {
-		if all || a.Type == hash.Cryptographic {
-			v = append(v, a.Name)
-		}
-	}
-
-	return v
 }

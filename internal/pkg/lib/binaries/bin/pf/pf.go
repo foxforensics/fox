@@ -1,0 +1,35 @@
+package pf
+
+import (
+	"bytes"
+	"encoding/json"
+
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib"
+	"www.velocidex.com/golang/go-prefetch"
+)
+
+func Detect(b []byte) bool {
+	for _, v := range []struct {
+		off int
+		buf []byte
+	}{
+		{off: 4, buf: []byte{'S', 'C', 'C', 'A'}},  // uncompressed
+		{off: 0, buf: []byte{'M', 'A', 'M', 0x04}}, // LZX compressed
+	} {
+		if lib.HasMagic(b, v.off, v.buf) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func Convert(b []byte) ([]byte, error) {
+	pi, err := prefetch.LoadPrefetch(bytes.NewReader(b))
+
+	if err != nil {
+		return b, err
+	}
+
+	return json.Marshal(pi)
+}

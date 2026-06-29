@@ -8,11 +8,11 @@ import (
 
 	"go.foxforensics.eu/bootkey/bootkey"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/bin/ese"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/bin/reg"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/record"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
+	"go.foxforensics.eu/fox/v4/internal/pkg/ad/record"
+	"go.foxforensics.eu/fox/v4/internal/pkg/ad/tables"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/bin/ese"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/bin/reg"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/formats"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/hashdump/extract"
 	"go.foxforensics.eu/hasher/hash"
@@ -71,14 +71,14 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) < 2 {
-		return sys.Usage(Usage)
+		sys.Usage(Usage)
+		return nil
 	}
 
 	if len(cmd.Paths) > 2 {
 		slog.Warn("additional paths will be ignored")
 	}
 
-	// paths will be loaded in order
 	ch, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
@@ -199,7 +199,7 @@ func (cmd *Ad) extract(fox *cmd.Globals, k, b []byte) (int, error) {
 }
 
 func (cmd *Ad) format(a fmt.Stringer) string {
-	if v, is := a.(*record.Secret); is {
+	if v, ok := a.(*record.Secret); ok {
 		switch {
 		case cmd.LmOnly:
 			return v.LmOnly()

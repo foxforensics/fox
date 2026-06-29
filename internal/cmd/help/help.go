@@ -29,7 +29,8 @@ type Help struct {
 
 func (cmd *Help) Run(_ *cmd.Globals) error {
 	if v, ok := usage[strings.ToLower(cmd.Name)]; ok {
-		return sys.Usage(v)
+		sys.Usage(v)
+		return nil
 	}
 
 	return errors.New("help topic is unknown")

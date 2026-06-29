@@ -1,7 +1,6 @@
 package sys
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"log/slog"
@@ -20,16 +19,14 @@ const Banner = `
   '--'    '----'--'  '--'
 `
 
-func About(msg string) error {
-	_, err1 := fmt.Println(msg)
-	_, err2 := fmt.Println(fmt.Sprintf(Version, version.Number, version.ID()))
-	return errors.Join(err1, err2)
+func About(msg string) {
+	_, _ = fmt.Println(msg)
+	_, _ = fmt.Println(fmt.Sprintf(Version, version.Number, version.ID()))
 }
 
-func Usage(msg string) error {
-	_, err1 := fmt.Println(fmt.Sprintf(Banner, version.Number))
-	_, err2 := fmt.Println(msg)
-	return errors.Join(err1, err2)
+func Usage(msg string) {
+	_, _ = fmt.Println(fmt.Sprintf(Banner, version.Number))
+	_, _ = fmt.Println(msg)
 }
 
 func CreateFile(path string) io.Writer {
@@ -37,7 +34,7 @@ func CreateFile(path string) io.Writer {
 
 	if err != nil {
 		slog.Error(err.Error())
-		return io.Discard
+		os.Exit(1)
 	}
 
 	return f

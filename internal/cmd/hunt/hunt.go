@@ -13,15 +13,15 @@ import (
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/client"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/event"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/muxer"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/parquet"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/receipt"
+	"go.foxforensics.eu/fox/v4/internal/pkg"
+	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/client"
+	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
+	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/hunter"
+	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/muxer"
+	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/parquet"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/formats"
 	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
 )
 
 var Usage = strings.TrimSpace(`
@@ -85,7 +85,7 @@ type Hunt struct {
 	// internal
 	client  *client.Client   `kong:"-"`
 	parquet *parquet.Parquet `kong:"-"`
-	unique  *types.Unique    `kong:"-"`
+	unique  *pkg.Unique      `kong:"-"`
 	rule    sigma.Rule       `kong:"-"`
 }
 
@@ -105,7 +105,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
 
 	if cmd.Uniq {
-		cmd.unique = types.NewUnique()
+		cmd.unique = pkg.NewUnique()
 	}
 
 	if cmd.Parquet {
@@ -144,7 +144,8 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		return sys.Usage(Usage)
+		sys.Usage(Usage)
+		return nil
 	}
 
 	if cmd.Paths[0] == "local" {

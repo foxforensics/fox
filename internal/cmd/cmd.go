@@ -12,7 +12,7 @@ import (
 
 	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types"
+	"go.foxforensics.eu/fox/v4/internal/pkg"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 	"go.foxforensics.eu/fox/v4/internal/sys/loader"
@@ -57,7 +57,7 @@ type Globals struct {
 	Writer  *writer.Writer     `kong:"-"`
 	Regexp  *regexp2.Regexp    `kong:"-"`
 	Loader  *loader.Loader     `kong:"-"`
-	Query   *types.Query       `kong:"-"`
+	Query   *pkg.Query         `kong:"-"`
 	Paths   []string           `kong:"-"`
 }
 
@@ -105,7 +105,7 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 		}
 	}
 
-	fox.Query, err = types.NewQuery(fox.Limit, fox.Regexp)
+	fox.Query, err = pkg.NewQuery(fox.Limit, fox.Regexp)
 
 	if err != nil {
 		return nil, err
@@ -160,9 +160,8 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	fox.Loader = loader.New(&loader.Options{
 		Query:    fox.Query,
+		Guarded:  !fox.NoStrict,
 		Password: fox.Password,
-		Threads:  fox.Threads,
-		Strict:   !fox.NoStrict,
 	})
 
 	// handle ctrl+c

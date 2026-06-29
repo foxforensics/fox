@@ -1,47 +1,47 @@
 package loader
 
 import (
-	"go.foxforensics.eu/fox/v4/internal/pkg"
-	sevenzip "go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/7z"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/ar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/cab"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/cpio"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/iso"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/msi"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/rar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/rpm"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/tar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/xar"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/archives/zip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/bin/elf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/bin/ese"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/bin/lnk"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/bin/mft"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/bin/pe"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/bin/pf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/bin/pst"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/log/evtx"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/log/fortinet"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/log/journal"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/bgzf"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/br"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/bzip2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/gzip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/kanzi"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/lz4"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/lzfse"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/lzip"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/lzo"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/lzw"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/minlz"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/s2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/snappy"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/xz"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/zlib"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/deflates/zstd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats/json"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats/jsonl"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats/xml"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/archives/7z"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/archives/ar"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/archives/cab"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/archives/cpio"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/archives/iso"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/archives/msi"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/archives/rar"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/archives/rpm"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/archives/tar"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/archives/xar"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/archives/zip"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/bin/elf"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/bin/ese"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/bin/lnk"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/bin/mft"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/bin/pe"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/bin/pf"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/bin/pst"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/log/evtx"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/log/fortinet"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/log/journal"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/bgzf"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/br"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/bzip2"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/gzip"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/kanzi"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/lz4"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/lzfse"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/lzip"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/lzo"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/lzw"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/minlz"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/s2"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/snappy"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/xz"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/zlib"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/deflates/zstd"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/formats/json"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/formats/jsonl"
+	"go.foxforensics.eu/fox/v4/internal/pkg/lib/formats/xml"
 )
 
 var registry = &struct {
@@ -58,26 +58,26 @@ var registry = &struct {
 
 type FormatEntry struct {
 	Name   string
-	Detect pkg.Detect
-	Format pkg.Format
+	Detect lib.Detect
+	Format lib.Format
 }
 
 type DeflateEntry struct {
 	Name    string
-	Detect  pkg.Detect
-	Deflate pkg.Deflate
+	Detect  lib.Detect
+	Deflate lib.Deflate
 }
 
 type ExtractEntry struct {
 	Name    string
-	Detect  pkg.Detect
-	Extract pkg.Extract
+	Detect  lib.Detect
+	Extract lib.Extract
 }
 
 type ConvertEntry struct {
 	Name    string
-	Detect  pkg.Detect
-	Convert pkg.Convert
+	Detect  lib.Detect
+	Convert lib.Convert
 }
 
 func RegisterDeflates() {

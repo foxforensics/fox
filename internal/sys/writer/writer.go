@@ -9,7 +9,7 @@ import (
 	"sync"
 
 	"github.com/dlclark/regexp2/v2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/receipt"
+	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
 )
 
 type Writer struct {
@@ -64,7 +64,7 @@ func (w *Writer) Write(f string, a ...any) {
 }
 
 func (w *Writer) Close(p string, r bool) {
-	if v, is := w.w.(io.Closer); is {
+	if v, ok := w.w.(io.Closer); ok {
 		if err := v.Close(); err != nil {
 			slog.Error(err.Error())
 		}
