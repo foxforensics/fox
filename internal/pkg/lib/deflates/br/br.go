@@ -15,5 +15,6 @@ func Detect(b []byte) bool {
 }
 
 func Deflate(b []byte) ([]byte, error) {
-	return io.ReadAll(brotli.NewReader(bytes.NewReader(b[4:]))) // v3
+	// remove header
+	return io.ReadAll(brotli.NewReader(bytes.NewReader(b[4:])))
 }

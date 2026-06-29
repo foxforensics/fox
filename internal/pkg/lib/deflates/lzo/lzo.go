@@ -23,19 +23,6 @@ func Deflate(b []byte) ([]byte, error) {
 	}
 
 	// remove header
-	// 89 4c 5a 4f 00 0d 0a 1a 0a
-	// 10 40
-	// 20 a0
-	// 09 40
-	// 02
-	// 01
-	// 03 00 00 01
-	// 00 00 81 a4
-	// 69 5a c7 48
-	// 00 00 00 00
-	// 07
-	// 66 6f 78 2e 74 78 74
-	// 61 e8 07 3a
 	head := 34 + int(b[33]) + 4
 
 	if len(b) <= head {
@@ -43,7 +30,6 @@ func Deflate(b []byte) ([]byte, error) {
 	}
 
 	// remove end
-	// 00 00 00 00
 	end := len(b) - 4
 
 	if len(b) <= end {
