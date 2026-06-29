@@ -25,14 +25,14 @@ EVIDENCE
 
 METADATA
 --------
-Acquired  %s
-Examiner  %s (%s)
-Host      %s
-Size      %d
+Acquired : %s
+Examiner : %s (%s)
+Host     : %s
+Size     : %d
 
 INTEGRITY
 ---------
-SHA-256   %x
+%x SHA-256
 
 COMMAND
 -------
