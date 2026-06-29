@@ -88,11 +88,11 @@ func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	}
 
 	if len(cmd.Include) > 0 {
-		cmd.include = strings.Split(string(cmd.Include), "\n")
+		cmd.include = sys.ParseList(cmd.Include)
 	}
 
 	if len(cmd.Exclude) > 0 {
-		cmd.exclude = strings.Split(string(cmd.Exclude), "\n")
+		cmd.exclude = sys.ParseList(cmd.Exclude)
 	}
 
 	return nil

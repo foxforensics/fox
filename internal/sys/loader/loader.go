@@ -355,7 +355,7 @@ func (ldr *Loader) createHeap(ctx context.Context, path, hint string, b []byte) 
 
 	b = ldr.opts.Query.Reduce(b)
 
-	ldr.paths.Store(path, pkg.Nil{})
+	ldr.paths.LoadOrStore(path, pkg.Nil{})
 	ldr.files.Add(1)
 
 	select {

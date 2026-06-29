@@ -40,6 +40,16 @@ func CreateFile(path string) io.Writer {
 	return f
 }
 
+func ParseList(b []byte) []string {
+	v := strings.Split(strings.TrimSpace(string(b)), "\n")
+
+	for i, s := range v {
+		v[i] = strings.TrimRight(s, "\r") // Windows line breaks
+	}
+
+	return v
+}
+
 func JoinPart(path, part string) string {
 	return fmt.Sprintf("%s%s%s", path, "::", part)
 }

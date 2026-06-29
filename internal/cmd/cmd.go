@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 
 	"github.com/dlclark/regexp2/v2"
@@ -82,11 +81,7 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	// parse paths
 	if len(fox.In) > 0 {
-		fox.Paths = strings.Split(strings.TrimSpace(string(fox.In)), "\n")
-
-		for i, s := range fox.Paths {
-			fox.Paths[i] = strings.TrimRight(s, "\r") // Windows paths
-		}
+		fox.Paths = sys.ParseList(fox.In)
 	}
 
 	// redirect output
