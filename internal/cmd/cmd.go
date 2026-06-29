@@ -86,8 +86,14 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	// redirect output
 	if len(fox.Out) > 0 {
+		f, err := sys.CreateFile(fox.Out)
+
+		if err != nil {
+			return nil, err
+		}
+
 		fox.NoPretty = true
-		fox.Writer = writer.New(sys.CreateFile(fox.Out))
+		fox.Writer = writer.New(f)
 	} else if fox.Quiet {
 		fox.Writer = writer.New(io.Discard)
 	} else {
