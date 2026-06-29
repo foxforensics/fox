@@ -73,6 +73,9 @@ func Extract(b []byte, root, _ string) (e []lib.Stream) {
 
 	case *zstd.Decoder:
 		defer r1.(*zstd.Decoder).Close()
+
+	default:
+		// other readers can't be closed
 	}
 
 	if rp.PayloadFormat() != "cpio" {

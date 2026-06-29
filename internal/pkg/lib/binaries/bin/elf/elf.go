@@ -2,7 +2,6 @@ package elf
 
 import (
 	"log/slog"
-	"strings"
 
 	"github.com/saferwall/elf"
 	"go.foxforensics.eu/fox/v4/internal/pkg/lib"
@@ -32,9 +31,6 @@ func Convert(b []byte) ([]byte, error) {
 	if err != nil {
 		return b, err
 	}
-
-	// remove for valid JSON
-	raw = strings.TrimSuffix(raw, "{}")
 
 	return []byte(raw), nil
 }
