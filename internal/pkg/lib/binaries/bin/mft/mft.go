@@ -3,6 +3,7 @@ package mft
 import (
 	"bytes"
 	"encoding/json"
+	"time"
 
 	"go.foxforensics.eu/fox/v4/internal/pkg/lib"
 	"go.foxforensics.eu/go-mft"
@@ -29,11 +30,19 @@ func Convert(b []byte) ([]byte, error) {
 
 	v := make([]mft.UsefulMftFields, 0, len(b)/1024)
 
-	for record := range ch {
-		if len(record.FilePath) > 0 {
-			v = append(v, record)
+	for {
+		select {
+		case <-time.After(time.Second):
+			return json.Marshal(v)
+
+		case record, ok := <-ch:
+			if !ok {
+				return json.Marshal(v)
+			}
+
+			if len(record.FilePath) > 0 {
+				v = append(v, record)
+			}
 		}
 	}
-
-	return json.Marshal(v)
 }
