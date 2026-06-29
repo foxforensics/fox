@@ -23,7 +23,7 @@ const (
 	PDI = 0x2069
 )
 
-var mask = regexp2.MustCompile(`^[-+]?\d+[bkmgtpezyr]?$`)
+var mask = regexp2.MustCompile(`^[-+]?\d+[bkmgtpez]?$`)
 
 func Sanitize(s string) string {
 	var sb strings.Builder
@@ -88,7 +88,7 @@ func Mechanize(s string) (int64, bool) {
 
 	n := int64(v)
 
-	for range strings.IndexByte("bkmgtpezyr", unit) {
+	for range strings.IndexByte("bkmgtpez", unit) {
 		if n > math.MaxInt64/1024 || n < math.MinInt64/1024 {
 			return 0, false // check for overflow and underflow
 		}

@@ -3,7 +3,6 @@ package sys
 import (
 	"fmt"
 	"io"
-	"log/slog"
 	"os"
 	"strings"
 
@@ -29,15 +28,8 @@ func Usage(msg string) {
 	_, _ = fmt.Println(msg)
 }
 
-func CreateFile(path string) io.Writer {
-	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
-
-	if err != nil {
-		slog.Error(err.Error())
-		os.Exit(1)
-	}
-
-	return f
+func CreateFile(path string) (io.Writer, error) {
+	return os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 }
 
 func ParseList(b []byte) []string {
