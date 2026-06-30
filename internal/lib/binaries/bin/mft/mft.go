@@ -36,7 +36,7 @@ func Convert(b []byte) ([]byte, error) {
 		select {
 		// this only a fallback if something goes wrong within the parser
 		case <-time.After(time.Second * timeout):
-			slog.Error("mft: parsing timed out")
+			slog.Error("mft: timed out while parsing")
 			close(ch) // stop producer
 			return json.Marshal(v)
 
