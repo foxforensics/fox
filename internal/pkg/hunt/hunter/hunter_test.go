@@ -44,7 +44,7 @@ func TestHunt(t *testing.T) {
 			ctx := context.Background()
 
 			ldr := loader.New(&loader.Options{
-				Query: new(pkg.Query),
+				Query: pkg.Query{},
 			})
 
 			file := test.FixtureFile(tt.file)
