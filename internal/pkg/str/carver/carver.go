@@ -78,10 +78,9 @@ func (crv *Carver) Carve(ctx context.Context, block []byte) <-chan *String {
 			}
 
 			select {
+			case ch <- &String{*str, adr, cls}:
 			case <-ctx.Done():
 				return
-			default:
-				ch <- &String{*str, adr, cls}
 			}
 		}
 	}()

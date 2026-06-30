@@ -349,18 +349,16 @@ func (ldr *Loader) createHeap(ctx context.Context, path, hint string, b []byte) 
 		return nil // already loaded
 	}
 
+	ldr.size.Add(uint64(len(b))) // add original size
+	ldr.files.Add(1)
+
+	b = ldr.opts.Query.Reduce(b)
+
 	select {
 	case <-ctx.Done():
 		return ctx.Err()
 
-	default:
-		ldr.size.Add(uint64(len(b))) // add original size
-		ldr.files.Add(1)
-
-		b = ldr.opts.Query.Reduce(b)
-
-		ldr.heaps <- heap.New(path, hint, b)
-
+	case ldr.heaps <- heap.New(path, hint, b):
 		slog.Debug(fmt.Sprintf("loaded heap %s", path))
 	}
 

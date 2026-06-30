@@ -132,10 +132,9 @@ func (htr *Hunter) carveEvtx(ctx context.Context, ch chan<- *event.Event, h *hea
 	for off := range htr.findOffset(ctx, h, evtx.Chunk) {
 		for evt := range evtx.Carve(sr, off, cap(ch)) {
 			select {
+			case ch <- evt:
 			case <-ctx.Done():
 				return ctx.Err()
-			default:
-				ch <- evt
 			}
 		}
 	}
@@ -148,10 +147,9 @@ func (htr *Hunter) carveJournal(ctx context.Context, ch chan<- *event.Event, h *
 	for off := range htr.findOffset(ctx, h, journal.Magic) {
 		for evt := range journal.Carve(sr, off, cap(ch)) {
 			select {
+			case ch <- evt:
 			case <-ctx.Done():
 				return ctx.Err()
-			default:
-				ch <- evt
 			}
 		}
 	}
