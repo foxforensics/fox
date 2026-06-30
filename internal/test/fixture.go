@@ -10,6 +10,8 @@ import (
 	"runtime"
 )
 
+const Fox = "fox.txt"
+
 const (
 	main     = "../main.go"
 	testdata = "../../testdata"
@@ -17,7 +19,7 @@ const (
 )
 
 func AssertFox(b []byte) bool {
-	return bytes.Equal(b, Fixture(filepath.Join("texts", "fox.txt")))
+	return bytes.Equal(b, Fixture(filepath.Join("texts", Fox)))
 }
 
 func FixtureMain(args ...string) ([]byte, error) {

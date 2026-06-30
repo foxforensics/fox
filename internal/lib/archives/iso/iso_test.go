@@ -38,7 +38,7 @@ func TestExtract(t *testing.T) {
 		t.Fatal("invalid entry count")
 	}
 
-	if e[0].Path != sys.JoinPart("", test.Sample) {
+	if e[0].Path != sys.JoinPart("", test.Fox) {
 		t.Fatal("invalid entry path", e[0].Path)
 	}
 

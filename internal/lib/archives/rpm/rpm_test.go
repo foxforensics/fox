@@ -38,7 +38,7 @@ func TestExtract(t *testing.T) {
 		t.Fatal("invalid entry count")
 	}
 
-	if !strings.HasSuffix(e[0].Path, test.Sample) {
+	if !strings.HasSuffix(e[0].Path, test.Fox) {
 		t.Fatal("invalid entry path")
 	}
 
