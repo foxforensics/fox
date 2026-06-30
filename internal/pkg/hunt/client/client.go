@@ -14,11 +14,11 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v6"
+	"go.foxforensics.eu/fox/v4/internal/lib/schemas"
+	"go.foxforensics.eu/fox/v4/internal/lib/schemas/ecs"
+	"go.foxforensics.eu/fox/v4/internal/lib/schemas/hec"
+	"go.foxforensics.eu/fox/v4/internal/lib/schemas/raw"
 	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
-	"go.foxforensics.eu/fox/v4/internal/pkg/lib/schemas"
-	"go.foxforensics.eu/fox/v4/internal/pkg/lib/schemas/ecs"
-	"go.foxforensics.eu/fox/v4/internal/pkg/lib/schemas/hec"
-	"go.foxforensics.eu/fox/v4/internal/pkg/lib/schemas/raw"
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
 )
 

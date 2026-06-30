@@ -20,6 +20,9 @@ type Heap struct {
 	m mmap.MMap // memory map
 }
 
+// TODO: keep track of mapped and unmapped areas
+// TODO: reduce must also keep track of original addr
+// TODO: mapped bool
 func New(name, hint string, m mmap.MMap) *Heap {
 	return &Heap{Name: name, Hint: hint, Size: uint64(len(m)), m: m}
 }

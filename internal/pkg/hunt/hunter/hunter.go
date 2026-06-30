@@ -12,9 +12,9 @@ import (
 	"sync"
 
 	"github.com/sourcegraph/conc/pool"
+	"go.foxforensics.eu/fox/v4/internal/lib/binaries/log/evtx"
+	"go.foxforensics.eu/fox/v4/internal/lib/binaries/log/journal"
 	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
-	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/log/evtx"
-	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/log/journal"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 )
 
@@ -39,7 +39,7 @@ type Hunter struct {
 }
 
 func New(opts *Options) *Hunter {
-	sync.OnceFunc(evtx.Prepare)
+	sync.OnceFunc(evtx.Prepare)()
 
 	return &Hunter{
 		opts: opts,

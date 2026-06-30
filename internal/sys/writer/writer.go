@@ -38,9 +38,13 @@ func (w *Writer) Header(s string) {
 
 func (w *Writer) Match(s string, re *regexp2.Regexp) {
 	if re != nil {
-		if ok, _ := re.MatchString(s); !ok {
+		if ok, err := re.MatchString(s); !ok {
+			if err != nil {
+				slog.Error(err.Error())
+			}
 			return
 		}
+
 		s = MarkMatch(s, re)
 	}
 

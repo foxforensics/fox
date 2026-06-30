@@ -5,27 +5,31 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 )
 
-const Sample = "fox.txt"
+const (
+	main     = "../main.go"
+	testdata = "../../testdata"
+	samples  = "../test/samples"
+)
 
-const root = "../../testdata"
+func AssertFox(b []byte) bool {
+	return bytes.Equal(b, Fixture(filepath.Join("texts", "fox.txt")))
+}
 
-func Assert(b []byte) bool {
-	return bytes.Equal(b, Fixture(filepath.Join("texts", Sample)))
+func FixtureMain(args ...string) ([]byte, error) {
+	v := append([]string{"run", FixtureFile(main)}, args...)
+
+	cmd := exec.Command("go", v...)
+
+	return cmd.CombinedOutput()
 }
 
 func FixtureFile(name string) string {
-	_, c, _, ok := runtime.Caller(0)
-
-	if !ok {
-		slog.Error("fixture: runtime error")
-		return ""
-	}
-
-	return filepath.Join(filepath.Dir(c), root, name)
+	return filepath.Join(getRoot(), testdata, name)
 }
 
 func FixtureDir(names []string) []string {
@@ -47,4 +51,26 @@ func Fixture(name string) []byte {
 	}
 
 	return buf
+}
+
+func Sample(name string) []byte {
+	buf, err := os.ReadFile(filepath.Join(getRoot(), samples, name))
+
+	if err != nil {
+		slog.Error(fmt.Sprintf("fixture: %s", err.Error()))
+		return []byte(nil)
+	}
+
+	return buf
+}
+
+func getRoot() string {
+	_, c, _, ok := runtime.Caller(0)
+
+	if !ok {
+		slog.Error("fixture: runtime error")
+		return ""
+	}
+
+	return filepath.Dir(c)
 }

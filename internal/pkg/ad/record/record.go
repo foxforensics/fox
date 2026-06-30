@@ -59,7 +59,7 @@ func (s *Secret) ToNTLM(history bool) string {
 
 	// append historic hashes
 	if history {
-		for i := range s.NTHashHistory {
+		for i := range max(len(s.LMHashHistory), len(s.NTHashHistory)) {
 			var lm = defaultLM
 			var nt = defaultNT
 

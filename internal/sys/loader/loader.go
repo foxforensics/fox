@@ -266,7 +266,7 @@ func (ldr *Loader) extractData(ctx context.Context, path, part string, b []byte,
 
 				select {
 				case <-ctx.Done():
-					break
+					return true
 				default:
 					err := ldr.processData(ctx, e.Path, part, e.Data, i+1)
 

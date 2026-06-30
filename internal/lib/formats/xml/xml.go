@@ -1,0 +1,54 @@
+// Package xml source: https://github.com/golang/go/issues/58994
+package xml
+
+import (
+	"bytes"
+	"encoding/xml"
+	"errors"
+	"io"
+
+	"go.foxforensics.eu/fox/v4/internal/lib"
+	"go.foxforensics.eu/fox/v4/internal/lib/formats"
+)
+
+func Detect(b []byte) bool {
+	return lib.HasMagic(b, 0, []byte{
+		'<', '?', 'x', 'm', 'l', ' ',
+	})
+}
+
+func Format(b []byte) ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+
+	err := indent(buf, bytes.NewReader(b), formats.Prefix, formats.Indent)
+
+	if err != nil {
+		return b, err
+	}
+
+	return bytes.Replace(buf.Bytes(), []byte("?>"), []byte("?>\n"), 1), nil
+}
+
+func indent(w io.Writer, r io.Reader, prefix, indent string) error {
+	decode := xml.NewDecoder(r)
+	encode := xml.NewEncoder(w)
+	encode.Indent(prefix, indent)
+
+	for {
+		token, err := decode.Token()
+
+		if errors.Is(err, io.EOF) {
+			return encode.Flush()
+		} else if err != nil {
+			return err
+		}
+
+		if data, ok := token.(xml.CharData); ok {
+			token = xml.CharData(bytes.TrimSpace(data))
+		}
+
+		if err := encode.EncodeToken(token); err != nil {
+			return err
+		}
+	}
+}

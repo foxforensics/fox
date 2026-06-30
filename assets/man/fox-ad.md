@@ -46,19 +46,19 @@ Secret Flags
 
 **-l, --lookup**
 
-:   Lookup hashes using the built-in wordlist.
+:   Lookup hashes using the built-in wordlist. **NT** and **LM** hashes will be replaced in place.
 
 **-h, --history**
 
-:   Extract also the users hash history.
+:   Extract also the users hash history. Lookup of these hashes is also possible.
 
 **--lm-only**
 
-:   Extract only the **LM** hashes (Hashcat mode _3000_). Excludes **--nt-only** flag.
+:   Extract only the **LM** hashes (Hashcat mode _3000_). Output will always be plaintext.
 
 **--nt-only**
 
-:   Extract only the **NT** hashes (Hashcat mode _1000_). Excludes **--lm-only** flag.
+:   Extract only the **NT** hashes (Hashcat mode _1000_). Output will always be plaintext.
 
 POSITIONAL ARGUMENTS
 ====================

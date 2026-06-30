@@ -9,7 +9,7 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/lib/formats"
+	"go.foxforensics.eu/fox/v4/internal/lib/formats"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 	"go.foxforensics.eu/hasher/hash"
@@ -140,6 +140,7 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 		for _, k := range cmd.Hash {
 			select {
 			case <-fox.Context.Done():
+				h.Discard()
 				return nil // canceled
 			default:
 			}
@@ -174,7 +175,10 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 			}
 
 			if fox.Regexp != nil && !plain {
-				if ok, _ := fox.Regexp.MatchString(sum); !ok {
+				if ok, err := fox.Regexp.MatchString(sum); !ok {
+					if err != nil {
+						slog.Error(err.Error())
+					}
 					continue // hash does not match
 				}
 			}

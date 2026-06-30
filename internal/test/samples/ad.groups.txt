@@ -1,0 +1,9 @@
+Domain Computers
+Domain Controllers
+Schema Admins
+Enterprise Admins
+Domain Admins
+Domain Users
+Domain Guests
+Group Policy Creator Owners
+DnsUpdateProxy

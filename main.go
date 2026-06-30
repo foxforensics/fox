@@ -104,6 +104,7 @@ type Fox struct {
 }
 
 func main() {
+	defer timer(time.Now())
 	defer trace()
 
 	log.SetFlags(0)
@@ -135,8 +136,8 @@ func main() {
 		os.Exit(1)
 
 	default:
-		defer timer(time.Now())
 		defer fox.Discard()
+		kong.Exit(fox.Exit)
 
 		ctx.FatalIfErrorf(ctx.Run(&fox.Globals))
 	}

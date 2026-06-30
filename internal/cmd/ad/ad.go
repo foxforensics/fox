@@ -8,11 +8,11 @@ import (
 
 	"go.foxforensics.eu/bootkey/bootkey"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
+	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/ese"
+	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/reg"
+	"go.foxforensics.eu/fox/v4/internal/lib/formats"
 	"go.foxforensics.eu/fox/v4/internal/pkg/ad/record"
 	"go.foxforensics.eu/fox/v4/internal/pkg/ad/tables"
-	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/bin/ese"
-	"go.foxforensics.eu/fox/v4/internal/pkg/lib/binaries/bin/reg"
-	"go.foxforensics.eu/fox/v4/internal/pkg/lib/formats"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/hashdump/extract"
 	"go.foxforensics.eu/hasher/hash"
@@ -51,7 +51,7 @@ type Ad struct {
 	Users     bool `short:"u" xor:"users,groups,computers"`
 	Groups    bool `short:"g" xor:"users,groups,computers"`
 	Computers bool `short:"c" xor:"users,groups,computers"`
-	Json      bool `short:"j" xor:"json,jsonl"`
+	Json      bool `short:"j" xor:"json,jsonl,"`
 	Jsonl     bool `short:"J" xor:"json,jsonl"`
 
 	// secret flags
@@ -205,7 +205,7 @@ func (cmd *Ad) format(a fmt.Stringer) string {
 			return v.LmOnly()
 		case cmd.NtOnly:
 			return v.NtOnly()
-		default:
+		case !cmd.Json && !cmd.Jsonl:
 			return v.ToNTLM(cmd.History)
 		}
 	}
