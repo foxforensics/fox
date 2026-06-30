@@ -3,6 +3,7 @@ package pkg
 import (
 	"bytes"
 	"errors"
+	"log/slog"
 	"strconv"
 	"strings"
 
@@ -42,7 +43,10 @@ func SetQuery(q *Query, s string, re *regexp2.Regexp) error {
 		return nil // empty
 	}
 
-	if ok, _ := limit.MatchString(s); !ok {
+	if ok, err := limit.MatchString(s); !ok {
+		if err != nil {
+			slog.Debug(err.Error())
+		}
 		return errors.New("invalid limit syntax")
 	}
 

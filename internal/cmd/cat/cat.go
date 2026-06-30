@@ -1,6 +1,7 @@
 package cat
 
 import (
+	"log/slog"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -134,7 +135,10 @@ func (cmd *Cat) renderHex(fox *cmd.Globals, b []byte) {
 		Pretty: !fox.NoPretty,
 	}, fox).Lines {
 		if fox.Regexp != nil {
-			if ok, _ := fox.Regexp.MatchString(l.Values); !ok {
+			if ok, err := fox.Regexp.MatchString(l.Values); !ok {
+				if err != nil {
+					slog.Error(err.Error())
+				}
 				continue // not matched afterward
 			}
 		}

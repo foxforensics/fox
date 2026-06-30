@@ -6,10 +6,13 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"sync"
 
 	db "go.foxforensics.eu/fox/v4/internal/pkg/str"
 	fstrings "go.foxforensics.eu/strings/strings"
 )
+
+var entries db.Database
 
 type Options struct {
 	Min     uint
@@ -34,9 +37,13 @@ type Carver struct {
 }
 
 func New(opts *Options) *Carver {
+	sync.OnceFunc(func() {
+		entries = db.BuildDB(opts.What)
+	})()
+
 	return &Carver{
 		opts:    opts,
-		entries: db.BuildDB(opts.What),
+		entries: entries,
 	}
 }
 

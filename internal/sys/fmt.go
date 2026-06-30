@@ -2,6 +2,7 @@ package sys
 
 import (
 	"fmt"
+	"log/slog"
 	"math"
 	"strconv"
 	"strings"
@@ -60,7 +61,10 @@ func Humanize(i uint64) string {
 func Mechanize(s string) (int64, bool) {
 	s = strings.ToLower(s)
 
-	if ok, _ := mask.MatchString(s); !ok {
+	if ok, err := mask.MatchString(s); !ok {
+		if err != nil {
+			slog.Error(err.Error())
+		}
 		return 0, false
 	}
 

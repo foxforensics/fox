@@ -1,6 +1,7 @@
 package str
 
 import (
+	"log/slog"
 	"slices"
 	"strings"
 
@@ -137,8 +138,10 @@ func (db Database) Lookup(s string) []string {
 	var v []string
 
 	for _, e := range db {
-		if ok, _ := e.Regex.MatchString(s); ok {
+		if ok, err := e.Regex.MatchString(s); ok {
 			v = append(v, e.Names...)
+		} else if err != nil {
+			slog.Error(err.Error())
 		}
 	}
 

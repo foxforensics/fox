@@ -3,6 +3,7 @@ package str
 import (
 	"errors"
 	"fmt"
+	"log/slog"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -112,7 +113,10 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 			Threads: fox.Threads,
 		}).Carve(fox.Context, h.Bytes()) {
 			if fox.Regexp != nil {
-				if ok, _ := fox.Regexp.MatchString(str.Value); !ok {
+				if ok, err := fox.Regexp.MatchString(str.Value); !ok {
+					if err != nil {
+						slog.Error(err.Error())
+					}
 					continue // not matched afterward
 				}
 			}

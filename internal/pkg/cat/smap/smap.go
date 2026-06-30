@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"cmp"
+	"log/slog"
 	"slices"
 
 	"github.com/dlclark/regexp2/v2"
@@ -52,8 +53,10 @@ func (s SMap) Render(n int) SMap {
 
 func (s SMap) Grep(re *regexp2.Regexp, n int) SMap {
 	return s.do(func(ch chan<- String, str *String) {
-		if ok, _ := re.MatchString(string(str.Bytes)); ok {
+		if ok, err := re.MatchString(string(str.Bytes)); ok {
 			ch <- *str
+		} else if err != nil {
+			slog.Error(err.Error())
 		}
 	}, n)
 }
