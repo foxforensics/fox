@@ -142,6 +142,7 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 			case <-fox.Context.Done():
 				h.Discard()
 				return nil // canceled
+
 			default:
 			}
 
@@ -155,7 +156,7 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 				if len(cmd.Exclude)+len(cmd.Include) == 0 {
 					slog.Debug(fmt.Sprintf("hash was empty"))
 				} else {
-					continue
+					continue // empty sum
 				}
 			}
 
