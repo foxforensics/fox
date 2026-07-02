@@ -18,7 +18,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
-	"go.foxforensics.eu/fox/v4/internal/sys/mmap"
+	"go.foxforensics.eu/fox/v4/internal/sys/memory"
 )
 
 const Stdin = "-"
@@ -27,6 +27,22 @@ const MaxFiles = 8192
 const MaxFolders = 64
 const MaxArchives = 4
 const MaxDeflates = 4
+
+const (
+	Initial = iota
+	Extract
+	Deflate
+	Convert
+	Format
+)
+
+type Entry struct {
+	Path   string
+	Part   string
+	Stage  byte
+	Data   []byte
+	Mapped bool
+}
 
 type Options struct {
 	Query    pkg.Query
@@ -75,9 +91,10 @@ func (ldr *Loader) Load(ctx context.Context, paths []string) <-chan *heap.Heap {
 					continue
 				}
 
-				err = ldr.processData(ctx, Stdin, "", bytes.TrimSpace(buf), 0)
-
-				if err != nil {
+				if err = ldr.processData(ctx, &Entry{
+					Path: Stdin,
+					Data: bytes.TrimSpace(buf),
+				}, 0); err != nil {
 					slog.Error(err.Error())
 				}
 
@@ -88,8 +105,11 @@ func (ldr *Loader) Load(ctx context.Context, paths []string) <-chan *heap.Heap {
 			case <-ctx.Done():
 				return
 			default:
-				p1, p2 := sys.SplitPart(path)
-				ldr.loadPath(ctx, p1, p2)
+				path, part := sys.SplitPart(path)
+				ldr.loadPath(ctx, &Entry{
+					Path: path,
+					Part: part,
+				})
 			}
 		}
 	}()
@@ -98,19 +118,13 @@ func (ldr *Loader) Load(ctx context.Context, paths []string) <-chan *heap.Heap {
 }
 
 func (ldr *Loader) Exit() {
-	slog.Debug(fmt.Sprintf("total size %s", sys.Humanize(ldr.size.Load())))
+	slog.Info(fmt.Sprintf("total size %s", sys.Humanize(ldr.size.Load())))
 }
 
-func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
-	v, err := filepath.Abs(path)
+func (ldr *Loader) loadPath(ctx context.Context, e *Entry) {
+	slog.Debug(fmt.Sprintf("looking for %s", e.Path))
 
-	if err == nil {
-		path = v
-	}
-
-	slog.Debug(fmt.Sprintf("looking for %s", path))
-
-	match, err := doublestar.FilepathGlob(path)
+	match, err := doublestar.FilepathGlob(e.Path)
 
 	if err != nil {
 		slog.Error(err.Error())
@@ -118,7 +132,7 @@ func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
 	}
 
 	if len(match) == 0 {
-		slog.Error(fmt.Sprintf("no files found for %s", path))
+		slog.Error(fmt.Sprintf("no files found for %s", e.Path))
 		return
 	}
 
@@ -134,10 +148,15 @@ func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
 				continue
 			}
 
+			v := &Entry{
+				Path: path,
+				Part: e.Part,
+			}
+
 			if fi.IsDir() {
-				err = ldr.loadDir(ctx, path, part, 1)
+				err = ldr.loadDir(ctx, v, 1)
 			} else {
-				err = ldr.loadFile(ctx, path, part)
+				err = ldr.loadFile(ctx, v)
 			}
 
 			if err != nil {
@@ -147,12 +166,12 @@ func (ldr *Loader) loadPath(ctx context.Context, path, part string) {
 	}
 }
 
-func (ldr *Loader) loadDir(ctx context.Context, path, part string, i int) error {
+func (ldr *Loader) loadDir(ctx context.Context, e *Entry, i int) error {
 	if ldr.opts.Guarded && i >= MaxFolders {
 		return errors.New("max folders reached")
 	}
 
-	dir, err := os.ReadDir(path)
+	dir, err := os.ReadDir(e.Path)
 
 	if err != nil {
 		return err
@@ -163,10 +182,15 @@ func (ldr *Loader) loadDir(ctx context.Context, path, part string, i int) error 
 		case <-ctx.Done():
 			return ctx.Err()
 		default:
+			v := &Entry{
+				Path: filepath.Join(e.Path, f.Name()),
+				Part: e.Part,
+			}
+
 			if f.IsDir() {
-				err = ldr.loadDir(ctx, filepath.Join(path, f.Name()), part, i+1)
+				err = ldr.loadDir(ctx, v, i+1)
 			} else {
-				err = ldr.loadFile(ctx, filepath.Join(path, f.Name()), part)
+				err = ldr.loadFile(ctx, v)
 			}
 
 			if err != nil {
@@ -178,8 +202,8 @@ func (ldr *Loader) loadDir(ctx context.Context, path, part string, i int) error 
 	return nil
 }
 
-func (ldr *Loader) loadFile(ctx context.Context, path, part string) error {
-	f, err := os.Open(path)
+func (ldr *Loader) loadFile(ctx context.Context, e *Entry) error {
+	f, err := os.Open(e.Path)
 
 	if err != nil {
 		return err
@@ -199,78 +223,77 @@ func (ldr *Loader) loadFile(ctx context.Context, path, part string) error {
 
 	// empty files will cause issues
 	if fi.Size() == 0 {
-		return ldr.createHeap(ctx, path, "", []byte(nil))
+		return ldr.createHeap(ctx, e)
 	}
 
-	b, err := mmap.Map(f)
+	e.Data, err = memory.Alloc(e.Path, f)
 
 	if err != nil {
 		return err
 	}
 
-	slog.Debug(fmt.Sprintf("loaded file %s", path))
+	e.Mapped = true
 
-	return ldr.processData(ctx, path, part, b, 0)
+	slog.Debug(fmt.Sprintf("memory mapped %s", e.Path))
+
+	return ldr.processData(ctx, e, 0)
 }
 
-func (ldr *Loader) processData(ctx context.Context, path, part string, b []byte, i int) error {
-	var hint string
-	var ok bool
-
+func (ldr *Loader) processData(ctx context.Context, e *Entry, i int) error {
 	// check depth to protect against zip bombs
 	if ldr.opts.Guarded && i >= MaxArchives {
 		return errors.New("max archives reached")
 	}
 
-	// 1. deflate data (nested)
+	// stage 1: deflate data (nested)
 	for j := 1; ; j++ {
 		if ldr.opts.Guarded && j >= MaxDeflates {
 			return errors.New("max deflates reached")
 		}
 
-		if b, ok = ldr.deflateData(b); !ok {
+		if !ldr.deflateData(e) {
 			break // no more nested
 		}
 	}
 
-	// 2. extract data (recursive)
-	if ldr.extractData(ctx, path, part, b, i) {
-		return nil
+	// stage 2: extract data (recursive)
+	if ldr.extractData(ctx, e, i) {
+		return nil // ends here
 	}
 
-	// 3. convert data
-	if b, ok = ldr.convertData(b); ok {
-		hint = "json"
-	}
+	// stage 3: convert data
+	ldr.convertData(e)
 
-	// 4. format data
-	if b, ok = ldr.formatData(b); ok {
-		hint = "json"
-	}
+	// stage 4: format data
+	ldr.formatData(e)
 
 	// filter for specific streams
-	if len(part) == 0 || strings.Contains(path, part) {
-		return ldr.createHeap(ctx, path, hint, b)
+	if len(e.Part) == 0 || strings.Contains(e.Path, e.Part) {
+		return ldr.createHeap(ctx, e)
 	}
 
 	return nil
 }
 
-func (ldr *Loader) extractData(ctx context.Context, path, part string, b []byte, i int) bool {
-	for _, a := range registry.Extracts {
-		if a.Detect(b) {
-			slog.Debug(fmt.Sprintf("archive detected as possibly %s", a.Name))
+func (ldr *Loader) extractData(ctx context.Context, e *Entry, i int) bool {
+	for _, r := range registry.Extracts {
+		if r.Detect(e.Data) {
+			slog.Debug(fmt.Sprintf("archive detected as possibly %s", r.Name))
 
-			for _, e := range a.Extract(b, path, ldr.opts.Password) {
-				slog.Debug(fmt.Sprintf("stream found %s", e.Path))
+			for _, s := range r.Extract(e.Data, e.Path, ldr.opts.Password) {
+				slog.Debug(fmt.Sprintf("stream found %s", s.Path))
 
 				select {
 				case <-ctx.Done():
 					return true
 				default:
-					err := ldr.processData(ctx, e.Path, part, e.Data, i+1)
-
-					if err != nil {
+					if err := ldr.processData(ctx, &Entry{
+						Path:   s.Path,
+						Part:   e.Part,
+						Data:   s.Data,
+						Mapped: false,
+						Stage:  Extract,
+					}, i+1); err != nil {
 						slog.Error(err.Error())
 					}
 				}
@@ -283,83 +306,89 @@ func (ldr *Loader) extractData(ctx context.Context, path, part string, b []byte,
 	return false
 }
 
-func (ldr *Loader) deflateData(b []byte) ([]byte, bool) {
-	for _, e := range registry.Deflates {
-		if e.Detect(b) {
-			slog.Debug(fmt.Sprintf("deflate detected as possibly %s", e.Name))
+func (ldr *Loader) deflateData(e *Entry) bool {
+	for _, r := range registry.Deflates {
+		if r.Detect(e.Data) {
+			slog.Debug(fmt.Sprintf("deflate detected as possibly %s", r.Name))
 
-			r, err := e.Deflate(b)
-
+			v, err := r.Deflate(e.Data)
 			if err != nil {
 				slog.Error(err.Error())
-				return b, false
+				return false
 			}
 
-			return r, true
+			e.Data = v
+			e.Mapped = false
+			e.Stage = Deflate
+			return true
 		}
 	}
 
-	return b, false
+	return false
 }
 
-func (ldr *Loader) convertData(b []byte) ([]byte, bool) {
-	for _, e := range registry.Converts {
-		if e.Detect(b) {
-			slog.Debug(fmt.Sprintf("convert detected as possibly %s", e.Name))
+func (ldr *Loader) convertData(e *Entry) {
+	for _, r := range registry.Converts {
+		if r.Detect(e.Data) {
+			slog.Debug(fmt.Sprintf("convert detected as possibly %s", r.Name))
 
-			r, err := e.Convert(b)
-
+			v, err := r.Convert(e.Data)
 			if err != nil {
 				slog.Error(err.Error())
-				return b, false
+				return
 			}
 
-			return r, true
+			e.Data = v
+			e.Mapped = false
+			e.Stage = Convert
+			return
 		}
 	}
-
-	return b, false
 }
 
-func (ldr *Loader) formatData(b []byte) ([]byte, bool) {
-	for _, e := range registry.Formats {
-		if e.Detect(b) {
-			slog.Debug(fmt.Sprintf("format detected as possibly %s", e.Name))
+func (ldr *Loader) formatData(e *Entry) {
+	for _, r := range registry.Formats {
+		if r.Detect(e.Data) {
+			slog.Debug(fmt.Sprintf("format detected as possibly %s", r.Name))
 
-			r, err := e.Format(b)
-
+			v, err := r.Format(e.Data)
 			if err != nil {
 				slog.Error(err.Error())
-				return b, false
+				return
 			}
 
-			return r, true
+			e.Data = v
+			e.Mapped = false
+			e.Stage = Format
+			return
 		}
 	}
-
-	return b, false
 }
 
-func (ldr *Loader) createHeap(ctx context.Context, path, hint string, b []byte) error {
+func (ldr *Loader) createHeap(ctx context.Context, e *Entry) error {
+	var ok bool
+
 	if ldr.opts.Guarded && ldr.files.Load() >= MaxFiles {
 		return errors.New("max files reached")
 	}
 
-	if _, ok := ldr.paths.LoadOrStore(path, pkg.Nil{}); ok {
+	if _, ok = ldr.paths.LoadOrStore(e.Path, pkg.Nil{}); ok {
 		return nil // already loaded
 	}
 
-	ldr.size.Add(uint64(len(b))) // add original size
+	ldr.size.Add(uint64(len(e.Data))) // add original size
 	ldr.files.Add(1)
 
-	b = ldr.opts.Query.Reduce(b)
+	if e.Data, ok = ldr.opts.Query.Reduce(e.Data); ok {
+		e.Mapped = false // no more mapped
+	}
 
 	select {
 	case <-ctx.Done():
 		return ctx.Err()
 
-	case ldr.heaps <- heap.New(path, hint, b):
-		slog.Debug(fmt.Sprintf("loaded heap %s", path))
+	case ldr.heaps <- heap.New(e.Path, e.Stage, e.Mapped, e.Data):
+		slog.Debug(fmt.Sprintf("loaded heap %s", e.Path))
 	}
 
 	return nil

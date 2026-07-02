@@ -9,21 +9,20 @@ import (
 const (
 	file = "texts/bible.txt"
 	name = "test"
-	hint = "text"
 	size = 4633983
 )
 
 func TestNew(t *testing.T) {
-	h := New(name, hint, test.Fixture(file))
+	h := New(name, 0, false, test.Fixture(file))
 
 	defer h.Discard()
 
-	if h.Name != name {
-		t.Fatal("invalid name")
-	}
-
 	if h.Size != size {
 		t.Fatal("invalid size")
+	}
+
+	if h.String() != name {
+		t.Fatal("invalid name")
 	}
 
 	if len(h.Bytes()) != size {
@@ -32,7 +31,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestIsText(t *testing.T) {
-	h := New(name, hint, test.Fixture(file))
+	h := New(name, 0, false, test.Fixture(file))
 
 	defer h.Discard()
 
@@ -42,7 +41,7 @@ func TestIsText(t *testing.T) {
 }
 
 func TestBytes(t *testing.T) {
-	h := New(name, hint, test.Fixture(file))
+	h := New(name, 0, false, test.Fixture(file))
 
 	defer h.Discard()
 
@@ -52,7 +51,7 @@ func TestBytes(t *testing.T) {
 }
 
 func TestString(t *testing.T) {
-	h := New(name, hint, test.Fixture(file))
+	h := New(name, 0, false, test.Fixture(file))
 
 	defer h.Discard()
 
@@ -62,7 +61,7 @@ func TestString(t *testing.T) {
 }
 
 func TestDiscard(t *testing.T) {
-	h := New(name, hint, test.Fixture(file))
+	h := New(name, 0, false, test.Fixture(file))
 	h.Discard()
 
 	if h.Size > 0 {

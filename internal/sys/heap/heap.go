@@ -5,7 +5,7 @@ import (
 	"io"
 	"sync"
 
-	"go.foxforensics.eu/fox/v4/internal/sys/mmap"
+	"go.foxforensics.eu/fox/v4/internal/sys/memory"
 )
 
 const block = 4096
@@ -13,18 +13,31 @@ const block = 4096
 type Heap struct {
 	sync.RWMutex
 
-	Name string // heap name
-	Hint string // heap hint
-	Size uint64 // heap size
-
-	m mmap.MMap // memory map
+	Name   string // heap name
+	Size   uint64 // heap size
+	Stage  byte
+	mapped bool
+	memory []byte
 }
 
-// TODO: keep track of mapped and unmapped areas
-// TODO: reduce must also keep track of original addr
-// TODO: mapped bool
-func New(name, hint string, m mmap.MMap) *Heap {
-	return &Heap{Name: name, Hint: hint, Size: uint64(len(m)), m: m}
+func New(name string, stage byte, mapped bool, memory memory.MMap) *Heap {
+	return &Heap{
+		Name:   name,
+		Size:   uint64(len(memory)),
+		Stage:  stage,
+		mapped: mapped,
+		memory: memory,
+	}
+}
+
+func (h *Heap) Clone() *Heap {
+	return &Heap{
+		Name:   h.Name,
+		Size:   h.Size,
+		Stage:  h.Stage,
+		mapped: false,
+		memory: nil,
+	}
 }
 
 func (h *Heap) String() string {
@@ -35,25 +48,25 @@ func (h *Heap) Reader() io.ReaderAt {
 	h.RLock()
 	defer h.RUnlock()
 
-	return bytes.NewReader(h.m)
+	return bytes.NewReader(h.memory)
 }
 
 func (h *Heap) Bytes() []byte {
 	h.RLock()
 	defer h.RUnlock()
 
-	return h.m
+	return h.memory
 }
 
 func (h *Heap) IsText() bool {
 	h.RLock()
 	defer h.RUnlock()
 
-	if h.m == nil {
+	if h.memory == nil {
 		return false
 	}
 
-	return !bytes.ContainsRune(h.m[:min(h.Size, block)], 0)
+	return !bytes.ContainsRune(h.memory[:min(h.Size, block)], 0)
 }
 
 func (h *Heap) Discard() {
@@ -62,9 +75,9 @@ func (h *Heap) Discard() {
 
 	h.Size = 0
 
-	// unmap memory
-	if h.m != nil {
-		mmap.Unmap(h.m)
-		h.m = nil
+	if h.mapped {
+		memory.Free(h.String())
+	} else if h.memory != nil {
+		h.memory = h.memory[:0]
 	}
 }

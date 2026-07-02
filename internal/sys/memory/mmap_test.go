@@ -1,4 +1,4 @@
-package mmap
+package memory
 
 import (
 	"os"
