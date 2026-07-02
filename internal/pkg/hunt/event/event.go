@@ -44,7 +44,7 @@ func (e *Event) String() string {
 }
 
 func (e *Event) SortKey() string {
-	return fmt.Sprintf("%020d-%020d", e.Time.UnixNano(), xxh3.HashString(e.String()))
+	return fmt.Sprintf("%020d-%020d", uint64(e.Time.UnixNano())^(1<<63), xxh3.HashString(e.String()))
 }
 
 func (e *Event) AsCEF() string {
