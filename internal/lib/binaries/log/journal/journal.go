@@ -144,7 +144,7 @@ func newEvent(od *ordereddict.Dict) (*event.Event, error) {
 		if v <= 7 {
 			e.Severity = 10 - int(v) // minimum 3
 		} else {
-			e.Severity = 2 // malformed means critical
+			e.Severity = 10 // malformed means critical
 		}
 	}
 
