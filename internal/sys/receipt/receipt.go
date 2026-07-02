@@ -4,6 +4,8 @@ package receipt
 import (
 	"crypto/sha256"
 	"fmt"
+	"io"
+	"log/slog"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -40,25 +42,43 @@ COMMAND
 `)
 
 func Generate(path string) error {
-	buf, err := os.ReadFile(path)
+	f, err := os.Open(path)
 
 	if err != nil {
 		return err
 	}
 
-	hst, err := os.Hostname()
+	defer func() {
+		if err := f.Close(); err != nil {
+			slog.Error(err.Error())
+		}
+	}()
+
+	fi, err := f.Stat()
 
 	if err != nil {
 		return err
 	}
 
-	usr, err := user.Current()
+	h := sha256.New()
+
+	if _, err := io.Copy(h, f); err != nil {
+		slog.Error(err.Error())
+	}
+
+	hn, err := os.Hostname()
 
 	if err != nil {
 		return err
 	}
 
-	abs, err := filepath.Abs(path)
+	un, err := user.Current()
+
+	if err != nil {
+		return err
+	}
+
+	p, err := filepath.Abs(path)
 
 	if err != nil {
 		return err
@@ -66,12 +86,12 @@ func Generate(path string) error {
 
 	return os.WriteFile(path+".cc", []byte(fmt.Sprintf(header,
 		version.Number, runtime.GOOS, runtime.GOARCH,
-		abs,
+		p,
 		time.Now().UTC().Format(time.RFC3339Nano),
-		usr.Name, usr.Username,
-		hst,
-		len(buf),
-		sha256.Sum256(buf),
+		un.Name, un.Username,
+		hn,
+		fi.Size(),
+		h.Sum(nil),
 		strings.Join(os.Args, " "),
 	)), 0600)
 }

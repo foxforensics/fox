@@ -12,7 +12,10 @@ import (
 	fstrings "go.foxforensics.eu/strings/strings"
 )
 
-var entries db.Database
+var (
+	entries db.Database
+	buildDB sync.Once
+)
 
 type Options struct {
 	Min     uint
@@ -37,9 +40,9 @@ type Carver struct {
 }
 
 func New(opts *Options) *Carver {
-	sync.OnceFunc(func() {
+	buildDB.Do(func() {
 		entries = db.BuildDB(opts.What)
-	})()
+	})
 
 	return &Carver{
 		opts:    opts,

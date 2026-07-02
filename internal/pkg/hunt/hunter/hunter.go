@@ -23,6 +23,8 @@ const (
 	Scale   = 1024
 )
 
+var prepare sync.Once
+
 var Local = []string{
 	"/Windows/System32/winevt/Logs",
 	"/var/log/journal",
@@ -39,7 +41,7 @@ type Hunter struct {
 }
 
 func New(opts *Options) *Hunter {
-	sync.OnceFunc(evtx.Prepare)()
+	prepare.Do(evtx.Prepare)
 
 	return &Hunter{
 		opts: opts,
