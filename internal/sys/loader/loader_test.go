@@ -115,7 +115,7 @@ func newOpts() *Options {
 
 func consume(ldr *Loader, in []string) (out []string) {
 	for h := range ldr.Load(context.Background(), in) {
-		out = append(out, filepath.Base(h.Name))
+		out = append(out, filepath.Base(h.Path))
 		h.Discard()
 	}
 
