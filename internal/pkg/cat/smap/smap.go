@@ -29,8 +29,16 @@ type String struct {
 func Map(m []byte) (s SMap) {
 	r := bufio.NewReaderSize(bytes.NewReader(m), Size)
 
+	var line []byte
+	
 	for {
-		b, _, err := r.ReadLine()
+		b, p, err := r.ReadLine()
+
+		line = append(line, b...)
+
+		if p {
+			continue // line too long
+		}
 
 		if err != nil {
 			break
@@ -38,8 +46,10 @@ func Map(m []byte) (s SMap) {
 
 		s = append(s, String{
 			Line:  uint(len(s)) + 1,
-			Bytes: bytes.Clone(b),
+			Bytes: bytes.Clone(line),
 		})
+
+		line = line[:0]
 	}
 
 	return
