@@ -37,7 +37,7 @@ func Purge() {
 	slog.Debug("purging all memory")
 
 	mapped.Range(func(k, v interface{}) bool {
-		if m, ok := v.(MMap); !ok {
+		if m, ok := v.(MMap); ok {
 			Unmap(m)
 			slog.Debug(fmt.Sprintf("memory purged for %s", k))
 		}
