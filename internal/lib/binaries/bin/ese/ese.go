@@ -140,7 +140,7 @@ func marshal(od *ordereddict.Dict, rep *strings.Replacer) ([]byte, error) {
 		}
 	}
 
-	if len(od.Items()) > 0 {
+	if buf.Len() > 1 {
 		buf.Truncate(buf.Len() - 1)
 	}
 
