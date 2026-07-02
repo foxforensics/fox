@@ -1,0 +1,4 @@
+      3l    1.0k  7.8e [################] 00000000 testdata/binaries/test.rnd
+      4l    1.0k  7.8e [################] 00000400 testdata/binaries/test.rnd
+      2l    1.0k  7.8e [################] 00000800 testdata/binaries/test.rnd
+      3l    1.0k  7.8e [################] 00000c00 testdata/binaries/test.rnd

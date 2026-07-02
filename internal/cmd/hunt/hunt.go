@@ -20,6 +20,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/hunter"
 	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/muxer"
 	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/parquet"
+	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/rules"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
 )
@@ -58,9 +59,6 @@ Example: Send events to an Elastic Stack
 
 Report bugs at: foxforensics.eu/issues
 `)
-
-//go:embed hunt.yml
-var Default []byte
 
 type Hunt struct {
 	All     bool `short:"a"`
@@ -121,7 +119,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if len(cmd.Rule) > 0 {
 		cmd.rule, err = sigma.ParseRule(cmd.Rule)
 	} else {
-		cmd.rule, err = sigma.ParseRule(Default)
+		cmd.rule, err = sigma.ParseRule(rules.Critical)
 	}
 
 	if err != nil {

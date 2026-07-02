@@ -21,7 +21,7 @@ func New(w io.Writer) *Writer {
 	return &Writer{w: w}
 }
 
-func (w *Writer) Header(s string) {
+func (w *Writer) FileHeader(s string) {
 	s = strings.TrimPrefix(s, "/")
 	s = strings.TrimSuffix(s, "/")
 	s = strings.ReplaceAll(s, "::", " > ")

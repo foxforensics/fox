@@ -1,0 +1,6 @@
+ FOX  testdata > formats > fox.json
+1  [
+2    "FOX",
+3    "0123 UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU 47!",
+4    "XOF"
+5  ]

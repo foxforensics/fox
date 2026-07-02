@@ -2,10 +2,20 @@ package cat
 
 import (
 	"bytes"
+	"log/slog"
+	"os"
 	"testing"
 
 	"go.foxforensics.eu/fox/v4/internal/test"
 )
+
+func TestMain(m *testing.M) {
+	if err := os.Chdir("../../../"); err != nil {
+		slog.Error(err.Error())
+	} else {
+		os.Exit(m.Run())
+	}
+}
 
 func TestCat(t *testing.T) {
 	for _, tt := range []struct {
@@ -15,7 +25,7 @@ func TestCat(t *testing.T) {
 	}{
 		{
 			"Text",
-			"cat.txt",
+			"cat.text.txt",
 			[]string{
 				"cat",
 				"-t",
@@ -32,12 +42,53 @@ func TestCat(t *testing.T) {
 			},
 		},
 		{
+			"Auto",
+			"cat.auto.txt",
+			[]string{
+				"cat",
+				test.FixtureFile("binaries/test.mbr"),
+			},
+		},
+		{
+			"Json",
+			"cat.json",
+			[]string{
+				"cat",
+				test.FixtureFile("formats/fox.json"),
+			},
+		},
+		{
+			"Jsonl",
+			"cat.jsonl",
+			[]string{
+				"cat",
+				test.FixtureFile("formats/fox.jsonl"),
+			},
+		},
+		{
+			"Xml",
+			"cat.xml",
+			[]string{
+				"cat",
+				test.FixtureFile("formats/fox.xml"),
+			},
+		},
+		{
 			"Find",
 			"cat.find.txt",
 			[]string{
 				"cat",
-				"-FO -C1",
+				"-FO",
+				"-C1",
 				test.FixtureFile("texts/fox.txt"),
+			},
+		},
+		{
+			"Empty",
+			"cat.empty.txt",
+			[]string{
+				"cat",
+				test.FixtureFile("binaries/test.nil"),
 			},
 		},
 	} {

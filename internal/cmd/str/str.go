@@ -99,10 +99,10 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 
 	for h := range ch {
 		if !fox.NoPretty {
-			fox.Writer.Header(h.String())
+			fox.Writer.FileHeader(h.String())
 		}
 
-		for str := range carver.New(&carver.Options{
+		for s := range carver.New(&carver.Options{
 			Min:     cmd.Min,
 			Max:     cmd.Max,
 			Ascii:   cmd.Ascii,
@@ -113,7 +113,7 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 			Threads: fox.Threads,
 		}).Carve(fox.Context, h.Bytes()) {
 			if fox.Regexp != nil {
-				if ok, err := fox.Regexp.MatchString(str.Value); !ok {
+				if ok, err := fox.Regexp.MatchString(s.Value); !ok {
 					if err != nil {
 						slog.Error(err.Error())
 					}
@@ -121,16 +121,16 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 				}
 			}
 
-			str.Value = writer.MarkMatch(str.Value, fox.Regexp)
+			s.Value = writer.MarkMatch(s.Value, fox.Regexp)
 
-			if !fox.NoPretty && len(str.Classes) > 0 {
-				fox.Writer.Write("%s  %s [%s]", writer.AsGray(str.Address), str.Value, writer.AsBold(str.Classes))
+			if !fox.NoPretty && len(s.Classes) > 0 {
+				fox.Writer.Write("%s  %s [%s]", writer.AsGray(s.Address), s.Value, writer.AsBold(s.Classes))
 			} else if !fox.NoPretty {
-				fox.Writer.Write("%s  %s", writer.AsGray(str.Address), str.Value)
-			} else if len(str.Classes) > 0 {
-				fox.Writer.Write("%s [%s]", str.Value, str.Classes)
+				fox.Writer.Write("%s  %s", writer.AsGray(s.Address), s.Value)
+			} else if len(s.Classes) > 0 {
+				fox.Writer.Write("%s [%s]", s.Value, s.Classes)
 			} else {
-				fox.Writer.Write(str.Value)
+				fox.Writer.Write(s.Value)
 			}
 		}
 

@@ -9,6 +9,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg"
 	"go.foxforensics.eu/fox/v4/internal/pkg/cat/buffer"
 	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/loader"
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
 
@@ -84,12 +85,18 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 	}
 
 	for h := range ch {
+		var hint string
+
 		if !fox.NoPretty {
-			fox.Writer.Header(h.String())
+			fox.Writer.FileHeader(h.String())
+		}
+
+		if h.Stage >= loader.Convert {
+			hint = "json" // default
 		}
 
 		if (h.IsText() && !cmd.Hex) || cmd.Text {
-			cmd.renderText(fox, h.Bytes(), h.Hint)
+			cmd.renderText(fox, h.Bytes(), hint)
 		} else {
 			cmd.renderHex(fox, h.Bytes())
 		}

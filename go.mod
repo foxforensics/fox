@@ -3,7 +3,6 @@ module go.foxforensics.eu/fox/v4
 go 1.26.0
 
 require (
-	github.com/0xrawsec/golang-evtx v1.2.9
 	github.com/Velocidex/go-journalctl v0.0.0-20260608120136-20835635c054
 	github.com/Velocidex/ordereddict v0.0.0-20250821063524-02dc06e46238
 	github.com/aixiansheng/lzfse v0.2.4
@@ -23,7 +22,7 @@ require (
 	github.com/flanglet/kanzi-go/v2 v2.5.1
 	github.com/hooklift/iso9660 v1.0.0
 	github.com/josephspurrier/goversioninfo v1.7.0
-	github.com/klauspost/compress v1.18.6
+	github.com/klauspost/compress v1.19.0
 	github.com/korylprince/goxar v0.1.2
 	github.com/minio/minlz v1.1.1
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
@@ -44,6 +43,7 @@ require (
 	go.foxforensics.eu/eventid v1.0.1
 	go.foxforensics.eu/go-bgzf v1.0.0
 	go.foxforensics.eu/go-ese v1.0.0
+	go.foxforensics.eu/go-evtx v1.3.0
 	go.foxforensics.eu/go-fortilog v1.1.2
 	go.foxforensics.eu/go-lnk v1.0.0
 	go.foxforensics.eu/go-mft v1.0.1
@@ -86,7 +86,7 @@ require (
 	github.com/hooklift/assert v0.1.0 // indirect
 	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f // indirect
 	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004 // indirect
-	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
+	github.com/klauspost/cpuid/v2 v2.4.0 // indirect
 	github.com/libp2p/go-sockaddr v0.2.0 // indirect
 	github.com/malwarology/sdhash v0.5.0 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect

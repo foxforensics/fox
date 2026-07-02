@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"github.com/dlclark/regexp2/v2"
@@ -15,8 +16,67 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 	"go.foxforensics.eu/fox/v4/internal/sys/loader"
+	"go.foxforensics.eu/fox/v4/internal/sys/memory"
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
+
+var About = strings.TrimSpace(`
+© 2026 Fox Forensics
+`)
+
+var Usage = strings.TrimSpace(`
+Usage: fox [COMMAND] [FLAGS...] <PATHS...>
+
+Commands:
+   a, ad                   Show Active Directory infos
+   c, cat                  Show file contents (default)
+   s, str                  Show file contained strings
+   i, info                 Show file infos and entropy
+   h, hash                 Show file hashes and checksums
+   x, hunt                 Hunt critical system events
+
+File flags:
+  -I, --in=FILE            Read paths from file
+  -O, --out=FILE           Write output to file (receipted)
+
+Filter flags:
+  -L, --limit=NUMBER       Filter using byte or line count
+  -F, --find=REGEX         Filter using regular expression
+
+Process flags:
+  -T, --threads=CORES      Use cores for parallel threads
+  -P, --password=TEXT      Use archive password (7z, Rar, Zip)
+
+Disable flags:
+  -r, --raw                Don't process files (r/rr/rrr)
+  -q, --quiet              Don't print anything
+  -n, --no-pretty          Don't prettify the output
+      --no-strict          Don't apply loader checks
+      --no-deflate         Don't deflate automatically
+      --no-extract         Don't extract automatically
+      --no-convert         Don't convert automatically
+      --no-receipt         Don't write the receipt
+
+Standard flags:
+  -v, --verbose[=LEVEL]    Print more details (v/vv)
+  -d, --dry-run            Print only the found files
+      --version            Print the version number
+      --help               Print this help message
+
+Positional arguments:
+  Globbing paths to open or '-' to read from STDIN
+
+Example: Find occurrences in event logs
+  $ fox -FWinlogon ./**/*.evtx
+
+Example: Hunt down critical events
+  $ fox hunt -u *.dd
+
+Example: Show help on sub commands
+  $ fox help info
+
+Report bugs at: foxforensics.eu/issues
+`)
 
 type Globals struct {
 	// file flags
@@ -176,7 +236,7 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	if fox.DryRun {
 		for h := range heaps {
-			fox.Writer.Write(h.Name)
+			fox.Writer.Write(h.String())
 		}
 
 		// exit early
@@ -203,4 +263,6 @@ func (fox *Globals) Discard() {
 	if fox.Loader != nil {
 		fox.Loader.Exit()
 	}
+
+	memory.Purge()
 }

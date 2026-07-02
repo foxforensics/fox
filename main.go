@@ -11,7 +11,6 @@ import (
 	"runtime"
 	"runtime/debug"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/alecthomas/kong"
@@ -26,64 +25,6 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd/str"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 )
-
-var About = strings.TrimSpace(`
-© 2026 Fox Forensics
-`)
-
-var Usage = strings.TrimSpace(`
-Usage: fox [COMMAND] [FLAGS...] <PATHS...>
-
-Commands:
-   a, ad                   Show Active Directory infos
-   c, cat                  Show file contents (default)
-   s, str                  Show file contained strings
-   i, info                 Show file infos and entropy
-   h, hash                 Show file hashes and checksums
-   x, hunt                 Hunt critical system events
-
-File flags:
-  -I, --in=FILE            Read paths from file
-  -O, --out=FILE           Write output to file (receipted)
-
-Filter flags:
-  -L, --limit=NUMBER       Filter using byte or line count
-  -F, --find=REGEX         Filter using regular expression
-
-Process flags:
-  -T, --threads=CORES      Use cores for parallel threads
-  -P, --password=TEXT      Use archive password (7z, Rar, Zip)
-
-Disable flags:
-  -r, --raw                Don't process files (r/rr/rrr)
-  -q, --quiet              Don't print anything
-  -n, --no-pretty          Don't prettify the output
-      --no-strict          Don't apply loader checks
-      --no-deflate         Don't deflate automatically
-      --no-extract         Don't extract automatically
-      --no-convert         Don't convert automatically
-      --no-receipt         Don't write the receipt
-
-Standard flags:
-  -v, --verbose[=LEVEL]    Print more details (v/vv)
-  -d, --dry-run            Print only the found files
-      --version            Print the version number
-      --help               Print this help message
-
-Positional arguments:
-  Globbing paths to open or '-' to read from STDIN
-
-Example: Find occurrences in event logs
-  $ fox -FWinlogon ./**/*.evtx
-
-Example: Hunt down critical events
-  $ fox hunt -u *.dd
-
-Example: Show help on sub commands
-  $ fox help info
-
-Report bugs at: foxforensics.eu/issues
-`)
 
 type Fox struct {
 	Ad   ad.Ad     `cmd:"" aliases:"a"`
@@ -124,11 +65,11 @@ func main() {
 		fallthrough // show usage
 
 	case fox.Globals.Help, ctx.Command() == "help":
-		sys.Usage(Usage)
+		sys.Usage(cmd.Usage)
 		os.Exit(0)
 
 	case fox.Version:
-		sys.About(About)
+		sys.About(cmd.About)
 		os.Exit(0)
 
 	case ctx.Error != nil:
@@ -144,7 +85,7 @@ func main() {
 }
 
 func timer(t time.Time) {
-	slog.Debug(fmt.Sprintf("total time %v", time.Since(t)))
+	slog.Info(fmt.Sprintf("total time %v", time.Since(t)))
 }
 
 func trace() {

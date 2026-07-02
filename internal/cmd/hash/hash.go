@@ -134,7 +134,7 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 		}
 
 		if !fox.NoPretty && len(cmd.Hash) > 1 {
-			fox.Writer.Header(h.String())
+			fox.Writer.FileHeader(h.String())
 		}
 
 		for _, k := range cmd.Hash {
