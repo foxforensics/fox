@@ -199,11 +199,15 @@ func addMapDeep(e *event.Event, em *evtx.GoEvtxMap, p string) {
 		case *evtx.GoEvtxMap, evtx.GoEvtxMap:
 			if m, ok := v.(evtx.GoEvtxMap); ok {
 				addMapDeep(e, &m, k)
+			} else {
+				slog.Error("map type invalid")
 			}
 
 		case *evtx.UTCTime, evtx.UTCTime:
 			if u, ok := v.(evtx.UTCTime); ok {
 				e.Fields[k] = time.Time(u).Format(time.RFC3339Nano)
+			} else {
+				slog.Error("utc type invalid")
 			}
 
 		default:
