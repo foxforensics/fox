@@ -53,8 +53,8 @@ func (s *Secret) ToNTLM(history bool) string {
 	sb.WriteString(fmt.Sprintf("%s:%d:%s:%s:::",
 		s.SAMAccountName,
 		s.RID,
-		s.format(s.LMHash, defaultLM),
-		s.format(s.NTHash, defaultNT),
+		s.format(s.LMHash, defaultLM, true),
+		s.format(s.NTHash, defaultNT, false),
 	))
 
 	// append historic hashes
@@ -75,8 +75,8 @@ func (s *Secret) ToNTLM(history bool) string {
 				s.SAMAccountName,
 				i,
 				s.RID,
-				s.format(lm, defaultLM),
-				s.format(nt, defaultNT),
+				s.format(lm, defaultLM, true),
+				s.format(nt, defaultNT, false),
 			))
 		}
 	}
@@ -85,15 +85,18 @@ func (s *Secret) ToNTLM(history bool) string {
 }
 
 func (s *Secret) LmOnly() string {
-	return s.format(s.LMHash, defaultLM)
+	return s.format(s.LMHash, defaultLM, true)
 }
 
 func (s *Secret) NtOnly() string {
-	return s.format(s.NTHash, defaultNT)
+	return s.format(s.NTHash, defaultNT, false)
 }
 
-func (s *Secret) format(sum, def string) string {
+func (s *Secret) format(sum, def string, upper bool) string {
 	if _, pwd := tables.Lookup(sum); len(pwd) > 0 {
+		if upper {
+			pwd = strings.ToUpper(pwd)
+		}
 		return writer.AsBold(pwd)
 	}
 
