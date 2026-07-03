@@ -139,6 +139,10 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 		fox.NoConvert = true
 	}
 
+	if fox.Threads <= 0 {
+		fox.Threads = 1 // must be at least one
+	}
+
 	// parse paths
 	if len(fox.In) > 0 {
 		fox.Paths = sys.ParseList(fox.In)
@@ -183,10 +187,6 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	if fox.Raw > 2 {
 		fox.NoStrict = true
-	}
-
-	if fox.Threads <= 0 {
-		fox.Threads = 1 // must be at least one
 	}
 
 	if len(fox.Lexer) > 0 {
