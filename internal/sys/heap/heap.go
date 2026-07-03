@@ -69,7 +69,7 @@ func (h *Heap) IsText() bool {
 	return !bytes.ContainsRune(h.memory[:min(h.Size, block)], 0)
 }
 
-func (h *Heap) Realloc(b []byte) {
+func (h *Heap) ReAlloc(b []byte) {
 	h.Lock()
 	defer h.Unlock()
 
@@ -78,7 +78,7 @@ func (h *Heap) Realloc(b []byte) {
 	h.memory = b
 }
 
-func (h *Heap) Discard() {
+func (h *Heap) DeAlloc() {
 	h.Lock()
 	defer h.Unlock()
 

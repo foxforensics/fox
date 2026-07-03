@@ -112,7 +112,7 @@ func (htr *Hunter) sort(ch <-chan *event.Event) <-chan *event.Event {
 }
 
 func (htr *Hunter) carve(ctx context.Context, ch chan<- *event.Event, h *heap.Heap) error {
-	defer h.Discard()
+	defer h.DeAlloc()
 
 	p := pool.New().
 		WithContext(ctx).

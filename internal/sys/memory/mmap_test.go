@@ -44,11 +44,13 @@ func TestMMap(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	defer Unmap(m)
+	defer func() {
+		if err = Unmap(m); err != nil {
+			t.Fatal(err)
+		}
+	}()
 
 	if len(m) != 4633983 {
 		t.Fatal("wrong size")
 	}
-
-	Unmap(m)
 }

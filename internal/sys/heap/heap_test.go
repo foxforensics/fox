@@ -15,7 +15,7 @@ const (
 func TestNew(t *testing.T) {
 	h := FromData(name, test.Fixture(file))
 
-	defer h.Discard()
+	defer h.DeAlloc()
 
 	if h.Size != size {
 		t.Fatal("invalid size")
@@ -33,7 +33,7 @@ func TestNew(t *testing.T) {
 func TestIsText(t *testing.T) {
 	h := FromData(name, test.Fixture(file))
 
-	defer h.Discard()
+	defer h.DeAlloc()
 
 	if !h.IsText() {
 		t.Fatal("not text")
@@ -43,7 +43,7 @@ func TestIsText(t *testing.T) {
 func TestBytes(t *testing.T) {
 	h := FromData(name, test.Fixture(file))
 
-	defer h.Discard()
+	defer h.DeAlloc()
 
 	if h.Bytes() == nil {
 		t.Fatal("bytes nil")
@@ -53,7 +53,7 @@ func TestBytes(t *testing.T) {
 func TestString(t *testing.T) {
 	h := FromData(name, test.Fixture(file))
 
-	defer h.Discard()
+	defer h.DeAlloc()
 
 	if h.String() != name {
 		t.Fatal("string invalid")
@@ -62,7 +62,7 @@ func TestString(t *testing.T) {
 
 func TestDiscard(t *testing.T) {
 	h := FromData(name, test.Fixture(file))
-	h.Discard()
+	h.DeAlloc()
 
 	if h.Size > 0 {
 		t.Fatal("invalid size")

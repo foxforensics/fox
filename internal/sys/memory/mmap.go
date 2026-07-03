@@ -1,10 +1,7 @@
 package memory
 
 import (
-	"errors"
-	"log/slog"
 	"os"
-	"syscall"
 
 	"go.foxforensics.eu/go-mmap"
 )
@@ -16,10 +13,6 @@ func Map(f *os.File) (MMap, error) {
 	return (MMap)(m), err
 }
 
-func Unmap(m MMap) {
-	if err := (*mmap.MMap)(&m).Unmap(); err != nil {
-		if !errors.Is(err, syscall.EINVAL) {
-			slog.Error(err.Error())
-		}
-	}
+func Unmap(m MMap) error {
+	return (*mmap.MMap)(&m).Unmap()
 }

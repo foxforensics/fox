@@ -23,16 +23,12 @@ import (
 
 const Stdin = "-"
 const Buffer = 256
-const MaxFiles = 8192
-const MaxFolders = 64
-const MaxArchives = 4
-const MaxDeflates = 4
 
 const (
-	Extract = iota + 1
-	Deflate
-	Convert
-	Format
+	StageExtract = iota + 1
+	StageDeflate
+	StageConvert
+	StageFormat
 )
 
 type Options struct {
@@ -150,7 +146,7 @@ func (ldr *Loader) loadPath(ctx context.Context, h *heap.Heap) {
 }
 
 func (ldr *Loader) loadDir(ctx context.Context, h *heap.Heap, i int) error {
-	if ldr.opts.Guarded && i >= MaxFolders {
+	if ldr.opts.Guarded && i >= sys.MaxFolders {
 		return errors.New("max folders reached")
 	}
 
@@ -221,13 +217,13 @@ func (ldr *Loader) loadFile(ctx context.Context, h *heap.Heap) error {
 
 func (ldr *Loader) processData(ctx context.Context, h *heap.Heap, i int) error {
 	// check depth to protect against zip bombs
-	if ldr.opts.Guarded && i >= MaxArchives {
+	if ldr.opts.Guarded && i >= sys.MaxArchives {
 		return errors.New("max archives reached")
 	}
 
 	// stage 1: deflate data (nested)
 	for j := 1; ; j++ {
-		if ldr.opts.Guarded && j >= MaxDeflates {
+		if ldr.opts.Guarded && j >= sys.MaxDeflates {
 			return errors.New("max deflates reached")
 		}
 
@@ -270,7 +266,7 @@ func (ldr *Loader) extractData(ctx context.Context, h *heap.Heap, i int) bool {
 					if err := ldr.processData(ctx, heap.New(
 						s.Path,
 						h.Part,
-						Extract,
+						StageExtract,
 						false,
 						s.Data,
 					), i+1); err != nil {
@@ -297,8 +293,8 @@ func (ldr *Loader) deflateData(h *heap.Heap) bool {
 				return false
 			}
 
-			h.Realloc(b)
-			h.Stage = Deflate
+			h.ReAlloc(b)
+			h.Stage = StageDeflate
 			return true
 		}
 	}
@@ -317,8 +313,8 @@ func (ldr *Loader) convertData(h *heap.Heap) {
 				return
 			}
 
-			h.Realloc(b)
-			h.Stage = Convert
+			h.ReAlloc(b)
+			h.Stage = StageConvert
 			return
 		}
 	}
@@ -335,15 +331,15 @@ func (ldr *Loader) formatData(h *heap.Heap) {
 				return
 			}
 
-			h.Realloc(b)
-			h.Stage = Format
+			h.ReAlloc(b)
+			h.Stage = StageFormat
 			return
 		}
 	}
 }
 
 func (ldr *Loader) createHeap(ctx context.Context, h *heap.Heap) error {
-	if ldr.opts.Guarded && ldr.files.Load() >= MaxFiles {
+	if ldr.opts.Guarded && ldr.files.Load() >= sys.MaxFiles {
 		return errors.New("max files reached")
 	}
 
@@ -355,7 +351,7 @@ func (ldr *Loader) createHeap(ctx context.Context, h *heap.Heap) error {
 	ldr.files.Add(1)
 
 	if b, ok := ldr.opts.Query.Reduce(h.Bytes()); ok {
-		h.Realloc(b)
+		h.ReAlloc(b)
 	}
 
 	select {
