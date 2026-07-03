@@ -233,8 +233,10 @@ func (ldr *Loader) processData(ctx context.Context, h *heap.Heap, i int) error {
 	}
 
 	// stage 2: extract data (recursive)
-	if ldr.extractData(ctx, h, i) {
+	if ok, err := ldr.extractData(ctx, h, i); ok {
 		return nil // ends here
+	} else if err != nil {
+		return err
 	}
 
 	// stage 3: convert data
@@ -251,7 +253,11 @@ func (ldr *Loader) processData(ctx context.Context, h *heap.Heap, i int) error {
 	return nil
 }
 
-func (ldr *Loader) extractData(ctx context.Context, h *heap.Heap, i int) bool {
+func (ldr *Loader) extractData(ctx context.Context, h *heap.Heap, i int) (bool, error) {
+	if ldr.opts.Guarded && ldr.files.Load() >= sys.MaxFiles {
+		return false, errors.New("max files reached")
+	}
+
 	for _, r := range registry.Extracts {
 		if r.Detect(h.Bytes()) {
 			slog.Debug(fmt.Sprintf("archive detected as possibly %s", r.Name))
@@ -261,7 +267,7 @@ func (ldr *Loader) extractData(ctx context.Context, h *heap.Heap, i int) bool {
 
 				select {
 				case <-ctx.Done():
-					return true
+					return true, nil
 				default:
 					if err := ldr.processData(ctx, heap.New(
 						s.Path,
@@ -275,11 +281,11 @@ func (ldr *Loader) extractData(ctx context.Context, h *heap.Heap, i int) bool {
 				}
 			}
 
-			return true
+			return true, nil
 		}
 	}
 
-	return false
+	return false, nil
 }
 
 func (ldr *Loader) deflateData(h *heap.Heap) bool {
