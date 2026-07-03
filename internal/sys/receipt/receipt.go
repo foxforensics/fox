@@ -62,8 +62,10 @@ func Generate(path string) error {
 
 	h := sha256.New()
 
-	if _, err := io.Copy(h, f); err != nil {
-		slog.Error(err.Error())
+	_, err = io.Copy(h, f)
+
+	if err != nil {
+		return err
 	}
 
 	hn, err := os.Hostname()
