@@ -17,27 +17,27 @@ type Heap struct {
 	Part   string // heap part
 	Size   uint64 // heap size
 	Stage  byte
-	mapped bool
+	token  uint64
 	memory []byte
 }
 
-func New(path, part string, stage byte, mapped bool, memory memory.MMap) *Heap {
+func New(path, part string, stage byte, token uint64, memory memory.MMap) *Heap {
 	return &Heap{
 		Path:   path,
 		Part:   part,
 		Size:   uint64(len(memory)),
 		Stage:  stage,
-		mapped: mapped,
+		token:  token,
 		memory: memory,
 	}
 }
 
 func FromPath(path, part string) *Heap {
-	return New(path, part, 0, false, nil)
+	return New(path, part, 0, 0, nil)
 }
 
 func FromData(path string, data []byte) *Heap {
-	return New(path, "", 0, false, data)
+	return New(path, "", 0, 0, data)
 }
 
 func (h *Heap) String() string {
@@ -74,7 +74,7 @@ func (h *Heap) ReAlloc(b []byte) {
 	defer h.Unlock()
 
 	h.Size = uint64(len(b))
-	h.mapped = false
+	h.token = 0
 	h.memory = b
 }
 
@@ -84,8 +84,8 @@ func (h *Heap) DeAlloc() {
 
 	h.Size = 0
 
-	if h.mapped {
-		memory.Free(h.String())
+	if h.token > 0 {
+		memory.Free(h.token)
 	} else if h.memory != nil {
 		h.memory = nil
 	}

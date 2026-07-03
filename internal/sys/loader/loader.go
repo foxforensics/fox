@@ -202,13 +202,13 @@ func (ldr *Loader) loadFile(ctx context.Context, h *heap.Heap) error {
 		return ldr.createHeap(ctx, h)
 	}
 
-	b, err := memory.Alloc(h.Path, f)
+	token, b, err := memory.Alloc(f)
 
 	if err != nil {
 		return err
 	}
 
-	h = heap.New(h.Path, h.Part, 0, true, b)
+	h = heap.New(h.Path, h.Part, 0, token, b)
 
 	slog.Debug(fmt.Sprintf("memory mapped %s", h.String()))
 
@@ -273,7 +273,7 @@ func (ldr *Loader) extractData(ctx context.Context, h *heap.Heap, i int) (bool, 
 						s.Path,
 						h.Part,
 						StageExtract,
-						false,
+						0,
 						s.Data,
 					), i+1); err != nil {
 						slog.Error(err.Error())

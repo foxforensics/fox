@@ -5,10 +5,12 @@ import (
 	"log/slog"
 	"os"
 	"sync"
+	"sync/atomic"
 )
 
 var (
-	mapped sync.Map
+	mapped  sync.Map
+	counter atomic.Uint64
 )
 
 func Total() uint64 {
@@ -24,26 +26,27 @@ func Total() uint64 {
 	return n
 }
 
-func Alloc(k string, f *os.File) (MMap, error) {
-	slog.Debug(fmt.Sprintf("memory alloc %s", k))
-
+func Alloc(f *os.File) (uint64, MMap, error) {
 	m, err := Map(f)
 
 	if err != nil {
-		return m, err
+		return 0, m, err
 	}
 
-	mapped.Store(k, m)
+	id := counter.Add(1)
+	mapped.Store(id, m)
 
-	return m, nil
+	slog.Debug(fmt.Sprintf("memory alloc for token %d", id))
+
+	return id, m, nil
 }
 
-func Free(k string) {
-	if v, ok := mapped.LoadAndDelete(k); !ok {
-		slog.Error(fmt.Sprintf("memory not found for %s", k))
+func Free(id uint64) {
+	if v, ok := mapped.LoadAndDelete(id); !ok {
+		slog.Error(fmt.Sprintf("memory not found for token %d", id))
 	} else if m, ok := v.(MMap); ok {
 		if err := Unmap(m); err == nil {
-			slog.Debug(fmt.Sprintf("memory freed %s", k))
+			slog.Debug(fmt.Sprintf("memory freed for token %d", id))
 		} else {
 			slog.Error(err.Error())
 		}
@@ -56,7 +59,7 @@ func Purge() {
 	mapped.Range(func(k, v any) bool {
 		if m, ok := v.(MMap); ok {
 			if err := Unmap(m); err == nil {
-				slog.Debug(fmt.Sprintf("memory purged for %s", k))
+				slog.Debug(fmt.Sprintf("memory purged for %d", k))
 			} else {
 				slog.Error(err.Error())
 			}
