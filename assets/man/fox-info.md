@@ -13,14 +13,10 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file infos and entropy. If the **--sort** flag is used, the files will be processed single-threaded, not _parallel_.
+Show file infos and entropy.
 
 FLAGS
 =====
-
-**-s, --sort**
-
-:   Sort files by path (slower).
 
 **-j, --json**
 
@@ -56,7 +52,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths insid
 EXAMPLES
 ========
 
-$ fox info -sN6.0 ./
+$ fox info -N6.0 ./
 
 :   List only high entropy files.
 

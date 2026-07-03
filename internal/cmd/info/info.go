@@ -27,7 +27,6 @@ var Usage = strings.TrimSpace(`
 Usage: fox info [FLAGS...] <PATHS...>
 
 Flags:
-  -s, --sort               Sort files by path (slower)
   -j, --json               Show infos as JSON objects
   -J, --jsonl              Show infos as JSON lines
 
@@ -39,7 +38,7 @@ Filter flags:
   -X, --max=VALUE          Maximal entropy value (default: 8.0)
 
 Example: List only high entropy files
-  $ fox info -sN6.0 ./
+  $ fox info -N6.0 ./
 
 Example: List blocks by one megabyte
   $ fox info -B1m backup.mdf
@@ -85,7 +84,6 @@ func (fi *FileInfo) String() string {
 }
 
 type Info struct {
-	Sort  bool `short:"s"`
 	Json  bool `short:"j" xor:"json,jsonl"`
 	Jsonl bool `short:"J" xor:"json,jsonl"`
 
@@ -129,10 +127,6 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 	if len(cmd.Paths) == 0 {
 		sys.Usage(Usage)
 		return nil
-	}
-
-	if cmd.Sort {
-		fox.Threads = 1 // single threaded
 	}
 
 	// turn off for calculations while loading
