@@ -71,7 +71,7 @@ Process Flags
 
 **-T, --threads**=_cores_
 
-:   Use _cores_ for parallel threads. The default is the number of logical CPUs available for the process.
+:   Use _cores_ for parallel threads. The default is the number of logical CPUs available for the process. This flag only affects file processing, not file discovery.
 
 **-P, --password**=_text_
 
