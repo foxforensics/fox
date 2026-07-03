@@ -9,6 +9,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg"
 	"go.foxforensics.eu/fox/v4/internal/pkg/cat/buffer"
 	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/loader"
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
 
@@ -90,7 +91,7 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 			fox.Writer.FileHeader(h.String())
 		}
 
-		if h.Stage >= sys.Convert {
+		if h.Stage >= loader.StageConvert {
 			hint = "json" // default
 		}
 
