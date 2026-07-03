@@ -2,7 +2,6 @@ package zstd
 
 import (
 	"bytes"
-	"io"
 
 	"github.com/klauspost/compress/zstd"
 	"go.foxforensics.eu/fox/v4/internal/lib"
@@ -23,5 +22,5 @@ func Deflate(b []byte) ([]byte, error) {
 
 	defer r.Close()
 
-	return io.ReadAll(r)
+	return lib.ReadMax(r, len(b))
 }

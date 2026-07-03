@@ -2,7 +2,6 @@ package lzfse
 
 import (
 	"bytes"
-	"io"
 
 	"github.com/aixiansheng/lzfse"
 	"go.foxforensics.eu/fox/v4/internal/lib"
@@ -25,5 +24,5 @@ func Detect(b []byte) bool {
 }
 
 func Deflate(b []byte) ([]byte, error) {
-	return io.ReadAll(lzfse.NewReader(bytes.NewReader(b)))
+	return lib.ReadMax(lzfse.NewReader(bytes.NewReader(b)), len(b))
 }

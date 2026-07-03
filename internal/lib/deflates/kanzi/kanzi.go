@@ -28,5 +28,5 @@ func Deflate(b []byte) ([]byte, error) {
 		}
 	}()
 
-	return io.ReadAll(r)
+	return lib.ReadMax(r, len(b))
 }

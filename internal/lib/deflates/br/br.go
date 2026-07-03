@@ -2,7 +2,6 @@ package br
 
 import (
 	"bytes"
-	"io"
 
 	"github.com/andybalholm/brotli"
 	"go.foxforensics.eu/fox/v4/internal/lib"
@@ -16,5 +15,5 @@ func Detect(b []byte) bool {
 
 func Deflate(b []byte) ([]byte, error) {
 	// remove header
-	return io.ReadAll(brotli.NewReader(bytes.NewReader(b[4:])))
+	return lib.ReadMax(brotli.NewReader(bytes.NewReader(b[4:])), len(b))
 }

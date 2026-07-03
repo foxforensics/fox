@@ -2,7 +2,6 @@ package gzip
 
 import (
 	"bytes"
-	"io"
 	"log/slog"
 
 	"github.com/klauspost/compress/gzip"
@@ -28,5 +27,5 @@ func Deflate(b []byte) ([]byte, error) {
 		}
 	}()
 
-	return io.ReadAll(r)
+	return lib.ReadMax(r, len(b))
 }

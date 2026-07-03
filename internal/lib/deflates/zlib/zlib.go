@@ -2,7 +2,6 @@ package zlib
 
 import (
 	"bytes"
-	"io"
 	"log/slog"
 
 	"github.com/klauspost/compress/zlib"
@@ -37,5 +36,5 @@ func Deflate(b []byte) ([]byte, error) {
 		}
 	}()
 
-	return io.ReadAll(r)
+	return lib.ReadMax(r, len(b))
 }

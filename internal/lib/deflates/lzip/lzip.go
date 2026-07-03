@@ -2,7 +2,6 @@ package lzip
 
 import (
 	"bytes"
-	"io"
 
 	"github.com/sorairolake/lzip-go"
 	"go.foxforensics.eu/fox/v4/internal/lib"
@@ -21,5 +20,5 @@ func Deflate(b []byte) ([]byte, error) {
 		return b, err
 	}
 
-	return io.ReadAll(r)
+	return lib.ReadMax(r, len(b))
 }

@@ -2,7 +2,6 @@ package snappy
 
 import (
 	"bytes"
-	"io"
 
 	"github.com/klauspost/compress/snappy"
 	"go.foxforensics.eu/fox/v4/internal/lib"
@@ -15,5 +14,5 @@ func Detect(b []byte) bool {
 }
 
 func Deflate(b []byte) ([]byte, error) {
-	return io.ReadAll(snappy.NewReader(bytes.NewReader(b)))
+	return lib.ReadMax(snappy.NewReader(bytes.NewReader(b)), len(b))
 }

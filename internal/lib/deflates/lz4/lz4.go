@@ -2,7 +2,6 @@ package lz4
 
 import (
 	"bytes"
-	"io"
 
 	"github.com/pierrec/lz4/v4"
 	"go.foxforensics.eu/fox/v4/internal/lib"
@@ -15,5 +14,5 @@ func Detect(b []byte) bool {
 }
 
 func Deflate(b []byte) ([]byte, error) {
-	return io.ReadAll(lz4.NewReader(bytes.NewReader(b)))
+	return lib.ReadMax(lz4.NewReader(bytes.NewReader(b)), len(b))
 }

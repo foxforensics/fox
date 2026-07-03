@@ -30,7 +30,7 @@ func Deflate(b []byte) ([]byte, error) {
 		}
 	}()
 
-	buf, err := io.ReadAll(r)
+	buf, err := lib.ReadMax(r, len(b))
 
 	// ignore errors for faulty compress files
 	if !errors.Is(err, io.ErrUnexpectedEOF) {

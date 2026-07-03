@@ -2,7 +2,6 @@ package msi
 
 import (
 	"bytes"
-	"io"
 	"log/slog"
 
 	"go.foxforensics.eu/fox/v4/internal/lib"
@@ -40,7 +39,7 @@ func Extract(b []byte, root, _ string) (e []lib.Stream) {
 			continue
 		}
 
-		buf, err := io.ReadAll(str)
+		buf, err := lib.ReadMax(str, len(b))
 
 		if err != nil {
 			slog.Error(err.Error())

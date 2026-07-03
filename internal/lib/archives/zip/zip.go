@@ -49,7 +49,7 @@ func Extract(b []byte, root, pass string) (e []lib.Stream) {
 			continue
 		}
 
-		buf, err := io.ReadAll(rc)
+		buf, err := lib.ReadMax(rc, len(b))
 
 		if err := rc.Close(); err != nil {
 			slog.Error(err.Error())

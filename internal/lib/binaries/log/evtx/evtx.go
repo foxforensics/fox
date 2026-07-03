@@ -196,14 +196,28 @@ func newEvent(evt *evtx.GoEvtxMap) *event.Event {
 func addMapDeep(e *event.Event, em *evtx.GoEvtxMap, p string) {
 	for k, v := range maps.All(*em) {
 		switch v.(type) {
-		case *evtx.GoEvtxMap, evtx.GoEvtxMap:
+		case *evtx.GoEvtxMap:
+			if m, ok := v.(*evtx.GoEvtxMap); ok {
+				addMapDeep(e, m, k)
+			} else {
+				slog.Error("map type invalid")
+			}
+
+		case evtx.GoEvtxMap:
 			if m, ok := v.(evtx.GoEvtxMap); ok {
 				addMapDeep(e, &m, k)
 			} else {
 				slog.Error("map type invalid")
 			}
 
-		case *evtx.UTCTime, evtx.UTCTime:
+		case *evtx.UTCTime:
+			if u, ok := v.(*evtx.UTCTime); ok {
+				e.Fields[k] = time.Time(*u).Format(time.RFC3339Nano)
+			} else {
+				slog.Error("utc type invalid")
+			}
+
+		case evtx.UTCTime:
 			if u, ok := v.(evtx.UTCTime); ok {
 				e.Fields[k] = time.Time(u).Format(time.RFC3339Nano)
 			} else {

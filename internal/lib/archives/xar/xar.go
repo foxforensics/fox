@@ -2,7 +2,6 @@ package xar
 
 import (
 	"bytes"
-	"io"
 	"log/slog"
 	"strings"
 
@@ -36,7 +35,7 @@ func Extract(b []byte, root, _ string) (e []lib.Stream) {
 			continue
 		}
 
-		if v, err := extractFile(f, root); err == nil {
+		if v, err := extractFile(f, root, len(b)); err == nil {
 			e = append(e, v)
 		} else {
 			slog.Error(err.Error())
@@ -46,7 +45,7 @@ func Extract(b []byte, root, _ string) (e []lib.Stream) {
 	return
 }
 
-func extractFile(f *xar.File, root string) (e lib.Stream, err error) {
+func extractFile(f *xar.File, root string, size int) (e lib.Stream, err error) {
 	r, err := f.Open()
 
 	if err != nil {
@@ -60,7 +59,7 @@ func extractFile(f *xar.File, root string) (e lib.Stream, err error) {
 	}()
 
 	e.Path = sys.JoinPart(root, f.Name)
-	e.Data, err = io.ReadAll(r)
+	e.Data, err = lib.ReadMax(r, size)
 
 	return e, err
 }

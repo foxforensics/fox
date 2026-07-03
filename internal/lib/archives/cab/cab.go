@@ -2,7 +2,6 @@ package cab
 
 import (
 	"bytes"
-	"io"
 	"log/slog"
 	"strings"
 
@@ -37,7 +36,7 @@ func Extract(b []byte, root, _ string) (e []lib.Stream) {
 			continue
 		}
 
-		buf, err := io.ReadAll(rc)
+		buf, err := lib.ReadMax(rc, len(b))
 
 		if err := rc.Close(); err != nil {
 			slog.Error(err.Error())

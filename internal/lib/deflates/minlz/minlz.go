@@ -2,7 +2,6 @@ package minlz
 
 import (
 	"bytes"
-	"io"
 
 	"github.com/minio/minlz"
 	"go.foxforensics.eu/fox/v4/internal/lib"
@@ -15,5 +14,5 @@ func Detect(b []byte) bool {
 }
 
 func Deflate(b []byte) ([]byte, error) {
-	return io.ReadAll(minlz.NewReader(bytes.NewReader(b)))
+	return lib.ReadMax(minlz.NewReader(bytes.NewReader(b)), len(b))
 }

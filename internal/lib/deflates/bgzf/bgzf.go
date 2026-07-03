@@ -2,7 +2,6 @@ package bgzf
 
 import (
 	"bytes"
-	"io"
 	"log/slog"
 
 	"go.foxforensics.eu/fox/v4/internal/lib"
@@ -28,5 +27,5 @@ func Deflate(b []byte) ([]byte, error) {
 		}
 	}()
 
-	return io.ReadAll(r)
+	return lib.ReadMax(r, len(b))
 }
