@@ -9,22 +9,9 @@ import (
 )
 
 var (
-	mapped  sync.Map
-	counter atomic.Uint64
+	tokens atomic.Uint64
+	mapped sync.Map
 )
-
-func Total() uint64 {
-	n := uint64(0)
-
-	mapped.Range(func(k, v any) bool {
-		if m, ok := v.(MMap); ok {
-			n += uint64(len(m))
-		}
-		return true
-	})
-
-	return n
-}
 
 func Alloc(f *os.File) (uint64, MMap, error) {
 	m, err := Map(f)
@@ -33,7 +20,8 @@ func Alloc(f *os.File) (uint64, MMap, error) {
 		return 0, m, err
 	}
 
-	id := counter.Add(1)
+	id := tokens.Add(1)
+
 	mapped.Store(id, m)
 
 	slog.Debug(fmt.Sprintf("memory alloc for token %d", id))
