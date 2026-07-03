@@ -11,6 +11,7 @@ import (
 )
 
 const Fox = "fox.txt"
+const Cycles = 5
 
 func AssertFox(b []byte) bool {
 	return bytes.Equal(b, Fixture(filepath.Join("texts", Fox)))

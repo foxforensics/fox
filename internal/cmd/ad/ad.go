@@ -95,7 +95,7 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		return errors.New("invalid file format")
 	}
 
-	defer ntds.Discard()
+	defer ntds.DeAlloc()
 
 	hive := <-ch
 
@@ -107,7 +107,7 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		return errors.New("invalid file format")
 	}
 
-	defer hive.Discard()
+	defer hive.DeAlloc()
 
 	if cmd.Lookup {
 		slog.Info("building tables")

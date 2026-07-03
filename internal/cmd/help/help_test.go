@@ -75,16 +75,18 @@ func TestHelp(t *testing.T) {
 			},
 		},
 	} {
-		t.Run(tt.name, func(t *testing.T) {
-			b, err := test.FixtureMain(tt.args...)
+		for range test.Cycles {
+			t.Run(tt.name, func(t *testing.T) {
+				b, err := test.FixtureMain(tt.args...)
 
-			if err != nil {
-				b = []byte(err.Error())
-			}
+				if err != nil {
+					b = []byte(err.Error())
+				}
 
-			if !bytes.Contains(b, []byte(tt.output)) {
-				t.Fatal("output mismatch")
-			}
-		})
+				if !bytes.Contains(b, []byte(tt.output)) {
+					t.Fatal("output mismatch")
+				}
+			})
+		}
 	}
 }

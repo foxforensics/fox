@@ -163,16 +163,18 @@ func TestAd(t *testing.T) {
 			},
 		},
 	} {
-		t.Run(tt.name, func(t *testing.T) {
-			b, err := test.FixtureMain(tt.args...)
+		for range test.Cycles {
+			t.Run(tt.name, func(t *testing.T) {
+				b, err := test.FixtureMain(tt.args...)
 
-			if err != nil {
-				t.Error(err)
-			}
+				if err != nil {
+					t.Error(err)
+				}
 
-			if !bytes.Equal(b, test.Sample(tt.sample)) {
-				t.Fatal("sample mismatch")
-			}
-		})
+				if !bytes.Equal(b, test.Sample(tt.sample)) {
+					t.Fatal("sample mismatch")
+				}
+			})
+		}
 	}
 }
