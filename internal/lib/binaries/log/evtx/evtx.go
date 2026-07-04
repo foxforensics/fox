@@ -2,39 +2,26 @@ package evtx
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"log/slog"
-	"maps"
 	"slices"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/Velocidex/ordereddict"
 	"go.foxforensics.eu/eventid/events"
 	"go.foxforensics.eu/fox/v4/internal/lib"
-	logs "go.foxforensics.eu/fox/v4/internal/lib/binaries/log"
+	"go.foxforensics.eu/fox/v4/internal/lib/binaries/log"
 	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
-	"go.foxforensics.eu/go-evtx/evtx"
+	"www.velocidex.com/golang/evtx"
 )
 
-var (
-	Magic = []byte(evtx.EvtxMagic)
-	Chunk = []byte(evtx.ChunkMagic)
-)
-
-var (
-	pathSystem    = evtx.Path("/Event/System")
-	pathEventData = evtx.Path("/Event/EventData")
-)
-
-var children = []string{
-	"Guid",
-	"Name",
-	"Value",
-	"DwordVal",
-}
+var Magic = []byte(evtx.EVTX_HEADER_MAGIC)
+var Chunk = []byte(evtx.EVTX_CHUNK_HEADER_MAGIC)
 
 var providers events.Providers
 
@@ -43,23 +30,33 @@ func Detect(b []byte) bool {
 }
 
 func Convert(b []byte) ([]byte, error) {
-	r, err := evtx.New(bytes.NewReader(b))
+	chunks, err := evtx.GetChunks(bytes.NewReader(b))
 
 	if err != nil {
 		return b, err
 	}
 
-	defer func() {
-		if err := r.Close(); err != nil {
-			slog.Error(err.Error())
-		}
-	}()
-
 	buf := bytes.NewBuffer(nil)
 
-	for e := range r.Events() {
-		buf.Write(evtx.ToJSON(e))
-		buf.WriteRune('\n')
+	for _, chunk := range chunks {
+		records, err := chunk.Parse(0)
+
+		if err != nil {
+			slog.Error(err.Error())
+			continue
+		}
+
+		for _, record := range records {
+			b, err := json.Marshal(record.Event)
+
+			if err != nil {
+				slog.Error(err.Error())
+				continue
+			}
+
+			buf.Write(b)
+			buf.WriteRune('\n')
+		}
 	}
 
 	return buf.Bytes(), nil
@@ -68,83 +65,67 @@ func Convert(b []byte) ([]byte, error) {
 func Prepare() {
 	var err error
 
-	providers, err = events.Get()
-
-	if err != nil {
-		// use empty fallback on errors
+	// use empty fallback on errors
+	if providers, err = events.Get(); err != nil {
 		providers = make(events.Providers)
 		slog.Error(err.Error())
 	}
-
-	evtx.SetModeCarving(true)
 }
 
 func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 	ch := make(chan *event.Event, cap)
 
-	chk, err := newChunk(sr, off)
+	chunk, err := evtx.NewChunk(sr, off)
 
 	if err != nil {
 		defer close(ch)
+
 		if !errors.Is(err, io.EOF) {
 			slog.Error(err.Error())
 		}
+
 		return ch
 	}
 
-	go func(chk *evtx.Chunk) {
+	go func() {
 		defer close(ch)
-		for evt := range chk.Events() {
-			ch <- newEvent(evt)
+		records, err := chunk.Parse(0)
+
+		if err != nil {
+			slog.Error(err.Error())
+			return
 		}
-	}(chk)
+
+		for _, record := range records {
+			e, err := newEvent(record)
+
+			if err != nil {
+				slog.Error(err.Error())
+				continue
+			}
+
+			ch <- e
+		}
+	}()
 
 	return ch
 }
 
-func newChunk(sr *io.SectionReader, off int64) (*evtx.Chunk, error) {
-	evtx.GoToSeeker(sr, off)
+func newEvent(r *evtx.EventRecord) (*event.Event, error) {
+	od, ok := r.Event.(*ordereddict.Dict)
 
-	chk := evtx.NewChunk()
-	chk.Offset = off
-	chk.Data = make([]byte, evtx.ChunkSize)
-
-	if _, err := io.ReadFull(sr, chk.Data); err != nil {
-		return nil, err
+	if !ok {
+		return nil, errors.New("event type invalid")
 	}
 
-	r := bytes.NewReader(chk.Data)
-
-	chk.ParseChunkHeader(r)
-
-	if err := chk.Header.Validate(); err != nil {
-		return nil, err
-	}
-
-	evtx.GoToSeeker(r, int64(chk.Header.SizeHeader))
-
-	chk.ParseStringTable(r)
-
-	if err := chk.ParseTemplateTable(r); err != nil {
-		return nil, err
-	}
-
-	if err := chk.ParseEventOffsets(r); err != nil {
-		return nil, err
-	}
-
-	return &chk, nil
-}
-
-func newEvent(evt *evtx.GoEvtxMap) *event.Event {
-	e := event.Event{
-		Time:     evt.TimeCreated().UTC(),
-		Host:     getString(evt, "/Event/System/Computer"),
-		User:     getString(evt, "/Event/System/Security/UserID"),
-		Sequence: getString(evt, "/Event/System/EventRecordID"),
-		Source:   logs.Eventlog,
-		Category: getString(evt, "/Event/System/Channel"),
-		Service:  getString(evt, "/Event/System/Provider/Name"),
+	e := &event.Event{
+		Time:     intToUTC(r.Header.FileTime),
+		Host:     getString(od, "Event.System.Computer"),
+		User:     getString(od, "Event.System.Security.UserID"),
+		Sequence: strconv.Itoa(getInt(od, "Event.System.EventRecordID")),
+		Source:   log.Eventlog,
+		Category: getString(od, "Event.System.Channel"),
+		Service:  getString(od, "Event.System.Provider.Name"),
 		Fields:   make(map[string]string),
 	}
 
@@ -153,94 +134,78 @@ func newEvent(evt *evtx.GoEvtxMap) *event.Event {
 		e.Service = "unknown"
 	}
 
-	// translate event id to message
-	e.Message = fmt.Sprintf("Undescribed event: %s: %d", e.Service, evt.EventID())
+	e.Message = fmt.Sprintf("Undescribed event: %s: %d", e.Service, r.Header.RecordID)
 
 	// calculate severity from level
-	level := getString(evt, "/Event/System/Level")
-
-	if v, err := strconv.Atoi(level); err == nil {
-		switch v {
-		case 0, 1:
-			e.Severity = 10
-		case 2:
-			e.Severity = 8
-		case 3:
-			e.Severity = 6
-		case 4:
-			e.Severity = 3
-		case 5:
-			e.Severity = 1
-		default:
-			e.Severity = 0
-		}
+	switch getInt(od, "Event.System.Level") {
+	case 0, 1:
+		e.Severity = 10
+	case 2:
+		e.Severity = 8
+	case 3:
+		e.Severity = 6
+	case 4:
+		e.Severity = 3
+	case 5:
+		e.Severity = 1
+	default:
+		e.Severity = 0
 	}
 
-	if v, err := evt.GetMap(&pathSystem); err == nil {
-		addMapDeep(&e, v, "")
-	}
+	addFields(e, od, "")
 
-	if v, err := evt.GetMap(&pathEventData); err == nil {
-		addMapDeep(&e, v, "")
-	}
-
+	// translate event id to message
 	if provider, ok := providers[e.Service]; ok {
-		if message, ok := provider[evt.EventID()]; ok {
-			e.Message = tryReplace(&e, message)
+		if id := int64(getInt(od, "Event.System.EventID.Value")); id > 0 {
+			if message, ok := provider[id]; ok {
+				e.Message = expandParams(message, e)
+			}
 		}
 	}
 
-	return &e
+	return e, nil
 }
 
-func addMapDeep(e *event.Event, em *evtx.GoEvtxMap, p string) {
-	for k, v := range maps.All(*em) {
-		switch v.(type) {
-		case *evtx.GoEvtxMap:
-			if m, ok := v.(*evtx.GoEvtxMap); ok {
-				addMapDeep(e, m, k)
-			} else {
-				slog.Error("map type invalid")
-			}
+func addFields(e *event.Event, od *ordereddict.Dict, parent string) {
+	if omitParent(parent) {
+		parent = ""
+	}
 
-		case evtx.GoEvtxMap:
-			if m, ok := v.(evtx.GoEvtxMap); ok {
-				addMapDeep(e, &m, k)
-			} else {
-				slog.Error("map type invalid")
-			}
+	for _, item := range od.Items() {
+		var key = parent
+		var val = ""
 
-		case *evtx.UTCTime:
-			if u, ok := v.(*evtx.UTCTime); ok {
-				e.Fields[k] = time.Time(*u).Format(time.RFC3339Nano)
-			} else {
-				slog.Error("utc type invalid")
-			}
+		switch v := item.Value.(type) {
+		case *ordereddict.Dict:
+			addFields(e, v, item.Key)
+			continue
 
-		case evtx.UTCTime:
-			if u, ok := v.(evtx.UTCTime); ok {
-				e.Fields[k] = time.Time(u).Format(time.RFC3339Nano)
-			} else {
-				slog.Error("utc type invalid")
-			}
+		case float64: // is always a filetime
+			val = floatToUTC(v).Format(time.RFC3339Nano)
 
 		default:
-			if slices.Contains(children, k) {
-				k = p // use parent as key
-			}
-
-			e.Fields[k] = fmt.Sprintf("%v", v)
+			val = fmt.Sprintf("%v", v)
 		}
+
+		if od.Len() > 1 || !omitChild(item.Key) {
+			key += item.Key // combined key
+		}
+
+		if len(key) == 0 {
+			key = item.Key // safety
+		}
+
+		e.Fields[key] = val
 	}
 }
 
-func tryReplace(e *event.Event, msg string) string {
+func expandParams(msg string, e *event.Event) string {
 	if strings.Contains(msg, "$1") {
 		for i := 1; ; i++ {
 			if v, ok := e.Fields[fmt.Sprintf("param%d", i)]; ok {
 				msg = strings.ReplaceAll(msg, fmt.Sprintf("$%d", i), v)
 			} else {
-				break // no param
+				break // no more params
 			}
 		}
 	}
@@ -248,8 +213,39 @@ func tryReplace(e *event.Event, msg string) string {
 	return msg
 }
 
-func getString(em *evtx.GoEvtxMap, path string) string {
-	p := evtx.Path(path)
-	v, _ := em.GetString(&p)
+func omitParent(key string) bool {
+	return slices.Contains([]string{
+		"System",
+		"Security",
+		"Execution",
+		"EventData",
+	}, key)
+}
+
+func omitChild(key string) bool {
+	return slices.Contains([]string{
+		"Guid",
+		"Value",
+		"SystemTime",
+	}, key)
+}
+
+func getString(od *ordereddict.Dict, key string) string {
+	v, _ := ordereddict.GetString(od, key)
 	return v
+}
+
+func getInt(od *ordereddict.Dict, key string) int {
+	v, _ := ordereddict.GetInt(od, key)
+	return v
+}
+
+func floatToUTC(v float64) time.Time {
+	nsec := int64((v - float64(int64(v))) * 1e9)
+	return time.Unix(int64(v), nsec).UTC()
+}
+
+func intToUTC(v uint64) time.Time {
+	const nsec int64 = 116444736000000000
+	return time.Unix(0, (int64(v)-nsec)*100).UTC()
 }

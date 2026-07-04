@@ -39,6 +39,10 @@ func (m *Muxer) AddHandler(h Handler) {
 					return nil // closed
 				}
 
+				if e == nil {
+					continue // skipped
+				}
+
 				if err := h(ctx, e); err != nil {
 					slog.Error(err.Error())
 				}

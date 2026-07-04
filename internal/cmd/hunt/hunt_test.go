@@ -29,7 +29,7 @@ func TestHunt(t *testing.T) {
 			[]string{
 				"hunt",
 				"-sa",
-				test.FixtureFile("binaries/test.journal"),
+				test.FixtureFile("binaries/test.dd"),
 			},
 		},
 		{
@@ -38,7 +38,7 @@ func TestHunt(t *testing.T) {
 			[]string{
 				"hunt",
 				"-saj",
-				test.FixtureFile("binaries/test.journal"),
+				test.FixtureFile("binaries/test.dd"),
 			},
 		},
 		{
@@ -47,7 +47,7 @@ func TestHunt(t *testing.T) {
 			[]string{
 				"hunt",
 				"-saJ",
-				test.FixtureFile("binaries/test.journal"),
+				test.FixtureFile("binaries/test.dd"),
 			},
 		},
 	} {

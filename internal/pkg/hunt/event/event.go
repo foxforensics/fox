@@ -50,7 +50,7 @@ func (e *Event) SortKey() string {
 func (e *Event) AsCEF() string {
 	var sb strings.Builder
 
-	sb.WriteString(fmt.Sprintf("%s %s CEF:1|fox|hunt|%s|100|",
+	sb.WriteString(fmt.Sprintf("%s %s CEF:1|Fox Forensics|Fox|%s|100|",
 		e.Time.Format("Jan 02 2006 15:04:05.000"),
 		e.Host,
 		version.Number,

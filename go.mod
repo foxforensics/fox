@@ -43,7 +43,6 @@ require (
 	go.foxforensics.eu/eventid v1.0.1
 	go.foxforensics.eu/go-bgzf v1.0.0
 	go.foxforensics.eu/go-ese v1.0.0
-	go.foxforensics.eu/go-evtx v1.3.0
 	go.foxforensics.eu/go-fortilog v1.1.2
 	go.foxforensics.eu/go-lnk v1.0.0
 	go.foxforensics.eu/go-mft v1.0.1
@@ -57,15 +56,16 @@ require (
 	go.foxforensics.eu/strings v1.0.1
 	go.foxforensics.eu/wordlist v1.0.2
 	golang.org/x/text v0.38.0
+	www.velocidex.com/golang/evtx v0.2.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
 require (
-	github.com/0xrawsec/golang-utils v1.3.2 // indirect
 	github.com/BobuSumisu/aho-corasick v1.0.3 // indirect
 	github.com/PaesslerAG/gval v1.2.4 // indirect
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
 	github.com/Velocidex/json v0.0.0-20220224052537-92f3c0326e5a // indirect
+	github.com/Velocidex/pkcs7 v0.0.0-20230220112103-d4ed02e1862a // indirect
 	github.com/Velocidex/yaml/v2 v2.2.8 // indirect
 	github.com/ajdnik/imghash/v2 v2.5.2 // indirect
 	github.com/akavel/rsrc v0.10.2 // indirect
@@ -82,6 +82,7 @@ require (
 	github.com/glaslos/tlsh v0.4.0 // indirect
 	github.com/godzie44/go-uring v0.0.0-20250501163612-d16a9e597639 // indirect
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hooklift/assert v0.1.0 // indirect
 	github.com/htruong/go-md2 v0.0.0-20170914203617-c69905b63f6f // indirect
@@ -123,5 +124,7 @@ require (
 	gonum.org/v1/gonum v0.17.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	www.velocidex.com/golang/binparsergen v0.1.1-0.20201101234514-bbdb29f9ee31 // indirect
+	www.velocidex.com/golang/go-pe v0.1.1-0.20211006062218-8f6d1ad6b2d5 // indirect
 	www.velocidex.com/golang/regparser v0.0.0-20250203141505-31e704a67ef7 // indirect
 )

@@ -73,10 +73,6 @@ func (h *Heap) ReAlloc(b []byte) {
 	h.Lock()
 	defer h.Unlock()
 
-	if h.token > 0 {
-		memory.Free(h.token)
-	}
-
 	h.Size = uint64(len(b))
 	h.token = 0
 	h.memory = b

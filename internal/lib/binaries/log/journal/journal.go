@@ -13,7 +13,7 @@ import (
 	"github.com/Velocidex/go-journalctl/parser"
 	"github.com/Velocidex/ordereddict"
 	"go.foxforensics.eu/fox/v4/internal/lib"
-	logs "go.foxforensics.eu/fox/v4/internal/lib/binaries/log"
+	"go.foxforensics.eu/fox/v4/internal/lib/binaries/log"
 	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -105,10 +105,10 @@ func newEvent(od *ordereddict.Dict) (*event.Event, error) {
 		return nil, ErrNoEventData
 	}
 
-	e := event.Event{
+	e := &event.Event{
 		Host:     getString(sys, "_HOSTNAME"),
 		Message:  getString(evt, "MESSAGE"),
-		Source:   logs.Journal,
+		Source:   log.Journal,
 		Category: getString(sys, "_TRANSPORT"),
 		Service:  getString(sys, "_COMM"),
 		Fields:   make(map[string]string),
@@ -158,11 +158,11 @@ func newEvent(od *ordereddict.Dict) (*event.Event, error) {
 		}
 	}
 
-	return &e, nil
+	return e, nil
 }
 
-func getString(od *ordereddict.Dict, path string) string {
-	v, _ := od.GetString(path)
+func getString(od *ordereddict.Dict, key string) string {
+	v, _ := od.GetString(key)
 	return v
 }
 

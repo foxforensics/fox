@@ -14,7 +14,7 @@ const Banner = `
   .-------.----.--.  .--. 
   |   ___/ .__. \  \/  /   © 2026 by Fox Forensics
   |   __|  |  |  >    <    https://foxforensics.eu
-  |  |   \ '--' /  /\  \   Version %s
+  |  |   \ '--' /  /\  \   Version %s %s
   '--'    '----'--'  '--'
 `
 
@@ -24,7 +24,7 @@ func About(msg string) {
 }
 
 func Usage(msg string) {
-	_, _ = fmt.Println(fmt.Sprintf(Banner, version.Number))
+	_, _ = fmt.Println(fmt.Sprintf(Banner, version.Number, version.ID()))
 	_, _ = fmt.Println(msg)
 }
 
