@@ -2,7 +2,6 @@
   <img src="assets/img/fox.svg" width="160" alt=""/>
   <br/><br/><b>The Forensic Examiners Swiss Army Knife</b><br/><br/>
 
-  [![Report](https://goreportcard.com/badge/github.com/foxforensics/fox/v4?style=for-the-badge)](https://goreportcard.com/report/github.com/foxforensics/fox/v4)
   [![Build](https://img.shields.io/github/actions/workflow/status/foxforensics/fox/tests.yaml?style=for-the-badge&label=build)](https://github.com/foxforensics/fox/actions)
   [![Release](https://img.shields.io/github/release/foxforensics/fox.svg?style=for-the-badge&label=release)](https://github.com/foxforensics/fox/releases)
 
