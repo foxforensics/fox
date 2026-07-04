@@ -41,13 +41,13 @@ func Free(id uint64) {
 	}
 }
 
-func Purge() {
-	slog.Debug("purging all memory")
+func FreeAll() {
+	slog.Debug("freeing all memory")
 
 	mapped.Range(func(k, v any) bool {
 		if m, ok := v.(MMap); ok {
 			if err := Unmap(m); err == nil {
-				slog.Debug(fmt.Sprintf("memory purged for %d", k))
+				slog.Debug(fmt.Sprintf("memory freed for token %d", k))
 			} else {
 				slog.Error(err.Error())
 			}

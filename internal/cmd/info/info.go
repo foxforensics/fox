@@ -158,7 +158,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 			if cmd.Min == 0 {
 				fox.Writer.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
 			}
-			h.DeAlloc()
+			h.Free()
 			continue
 		}
 
@@ -174,7 +174,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 			fi.Offset += uint64(n)
 		}
 
-		h.DeAlloc()
+		h.Free()
 	}
 
 	return nil

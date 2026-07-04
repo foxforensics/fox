@@ -264,5 +264,5 @@ func (fox *Globals) Discard() {
 		fox.Loader.Exit()
 	}
 
-	memory.Purge()
+	memory.FreeAll()
 }

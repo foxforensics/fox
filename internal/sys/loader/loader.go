@@ -24,13 +24,6 @@ import (
 const Stdin = "-"
 const Buffer = 256
 
-const (
-	StageExtract = iota + 1
-	StageDeflate
-	StageConvert
-	StageFormat
-)
-
 type Options struct {
 	Query    pkg.Query
 	Guarded  bool
@@ -208,7 +201,7 @@ func (ldr *Loader) loadFile(ctx context.Context, h *heap.Heap) error {
 		return err
 	}
 
-	h = heap.New(h.Path, h.Part, 0, token, b)
+	h = heap.New(h.Path, h.Part, "", token, b)
 
 	slog.Debug(fmt.Sprintf("memory mapped %s", h.String()))
 
@@ -272,7 +265,7 @@ func (ldr *Loader) extractData(ctx context.Context, h *heap.Heap, i int) (bool, 
 					if err := ldr.processData(ctx, heap.New(
 						s.Path,
 						h.Part,
-						StageExtract,
+						"",
 						0,
 						s.Data,
 					), i+1); err != nil {
@@ -299,8 +292,7 @@ func (ldr *Loader) deflateData(h *heap.Heap) bool {
 				return false
 			}
 
-			h.ReAlloc(b)
-			h.Stage = StageDeflate
+			h.Change(b)
 			return true
 		}
 	}
@@ -319,8 +311,8 @@ func (ldr *Loader) convertData(h *heap.Heap) {
 				return
 			}
 
-			h.ReAlloc(b)
-			h.Stage = StageConvert
+			h.Change(b)
+			h.Hint = "json"
 			return
 		}
 	}
@@ -337,8 +329,8 @@ func (ldr *Loader) formatData(h *heap.Heap) {
 				return
 			}
 
-			h.ReAlloc(b)
-			h.Stage = StageFormat
+			h.Change(b)
+			h.Hint = "json"
 			return
 		}
 	}
@@ -357,7 +349,7 @@ func (ldr *Loader) createHeap(ctx context.Context, h *heap.Heap) error {
 	ldr.files.Add(1)
 
 	if b, ok := ldr.opts.Query.Reduce(h.Bytes()); ok {
-		h.ReAlloc(b)
+		h.Change(b)
 	}
 
 	select {

@@ -15,29 +15,29 @@ type Heap struct {
 
 	Path   string // heap path
 	Part   string // heap part
+	Hint   string // heap hint
 	Size   uint64 // heap size
-	Stage  byte
 	token  uint64
 	memory []byte
 }
 
-func New(path, part string, stage byte, token uint64, memory memory.MMap) *Heap {
+func New(path, part, hint string, token uint64, memory memory.MMap) *Heap {
 	return &Heap{
 		Path:   path,
 		Part:   part,
+		Hint:   hint,
 		Size:   uint64(len(memory)),
-		Stage:  stage,
 		token:  token,
 		memory: memory,
 	}
 }
 
 func FromPath(path, part string) *Heap {
-	return New(path, part, 0, 0, nil)
+	return New(path, part, "", 0, nil)
 }
 
 func FromData(path string, data []byte) *Heap {
-	return New(path, "", 0, 0, data)
+	return New(path, "", "", 0, data)
 }
 
 func (h *Heap) String() string {
@@ -69,7 +69,7 @@ func (h *Heap) IsText() bool {
 	return !bytes.ContainsRune(h.memory[:min(h.Size, block)], 0)
 }
 
-func (h *Heap) ReAlloc(b []byte) {
+func (h *Heap) Change(b []byte) {
 	h.Lock()
 	defer h.Unlock()
 
@@ -78,7 +78,7 @@ func (h *Heap) ReAlloc(b []byte) {
 	h.memory = b
 }
 
-func (h *Heap) DeAlloc() {
+func (h *Heap) Free() {
 	h.Lock()
 	defer h.Unlock()
 

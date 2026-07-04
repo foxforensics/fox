@@ -134,7 +134,7 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 			}
 		}
 
-		h.DeAlloc()
+		h.Free()
 	}
 
 	return nil

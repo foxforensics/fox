@@ -140,7 +140,7 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 		for _, k := range cmd.Hash {
 			select {
 			case <-fox.Context.Done():
-				h.DeAlloc()
+				h.Free()
 				return nil // canceled
 
 			default:
@@ -215,7 +215,7 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 			fox.Writer.Match(formats.Auto(fh, cmd.Json, cmd.Jsonl), fox.Regexp)
 		}
 
-		h.DeAlloc()
+		h.Free()
 	}
 
 	return nil
