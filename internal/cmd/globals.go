@@ -48,13 +48,13 @@ Process flags:
   -P, --password=TEXT      Use archive password (7z, Rar, Zip)
 
 Disable flags:
-  -r, --raw                Don't process files (r/rr/rrr)
+  -r, --raw[=LEVEL]        Don't process files (r/rr/rrr/rrrr)
   -q, --quiet              Don't print anything
-  -n, --no-pretty          Don't prettify the output
-      --no-strict          Don't apply loader checks
+      --no-pretty          Don't prettify the output
+      --no-convert         Don't convert automatically
       --no-deflate         Don't deflate automatically
       --no-extract         Don't extract automatically
-      --no-convert         Don't convert automatically
+      --no-protect         Don't protect the loader
       --no-receipt         Don't write the receipt
 
 Standard flags:
@@ -94,11 +94,11 @@ type Globals struct {
 	// disable flags
 	Raw       int  `short:"r" type:"counter"`
 	Quiet     bool `short:"q" xor:"out,quiet"`
-	NoPretty  bool `short:"n" long:"no-pretty"`
-	NoStrict  bool `long:"no-strict"`
+	NoPretty  bool `long:"no-pretty"`
+	NoConvert bool `long:"no-convert"`
 	NoDeflate bool `long:"no-deflate"`
 	NoExtract bool `long:"no-extract"`
-	NoConvert bool `long:"no-convert"`
+	NoProtect bool `long:"no-protect"`
 	NoReceipt bool `long:"no-receipt"`
 
 	// standard flags
@@ -177,16 +177,20 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	}
 
 	if fox.Raw > 0 {
-		fox.NoConvert = true
+		fox.NoPretty = true
 	}
 
 	if fox.Raw > 1 {
+		fox.NoConvert = true
+	}
+
+	if fox.Raw > 2 {
 		fox.NoDeflate = true
 		fox.NoExtract = true
 	}
 
-	if fox.Raw > 2 {
-		fox.NoStrict = true
+	if fox.Raw > 3 {
+		fox.NoProtect = true
 	}
 
 	if len(fox.Lexer) > 0 {
@@ -221,7 +225,7 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	fox.Loader = loader.New(&loader.Options{
 		Query:    fox.Query,
-		Guarded:  !fox.NoStrict,
+		Protect:  !fox.NoProtect,
 		Password: fox.Password,
 	})
 

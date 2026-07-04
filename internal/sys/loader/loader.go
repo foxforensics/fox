@@ -26,7 +26,7 @@ const Buffer = 256
 
 type Options struct {
 	Query    pkg.Query
-	Guarded  bool
+	Protect  bool
 	Password string
 }
 
@@ -139,7 +139,7 @@ func (ldr *Loader) loadPath(ctx context.Context, h *heap.Heap) {
 }
 
 func (ldr *Loader) loadDir(ctx context.Context, h *heap.Heap, i int) error {
-	if ldr.opts.Guarded && i >= sys.MaxFolders {
+	if ldr.opts.Protect && i >= sys.MaxFolders {
 		return errors.New("max folders reached")
 	}
 
@@ -210,13 +210,13 @@ func (ldr *Loader) loadFile(ctx context.Context, h *heap.Heap) error {
 
 func (ldr *Loader) processData(ctx context.Context, h *heap.Heap, i int) error {
 	// check depth to protect against zip bombs
-	if ldr.opts.Guarded && i >= sys.MaxArchives {
+	if ldr.opts.Protect && i >= sys.MaxArchives {
 		return errors.New("max archives reached")
 	}
 
 	// stage 1: deflate data (nested)
 	for j := 1; ; j++ {
-		if ldr.opts.Guarded && j >= sys.MaxDeflates {
+		if ldr.opts.Protect && j >= sys.MaxDeflates {
 			return errors.New("max deflates reached")
 		}
 
@@ -247,7 +247,7 @@ func (ldr *Loader) processData(ctx context.Context, h *heap.Heap, i int) error {
 }
 
 func (ldr *Loader) extractData(ctx context.Context, h *heap.Heap, i int) (bool, error) {
-	if ldr.opts.Guarded && ldr.files.Load() >= sys.MaxFiles {
+	if ldr.opts.Protect && ldr.files.Load() >= sys.MaxFiles {
 		return false, errors.New("max files reached")
 	}
 
@@ -337,7 +337,7 @@ func (ldr *Loader) formatData(h *heap.Heap) {
 }
 
 func (ldr *Loader) createHeap(ctx context.Context, h *heap.Heap) error {
-	if ldr.opts.Guarded && ldr.files.Load() >= sys.MaxFiles {
+	if ldr.opts.Protect && ldr.files.Load() >= sys.MaxFiles {
 		return errors.New("max files reached")
 	}
 

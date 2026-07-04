@@ -82,31 +82,31 @@ Disable Flags
 
 **-r, --raw**[=_level_]
 
-:   Don't process files (**r**/**rr**/**rrr**). Level _1_ implies **--no-convert**. Level _2_ implies **--no-deflate** and **--no-extract** additional. Level _3_ implies **--no-strict** additional.
+:   Don't process files (**r**/**rr**/**rrr**/**rrrr**). Level _1_ implies **--no-pretty**. Level _2_ implies **--no-convert**. Level _3_ implies **--no-deflate** and **--no-extract** additional. Level _4_ implies **--no-protect** additional.
 
 **-q, --quiet**
 
 :   Don't print anything.
 
-**-n, --no-pretty**
+**--no-pretty**
 
-:   Don't prettify the output. Header line and colors will be turned off.
-
-**--no-strict**
-
-:   Don't apply loader checks (**-rrr**). This effectively removes all resource limiting safeguards from the loading pipeline, which are in place to mitigate malicious crafted files like zip bombs.
-
-**--no-deflate**
-
-:   Don't deflate automatically (**-rr**).
-
-**--no-extract**
-
-:   Don't extract automatically (**-rr**).
+:   Don't prettify the output (**-r**). Header line and colors will be turned off.
 
 **--no-convert**
 
-:   Don't convert automatically (**-r**).
+:   Don't convert automatically (**-rr**).
+
+**--no-deflate**
+
+:   Don't deflate automatically (**-rrr**).
+
+**--no-extract**
+
+:   Don't extract automatically (**-rrr**).
+
+**--no-protect**
+
+:   Don't apply any loader protection (**-rrrr**). This effectively removes all resource limiting safeguards from the loading pipeline, which are in place to mitigate malicious crafted files like zip bombs.
 
 **--no-receipt**
 
