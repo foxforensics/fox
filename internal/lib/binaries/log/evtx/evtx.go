@@ -172,7 +172,8 @@ func addFields(e *event.Event, od *ordereddict.Dict, parent string) {
 	}
 
 	for _, item := range od.Items() {
-		var key, val = parent, ""
+		var key = parent
+		var val string
 
 		switch v := item.Value.(type) {
 		case *ordereddict.Dict:

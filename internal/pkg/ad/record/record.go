@@ -50,12 +50,12 @@ func (s *Secret) ToNTLM(history bool) string {
 	var sb strings.Builder
 
 	// append actual hashes
-	sb.WriteString(fmt.Sprintf("%s:%d:%s:%s:::",
+	fmt.Fprintf(&sb, "%s:%d:%s:%s:::",
 		s.SAMAccountName,
 		s.RID,
 		s.format(s.LMHash, defaultLM, true),
 		s.format(s.NTHash, defaultNT, false),
-	))
+	)
 
 	// append historic hashes
 	if history {
@@ -71,13 +71,13 @@ func (s *Secret) ToNTLM(history bool) string {
 				nt = s.NTHashHistory[i]
 			}
 
-			sb.WriteString(fmt.Sprintf("\n%s_history%d:%d:%s:%s:::",
+			fmt.Fprintf(&sb, "\n%s_history%d:%d:%s:%s:::",
 				s.SAMAccountName,
 				i,
 				s.RID,
 				s.format(lm, defaultLM, true),
 				s.format(nt, defaultNT, false),
-			))
+			)
 		}
 	}
 

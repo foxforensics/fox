@@ -76,7 +76,7 @@ func formatStd(ctx *HexContext) HexLine {
 		case v >= 1 && v <= 31:
 			val.WriteString(writer.AsBold(fmt.Sprintf("%02x ", v)))
 		default:
-			val.WriteString(fmt.Sprintf("%02x ", v))
+			fmt.Fprintf(&val, "%02x ", v)
 		}
 
 		if (i+1)%8 == 0 {
@@ -108,7 +108,7 @@ func formatRaw(ctx *HexContext) HexLine {
 			break
 		}
 
-		val.WriteString(fmt.Sprintf("%02x ", ctx.Data[ctx.Index+i]))
+		fmt.Fprintf(&val, "%02x ", ctx.Data[ctx.Index+i])
 	}
 
 	return HexLine{"", val.String(), ""}
