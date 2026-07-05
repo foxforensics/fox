@@ -18,10 +18,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 )
 
-const (
-	Latency = int64(1024 * 64) // 64kb
-	Scale   = 1024
-)
+const Scale = 1024
 
 var prepare sync.Once
 
@@ -172,21 +169,16 @@ func (htr *Hunter) findOffset(ctx context.Context, h *heap.Heap, seq []byte) <-c
 			}
 
 			off += idx
-			out <- off
 
-			slog.Debug(fmt.Sprintf("hunt: found at offset 0x%08x", off))
+			select {
+			case out <- off:
+				slog.Debug(fmt.Sprintf("hunt: found at offset 0x%08x", off))
+
+			case <-ctx.Done():
+				return // hunt canceled
+			}
 
 			off += int64(len(seq))
-
-			// we trade off carving speed over latency
-			if off%Latency == 0 {
-				select {
-				case <-ctx.Done():
-					return // hunt canceled
-				default:
-					continue
-				}
-			}
 		}
 	}(h.Bytes())
 

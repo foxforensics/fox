@@ -63,16 +63,16 @@ func Extract(b []byte, root, _ string) (e []lib.Stream) {
 	}
 
 	// prevent resource leaks
-	switch r1.(type) {
+	switch v := r1.(type) {
 	case *gzip.Reader:
 		defer func() {
-			if err := r1.(*gzip.Reader).Close(); err != nil {
+			if err := v.Close(); err != nil {
 				slog.Error(err.Error())
 			}
 		}()
 
 	case *zstd.Decoder:
-		defer r1.(*zstd.Decoder).Close()
+		defer v.Close()
 
 	default:
 		// other readers can't be closed

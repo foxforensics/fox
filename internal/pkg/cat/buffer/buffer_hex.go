@@ -72,9 +72,9 @@ func formatStd(ctx *HexContext) HexLine {
 
 		switch v := ctx.Data[ctx.Index+i]; {
 		case v == 0:
-			val.WriteString(writer.AsGray("%02x ", v))
+			val.WriteString(writer.AsGray(fmt.Sprintf("%02x ", v)))
 		case v >= 1 && v <= 31:
-			val.WriteString(writer.AsBold("%02x ", v))
+			val.WriteString(writer.AsBold(fmt.Sprintf("%02x ", v)))
 		default:
 			val.WriteString(fmt.Sprintf("%02x ", v))
 		}

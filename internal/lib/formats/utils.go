@@ -53,6 +53,17 @@ func AsJSONL(a any) string {
 	return string(b)
 }
 
-func JsonError(err error) string {
-	return fmt.Sprintf(`{"error": "%s"}`, err.Error())
+func JsonError(e error) string {
+	b, err := json.Marshal(struct {
+		Error string `json:"error"`
+	}{
+		e.Error(), // escape error
+	})
+
+	if err != nil {
+		slog.Error(err.Error())
+		return `{"error": "unknown error"}`
+	}
+
+	return string(b)
 }

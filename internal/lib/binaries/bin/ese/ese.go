@@ -19,7 +19,7 @@ const (
 	ldapName = "ATTm131532"
 )
 
-var wrapper = `{"table":"%s","rows":[%s]}`
+var wrapper = `{"table":%s,"rows":[%s]}`
 
 func Detect(b []byte) bool {
 	return lib.HasMagic(b, 4, []byte{
@@ -60,7 +60,13 @@ func Convert(b []byte) ([]byte, error) {
 
 		rows := bytes.Join(v, []byte(","))
 
-		buf.WriteString(fmt.Sprintf(wrapper, table, rows))
+		name, err := json.Marshal(table)
+
+		if err != nil {
+			name = []byte(err.Error())
+		}
+
+		buf.WriteString(fmt.Sprintf(wrapper, name, rows))
 
 		if i < ctl.Tables.Len()-1 {
 			buf.WriteByte(',')

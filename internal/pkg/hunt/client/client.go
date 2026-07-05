@@ -23,7 +23,7 @@ import (
 )
 
 // Timeout for everything network related.
-const Timeout = time.Second * 30
+const timeout = time.Second * 30
 
 type Options struct {
 	Url    string
@@ -55,11 +55,11 @@ func New(opts *Options) (*Client, error) {
 
 	cli := &Client{
 		client: http.Client{
-			Timeout: Timeout,
+			Timeout: timeout,
 			Transport: &http.Transport{
 				Proxy:               http.ProxyFromEnvironment,
-				IdleConnTimeout:     Timeout,
-				TLSHandshakeTimeout: Timeout,
+				IdleConnTimeout:     timeout,
+				TLSHandshakeTimeout: timeout,
 				MaxIdleConnsPerHost: 10,
 				TLSClientConfig: &tls.Config{
 					MinVersion: tls.VersionTLS13, // pinned
@@ -129,9 +129,6 @@ func (cli *Client) Send(ctx context.Context, evt *event.Event) error {
 		return err
 	}
 
-	bo := backoff.NewExponentialBackOff()
-	bo.MaxInterval = Timeout
-
 	_, err = backoff.Retry(ctx, func() (any, error) {
 		req, err := http.NewRequestWithContext(ctx, "POST", cli.opts.Url, bytes.NewReader(buf))
 
@@ -168,7 +165,14 @@ func (cli *Client) Send(ctx context.Context, evt *event.Event) error {
 		default:
 			return nil, nil
 		}
-	}, backoff.WithBackOff(bo))
+	},
+		backoff.WithMaxElapsedTime(timeout),
+		backoff.WithMaxTries(10),
+	)
+
+	if err, ok := errors.AsType[*backoff.RetryError](err); ok {
+		return err.LastErr // unwrap client error
+	}
 
 	return err
 }
