@@ -148,7 +148,7 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 
 			sum, err := hash.Sum(k, h.Bytes())
 
-			if errors.Is(err, hash.NotSupported) {
+			if errors.Is(err, hash.ErrNotSupported) {
 				return fmt.Errorf("%s: %s", err, k)
 			}
 

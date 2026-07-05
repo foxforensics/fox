@@ -51,7 +51,7 @@ require (
 	go.foxforensics.eu/go-pst/v6 v6.0.1
 	go.foxforensics.eu/go-zip v1.0.0
 	go.foxforensics.eu/hashdump v1.0.2
-	go.foxforensics.eu/hasher v1.1.0
+	go.foxforensics.eu/hasher v1.1.1
 	go.foxforensics.eu/rhash v1.7.4
 	go.foxforensics.eu/strings v1.0.1
 	go.foxforensics.eu/wordlist v1.0.2
