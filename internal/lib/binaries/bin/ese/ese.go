@@ -66,7 +66,7 @@ func Convert(b []byte) ([]byte, error) {
 			name = []byte(err.Error())
 		}
 
-		buf.WriteString(fmt.Sprintf(wrapper, name, rows))
+		fmt.Fprintf(buf, wrapper, name, rows)
 
 		if i < ctl.Tables.Len()-1 {
 			buf.WriteByte(',')

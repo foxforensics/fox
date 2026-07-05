@@ -59,19 +59,19 @@ func (fi *FileInfo) String() string {
 
 	e := strings.Repeat("■", int(math.Round(fi.Entropy*2)))
 
-	sb.WriteString(fmt.Sprintf("%7dl ", fi.Lines))
-	sb.WriteString(fmt.Sprintf("%7s ", sys.Humanize(fi.Bytes)))
+	fmt.Fprintf(&sb, "%7dl ", fi.Lines)
+	fmt.Fprintf(&sb, "%7s ", sys.Humanize(fi.Bytes))
 
 	if fi.Entropy > Threshold {
 		sb.WriteString(writer.AsBold(fmt.Sprintf(" %.1fe ", fi.Entropy)))
 		sb.WriteString(writer.AsBold(fmt.Sprintf("[%-16s] ", e)))
 	} else {
-		sb.WriteString(fmt.Sprintf(" %.1fe ", fi.Entropy))
-		sb.WriteString(fmt.Sprintf("[%-16s] ", e))
+		fmt.Fprintf(&sb, " %.1fe ", fi.Entropy)
+		fmt.Fprintf(&sb, "[%-16s] ", e)
 	}
 
 	if fi.Offset != NoOffset {
-		sb.WriteString(fmt.Sprintf("%.08x ", fi.Offset))
+		fmt.Fprintf(&sb, "%.08x ", fi.Offset)
 	}
 
 	sb.WriteString(fi.File)

@@ -40,7 +40,7 @@ func Convert(b []byte) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 
 	for l := range j.GetLogs(context.Background()) {
-		buf.WriteString(fmt.Sprintf(`{"Event": %s}`, l.String()))
+		fmt.Fprintf(buf, `{"Event": %s}`, l.String())
 		buf.WriteRune('\n')
 	}
 
