@@ -119,9 +119,9 @@ func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
 		if !fox.NoPretty {
 			fox.Writer.Write("%s %s", writer.AsGray(l.Line), s)
 		} else if l.Line == buffer.Sep {
-			fox.Writer.Write(writer.AsGray(buffer.Sep))
+			fox.Writer.WriteString(writer.AsGray(buffer.Sep))
 		} else {
-			fox.Writer.Write(s)
+			fox.Writer.WriteString(s)
 		}
 	}
 }
@@ -149,7 +149,7 @@ func (cmd *Cat) renderHex(fox *cmd.Globals, b []byte) {
 		if !fox.NoPretty && l.Values == lastHex {
 			if !wasCut {
 				wasCut = true
-				fox.Writer.Write(writer.AsGray("*"))
+				fox.Writer.WriteString(writer.AsGray("*"))
 			}
 			continue
 		}
@@ -157,7 +157,7 @@ func (cmd *Cat) renderHex(fox *cmd.Globals, b []byte) {
 		if !fox.NoPretty {
 			fox.Writer.Write("%s  %s%s", writer.AsGray(l.Address), l.Values, l.String)
 		} else {
-			fox.Writer.Write(l.Values)
+			fox.Writer.WriteString(l.Values)
 		}
 
 		lastHex, wasCut = l.Values, false

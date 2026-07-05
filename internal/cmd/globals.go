@@ -240,7 +240,7 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	if fox.DryRun {
 		for h := range heaps {
-			fox.Writer.Write(h.String())
+			fox.Writer.WriteString(h.String())
 		}
 
 		// exit early

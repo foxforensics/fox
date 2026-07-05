@@ -23,8 +23,8 @@ var Fox = color.New(color.Bold).
 	AddRGB(0xff, 0xff, 0xff).
 	Sprint(" FOX ")
 
-var AsGray = color.New(color.FgHiBlack).SprintfFunc()
-var AsBold = color.New(color.Bold).SprintfFunc()
+var AsGray = color.New(color.FgHiBlack).SprintFunc()
+var AsBold = color.New(color.Bold).SprintFunc()
 
 var cef = regexp2.MustCompile(`[^|]+$`)
 

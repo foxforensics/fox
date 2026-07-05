@@ -67,6 +67,16 @@ func (w *Writer) Write(f string, a ...any) {
 	}
 }
 
+func (w *Writer) WriteString(s string) {
+	w.Lock()
+	_, err := fmt.Fprintln(w.w, s)
+	w.Unlock()
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+}
+
 func (w *Writer) Close(p string, r bool) {
 	if v, ok := w.w.(io.Closer); ok {
 		if err := v.Close(); err != nil {

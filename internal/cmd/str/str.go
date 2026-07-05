@@ -130,7 +130,7 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 			} else if len(s.Classes) > 0 {
 				fox.Writer.Write("%s [%s]", s.Value, s.Classes)
 			} else {
-				fox.Writer.Write(s.Value)
+				fox.Writer.WriteString(s.Value)
 			}
 		}
 
