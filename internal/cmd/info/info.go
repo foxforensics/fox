@@ -57,7 +57,7 @@ type FileInfo struct {
 func (fi *FileInfo) String() string {
 	var sb strings.Builder
 
-	e := strings.Repeat("#", int(math.Round(fi.Entropy*2)))
+	e := strings.Repeat("■", int(math.Round(fi.Entropy*2)))
 
 	sb.WriteString(fmt.Sprintf("%7dl ", fi.Lines))
 	sb.WriteString(fmt.Sprintf("%7s ", sys.Humanize(fi.Bytes)))

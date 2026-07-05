@@ -1,5 +1,5 @@
-  10733l    2.2m  6.8e [##############  ] testdata/binaries/fox.elf
-  11217l    1.5m  6.1e [############    ] testdata/binaries/fox.exe
-    661l   68.6k  6.8e [##############  ] testdata/binaries/test.elog
-   1811l  761.0k  6.5e [#############   ] testdata/binaries/test.pst
-   1075l  256.0k  6.7e [#############   ] testdata/binaries/test.tlog
+  10733l    2.2m  6.8e [■■■■■■■■■■■■■■  ] testdata/binaries/fox.elf
+  11217l    1.5m  6.1e [■■■■■■■■■■■■    ] testdata/binaries/fox.exe
+    661l   68.6k  6.8e [■■■■■■■■■■■■■■  ] testdata/binaries/test.elog
+   1811l  761.0k  6.5e [■■■■■■■■■■■■■   ] testdata/binaries/test.pst
+   1075l  256.0k  6.7e [■■■■■■■■■■■■■   ] testdata/binaries/test.tlog
