@@ -13,14 +13,14 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show the resulting super timeline of different files.
+Show the super timeline of different files and formats.
 
 FLAGS
 =====
 
 **-b, --body**
 
-:   Show timeline as body file.
+:   Show timeline as body file version 3. All timestamps are in **UTC** time.
 
 **-j, --json**
 

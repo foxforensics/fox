@@ -2,7 +2,13 @@ package body
 
 import (
 	"fmt"
+	"strings"
 	"time"
+)
+
+var replacer = strings.NewReplacer(
+	`\`, `\\`, // mask backslashes
+	`|`, `\|`, // mask pipes
 )
 
 type Body struct {
@@ -21,7 +27,7 @@ type Body struct {
 
 func (b Body) String() string {
 	return fmt.Sprintf("0|%s|%s|%s|%d|%d|%d|%d|%d|%d|%d",
-		b.Name,
+		replacer.Replace(b.Name),
 		b.Inode,
 		b.Mode,
 		b.UID,

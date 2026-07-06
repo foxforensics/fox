@@ -3,13 +3,11 @@ package time
 import (
 	"fmt"
 	"log/slog"
-	"slices"
 	"strings"
 
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/mft"
 	"go.foxforensics.eu/fox/v4/internal/lib/formats"
-	"go.foxforensics.eu/fox/v4/internal/pkg/time/body"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 )
 
@@ -50,24 +48,16 @@ func (cmd *Time) Run(fox *cmd.Globals) error {
 		return err
 	}
 
-	bf := make([]body.Body, 0)
-
 	for h := range ch {
 		if mft.Detect(h.Bytes()) {
 			slog.Debug(fmt.Sprintf("mft detected %s", h))
 
-			bf = append(bf, mft.ToBody(h.Bytes())...)
+			for _, v := range mft.ToBody(h.Bytes()) {
+				fox.Writer.Match(formats.Auto(v, cmd.Json, cmd.Jsonl), fox.Regexp)
+			}
 		}
 
 		h.Free()
-	}
-
-	slices.SortStableFunc(bf, func(a, b body.Body) int {
-		return strings.Compare(a.Name, b.Name)
-	})
-
-	for _, b := range bf {
-		fox.Writer.Match(formats.Auto(b, cmd.Json, cmd.Jsonl), fox.Regexp)
 	}
 
 	return nil
