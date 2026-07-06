@@ -52,10 +52,10 @@ func ToBody(b []byte) []body.Body {
 			Name:   e.FileName(),
 			Inode:  e.Inode,
 			Size:   uint64(e.FileSize),
-			Atime:  e.LastAccess0x30,
-			Mtime:  e.LastModified0x30,
-			Ctime:  e.Created0x30,
-			Crtime: e.Created0x10,
+			Atime:  e.LastAccess0x10,
+			Mtime:  e.LastModified0x10,
+			Ctime:  e.Created0x10,
+			Crtime: e.Created0x30,
 		})
 	}
 
