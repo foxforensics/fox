@@ -10,6 +10,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd/hunt"
 	"go.foxforensics.eu/fox/v4/internal/cmd/info"
 	"go.foxforensics.eu/fox/v4/internal/cmd/str"
+	"go.foxforensics.eu/fox/v4/internal/cmd/time"
 	"go.foxforensics.eu/fox/v4/internal/test"
 )
 
@@ -64,6 +65,14 @@ func TestHelp(t *testing.T) {
 			[]string{
 				"help",
 				"str",
+			},
+		},
+		{
+			"Time",
+			time.Usage,
+			[]string{
+				"help",
+				"time",
 			},
 		},
 		{

@@ -11,16 +11,18 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd/hunt"
 	"go.foxforensics.eu/fox/v4/internal/cmd/info"
 	"go.foxforensics.eu/fox/v4/internal/cmd/str"
+	"go.foxforensics.eu/fox/v4/internal/cmd/time"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 )
 
 var usage = map[string]string{
 	"ad":   ad.Usage,
 	"cat":  cat.Usage,
-	"str":  str.Usage,
-	"info": info.Usage,
 	"hash": hash.Usage,
 	"hunt": hunt.Usage,
+	"info": info.Usage,
+	"str":  str.Usage,
+	"time": time.Usage,
 }
 
 type Help struct {

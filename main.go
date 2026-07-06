@@ -11,7 +11,8 @@ import (
 	"runtime"
 	"runtime/debug"
 	"strconv"
-	"time"
+	"strings"
+	_time "time"
 
 	"github.com/alecthomas/kong"
 	_ "github.com/josephspurrier/goversioninfo"
@@ -23,8 +24,19 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/cmd/hunt"
 	"go.foxforensics.eu/fox/v4/internal/cmd/info"
 	"go.foxforensics.eu/fox/v4/internal/cmd/str"
+	"go.foxforensics.eu/fox/v4/internal/cmd/time"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 )
+
+var About = strings.TrimSpace(`
+© 2026 Fox Forensics
+`)
+
+var Usage = strings.TrimSpace(`
+Usage: fox [COMMAND] [FLAGS...] <PATHS...>
+
+Use 'fox help' to show further information.
+`)
 
 type Fox struct {
 	Ad   ad.Ad     `cmd:"" aliases:"a"`
@@ -33,6 +45,7 @@ type Fox struct {
 	Hunt hunt.Hunt `cmd:"" aliases:"x"`
 	Info info.Info `cmd:"" aliases:"i"`
 	Str  str.Str   `cmd:"" aliases:"s"`
+	Time time.Time `cmd:"" aliases:"t"`
 
 	// hidden commands
 	Help help.Help `cmd:"" hidden:""`
@@ -45,11 +58,12 @@ type Fox struct {
 }
 
 func main() {
-	defer timer(time.Now())
+	defer timer(_time.Now())
 	defer trace()
 
 	log.SetFlags(0)
 	log.SetPrefix("FOX: ")
+	slog.SetLogLoggerLevel(slog.LevelWarn)
 
 	fox := new(Fox)
 	ctx := kong.Parse(fox,
@@ -64,12 +78,16 @@ func main() {
 	case len(ctx.Args) == 0:
 		fallthrough // show usage
 
-	case fox.Globals.Help, ctx.Command() == "help":
-		sys.Usage(cmd.Usage)
+	case fox.Globals.Help:
+		sys.Usage(Usage)
 		os.Exit(0)
 
 	case fox.Version:
-		sys.About(cmd.About)
+		sys.About(About)
+		os.Exit(0)
+
+	case ctx.Command() == "help":
+		sys.Usage(cmd.Usage)
 		os.Exit(0)
 
 	case ctx.Error != nil:
@@ -84,8 +102,8 @@ func main() {
 	}
 }
 
-func timer(t time.Time) {
-	slog.Info(fmt.Sprintf("total time %v", time.Since(t)))
+func timer(t _time.Time) {
+	slog.Info(fmt.Sprintf("total time %v", _time.Since(t)))
 }
 
 func trace() {
