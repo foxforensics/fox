@@ -163,7 +163,7 @@ func (htr *Hunter) findOffset(ctx context.Context, h *heap.Heap, seq []byte) <-c
 		defer close(out)
 
 		var off, idx int64
-		for off < int64(len(b)-len(seq)) {
+		for off <= int64(len(b)-len(seq)) {
 			if idx = int64(bytes.Index(b[off:], seq)); idx == -1 {
 				break
 			}

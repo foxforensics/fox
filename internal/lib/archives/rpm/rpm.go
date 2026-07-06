@@ -101,9 +101,7 @@ func Extract(b []byte, root, _ string) (e []lib.Stream) {
 			continue
 		}
 
-		buf := make([]byte, h.Size)
-
-		_, err = io.ReadFull(r2, buf)
+		buf, err := lib.ReadMax(r2, len(b))
 
 		if err != nil {
 			slog.Error(err.Error())
