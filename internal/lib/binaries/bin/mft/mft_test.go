@@ -2,6 +2,7 @@ package mft
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"go.foxforensics.eu/fox/v4/internal/test"
@@ -38,7 +39,15 @@ func TestConvert(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !json.Valid(buf) {
-		t.Fatal("invalid json")
+	lines := strings.Split(string(buf), "\n")
+
+	if len(lines) == 0 {
+		t.Fatal("invalid length")
+	}
+
+	for _, l := range lines {
+		if len(l) > 0 && !json.Valid([]byte(l)) {
+			t.Fatal("invalid json")
+		}
 	}
 }

@@ -20,10 +20,6 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 )
 
-var About = strings.TrimSpace(`
-© 2026 Fox Forensics
-`)
-
 var Usage = strings.TrimSpace(`
 Usage: fox [COMMAND] [FLAGS...] <PATHS...>
 
@@ -32,6 +28,7 @@ Commands:
    c, cat                  Show file contents (default)
    s, str                  Show file contained strings
    i, info                 Show file infos and entropy
+   t, time                 show file super timeline
    h, hash                 Show file hashes and checksums
    x, hunt                 Hunt critical system events
 
@@ -45,7 +42,7 @@ Filter flags:
 
 Process flags:
   -T, --threads=CORES      Use cores for parallel threads
-  -P, --password=TEXT      Use archive password (7z, Rar, Zip)
+  -P, --password=TEXT      Use text to decrypt (7z, Rar, Zip)
 
 Disable flags:
   -r, --raw[=LEVEL]        Don't process files (r/rr/rrr/rrrr)
@@ -73,7 +70,7 @@ Example: Hunt down critical events
   $ fox hunt -u *.dd
 
 Example: Show help on sub commands
-  $ fox help info
+  $ fox help hunt
 
 Report bugs at: foxforensics.eu/issues
 `)
@@ -221,6 +218,12 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	if fox.NoReceipt && len(fox.Out) > 0 {
 		slog.Warn("receipts has been disabled!")
+	}
+
+	if fox.Password == "-" {
+		if fox.Password, err = sys.Password(); err != nil {
+			return nil, err
+		}
 	}
 
 	fox.Loader = loader.New(&loader.Options{

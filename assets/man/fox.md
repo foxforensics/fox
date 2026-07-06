@@ -75,7 +75,7 @@ Process Flags
 
 **-P, --password**=_text_
 
-:   Use _text_ to decrypt encrypted archives. This is only supported for **7z**, **Rar** and **Zip** archives.
+:   Use _text_ as password to decrypt encrypted archives. Use '-' to read the password securely from **STDIN(4)**. The password can also be set as environment variable. This is only supported for **7z**, **Rar** and **Zip** archives.
 
 Disable Flags
 -------------

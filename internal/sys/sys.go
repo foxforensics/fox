@@ -1,15 +1,18 @@
 package sys
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"strings"
 
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
+	"golang.org/x/term"
 )
 
 const Version = "Version %s %s"
+const Prompt = "Password: "
 const Banner = `
   .-------.----.--.  .--. 
   |   ___/ .__. \  \/  /   © 2026 by Fox Forensics
@@ -26,6 +29,34 @@ func About(msg string) {
 func Usage(msg string) {
 	_, _ = fmt.Println(fmt.Sprintf(Banner, version.Number, version.ID()))
 	_, _ = fmt.Println(msg)
+}
+
+func Password() (string, error) {
+	fd := int(os.Stdin.Fd())
+
+	if !term.IsTerminal(fd) {
+		return "", errors.New("stdin is not a terminal")
+	}
+
+	_, err := fmt.Fprint(os.Stderr, Prompt)
+
+	if err != nil {
+		return "", err
+	}
+
+	b, err := term.ReadPassword(fd)
+
+	if err != nil {
+		return "", err
+	}
+
+	_, err = fmt.Fprintln(os.Stderr)
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(b), nil
 }
 
 func CreateFile(path string) (io.Writer, error) {

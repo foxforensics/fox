@@ -45,7 +45,6 @@ require (
 	go.foxforensics.eu/go-ese v1.0.0
 	go.foxforensics.eu/go-fortilog v1.1.2
 	go.foxforensics.eu/go-lnk v1.0.0
-	go.foxforensics.eu/go-mft v1.0.1
 	go.foxforensics.eu/go-mmap v1.0.0
 	go.foxforensics.eu/go-msi v1.0.0
 	go.foxforensics.eu/go-pst/v6 v6.0.1
@@ -55,8 +54,10 @@ require (
 	go.foxforensics.eu/rhash v1.7.4
 	go.foxforensics.eu/strings v1.0.1
 	go.foxforensics.eu/wordlist v1.0.2
-	golang.org/x/text v0.38.0
+	golang.org/x/term v0.44.0
+	golang.org/x/text v0.39.0
 	www.velocidex.com/golang/evtx v0.2.0
+	www.velocidex.com/golang/go-ntfs v0.2.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
