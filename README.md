@@ -18,6 +18,7 @@
 * [x] Parse MFT, LNK, PF, PST binary files
 * [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files 
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
+* [x] Create an MFT super timeline and check for timestomping
 * [x] Extract [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes, users, groups, computers  
 * [x] Lookup NTLM hashes using 210000+ entry wordlists
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
@@ -79,6 +80,11 @@ fox str -w sample.exe
 List only high entropy files:
 ```console
 fox info -N6.0 ./
+```
+
+Show MFT entries as body file:
+```console
+fox time "$MFT"
 ```
 
 Hash archive contents as MD5:

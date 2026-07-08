@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
@@ -165,6 +166,8 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 		if fox.Regexp, err = regexp2.Compile(fox.Find); err != nil {
 			return nil, errors.New("invalid regex syntax")
 		}
+
+		fox.Regexp.MatchTimeout = time.Minute // default
 	}
 
 	err = pkg.SetQuery(&fox.Query, fox.Limit, fox.Regexp)

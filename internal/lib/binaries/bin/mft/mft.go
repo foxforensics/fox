@@ -4,10 +4,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"log/slog"
+	"strings"
+	"time"
 
 	"go.foxforensics.eu/fox/v4/internal/lib"
-	"go.foxforensics.eu/fox/v4/internal/pkg/time/body"
+	"go.foxforensics.eu/fox/v4/internal/pkg/time/entry"
 	"www.velocidex.com/golang/go-ntfs/parser"
 )
 
@@ -42,22 +45,61 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func ToBody(b []byte) []body.Body {
-	v := make([]body.Body, 0, len(b)/record)
+func Parse(b []byte) []entry.Entry {
+	v := make([]entry.Entry, 0, len(b)/record)
 
 	ch := parser.ParseMFTFile(context.Background(), bytes.NewReader(b), int64(len(b)), cluster, record)
 
-	for e := range ch {
-		v = append(v, body.Body{
-			Name:   e.FileName(),
-			Inode:  e.Inode,
-			Size:   uint64(e.FileSize),
-			Atime:  e.LastAccess0x10,
-			Mtime:  e.LastModified0x10,
-			Ctime:  e.Created0x10,
-			Crtime: e.Created0x30,
+	for mh := range ch {
+		v = append(v, entry.Entry{
+			Name:    mh.FileName(),
+			Inode:   fmt.Sprintf("%d-%d", mh.EntryNumber, mh.SequenceNumber),
+			Mode:    buildMode(mh),
+			Size:    uint64(mh.FileSize),
+			Mtime:   mh.LastModified0x10,
+			Atime:   mh.LastAccess0x10,
+			Ctime:   mh.LastRecordChange0x10,
+			Btime:   mh.Created0x10,
+			Anomaly: checkTimes(mh),
 		})
 	}
 
 	return v
+}
+
+func buildMode(mh *parser.MFTHighlight) string {
+	var sb strings.Builder
+
+	if strings.Contains(mh.SIFlags, "REPARSE_POINT") {
+		sb.WriteByte('l')
+	} else if mh.IsDir {
+		sb.WriteByte('d')
+	} else {
+		sb.WriteByte('-')
+	}
+
+	if strings.Contains(mh.SIFlags, "READ_ONLY") || strings.Contains(mh.SIFlags, "SYSTEM") {
+		sb.WriteString("r-xr-xr-x")
+	} else {
+		sb.WriteString("rwxrwxrwx")
+	}
+
+	return sb.String()
+}
+
+func checkTimes(mh *parser.MFTHighlight) bool {
+	return checkTime(mh.LastModified0x10, mh.LastModified0x30) ||
+		checkTime(mh.LastAccess0x10, mh.LastAccess0x30) ||
+		checkTime(mh.LastRecordChange0x10, mh.LastRecordChange0x30) ||
+		checkTime(mh.Created0x10, mh.Created0x30)
+}
+
+func checkTime(t1, t2 time.Time) bool {
+	if t1.Nanosecond() == 0 {
+		if t1.Unix() <= t2.Unix() {
+			return true // with high probability
+		}
+	}
+
+	return false
 }

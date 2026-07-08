@@ -13,14 +13,14 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show the super timeline of different files and formats.
+Show the timeline of all MFT entries. Entries will be shown as bodyfile Version 3, if not otherwise specified. All timestamps will be normalized to **UTC**.
 
 FLAGS
 =====
 
-**-b, --body**
+**-c, --csv**
 
-:   Show timeline as body file version 3. All timestamps are in **UTC** time.
+:   Show timeline as CSV list.
 
 **-j, --json**
 
@@ -40,7 +40,7 @@ EXAMPLES
 
 $ fox time "$MFT"
 
-:   Show timeline of MFT entries.
+:   Show MFT entries as body file.
 
 BUGS
 ====
