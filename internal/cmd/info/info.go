@@ -19,6 +19,7 @@ import (
 
 // Threshold for high entropy files
 const Threshold = 7.2
+const Precision = 1e6
 
 var Usage = strings.TrimSpace(`
 Usage: fox info [FLAGS...] <PATHS...>
@@ -161,7 +162,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 		for block := range slices.Chunk(h.Bytes(), int(n)) {
 			fi.Bytes = uint64(len(block))
 			fi.Lines = uint64(bytes.Count(block, []byte{'\n'}))
-			fi.Entropy = entropy.Calculate(block)
+			fi.Entropy = float64(int(entropy.Calculate(block)*Precision)) / Precision
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
 				fox.Writer.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
