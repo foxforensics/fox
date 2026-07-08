@@ -20,9 +20,6 @@ import (
 // Threshold for high entropy files
 const Threshold = 7.2
 
-// NoOffset is used for analysis
-const NoOffset = math.MaxInt64
-
 var Usage = strings.TrimSpace(`
 Usage: fox info [FLAGS...] <PATHS...>
 
@@ -48,10 +45,11 @@ Report bugs at: foxforensics.eu/issues
 
 type FileInfo struct {
 	File    string  `json:"file,omitempty"`
-	Bytes   uint64  `json:"bytes,omitempty"`
-	Lines   uint64  `json:"lines,omitempty"`
-	Offset  uint64  `json:"offset,omitempty"`
-	Entropy float64 `json:"entropy,omitempty"`
+	Bytes   uint64  `json:"bytes"`
+	Lines   uint64  `json:"lines"`
+	Offset  uint64  `json:"offset"`
+	Entropy float64 `json:"entropy"`
+	IsBlock bool    `json:"is_block,omitempty"`
 }
 
 func (fi *FileInfo) String() string {
@@ -59,19 +57,19 @@ func (fi *FileInfo) String() string {
 
 	e := strings.Repeat("■", int(math.Round(fi.Entropy*2)))
 
-	fmt.Fprintf(&sb, "%7dl ", fi.Lines)
-	fmt.Fprintf(&sb, "%7s ", sys.Humanize(fi.Bytes))
+	_, _ = fmt.Fprintf(&sb, "%7dl ", fi.Lines)
+	_, _ = fmt.Fprintf(&sb, "%7s ", sys.Humanize(fi.Bytes))
 
 	if fi.Entropy > Threshold {
 		sb.WriteString(writer.AsBold(fmt.Sprintf(" %.1fe ", fi.Entropy)))
 		sb.WriteString(writer.AsBold(fmt.Sprintf("[%-16s] ", e)))
 	} else {
-		fmt.Fprintf(&sb, " %.1fe ", fi.Entropy)
-		fmt.Fprintf(&sb, "[%-16s] ", e)
+		_, _ = fmt.Fprintf(&sb, " %.1fe ", fi.Entropy)
+		_, _ = fmt.Fprintf(&sb, "[%-16s] ", e)
 	}
 
-	if fi.Offset != NoOffset {
-		fmt.Fprintf(&sb, "%.08x ", fi.Offset)
+	if fi.IsBlock {
+		_, _ = fmt.Fprintf(&sb, "%.08x ", fi.Offset)
 	}
 
 	sb.WriteString(fi.File)
@@ -143,14 +141,12 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 	}
 
 	for h := range ch {
-		fi := &FileInfo{File: h.String()}
+		fi := &FileInfo{File: h.String(), IsBlock: cmd.block > 0}
 
 		n := int64(h.Size)
 
-		if cmd.block > 0 {
+		if fi.IsBlock {
 			n = cmd.block
-		} else {
-			fi.Offset = NoOffset
 		}
 
 		// because empty files will cause errors
