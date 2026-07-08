@@ -292,7 +292,7 @@ func (ldr *Loader) deflateData(h *heap.Heap) bool {
 				return false
 			}
 
-			h.Change(b)
+			h.Derive(b)
 			return true
 		}
 	}
@@ -311,7 +311,7 @@ func (ldr *Loader) convertData(h *heap.Heap) {
 				return
 			}
 
-			h.Change(b)
+			h.Derive(b)
 			h.Hint = "json"
 			return
 		}
@@ -329,7 +329,7 @@ func (ldr *Loader) formatData(h *heap.Heap) {
 				return
 			}
 
-			h.Change(b)
+			h.Derive(b)
 			h.Hint = "json"
 			return
 		}
@@ -349,7 +349,7 @@ func (ldr *Loader) createHeap(ctx context.Context, h *heap.Heap) error {
 	ldr.files.Add(1)
 
 	if b, ok := ldr.opts.Query.Reduce(h.Bytes()); ok {
-		h.Change(b)
+		h.Derive(b)
 	}
 
 	select {

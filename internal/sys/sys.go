@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"go.foxforensics.eu/fox/v4/internal/pkg"
 	"go.foxforensics.eu/fox/v4/internal/sys/version"
 	"golang.org/x/term"
 )
@@ -71,6 +72,17 @@ func ParseList(b []byte) []string {
 	}
 
 	return v
+}
+
+func ParseMap(b []byte) map[string]pkg.Nil {
+	v := strings.Split(strings.TrimSpace(string(b)), "\n")
+	m := make(map[string]pkg.Nil, len(v))
+
+	for _, s := range v {
+		m[strings.TrimRight(s, "\r")] = pkg.Nil{} // Windows line breaks
+	}
+
+	return m
 }
 
 func JoinPart(path, part string) string {

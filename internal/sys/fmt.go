@@ -6,6 +6,7 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/dlclark/regexp2/v2"
 )
@@ -101,4 +102,24 @@ func Mechanize(s string) (int64, bool) {
 	}
 
 	return n, true
+}
+
+func Truncate(s string, n int) string {
+	if len(s) <= n {
+		return s
+	}
+
+	s = s[:n]
+
+	for len(s) > 0 {
+		r, l := utf8.DecodeLastRuneInString(s)
+
+		if r != utf8.RuneError || l != 1 {
+			break
+		}
+
+		s = s[:len(s)-1]
+	}
+
+	return s
 }

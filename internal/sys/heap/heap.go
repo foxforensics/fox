@@ -69,7 +69,7 @@ func (h *Heap) IsText() bool {
 	return !bytes.ContainsRune(h.memory[:min(h.Size, block)], 0)
 }
 
-func (h *Heap) Change(b []byte) {
+func (h *Heap) Derive(b []byte) {
 	h.Lock()
 	defer h.Unlock()
 

@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
-	"slices"
 	"strings"
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/lib/formats"
+	"go.foxforensics.eu/fox/v4/internal/pkg"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 	"go.foxforensics.eu/hasher/hash"
@@ -67,8 +67,8 @@ type Hash struct {
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	include []string `kong:"-"`
-	exclude []string `kong:"-"`
+	include map[string]pkg.Nil `kong:"-"`
+	exclude map[string]pkg.Nil `kong:"-"`
 }
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
@@ -88,11 +88,11 @@ func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	}
 
 	if len(cmd.Include) > 0 {
-		cmd.include = sys.ParseList(cmd.Include)
+		cmd.include = sys.ParseMap(cmd.Include)
 	}
 
 	if len(cmd.Exclude) > 0 {
-		cmd.exclude = sys.ParseList(cmd.Exclude)
+		cmd.exclude = sys.ParseMap(cmd.Exclude)
 	}
 
 	return nil
@@ -161,14 +161,14 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 			}
 
 			if len(cmd.Exclude) > 0 {
-				if slices.Contains(cmd.exclude, sum) {
+				if _, ok := cmd.exclude[sum]; ok {
 					slog.Debug(fmt.Sprintf("hash was excluded %s", sum))
 					continue // was excluded
 				}
 			}
 
 			if len(cmd.Include) > 0 {
-				if slices.Contains(cmd.include, sum) {
+				if _, ok := cmd.include[sum]; ok {
 					slog.Debug(fmt.Sprintf("hash was included %s", sum))
 				} else {
 					continue // not included

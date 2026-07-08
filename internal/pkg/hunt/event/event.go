@@ -50,26 +50,38 @@ func (e *Event) SortKey() string {
 func (e *Event) AsCEF() string {
 	var sb strings.Builder
 
-	fmt.Fprintf(&sb, "%s %s CEF:1|Fox Forensics|Fox|%s|100|",
+	_, err := fmt.Fprintf(&sb, "%s %s CEF:1|Fox Forensics|Fox|%s|100|",
 		e.Time.Format("Jan 02 2006 15:04:05.000"),
 		e.Host,
 		version.Number,
 	)
 
-	_, err := replacer.WriteString(&sb, sys.Sanitize(e.Message[:min(len(e.Message), 512)]))
+	if err != nil {
+		slog.Error(err.Error())
+	}
+
+	_, err = replacer.WriteString(&sb, sys.Sanitize(sys.Truncate(e.Message, 512)))
 
 	if err != nil {
 		slog.Error(err.Error())
 	}
 
-	fmt.Fprintf(&sb, "|%d|", e.Severity)
+	_, err = fmt.Fprintf(&sb, "|%d|", e.Severity)
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
 
 	for _, k := range slices.Sorted(maps.Keys(e.Fields)) {
 		if v := e.Fields[k]; len(v) > 0 {
-			fmt.Fprintf(&sb, "%s=%s ",
+			_, err = fmt.Fprintf(&sb, "%s=%s ",
 				replacer.Replace(k),
 				replacer.Replace(v),
 			)
+
+			if err != nil {
+				slog.Error(err.Error())
+			}
 		}
 	}
 
