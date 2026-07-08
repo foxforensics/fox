@@ -78,7 +78,7 @@ func TestInfo(t *testing.T) {
 				}
 
 				if !bytes.Equal(b, test.Sample(tt.sample)) {
-					t.Fatal("sample mismatch")
+					t.Fatal("sample mismatch:", string(b))
 				}
 			})
 		}
