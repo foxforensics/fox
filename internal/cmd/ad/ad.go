@@ -51,7 +51,7 @@ type Ad struct {
 	Users     bool `short:"u" xor:"users,groups,computers"`
 	Groups    bool `short:"g" xor:"users,groups,computers"`
 	Computers bool `short:"c" xor:"users,groups,computers"`
-	Json      bool `short:"j" xor:"json,jsonl,"`
+	Json      bool `short:"j" xor:"json,jsonl"`
 	Jsonl     bool `short:"J" xor:"json,jsonl"`
 
 	// secret flags
