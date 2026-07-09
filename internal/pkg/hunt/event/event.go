@@ -52,7 +52,7 @@ func (e *Event) AsCEF() string {
 
 	_, err := fmt.Fprintf(&sb, "%s %s CEF:1|Fox Forensics|Fox|%s|100|",
 		e.Time.Format("Jan 02 2006 15:04:05.000"),
-		e.Host,
+		replacer.Replace(e.Host),
 		version.Number,
 	)
 
