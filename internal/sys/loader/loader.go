@@ -253,7 +253,7 @@ func (ldr *Loader) extractData(ctx context.Context, h *heap.Heap, i int) (bool, 
 
 	for _, r := range registry.Extracts {
 		if r.Detect(h.Bytes()) {
-			slog.Debug(fmt.Sprintf("archive detected as possibly %s", r.Name))
+			slog.Debug(fmt.Sprintf("archive detected as %s", r.Name))
 
 			for _, s := range r.Extract(h.Bytes(), h.Path, ldr.opts.Password) {
 				slog.Debug(fmt.Sprintf("stream found %s", s.Path))
@@ -284,7 +284,7 @@ func (ldr *Loader) extractData(ctx context.Context, h *heap.Heap, i int) (bool, 
 func (ldr *Loader) deflateData(h *heap.Heap) bool {
 	for _, r := range registry.Deflates {
 		if r.Detect(h.Bytes()) {
-			slog.Debug(fmt.Sprintf("deflate detected as possibly %s", r.Name))
+			slog.Debug(fmt.Sprintf("deflate detected as %s", r.Name))
 
 			b, err := r.Deflate(h.Bytes())
 			if err != nil {
@@ -303,7 +303,7 @@ func (ldr *Loader) deflateData(h *heap.Heap) bool {
 func (ldr *Loader) convertData(h *heap.Heap) {
 	for _, r := range registry.Converts {
 		if r.Detect(h.Bytes()) {
-			slog.Debug(fmt.Sprintf("convert detected as possibly %s", r.Name))
+			slog.Debug(fmt.Sprintf("convert detected as %s", r.Name))
 
 			b, err := r.Convert(h.Bytes())
 			if err != nil {
@@ -321,7 +321,7 @@ func (ldr *Loader) convertData(h *heap.Heap) {
 func (ldr *Loader) formatData(h *heap.Heap) {
 	for _, r := range registry.Formats {
 		if r.Detect(h.Bytes()) {
-			slog.Debug(fmt.Sprintf("format detected as possibly %s", r.Name))
+			slog.Debug(fmt.Sprintf("format detected as %s", r.Name))
 
 			b, err := r.Format(h.Bytes())
 			if err != nil {

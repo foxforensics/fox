@@ -13,7 +13,6 @@ import (
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/lib/formats"
 	"go.foxforensics.eu/fox/v4/internal/pkg"
 	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/client"
 	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
@@ -23,6 +22,7 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/rules"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
+	"go.foxforensics.eu/fox/v4/library/formats"
 )
 
 var Usage = strings.TrimSpace(`

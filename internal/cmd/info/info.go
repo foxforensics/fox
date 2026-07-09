@@ -12,9 +12,9 @@ import (
 	"github.com/fatih/color"
 	"go.foxforensics.eu/entropy/entropy"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/lib/formats"
 	"go.foxforensics.eu/fox/v4/internal/sys"
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
+	"go.foxforensics.eu/fox/v4/library/formats"
 )
 
 // Threshold for high entropy files

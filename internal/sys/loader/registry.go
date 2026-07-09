@@ -1,47 +1,47 @@
 package loader
 
 import (
-	"go.foxforensics.eu/fox/v4/internal/lib"
-	"go.foxforensics.eu/fox/v4/internal/lib/archives/7z"
-	"go.foxforensics.eu/fox/v4/internal/lib/archives/ar"
-	"go.foxforensics.eu/fox/v4/internal/lib/archives/cab"
-	"go.foxforensics.eu/fox/v4/internal/lib/archives/cpio"
-	"go.foxforensics.eu/fox/v4/internal/lib/archives/iso"
-	"go.foxforensics.eu/fox/v4/internal/lib/archives/msi"
-	"go.foxforensics.eu/fox/v4/internal/lib/archives/rar"
-	"go.foxforensics.eu/fox/v4/internal/lib/archives/rpm"
-	"go.foxforensics.eu/fox/v4/internal/lib/archives/tar"
-	"go.foxforensics.eu/fox/v4/internal/lib/archives/xar"
-	"go.foxforensics.eu/fox/v4/internal/lib/archives/zip"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/elf"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/ese"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/lnk"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/mft"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/pe"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/pf"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/pst"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/log/evtx"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/log/fortinet"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/log/journal"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/bgzf"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/br"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/bzip2"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/gzip"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/kanzi"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/lz4"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/lzfse"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/lzip"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/lzo"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/lzw"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/minlz"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/s2"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/snappy"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/xz"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/zlib"
-	"go.foxforensics.eu/fox/v4/internal/lib/deflates/zstd"
-	"go.foxforensics.eu/fox/v4/internal/lib/formats/json"
-	"go.foxforensics.eu/fox/v4/internal/lib/formats/jsonl"
-	"go.foxforensics.eu/fox/v4/internal/lib/formats/xml"
+	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v4/library/archives/7z"
+	"go.foxforensics.eu/fox/v4/library/archives/ar"
+	"go.foxforensics.eu/fox/v4/library/archives/cab"
+	"go.foxforensics.eu/fox/v4/library/archives/cpio"
+	"go.foxforensics.eu/fox/v4/library/archives/iso"
+	"go.foxforensics.eu/fox/v4/library/archives/msi"
+	"go.foxforensics.eu/fox/v4/library/archives/rar"
+	"go.foxforensics.eu/fox/v4/library/archives/rpm"
+	"go.foxforensics.eu/fox/v4/library/archives/tar"
+	"go.foxforensics.eu/fox/v4/library/archives/xar"
+	"go.foxforensics.eu/fox/v4/library/archives/zip"
+	"go.foxforensics.eu/fox/v4/library/binaries/bin/elf"
+	"go.foxforensics.eu/fox/v4/library/binaries/bin/ese"
+	"go.foxforensics.eu/fox/v4/library/binaries/bin/lnk"
+	"go.foxforensics.eu/fox/v4/library/binaries/bin/mft"
+	"go.foxforensics.eu/fox/v4/library/binaries/bin/pe"
+	"go.foxforensics.eu/fox/v4/library/binaries/bin/pf"
+	"go.foxforensics.eu/fox/v4/library/binaries/bin/pst"
+	"go.foxforensics.eu/fox/v4/library/binaries/log/evtx"
+	"go.foxforensics.eu/fox/v4/library/binaries/log/fortinet"
+	"go.foxforensics.eu/fox/v4/library/binaries/log/journal"
+	"go.foxforensics.eu/fox/v4/library/deflates/bgzf"
+	"go.foxforensics.eu/fox/v4/library/deflates/br"
+	"go.foxforensics.eu/fox/v4/library/deflates/bzip2"
+	"go.foxforensics.eu/fox/v4/library/deflates/gzip"
+	"go.foxforensics.eu/fox/v4/library/deflates/kanzi"
+	"go.foxforensics.eu/fox/v4/library/deflates/lz4"
+	"go.foxforensics.eu/fox/v4/library/deflates/lzfse"
+	"go.foxforensics.eu/fox/v4/library/deflates/lzip"
+	"go.foxforensics.eu/fox/v4/library/deflates/lzo"
+	"go.foxforensics.eu/fox/v4/library/deflates/lzw"
+	"go.foxforensics.eu/fox/v4/library/deflates/minlz"
+	"go.foxforensics.eu/fox/v4/library/deflates/s2"
+	"go.foxforensics.eu/fox/v4/library/deflates/snappy"
+	"go.foxforensics.eu/fox/v4/library/deflates/xz"
+	"go.foxforensics.eu/fox/v4/library/deflates/zlib"
+	"go.foxforensics.eu/fox/v4/library/deflates/zstd"
+	"go.foxforensics.eu/fox/v4/library/formats/json"
+	"go.foxforensics.eu/fox/v4/library/formats/jsonl"
+	"go.foxforensics.eu/fox/v4/library/formats/xml"
 )
 
 var registry = &struct {
@@ -58,26 +58,26 @@ var registry = &struct {
 
 type FormatEntry struct {
 	Name   string
-	Detect lib.Detect
-	Format lib.Format
+	Detect library.Detect
+	Format library.Format
 }
 
 type DeflateEntry struct {
 	Name    string
-	Detect  lib.Detect
-	Deflate lib.Deflate
+	Detect  library.Detect
+	Deflate library.Deflate
 }
 
 type ExtractEntry struct {
 	Name    string
-	Detect  lib.Detect
-	Extract lib.Extract
+	Detect  library.Detect
+	Extract library.Extract
 }
 
 type ConvertEntry struct {
 	Name    string
-	Detect  lib.Detect
-	Convert lib.Convert
+	Detect  library.Detect
+	Convert library.Convert
 }
 
 func RegisterDeflates() {

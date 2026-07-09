@@ -8,12 +8,12 @@ import (
 
 	"go.foxforensics.eu/bootkey/bootkey"
 	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/ese"
-	"go.foxforensics.eu/fox/v4/internal/lib/binaries/bin/reg"
-	"go.foxforensics.eu/fox/v4/internal/lib/formats"
 	"go.foxforensics.eu/fox/v4/internal/pkg/ad/record"
 	"go.foxforensics.eu/fox/v4/internal/pkg/ad/tables"
 	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/library/binaries/bin/ese"
+	"go.foxforensics.eu/fox/v4/library/binaries/bin/reg"
+	"go.foxforensics.eu/fox/v4/library/formats"
 	"go.foxforensics.eu/hashdump/extract"
 	"go.foxforensics.eu/hasher/hash"
 )
