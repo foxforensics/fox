@@ -55,4 +55,6 @@ func FreeAll() {
 
 		return true
 	})
+
+	mapped.Clear()
 }
