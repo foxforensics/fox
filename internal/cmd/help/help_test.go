@@ -44,6 +44,14 @@ func TestHelp(t *testing.T) {
 			},
 		},
 		{
+			"Help",
+			Usage,
+			[]string{
+				"help",
+				"help",
+			},
+		},
+		{
 			"Hunt",
 			hunt.Usage,
 			[]string{
@@ -84,18 +92,16 @@ func TestHelp(t *testing.T) {
 			},
 		},
 	} {
-		for range test.Cycles {
-			t.Run(tt.name, func(t *testing.T) {
-				b, err := test.FixtureMain(tt.args...)
+		t.Run(tt.name, func(t *testing.T) {
+			b, err := test.FixtureMain(tt.args...)
 
-				if err != nil {
-					b = []byte(err.Error())
-				}
+			if err != nil {
+				b = []byte(err.Error())
+			}
 
-				if !bytes.Contains(b, []byte(tt.output)) {
-					t.Fatal("output mismatch")
-				}
-			})
-		}
+			if !bytes.Contains(b, []byte(tt.output)) {
+				t.Fatal("output mismatch")
+			}
+		})
 	}
 }

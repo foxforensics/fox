@@ -15,10 +15,20 @@ import (
 	"go.foxforensics.eu/fox/v4/internal/sys"
 )
 
-var usage = map[string]string{
+var Usage = strings.TrimSpace(`
+Usage: fox help <TOPIC>
+
+Example: Show help on sub commands
+  $ fox help hunt
+
+Report bugs at: foxforensics.eu/issues
+`)
+
+var topics = map[string]string{
 	"ad":   ad.Usage,
 	"cat":  cat.Usage,
 	"hash": hash.Usage,
+	"help": Usage,
 	"hunt": hunt.Usage,
 	"info": info.Usage,
 	"str":  str.Usage,
@@ -30,7 +40,7 @@ type Help struct {
 }
 
 func (cmd *Help) Run(_ *cmd.Globals) error {
-	if v, ok := usage[strings.ToLower(cmd.Name)]; ok {
+	if v, ok := topics[strings.ToLower(cmd.Name)]; ok {
 		sys.Usage(v)
 		return nil
 	}

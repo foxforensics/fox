@@ -29,7 +29,7 @@ Commands:
    c, cat                  Show file contents (default)
    s, str                  Show file contained strings
    i, info                 Show file infos and entropy
-   t, time                 show file super timeline
+   t, time                 Show file super timeline
    h, hash                 Show file hashes and checksums
    x, hunt                 Hunt critical system events
 

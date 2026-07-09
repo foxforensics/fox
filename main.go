@@ -33,7 +33,13 @@ var About = strings.TrimSpace(`
 `)
 
 var Usage = strings.TrimSpace(`
-Usage: fox [COMMAND] [FLAGS...] <PATHS...>
+Usage: fox {ad,cat,str,info,time,hash,hunt} <...>
+
+Example: Find occurrences in event logs
+  $ fox -FWinlogon ./**/*.evtx
+
+Example: Hunt down critical events
+  $ fox hunt -u *.dd
 
 Use 'fox help' to show further information.
 `)
