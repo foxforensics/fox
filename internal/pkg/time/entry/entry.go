@@ -48,8 +48,8 @@ func (e Entry) AsTimesketch() string {
 	if !e.Mtime.IsZero() {
 		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
 			e.Name+" was modified",
-			e.Mtime.UTC().UnixMicro(),
-			e.Mtime.UTC().Format(time.RFC3339),
+			e.Mtime.UnixMicro(),
+			e.Mtime.Format(time.RFC3339),
 			"Modify time",
 		))
 	}
@@ -57,8 +57,8 @@ func (e Entry) AsTimesketch() string {
 	if !e.Atime.IsZero() {
 		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
 			e.Name+" was accessed",
-			e.Atime.UTC().UnixMicro(),
-			e.Atime.UTC().Format(time.RFC3339),
+			e.Atime.UnixMicro(),
+			e.Atime.Format(time.RFC3339),
 			"Access time",
 		))
 	}
@@ -66,8 +66,8 @@ func (e Entry) AsTimesketch() string {
 	if !e.Ctime.IsZero() {
 		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
 			e.Name+" was changed",
-			e.Ctime.UTC().UnixMicro(),
-			e.Ctime.UTC().Format(time.RFC3339),
+			e.Ctime.UnixMicro(),
+			e.Ctime.Format(time.RFC3339),
 			"Change time",
 		))
 	}
@@ -75,8 +75,8 @@ func (e Entry) AsTimesketch() string {
 	if !e.Btime.IsZero() {
 		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
 			e.Name+" was created",
-			e.Btime.UTC().UnixMicro(),
-			e.Btime.UTC().Format(time.RFC3339),
+			e.Btime.UnixMicro(),
+			e.Btime.Format(time.RFC3339),
 			"Create time",
 		))
 	}
@@ -86,7 +86,7 @@ func (e Entry) AsTimesketch() string {
 
 func timeOrZero(t time.Time) int64 {
 	if !t.IsZero() {
-		return t.UTC().Unix()
+		return t.Unix()
 	}
 
 	return 0

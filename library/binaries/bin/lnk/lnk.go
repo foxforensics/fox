@@ -41,9 +41,9 @@ func Parse(b []byte) []*entry.Entry {
 		Name:  lf.LinkInfo.LocalBasePath + lf.LinkInfo.CommonPathSuffix,
 		Mode:  buildMode(&lf),
 		Size:  uint64(lf.Header.TargetFileSize),
-		Mtime: lf.Header.WriteTime,
-		Atime: lf.Header.AccessTime,
-		Btime: lf.Header.CreationTime,
+		Mtime: lf.Header.WriteTime.UTC(),
+		Atime: lf.Header.AccessTime.UTC(),
+		Btime: lf.Header.CreationTime.UTC(),
 	})
 }
 

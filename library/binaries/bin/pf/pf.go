@@ -51,7 +51,7 @@ func Parse(b []byte) []*entry.Entry {
 			Name:    pi.Executable,
 			Size:    uint64(pi.FileSize),
 			Mode:    "-rwxrwxrwx",
-			Atime:   t,
+			Atime:   t.UTC(),
 			Anomaly: pi.RunCount == 0,
 		})
 
@@ -59,7 +59,7 @@ func Parse(b []byte) []*entry.Entry {
 			v = append(v, &entry.Entry{
 				Name:  f,
 				Mode:  "-rwxrwxrwx",
-				Atime: t,
+				Atime: t.UTC(),
 			})
 		}
 	}

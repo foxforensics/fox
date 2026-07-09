@@ -56,10 +56,10 @@ func Parse(b []byte) []*entry.Entry {
 			Inode:   fmt.Sprintf("%d-%d", mh.EntryNumber, mh.SequenceNumber),
 			Mode:    buildMode(mh),
 			Size:    uint64(mh.FileSize),
-			Mtime:   mh.LastModified0x10,
-			Atime:   mh.LastAccess0x10,
-			Ctime:   mh.LastRecordChange0x10,
-			Btime:   mh.Created0x10,
+			Mtime:   mh.LastModified0x10.UTC(),
+			Atime:   mh.LastAccess0x10.UTC(),
+			Ctime:   mh.LastRecordChange0x10.UTC(),
+			Btime:   mh.Created0x10.UTC(),
 			Anomaly: checkTimes(mh),
 		})
 	}
@@ -96,7 +96,7 @@ func checkTimes(mh *parser.MFTHighlight) bool {
 
 func checkTime(t1, t2 time.Time) bool {
 	if t1.Nanosecond() == 0 {
-		if t1.Unix() <= t2.Unix() {
+		if t1.UTC().Unix() <= t2.UTC().Unix() {
 			return true // with high probability
 		}
 	}
