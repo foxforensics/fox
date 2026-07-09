@@ -30,7 +30,7 @@ func Map(m []byte) (s SMap) {
 	r := bufio.NewReaderSize(bytes.NewReader(m), Size)
 
 	var line []byte
-	
+
 	for {
 		b, p, err := r.ReadLine()
 
