@@ -18,11 +18,11 @@
 * [x] Parse MFT, LNK, PF, PST binary files
 * [x] Parse Active Directory and other [EDB](https://learn.microsoft.com/en-us/windows/win32/extensible-storage-engine/extensible-storage-engine) files 
 * [x] Parse [Linux ELF](https://refspecs.linuxfoundation.org/elf/elf.pdf) and [Windows PE/COFF](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format) executables
-* [x] Create an MFT super timeline and check for timestomping
 * [x] Extract [Active Directory](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/ntlm-user-authentication) hashes, users, groups, computers  
 * [x] Lookup NTLM hashes using 210000+ entry wordlists
 * [x] Integral `grep`, `head`, `tail`, `uniq`, `wc`, `hexdump` like abilities
 * [x] Integral syntax highlighting for many different formats
+* [x] Integral super timeline with timestomp checks
 * [x] Integral fast [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) calculation
 * [x] Integral *Chain-of-Custody* receipt generation
 * [x] Support of path globbing and file streams
@@ -30,7 +30,7 @@
 * [x] Support of encrypted `7z`, `Rar`, `Zip` archives
 * [x] Many popular archive and compression formats
 * [x] Many popular cryptographic, image, fuzzy, fast and OS hashes
-* [x] With [man pages](assets/man) for every command
+* [x] Bundled [man pages](assets/man) for every command
 * [x] Advanced [Hunt](assets/man/fox-hunt.md) command
   * [x] Built-in log carving of [Linux Journals](https://systemd.io/JOURNAL_FILE_FORMAT/) and [Windows Event Logs](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format)
   * [x] Built-in super timeline in [Common Event Format](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter%201%20What%20is%20CEF.htm)
@@ -82,9 +82,9 @@ List only high entropy files:
 fox info -N6.0 ./
 ```
 
-Show MFT entries as body file:
+Show MFT info as body file:
 ```console
-fox time "$MFT"
+fox time ./$MFT
 ```
 
 Hash archive contents as MD5:

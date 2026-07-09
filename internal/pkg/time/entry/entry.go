@@ -35,28 +35,59 @@ func (e Entry) AsBody() string {
 		e.Inode,
 		e.Mode,
 		e.Size,
-		e.Atime.UTC().Unix(),
-		e.Mtime.UTC().Unix(),
-		e.Ctime.UTC().Unix(),
-		e.Btime.UTC().Unix(),
+		timeOrZero(e.Atime),
+		timeOrZero(e.Mtime),
+		timeOrZero(e.Ctime),
+		timeOrZero(e.Btime),
 	)
 }
 
-/*
-date,time,timezone,MACB,source,sourcetype,type,user,host,short,desc,version,filename,inode,notes,format,extra
-07/04/2026,14:22:01,UTC,M...,FILE,NTFS $MFT,Content Modification Time,-,-,OS: /Windows/System32/config/SAM,NTFS $MFT entry, sequence: 3,2,/dev/sda2,1289,-,filestat,file_size: 262144; allocated: True
-07/04/2026,14:22:05,UTC,....,REG,UserAssist,Last Run Time,jdoe,DESKTOP-01,UserAssist: chrome.exe,[UserAssist] Program execution: chrome.exe count: 42,2,/Users/jdoe/NTUSER.DAT,-,-,winreg_default,count: 42; application: chrome.exe
-07/04/2026,14:25:33,UTC,..C.,EVT,WinEVTX,Change Time,SYSTEM,DESKTOP-01,[4624] Logon,An account was successfully logged on,2,/Windows/System32/winevt/Logs/Security.evtx,-,-,winevtx,event_identifier: 4624; source_name: Microsoft-Windows-Security-Auditing
-*/
+func (e Entry) AsTimesketch() string {
+	var lines []string
 
-func (e Entry) AsCSV() string {
-	return fmt.Sprintf("%s;%s;%d;%s;%s;%s;%s",
-		replacer.Replace(e.Name),
-		e.Inode,
-		e.Size,
-		e.Atime.UTC().Format(time.RFC3339),
-		e.Mtime.UTC().Format(time.RFC3339),
-		e.Btime.UTC().Format(time.RFC3339),
-		e.Ctime.UTC().Format(time.RFC3339),
-	)
+	if !e.Mtime.IsZero() {
+		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
+			e.Name+" was modified",
+			e.Mtime.UTC().UnixMicro(),
+			e.Mtime.UTC().Format(time.RFC3339),
+			"Modify time",
+		))
+	}
+
+	if !e.Atime.IsZero() {
+		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
+			e.Name+" was accessed",
+			e.Atime.UTC().UnixMicro(),
+			e.Atime.UTC().Format(time.RFC3339),
+			"Access time",
+		))
+	}
+
+	if !e.Ctime.IsZero() {
+		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
+			e.Name+" was changed",
+			e.Ctime.UTC().UnixMicro(),
+			e.Ctime.UTC().Format(time.RFC3339),
+			"Change time",
+		))
+	}
+
+	if !e.Btime.IsZero() {
+		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
+			e.Name+" was created",
+			e.Btime.UTC().UnixMicro(),
+			e.Btime.UTC().Format(time.RFC3339),
+			"Create time",
+		))
+	}
+
+	return strings.Join(lines, "\n")
+}
+
+func timeOrZero(t time.Time) int64 {
+	if !t.IsZero() {
+		return t.UTC().Unix()
+	}
+
+	return 0
 }

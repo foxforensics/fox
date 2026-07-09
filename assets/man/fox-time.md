@@ -13,14 +13,14 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show the timeline of all MFT entries. Entries will be shown as bodyfile Version 3, if not otherwise specified. All timestamps will be normalized to **UTC**.
+Show super timeline of MFT, LNK or PF files. The timeline will be shown as *Body File Version 3*, if not otherwise specified. All timestamps will be normalized to **UTC**.
 
 FLAGS
 =====
 
 **-c, --csv**
 
-:   Show timeline as CSV list.
+:   Show as Timesketch compatible CSV lines.
 
 **-j, --json**
 
@@ -38,7 +38,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths insid
 EXAMPLES
 ========
 
-$ fox time "$MFT"
+$ fox time ./$MFT
 
 :   Show MFT entries as body file.
 

@@ -36,6 +36,10 @@ If no command is passed, then the **cat** command will be used by default and th
 
 :   Show file infos and entropy.
 
+**t, time**
+
+:   Show file super timeline.
+
 **h, hash**
 
 :   Show file hashes and checksums.
@@ -174,7 +178,7 @@ $ fox info -N6.0 ./
 
 :   List only high entropy files.
 
-$ fox time "$MFT"
+$ fox time ./$MFT
 
 :   Show MFT entries as body file.
 
