@@ -44,6 +44,7 @@ func (h *Heap) String() string {
 	return h.Path
 }
 
+// Reader must not be retained past the heap scope.
 func (h *Heap) Reader() io.ReaderAt {
 	h.RLock()
 	defer h.RUnlock()
@@ -51,6 +52,7 @@ func (h *Heap) Reader() io.ReaderAt {
 	return bytes.NewReader(h.memory)
 }
 
+// Bytes must not be retained past the heap scope.
 func (h *Heap) Bytes() []byte {
 	h.RLock()
 	defer h.RUnlock()
