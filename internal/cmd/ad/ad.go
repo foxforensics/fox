@@ -91,11 +91,11 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		return errors.New("required file(s) missing")
 	}
 
+	defer ntds.Free()
+
 	if !ese.Detect(ntds.Bytes()) {
 		return errors.New("invalid file format")
 	}
-
-	defer ntds.Free()
 
 	hive := <-ch
 
@@ -103,11 +103,11 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		return errors.New("required file(s) missing")
 	}
 
+	defer hive.Free()
+
 	if !reg.Detect(hive.Bytes()) {
 		return errors.New("invalid file format")
 	}
-
-	defer hive.Free()
 
 	if cmd.Lookup {
 		slog.Info("building tables")
