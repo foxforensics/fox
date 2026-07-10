@@ -27,8 +27,8 @@ func Convert(b []byte) ([]byte, error) {
 	return json.Marshal(lf)
 }
 
-func Parse(b []byte) []*entry.Entry {
-	var v []*entry.Entry
+func Parse(b []byte) []entry.Entry {
+	var v []entry.Entry
 
 	lf, err := lnk.Read(bytes.NewReader(b), uint64(len(b)))
 
@@ -37,7 +37,7 @@ func Parse(b []byte) []*entry.Entry {
 		return v
 	}
 
-	return append(v, &entry.Entry{
+	return append(v, entry.Entry{
 		Name:  lf.LinkInfo.LocalBasePath + lf.LinkInfo.CommonPathSuffix,
 		Mode:  buildMode(&lf),
 		Size:  uint64(lf.Header.TargetFileSize),

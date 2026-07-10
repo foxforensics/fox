@@ -36,8 +36,8 @@ func Convert(b []byte) ([]byte, error) {
 	return json.Marshal(pi)
 }
 
-func Parse(b []byte) []*entry.Entry {
-	var v []*entry.Entry
+func Parse(b []byte) []entry.Entry {
+	var v []entry.Entry
 
 	pi, err := prefetch.LoadPrefetch(bytes.NewReader(b))
 
@@ -47,7 +47,7 @@ func Parse(b []byte) []*entry.Entry {
 	}
 
 	for _, t := range pi.LastRunTimes {
-		v = append(v, &entry.Entry{
+		v = append(v, entry.Entry{
 			Name:    pi.Executable,
 			Size:    uint64(pi.FileSize),
 			Mode:    "-rwxrwxrwx",
@@ -56,7 +56,7 @@ func Parse(b []byte) []*entry.Entry {
 		})
 
 		for _, f := range pi.FilesAccessed {
-			v = append(v, &entry.Entry{
+			v = append(v, entry.Entry{
 				Name:  f,
 				Mode:  "-rwxrwxrwx",
 				Atime: t.UTC(),

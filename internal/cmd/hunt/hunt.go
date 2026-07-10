@@ -150,7 +150,7 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 		cmd.Paths = append(hunter.Local, cmd.Paths[1:]...)
 	}
 
-	ch, err := fox.Init(cmd.Paths, true)
+	heaps, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
@@ -191,7 +191,7 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 	for e := range hunter.New(&hunter.Options{
 		Sort:    cmd.Sort,
 		Threads: fox.Threads,
-	}).Hunt(fox.Context, ch) {
+	}).Hunt(fox.Context, heaps) {
 		m, err := sig.Matches(fox.Context, e.Fields)
 
 		if err != nil {

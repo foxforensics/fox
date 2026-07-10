@@ -91,13 +91,13 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 		return nil
 	}
 
-	ch, err := fox.Init(cmd.Paths, true)
+	heaps, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	for h := range ch {
+	for h := range heaps {
 		if !fox.NoPretty {
 			fox.Writer.FileHeader(h.String())
 		}

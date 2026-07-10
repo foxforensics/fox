@@ -180,7 +180,7 @@ $ fox info -N6.0 ./
 
 $ fox time -b ./$MFT
 
-:   Show MFT entries as body file.
+:   Show entries as body file.
 
 $ fox hash -Hmd5 files.7z
 

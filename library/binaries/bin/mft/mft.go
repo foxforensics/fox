@@ -45,13 +45,13 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func Parse(b []byte) []*entry.Entry {
-	v := make([]*entry.Entry, 0, len(b)/record)
+func Parse(b []byte) []entry.Entry {
+	v := make([]entry.Entry, 0, len(b)/record)
 
 	ch := parser.ParseMFTFile(context.Background(), bytes.NewReader(b), int64(len(b)), cluster, record)
 
 	for mh := range ch {
-		v = append(v, &entry.Entry{
+		v = append(v, entry.Entry{
 			Name:    mh.FileName(),
 			Inode:   fmt.Sprintf("%d-%d", mh.EntryNumber, mh.SequenceNumber),
 			Mode:    buildMode(mh),

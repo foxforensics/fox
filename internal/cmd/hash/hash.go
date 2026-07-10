@@ -121,13 +121,13 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 		n = max(n, len(algo))
 	}
 
-	ch, err := fox.Init(cmd.Paths, true)
+	heaps, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	for h := range ch {
+	for h := range heaps {
 		fh := &FileHash{
 			File: h.String(),
 			Hash: make(map[string]string),

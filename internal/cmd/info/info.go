@@ -133,7 +133,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 
 	fox.NoPretty = true
 
-	ch, err := fox.Init(cmd.Paths, true)
+	heaps, err := fox.Init(cmd.Paths, true)
 
 	color.NoColor = v
 
@@ -141,7 +141,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 		return err
 	}
 
-	for h := range ch {
+	for h := range heaps {
 		fi := &FileInfo{File: h.String(), IsBlock: cmd.block > 0}
 
 		n := int64(h.Size)

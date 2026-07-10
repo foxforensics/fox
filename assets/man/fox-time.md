@@ -49,6 +49,10 @@ Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths insid
 EXAMPLES
 ========
 
+$ fox time -s ./**/*.pf
+
+:   Show entries chronologically.
+
 $ fox time -b ./$MFT
 
 :   Show MFT entries as body file.
@@ -68,4 +72,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**fox(1)**
+**fox(1)**, **sort(1)**

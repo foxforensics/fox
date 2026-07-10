@@ -111,9 +111,9 @@ func (crv *Carver) sort(ctx context.Context, ch <-chan *String) <-chan *String {
 
 		for _, s := range v {
 			select {
+			case sorted <- &s:
 			case <-ctx.Done():
 				return
-			case sorted <- &s:
 			}
 		}
 	}()

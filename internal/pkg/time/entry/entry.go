@@ -2,6 +2,7 @@ package entry
 
 import (
 	"fmt"
+	"log/slog"
 	"strings"
 	"time"
 
@@ -34,7 +35,28 @@ type Timesketch struct {
 }
 
 func (e Entry) String() string {
-	return fmt.Sprintf("")
+	return fmt.Sprintf("%s %s", e.SortKey().Format(time.RFC3339), e.Name)
+}
+
+func (e Entry) SortKey() time.Time {
+	if !e.Ctime.IsZero() {
+		return e.Ctime
+	}
+
+	if !e.Atime.IsZero() {
+		return e.Atime
+	}
+
+	if !e.Mtime.IsZero() {
+		return e.Mtime
+	}
+
+	if !e.Btime.IsZero() {
+		return e.Btime
+	}
+
+	slog.Error("entry has no timestamp")
+	return time.Time{}
 }
 
 func (e Entry) AsBodyfile() string {

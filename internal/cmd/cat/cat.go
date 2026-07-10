@@ -77,13 +77,13 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 	fox.Query.Before = cmd.Before
 	fox.Query.After = cmd.After
 
-	ch, err := fox.Init(cmd.Paths, cmd.Text || cmd.Hex)
+	heaps, err := fox.Init(cmd.Paths, cmd.Text || cmd.Hex)
 
 	if err != nil {
 		return err
 	}
 
-	for h := range ch {
+	for h := range heaps {
 		if !fox.NoPretty {
 			fox.Writer.FileHeader(h.String())
 		}

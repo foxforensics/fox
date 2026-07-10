@@ -28,6 +28,7 @@ func TestTime(t *testing.T) {
 			"time.txt",
 			[]string{
 				"time",
+				"-s",
 				test.FixtureFile("binaries/test.mft"),
 			},
 		},

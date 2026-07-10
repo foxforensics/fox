@@ -79,13 +79,13 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		slog.Warn("additional paths will be ignored")
 	}
 
-	ch, err := fox.Init(cmd.Paths, true)
+	heaps, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	ntds := <-ch
+	ntds := <-heaps
 
 	if ntds == nil {
 		return errors.New("required file(s) missing")
@@ -97,7 +97,7 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		return errors.New("invalid file format")
 	}
 
-	hive := <-ch
+	hive := <-heaps
 
 	if hive == nil {
 		return errors.New("required file(s) missing")

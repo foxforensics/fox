@@ -1,13 +1,16 @@
 package time
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
+	"slices"
 	"strings"
 
 	"go.foxforensics.eu/fox/v4/internal/cmd"
 	"go.foxforensics.eu/fox/v4/internal/pkg/time/entry"
 	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v4/internal/sys/heap"
 	"go.foxforensics.eu/fox/v4/internal/sys/writer"
 	"go.foxforensics.eu/fox/v4/library/binaries/bin/lnk"
 	"go.foxforensics.eu/fox/v4/library/binaries/bin/mft"
@@ -26,6 +29,9 @@ Flags:
 Format flags:
   -b, --bodyfile           Show in Body file format
   -t, --timesketch         Show in Timesketch format
+
+Example: Show entries chronologically
+  $ fox time -s ./**/*.pf
 
 Example: Show MFT entries as body file
   $ fox time -b ./$MFT
@@ -54,45 +60,21 @@ func (cmd *Time) Run(fox *cmd.Globals) error {
 		return nil
 	}
 
-	ch, err := fox.Init(cmd.Paths, true)
+	heaps, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	for h := range ch {
-		switch {
-		case mft.Detect(h.Bytes()):
-			slog.Debug("file detected as mft")
+	ch := cmd.parse(fox.Context, heaps)
 
-			for _, e := range mft.Parse(h.Bytes()) {
-				fox.Writer.Match(cmd.format(e), fox.Regexp)
-			}
-
-		case lnk.Detect(h.Bytes()):
-			slog.Debug("file detected as lnk")
-
-			for _, e := range lnk.Parse(h.Bytes()) {
-				fox.Writer.Match(cmd.format(e), fox.Regexp)
-			}
-
-		case pf.Detect(h.Bytes()):
-			slog.Debug("file detected as pf")
-
-			for _, e := range pf.Parse(h.Bytes()) {
-				fox.Writer.Match(cmd.format(e), fox.Regexp)
-			}
-
-		default:
-			slog.Debug(fmt.Sprintf("file not supported %s", h))
-		}
-
-		h.Free()
+	if cmd.Sort {
+		ch = cmd.sort(fox.Context, ch)
 	}
 
-	//slices.SortStableFunc(src, func(a, b *event.Event) int {
-	//	return strings.Compare(a.SortKey(), b.SortKey())
-	//})
+	for e := range ch {
+		fox.Writer.Match(cmd.format(e), fox.Regexp)
+	}
 
 	return nil
 }
@@ -112,4 +94,74 @@ func (cmd *Time) format(e *entry.Entry) string {
 	default:
 		return e.String()
 	}
+}
+
+func (cmd *Time) parse(ctx context.Context, heaps <-chan *heap.Heap) <-chan *entry.Entry {
+	entries := make(chan *entry.Entry, 4096)
+
+	go func() {
+		defer close(entries)
+
+		var parse func(b []byte) []entry.Entry
+
+		for h := range heaps {
+			switch {
+			case mft.Detect(h.Bytes()):
+				slog.Debug("file detected as mft")
+				parse = mft.Parse
+
+			case lnk.Detect(h.Bytes()):
+				slog.Debug("file detected as lnk")
+				parse = lnk.Parse
+
+			case pf.Detect(h.Bytes()):
+				slog.Debug("file detected as pf")
+				parse = pf.Parse
+
+			default:
+				slog.Debug(fmt.Sprintf("file not supported %s", h))
+			}
+
+			for _, e := range parse(h.Bytes()) {
+				select {
+				case entries <- &e:
+				case <-ctx.Done():
+					h.Free()
+					return
+				}
+			}
+
+			h.Free()
+		}
+	}()
+
+	return entries
+}
+
+func (cmd *Time) sort(ctx context.Context, ch <-chan *entry.Entry) <-chan *entry.Entry {
+	sorted := make(chan *entry.Entry, cap(ch))
+
+	go func() {
+		defer close(sorted)
+
+		v := make([]*entry.Entry, 0)
+
+		for e := range ch {
+			v = append(v, e)
+		}
+
+		slices.SortStableFunc(v, func(a, b *entry.Entry) int {
+			return a.SortKey().Compare(b.SortKey())
+		})
+
+		for _, e := range v {
+			select {
+			case sorted <- e:
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+
+	return sorted
 }
