@@ -13,14 +13,14 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show super timeline of MFT, LNK or PF files. The timeline will be shown as *Body File Version 3*, if not otherwise specified. All timestamps will be normalized to **UTC**.
+Show super timeline of MFT, LNK or PF files. Please be aware that, using the **--sort** flag will buffer all found events in memory. For large sets of data this could be very slow and take a serious amount of memory. All timestamps will be normalized to **UTC**.
 
 FLAGS
 =====
 
-**-c, --csv**
+**-s, --sort**
 
-:   Show as Timesketch compatible CSV lines.
+:   Sort timeline chronologically.
 
 **-j, --json**
 
@@ -30,6 +30,17 @@ FLAGS
 
 :   Show timeline as JSON lines.
 
+Format Flags
+------------
+
+**-b, --bodyfile**
+
+:   Show in **Body File Version 3** format.
+
+**-t, --timesketch**
+
+:   Show in **Timesketch** format.
+
 POSITIONAL ARGUMENTS
 ====================
 
@@ -38,7 +49,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths insid
 EXAMPLES
 ========
 
-$ fox time ./$MFT
+$ fox time -b ./$MFT
 
 :   Show MFT entries as body file.
 

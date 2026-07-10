@@ -178,7 +178,7 @@ $ fox info -N6.0 ./
 
 :   List only high entropy files.
 
-$ fox time ./$MFT
+$ fox time -b ./$MFT
 
 :   Show MFT entries as body file.
 

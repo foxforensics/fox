@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file string contents by carving the file(s).
+Show file string contents by carving the file(s). Please be aware that, using the **--sort** flag will buffer all found strings in memory. For large sets of data this could be very slow and take a serious amount of memory.
 
 FLAGS
 =====

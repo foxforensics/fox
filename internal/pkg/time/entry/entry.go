@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"go.foxforensics.eu/fox/v4/library/formats"
 )
 
 var replacer = strings.NewReplacer(
@@ -25,66 +27,53 @@ type Entry struct {
 	Anomaly bool      `json:"anomaly,omitempty"`
 }
 
-func (e Entry) String() string {
-	return e.AsBody()
+type Timesketch struct {
+	Message       string `json:"message"`
+	Datetime      string `json:"datetime"`
+	TimestampDesc string `json:"timestamp_desc"`
 }
 
-func (e Entry) AsBody() string {
+func (e Entry) String() string {
+	return fmt.Sprintf("")
+}
+
+func (e Entry) AsBodyfile() string {
 	return fmt.Sprintf("0|%s|%s|%s|0|0|%d|%d|%d|%d|%d",
 		replacer.Replace(e.Name),
 		e.Inode,
 		e.Mode,
 		e.Size,
-		timeOrZero(e.Atime),
-		timeOrZero(e.Mtime),
-		timeOrZero(e.Ctime),
-		timeOrZero(e.Btime),
+		toEpoch(e.Atime),
+		toEpoch(e.Mtime),
+		toEpoch(e.Ctime),
+		toEpoch(e.Btime),
 	)
 }
 
 func (e Entry) AsTimesketch() string {
-	var lines []string
+	var sb strings.Builder
 
-	if !e.Mtime.IsZero() {
-		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
-			e.Name+" was modified",
-			e.Mtime.UnixMicro(),
-			e.Mtime.Format(time.RFC3339),
-			"Modify time",
-		))
-	}
+	sb.WriteString(toJsonl(e.Mtime, e.Name+" was modified", "Modify time"))
+	sb.WriteString(toJsonl(e.Atime, e.Name+" was accessed", "Access time"))
+	sb.WriteString(toJsonl(e.Ctime, e.Name+" was changed", "Change time"))
+	sb.WriteString(toJsonl(e.Btime, e.Name+" was created", "Create time"))
 
-	if !e.Atime.IsZero() {
-		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
-			e.Name+" was accessed",
-			e.Atime.UnixMicro(),
-			e.Atime.Format(time.RFC3339),
-			"Access time",
-		))
-	}
-
-	if !e.Ctime.IsZero() {
-		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
-			e.Name+" was changed",
-			e.Ctime.UnixMicro(),
-			e.Ctime.Format(time.RFC3339),
-			"Change time",
-		))
-	}
-
-	if !e.Btime.IsZero() {
-		lines = append(lines, fmt.Sprintf("%s,%d,%s,%s",
-			e.Name+" was created",
-			e.Btime.UnixMicro(),
-			e.Btime.Format(time.RFC3339),
-			"Create time",
-		))
-	}
-
-	return strings.Join(lines, "\n")
+	return sb.String()
 }
 
-func timeOrZero(t time.Time) int64 {
+func toJsonl(t time.Time, msg, desc string) string {
+	if t.IsZero() {
+		return ""
+	}
+
+	return formats.AsJSONL(&Timesketch{
+		Message:       msg,
+		Datetime:      t.Format(time.RFC3339),
+		TimestampDesc: desc,
+	})
+}
+
+func toEpoch(t time.Time) int64 {
 	if !t.IsZero() {
 		return t.Unix()
 	}

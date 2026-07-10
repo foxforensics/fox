@@ -32,15 +32,6 @@ func TestTime(t *testing.T) {
 			},
 		},
 		{
-			"Csv",
-			"time.csv",
-			[]string{
-				"time",
-				"-c",
-				test.FixtureFile("binaries/test.pf"),
-			},
-		},
-		{
 			"Json",
 			"time.json",
 			[]string{
@@ -56,6 +47,24 @@ func TestTime(t *testing.T) {
 				"time",
 				"-J",
 				test.FixtureFile("binaries/test.lnk"),
+			},
+		},
+		{
+			"Bodyfile",
+			"time.bodyfile.csv",
+			[]string{
+				"time",
+				"-b",
+				test.FixtureFile("binaries/test.pf"),
+			},
+		},
+		{
+			"Timesketch",
+			"time.timesketch.jsonl",
+			[]string{
+				"time",
+				"-t",
+				test.FixtureFile("binaries/test.pf"),
 			},
 		},
 	} {

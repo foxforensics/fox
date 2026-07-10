@@ -19,20 +19,28 @@ var Usage = strings.TrimSpace(`
 Usage: fox time [FLAGS...] <PATHS...>
 
 Flags:
-  -c, --csv                Show timeline as CSV (Timesketch)
+  -s, --sort               Sort timeline chronologically
   -j, --json               Show timeline as JSON objects
   -J, --jsonl              Show timeline as JSON lines
 
+Format flags:
+  -b, --bodyfile           Show in Body file format
+  -t, --timesketch         Show in Timesketch format
+
 Example: Show MFT entries as body file
-  $ fox time ./$MFT
+  $ fox time -b ./$MFT
 
 Report bugs at: foxforensics.eu/issues
 `)
 
 type Time struct {
-	Csv   bool `short:"c" xor:"csv,json,jsonl"`
-	Json  bool `short:"j" xor:"csv,json,jsonl"`
-	Jsonl bool `short:"J" xor:"csv,json,jsonl"`
+	Sort  bool `short:"s"`
+	Json  bool `short:"j" xor:"json,jsonl"`
+	Jsonl bool `short:"J" xor:"json,jsonl"`
+
+	// format flags
+	Bodyfile   bool `short:"b" xor:"bodyfile,timesketch"`
+	Timesketch bool `short:"t" xor:"bodyfile,timesketch"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -82,17 +90,23 @@ func (cmd *Time) Run(fox *cmd.Globals) error {
 		h.Free()
 	}
 
+	//slices.SortStableFunc(src, func(a, b *event.Event) int {
+	//	return strings.Compare(a.SortKey(), b.SortKey())
+	//})
+
 	return nil
 }
 
 func (cmd *Time) format(e *entry.Entry) string {
 	switch {
-	case cmd.Csv:
-		return e.AsTimesketch()
 	case cmd.Json:
 		return writer.ColorizeAs(formats.AsJSON(e), "json")
 	case cmd.Jsonl:
 		return writer.ColorizeAs(formats.AsJSONL(e), "json")
+	case cmd.Bodyfile:
+		return e.AsBodyfile()
+	case cmd.Timesketch:
+		return e.AsTimesketch()
 	case e.Anomaly:
 		return writer.AsBold(e.String())
 	default:

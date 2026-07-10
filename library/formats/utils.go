@@ -39,7 +39,7 @@ func AsJSON(a any) string {
 
 	if err != nil {
 		slog.Error(err.Error())
-		return JsonError(err)
+		return string(JsonError(err))
 	}
 
 	return string(b)
@@ -50,13 +50,13 @@ func AsJSONL(a any) string {
 
 	if err != nil {
 		slog.Error(err.Error())
-		return JsonError(err)
+		return string(JsonError(err))
 	}
 
 	return string(b)
 }
 
-func JsonError(e error) string {
+func JsonError(e error) []byte {
 	b, err := json.Marshal(struct {
 		Error string `json:"error"`
 	}{
@@ -65,8 +65,8 @@ func JsonError(e error) string {
 
 	if err != nil {
 		slog.Error(err.Error())
-		return `{"error": "unknown error"}`
+		return []byte(`{"error": "unknown error"}`)
 	}
 
-	return string(b)
+	return b
 }

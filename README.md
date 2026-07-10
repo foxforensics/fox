@@ -84,7 +84,7 @@ fox info -N6.0 ./
 
 Show MFT info as body file:
 ```console
-fox time ./$MFT
+fox time -b ./$MFT
 ```
 
 Hash archive contents as MD5:

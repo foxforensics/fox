@@ -30,7 +30,7 @@ Usage: fox hunt [FLAGS...] <local|PATHS...>
 
 Flags:
   -a, --all                Show logs with all severities
-  -s, --sort               Show logs sorted by timestamp (slow)
+  -s, --sort               Show logs sorted by timestamp
   -u, --uniq               Show logs that are unique 
   -j, --json               Show logs as JSON objects
   -J, --jsonl              Show logs as JSON lines
