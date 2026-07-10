@@ -120,6 +120,8 @@ func (cmd *Time) parse(ctx context.Context, heaps <-chan *heap.Heap) <-chan *ent
 
 			default:
 				slog.Debug(fmt.Sprintf("file not supported %s", h))
+				h.Free()
+				continue
 			}
 
 			for _, e := range parse(h.Bytes()) {
