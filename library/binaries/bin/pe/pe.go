@@ -6,7 +6,7 @@ import (
 	"log/slog"
 
 	"github.com/saferwall/pe"
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/library"
 )
 
 const Magic = "MZ"

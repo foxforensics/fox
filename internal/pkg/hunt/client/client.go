@@ -14,12 +14,12 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v6"
-	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
-	"go.foxforensics.eu/fox/v4/internal/sys/version"
-	"go.foxforensics.eu/fox/v4/library/schemas"
-	"go.foxforensics.eu/fox/v4/library/schemas/ecs"
-	"go.foxforensics.eu/fox/v4/library/schemas/hec"
-	"go.foxforensics.eu/fox/v4/library/schemas/raw"
+	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/sys/version"
+	"go.foxforensics.eu/fox/v5/library/schemas"
+	"go.foxforensics.eu/fox/v5/library/schemas/ecs"
+	"go.foxforensics.eu/fox/v5/library/schemas/hec"
+	"go.foxforensics.eu/fox/v5/library/schemas/raw"
 )
 
 // Timeout for everything network related.

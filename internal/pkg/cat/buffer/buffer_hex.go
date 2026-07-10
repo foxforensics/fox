@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/cmd"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/sys/writer"
 )
 
 type HexLine struct {

@@ -6,9 +6,9 @@ import (
 	"log/slog"
 	"strings"
 
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/library"
-	"go.foxforensics.eu/fox/v4/library/archives"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/library"
+	"go.foxforensics.eu/fox/v5/library/archives"
 	"go.foxforensics.eu/go-zip/zip"
 )
 

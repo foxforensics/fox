@@ -9,7 +9,7 @@ import (
 	"sync"
 
 	"github.com/dlclark/regexp2/v2"
-	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
+	"go.foxforensics.eu/fox/v5/internal/sys/receipt"
 )
 
 type Writer struct {

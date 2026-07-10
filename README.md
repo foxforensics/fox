@@ -44,7 +44,7 @@
 Install the development version directly via `go`:
 
 ```console
-go install go.foxforensics.eu/fox/v4@latest
+go install go.foxforensics.eu/fox/v5@latest
 ```
 
 Standalone binaries and packages are available for:

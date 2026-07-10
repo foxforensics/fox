@@ -15,8 +15,8 @@ import (
 	"github.com/sorairolake/lzip-go"
 	"github.com/ulikunitz/xz"
 	"github.com/ulikunitz/xz/lzma"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/library"
 )
 
 func Detect(b []byte) bool {

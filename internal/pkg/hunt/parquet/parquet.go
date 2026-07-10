@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/parquet-go/parquet-go"
-	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
 )
 
 type Parquet struct {

@@ -6,7 +6,7 @@ import (
 	"log/slog"
 
 	kio "github.com/flanglet/kanzi-go/v2/io"
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/library"
 )
 
 func Detect(b []byte) bool {

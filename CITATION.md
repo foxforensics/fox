@@ -5,7 +5,7 @@ type: software
 authors:
   - name: "Fox Forensics"
 url: "https://foxforensics.eu"
-version: 4
+version: 5
 abstract: "fox: The Forensic Examiners Swiss Army Knife."
 keywords:
   - fox

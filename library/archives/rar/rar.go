@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"github.com/nwaples/rardecode/v2"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/library"
-	"go.foxforensics.eu/fox/v4/library/archives"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/library"
+	"go.foxforensics.eu/fox/v5/library/archives"
 )
 
 func Detect(b []byte) bool {

@@ -5,7 +5,7 @@ import (
 	"io"
 	"sync"
 
-	"go.foxforensics.eu/fox/v4/internal/sys/memory"
+	"go.foxforensics.eu/fox/v5/internal/sys/memory"
 )
 
 const block = 4096

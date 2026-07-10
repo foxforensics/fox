@@ -13,12 +13,12 @@ import (
 
 	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
-	"go.foxforensics.eu/fox/v4/internal/pkg"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/heap"
-	"go.foxforensics.eu/fox/v4/internal/sys/loader"
-	"go.foxforensics.eu/fox/v4/internal/sys/memory"
-	"go.foxforensics.eu/fox/v4/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/sys/heap"
+	"go.foxforensics.eu/fox/v5/internal/sys/loader"
+	"go.foxforensics.eu/fox/v5/internal/sys/memory"
+	"go.foxforensics.eu/fox/v5/internal/sys/writer"
 )
 
 var Usage = strings.TrimSpace(`

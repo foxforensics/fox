@@ -1,4 +1,4 @@
-module go.foxforensics.eu/fox/v4
+module go.foxforensics.eu/fox/v5
 
 go 1.26.0
 

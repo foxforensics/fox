@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"time"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
-	"go.foxforensics.eu/fox/v4/internal/sys/version"
-	"go.foxforensics.eu/fox/v4/library/binaries"
-	"go.foxforensics.eu/fox/v4/library/formats"
+	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/sys/version"
+	"go.foxforensics.eu/fox/v5/library/binaries"
+	"go.foxforensics.eu/fox/v5/library/formats"
 	"go.foxforensics.eu/hasher/hash"
 )
 

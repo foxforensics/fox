@@ -6,8 +6,8 @@ import (
 	"log/slog"
 	"strings"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/time/entry"
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/internal/pkg/time/entry"
+	"go.foxforensics.eu/fox/v5/library"
 	"go.foxforensics.eu/go-lnk"
 )
 

@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/Velocidex/ordereddict"
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/library"
 	"go.foxforensics.eu/go-ese/parser"
 )
 

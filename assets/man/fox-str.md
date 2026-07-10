@@ -1,4 +1,4 @@
-% FOX STR(1) Version 4 | Fox Documentation
+% FOX STR(1) Version 5 | Fox Documentation
 
 NAME
 ====

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/ad/tables"
-	"go.foxforensics.eu/fox/v4/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/pkg/ad/tables"
+	"go.foxforensics.eu/fox/v5/internal/sys/writer"
 	"go.foxforensics.eu/hashdump/extract"
 )
 

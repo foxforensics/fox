@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/dlclark/regexp2/v2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/cat/smap"
+	"go.foxforensics.eu/fox/v5/internal/pkg/cat/smap"
 )
 
 const CR = '\n'

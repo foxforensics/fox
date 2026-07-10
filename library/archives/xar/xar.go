@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/korylprince/goxar"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/library"
 )
 
 func Detect(b []byte) bool {

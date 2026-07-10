@@ -7,15 +7,15 @@ import (
 	"slices"
 	"strings"
 
-	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/time/entry"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/heap"
-	"go.foxforensics.eu/fox/v4/internal/sys/writer"
-	"go.foxforensics.eu/fox/v4/library/binaries/bin/lnk"
-	"go.foxforensics.eu/fox/v4/library/binaries/bin/mft"
-	"go.foxforensics.eu/fox/v4/library/binaries/bin/pf"
-	"go.foxforensics.eu/fox/v4/library/formats"
+	"go.foxforensics.eu/fox/v5/internal/cmd"
+	"go.foxforensics.eu/fox/v5/internal/pkg/time/entry"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/sys/heap"
+	"go.foxforensics.eu/fox/v5/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/library/binaries/bin/lnk"
+	"go.foxforensics.eu/fox/v5/library/binaries/bin/mft"
+	"go.foxforensics.eu/fox/v5/library/binaries/bin/pf"
+	"go.foxforensics.eu/fox/v5/library/formats"
 )
 
 var Usage = strings.TrimSpace(`

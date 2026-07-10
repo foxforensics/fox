@@ -8,7 +8,7 @@ import (
 
 	set "github.com/emersion/go-message/charset"
 	"github.com/rotisserie/eris"
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/library"
 	"go.foxforensics.eu/go-pst/v6/pst"
 	"golang.org/x/text/encoding"
 )

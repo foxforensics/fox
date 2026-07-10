@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"math"
 
-	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/cat/smap"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/cmd"
+	"go.foxforensics.eu/fox/v5/internal/pkg/cat/smap"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/sys/writer"
 )
 
 const Limit = 1024 * 1024 * 4 // 4mb

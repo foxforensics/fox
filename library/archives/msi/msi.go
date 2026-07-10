@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"log/slog"
 
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/library"
 	"go.foxforensics.eu/go-msi/msi"
 )
 

@@ -7,8 +7,8 @@ import (
 	"errors"
 	"io"
 
-	"go.foxforensics.eu/fox/v4/library"
-	"go.foxforensics.eu/fox/v4/library/formats"
+	"go.foxforensics.eu/fox/v5/library"
+	"go.foxforensics.eu/fox/v5/library/formats"
 )
 
 func Detect(b []byte) bool {

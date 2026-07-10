@@ -15,10 +15,10 @@ import (
 	"sync/atomic"
 
 	"github.com/bmatcuk/doublestar/v4"
-	"go.foxforensics.eu/fox/v4/internal/pkg"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/heap"
-	"go.foxforensics.eu/fox/v4/internal/sys/memory"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/sys/heap"
+	"go.foxforensics.eu/fox/v5/internal/sys/memory"
 )
 
 const Stdin = "-"

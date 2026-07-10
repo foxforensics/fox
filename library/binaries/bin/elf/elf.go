@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/saferwall/elf"
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/library"
 )
 
 const Magic = "\x7FELF"

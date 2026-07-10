@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"go.foxforensics.eu/fox/v4/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/test"
 )
 
 func TestAd(t *testing.T) {

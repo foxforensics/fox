@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg"
-	"go.foxforensics.eu/fox/v4/internal/sys/loader"
-	"go.foxforensics.eu/fox/v4/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/sys/loader"
+	"go.foxforensics.eu/fox/v5/internal/test"
 )
 
 func TestHunt(t *testing.T) {

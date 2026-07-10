@@ -16,16 +16,16 @@ import (
 
 	"github.com/alecthomas/kong"
 	_ "github.com/josephspurrier/goversioninfo"
-	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/cmd/ad"
-	"go.foxforensics.eu/fox/v4/internal/cmd/cat"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hash"
-	"go.foxforensics.eu/fox/v4/internal/cmd/help"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hunt"
-	"go.foxforensics.eu/fox/v4/internal/cmd/info"
-	"go.foxforensics.eu/fox/v4/internal/cmd/str"
-	"go.foxforensics.eu/fox/v4/internal/cmd/time"
-	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/cmd"
+	"go.foxforensics.eu/fox/v5/internal/cmd/ad"
+	"go.foxforensics.eu/fox/v5/internal/cmd/cat"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hash"
+	"go.foxforensics.eu/fox/v5/internal/cmd/help"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt"
+	"go.foxforensics.eu/fox/v5/internal/cmd/info"
+	"go.foxforensics.eu/fox/v5/internal/cmd/str"
+	"go.foxforensics.eu/fox/v5/internal/cmd/time"
+	"go.foxforensics.eu/fox/v5/internal/sys"
 )
 
 var About = strings.TrimSpace(`

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"log/slog"
 
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/library"
 	"go.foxforensics.eu/go-bgzf/bgzf"
 )
 

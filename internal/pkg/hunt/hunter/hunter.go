@@ -12,10 +12,10 @@ import (
 	"sync"
 
 	"github.com/sourcegraph/conc/pool"
-	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
-	"go.foxforensics.eu/fox/v4/internal/sys/heap"
-	"go.foxforensics.eu/fox/v4/library/binaries/log/evtx"
-	"go.foxforensics.eu/fox/v4/library/binaries/log/journal"
+	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/sys/heap"
+	"go.foxforensics.eu/fox/v5/library/binaries/log/evtx"
+	"go.foxforensics.eu/fox/v5/library/binaries/log/journal"
 )
 
 const Scale = 1024

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log/slog"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
-	"go.foxforensics.eu/fox/v4/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/sys/writer"
 )
 
 const Prefix = ""

@@ -7,7 +7,7 @@ import (
 	"bytes"
 	"io"
 
-	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/sys"
 )
 
 type Chunk struct {

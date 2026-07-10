@@ -3,7 +3,7 @@ package fortinet
 import (
 	"bytes"
 
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/library"
 	"go.foxforensics.eu/go-fortilog/fortilog"
 )
 

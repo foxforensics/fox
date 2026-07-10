@@ -1,4 +1,4 @@
-% FOX HASH(1) Version 4 | Fox Documentation
+% FOX HASH(1) Version 5 | Fox Documentation
 
 NAME
 ====

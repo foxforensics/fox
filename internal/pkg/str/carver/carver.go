@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	db "go.foxforensics.eu/fox/v4/internal/pkg/str"
+	db "go.foxforensics.eu/fox/v5/internal/pkg/str"
 	fstrings "go.foxforensics.eu/strings/strings"
 )
 

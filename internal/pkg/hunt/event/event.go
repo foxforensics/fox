@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/zeebo/xxh3"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/version"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/sys/version"
 )
 
 var replacer = strings.NewReplacer(

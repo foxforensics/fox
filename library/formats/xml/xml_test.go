@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"go.foxforensics.eu/fox/v4/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/test"
 )
 
 const src = "formats/fox.xml"

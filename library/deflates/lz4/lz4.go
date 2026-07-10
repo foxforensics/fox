@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	"github.com/pierrec/lz4/v4"
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/library"
 )
 
 func Detect(b []byte) bool {

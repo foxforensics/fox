@@ -3,7 +3,7 @@ package heap
 import (
 	"testing"
 
-	"go.foxforensics.eu/fox/v4/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/test"
 )
 
 const (

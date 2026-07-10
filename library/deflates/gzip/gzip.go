@@ -5,7 +5,7 @@ import (
 	"log/slog"
 
 	"github.com/klauspost/compress/gzip"
-	"go.foxforensics.eu/fox/v4/library"
+	"go.foxforensics.eu/fox/v5/library"
 )
 
 func Detect(b []byte) bool {

@@ -5,11 +5,11 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg"
-	"go.foxforensics.eu/fox/v4/internal/pkg/cat/buffer"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/cmd"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/pkg/cat/buffer"
+	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/sys/writer"
 )
 
 var Usage = strings.TrimSpace(`

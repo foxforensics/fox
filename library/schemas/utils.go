@@ -1,7 +1,7 @@
 package schemas
 
 import (
-	"go.foxforensics.eu/fox/v4/internal/pkg/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
 )
 
 type Apply func(*event.Event) ([]byte, error)

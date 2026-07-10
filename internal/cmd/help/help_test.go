@@ -4,14 +4,14 @@ import (
 	"bytes"
 	"testing"
 
-	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/cmd/ad"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hash"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hunt"
-	"go.foxforensics.eu/fox/v4/internal/cmd/info"
-	"go.foxforensics.eu/fox/v4/internal/cmd/str"
-	"go.foxforensics.eu/fox/v4/internal/cmd/time"
-	"go.foxforensics.eu/fox/v4/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/cmd"
+	"go.foxforensics.eu/fox/v5/internal/cmd/ad"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hash"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt"
+	"go.foxforensics.eu/fox/v5/internal/cmd/info"
+	"go.foxforensics.eu/fox/v5/internal/cmd/str"
+	"go.foxforensics.eu/fox/v5/internal/cmd/time"
+	"go.foxforensics.eu/fox/v5/internal/test"
 )
 
 func TestHelp(t *testing.T) {

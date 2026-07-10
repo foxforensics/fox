@@ -4,15 +4,15 @@ import (
 	"errors"
 	"strings"
 
-	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/cmd/ad"
-	"go.foxforensics.eu/fox/v4/internal/cmd/cat"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hash"
-	"go.foxforensics.eu/fox/v4/internal/cmd/hunt"
-	"go.foxforensics.eu/fox/v4/internal/cmd/info"
-	"go.foxforensics.eu/fox/v4/internal/cmd/str"
-	"go.foxforensics.eu/fox/v4/internal/cmd/time"
-	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/cmd"
+	"go.foxforensics.eu/fox/v5/internal/cmd/ad"
+	"go.foxforensics.eu/fox/v5/internal/cmd/cat"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hash"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt"
+	"go.foxforensics.eu/fox/v5/internal/cmd/info"
+	"go.foxforensics.eu/fox/v5/internal/cmd/str"
+	"go.foxforensics.eu/fox/v5/internal/cmd/time"
+	"go.foxforensics.eu/fox/v5/internal/sys"
 )
 
 var Usage = strings.TrimSpace(`
@@ -24,7 +24,7 @@ Example: Show help on sub commands
 Report bugs at: foxforensics.eu/issues
 `)
 
-var topics = map[string]string{
+var catalog = map[string]string{
 	"ad":   ad.Usage,
 	"cat":  cat.Usage,
 	"hash": hash.Usage,
@@ -40,7 +40,7 @@ type Help struct {
 }
 
 func (cmd *Help) Run(_ *cmd.Globals) error {
-	if v, ok := topics[strings.ToLower(cmd.Name)]; ok {
+	if v, ok := catalog[strings.ToLower(cmd.Name)]; ok {
 		sys.Usage(v)
 		return nil
 	}

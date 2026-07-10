@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/dlclark/regexp2/v2"
-	"go.foxforensics.eu/fox/v4/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/test"
 )
 
 func BenchmarkMap(b *testing.B) {

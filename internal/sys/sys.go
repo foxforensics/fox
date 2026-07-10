@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"go.foxforensics.eu/fox/v4/internal/pkg"
-	"go.foxforensics.eu/fox/v4/internal/sys/version"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/sys/version"
 	"golang.org/x/term"
 )
 
