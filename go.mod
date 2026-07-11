@@ -1,6 +1,7 @@
 module go.foxforensics.eu/fox/v5
 
 go 1.26.0
+toolchain go1.26.0
 
 require (
 	github.com/Velocidex/go-journalctl v0.0.0-20260608120136-20835635c054
