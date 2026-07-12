@@ -121,7 +121,7 @@ func newEvent(r *evtx.EventRecord) (*event.Event, error) {
 	e := &event.Event{
 		Time:     intToUTC(r.Header.FileTime),
 		Host:     getString(od, "Event.System.Computer"),
-		User:     getString(od, "Event.System.Security.UserID"),
+		User:     getAny(od, "Event.System.Security.UserID"),
 		Sequence: strconv.Itoa(getInt(od, "Event.System.EventRecordID")),
 		Source:   string(binaries.Eventlog),
 		Category: getString(od, "Event.System.Channel"),
@@ -244,6 +244,11 @@ func getInt(od *ordereddict.Dict, key string) int {
 		slog.Error(fmt.Sprintf("%s is not an int", key))
 	}
 	return v
+}
+
+func getAny(od *ordereddict.Dict, key string) string {
+	v, _ := ordereddict.GetAny(od, key)
+	return fmt.Sprintf("%v", v)
 }
 
 func floatToUTC(v float64) time.Time {

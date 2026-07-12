@@ -1,4 +1,4 @@
-package str
+package carver
 
 import (
 	"log/slog"

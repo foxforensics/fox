@@ -80,7 +80,7 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 	}
 
 	if cmd.Paths[0] == "list" {
-		db := BuildDB(3)
+		db := carver.BuildDB(3)
 
 		for _, s := range db.List() {
 			fmt.Println(s)

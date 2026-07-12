@@ -18,7 +18,7 @@ func AssertFox(b []byte) bool {
 }
 
 func FixtureMain(args ...string) ([]byte, error) {
-	v := append([]string{"run", FixtureFile("../main.go")}, args...)
+	v := append([]string{"run", FixtureFile("../../main.go")}, args...)
 
 	cmd := exec.Command("go", v...)
 
@@ -65,7 +65,7 @@ func Fixture(name string) []byte {
 }
 
 func Sample(name string) []byte {
-	buf, err := os.ReadFile(filepath.Join(getRoot(), "../../testdata/samples", name))
+	buf, err := os.ReadFile(filepath.Join(getRoot(), "../../testdata/golden", name))
 
 	if err != nil {
 		slog.Error(fmt.Sprintf("fixture: %s", err.Error()))

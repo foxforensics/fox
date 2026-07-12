@@ -8,12 +8,11 @@ import (
 	"strings"
 	"sync"
 
-	db "go.foxforensics.eu/fox/v5/internal/cmd/str"
 	fstrings "go.foxforensics.eu/strings/strings"
 )
 
 var (
-	entries db.Database
+	entries Database
 	buildDB sync.Once
 )
 
@@ -36,12 +35,12 @@ type String struct {
 
 type Carver struct {
 	opts    *Options
-	entries db.Database
+	entries Database
 }
 
 func New(opts *Options) *Carver {
 	buildDB.Do(func() {
-		entries = db.BuildDB(opts.What)
+		entries = BuildDB(opts.What)
 	})
 
 	return &Carver{
