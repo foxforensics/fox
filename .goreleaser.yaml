@@ -18,8 +18,8 @@ builds:
   - env:
       - CGO_ENABLED=0
     ldflags:
-      - -s -w -X go.foxforensics.eu/fox/v5/internal/sys/version.Number={{.Version}}
-      - -s -w -X go.foxforensics.eu/fox/v5/internal/sys/version.Commit={{.Commit}}
+      - -s -w -X go.foxforensics.eu/fox/v5/internal/pkg/version.Number={{.Version}}
+      - -s -w -X go.foxforensics.eu/fox/v5/internal/pkg/version.Commit={{.Commit}}
     goos:
       - linux
       - windows
