@@ -28,7 +28,6 @@ func TestTime(t *testing.T) {
 			"time.txt",
 			[]string{
 				"time",
-				"-s",
 				tests.FixtureFile("binaries/test.mft"),
 			},
 		},
@@ -48,24 +47,6 @@ func TestTime(t *testing.T) {
 				"time",
 				"-J",
 				tests.FixtureFile("binaries/test.lnk"),
-			},
-		},
-		{
-			"Bodyfile",
-			"time.bodyfile.csv",
-			[]string{
-				"time",
-				"-b",
-				tests.FixtureFile("binaries/test.pf"),
-			},
-		},
-		{
-			"Timesketch",
-			"time.timesketch.jsonl",
-			[]string{
-				"time",
-				"-t",
-				tests.FixtureFile("binaries/test.pf"),
 			},
 		},
 	} {

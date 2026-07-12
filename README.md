@@ -82,9 +82,9 @@ List only high entropy files:
 fox info -N6.0 ./
 ```
 
-Show entries as body file:
+Show entries as bodyfile:
 ```console
-fox time -b ./$MFT
+fox time ./$MFT
 ```
 
 Hash archive contents as MD5:

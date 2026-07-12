@@ -39,13 +39,11 @@ func TestCarve(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			var n int
 
-			crv := New(&Options{
+			for range New(&Options{
 				Min:   4,
 				Max:   256,
 				Ascii: tt.ascii,
-			})
-
-			for range crv.Carve(context.Background(), tests.Fixture(tt.file)) {
+			}).Carve(context.Background(), tests.Fixture(tt.file)) {
 				n++
 			}
 

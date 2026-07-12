@@ -1,20 +1,11 @@
 package time
 
 import (
-	"context"
-	"fmt"
-	"log/slog"
-	"slices"
 	"strings"
 
 	"go.foxforensics.eu/fox/v5/internal/cmd"
-	"go.foxforensics.eu/fox/v5/internal/cmd/time/entry"
+	"go.foxforensics.eu/fox/v5/internal/cmd/time/parser"
 	"go.foxforensics.eu/fox/v5/internal/pkg"
-	"go.foxforensics.eu/fox/v5/internal/pkg/heap"
-	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
-	"go.foxforensics.eu/fox/v5/library/binaries/bin/lnk"
-	"go.foxforensics.eu/fox/v5/library/binaries/bin/mft"
-	"go.foxforensics.eu/fox/v5/library/binaries/bin/pf"
 	"go.foxforensics.eu/fox/v5/library/formats"
 )
 
@@ -26,15 +17,11 @@ Flags:
   -j, --json               Show timeline as JSON objects
   -J, --jsonl              Show timeline as JSON lines
 
-Format flags:
-  -b, --bodyfile           Show in Body file format
-  -t, --timesketch         Show in Timesketch format
+Example: Show MFT entries as bodyfile
+  $ fox time ./$MFT
 
 Example: Show entries chronologically
   $ fox time -s ./**/*.pf
-
-Example: Show MFT entries as body file
-  $ fox time -b ./$MFT
 
 Report bugs at: foxforensics.eu/issues
 `)
@@ -43,10 +30,6 @@ type Time struct {
 	Sort  bool `short:"s"`
 	Json  bool `short:"j" xor:"json,jsonl"`
 	Jsonl bool `short:"J" xor:"json,jsonl"`
-
-	// format flags
-	Bodyfile   bool `short:"b" xor:"bodyfile,timesketch"`
-	Timesketch bool `short:"t" xor:"bodyfile,timesketch"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -66,104 +49,16 @@ func (cmd *Time) Run(fox *cmd.Globals) error {
 		return err
 	}
 
-	ch := cmd.parse(fox.Context, heaps)
+	for h := range heaps {
+		for e := range parser.New(&parser.Options{
+			Sort:    cmd.Sort,
+			Threads: fox.Threads,
+		}).Parse(fox.Context, h.Bytes()) {
+			fox.Writer.Match(formats.Auto(e, cmd.Json, cmd.Jsonl), fox.Regexp)
+		}
 
-	if cmd.Sort {
-		ch = cmd.sort(fox.Context, ch)
-	}
-
-	for e := range ch {
-		fox.Writer.Match(cmd.format(e), fox.Regexp)
+		h.Free()
 	}
 
 	return nil
-}
-
-func (cmd *Time) format(e *entry.Entry) string {
-	switch {
-	case cmd.Json:
-		return writer.ColorizeAs(formats.AsJSON(e), "json")
-	case cmd.Jsonl:
-		return writer.ColorizeAs(formats.AsJSONL(e), "json")
-	case cmd.Bodyfile:
-		return e.AsBodyfile()
-	case cmd.Timesketch:
-		return e.AsTimesketch()
-	case e.Anomaly:
-		return writer.AsBold(e.String())
-	default:
-		return e.String()
-	}
-}
-
-func (cmd *Time) parse(ctx context.Context, heaps <-chan *heap.Heap) <-chan *entry.Entry {
-	entries := make(chan *entry.Entry, 4096)
-
-	go func() {
-		defer close(entries)
-
-		var parse func(b []byte) []entry.Entry
-
-		for h := range heaps {
-			switch {
-			case mft.Detect(h.Bytes()):
-				slog.Debug("file detected as mft")
-				parse = mft.Parse
-
-			case lnk.Detect(h.Bytes()):
-				slog.Debug("file detected as lnk")
-				parse = lnk.Parse
-
-			case pf.Detect(h.Bytes()):
-				slog.Debug("file detected as pf")
-				parse = pf.Parse
-
-			default:
-				slog.Debug(fmt.Sprintf("file not supported %s", h))
-				h.Free()
-				continue
-			}
-
-			for _, e := range parse(h.Bytes()) {
-				select {
-				case entries <- &e:
-				case <-ctx.Done():
-					h.Free()
-					return
-				}
-			}
-
-			h.Free()
-		}
-	}()
-
-	return entries
-}
-
-func (cmd *Time) sort(ctx context.Context, ch <-chan *entry.Entry) <-chan *entry.Entry {
-	sorted := make(chan *entry.Entry, cap(ch))
-
-	go func() {
-		defer close(sorted)
-
-		v := make([]*entry.Entry, 0)
-
-		for e := range ch {
-			v = append(v, e)
-		}
-
-		slices.SortStableFunc(v, func(a, b *entry.Entry) int {
-			return a.SortKey().Compare(b.SortKey())
-		})
-
-		for _, e := range v {
-			select {
-			case sorted <- e:
-			case <-ctx.Done():
-				return
-			}
-		}
-	}()
-
-	return sorted
 }

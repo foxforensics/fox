@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"go.foxforensics.eu/fox/v5/library/formats"
+	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
 )
 
 var replacer = strings.NewReplacer(
@@ -28,27 +28,36 @@ type Entry struct {
 	Anomaly bool      `json:"anomaly,omitempty"`
 }
 
-type Timesketch struct {
-	Message       string `json:"message"`
-	Datetime      string `json:"datetime"`
-	TimestampDesc string `json:"timestamp_desc"`
-}
-
 func (e Entry) String() string {
-	return fmt.Sprintf("%s %s", e.SortKey().Format(time.RFC3339), e.Name)
+	s := fmt.Sprintf("0|%s|%s|%s|0|0|%d|%d|%d|%d|%d",
+		replacer.Replace(e.Name),
+		e.Inode,
+		e.Mode,
+		e.Size,
+		epoch(e.Atime),
+		epoch(e.Mtime),
+		epoch(e.Ctime),
+		epoch(e.Btime),
+	)
+
+	if e.Anomaly {
+		return writer.AsBold(s)
+	}
+
+	return s
 }
 
 func (e Entry) SortKey() time.Time {
-	if !e.Ctime.IsZero() {
-		return e.Ctime
-	}
-
 	if !e.Atime.IsZero() {
 		return e.Atime
 	}
 
 	if !e.Mtime.IsZero() {
 		return e.Mtime
+	}
+
+	if !e.Ctime.IsZero() {
+		return e.Ctime
 	}
 
 	if !e.Btime.IsZero() {
@@ -59,43 +68,7 @@ func (e Entry) SortKey() time.Time {
 	return time.Time{}
 }
 
-func (e Entry) AsBodyfile() string {
-	return fmt.Sprintf("0|%s|%s|%s|0|0|%d|%d|%d|%d|%d",
-		replacer.Replace(e.Name),
-		e.Inode,
-		e.Mode,
-		e.Size,
-		toEpoch(e.Atime),
-		toEpoch(e.Mtime),
-		toEpoch(e.Ctime),
-		toEpoch(e.Btime),
-	)
-}
-
-func (e Entry) AsTimesketch() string {
-	var sb strings.Builder
-
-	sb.WriteString(toJsonl(e.Mtime, e.Name+" was modified", "Modify time"))
-	sb.WriteString(toJsonl(e.Atime, e.Name+" was accessed", "Access time"))
-	sb.WriteString(toJsonl(e.Ctime, e.Name+" was changed", "Change time"))
-	sb.WriteString(toJsonl(e.Btime, e.Name+" was created", "Create time"))
-
-	return sb.String()
-}
-
-func toJsonl(t time.Time, msg, desc string) string {
-	if t.IsZero() {
-		return ""
-	}
-
-	return formats.AsJSONL(&Timesketch{
-		Message:       msg,
-		Datetime:      t.Format(time.RFC3339),
-		TimestampDesc: desc,
-	})
-}
-
-func toEpoch(t time.Time) int64 {
+func epoch(t time.Time) int64 {
 	if !t.IsZero() {
 		return t.Unix()
 	}

@@ -36,11 +36,6 @@ func TestHunt(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			var n int
 
-			htr := New(&Options{
-				true, // provides also uniqueness
-				1,
-			})
-
 			ctx := context.Background()
 
 			ldr := loader.New(&loader.Options{
@@ -49,7 +44,10 @@ func TestHunt(t *testing.T) {
 
 			file := tests.FixtureFile(tt.file)
 
-			for range htr.Hunt(ctx, ldr.Load(ctx, []string{file})) {
+			for range New(&Options{
+				true, // provides also uniqueness
+				1,
+			}).Hunt(ctx, ldr.Load(ctx, []string{file})) {
 				n++
 			}
 

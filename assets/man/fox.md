@@ -178,9 +178,9 @@ $ fox info -N6.0 ./
 
 :   List only high entropy files.
 
-$ fox time -b ./$MFT
+$ fox time ./$MFT
 
-:   Show entries as body file.
+:   Show entries as bodyfile.
 
 $ fox hash -Hmd5 files.7z
 

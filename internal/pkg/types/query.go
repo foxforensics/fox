@@ -11,8 +11,6 @@ import (
 	"go.foxforensics.eu/fox/v5/internal/pkg/smap"
 )
 
-const CR = '\n'
-
 var limit = regexp2.MustCompile(`^-?[0-9a-f]+[bhl]?$`)
 
 type Query struct {
@@ -135,7 +133,7 @@ func (q *Query) Reduce(b []byte) ([]byte, bool) {
 		i := x
 
 		for n := 0; i < y && n < int(q.Lines); i++ {
-			if b[i] == CR {
+			if b[i] == '\n' {
 				n++
 			}
 		}
@@ -147,7 +145,7 @@ func (q *Query) Reduce(b []byte) ([]byte, bool) {
 		i, n := y-1, 0
 
 		for ; i > x && n < int(q.Lines); i-- {
-			if b[i-1] == CR {
+			if b[i-1] == '\n' {
 				n++
 			}
 		}
@@ -171,9 +169,9 @@ func (q *Query) Reduce(b []byte) ([]byte, bool) {
 }
 
 func count(b []byte) int {
-	v := bytes.Count(b, []byte{CR})
+	v := bytes.Count(b, []byte{'\n'})
 
-	if len(b) > 0 && b[len(b)-1] != CR {
+	if len(b) > 0 && b[len(b)-1] != '\n' {
 		v++ // last line
 	}
 
