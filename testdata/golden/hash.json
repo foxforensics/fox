@@ -1,0 +1,126 @@
+{
+  "file": "testdata/corpus/binaries/fox.elf",
+  "hash": {
+    "sha256": "148f0ddec1f8f4ad3dbf4ee3831bf23a577471414ac118359914fa99f496b3e8"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/fox.exe",
+  "hash": {
+    "sha256": "cba9c220ad3d84273298c8e26bf4d8d10ab1ab977a492e0b991f58876cfd7532"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.com",
+  "hash": {
+    "sha256": "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.dd",
+  "hash": {
+    "sha256": "031d94adf2e5e99cc6cfcbda38a6407e508232ebf7543d9cdf5d5f562c642a26"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.dit",
+  "hash": {
+    "sha256": "6e08c41e9697688899b8a3718fa74ee6c5f92685e145654b5ade1858c8bc2d65"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.dll",
+  "hash": {
+    "sha256": "628c170a814c31c7b001425791430a7b8ad1ad4b525bf15d570e99f40ea30ee7"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.elog",
+  "hash": {
+    "sha256": "9042d2440120c6d0ba735932d01c268a606bdc764f79421dd36b6179ab79a1e5"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.ese",
+  "hash": {
+    "sha256": "a6b5a89e9de67ae2269f955fc42ab4ca2076434c22090ddadd215511ac1f8ee9"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.evtx",
+  "hash": {
+    "sha256": "2df9366a2ae675b7e2e1e7bfac9fb6e0f18b5e1906a3e84a1232736808b1a6ce"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.journal",
+  "hash": {
+    "sha256": "23d3bbd71db74c996402c2d536b94a5a76286b5ec2258337b94cee226b9c578f"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.lnk",
+  "hash": {
+    "sha256": "56896ace0eeab06ade57845b8a31d69ba964d714793869d02184a4cd041a044f"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.mbr",
+  "hash": {
+    "sha256": "f58ca4adc037022d6a00d87f90b9480a580a5af5cac948b28bf7d8e0793107a1"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.mft",
+  "hash": {
+    "sha256": "e348efa6ad3327e8b8b8bceddda1ad420cb8fa36bb041bfe9b4efc52e140803e"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.nil",
+  "hash": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.pf",
+  "hash": {
+    "sha256": "2addd8d31be72d5df3f4d292c5346da0c4a2eac03f375889b0601002081d56f9"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.pst",
+  "hash": {
+    "sha256": "08de0bb7a392a85f8d1b0caafccd16e59294e6b827e168782f7934da4ff5e15f"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.reg",
+  "hash": {
+    "sha256": "8f1ce3583699abfedc9d5c2bfb760d2fed2ca8f56cb21295e1c5de01378a47ee"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.rnd",
+  "hash": {
+    "sha256": "0ce64102544f75a061a5a8a7eb39f2a01c1b0948f859dc5b57d06645ae240cda"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test.tlog",
+  "hash": {
+    "sha256": "8a20680efe6572507d05661b464d93c968ffde0b753a10f7a9973bb5cfcd0500"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test32.exe",
+  "hash": {
+    "sha256": "e91e6c6673d13ef0efd5af5091f6c5bd5b55895c71cdd7ae23ca0e1b10e1a700"
+  }
+}
+{
+  "file": "testdata/corpus/binaries/test64.exe",
+  "hash": {
+    "sha256": "d526f32ec97c10f9cef71132c89d457b388711b4a4eb4168da3896fb4d45b6d0"
+  }
+}

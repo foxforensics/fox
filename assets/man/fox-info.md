@@ -1,4 +1,4 @@
-% FOX INFO(1) Version 4 | Fox Documentation
+% FOX INFO(1) Version 5 | Fox Documentation
 
 NAME
 ====
@@ -13,14 +13,10 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file infos and entropy. If the **--sort** flag is used, the files will be processed single-threaded, not _parallel_.
+Show file infos and entropy.
 
 FLAGS
 =====
-
-**-s, --sort**
-
-:   Sort files by path (slower).
 
 **-j, --json**
 
@@ -51,12 +47,12 @@ Filter Flags
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths inside archives, use the archive:file notation.
+Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths inside archives, use the archive::file notation.
 
 EXAMPLES
 ========
 
-$ fox info -sN6.0 ./
+$ fox info -N6.0 ./
 
 :   List only high entropy files.
 

@@ -1,4 +1,4 @@
-% FOX STR(1) Version 4 | Fox Documentation
+% FOX STR(1) Version 5 | Fox Documentation
 
 NAME
 ====
@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Show file string contents by carving the file(s).
+Show file string contents by carving the file(s). Please be aware that, using the **--sort** flag will buffer all found strings in memory. For large sets of data this could be very slow and take a serious amount of memory.
 
 FLAGS
 =====
@@ -52,7 +52,7 @@ Class Flags
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**. If **list** is specified as _path_, only the list of the built-in classifications will be shown. To refer to paths inside archives, use the archive:file notation.
+Globbing paths to open or '-' to read from **STDIN(4)**. If **list** is specified as _path_, only the list of the built-in classifications will be shown. To refer to paths inside archives, use the archive::file notation.
 
 EXAMPLES
 ========

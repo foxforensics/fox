@@ -3,15 +3,14 @@ package types
 import (
 	"bytes"
 	"errors"
+	"log/slog"
+	"math"
 	"strconv"
 	"strings"
 
 	"github.com/dlclark/regexp2/v2"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/smap"
-	"go.foxforensics.eu/fox/v4/internal/sys/mmap"
+	"go.foxforensics.eu/fox/v5/internal/pkg/smap"
 )
-
-const CR = '\n'
 
 var limit = regexp2.MustCompile(`^-?[0-9a-f]+[bhl]?$`)
 
@@ -29,23 +28,24 @@ type Query struct {
 	}
 }
 
-func NewQuery(s string, re *regexp2.Regexp) (*Query, error) {
+func SetQuery(q *Query, s string, re *regexp2.Regexp) error {
 	s = strings.TrimSpace(strings.ToLower(s))
 
 	neg := strings.HasPrefix(s, "-")
 
-	query := &Query{
-		Regex:  re,
-		IsHead: !neg,
-		IsTail: neg,
-	}
+	q.Regex = re
+	q.IsHead = !neg
+	q.IsTail = neg
 
 	if len(s) == 0 {
-		return query, nil // empty
+		return nil // empty
 	}
 
-	if ok, _ := limit.MatchString(s); !ok {
-		return nil, errors.New("invalid limit syntax")
+	if ok, err := limit.MatchString(s); !ok {
+		if err != nil {
+			slog.Debug(err.Error())
+		}
+		return errors.New("invalid limit syntax")
 	}
 
 	var val int64
@@ -63,21 +63,25 @@ func NewQuery(s string, re *regexp2.Regexp) (*Query, error) {
 	}
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if val < 0 {
+		if val == math.MinInt64 {
+			return errors.New("invalid limit")
+		}
+
 		val *= -1
 	}
 
 	switch {
 	case s[len(s)-1] == 'l':
-		query.Lines = uint(val)
+		q.Lines = uint(val)
 	default:
-		query.Bytes = uint(val)
+		q.Bytes = uint(val)
 	}
 
-	return query, nil
+	return nil
 }
 
 func (q *Query) Filter(s smap.SMap, n int) smap.SMap {
@@ -111,50 +115,50 @@ func (q *Query) Filter(s smap.SMap, n int) smap.SMap {
 	return r // with context
 }
 
-func (q *Query) Reduce(m mmap.MMap) mmap.MMap {
-	var a, b = 0, len(m)
+func (q *Query) Reduce(b []byte) ([]byte, bool) {
+	var x, y = 0, len(b)
 
 	if !q.IsHead && !q.IsTail {
-		return m
+		return b, false
 	}
 
 	if q.IsHead && q.Bytes > 0 {
-		b = min(int(q.Bytes), b)
+		y = min(int(q.Bytes), y)
 	}
 
 	if q.IsTail && q.Bytes > 0 {
-		a = max(len(m)-int(q.Bytes), 0)
+		x = max(len(b)-int(q.Bytes), 0)
 
 		// save last lines
-		q.Values.Bytes = a
-		q.Values.Lines = count(m) - count(m[a:])
+		q.Values.Bytes = x
+		q.Values.Lines = count(b) - count(b[x:])
 	}
 
 	if q.IsHead && q.Lines > 0 {
-		i := a
+		i := x
 
-		for n := 0; i < b && n < int(q.Lines); i++ {
-			if m[i] == CR {
+		for n := 0; i < y && n < int(q.Lines); i++ {
+			if b[i] == '\n' {
 				n++
 			}
 		}
 
-		b = min(i, b)
+		y = min(i, y)
 	}
 
 	if q.IsTail && q.Lines > 0 {
-		i, n := b-1, 0
+		i, n := y-1, 0
 
-		for ; i > a && n < int(q.Lines); i-- {
-			if m[i-1] == CR {
+		for ; i > x && n < int(q.Lines); i-- {
+			if b[i-1] == '\n' {
 				n++
 			}
 		}
 
-		a = max(i, a)
+		x = max(i, x)
 
-		if a > 0 {
-			a++ // skip linebreak
+		if x > 0 {
+			x++ // skip linebreak
 		}
 
 		if i == 0 {
@@ -162,17 +166,17 @@ func (q *Query) Reduce(m mmap.MMap) mmap.MMap {
 		}
 
 		// save last lines
-		q.Values.Bytes = a
-		q.Values.Lines = count(m) - n
+		q.Values.Bytes = x
+		q.Values.Lines = count(b) - n
 	}
 
-	return m[a:b]
+	return b[x:y], true
 }
 
-func count(m mmap.MMap) int {
-	v := bytes.Count(m, []byte{CR})
+func count(b []byte) int {
+	v := bytes.Count(b, []byte{'\n'})
 
-	if len(m) > 0 && m[len(m)-1] != CR {
+	if len(b) > 0 && b[len(b)-1] != '\n' {
 		v++ // last line
 	}
 

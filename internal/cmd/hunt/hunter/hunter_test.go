@@ -1,0 +1,59 @@
+package hunter
+
+import (
+	"context"
+	"testing"
+
+	"go.foxforensics.eu/fox/v5/internal/pkg/loader"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
+	"go.foxforensics.eu/fox/v5/internal/pkg/types"
+)
+
+func TestHunt(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		file  string
+		count int
+	}{
+		{
+			"empty",
+			"binaries/test.nil",
+			0,
+		}, {
+			"evtx",
+			"binaries/test.evtx",
+			3170,
+		}, {
+			"journal",
+			"binaries/test.journal",
+			1922,
+		}, {
+			"raw",
+			"binaries/test.dd",
+			919,
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			var n int
+
+			ctx := context.Background()
+
+			ldr := loader.New(&loader.Options{
+				Query: types.Query{},
+			})
+
+			file := tests.FixtureFile(tt.file)
+
+			for range New(&Options{
+				true, // provides also uniqueness
+				1,
+			}).Hunt(ctx, ldr.Load(ctx, []string{file})) {
+				n++
+			}
+
+			if n != tt.count {
+				t.Fatal("invalid count:", n)
+			}
+		})
+	}
+}

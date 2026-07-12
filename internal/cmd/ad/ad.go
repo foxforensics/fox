@@ -7,13 +7,13 @@ import (
 	"strings"
 
 	"go.foxforensics.eu/bootkey/bootkey"
-	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/bin/ese"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/binaries/bin/reg"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/record"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/tables"
-	"go.foxforensics.eu/fox/v4/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/cmd"
+	"go.foxforensics.eu/fox/v5/internal/cmd/ad/record"
+	"go.foxforensics.eu/fox/v5/internal/cmd/ad/tables"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/library/binaries/bin/ese"
+	"go.foxforensics.eu/fox/v5/library/binaries/bin/reg"
+	"go.foxforensics.eu/fox/v5/library/formats"
 	"go.foxforensics.eu/hashdump/extract"
 	"go.foxforensics.eu/hasher/hash"
 )
@@ -68,48 +68,46 @@ type Ad struct {
 }
 
 func (cmd *Ad) Run(fox *cmd.Globals) error {
-	cmd.Paths = append(cmd.Paths, fox.Input...)
+	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) < 2 {
-		return sys.Usage(Usage)
+		pkg.Usage(Usage)
+		return nil
 	}
 
 	if len(cmd.Paths) > 2 {
 		slog.Warn("additional paths will be ignored")
 	}
 
-	// paths will be loaded in order
-	ch, err := fox.Init(cmd.Paths, true)
+	heaps, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	defer fox.Discard()
-
-	ntds := <-ch
+	ntds := <-heaps
 
 	if ntds == nil {
 		return errors.New("required file(s) missing")
 	}
 
+	defer ntds.Free()
+
 	if !ese.Detect(ntds.Bytes()) {
 		return errors.New("invalid file format")
 	}
 
-	defer ntds.Discard()
-
-	hive := <-ch
+	hive := <-heaps
 
 	if hive == nil {
 		return errors.New("required file(s) missing")
 	}
 
+	defer hive.Free()
+
 	if !reg.Detect(hive.Bytes()) {
 		return errors.New("invalid file format")
 	}
-
-	defer hive.Discard()
 
 	if cmd.Lookup {
 		slog.Info("building tables")
@@ -194,20 +192,20 @@ func (cmd *Ad) extract(fox *cmd.Globals, k, b []byte) (int, error) {
 	}
 
 	for _, v := range a {
-		sys.Stdout.Match(cmd.format(v), fox.Regexp)
+		fox.Writer.Match(cmd.format(v), fox.Regexp)
 	}
 
 	return len(a), nil
 }
 
 func (cmd *Ad) format(a fmt.Stringer) string {
-	if v, is := a.(*record.Secret); is {
+	if v, ok := a.(*record.Secret); ok {
 		switch {
 		case cmd.LmOnly:
 			return v.LmOnly()
 		case cmd.NtOnly:
 			return v.NtOnly()
-		default:
+		case !cmd.Json && !cmd.Jsonl:
 			return v.ToNTLM(cmd.History)
 		}
 	}

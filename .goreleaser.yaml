@@ -12,13 +12,14 @@ before:
     - pandoc -s -t man assets/man/fox-hunt.md -o fox-hunt.1
     - pandoc -s -t man assets/man/fox-info.md -o fox-info.1
     - pandoc -s -t man assets/man/fox-str.md -o fox-str.1
+    - pandoc -s -t man assets/man/fox-time.md -o fox-time.1
 
 builds:
   - env:
       - CGO_ENABLED=0
     ldflags:
-      - -s -w -X go.foxforensics.eu/fox/v4/internal/sys/version.Number={{.Version}}
-      - -s -w -X go.foxforensics.eu/fox/v4/internal/sys/version.Commit={{.Commit}}
+      - -s -w -X go.foxforensics.eu/fox/v5/internal/sys/version.Number={{.Version}}
+      - -s -w -X go.foxforensics.eu/fox/v5/internal/sys/version.Commit={{.Commit}}
     goos:
       - linux
       - windows
@@ -47,6 +48,7 @@ archives:
       - fox-hunt.1
       - fox-info.1
       - fox-str.1
+      - fox-time.1
       - README.md
       - LICENSE.md
       - SECURITY.md
@@ -127,6 +129,10 @@ nfpms:
         dst: /usr/share/man/man1/fox-str.1
         file_info:
           mode: 0644
+      - src: ./fox-time.1
+        dst: /usr/share/man/man1/fox-time.1
+        file_info:
+          mode: 0644
 
 homebrew_casks:
   - url:
@@ -156,3 +162,4 @@ homebrew_casks:
       - fox-hunt.1
       - fox-info.1
       - fox-str.1
+      - fox-time.1

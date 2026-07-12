@@ -1,6 +1,7 @@
 package hunt
 
 import (
+	"context"
 	_ "embed"
 	"errors"
 	"fmt"
@@ -11,17 +12,17 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
-	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/net/schema"
-	"go.foxforensics.eu/fox/v4/internal/net/stream"
-	"go.foxforensics.eu/fox/v4/internal/net/stream/http"
-	"go.foxforensics.eu/fox/v4/internal/net/stream/mqtt"
-	"go.foxforensics.eu/fox/v4/internal/pkg/adapters/formats"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types/hunter"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/parquet"
-	"go.foxforensics.eu/fox/v4/internal/sys/receipt"
+	"go.foxforensics.eu/fox/v5/internal/cmd"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/client"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/hunter"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/muxer"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/parquet"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/rules"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/pkg/receipt"
+	"go.foxforensics.eu/fox/v5/internal/pkg/types"
+	"go.foxforensics.eu/fox/v5/library/formats"
 )
 
 var Usage = strings.TrimSpace(`
@@ -29,7 +30,7 @@ Usage: fox hunt [FLAGS...] <local|PATHS...>
 
 Flags:
   -a, --all                Show logs with all severities
-  -s, --sort               Show logs sorted by timestamp (slow)
+  -s, --sort               Show logs sorted by timestamp
   -u, --uniq               Show logs that are unique 
   -j, --json               Show logs as JSON objects
   -J, --jsonl              Show logs as JSON lines
@@ -39,17 +40,10 @@ Sigma flags:
   -R, --rule=FILE          Filter using Sigma rules file
 
 Stream flags:
-  -U, --url=SERVER         Stream events to a server or broker
-  -A, --auth=TOKEN         Use token for streaming to Splunk
-  -M, --mqtt=TOPIC         Use topic for streaming via MQTT
-
-Schema flags:
-  -e, --ecs                Use ECS schema while streaming
-  -h, --hec                Use HEC schema while streaming
-
-Aliases:
-  --elastic                Alias for -eU http://localhost:8080
-  --splunk                 Alias for -hU http://localhost:8088/...
+  -U, --url=URL            Stream events using CEF schema
+  -E, --ecs=URL            Stream events using ECS schema
+  -H, --hec=URL            Stream events using HEC schema
+  -A, --auth=TOKEN         Use auth token with HEC streaming
 
 Remarks:
   If 'local' is specified as path, built-in paths will be used.
@@ -57,25 +51,19 @@ Remarks:
 Example: Hunt down critical events
   $ fox hunt -u *.dd
 
-Example: Save all events as Parquet
-  $ fox hunt -ap *.evtx
+Example: Save local events as Parquet
+  $ fox hunt -ap local
 
-Example: Send local events to a server
-  $ fox hunt -U http://127.0.0.1:8080 local
-
-Example: Send local events to a broker
-  $ fox hunt -U tcp://127.0.0.1:1883 -M events local
+Example: Send events to an Elastic Stack
+  $ fox hunt -E http://127.0.0.1:8080 *.evtx
 
 Report bugs at: foxforensics.eu/issues
 `)
 
-//go:embed hunt.yml
-var Default []byte
-
 type Hunt struct {
 	All     bool `short:"a"`
 	Sort    bool `short:"s"`
-	Uniq    bool `short:"u" xor:"uniq,dist"`
+	Uniq    bool `short:"u"`
 	Json    bool `short:"j" xor:"json,jsonl"`
 	Jsonl   bool `short:"J" xor:"json,jsonl"`
 	Parquet bool `short:"p"`
@@ -84,44 +72,28 @@ type Hunt struct {
 	Rule []byte `short:"R" type:"filecontent"`
 
 	// stream flags
-	Url  string `short:"U"`
-	Auth string `short:"A" xor:"auth,mqtt"`
-	Mqtt string `short:"M" xor:"auth,mqtt"`
-
-	// schema flags
-	Ecs bool `short:"e" xor:"ecs,hec"`
-	Hec bool `short:"h" xor:"ecs,hec"`
-
-	// aliases
-	Elastic bool `long:"elastic" xor:"elastic,splunk"`
-	Splunk  bool `long:"splunk" xor:"elastic,splunk"`
-
-	// hidden
-	QoS      byte   `hidden:"" long:"mqtt-qos"`
-	Username string `hidden:"" long:"mqtt-username"`
-	Password string `hidden:"" long:"mqtt-password"`
+	Url  string `short:"U" xor:"url,ecs,hec"`
+	Ecs  string `short:"E" xor:"url,ecs,hec"`
+	Hec  string `short:"H" xor:"url,ecs,hec"`
+	Auth string `short:"A" and:"auth,hec"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	streamer stream.Streamer  `kong:"-"`
-	file     *parquet.Parquet `kong:"-"`
-	uniq     *types.Unique    `kong:"-"`
-	rule     sigma.Rule       `kong:"-"`
+	client  *client.Client   `kong:"-"`
+	parquet *parquet.Parquet `kong:"-"`
+	unique  *types.Unique    `kong:"-"`
+	rule    sigma.Rule       `kong:"-"`
 }
 
 func (cmd *Hunt) Validate() error {
-	if cmd.Hec && len(cmd.Auth) == 0 && len(cmd.Mqtt) == 0 {
+	if len(cmd.Hec) > 0 && len(cmd.Auth) == 0 {
 		return errors.New("auth required")
 	}
 
-	if cmd.Hec && len(cmd.Auth) > 0 && len(cmd.Mqtt) > 0 {
+	if len(cmd.Hec) == 0 && len(cmd.Auth) > 0 {
 		return errors.New("no auth required")
-	}
-
-	if cmd.QoS > 2 {
-		return errors.New("mqtt qos invalid")
 	}
 
 	return nil
@@ -131,57 +103,13 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
 
 	if cmd.Uniq {
-		cmd.uniq = types.NewUnique()
+		cmd.unique = types.NewUnique()
 	}
 
 	if cmd.Parquet {
-		cmd.file, err = parquet.New(fmt.Sprintf("fox_hunt_%s",
+		cmd.parquet, err = parquet.New(fmt.Sprintf("fox_hunt_%s",
 			time.Now().UTC().Format("20060102150405"),
 		))
-
-		if err != nil {
-			return err
-		}
-	}
-
-	if cmd.Elastic {
-		cmd.Url = stream.Elastic
-		cmd.Ecs = true
-	}
-
-	if cmd.Splunk {
-		cmd.Url = stream.Splunk
-		cmd.Hec = true
-	}
-
-	if len(cmd.Url) > 0 {
-		var shm schema.Schema
-
-		switch {
-		case cmd.Hec:
-			shm = schema.Hec
-		case cmd.Ecs:
-			shm = schema.Ecs
-		default:
-			shm = schema.Raw
-		}
-
-		if len(cmd.Mqtt) > 0 {
-			cmd.streamer, err = mqtt.Create(&mqtt.Options{
-				Url:      cmd.Url,
-				Topic:    cmd.Mqtt,
-				Username: cmd.Username,
-				Password: cmd.Password,
-				QoS:      cmd.QoS,
-				Schema:   shm,
-			})
-		} else {
-			cmd.streamer, err = http.Create(&http.Options{
-				Url:    cmd.Url,
-				Token:  cmd.Auth,
-				Schema: shm,
-			})
-		}
 
 		if err != nil {
 			return err
@@ -191,31 +119,47 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if len(cmd.Rule) > 0 {
 		cmd.rule, err = sigma.ParseRule(cmd.Rule)
 	} else {
-		cmd.rule, err = sigma.ParseRule(Default)
+		cmd.rule, err = sigma.ParseRule(rules.Critical)
+	}
+
+	if err != nil {
+		return err
+	}
+
+	switch {
+	case len(cmd.Url) > 0:
+		cmd.client, err = client.Raw(cmd.Url)
+	case len(cmd.Ecs) > 0:
+		cmd.client, err = client.Ecs(cmd.Ecs)
+	case len(cmd.Hec) > 0:
+		cmd.client, err = client.Hec(cmd.Hec, cmd.Auth)
 	}
 
 	return err
 }
 
 func (cmd *Hunt) Run(fox *cmd.Globals) error {
-	cmd.Paths = append(cmd.Paths, fox.Input...)
+	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		return sys.Usage(Usage)
+		pkg.Usage(Usage)
+		return nil
 	}
 
 	if cmd.Paths[0] == "local" {
 		cmd.Paths = append(hunter.Local, cmd.Paths[1:]...)
 	}
 
-	ch, err := fox.Init(cmd.Paths, true)
+	heaps, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	defer fox.Discard()
 	defer cmd.discard(fox)
+
+	sig := evaluator.ForRule(cmd.rule)
+	mux := muxer.New(fox.Context, hunter.Scale)
 
 	slog.Info("hunt: started")
 	slog.Debug(fmt.Sprintf("hunt: using %d thread(s)", fox.Threads))
@@ -225,22 +169,29 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 		slog.Warn("hunt: rule is not officially supported!")
 	}
 
-	if cmd.file != nil {
-		slog.Debug(fmt.Sprintf("hunt: using storage %s", cmd.file))
+	if cmd.client != nil {
+		slog.Debug(fmt.Sprintf("hunt: streaming to %s", cmd.client))
+		mux.AddHandler(cmd.client.Send)
 	}
 
-	if cmd.streamer != nil {
-		slog.Debug(fmt.Sprintf("hunt: streaming as %s", cmd.streamer))
+	if cmd.parquet != nil {
+		slog.Debug(fmt.Sprintf("hunt: using storage %s", cmd.parquet))
+		mux.AddHandler(cmd.parquet.Write)
+	}
+
+	if !fox.Quiet {
+		mux.AddHandler(func(_ context.Context, e *event.Event) error {
+			fox.Writer.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
+			return nil
+		})
 	}
 
 	var n int64
 
-	var sig = evaluator.ForRule(cmd.rule)
-
 	for e := range hunter.New(&hunter.Options{
 		Sort:    cmd.Sort,
 		Threads: fox.Threads,
-	}).Hunt(fox.Context, ch) {
+	}).Hunt(fox.Context, heaps) {
 		m, err := sig.Matches(fox.Context, e.Fields)
 
 		if err != nil {
@@ -248,7 +199,7 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 			continue // not successful
 		}
 
-		if cmd.uniq != nil && !cmd.uniq.Is(e.String()) {
+		if cmd.unique != nil && !cmd.unique.Is(e.String()) {
 			continue // not unique
 		}
 
@@ -256,55 +207,34 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 			continue // not matched
 		}
 
-		if cmd.file == nil {
-			sys.Stdout.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
-		} else {
-			if err = cmd.file.Write(e); err != nil {
-				slog.Error(err.Error())
-			}
-		}
-
-		if cmd.streamer != nil {
-			err = cmd.streamer.Stream(fox.Context, e)
-
-			if err != nil {
-				slog.Error(err.Error())
-			}
-		}
-
+		mux.Handle(fox.Context, e)
 		n++
 	}
 
 	slog.Info("hunt: finished")
 	slog.Info(fmt.Sprintf("hunt: found %d event(s)", n))
 
-	return nil
+	return mux.Wait()
 }
 
 func (cmd *Hunt) discard(fox *cmd.Globals) {
-	if cmd.streamer != nil {
-		err := cmd.streamer.Close()
-
-		if err != nil {
-			slog.Error(err.Error())
-		}
+	if cmd.parquet == nil {
+		return
 	}
 
-	if cmd.file != nil {
-		err := cmd.file.Close()
+	err := cmd.parquet.Close()
 
-		if err != nil {
-			slog.Error(err.Error())
-		}
+	if err != nil {
+		slog.Error(err.Error())
+	}
 
-		if fox.NoReceipt {
-			return
-		}
+	if fox.NoReceipt {
+		return
+	}
 
-		err = receipt.Generate(cmd.file.String())
+	err = receipt.Generate(cmd.parquet.String())
 
-		if err != nil {
-			slog.Error(err.Error())
-		}
+	if err != nil {
+		slog.Error(err.Error())
 	}
 }

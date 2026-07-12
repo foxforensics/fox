@@ -1,14 +1,15 @@
 package cat
 
 import (
+	"log/slog"
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"go.foxforensics.eu/fox/v4/internal/cmd"
-	"go.foxforensics.eu/fox/v4/internal/pkg/types"
-	buffer2 "go.foxforensics.eu/fox/v4/internal/pkg/types/buffer"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
+	"go.foxforensics.eu/fox/v5/internal/cmd"
+	buffer2 "go.foxforensics.eu/fox/v5/internal/cmd/cat/buffer"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/pkg/types"
+	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
 )
 
 var Usage = strings.TrimSpace(`
@@ -65,27 +66,26 @@ func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Cat) Run(fox *cmd.Globals) error {
-	cmd.Paths = append(cmd.Paths, fox.Input...)
+	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		return sys.Usage(Usage)
+		pkg.Usage(Usage)
+		return nil
 	}
-
-	ch, err := fox.Init(cmd.Paths, cmd.Text || cmd.Hex)
-
-	if err != nil {
-		return err
-	}
-
-	defer fox.Discard()
 
 	// apply command specific params
 	fox.Query.Before = cmd.Before
 	fox.Query.After = cmd.After
 
-	for h := range ch {
+	heaps, err := fox.Init(cmd.Paths, cmd.Text || cmd.Hex)
+
+	if err != nil {
+		return err
+	}
+
+	for h := range heaps {
 		if !fox.NoPretty {
-			sys.Stdout.Header(h.String())
+			fox.Writer.FileHeader(h.String())
 		}
 
 		if (h.IsText() && !cmd.Hex) || cmd.Text {
@@ -94,7 +94,7 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 			cmd.renderHex(fox, h.Bytes())
 		}
 
-		h.Discard()
+		h.Free()
 	}
 
 	return nil
@@ -113,15 +113,15 @@ func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
 		}
 
 		if fox.Regexp != nil && l.Line != buffer2.Sep {
-			s = terminal.MarkMatch(s, fox.Regexp)
+			s = writer.MarkMatch(s, fox.Regexp)
 		}
 
 		if !fox.NoPretty {
-			sys.Stdout.Write("%s %s", terminal.AsGray(l.Line), s)
+			fox.Writer.Write("%s %s", writer.AsGray(l.Line), s)
 		} else if l.Line == buffer2.Sep {
-			sys.Stdout.Write(terminal.AsGray(buffer2.Sep))
+			fox.Writer.WriteString(writer.AsGray(buffer2.Sep))
 		} else {
-			sys.Stdout.Write(s)
+			fox.Writer.WriteString(s)
 		}
 	}
 }
@@ -135,26 +135,29 @@ func (cmd *Cat) renderHex(fox *cmd.Globals, b []byte) {
 		Pretty: !fox.NoPretty,
 	}, fox).Lines {
 		if fox.Regexp != nil {
-			if ok, _ := fox.Regexp.MatchString(l.Values); !ok {
+			if ok, err := fox.Regexp.MatchString(l.Values); !ok {
+				if err != nil {
+					slog.Error(err.Error())
+				}
 				continue // not matched afterward
 			}
 		}
 
-		l.Values = terminal.MarkMatch(l.Values, fox.Regexp)
+		l.Values = writer.MarkMatch(l.Values, fox.Regexp)
 
 		// cut similar lines for better readability
 		if !fox.NoPretty && l.Values == lastHex {
 			if !wasCut {
 				wasCut = true
-				sys.Stdout.Write(terminal.AsGray("*"))
+				fox.Writer.WriteString(writer.AsGray("*"))
 			}
 			continue
 		}
 
 		if !fox.NoPretty {
-			sys.Stdout.Write("%s  %s%s", terminal.AsGray(l.Address), l.Values, l.String)
+			fox.Writer.Write("%s  %s%s", writer.AsGray(l.Address), l.Values, l.String)
 		} else {
-			sys.Stdout.Write(l.Values)
+			fox.Writer.WriteString(l.Values)
 		}
 
 		lastHex, wasCut = l.Values, false

@@ -1,0 +1,15 @@
+ FOX  testdata > corpus > texts > test.txt
+00000000  ASCII string
+0000000d  Unicode 🦊 string
+00000021  127.0.0.1
+0000002b  2001:0db8:85a3:08d3:1319:8a2e:0370:7344
+00000053  12:34:56:78:90:ab
+00000065  foxforensics.eu
+00000075  noreply@foxforensics.eu
+0000008d  https://foxforensics.eu
+000000a5  \\fox\forensics\dev.txt
+000000bd  550e8400-e29b-11d4-a716-446655440000
+000000e2  002130-563959-533643-315590-484044-259380-247291-123456
+0000011a  S-1-5-21-3623811015-3361044348-30300820-1013
+00000147  \\?\C:\Windows\System32\winevt\Logs
+0000016b  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion

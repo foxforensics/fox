@@ -1,4 +1,4 @@
-% FOX(1) Version 4 | Fox Documentation
+% FOX(1) Version 5 | Fox Documentation
 
 NAME
 ====
@@ -36,6 +36,10 @@ If no command is passed, then the **cat** command will be used by default and th
 
 :   Show file infos and entropy.
 
+**t, time**
+
+:   Show file super timeline.
+
 **h, hash**
 
 :   Show file hashes and checksums.
@@ -71,42 +75,42 @@ Process Flags
 
 **-T, --threads**=_cores_
 
-:   Use _cores_ for parallel threads. The default is the number of logical CPUs available for the process.
+:   Use _cores_ for parallel threads. The default is the number of logical CPUs available for the process. This flag only affects file processing, not file discovery.
 
 **-P, --password**=_text_
 
-:   Use _text_ to decrypt encrypted archives. This is only supported for **7z**, **Rar** and **Zip** archives.
+:   Use _text_ as password to decrypt encrypted archives. Use '-' to read the password securely from **STDIN(4)**. The password can also be set as environment variable. This is only supported for **7z**, **Rar** and **Zip** archives.
 
 Disable Flags
 -------------
 
 **-r, --raw**[=_level_]
 
-:   Don't process files (**r**/**rr**/**rrr**). Level _1_ implies **--no-convert**. Level _2_ implies **--no-deflate** and **--no-extract** additional. Level _3_ implies **--no-strict** additional.
+:   Don't process files (**r**/**rr**/**rrr**/**rrrr**). Level _1_ implies **--no-pretty**. Level _2_ implies **--no-convert**. Level _3_ implies **--no-deflate** and **--no-extract** additional. Level _4_ implies **--no-protect** additional.
 
 **-q, --quiet**
 
 :   Don't print anything.
 
-**-n, --no-pretty**
+**--no-pretty**
 
-:   Don't prettify the output. Header line and colors will be turned off.
-
-**--no-strict**
-
-:   Don't stop on parser errors (**-rrr**).
-
-**--no-deflate**
-
-:   Don't deflate automatically (**-rr**).
-
-**--no-extract**
-
-:   Don't extract automatically (**-rr**).
+:   Don't prettify the output (**-r**). Header line and colors will be turned off.
 
 **--no-convert**
 
-:   Don't convert automatically (**-r**).
+:   Don't convert automatically (**-rr**).
+
+**--no-deflate**
+
+:   Don't deflate automatically (**-rrr**).
+
+**--no-extract**
+
+:   Don't extract automatically (**-rrr**).
+
+**--no-protect**
+
+:   Don't apply any loader protection (**-rrrr**). This effectively removes all resource limiting safeguards from the loading pipeline, which are in place to mitigate malicious crafted files like zip bombs.
 
 **--no-receipt**
 
@@ -134,7 +138,7 @@ Standard Flags
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths inside archives, use the archive:file notation. 
+Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths inside archives, use the archive::file notation. 
 
 ENVIRONMENT
 ===========
@@ -170,9 +174,13 @@ $ fox str -w sample.exe
 
 :   Show all strings in a binary.
 
-$ fox info -sN6.0 ./
+$ fox info -N6.0 ./
 
 :   List only high entropy files.
+
+$ fox time ./$MFT
+
+:   Show entries as bodyfile.
 
 $ fox hash -Hmd5 files.7z
 
@@ -201,4 +209,4 @@ Please visit the project's homepage at:
 SEE ALSO
 ========
 
-**cat(1)**, **grep(1)**, **head(1)**, **tail(1)**, **uniq(1)**, **wc(1)**, **strings(1)**, **hexdump(1)**, **sha256sum(1)**
+**cat(1)**, **grep(1)**, **head(1)**, **tail(1)**, **sort(1)**, **uniq(1)**, **wc(1)**, **strings(1)**, **hexdump(1)**, **sha256sum(1)**

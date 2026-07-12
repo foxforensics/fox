@@ -2,13 +2,15 @@ package str
 
 import (
 	"errors"
+	"fmt"
+	"log/slog"
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"go.foxforensics.eu/fox/v4/internal/cmd"
-	carver2 "go.foxforensics.eu/fox/v4/internal/pkg/types/carver"
-	"go.foxforensics.eu/fox/v4/internal/sys"
-	"go.foxforensics.eu/fox/v4/internal/sys/terminal"
+	"go.foxforensics.eu/fox/v5/internal/cmd"
+	"go.foxforensics.eu/fox/v5/internal/cmd/str/carver"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
 )
 
 var Usage = strings.TrimSpace(`
@@ -70,37 +72,36 @@ func (cmd *Str) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 }
 
 func (cmd *Str) Run(fox *cmd.Globals) error {
-	cmd.Paths = append(cmd.Paths, fox.Input...)
+	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		return sys.Usage(Usage)
+		pkg.Usage(Usage)
+		return nil
 	}
 
 	if cmd.Paths[0] == "list" {
-		db := carver2.BuildDB(3)
+		db := carver.BuildDB(3)
 
 		for _, s := range db.List() {
-			sys.Stdout.Write(s)
+			fmt.Println(s)
 		}
 
 		// exit early
 		return nil
 	}
 
-	ch, err := fox.Init(cmd.Paths, true)
+	heaps, err := fox.Init(cmd.Paths, true)
 
 	if err != nil {
 		return err
 	}
 
-	defer fox.Discard()
-
-	for h := range ch {
+	for h := range heaps {
 		if !fox.NoPretty {
-			sys.Stdout.Header(h.String())
+			fox.Writer.FileHeader(h.String())
 		}
 
-		for str := range carver2.New(&carver2.Options{
+		for s := range carver.New(&carver.Options{
 			Min:     cmd.Min,
 			Max:     cmd.Max,
 			Ascii:   cmd.Ascii,
@@ -111,25 +112,28 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 			Threads: fox.Threads,
 		}).Carve(fox.Context, h.Bytes()) {
 			if fox.Regexp != nil {
-				if ok, _ := fox.Regexp.MatchString(str.Value); !ok {
+				if ok, err := fox.Regexp.MatchString(s.Value); !ok {
+					if err != nil {
+						slog.Error(err.Error())
+					}
 					continue // not matched afterward
 				}
 			}
 
-			str.Value = terminal.MarkMatch(str.Value, fox.Regexp)
+			s.Value = writer.MarkMatch(s.Value, fox.Regexp)
 
-			if !fox.NoPretty && len(str.Classes) > 0 {
-				sys.Stdout.Write("%s  %s [%s]", terminal.AsGray(str.Address), str.Value, terminal.AsBold(str.Classes))
+			if !fox.NoPretty && len(s.Classes) > 0 {
+				fox.Writer.Write("%s  %s [%s]", writer.AsGray(s.Address), s.Value, writer.AsBold(s.Classes))
 			} else if !fox.NoPretty {
-				sys.Stdout.Write("%s  %s", terminal.AsGray(str.Address), str.Value)
-			} else if len(str.Classes) > 0 {
-				sys.Stdout.Write("%s [%s]", str.Value, str.Classes)
+				fox.Writer.Write("%s  %s", writer.AsGray(s.Address), s.Value)
+			} else if len(s.Classes) > 0 {
+				fox.Writer.Write("%s [%s]", s.Value, s.Classes)
 			} else {
-				sys.Stdout.Write(str.Value)
+				fox.Writer.WriteString(s.Value)
 			}
 		}
 
-		h.Discard()
+		h.Free()
 	}
 
 	return nil
