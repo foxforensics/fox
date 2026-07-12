@@ -249,7 +249,7 @@ func getInt(od *ordereddict.Dict, key string) int {
 func getAny(od *ordereddict.Dict, key string) string {
 	v, ok := ordereddict.GetAny(od, key)
 	if !ok {
-		return ""
+		return "" // fallback for nil
 	}
 	return fmt.Sprintf("%v", v)
 }
