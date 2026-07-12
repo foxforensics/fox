@@ -247,7 +247,10 @@ func getInt(od *ordereddict.Dict, key string) int {
 }
 
 func getAny(od *ordereddict.Dict, key string) string {
-	v, _ := ordereddict.GetAny(od, key)
+	v, ok := ordereddict.GetAny(od, key)
+	if !ok {
+		return ""
+	}
 	return fmt.Sprintf("%v", v)
 }
 
