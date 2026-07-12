@@ -1,0 +1,21 @@
+  10733l    2.2m  6.8e [■■■■■■■■■■■■■■  ] testdata/corpus/binaries/fox.elf
+  11217l    1.5m  6.1e [■■■■■■■■■■■■    ] testdata/corpus/binaries/fox.exe
+      0l     68b  4.9e [■■■■■■■■■■      ] testdata/corpus/binaries/test.com
+   4836l    3.8m  2.4e [■■■■■           ] testdata/corpus/binaries/test.dd
+  33864l   10.0m  4.1e [■■■■■■■■        ] testdata/corpus/binaries/test.dit
+      3l    1.0k  2.0e [■■■■            ] testdata/corpus/binaries/test.dll
+    661l   68.6k  6.8e [■■■■■■■■■■■■■■  ] testdata/corpus/binaries/test.elog
+  27732l   32.1m  0.8e [■■              ] testdata/corpus/binaries/test.ese
+   9413l    3.1m  4.3e [■■■■■■■■■       ] testdata/corpus/binaries/test.evtx
+   1606l    8.0m  1.4e [■■■             ] testdata/corpus/binaries/test.journal
+      0l    601b  5.2e [■■■■■■■■■■      ] testdata/corpus/binaries/test.lnk
+      0l    512b  5.9e [■■■■■■■■■■■■    ] testdata/corpus/binaries/test.mbr
+   4403l    5.8m  2.3e [■■■■■           ] testdata/corpus/binaries/test.mft
+      0l      0b  0.0e [                ] testdata/corpus/binaries/test.nil
+    455l   62.8k  4.2e [■■■■■■■■        ] testdata/corpus/binaries/test.pf
+   1811l  761.0k  6.5e [■■■■■■■■■■■■■   ] testdata/corpus/binaries/test.pst
+   5838l    2.5m  4.4e [■■■■■■■■■       ] testdata/corpus/binaries/test.reg
+     12l    4.0k  8.0e [■■■■■■■■■■■■■■■■] testdata/corpus/binaries/test.rnd
+   1075l  256.0k  6.7e [■■■■■■■■■■■■■   ] testdata/corpus/binaries/test.tlog
+      1l    1.0k  1.4e [■■■             ] testdata/corpus/binaries/test32.exe
+      1l    1.0k  1.5e [■■■             ] testdata/corpus/binaries/test64.exe
