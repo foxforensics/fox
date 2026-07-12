@@ -33,7 +33,7 @@ func FixtureFile(name string) string {
 		return ""
 	}
 
-	v, err := filepath.Rel(d, filepath.Join(getRoot(), "../../testdata", name))
+	v, err := filepath.Rel(d, filepath.Join(getRoot(), "../../testdata/corpus", name))
 
 	if err != nil {
 		slog.Error(fmt.Sprintf("fixture: %s", err.Error()))
@@ -65,7 +65,7 @@ func Fixture(name string) []byte {
 }
 
 func Sample(name string) []byte {
-	buf, err := os.ReadFile(filepath.Join(getRoot(), "../test/samples", name))
+	buf, err := os.ReadFile(filepath.Join(getRoot(), "../../testdata/samples", name))
 
 	if err != nil {
 		slog.Error(fmt.Sprintf("fixture: %s", err.Error()))
