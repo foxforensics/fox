@@ -8,10 +8,9 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v5/internal/cmd"
-	"go.foxforensics.eu/fox/v5/internal/pkg/str"
-	"go.foxforensics.eu/fox/v5/internal/pkg/str/carver"
-	"go.foxforensics.eu/fox/v5/internal/sys"
-	"go.foxforensics.eu/fox/v5/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/cmd/str/carver"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
 )
 
 var Usage = strings.TrimSpace(`
@@ -76,12 +75,12 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		sys.Usage(Usage)
+		pkg.Usage(Usage)
 		return nil
 	}
 
 	if cmd.Paths[0] == "list" {
-		db := str.BuildDB(3)
+		db := BuildDB(3)
 
 		for _, s := range db.List() {
 			fmt.Println(s)

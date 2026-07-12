@@ -1,3 +1,0 @@
-[submodule "corpus"]
-	path = testdata
-	url = https://github.com/foxforensics/corpus.git

@@ -12,7 +12,7 @@ import (
 
 	"github.com/Velocidex/go-journalctl/parser"
 	"github.com/Velocidex/ordereddict"
-	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/event"
 	"go.foxforensics.eu/fox/v5/library"
 	"go.foxforensics.eu/fox/v5/library/binaries"
 	"golang.org/x/text/cases"

@@ -1,7 +1,7 @@
 package raw
 
 import (
-	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/event"
 )
 
 func Apply(evt *event.Event) ([]byte, error) {

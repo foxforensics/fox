@@ -6,7 +6,7 @@ import (
 	"errors"
 
 	"github.com/rasky/go-lzo"
-	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 	"go.foxforensics.eu/fox/v5/library"
 )
 
@@ -38,7 +38,7 @@ func Deflate(b []byte) ([]byte, error) {
 	}
 
 	// prevent zip bombs, that deflate exorbitant amounts of data
-	m := len(b) * sys.MaxFactor
+	m := len(b) * pkg.MaxFactor
 
 	body := b[head:end]
 

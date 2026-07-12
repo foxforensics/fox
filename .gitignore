@@ -45,4 +45,4 @@ go.work.sum
 .DS_Store
 
 # Test corpus
-testdata/
+testdata/corpus/

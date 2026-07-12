@@ -14,11 +14,11 @@ import (
 	"github.com/dlclark/regexp2/v2"
 	"github.com/fatih/color"
 	"go.foxforensics.eu/fox/v5/internal/pkg"
-	"go.foxforensics.eu/fox/v5/internal/sys"
-	"go.foxforensics.eu/fox/v5/internal/sys/heap"
-	"go.foxforensics.eu/fox/v5/internal/sys/loader"
-	"go.foxforensics.eu/fox/v5/internal/sys/memory"
-	"go.foxforensics.eu/fox/v5/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/pkg/heap"
+	loader2 "go.foxforensics.eu/fox/v5/internal/pkg/loader"
+	"go.foxforensics.eu/fox/v5/internal/pkg/memory"
+	"go.foxforensics.eu/fox/v5/internal/pkg/types"
+	writer2 "go.foxforensics.eu/fox/v5/internal/pkg/writer"
 )
 
 var Usage = strings.TrimSpace(`
@@ -111,10 +111,10 @@ type Globals struct {
 	// internal
 	Context context.Context    `kong:"-"`
 	Cancel  context.CancelFunc `kong:"-"`
-	Writer  *writer.Writer     `kong:"-"`
+	Writer  *writer2.Writer    `kong:"-"`
 	Regexp  *regexp2.Regexp    `kong:"-"`
-	Loader  *loader.Loader     `kong:"-"`
-	Query   pkg.Query          `kong:"-"`
+	Loader  *loader2.Loader    `kong:"-"`
+	Query   types.Query        `kong:"-"`
 	Paths   []string           `kong:"-"`
 }
 
@@ -143,23 +143,23 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 
 	// parse paths
 	if len(fox.In) > 0 {
-		fox.Paths = sys.ParseList(fox.In)
+		fox.Paths = pkg.ParseList(fox.In)
 	}
 
 	// redirect output
 	if len(fox.Out) > 0 {
-		f, err := sys.CreateFile(fox.Out)
+		f, err := pkg.CreateFile(fox.Out)
 
 		if err != nil {
 			return nil, err
 		}
 
 		fox.NoPretty = true
-		fox.Writer = writer.New(f)
+		fox.Writer = writer2.New(f)
 	} else if fox.Quiet {
-		fox.Writer = writer.New(io.Discard)
+		fox.Writer = writer2.New(io.Discard)
 	} else {
-		fox.Writer = writer.New(os.Stdout)
+		fox.Writer = writer2.New(os.Stdout)
 	}
 
 	if len(fox.Find) > 0 {
@@ -170,7 +170,7 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 		fox.Regexp.MatchTimeout = time.Minute // default
 	}
 
-	err = pkg.SetQuery(&fox.Query, fox.Limit, fox.Regexp)
+	err = types.SetQuery(&fox.Query, fox.Limit, fox.Regexp)
 
 	if err != nil {
 		return nil, err
@@ -194,27 +194,27 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	}
 
 	if len(fox.Lexer) > 0 {
-		writer.Lexer = fox.Lexer
+		writer2.Lexer = fox.Lexer
 	}
 
 	if len(fox.Style) > 0 {
-		writer.Style = fox.Style
+		writer2.Style = fox.Style
 	}
 
 	if !fox.NoDeflate {
-		loader.RegisterDeflates()
+		loader2.RegisterDeflates()
 	}
 
 	if !fox.NoExtract {
-		loader.RegisterExtracts()
+		loader2.RegisterExtracts()
 	}
 
 	if !fox.NoConvert {
-		loader.RegisterConverts()
+		loader2.RegisterConverts()
 	}
 
 	if !fox.NoPretty {
-		loader.RegisterFormats()
+		loader2.RegisterFormats()
 	} else {
 		color.NoColor = true // turn off color package
 	}
@@ -224,12 +224,12 @@ func (fox *Globals) Init(args []string, raw bool) (<-chan *heap.Heap, error) {
 	}
 
 	if fox.Password == "-" {
-		if fox.Password, err = sys.Password(); err != nil {
+		if fox.Password, err = pkg.Password(); err != nil {
 			return nil, err
 		}
 	}
 
-	fox.Loader = loader.New(&loader.Options{
+	fox.Loader = loader2.New(&loader2.Options{
 		Query:    fox.Query,
 		Protect:  !fox.NoProtect,
 		Password: fox.Password,

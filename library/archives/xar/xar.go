@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/korylprince/goxar"
-	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 	"go.foxforensics.eu/fox/v5/library"
 )
 
@@ -58,7 +58,7 @@ func extractFile(f *xar.File, root string, size int) (e library.Chunk, err error
 		}
 	}()
 
-	e.Path = sys.JoinPart(root, f.Name)
+	e.Path = pkg.JoinPart(root, f.Name)
 	e.Data, err = library.ReadMax(r, size)
 
 	return e, err

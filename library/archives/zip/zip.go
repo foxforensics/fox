@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"strings"
 
-	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 	"go.foxforensics.eu/fox/v5/library"
 	"go.foxforensics.eu/fox/v5/library/archives"
 	"go.foxforensics.eu/go-zip/zip"
@@ -61,7 +61,7 @@ func Extract(b []byte, root, pass string) (e []library.Chunk) {
 		}
 
 		e = append(e, library.Chunk{
-			Path: sys.JoinPart(root, f.Name),
+			Path: pkg.JoinPart(root, f.Name),
 			Data: buf,
 		})
 	}

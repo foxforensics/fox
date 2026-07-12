@@ -6,10 +6,10 @@ import (
 
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v5/internal/cmd"
+	buffer2 "go.foxforensics.eu/fox/v5/internal/cmd/cat/buffer"
 	"go.foxforensics.eu/fox/v5/internal/pkg"
-	"go.foxforensics.eu/fox/v5/internal/pkg/cat/buffer"
-	"go.foxforensics.eu/fox/v5/internal/sys"
-	"go.foxforensics.eu/fox/v5/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/pkg/types"
+	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
 )
 
 var Usage = strings.TrimSpace(`
@@ -49,12 +49,12 @@ type Cat struct {
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	uniq *pkg.Unique `kong:"-"`
+	uniq *types.Unique `kong:"-"`
 }
 
 func (cmd *Cat) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	if cmd.Uniq {
-		cmd.uniq = pkg.NewUnique()
+		cmd.uniq = types.NewUnique()
 	}
 
 	if cmd.Context > 0 {
@@ -69,7 +69,7 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		sys.Usage(Usage)
+		pkg.Usage(Usage)
 		return nil
 	}
 
@@ -101,7 +101,7 @@ func (cmd *Cat) Run(fox *cmd.Globals) error {
 }
 
 func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
-	for l := range buffer.Text(&buffer.TextContext{
+	for l := range buffer2.Text(&buffer2.TextContext{
 		Parent: fox.Context,
 		Data:   b,
 		Hint:   hint,
@@ -112,14 +112,14 @@ func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
 			continue // not unique
 		}
 
-		if fox.Regexp != nil && l.Line != buffer.Sep {
+		if fox.Regexp != nil && l.Line != buffer2.Sep {
 			s = writer.MarkMatch(s, fox.Regexp)
 		}
 
 		if !fox.NoPretty {
 			fox.Writer.Write("%s %s", writer.AsGray(l.Line), s)
-		} else if l.Line == buffer.Sep {
-			fox.Writer.WriteString(writer.AsGray(buffer.Sep))
+		} else if l.Line == buffer2.Sep {
+			fox.Writer.WriteString(writer.AsGray(buffer2.Sep))
 		} else {
 			fox.Writer.WriteString(s)
 		}
@@ -129,7 +129,7 @@ func (cmd *Cat) renderText(fox *cmd.Globals, b []byte, hint string) {
 func (cmd *Cat) renderHex(fox *cmd.Globals, b []byte) {
 	lastHex, wasCut := "", false
 
-	for l := range buffer.Hex(&buffer.HexContext{
+	for l := range buffer2.Hex(&buffer2.HexContext{
 		Parent: fox.Context,
 		Data:   b,
 		Pretty: !fox.NoPretty,

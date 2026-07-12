@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/secDre4mer/go-cab"
-	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 	"go.foxforensics.eu/fox/v5/library"
 )
 
@@ -48,7 +48,7 @@ func Extract(b []byte, root, _ string) (e []library.Chunk) {
 		}
 
 		e = append(e, library.Chunk{
-			Path: sys.JoinPart(root, f.Name),
+			Path: pkg.JoinPart(root, f.Name),
 			Data: buf,
 		})
 	}

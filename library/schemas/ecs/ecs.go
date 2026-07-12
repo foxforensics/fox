@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
-	"go.foxforensics.eu/fox/v5/internal/sys/version"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/pkg/version"
 	"go.foxforensics.eu/fox/v5/library/binaries"
 	"go.foxforensics.eu/fox/v5/library/formats"
 	"go.foxforensics.eu/hasher/hash"

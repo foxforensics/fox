@@ -13,15 +13,15 @@ import (
 	"github.com/bradleyjkemp/sigma-go"
 	"github.com/bradleyjkemp/sigma-go/evaluator"
 	"go.foxforensics.eu/fox/v5/internal/cmd"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/client"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/hunter"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/muxer"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/parquet"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/rules"
 	"go.foxforensics.eu/fox/v5/internal/pkg"
-	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/client"
-	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
-	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/hunter"
-	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/muxer"
-	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/parquet"
-	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/rules"
-	"go.foxforensics.eu/fox/v5/internal/sys"
-	"go.foxforensics.eu/fox/v5/internal/sys/receipt"
+	"go.foxforensics.eu/fox/v5/internal/pkg/receipt"
+	"go.foxforensics.eu/fox/v5/internal/pkg/types"
 	"go.foxforensics.eu/fox/v5/library/formats"
 )
 
@@ -83,7 +83,7 @@ type Hunt struct {
 	// internal
 	client  *client.Client   `kong:"-"`
 	parquet *parquet.Parquet `kong:"-"`
-	unique  *pkg.Unique      `kong:"-"`
+	unique  *types.Unique    `kong:"-"`
 	rule    sigma.Rule       `kong:"-"`
 }
 
@@ -103,7 +103,7 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
 
 	if cmd.Uniq {
-		cmd.unique = pkg.NewUnique()
+		cmd.unique = types.NewUnique()
 	}
 
 	if cmd.Parquet {
@@ -142,7 +142,7 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		sys.Usage(Usage)
+		pkg.Usage(Usage)
 		return nil
 	}
 

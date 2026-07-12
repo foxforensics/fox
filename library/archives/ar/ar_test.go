@@ -3,7 +3,7 @@ package ar
 import (
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 	"go.foxforensics.eu/fox/v5/internal/test"
 )
 
@@ -38,7 +38,7 @@ func TestExtract(t *testing.T) {
 		t.Fatal("invalid entry count")
 	}
 
-	if e[0].Path != sys.JoinPart("", test.Fox) {
+	if e[0].Path != pkg.JoinPart("", test.Fox) {
 		t.Fatal("invalid entry path")
 	}
 

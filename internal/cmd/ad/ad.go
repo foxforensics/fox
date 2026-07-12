@@ -8,9 +8,9 @@ import (
 
 	"go.foxforensics.eu/bootkey/bootkey"
 	"go.foxforensics.eu/fox/v5/internal/cmd"
-	"go.foxforensics.eu/fox/v5/internal/pkg/ad/record"
-	"go.foxforensics.eu/fox/v5/internal/pkg/ad/tables"
-	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/cmd/ad/record"
+	"go.foxforensics.eu/fox/v5/internal/cmd/ad/tables"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 	"go.foxforensics.eu/fox/v5/library/binaries/bin/ese"
 	"go.foxforensics.eu/fox/v5/library/binaries/bin/reg"
 	"go.foxforensics.eu/fox/v5/library/formats"
@@ -71,7 +71,7 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) < 2 {
-		sys.Usage(Usage)
+		pkg.Usage(Usage)
 		return nil
 	}
 

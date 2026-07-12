@@ -1,0 +1,92 @@
+package writer
+
+import (
+	"fmt"
+	"io"
+	"log/slog"
+	"path/filepath"
+	"strings"
+	"sync"
+
+	"github.com/dlclark/regexp2/v2"
+	"go.foxforensics.eu/fox/v5/internal/pkg/receipt"
+)
+
+type Writer struct {
+	sync.Mutex
+	w io.Writer
+}
+
+func New(w io.Writer) *Writer {
+	return &Writer{w: w}
+}
+
+func (w *Writer) FileHeader(s string) {
+	s = strings.TrimPrefix(s, "/")
+	s = strings.TrimSuffix(s, "/")
+	s = strings.ReplaceAll(s, "::", " > ")
+	s = strings.ReplaceAll(s, string(filepath.Separator), " > ")
+
+	w.Lock()
+	_, err := fmt.Fprintf(w.w, "%s %s\n", Fox, AsBold(s))
+	w.Unlock()
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+}
+
+func (w *Writer) Match(s string, re *regexp2.Regexp) {
+	if re != nil {
+		if ok, err := re.MatchString(s); !ok {
+			if err != nil {
+				slog.Error(err.Error())
+			}
+			return
+		}
+
+		s = MarkMatch(s, re)
+	}
+
+	w.Lock()
+	_, err := fmt.Fprintln(w.w, s)
+	w.Unlock()
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+}
+
+func (w *Writer) Write(f string, a ...any) {
+	w.Lock()
+	_, err := fmt.Fprintf(w.w, f+"\n", a...)
+	w.Unlock()
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+}
+
+func (w *Writer) WriteString(s string) {
+	w.Lock()
+	_, err := fmt.Fprintln(w.w, s)
+	w.Unlock()
+
+	if err != nil {
+		slog.Error(err.Error())
+	}
+}
+
+func (w *Writer) Close(p string, r bool) {
+	if v, ok := w.w.(io.Closer); ok {
+		if err := v.Close(); err != nil {
+			slog.Error(err.Error())
+		}
+	}
+
+	if r && len(p) > 0 {
+		if err := receipt.Generate(p); err != nil {
+			slog.Error(err.Error())
+		}
+	}
+}

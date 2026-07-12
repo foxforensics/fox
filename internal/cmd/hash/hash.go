@@ -9,8 +9,8 @@ import (
 	"github.com/alecthomas/kong"
 	"go.foxforensics.eu/fox/v5/internal/cmd"
 	"go.foxforensics.eu/fox/v5/internal/pkg"
-	"go.foxforensics.eu/fox/v5/internal/sys"
-	"go.foxforensics.eu/fox/v5/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/pkg/types"
+	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
 	"go.foxforensics.eu/fox/v5/library/formats"
 	"go.foxforensics.eu/hasher/hash"
 )
@@ -67,8 +67,8 @@ type Hash struct {
 	Paths []string `arg:"" optional:""`
 
 	// internal
-	include map[string]pkg.Nil `kong:"-"`
-	exclude map[string]pkg.Nil `kong:"-"`
+	include map[string]types.Nil `kong:"-"`
+	exclude map[string]types.Nil `kong:"-"`
 }
 
 func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
@@ -88,11 +88,11 @@ func (cmd *Hash) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	}
 
 	if len(cmd.Include) > 0 {
-		cmd.include = sys.ParseMap(cmd.Include)
+		cmd.include = pkg.ParseMap(cmd.Include)
 	}
 
 	if len(cmd.Exclude) > 0 {
-		cmd.exclude = sys.ParseMap(cmd.Exclude)
+		cmd.exclude = pkg.ParseMap(cmd.Exclude)
 	}
 
 	return nil
@@ -102,7 +102,7 @@ func (cmd *Hash) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		sys.Usage(Usage)
+		pkg.Usage(Usage)
 		return nil
 	}
 

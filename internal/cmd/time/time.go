@@ -8,10 +8,10 @@ import (
 	"strings"
 
 	"go.foxforensics.eu/fox/v5/internal/cmd"
-	"go.foxforensics.eu/fox/v5/internal/pkg/time/entry"
-	"go.foxforensics.eu/fox/v5/internal/sys"
-	"go.foxforensics.eu/fox/v5/internal/sys/heap"
-	"go.foxforensics.eu/fox/v5/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/cmd/time/entry"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/pkg/heap"
+	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
 	"go.foxforensics.eu/fox/v5/library/binaries/bin/lnk"
 	"go.foxforensics.eu/fox/v5/library/binaries/bin/mft"
 	"go.foxforensics.eu/fox/v5/library/binaries/bin/pf"
@@ -56,7 +56,7 @@ func (cmd *Time) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		sys.Usage(Usage)
+		pkg.Usage(Usage)
 		return nil
 	}
 

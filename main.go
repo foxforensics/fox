@@ -25,7 +25,7 @@ import (
 	"go.foxforensics.eu/fox/v5/internal/cmd/info"
 	"go.foxforensics.eu/fox/v5/internal/cmd/str"
 	"go.foxforensics.eu/fox/v5/internal/cmd/time"
-	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 )
 
 var About = strings.TrimSpace(`
@@ -85,15 +85,15 @@ func main() {
 		fallthrough // show usage
 
 	case fox.Globals.Help:
-		sys.Usage(Usage)
+		pkg.Usage(Usage)
 		os.Exit(0)
 
 	case fox.Version:
-		sys.About(About)
+		pkg.About(About)
 		os.Exit(0)
 
 	case ctx.Command() == "help":
-		sys.Usage(cmd.Usage)
+		pkg.Usage(cmd.Usage)
 		os.Exit(0)
 
 	case ctx.Error != nil:

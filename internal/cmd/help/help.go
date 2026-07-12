@@ -12,7 +12,7 @@ import (
 	"go.foxforensics.eu/fox/v5/internal/cmd/info"
 	"go.foxforensics.eu/fox/v5/internal/cmd/str"
 	"go.foxforensics.eu/fox/v5/internal/cmd/time"
-	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 )
 
 var Usage = strings.TrimSpace(`
@@ -41,7 +41,7 @@ type Help struct {
 
 func (cmd *Help) Run(_ *cmd.Globals) error {
 	if v, ok := catalog[strings.ToLower(cmd.Name)]; ok {
-		sys.Usage(v)
+		pkg.Usage(v)
 		return nil
 	}
 

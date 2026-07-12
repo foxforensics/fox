@@ -12,8 +12,8 @@ import (
 	"github.com/fatih/color"
 	"go.foxforensics.eu/entropy/entropy"
 	"go.foxforensics.eu/fox/v5/internal/cmd"
-	"go.foxforensics.eu/fox/v5/internal/sys"
-	"go.foxforensics.eu/fox/v5/internal/sys/writer"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
 	"go.foxforensics.eu/fox/v5/library/formats"
 )
 
@@ -59,7 +59,7 @@ func (fi *FileInfo) String() string {
 	e := strings.Repeat("■", int(math.Round(fi.Entropy*2)))
 
 	_, _ = fmt.Fprintf(&sb, "%7dl ", fi.Lines)
-	_, _ = fmt.Fprintf(&sb, "%7s ", sys.Humanize(fi.Bytes))
+	_, _ = fmt.Fprintf(&sb, "%7s ", pkg.Humanize(fi.Bytes))
 
 	if fi.Entropy > Threshold {
 		sb.WriteString(writer.AsBold(fmt.Sprintf(" %.1fe ", fi.Entropy)))
@@ -112,7 +112,7 @@ func (cmd *Info) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var ok bool
 
 	if len(cmd.Block) > 0 {
-		if cmd.block, ok = sys.Mechanize(cmd.Block); !ok {
+		if cmd.block, ok = pkg.Mechanize(cmd.Block); !ok {
 			return errors.New("invalid block syntax")
 		}
 	}
@@ -124,7 +124,7 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
 	if len(cmd.Paths) == 0 {
-		sys.Usage(Usage)
+		pkg.Usage(Usage)
 		return nil
 	}
 

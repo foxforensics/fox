@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"log/slog"
 
-	"go.foxforensics.eu/fox/v5/internal/pkg/time/entry"
+	"go.foxforensics.eu/fox/v5/internal/cmd/time/entry"
 	"go.foxforensics.eu/fox/v5/library"
 	"www.velocidex.com/golang/go-prefetch"
 )

@@ -7,7 +7,7 @@ import (
 	"bytes"
 	"io"
 
-	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 )
 
 type Chunk struct {
@@ -35,5 +35,5 @@ func HasMagic(b []byte, off int, m []byte) bool {
 
 func ReadMax(r io.Reader, size int) ([]byte, error) {
 	// prevent zip bombs, that deflate exorbitant amounts of data
-	return io.ReadAll(io.LimitReader(r, int64(size*sys.MaxFactor)))
+	return io.ReadAll(io.LimitReader(r, int64(size*pkg.MaxFactor)))
 }

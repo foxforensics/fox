@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
-	"go.foxforensics.eu/fox/v5/internal/sys/version"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/pkg/version"
 )
 
 type Hec struct {

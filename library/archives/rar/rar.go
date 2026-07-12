@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/nwaples/rardecode/v2"
-	"go.foxforensics.eu/fox/v5/internal/sys"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 	"go.foxforensics.eu/fox/v5/library"
 	"go.foxforensics.eu/fox/v5/library/archives"
 )
@@ -51,7 +51,7 @@ func Extract(b []byte, root, pass string) (e []library.Chunk) {
 		}
 
 		e = append(e, library.Chunk{
-			Path: sys.JoinPart(root, h.Name),
+			Path: pkg.JoinPart(root, h.Name),
 			Data: buf,
 		})
 	}

@@ -14,7 +14,7 @@ import (
 
 	"github.com/Velocidex/ordereddict"
 	"go.foxforensics.eu/eventid/events"
-	"go.foxforensics.eu/fox/v5/internal/pkg/hunt/event"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/event"
 	"go.foxforensics.eu/fox/v5/library"
 	"go.foxforensics.eu/fox/v5/library/binaries"
 	"www.velocidex.com/golang/evtx"
