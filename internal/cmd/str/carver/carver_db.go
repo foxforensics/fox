@@ -115,6 +115,10 @@ func BuildDB(level int) Database {
 		db = append(db, database.Entries...)
 	}
 
+	for _, e := range db {
+		e.Regex.MatchTimeout = time.Minute // default
+	}
+
 	return db
 }
 
@@ -139,7 +143,6 @@ func (db Database) Lookup(s string) []string {
 	var v []string
 
 	for _, e := range db {
-		e.Regex.MatchTimeout = time.Minute // default
 		if ok, err := e.Regex.MatchString(s); ok {
 			v = append(v, e.Names...)
 		} else if err != nil {

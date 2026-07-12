@@ -129,7 +129,7 @@ func (htr *Hunter) carve(ctx context.Context, ch chan<- *event.Event, h *heap.He
 func (htr *Hunter) carveEvtx(ctx context.Context, ch chan<- *event.Event, h *heap.Heap) error {
 	sr := io.NewSectionReader(h.Reader(), 0, int64(h.Size))
 	for off := range htr.findOffset(ctx, h, evtx.Chunk) {
-		for evt := range evtx.Carve(sr, off, cap(ch)) {
+		for evt := range evtx.Carve(ctx, sr, off, cap(ch)) {
 			select {
 			case ch <- evt:
 			case <-ctx.Done():
@@ -144,7 +144,7 @@ func (htr *Hunter) carveEvtx(ctx context.Context, ch chan<- *event.Event, h *hea
 func (htr *Hunter) carveJournal(ctx context.Context, ch chan<- *event.Event, h *heap.Heap) error {
 	sr := io.NewSectionReader(h.Reader(), 0, int64(h.Size))
 	for off := range htr.findOffset(ctx, h, journal.Magic) {
-		for evt := range journal.Carve(sr, off, cap(ch)) {
+		for evt := range journal.Carve(ctx, sr, off, cap(ch)) {
 			select {
 			case ch <- evt:
 			case <-ctx.Done():

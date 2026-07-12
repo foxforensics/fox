@@ -47,7 +47,7 @@ func Convert(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
+func Carve(ctx context.Context, sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 	ch := make(chan *event.Event, cap)
 
 	_, err := sr.Seek(off, io.SeekStart)
@@ -71,7 +71,7 @@ func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 	go func(f *parser.JournalFile) {
 		defer close(ch)
 
-		for evt := range f.GetLogs(context.Background()) {
+		for evt := range f.GetLogs(ctx) {
 			e, err := newEvent(evt)
 
 			if err != nil {
@@ -79,7 +79,11 @@ func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 				continue
 			}
 
-			ch <- e
+			select {
+			case ch <- e:
+			case <-ctx.Done():
+				return
+			}
 		}
 	}(f)
 

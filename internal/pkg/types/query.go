@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"log/slog"
+	"math"
 	"strconv"
 	"strings"
 
@@ -66,6 +67,10 @@ func SetQuery(q *Query, s string, re *regexp2.Regexp) error {
 	}
 
 	if val < 0 {
+		if val == math.MinInt64 {
+			return errors.New("invalid limit")
+		}
+
 		val *= -1
 	}
 

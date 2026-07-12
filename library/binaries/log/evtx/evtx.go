@@ -2,6 +2,7 @@ package evtx
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -72,7 +73,7 @@ func Prepare() {
 	}
 }
 
-func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
+func Carve(ctx context.Context, sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 	ch := make(chan *event.Event, cap)
 
 	chunk, err := evtx.NewChunk(sr, off)
@@ -104,7 +105,11 @@ func Carve(sr *io.SectionReader, off int64, cap int) <-chan *event.Event {
 				continue
 			}
 
-			ch <- e
+			select {
+			case ch <- e:
+			case <-ctx.Done():
+				return
+			}
 		}
 	}()
 
