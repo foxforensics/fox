@@ -86,7 +86,7 @@ func translate(ctl *parser.Catalog) []string {
 
 	// build name attribute cache
 	if err := ctl.DumpTable("MSysObjects", func(row *ordereddict.Dict) error {
-		if v, ok := row.GetString("Name"); ok {
+		if v, ok := row.GetString("Name"); ok && len(v) > 4 {
 			if strings.HasPrefix(v, "ATT") {
 				if k, err := strconv.Atoi(v[4:]); err == nil {
 					cache[int64(k)] = v

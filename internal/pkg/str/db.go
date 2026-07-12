@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/dlclark/regexp2/v2"
 	"go.foxforensics.eu/rhash/database"
@@ -138,6 +139,7 @@ func (db Database) Lookup(s string) []string {
 	var v []string
 
 	for _, e := range db {
+		e.Regex.MatchTimeout = time.Minute // default
 		if ok, err := e.Regex.MatchString(s); ok {
 			v = append(v, e.Names...)
 		} else if err != nil {

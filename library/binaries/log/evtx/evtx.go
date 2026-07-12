@@ -231,12 +231,18 @@ func omitChild(key string) bool {
 }
 
 func getString(od *ordereddict.Dict, key string) string {
-	v, _ := ordereddict.GetString(od, key)
+	v, ok := ordereddict.GetString(od, key)
+	if !ok {
+		slog.Error(fmt.Sprintf("%s is not a string", key))
+	}
 	return v
 }
 
 func getInt(od *ordereddict.Dict, key string) int {
-	v, _ := ordereddict.GetInt(od, key)
+	v, ok := ordereddict.GetInt(od, key)
+	if !ok {
+		slog.Error(fmt.Sprintf("%s is not an int", key))
+	}
 	return v
 }
 

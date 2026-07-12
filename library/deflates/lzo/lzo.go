@@ -6,6 +6,7 @@ import (
 	"errors"
 
 	"github.com/rasky/go-lzo"
+	"go.foxforensics.eu/fox/v5/internal/sys"
 	"go.foxforensics.eu/fox/v5/library"
 )
 
@@ -32,9 +33,12 @@ func Deflate(b []byte) ([]byte, error) {
 	// remove end
 	end := len(b) - 4
 
-	if len(b) <= end {
+	if end < head {
 		return buf.Bytes(), errors.New("invalid length")
 	}
+
+	// prevent zip bombs, that deflate exorbitant amounts of data
+	m := len(b) * sys.MaxFactor
 
 	body := b[head:end]
 
@@ -46,8 +50,16 @@ func Deflate(b []byte) ([]byte, error) {
 		ul := int(binary.BigEndian.Uint32(body[0:4]))
 		cl := int(binary.BigEndian.Uint32(body[4:8]))
 
+		if cl < 0 || ul < 0 || ul > m {
+			return buf.Bytes(), errors.New("invalid block")
+		}
+
 		if len(body) < 12+cl {
 			return buf.Bytes(), errors.New("invalid block")
+		}
+
+		if buf.Len()+ul > m {
+			return buf.Bytes(), errors.New("too much output")
 		}
 
 		r := bytes.NewReader(body[12 : 12+cl])
