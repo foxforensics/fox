@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 func TestMain(m *testing.M) {
@@ -29,7 +29,7 @@ func TestCat(t *testing.T) {
 			[]string{
 				"cat",
 				"-t",
-				test.FixtureFile("texts/fox.txt"),
+				tests.FixtureFile("texts/fox.txt"),
 			},
 		},
 		{
@@ -38,7 +38,7 @@ func TestCat(t *testing.T) {
 			[]string{
 				"cat",
 				"-x",
-				test.FixtureFile("texts/fox.txt"),
+				tests.FixtureFile("texts/fox.txt"),
 			},
 		},
 		{
@@ -46,7 +46,7 @@ func TestCat(t *testing.T) {
 			"cat.auto.txt",
 			[]string{
 				"cat",
-				test.FixtureFile("binaries/test.mbr"),
+				tests.FixtureFile("binaries/test.mbr"),
 			},
 		},
 		{
@@ -54,7 +54,7 @@ func TestCat(t *testing.T) {
 			"cat.json",
 			[]string{
 				"cat",
-				test.FixtureFile("formats/fox.json"),
+				tests.FixtureFile("formats/fox.json"),
 			},
 		},
 		{
@@ -62,7 +62,7 @@ func TestCat(t *testing.T) {
 			"cat.jsonl",
 			[]string{
 				"cat",
-				test.FixtureFile("formats/fox.jsonl"),
+				tests.FixtureFile("formats/fox.jsonl"),
 			},
 		},
 		{
@@ -70,7 +70,7 @@ func TestCat(t *testing.T) {
 			"cat.xml",
 			[]string{
 				"cat",
-				test.FixtureFile("formats/fox.xml"),
+				tests.FixtureFile("formats/fox.xml"),
 			},
 		},
 		{
@@ -80,7 +80,7 @@ func TestCat(t *testing.T) {
 				"cat",
 				"-FO",
 				"-C1",
-				test.FixtureFile("texts/fox.txt"),
+				tests.FixtureFile("texts/fox.txt"),
 			},
 		},
 		{
@@ -88,19 +88,19 @@ func TestCat(t *testing.T) {
 			"cat.empty.txt",
 			[]string{
 				"cat",
-				test.FixtureFile("binaries/test.nil"),
+				tests.FixtureFile("binaries/test.nil"),
 			},
 		},
 	} {
-		for range test.Cycles {
+		for range tests.Cycles {
 			t.Run(tt.name, func(t *testing.T) {
-				b, err := test.FixtureMain(tt.args...)
+				b, err := tests.FixtureMain(tt.args...)
 
 				if err != nil {
 					t.Error(err)
 				}
 
-				if !bytes.Equal(b, test.Sample(tt.sample)) {
+				if !bytes.Equal(b, tests.Sample(tt.sample)) {
 					t.Fatal("sample mismatch:", string(b))
 				}
 			})

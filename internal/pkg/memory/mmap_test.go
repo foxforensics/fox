@@ -4,11 +4,11 @@ import (
 	"os"
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 func BenchmarkMMap(b *testing.B) {
-	v := test.FixtureFile("texts/bible.txt")
+	v := tests.FixtureFile("texts/bible.txt")
 
 	f, err := os.Open(v)
 
@@ -26,7 +26,7 @@ func BenchmarkMMap(b *testing.B) {
 }
 
 func TestMMap(t *testing.T) {
-	v := test.FixtureFile("texts/bible.txt")
+	v := tests.FixtureFile("texts/bible.txt")
 
 	f, err := os.Open(v)
 

@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 func TestMain(m *testing.M) {
@@ -29,7 +29,7 @@ func TestHunt(t *testing.T) {
 			[]string{
 				"hunt",
 				"-sa",
-				test.FixtureFile("binaries/test.dd"),
+				tests.FixtureFile("binaries/test.dd"),
 			},
 		},
 		{
@@ -38,7 +38,7 @@ func TestHunt(t *testing.T) {
 			[]string{
 				"hunt",
 				"-saj",
-				test.FixtureFile("binaries/test.dd"),
+				tests.FixtureFile("binaries/test.dd"),
 			},
 		},
 		{
@@ -47,19 +47,19 @@ func TestHunt(t *testing.T) {
 			[]string{
 				"hunt",
 				"-saJ",
-				test.FixtureFile("binaries/test.dd"),
+				tests.FixtureFile("binaries/test.dd"),
 			},
 		},
 	} {
-		for range test.Cycles {
+		for range tests.Cycles {
 			t.Run(tt.name, func(t *testing.T) {
-				b, err := test.FixtureMain(tt.args...)
+				b, err := tests.FixtureMain(tt.args...)
 
 				if err != nil {
 					t.Error(err)
 				}
 
-				if !bytes.Equal(b, test.Sample(tt.sample)) {
+				if !bytes.Equal(b, tests.Sample(tt.sample)) {
 					t.Fatal("sample mismatch:", string(b))
 				}
 			})

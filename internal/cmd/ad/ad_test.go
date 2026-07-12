@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 func TestAd(t *testing.T) {
@@ -18,8 +18,8 @@ func TestAd(t *testing.T) {
 			"ad.secrets.txt",
 			[]string{
 				"ad",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -28,8 +28,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-j",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -38,8 +38,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-J",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -48,8 +48,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"--lm-only",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -58,8 +58,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"--nt-only",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -68,8 +68,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-l",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -78,8 +78,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-c",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -88,8 +88,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-cj",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -98,8 +98,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-cJ",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -108,8 +108,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-g",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -118,8 +118,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-gj",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -128,8 +128,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-gJ",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -138,8 +138,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-u",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -148,8 +148,8 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-uj",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 		{
@@ -158,20 +158,20 @@ func TestAd(t *testing.T) {
 			[]string{
 				"ad",
 				"-uJ",
-				test.FixtureFile("binaries/test.dit"),
-				test.FixtureFile("binaries/test.reg"),
+				tests.FixtureFile("binaries/test.dit"),
+				tests.FixtureFile("binaries/test.reg"),
 			},
 		},
 	} {
-		for range test.Cycles {
+		for range tests.Cycles {
 			t.Run(tt.name, func(t *testing.T) {
-				b, err := test.FixtureMain(tt.args...)
+				b, err := tests.FixtureMain(tt.args...)
 
 				if err != nil {
 					t.Error(err)
 				}
 
-				if !bytes.Equal(b, test.Sample(tt.sample)) {
+				if !bytes.Equal(b, tests.Sample(tt.sample)) {
 					t.Fatal("sample mismatch:", string(b))
 				}
 			})

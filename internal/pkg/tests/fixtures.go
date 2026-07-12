@@ -1,4 +1,4 @@
-package test
+package tests
 
 import (
 	"bytes"
@@ -33,7 +33,7 @@ func FixtureFile(name string) string {
 		return ""
 	}
 
-	v, err := filepath.Rel(d, filepath.Join(getRoot(), "../../testdata/corpus", name))
+	v, err := filepath.Rel(d, filepath.Join(getRoot(), "../../../testdata/corpus", name))
 
 	if err != nil {
 		slog.Error(fmt.Sprintf("fixture: %s", err.Error()))
@@ -65,7 +65,7 @@ func Fixture(name string) []byte {
 }
 
 func Sample(name string) []byte {
-	buf, err := os.ReadFile(filepath.Join(getRoot(), "../../testdata/golden", name))
+	buf, err := os.ReadFile(filepath.Join(getRoot(), "../../../testdata/golden", name))
 
 	if err != nil {
 		slog.Error(fmt.Sprintf("fixture: %s", err.Error()))

@@ -3,13 +3,13 @@ package zstd
 import (
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 const src = "deflates/fox.zst"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := test.Fixture(src)
+	buf := tests.Fixture(src)
 
 	for b.Loop() {
 		_ = Detect(buf)
@@ -17,7 +17,7 @@ func BenchmarkDetect(b *testing.B) {
 }
 
 func BenchmarkDeflate(b *testing.B) {
-	buf := test.Fixture(src)
+	buf := tests.Fixture(src)
 
 	for b.Loop() {
 		_, _ = Deflate(buf)
@@ -25,19 +25,19 @@ func BenchmarkDeflate(b *testing.B) {
 }
 
 func TestDetect(t *testing.T) {
-	if !Detect(test.Fixture(src)) {
+	if !Detect(tests.Fixture(src)) {
 		t.Fatal("not detected")
 	}
 }
 
 func TestDeflate(t *testing.T) {
-	buf, err := Deflate(test.Fixture(src))
+	buf, err := Deflate(tests.Fixture(src))
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if !test.AssertFox(buf) {
+	if !tests.AssertFox(buf) {
 		t.Fatal("not deflated")
 	}
 }

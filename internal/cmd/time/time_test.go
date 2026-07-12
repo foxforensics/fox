@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 func TestMain(m *testing.M) {
@@ -29,7 +29,7 @@ func TestTime(t *testing.T) {
 			[]string{
 				"time",
 				"-s",
-				test.FixtureFile("binaries/test.mft"),
+				tests.FixtureFile("binaries/test.mft"),
 			},
 		},
 		{
@@ -38,7 +38,7 @@ func TestTime(t *testing.T) {
 			[]string{
 				"time",
 				"-j",
-				test.FixtureFile("binaries/test.lnk"),
+				tests.FixtureFile("binaries/test.lnk"),
 			},
 		},
 		{
@@ -47,7 +47,7 @@ func TestTime(t *testing.T) {
 			[]string{
 				"time",
 				"-J",
-				test.FixtureFile("binaries/test.lnk"),
+				tests.FixtureFile("binaries/test.lnk"),
 			},
 		},
 		{
@@ -56,7 +56,7 @@ func TestTime(t *testing.T) {
 			[]string{
 				"time",
 				"-b",
-				test.FixtureFile("binaries/test.pf"),
+				tests.FixtureFile("binaries/test.pf"),
 			},
 		},
 		{
@@ -65,19 +65,19 @@ func TestTime(t *testing.T) {
 			[]string{
 				"time",
 				"-t",
-				test.FixtureFile("binaries/test.pf"),
+				tests.FixtureFile("binaries/test.pf"),
 			},
 		},
 	} {
-		for range test.Cycles {
+		for range tests.Cycles {
 			t.Run(tt.name, func(t *testing.T) {
-				b, err := test.FixtureMain(tt.args...)
+				b, err := tests.FixtureMain(tt.args...)
 
 				if err != nil {
 					t.Error(err)
 				}
 
-				if !bytes.Equal(b, test.Sample(tt.sample)) {
+				if !bytes.Equal(b, tests.Sample(tt.sample)) {
 					t.Fatal("sample mismatch:", string(b))
 				}
 			})

@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"github.com/dlclark/regexp2/v2"
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 func BenchmarkMap(b *testing.B) {
-	v := test.Fixture("texts/bible.txt")
+	v := tests.Fixture("texts/bible.txt")
 
 	for b.Loop() {
 		Map(v)
@@ -16,7 +16,7 @@ func BenchmarkMap(b *testing.B) {
 }
 
 func BenchmarkGrep(b *testing.B) {
-	v := test.Fixture("texts/bible.txt")
+	v := tests.Fixture("texts/bible.txt")
 
 	s := Map(v)
 
@@ -28,7 +28,7 @@ func BenchmarkGrep(b *testing.B) {
 }
 
 func TestMap(t *testing.T) {
-	v := test.Fixture("texts/bible.txt")
+	v := tests.Fixture("texts/bible.txt")
 
 	if len(Map(v)) != 31107 {
 		t.Fatal("wrong size")
@@ -36,7 +36,7 @@ func TestMap(t *testing.T) {
 }
 
 func TestGrep(t *testing.T) {
-	v := test.Fixture("texts/bible.txt")
+	v := tests.Fixture("texts/bible.txt")
 
 	re := regexp2.MustCompile("King James")
 

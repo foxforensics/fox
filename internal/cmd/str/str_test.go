@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 func TestMain(m *testing.M) {
@@ -28,7 +28,7 @@ func TestStr(t *testing.T) {
 			"str.txt",
 			[]string{
 				"str",
-				test.FixtureFile("texts/test.txt"),
+				tests.FixtureFile("texts/test.txt"),
 			},
 		},
 		{
@@ -37,7 +37,7 @@ func TestStr(t *testing.T) {
 			[]string{
 				"str",
 				"-a",
-				test.FixtureFile("texts/test.txt"),
+				tests.FixtureFile("texts/test.txt"),
 			},
 		},
 		{
@@ -46,7 +46,7 @@ func TestStr(t *testing.T) {
 			[]string{
 				"str",
 				"-s",
-				test.FixtureFile("texts/test.txt"),
+				tests.FixtureFile("texts/test.txt"),
 			},
 		},
 		{
@@ -55,7 +55,7 @@ func TestStr(t *testing.T) {
 			[]string{
 				"str",
 				"-at",
-				test.FixtureFile("texts/test.txt"),
+				tests.FixtureFile("texts/test.txt"),
 			},
 		},
 		{
@@ -65,7 +65,7 @@ func TestStr(t *testing.T) {
 				"str",
 				"-N6",
 				"-X8",
-				test.FixtureFile("texts/test.txt"),
+				tests.FixtureFile("texts/test.txt"),
 			},
 		},
 		{
@@ -74,7 +74,7 @@ func TestStr(t *testing.T) {
 			[]string{
 				"str",
 				"-w",
-				test.FixtureFile("texts/test.txt"),
+				tests.FixtureFile("texts/test.txt"),
 			},
 		},
 		{
@@ -83,7 +83,7 @@ func TestStr(t *testing.T) {
 			[]string{
 				"str",
 				"-ww",
-				test.FixtureFile("texts/test.txt"),
+				tests.FixtureFile("texts/test.txt"),
 			},
 		},
 		{
@@ -92,7 +92,7 @@ func TestStr(t *testing.T) {
 			[]string{
 				"str",
 				"-www",
-				test.FixtureFile("texts/test.txt"),
+				tests.FixtureFile("texts/test.txt"),
 			},
 		},
 		{
@@ -101,19 +101,19 @@ func TestStr(t *testing.T) {
 			[]string{
 				"str",
 				"-Cipv4,ipv6",
-				test.FixtureFile("texts/test.txt"),
+				tests.FixtureFile("texts/test.txt"),
 			},
 		},
 	} {
-		for range test.Cycles {
+		for range tests.Cycles {
 			t.Run(tt.name, func(t *testing.T) {
-				b, err := test.FixtureMain(tt.args...)
+				b, err := tests.FixtureMain(tt.args...)
 
 				if err != nil {
 					t.Error(err)
 				}
 
-				if !bytes.Equal(b, test.Sample(tt.sample)) {
+				if !bytes.Equal(b, tests.Sample(tt.sample)) {
 					t.Fatal("sample mismatch:", string(b))
 				}
 			})

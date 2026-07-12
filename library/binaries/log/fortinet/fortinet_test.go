@@ -4,13 +4,13 @@ import (
 	"strings"
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 const src = "binaries/test.tlog"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := test.Fixture(src)
+	buf := tests.Fixture(src)
 
 	for b.Loop() {
 		_ = Detect(buf)
@@ -18,7 +18,7 @@ func BenchmarkDetect(b *testing.B) {
 }
 
 func BenchmarkConvert(b *testing.B) {
-	buf := test.Fixture(src)
+	buf := tests.Fixture(src)
 
 	for b.Loop() {
 		_, _ = Convert(buf)
@@ -40,7 +40,7 @@ func TestDetect(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			if !Detect(test.Fixture(tt.path)) {
+			if !Detect(tests.Fixture(tt.path)) {
 				t.Fatal("not detected")
 			}
 		})
@@ -62,7 +62,7 @@ func TestConvert(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			buf, err := Convert(test.Fixture(tt.path))
+			buf, err := Convert(tests.Fixture(tt.path))
 
 			if err != nil {
 				t.Error(err)

@@ -7,8 +7,8 @@ import (
 	"slices"
 	"testing"
 
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 	"go.foxforensics.eu/fox/v5/internal/pkg/types"
-	"go.foxforensics.eu/fox/v5/internal/test"
 )
 
 func TestMain(m *testing.M) {
@@ -92,7 +92,7 @@ func TestLoadFiles(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			l := New(newOpts())
 
-			paths := consume(l, test.FixtureDir(tt.in))
+			paths := consume(l, tests.FixtureDir(tt.in))
 
 			if len(paths) != len(tt.out) {
 				t.Fatal("invalid count")

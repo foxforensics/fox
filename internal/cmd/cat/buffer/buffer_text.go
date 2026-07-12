@@ -6,8 +6,8 @@ import (
 	"math"
 
 	"go.foxforensics.eu/fox/v5/internal/cmd"
-	"go.foxforensics.eu/fox/v5/internal/cmd/cat/smap"
 	"go.foxforensics.eu/fox/v5/internal/pkg"
+	"go.foxforensics.eu/fox/v5/internal/pkg/smap"
 	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
 )
 

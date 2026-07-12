@@ -11,7 +11,7 @@ import (
 	"go.foxforensics.eu/fox/v5/internal/cmd/info"
 	"go.foxforensics.eu/fox/v5/internal/cmd/str"
 	"go.foxforensics.eu/fox/v5/internal/cmd/time"
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 func TestHelp(t *testing.T) {
@@ -93,7 +93,7 @@ func TestHelp(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			b, err := test.FixtureMain(tt.args...)
+			b, err := tests.FixtureMain(tt.args...)
 
 			if err != nil {
 				b = []byte(err.Error())

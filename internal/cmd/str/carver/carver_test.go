@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 func TestCarve(t *testing.T) {
@@ -45,7 +45,7 @@ func TestCarve(t *testing.T) {
 				Ascii: tt.ascii,
 			})
 
-			for range crv.Carve(context.Background(), test.Fixture(tt.file)) {
+			for range crv.Carve(context.Background(), tests.Fixture(tt.file)) {
 				n++
 			}
 

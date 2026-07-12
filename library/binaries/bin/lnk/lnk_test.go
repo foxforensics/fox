@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 const src = "binaries/test.lnk"
 
 func BenchmarkDetect(b *testing.B) {
-	buf := test.Fixture(src)
+	buf := tests.Fixture(src)
 
 	for b.Loop() {
 		_ = Detect(buf)
@@ -18,7 +18,7 @@ func BenchmarkDetect(b *testing.B) {
 }
 
 func BenchmarkConvert(b *testing.B) {
-	buf := test.Fixture(src)
+	buf := tests.Fixture(src)
 
 	for b.Loop() {
 		_, _ = Convert(buf)
@@ -26,13 +26,13 @@ func BenchmarkConvert(b *testing.B) {
 }
 
 func TestDetect(t *testing.T) {
-	if !Detect(test.Fixture(src)) {
+	if !Detect(tests.Fixture(src)) {
 		t.Fatal("not detected")
 	}
 }
 
 func TestConvert(t *testing.T) {
-	buf, err := Convert(test.Fixture(src))
+	buf, err := Convert(tests.Fixture(src))
 
 	if err != nil {
 		t.Error(err)

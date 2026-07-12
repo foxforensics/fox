@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"go.foxforensics.eu/fox/v5/internal/pkg/loader"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 	"go.foxforensics.eu/fox/v5/internal/pkg/types"
-	"go.foxforensics.eu/fox/v5/internal/test"
 )
 
 func TestHunt(t *testing.T) {
@@ -47,7 +47,7 @@ func TestHunt(t *testing.T) {
 				Query: types.Query{},
 			})
 
-			file := test.FixtureFile(tt.file)
+			file := tests.FixtureFile(tt.file)
 
 			for range htr.Hunt(ctx, ldr.Load(ctx, []string{file})) {
 				n++

@@ -3,7 +3,7 @@ package heap
 import (
 	"testing"
 
-	"go.foxforensics.eu/fox/v5/internal/test"
+	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
 const (
@@ -13,7 +13,7 @@ const (
 )
 
 func TestNew(t *testing.T) {
-	h := FromData(name, test.Fixture(file))
+	h := FromData(name, tests.Fixture(file))
 
 	defer h.Free()
 
@@ -31,7 +31,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestIsText(t *testing.T) {
-	h := FromData(name, test.Fixture(file))
+	h := FromData(name, tests.Fixture(file))
 
 	defer h.Free()
 
@@ -41,7 +41,7 @@ func TestIsText(t *testing.T) {
 }
 
 func TestBytes(t *testing.T) {
-	h := FromData(name, test.Fixture(file))
+	h := FromData(name, tests.Fixture(file))
 
 	defer h.Free()
 
@@ -51,7 +51,7 @@ func TestBytes(t *testing.T) {
 }
 
 func TestString(t *testing.T) {
-	h := FromData(name, test.Fixture(file))
+	h := FromData(name, tests.Fixture(file))
 
 	defer h.Free()
 
@@ -61,7 +61,7 @@ func TestString(t *testing.T) {
 }
 
 func TestDiscard(t *testing.T) {
-	h := FromData(name, test.Fixture(file))
+	h := FromData(name, tests.Fixture(file))
 	h.Free()
 
 	if h.Size > 0 {
