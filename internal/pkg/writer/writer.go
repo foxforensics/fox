@@ -24,7 +24,7 @@ func New(w io.Writer) *Writer {
 func (w *Writer) FileHeader(s string) {
 	s = strings.TrimPrefix(s, "/")
 	s = strings.TrimSuffix(s, "/")
-	s = strings.ReplaceAll(s, "::", " > ")
+	s = strings.ReplaceAll(s, "!", " > ")
 	s = strings.ReplaceAll(s, string(filepath.Separator), " > ")
 
 	w.Lock()

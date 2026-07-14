@@ -47,7 +47,7 @@ Filter Flags
 POSITIONAL ARGUMENTS
 ====================
 
-Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths inside archives, use the archive::file notation.
+Globbing paths to open or '-' to read from **STDIN(4)**. To refer to paths inside archives, use the archive!file notation.
 
 EXAMPLES
 ========

@@ -86,11 +86,11 @@ func ParseMap(b []byte) map[string]types.Nil {
 }
 
 func JoinPart(path, part string) string {
-	return fmt.Sprintf("%s%s%s", path, "::", part)
+	return fmt.Sprintf("%s%s%s", path, "!", part)
 }
 
 func SplitPart(path string) (string, string) {
-	t := strings.SplitN(path, "::", 2)
+	t := strings.SplitN(path, "!", 2)
 
 	if len(t) < 2 {
 		return path, ""

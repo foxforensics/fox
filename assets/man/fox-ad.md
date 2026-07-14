@@ -63,7 +63,7 @@ Secret Flags
 POSITIONAL ARGUMENTS
 ====================
 
-The Active Directory offline database file followed by the Windows system registry hive. To refer to paths inside archives, use the archive::file notation.
+The Active Directory offline database file followed by the Windows system registry hive. To refer to paths inside archives, use the archive!file notation.
 
 ENVIRONMENT
 ===========
