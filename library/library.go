@@ -1,6 +1,7 @@
-// Package library source:
-// https://github.com/frizb/FirmwareReverseEngineering/blob/master/IdentifyingCompressionAlgorithms.md
-// https://en.wikipedia.org/wiki/List_of_file_signatures
+// Package library provides support for different file types.
+// Source:
+// - https://github.com/frizb/FirmwareReverseEngineering/blob/master/IdentifyingCompressionAlgorithms.md
+// - https://en.wikipedia.org/wiki/List_of_file_signatures
 package library
 
 import (
