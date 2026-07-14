@@ -3,7 +3,7 @@
 NAME
 ====
 
-**fox** — The Forensic Examiners Swiss Army Knife
+**fox** — The Forensic Examiner's Swiss Army Knife
 
 SYNOPSIS
 ========
