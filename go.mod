@@ -10,13 +10,13 @@ require (
 	github.com/alecthomas/kong v1.15.0
 	github.com/andybalholm/brotli v1.2.2
 	github.com/bmatcuk/doublestar/v4 v4.10.0
-	github.com/bodgit/sevenzip v1.6.4
+	github.com/bodgit/sevenzip v1.6.5
 	github.com/bradleyjkemp/sigma-go v0.6.6
 	github.com/cavaliergopher/cpio v1.0.1
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cenkalti/backoff/v6 v6.0.1
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
-	github.com/dlclark/regexp2/v2 v2.2.2
+	github.com/dlclark/regexp2/v2 v2.5.0
 	github.com/emersion/go-message v0.18.2
 	github.com/fatih/color v1.19.0
 	github.com/flanglet/kanzi-go/v2 v2.5.1
@@ -24,7 +24,7 @@ require (
 	github.com/josephspurrier/goversioninfo v1.7.0
 	github.com/klauspost/compress v1.19.0
 	github.com/korylprince/goxar v0.1.2
-	github.com/minio/minlz v1.1.1
+	github.com/minio/minlz v1.2.0
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
 	github.com/nwaples/rardecode/v2 v2.2.5
 	github.com/parquet-go/parquet-go v0.30.1
@@ -54,8 +54,8 @@ require (
 	go.foxforensics.eu/rhash v1.7.4
 	go.foxforensics.eu/strings v1.0.1
 	go.foxforensics.eu/wordlist v1.0.2
-	golang.org/x/term v0.44.0
-	golang.org/x/text v0.39.0
+	golang.org/x/term v0.45.0
+	golang.org/x/text v0.40.0
 	www.velocidex.com/golang/evtx v0.2.0
 	www.velocidex.com/golang/go-ntfs v0.2.0
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
@@ -90,7 +90,7 @@ require (
 	github.com/jzelinskie/whirlpool v0.0.0-20201016144138-0675e54bb004 // indirect
 	github.com/klauspost/cpuid/v2 v2.4.0 // indirect
 	github.com/libp2p/go-sockaddr v0.2.0 // indirect
-	github.com/malwarology/sdhash v0.5.0 // indirect
+	github.com/malwarology/sdhash v0.6.0 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
 	github.com/mattn/go-isatty v0.0.22 // indirect
 	github.com/parquet-go/bitpack v1.0.0 // indirect
@@ -117,11 +117,11 @@ require (
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
-	golang.org/x/crypto v0.53.0 // indirect
-	golang.org/x/exp v0.0.0-20260611194520-c48552f49976 // indirect
-	golang.org/x/image v0.43.0 // indirect
-	golang.org/x/net v0.56.0 // indirect
-	golang.org/x/sys v0.46.0 // indirect
+	golang.org/x/crypto v0.54.0 // indirect
+	golang.org/x/exp v0.0.0-20260709172345-9ea1abe57597 // indirect
+	golang.org/x/image v0.44.0 // indirect
+	golang.org/x/net v0.57.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
