@@ -97,7 +97,7 @@ func TestAd(t *testing.T) {
 			"ad.computers.jsonl",
 			[]string{
 				"ad",
-				"-cJ",
+				"-cl",
 				tests.FixtureFile("binaries/test.dit"),
 				tests.FixtureFile("binaries/test.reg"),
 			},
@@ -127,7 +127,7 @@ func TestAd(t *testing.T) {
 			"ad.groups.jsonl",
 			[]string{
 				"ad",
-				"-gJ",
+				"-gl",
 				tests.FixtureFile("binaries/test.dit"),
 				tests.FixtureFile("binaries/test.reg"),
 			},
@@ -157,7 +157,7 @@ func TestAd(t *testing.T) {
 			"ad.users.jsonl",
 			[]string{
 				"ad",
-				"-uJ",
+				"-ul",
 				tests.FixtureFile("binaries/test.dit"),
 				tests.FixtureFile("binaries/test.reg"),
 			},
