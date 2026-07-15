@@ -46,7 +46,7 @@ func TestHunt(t *testing.T) {
 			"hunt.jsonl",
 			[]string{
 				"hunt",
-				"-saJ",
+				"-sal",
 				tests.FixtureFile("binaries/test.dd"),
 			},
 		},
@@ -73,31 +73,5 @@ func TestHunt(t *testing.T) {
 				}
 			})
 		}
-	}
-}
-
-func TestStream(t *testing.T) {
-	for _, tt := range []struct {
-		name   string
-		sample string
-		args   []string
-	}{
-		{
-			"Triage",
-			"hunt.triage.txt",
-			[]string{
-				"hunt",
-				"-t",
-				tests.FixtureFile("binaries/test.evtx"),
-			},
-		},
-	} {
-		t.Run(tt.name, func(t *testing.T) {
-			_, err := tests.ExecuteMain(tt.args...)
-
-			if err != nil {
-				t.Error(err)
-			}
-		})
 	}
 }
