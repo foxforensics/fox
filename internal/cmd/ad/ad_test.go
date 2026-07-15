@@ -67,7 +67,7 @@ func TestAd(t *testing.T) {
 			"ad.lookup.txt",
 			[]string{
 				"ad",
-				"-l",
+				"-w",
 				tests.FixtureFile("binaries/test.dit"),
 				tests.FixtureFile("binaries/test.reg"),
 			},
