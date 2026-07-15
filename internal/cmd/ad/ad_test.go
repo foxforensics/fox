@@ -37,7 +37,7 @@ func TestAd(t *testing.T) {
 			"ad.secrets.jsonl",
 			[]string{
 				"ad",
-				"-J",
+				"-l",
 				tests.FixtureFile("binaries/test.dit"),
 				tests.FixtureFile("binaries/test.reg"),
 			},
@@ -165,7 +165,7 @@ func TestAd(t *testing.T) {
 	} {
 		for range tests.Cycles {
 			t.Run(tt.name, func(t *testing.T) {
-				b, err := tests.FixtureMain(tt.args...)
+				b, err := tests.ExecuteMain(tt.args...)
 
 				if err != nil {
 					t.Error(err)

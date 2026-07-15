@@ -30,7 +30,7 @@ FLAGS
 
 :   Show results as JSON objects.
 
-**-J, --jsonl**
+**-l, --jsonl**
 
 :   Show results as JSON lines.
 

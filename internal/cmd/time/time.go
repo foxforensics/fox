@@ -15,7 +15,7 @@ Usage: fox time [FLAGS...] <PATHS...>
 Flags:
   -s, --sort               Sort timeline chronologically
   -j, --json               Show timeline as JSON objects
-  -J, --jsonl              Show timeline as JSON lines
+  -l, --jsonl              Show timeline as JSON lines
 
 Example: Show MFT entries as bodyfile
   $ fox time ./$MFT
@@ -29,7 +29,7 @@ Report bugs at: foxforensics.eu/issues
 type Time struct {
 	Sort  bool `short:"s"`
 	Json  bool `short:"j" xor:"json,jsonl"`
-	Jsonl bool `short:"J" xor:"json,jsonl"`
+	Jsonl bool `short:"l" xor:"json,jsonl"`
 
 	// paths
 	Paths []string `arg:"" optional:""`

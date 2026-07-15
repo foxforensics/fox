@@ -22,7 +22,7 @@ FLAGS
 
 :   Show infos as JSON objects.
 
-**-J, --jsonl**
+**-l, --jsonl**
 
 :   Show infos as JSON lines.
 
@@ -42,7 +42,7 @@ Filter Flags
 
 **-X, --max**=_value_
 
-:   Filter maximal entropy _value_ (default: **8.0**).
+:   Filter maximum entropy _value_ (default: **8.0**).
 
 POSITIONAL ARGUMENTS
 ====================

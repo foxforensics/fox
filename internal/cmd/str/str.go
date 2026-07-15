@@ -21,7 +21,7 @@ Flags:
   -s, --sort               Sort strings alphabetically
   -t, --trim               Trim strings whitespaces
   -N, --min=LENGTH         Minimum string length (default: 3)
-  -X, --max=LENGTH         Maximal string length (default: 256)
+  -X, --max=LENGTH         Maximum string length (default: 256)
 
 Class flags:
   -w, --what[=LEVEL]       Show string classifications (w/ww/www)

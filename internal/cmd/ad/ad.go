@@ -26,10 +26,10 @@ Record flags:
   -g, --groups             Show all group records
   -c, --computers          Show all computer records
   -j, --json               Show records as JSON objects
-  -J, --jsonl              Show records as JSON lines
+  -l, --jsonl              Show records as JSON lines
 
 Secret flags:
-  -l, --lookup             Lookup hashes using wordlist
+  -w, --wordlist           Lookup hashes using the wordlist
   -h, --history            Extract also the users hash history
       --lm-only            Extract only the LM hashes (Hashcat mode 3000)
       --nt-only            Extract only the NT hashes (Hashcat mode 1000)
@@ -38,7 +38,7 @@ Remarks:
   If no records are specified, hashes will be shown in secretsdump manner.
 
 Example: Show NTLM hashes
-  $ fox ad -hl NTDS.dit SYSTEM
+  $ fox ad -hw NTDS.dit SYSTEM
 
 Example: Show user records
   $ fox ad -uj NTDS.dit SYSTEM
@@ -52,16 +52,16 @@ type Ad struct {
 	Groups    bool `short:"g" xor:"users,groups,computers"`
 	Computers bool `short:"c" xor:"users,groups,computers"`
 	Json      bool `short:"j" xor:"json,jsonl"`
-	Jsonl     bool `short:"J" xor:"json,jsonl"`
+	Jsonl     bool `short:"l" xor:"json,jsonl"`
 
 	// secret flags
-	Lookup  bool `short:"l"`
-	History bool `short:"h"`
-	LmOnly  bool `long:"lm-only" xor:"lm-only,nt-only"`
-	NtOnly  bool `long:"nt-only" xor:"lm-only,nt-only"`
+	Wordlist bool `short:"w"`
+	History  bool `short:"h"`
+	LmOnly   bool `long:"lm-only" xor:"lm-only,nt-only"`
+	NtOnly   bool `long:"nt-only" xor:"lm-only,nt-only"`
 
 	// hidden
-	Wordlist []byte `hidden:"" type:"filecontent"`
+	AdWordlist []byte `hidden:"" long:"ad-wordlist" type:"filecontent"`
 
 	// paths
 	Paths []string `arg:"" optional:""`
@@ -109,10 +109,10 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		return errors.New("invalid file format")
 	}
 
-	if cmd.Lookup {
+	if cmd.Wordlist {
 		slog.Info("building tables")
 
-		n, err := tables.Build(cmd.Wordlist, fox.Threads, hash.LM, hash.NT)
+		n, err := tables.Build(cmd.AdWordlist, fox.Threads, hash.LM, hash.NT)
 
 		if err != nil {
 			return err

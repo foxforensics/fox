@@ -45,7 +45,7 @@ func TestHash(t *testing.T) {
 			"hash.jsonl",
 			[]string{
 				"hash",
-				"-J",
+				"-l",
 				tests.FixtureFile("binaries"),
 			},
 		},
@@ -79,7 +79,7 @@ func TestHash(t *testing.T) {
 	} {
 		for range tests.Cycles {
 			t.Run(tt.name, func(t *testing.T) {
-				b, err := tests.FixtureMain(tt.args...)
+				b, err := tests.ExecuteMain(tt.args...)
 
 				if err != nil {
 					t.Error(err)

@@ -46,14 +46,14 @@ func TestTime(t *testing.T) {
 			"time.jsonl",
 			[]string{
 				"time",
-				"-J",
+				"-l",
 				tests.FixtureFile("binaries/test.lnk"),
 			},
 		},
 	} {
 		for range tests.Cycles {
 			t.Run(tt.name, func(t *testing.T) {
-				b, err := tests.FixtureMain(tt.args...)
+				b, err := tests.ExecuteMain(tt.args...)
 
 				if err != nil {
 					t.Error(err)

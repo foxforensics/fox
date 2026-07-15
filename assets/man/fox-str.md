@@ -36,7 +36,7 @@ FLAGS
 
 **-X, --max**=_length_
 
-:   Maximal string _length_ (default: **256**).
+:   Maximum string _length_ (default: **256**).
 
 Class Flags
 -----------

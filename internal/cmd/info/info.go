@@ -26,14 +26,14 @@ Usage: fox info [FLAGS...] <PATHS...>
 
 Flags:
   -j, --json               Show infos as JSON objects
-  -J, --jsonl              Show infos as JSON lines
+  -l, --jsonl              Show infos as JSON lines
 
 Block flags:
   -B, --block=SIZE         Block size for analysis
 
 Filter flags:
   -N, --min=VALUE          Minimum entropy value (default: 0.0)
-  -X, --max=VALUE          Maximal entropy value (default: 8.0)
+  -X, --max=VALUE          Maximum entropy value (default: 8.0)
 
 Example: List only high entropy files
   $ fox info -N6.0 ./
@@ -84,7 +84,7 @@ func (fi *FileInfo) String() string {
 
 type Info struct {
 	Json  bool `short:"j" xor:"json,jsonl"`
-	Jsonl bool `short:"J" xor:"json,jsonl"`
+	Jsonl bool `short:"l" xor:"json,jsonl"`
 
 	// block flags
 	Block string `short:"B" xor:"block"`

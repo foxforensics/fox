@@ -22,7 +22,7 @@ Flags:
   -H, --hash=NAME,...      Use hash algorithm(s) (default: SHA256)
   -a, --all                Show all hashes and checksums
   -j, --json               Show results as JSON objects
-  -J, --jsonl              Show results as JSON lines
+  -l, --jsonl              Show results as JSON lines
 
 Filter flags
   -B, --include=FILE       Include only known bad hashes
@@ -57,7 +57,7 @@ type Hash struct {
 	Hash  []string `short:"H" xor:"hash,all" sep:","`
 	All   bool     `short:"a" xor:"hash,all"`
 	Json  bool     `short:"j" xor:"json,jsonl"`
-	Jsonl bool     `short:"J" xor:"json,jsonl"`
+	Jsonl bool     `short:"l" xor:"json,jsonl"`
 
 	// filter flags
 	Include []byte `short:"B" xor:"include,exclude" type:"filecontent"`

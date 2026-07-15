@@ -17,7 +17,7 @@ func AssertFox(b []byte) bool {
 	return bytes.Equal(b, Fixture(filepath.Join("texts", Fox)))
 }
 
-func FixtureMain(args ...string) ([]byte, error) {
+func ExecuteMain(args ...string) ([]byte, error) {
 	v := append([]string{"run", FixtureFile("../../main.go")}, args...)
 
 	cmd := exec.Command("go", v...)

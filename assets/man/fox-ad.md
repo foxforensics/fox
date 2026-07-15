@@ -37,14 +37,14 @@ Record Flags
 
 :   Show records as JSON objects.
 
-**-J, --jsonl**
+**-l, --jsonl**
 
 :   Show records as JSON lines.
 
 Secret Flags
 ------------
 
-**-l, --lookup**
+**-w, --wordlist**
 
 :   Lookup hashes using the built-in wordlist. **NT** and **LM** hashes will be replaced in place.
 
@@ -68,14 +68,14 @@ The Active Directory offline database file followed by the Windows system regist
 ENVIRONMENT
 ===========
 
-**FOX_WORDLIST**
+**FOX_AD_WORDLIST**
 
-:   Force wordlist path as base of rainbow tables. The file MUST be a plain text file with either _ASCII_ or _UTF-8_ encoding. The wordlist MUST contain a single word per line, followed by a linebreak. See <_https://github.com/danielmiessler/SecLists/tree/master/Passwords/Common-Credentials_> for different wordlists. Only available in this mode.
+:   Build the rainbow tables based on the given file. The file MUST be a plain text file in either _ASCII_ or _UTF-8_ encoding. The wordlist MUST contain a single word per line, followed by a linebreak. See <_https://github.com/danielmiessler/SecLists/tree/master/Passwords/Common-Credentials_> for different wordlists. Only available in this mode.
 
 EXAMPLES
 ========
 
-$ fox ad -hl NTDS.dit SYSTEM
+$ fox ad -hw NTDS.dit SYSTEM
 
 :   Show NTLM hashes.
 

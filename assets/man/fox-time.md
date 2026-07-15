@@ -26,7 +26,7 @@ FLAGS
 
 :   Show timeline as JSON objects.
 
-**-J, --jsonl**
+**-l, --jsonl**
 
 :   Show timeline as JSON lines.
 
