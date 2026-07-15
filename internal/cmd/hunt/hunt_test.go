@@ -9,12 +9,6 @@ import (
 	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
-type Request struct {
-	body        []byte
-	authHeader  string
-	contentType string
-}
-
 func TestMain(m *testing.M) {
 	if err := os.Chdir("../../../"); err != nil {
 		slog.Error(err.Error())
