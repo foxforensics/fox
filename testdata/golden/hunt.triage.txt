@@ -1,0 +1,1137 @@
+2014-01-25T01:27:34.355857Z @IACIS-HDD-2014 [00000124] Security: A user account was created
+2014-01-25T01:27:34.730257Z @IACIS-HDD-2014 [00000125] Security: A member was added to a security-enabled local group
+2014-01-25T01:27:35.073458Z @IACIS-HDD-2014 [00000129] Security: A user account was changed
+2014-01-25T01:27:35.385459Z @IACIS-HDD-2014 [00000130] Security: A member was added to a security-enabled local group
+2014-01-25T01:27:35.806659Z @IACIS-HDD-2014 [00000131] Security: A member was added to a security-enabled local group
+2014-01-25T01:27:36.071860Z @IACIS-HDD-2014 [00000132] Security: A member was added to a security-enabled local group
+2014-01-25T01:27:36.446260Z @IACIS-HDD-2014 [00000133] Security: A member was removed from a security-enabled local group
+2014-01-25T01:27:36.820661Z @IACIS-HDD-2014 [00000136] Security: A user account was changed
+2014-01-25T01:27:36.820661Z @IACIS-HDD-2014 [00000134] Security: A user account was changed
+2014-01-25T01:27:37.148262Z @IACIS-HDD-2014 [00000138] Security: A user account was created
+2014-01-25T01:27:37.148262Z @IACIS-HDD-2014 [00000140] Security: A user account was changed
+2014-01-25T01:27:37.569462Z @IACIS-HDD-2014 [00000142] Security: A user account was changed
+2014-01-25T01:27:38.255864Z @IACIS-HDD-2014 [00000144] Security: System security access was granted to an account
+2014-01-25T01:27:38.255864Z @IACIS-HDD-2014 [00000143] Security: System security access was granted to an account
+2014-01-25T01:27:39.441466Z @IACIS-HDD-2014 [00000145] Security: A member was added to a security-enabled local group
+2014-01-25T01:27:50.119911Z @IACIS-HDD-2014 [00000147] Security: An account was successfully logged on
+2014-01-25T01:27:50.119911Z @IACIS-HDD-2014 [00000148] Security: An account was successfully logged on
+2014-01-25T01:27:50.119911Z @IACIS-HDD-2014 [00000146] Security: A logon was attempted using explicit credentials
+2014-01-25T01:27:50.119911Z @IACIS-HDD-2014 [00000149] Security: Special privileges assigned to new logon
+2014-01-25T01:27:54.004318Z @IACIS-HDD-2014 [00000151] Security: Special privileges assigned to new logon
+2014-01-25T01:27:54.004318Z @IACIS-HDD-2014 [00000150] Security: An account was successfully logged on
+2014-01-25T01:27:54.207118Z @IACIS-HDD-2014 [00000152] Security: An account was successfully logged on
+2014-01-25T01:27:54.207118Z @IACIS-HDD-2014 [00000153] Security: Special privileges assigned to new logon
+2014-01-25T01:28:22.255967Z @IACIS-HDD-2014 [00000155] Security: An attempt was made to unregister a security event source
+2014-01-25T01:28:22.255967Z @IACIS-HDD-2014 [00000154] Security: An attempt was made to register a security event source
+2014-01-25T01:54:32.603078Z @IACIS-HDD-2014 [00000169] Security: An account was successfully logged on
+2014-01-25T01:54:32.603078Z @IACIS-HDD-2014 [00000170] Security: Special privileges assigned to new logon
+2014-01-25T01:54:34.022681Z @IACIS-HDD-2014 [00000171] Security: An account was successfully logged on
+2014-01-25T01:54:34.022681Z @IACIS-HDD-2014 [00000172] Security: Special privileges assigned to new logon
+2014-01-25T01:56:09.073648Z @IACIS-HDD-2014 [00000176] Security: An attempt was made to unregister a security event source
+2014-01-25T01:56:09.073648Z @IACIS-HDD-2014 [00000175] Security: An attempt was made to register a security event source
+2014-01-25T02:28:26.799851Z @IACIS-HDD-2014 [00000180] Security: Special privileges assigned to new logon
+2014-01-25T02:28:26.799851Z @IACIS-HDD-2014 [00000179] Security: An account was successfully logged on
+2014-01-25T02:38:24.062500Z @IACIS-HDD-2014 [00000184] Security: Special privileges assigned to new logon
+2014-01-25T02:38:24.062500Z @IACIS-HDD-2014 [00000183] Security: An account was successfully logged on
+2014-01-25T02:42:06.425291Z @IACIS-HDD-2014 [00000185] Security: An account was successfully logged on
+2014-01-25T02:42:06.425291Z @IACIS-HDD-2014 [00000186] Security: Special privileges assigned to new logon
+2014-01-25T02:45:47.446479Z @IACIS-HDD-2014 [00000187] Security: An account was successfully logged on
+2014-01-25T02:45:47.462079Z @IACIS-HDD-2014 [00000188] Security: Special privileges assigned to new logon
+2014-01-25T02:49:22.836057Z @IACIS-HDD-2014 [00000189] Security: An account was successfully logged on
+2014-01-25T02:49:22.851657Z @IACIS-HDD-2014 [00000190] Security: Special privileges assigned to new logon
+2014-01-25T02:56:11.603575Z @IACIS-HDD-2014 [00000191] Security: An account was successfully logged on
+2014-01-25T02:56:11.603575Z @IACIS-HDD-2014 [00000192] Security: Special privileges assigned to new logon
+2014-01-25T02:57:35.500523Z @IACIS-HDD-2014 [00000194] Security: Special privileges assigned to new logon
+2014-01-25T02:57:35.500523Z @IACIS-HDD-2014 [00000193] Security: An account was successfully logged on
+2014-01-25T03:10:54.986327Z @IACIS-HDD-2014 [00000195] Security: An account was successfully logged on
+2014-01-25T03:10:54.986327Z @IACIS-HDD-2014 [00000196] Security: Special privileges assigned to new logon
+2014-01-25T03:16:01.979266Z @IACIS-HDD-2014 [00000198] Security: Special privileges assigned to new logon
+2014-01-25T03:16:01.979266Z @IACIS-HDD-2014 [00000197] Security: An account was successfully logged on
+2014-01-25T03:20:09.364500Z @IACIS-HDD-2014 [00000199] Security: An account was successfully logged on
+2014-01-25T03:20:09.364500Z @IACIS-HDD-2014 [00000200] Security: Special privileges assigned to new logon
+2014-01-25T03:27:01.688825Z @IACIS-HDD-2014 [00000201] Security: An account was successfully logged on
+2014-01-25T03:27:01.688825Z @IACIS-HDD-2014 [00000202] Security: Special privileges assigned to new logon
+2014-01-25T03:27:05.417231Z @IACIS-HDD-2014 [00000203] Security: An account was successfully logged on
+2014-01-25T03:27:05.417231Z @IACIS-HDD-2014 [00000204] Security: Special privileges assigned to new logon
+2014-01-25T03:31:22.474483Z @IACIS-HDD-2014 [00000205] Security: An account was successfully logged on
+2014-01-25T03:31:22.474483Z @IACIS-HDD-2014 [00000206] Security: Special privileges assigned to new logon
+2014-01-25T03:37:21.290713Z @IACIS-HDD-2014 [00000207] Security: An account was successfully logged on
+2014-01-25T03:37:21.290713Z @IACIS-HDD-2014 [00000208] Security: Special privileges assigned to new logon
+2014-01-25T03:41:36.288761Z @IACIS-HDD-2014 [00000209] Security: An account was successfully logged on
+2014-01-25T03:41:36.288761Z @IACIS-HDD-2014 [00000210] Security: Special privileges assigned to new logon
+2014-01-25T03:47:29.504581Z @IACIS-HDD-2014 [00000211] Security: An account was successfully logged on
+2014-01-25T03:47:29.504581Z @IACIS-HDD-2014 [00000212] Security: Special privileges assigned to new logon
+2014-01-25T03:52:25.998702Z @IACIS-HDD-2014 [00000214] Security: Special privileges assigned to new logon
+2014-01-25T03:52:25.998702Z @IACIS-HDD-2014 [00000213] Security: An account was successfully logged on
+2014-01-25T03:57:40.682455Z @IACIS-HDD-2014 [00000216] Security: Special privileges assigned to new logon
+2014-01-25T03:57:40.682455Z @IACIS-HDD-2014 [00000215] Security: An account was successfully logged on
+2014-01-25T04:05:34.876488Z @IACIS-HDD-2014 [00000218] Security: Special privileges assigned to new logon
+2014-01-25T04:05:34.876488Z @IACIS-HDD-2014 [00000217] Security: An account was successfully logged on
+2014-01-25T04:05:40.336497Z @IACIS-HDD-2014 [00000220] Security: Special privileges assigned to new logon
+2014-01-25T04:05:40.336497Z @IACIS-HDD-2014 [00000219] Security: An account was successfully logged on
+2014-01-25T04:15:39.658350Z @IACIS-HDD-2014 [00000222] Security: Special privileges assigned to new logon
+2014-01-25T04:15:39.658350Z @IACIS-HDD-2014 [00000221] Security: An account was successfully logged on
+2014-01-25T04:15:45.087159Z @IACIS-HDD-2014 [00000224] Security: Special privileges assigned to new logon
+2014-01-25T04:15:45.087159Z @IACIS-HDD-2014 [00000223] Security: An account was successfully logged on
+2014-01-25T04:19:10.759258Z @37L4247F27-25 [00000002] Security: An account was successfully logged on
+2014-01-25T04:19:13.520463Z @37L4247F27-25 [00000003] Security: The Per-user audit policy table was created
+2014-01-25T04:19:14.674865Z @37L4247F27-25 [00000016] Security: An account was successfully logged on
+2014-01-25T04:19:14.674865Z @37L4247F27-25 [00000017] Security: Special privileges assigned to new logon
+2014-01-25T04:19:15.361266Z @37L4247F27-25 [00000018] Security: An account was successfully logged on
+2014-01-25T04:19:15.361266Z @37L4247F27-25 [00000019] Security: Special privileges assigned to new logon
+2014-01-25T04:19:30.290492Z @37L4247F27-25 [00000021] Security: Special privileges assigned to new logon
+2014-01-25T04:19:30.290492Z @37L4247F27-25 [00000020] Security: An account was successfully logged on
+2014-01-25T04:19:30.477693Z @37L4247F27-25 [00000022] Security: An account was successfully logged on
+2014-01-25T04:19:30.477693Z @37L4247F27-25 [00000023] Security: Special privileges assigned to new logon
+2014-01-25T04:19:30.493293Z @37L4247F27-25 [00000024] Security: An account was successfully logged on
+2014-01-25T04:19:30.493293Z @37L4247F27-25 [00000025] Security: Special privileges assigned to new logon
+2014-01-25T04:19:31.304494Z @37L4247F27-25 [00000027] Security: Special privileges assigned to new logon
+2014-01-25T04:19:31.304494Z @37L4247F27-25 [00000026] Security: An account was successfully logged on
+2014-01-25T04:19:35.719302Z @37L4247F27-25 [00000029] Security: Special privileges assigned to new logon
+2014-01-25T04:19:35.719302Z @37L4247F27-25 [00000028] Security: An account was successfully logged on
+2014-01-25T04:19:41.491312Z @37L4247F27-25 [00000032] Security: An account was successfully logged on
+2014-01-25T04:21:06.168261Z @37L4247F27-25 [00000033] Security: A user account was changed
+2014-01-25T04:21:47.399133Z @37L4247F27-25 [00000034] Security: An account was successfully logged on
+2014-01-25T04:21:47.399133Z @37L4247F27-25 [00000035] Security: Special privileges assigned to new logon
+2014-01-25T04:21:53.857544Z @37L4247F27-25 [00000036] Security: An account was successfully logged on
+2014-01-25T04:21:53.857544Z @37L4247F27-25 [00000037] Security: Special privileges assigned to new logon
+2014-01-25T04:22:02.515560Z @37L4247F27-25 [00000038] Security: An account was successfully logged on
+2014-01-25T04:22:02.515560Z @37L4247F27-25 [00000039] Security: Special privileges assigned to new logon
+2014-01-25T04:22:03.108361Z @37L4247F27-25 [00000041] Security: Special privileges assigned to new logon
+2014-01-25T04:22:03.108361Z @37L4247F27-25 [00000040] Security: An account was successfully logged on
+2014-01-25T04:23:18.562851Z @IACIS-HDD-2014 [00000044] Security: An account was successfully logged on
+2014-01-25T04:23:21.012055Z @IACIS-HDD-2014 [00000045] Security: The Per-user audit policy table was created
+2014-01-25T04:23:21.698456Z @IACIS-HDD-2014 [00000047] Security: Special privileges assigned to new logon
+2014-01-25T04:23:21.698456Z @IACIS-HDD-2014 [00000046] Security: An account was successfully logged on
+2014-01-25T04:23:22.540858Z @IACIS-HDD-2014 [00000048] Security: An account was successfully logged on
+2014-01-25T04:23:22.540858Z @IACIS-HDD-2014 [00000049] Security: Special privileges assigned to new logon
+2014-01-25T04:23:36.502882Z @IACIS-HDD-2014 [00000051] Security: Special privileges assigned to new logon
+2014-01-25T04:23:36.502882Z @IACIS-HDD-2014 [00000050] Security: An account was successfully logged on
+2014-01-25T04:23:36.518482Z @IACIS-HDD-2014 [00000052] Security: An account was successfully logged on
+2014-01-25T04:23:36.518482Z @IACIS-HDD-2014 [00000053] Security: Special privileges assigned to new logon
+2014-01-25T04:23:36.690082Z @IACIS-HDD-2014 [00000054] Security: An account was successfully logged on
+2014-01-25T04:23:36.690082Z @IACIS-HDD-2014 [00000055] Security: Special privileges assigned to new logon
+2014-01-25T04:24:37.093389Z @IACIS-HDD-2014 [00000057] Security: An account was successfully logged on
+2014-01-25T04:24:37.093389Z @IACIS-HDD-2014 [00000058] Security: Special privileges assigned to new logon
+2014-01-25T04:24:40.790595Z @IACIS-HDD-2014 [00000060] Security: Special privileges assigned to new logon
+2014-01-25T04:24:40.790595Z @IACIS-HDD-2014 [00000059] Security: An account was successfully logged on
+2014-01-25T04:24:46.609405Z @IACIS-HDD-2014 [00000085] Security: An account was successfully logged on
+2014-01-25T04:24:46.921406Z @IACIS-HDD-2014 [00000109] Security: A user account was changed
+2014-01-25T04:24:46.921406Z @IACIS-HDD-2014 [00000107] Security: A user account was changed
+2014-01-25T04:24:46.921406Z @IACIS-HDD-2014 [00000108] Security: A user account was changed
+2014-01-25T04:24:46.921406Z @IACIS-HDD-2014 [00000106] Security: A user account was changed
+2014-01-25T04:26:50.068022Z @IACIS-HDD-2014 [00000111] Security: Special privileges assigned to new logon
+2014-01-25T04:26:50.068022Z @IACIS-HDD-2014 [00000110] Security: An account was successfully logged on
+2014-01-25T04:26:50.707623Z @IACIS-HDD-2014 [00000112] Security: An account was successfully logged on
+2014-01-25T04:26:50.707623Z @IACIS-HDD-2014 [00000113] Security: Special privileges assigned to new logon
+2014-01-25T04:35:08.209602Z @IACIS-HDD-2014 [00000225] Security: An account was successfully logged on
+2014-01-25T04:35:08.209602Z @IACIS-HDD-2014 [00000226] Security: Special privileges assigned to new logon
+2014-01-25T04:35:14.184413Z @IACIS-HDD-2014 [00000227] Security: An account was successfully logged on
+2014-01-25T04:35:14.184413Z @IACIS-HDD-2014 [00000228] Security: Special privileges assigned to new logon
+2014-01-25T04:45:36.609906Z @IACIS-HDD-2014 [00000230] Security: Special privileges assigned to new logon
+2014-01-25T04:45:36.609906Z @IACIS-HDD-2014 [00000229] Security: An account was successfully logged on
+2014-01-25T04:45:42.069916Z @IACIS-HDD-2014 [00000232] Security: Special privileges assigned to new logon
+2014-01-25T04:45:42.069916Z @IACIS-HDD-2014 [00000231] Security: An account was successfully logged on
+2014-01-25T04:59:34.799378Z @IACIS-HDD-2014 [00000235] Security: An account was successfully logged on
+2014-01-25T04:59:34.814978Z @IACIS-HDD-2014 [00000236] Security: Special privileges assigned to new logon
+2014-01-25T04:59:41.335790Z @IACIS-HDD-2014 [00000238] Security: Special privileges assigned to new logon
+2014-01-25T04:59:41.335790Z @IACIS-HDD-2014 [00000237] Security: An account was successfully logged on
+2014-01-25T05:01:10.333946Z @IACIS-HDD-2014 [00000239] Security: An account was successfully logged on
+2014-01-25T05:01:10.536746Z @IACIS-HDD-2014 [00000240] Security: Special privileges assigned to new logon
+2014-01-25T05:17:35.023276Z @IACIS-HDD-2014 [00000242] Security: Special privileges assigned to new logon
+2014-01-25T05:17:35.023276Z @IACIS-HDD-2014 [00000241] Security: An account was successfully logged on
+2014-01-25T05:17:39.266483Z @IACIS-HDD-2014 [00000244] Security: Special privileges assigned to new logon
+2014-01-25T05:17:39.266483Z @IACIS-HDD-2014 [00000243] Security: An account was successfully logged on
+2014-01-25T05:35:47.165594Z @IACIS-HDD-2014 [00000245] Security: An account was successfully logged on
+2014-01-25T05:35:47.181194Z @IACIS-HDD-2014 [00000246] Security: Special privileges assigned to new logon
+2014-01-25T05:35:57.820412Z @IACIS-HDD-2014 [00000248] Security: Special privileges assigned to new logon
+2014-01-25T05:35:57.820412Z @IACIS-HDD-2014 [00000247] Security: An account was successfully logged on
+2014-01-25T05:56:50.705413Z @IACIS-HDD-2014 [00000250] Security: Special privileges assigned to new logon
+2014-01-25T05:56:50.705413Z @IACIS-HDD-2014 [00000249] Security: An account was successfully logged on
+2014-01-25T05:56:58.411827Z @IACIS-HDD-2014 [00000252] Security: Special privileges assigned to new logon
+2014-01-25T05:56:58.411827Z @IACIS-HDD-2014 [00000251] Security: An account was successfully logged on
+2014-01-25T06:18:09.455259Z @IACIS-HDD-2014 [00000253] Security: An account was successfully logged on
+2014-01-25T06:18:09.470859Z @IACIS-HDD-2014 [00000254] Security: Special privileges assigned to new logon
+2014-01-25T06:18:18.035274Z @IACIS-HDD-2014 [00000256] Security: Special privileges assigned to new logon
+2014-01-25T06:18:18.035274Z @IACIS-HDD-2014 [00000255] Security: An account was successfully logged on
+2014-01-25T06:26:35.036547Z @IACIS-HDD-2014 [00000257] Security: An account was successfully logged on
+2014-01-25T06:26:35.083347Z @IACIS-HDD-2014 [00000258] Security: Special privileges assigned to new logon
+2014-01-25T06:58:01.345060Z @IACIS-HDD-2014 [00000259] Security: An account was successfully logged on
+2014-01-25T06:58:01.345060Z @IACIS-HDD-2014 [00000260] Security: Special privileges assigned to new logon
+2014-01-25T06:58:09.082674Z @IACIS-HDD-2014 [00000261] Security: An account was successfully logged on
+2014-01-25T06:58:09.082674Z @IACIS-HDD-2014 [00000262] Security: Special privileges assigned to new logon
+2014-01-25T07:52:21.937987Z @IACIS-HDD-2014 [00000264] Security: Special privileges assigned to new logon
+2014-01-25T07:52:21.937987Z @IACIS-HDD-2014 [00000263] Security: An account was successfully logged on
+2014-01-25T08:40:09.004623Z @IACIS-HDD-2014 [00000265] Security: An account was successfully logged on
+2014-01-25T08:40:09.020223Z @IACIS-HDD-2014 [00000266] Security: Special privileges assigned to new logon
+2014-01-25T08:58:02.668109Z @IACIS-HDD-2014 [00000269] Security: Special privileges assigned to new logon
+2014-01-25T08:58:02.668109Z @IACIS-HDD-2014 [00000268] Security: An account was successfully logged on
+2014-01-25T08:58:04.165711Z @IACIS-HDD-2014 [00000271] Security: Special privileges assigned to new logon
+2014-01-25T08:58:04.165711Z @IACIS-HDD-2014 [00000270] Security: An account was successfully logged on
+2014-01-25T13:25:16.603258Z @IACIS-HDD-2014 [00000274] Security: An account was successfully logged on
+2014-01-25T13:25:17.133659Z @IACIS-HDD-2014 [00000275] Security: The Per-user audit policy table was created
+2014-01-25T13:25:17.336459Z @IACIS-HDD-2014 [00000276] Security: An account was successfully logged on
+2014-01-25T13:25:17.336459Z @IACIS-HDD-2014 [00000277] Security: Special privileges assigned to new logon
+2014-01-25T13:25:17.710860Z @IACIS-HDD-2014 [00000278] Security: An account was successfully logged on
+2014-01-25T13:25:17.710860Z @IACIS-HDD-2014 [00000279] Security: Special privileges assigned to new logon
+2014-01-25T13:25:17.851260Z @IACIS-HDD-2014 [00000281] Security: Special privileges assigned to new logon
+2014-01-25T13:25:17.851260Z @IACIS-HDD-2014 [00000280] Security: An account was successfully logged on
+2014-01-25T13:25:18.553261Z @IACIS-HDD-2014 [00000285] Security: Special privileges assigned to new logon
+2014-01-25T13:25:18.553261Z @IACIS-HDD-2014 [00000282] Security: An account was successfully logged on
+2014-01-25T13:25:18.553261Z @IACIS-HDD-2014 [00000284] Security: An account was successfully logged on
+2014-01-25T13:25:18.553261Z @IACIS-HDD-2014 [00000283] Security: Special privileges assigned to new logon
+2014-01-25T13:25:20.362864Z @IACIS-HDD-2014 [00000287] Security: Special privileges assigned to new logon
+2014-01-25T13:25:20.362864Z @IACIS-HDD-2014 [00000286] Security: An account was successfully logged on
+2014-01-25T13:25:29.737079Z @IACIS-HDD-2014 [00000290] Security: Special privileges assigned to new logon
+2014-01-25T13:25:29.737079Z @IACIS-HDD-2014 [00000289] Security: An account was successfully logged on
+2014-01-25T13:25:34.885088Z @IACIS-HDD-2014 [00000293] Security: An account was successfully logged on
+2014-01-25T13:27:36.331301Z @IACIS-HDD-2014 [00001809] Security: Special privileges assigned to new logon
+2014-01-25T13:27:36.331301Z @IACIS-HDD-2014 [00001808] Security: An account was successfully logged on
+2014-01-25T13:27:38.546505Z @IACIS-HDD-2014 [00001811] Security: Special privileges assigned to new logon
+2014-01-25T13:27:38.546505Z @IACIS-HDD-2014 [00001810] Security: An account was successfully logged on
+2014-01-25T13:29:09.306857Z @IACIS-HDD-2014 [00001814] Security: An account was successfully logged on
+2014-01-25T13:29:09.712458Z @IACIS-HDD-2014 [00001815] Security: The Per-user audit policy table was created
+2014-01-25T13:29:11.147660Z @IACIS-HDD-2014 [00001816] Security: An account was successfully logged on
+2014-01-25T13:29:11.147660Z @IACIS-HDD-2014 [00001817] Security: Special privileges assigned to new logon
+2014-01-25T13:29:11.334861Z @IACIS-HDD-2014 [00001819] Security: Special privileges assigned to new logon
+2014-01-25T13:29:11.334861Z @IACIS-HDD-2014 [00001818] Security: An account was successfully logged on
+2014-01-25T13:29:11.428461Z @IACIS-HDD-2014 [00001821] Security: Special privileges assigned to new logon
+2014-01-25T13:29:11.428461Z @IACIS-HDD-2014 [00001820] Security: An account was successfully logged on
+2014-01-25T13:29:11.584461Z @IACIS-HDD-2014 [00001822] Security: An account was successfully logged on
+2014-01-25T13:29:11.584461Z @IACIS-HDD-2014 [00001823] Security: Special privileges assigned to new logon
+2014-01-25T13:29:11.600061Z @IACIS-HDD-2014 [00001825] Security: Special privileges assigned to new logon
+2014-01-25T13:29:11.600061Z @IACIS-HDD-2014 [00001824] Security: An account was successfully logged on
+2014-01-25T13:29:12.302062Z @IACIS-HDD-2014 [00001826] Security: An account was successfully logged on
+2014-01-25T13:29:12.302062Z @IACIS-HDD-2014 [00001827] Security: Special privileges assigned to new logon
+2014-01-25T13:29:22.256278Z @IACIS-HDD-2014 [00001829] Security: An account was successfully logged on
+2014-01-25T13:29:22.256278Z @IACIS-HDD-2014 [00001830] Security: Special privileges assigned to new logon
+2014-01-25T13:29:25.844284Z @IACIS-HDD-2014 [00001833] Security: An account was successfully logged on
+2014-01-25T13:29:57.902341Z @IACIS-HDD-2014 [00001835] Security: Special privileges assigned to new logon
+2014-01-25T13:29:57.902341Z @IACIS-HDD-2014 [00001834] Security: An account was successfully logged on
+2014-01-25T13:32:03.969667Z @IACIS-HDD-2014 [00001840] Security: An account was successfully logged on
+2014-01-25T13:32:04.297268Z @IACIS-HDD-2014 [00001841] Security: The Per-user audit policy table was created
+2014-01-25T13:32:04.390868Z @IACIS-HDD-2014 [00001843] Security: Special privileges assigned to new logon
+2014-01-25T13:32:04.390868Z @IACIS-HDD-2014 [00001842] Security: An account was successfully logged on
+2014-01-25T13:32:04.609268Z @IACIS-HDD-2014 [00001844] Security: An account was successfully logged on
+2014-01-25T13:32:04.609268Z @IACIS-HDD-2014 [00001845] Security: Special privileges assigned to new logon
+2014-01-25T13:32:04.671668Z @IACIS-HDD-2014 [00001847] Security: Special privileges assigned to new logon
+2014-01-25T13:32:04.671668Z @IACIS-HDD-2014 [00001846] Security: An account was successfully logged on
+2014-01-25T13:32:04.780869Z @IACIS-HDD-2014 [00001849] Security: Special privileges assigned to new logon
+2014-01-25T13:32:04.780869Z @IACIS-HDD-2014 [00001848] Security: An account was successfully logged on
+2014-01-25T13:32:04.796469Z @IACIS-HDD-2014 [00001850] Security: An account was successfully logged on
+2014-01-25T13:32:04.796469Z @IACIS-HDD-2014 [00001851] Security: Special privileges assigned to new logon
+2014-01-25T13:32:05.264469Z @IACIS-HDD-2014 [00001853] Security: Special privileges assigned to new logon
+2014-01-25T13:32:05.264469Z @IACIS-HDD-2014 [00001852] Security: An account was successfully logged on
+2014-01-25T13:32:12.478880Z @IACIS-HDD-2014 [00001856] Security: Special privileges assigned to new logon
+2014-01-25T13:32:12.478880Z @IACIS-HDD-2014 [00001855] Security: An account was successfully logged on
+2014-01-25T13:32:16.447887Z @IACIS-HDD-2014 [00001859] Security: An account was successfully logged on
+2014-01-25T13:32:26.478705Z @IACIS-HDD-2014 [00001862] Security: An account was successfully logged on
+2014-01-25T13:32:26.478705Z @IACIS-HDD-2014 [00001863] Security: Special privileges assigned to new logon
+2014-01-25T13:32:26.665905Z @IACIS-HDD-2014 [00001865] Security: Special privileges assigned to new logon
+2014-01-25T13:32:26.665905Z @IACIS-HDD-2014 [00001864] Security: An account was successfully logged on
+2014-01-25T13:32:36.665523Z @IACIS-HDD-2014 [00001868] Security: An account was successfully logged on
+2014-01-25T13:32:36.665523Z @IACIS-HDD-2014 [00001869] Security: Special privileges assigned to new logon
+2014-01-25T13:32:36.665523Z @IACIS-HDD-2014 [00001866] Security: A logon was attempted using explicit credentials
+2014-01-25T13:32:36.665523Z @IACIS-HDD-2014 [00001867] Security: An account was successfully logged on
+2014-01-25T13:32:42.889934Z @IACIS-HDD-2014 [00001871] Security: Special privileges assigned to new logon
+2014-01-25T13:32:42.889934Z @IACIS-HDD-2014 [00001870] Security: An account was successfully logged on
+2014-01-25T13:34:23.286510Z @IACIS-HDD-2014 [00001873] Security: Special privileges assigned to new logon
+2014-01-25T13:34:23.286510Z @IACIS-HDD-2014 [00001872] Security: An account was successfully logged on
+2014-01-25T13:35:07.855788Z @IACIS-HDD-2014 [00001875] Security: Special privileges assigned to new logon
+2014-01-25T13:35:07.855788Z @IACIS-HDD-2014 [00001874] Security: An account was successfully logged on
+2014-01-25T13:35:13.534198Z @IACIS-HDD-2014 [00001876] Security: An account was successfully logged on
+2014-01-25T13:35:13.534198Z @IACIS-HDD-2014 [00001877] Security: Special privileges assigned to new logon
+2014-01-25T13:49:16.156878Z @IACIS-HDD-2014 [00001885] Security: Special privileges assigned to new logon
+2014-01-25T13:49:16.156878Z @IACIS-HDD-2014 [00001884] Security: An account was successfully logged on
+2014-01-25T13:49:57.961752Z @IACIS-HDD-2014 [00001887] Security: An account was successfully logged on
+2014-01-25T13:49:57.961752Z @IACIS-HDD-2014 [00001888] Security: Special privileges assigned to new logon
+2014-01-25T13:49:59.131754Z @IACIS-HDD-2014 [00001889] Security: An account was successfully logged on
+2014-01-25T13:49:59.131754Z @IACIS-HDD-2014 [00001890] Security: Special privileges assigned to new logon
+2014-01-25T13:51:19.924296Z @IACIS-HDD-2014 [00001913] Security: An attempt was made to register a security event source
+2014-01-25T13:51:19.955496Z @IACIS-HDD-2014 [00001914] Security: An attempt was made to unregister a security event source
+2014-01-25T13:53:06.731637Z @IACIS-HDD-2014 [00001940] Security: An account was successfully logged on
+2014-01-25T13:53:07.371238Z @IACIS-HDD-2014 [00001941] Security: The Per-user audit policy table was created
+2014-01-25T13:53:07.995239Z @IACIS-HDD-2014 [00001943] Security: Special privileges assigned to new logon
+2014-01-25T13:53:07.995239Z @IACIS-HDD-2014 [00001942] Security: An account was successfully logged on
+2014-01-25T13:53:08.104439Z @IACIS-HDD-2014 [00001945] Security: Special privileges assigned to new logon
+2014-01-25T13:53:08.104439Z @IACIS-HDD-2014 [00001944] Security: An account was successfully logged on
+2014-01-25T13:53:08.166839Z @IACIS-HDD-2014 [00001946] Security: An account was successfully logged on
+2014-01-25T13:53:08.166839Z @IACIS-HDD-2014 [00001947] Security: Special privileges assigned to new logon
+2014-01-25T13:53:08.260440Z @IACIS-HDD-2014 [00001949] Security: Special privileges assigned to new logon
+2014-01-25T13:53:08.260440Z @IACIS-HDD-2014 [00001948] Security: An account was successfully logged on
+2014-01-25T13:53:08.291640Z @IACIS-HDD-2014 [00001951] Security: Special privileges assigned to new logon
+2014-01-25T13:53:08.291640Z @IACIS-HDD-2014 [00001950] Security: An account was successfully logged on
+2014-01-25T13:53:08.759640Z @IACIS-HDD-2014 [00001952] Security: An account was successfully logged on
+2014-01-25T13:53:08.759640Z @IACIS-HDD-2014 [00001953] Security: Special privileges assigned to new logon
+2014-01-25T13:53:13.582848Z @IACIS-HDD-2014 [00001955] Security: An account was successfully logged on
+2014-01-25T13:53:13.582848Z @IACIS-HDD-2014 [00001956] Security: Special privileges assigned to new logon
+2014-01-25T13:53:16.314652Z @IACIS-HDD-2014 [00001959] Security: An account was successfully logged on
+2014-01-25T13:53:32.866281Z @IACIS-HDD-2014 [00001962] Security: An account was successfully logged on
+2014-01-25T13:53:32.866281Z @IACIS-HDD-2014 [00001963] Security: Special privileges assigned to new logon
+2014-01-25T13:53:32.866281Z @IACIS-HDD-2014 [00001960] Security: A logon was attempted using explicit credentials
+2014-01-25T13:53:32.866281Z @IACIS-HDD-2014 [00001961] Security: An account was successfully logged on
+2014-01-25T13:53:43.956900Z @IACIS-HDD-2014 [00001964] Security: An account was successfully logged on
+2014-01-25T13:53:43.956900Z @IACIS-HDD-2014 [00001965] Security: Special privileges assigned to new logon
+2014-01-25T13:54:14.517354Z @IACIS-HDD-2014 [00001970] Security: An account was successfully logged on
+2014-01-25T13:54:14.517354Z @IACIS-HDD-2014 [00001971] Security: Special privileges assigned to new logon
+2014-01-25T13:55:17.307464Z @IACIS-HDD-2014 [00001975] Security: Special privileges assigned to new logon
+2014-01-25T13:55:17.307464Z @IACIS-HDD-2014 [00001974] Security: An account was successfully logged on
+2014-01-25T14:24:20.766527Z @IACIS-HDD-2014 [00001977] Security: Special privileges assigned to new logon
+2014-01-25T14:24:20.766527Z @IACIS-HDD-2014 [00001976] Security: An account was successfully logged on
+2014-01-25T14:24:21.218927Z @IACIS-HDD-2014 [00001979] Security: Special privileges assigned to new logon
+2014-01-25T14:24:21.218927Z @IACIS-HDD-2014 [00001978] Security: An account was successfully logged on
+2014-01-25T14:35:46.647567Z @IACIS-HDD-2014 [00001981] Security: Special privileges assigned to new logon
+2014-01-25T14:35:46.647567Z @IACIS-HDD-2014 [00001980] Security: An account was successfully logged on
+2014-01-25T14:35:59.397585Z @IACIS-HDD-2014 [00001983] Security: Special privileges assigned to new logon
+2014-01-25T14:35:59.397585Z @IACIS-HDD-2014 [00001982] Security: An account was successfully logged on
+2014-01-25T14:46:34.786721Z @IACIS-HDD-2014 [00001984] Security: An account was successfully logged on
+2014-01-25T14:46:34.786721Z @IACIS-HDD-2014 [00001985] Security: Special privileges assigned to new logon
+2014-01-25T14:51:00.257509Z @IACIS-HDD-2014 [00001988] Security: Special privileges assigned to new logon
+2014-01-25T14:51:00.257509Z @IACIS-HDD-2014 [00001987] Security: An account was successfully logged on
+2014-01-25T14:51:01.630311Z @IACIS-HDD-2014 [00001989] Security: An account was successfully logged on
+2014-01-25T14:51:01.630311Z @IACIS-HDD-2014 [00001990] Security: Special privileges assigned to new logon
+2014-01-25T15:25:16.520845Z @IACIS-HDD-2014 [00001993] Security: An account was successfully logged on
+2014-01-25T15:25:16.598845Z @IACIS-HDD-2014 [00001994] Security: The Per-user audit policy table was created
+2014-01-25T15:25:27.799665Z @IACIS-HDD-2014 [00001995] Security: An account was successfully logged on
+2014-01-25T15:25:27.799665Z @IACIS-HDD-2014 [00001996] Security: Special privileges assigned to new logon
+2014-01-25T15:25:27.955665Z @IACIS-HDD-2014 [00001998] Security: Special privileges assigned to new logon
+2014-01-25T15:25:27.955665Z @IACIS-HDD-2014 [00001997] Security: An account was successfully logged on
+2014-01-25T15:25:28.018065Z @IACIS-HDD-2014 [00001999] Security: An account was successfully logged on
+2014-01-25T15:25:28.018065Z @IACIS-HDD-2014 [00002000] Security: Special privileges assigned to new logon
+2014-01-25T15:25:29.593668Z @IACIS-HDD-2014 [00002002] Security: Special privileges assigned to new logon
+2014-01-25T15:25:29.593668Z @IACIS-HDD-2014 [00002001] Security: An account was successfully logged on
+2014-01-25T15:25:29.640468Z @IACIS-HDD-2014 [00002004] Security: Special privileges assigned to new logon
+2014-01-25T15:25:29.640468Z @IACIS-HDD-2014 [00002003] Security: An account was successfully logged on
+2014-01-25T15:25:29.671668Z @IACIS-HDD-2014 [00002005] Security: An account was successfully logged on
+2014-01-25T15:25:29.671668Z @IACIS-HDD-2014 [00002006] Security: Special privileges assigned to new logon
+2014-01-25T15:25:29.921269Z @IACIS-HDD-2014 [00002007] Security: An account was successfully logged on
+2014-01-25T15:25:29.921269Z @IACIS-HDD-2014 [00002008] Security: Special privileges assigned to new logon
+2014-01-25T15:25:33.886890Z @IACIS-HDD-2014 [00002010] Security: An account was successfully logged on
+2014-01-25T15:25:33.886890Z @IACIS-HDD-2014 [00002011] Security: Special privileges assigned to new logon
+2014-01-25T15:25:34.992931Z @IACIS-HDD-2014 [00002014] Security: An account was successfully logged on
+2014-01-25T15:25:50.377368Z @IACIS-HDD-2014 [00002015] Security: A logon was attempted using explicit credentials
+2014-01-25T15:25:50.377368Z @IACIS-HDD-2014 [00002016] Security: An account was successfully logged on
+2014-01-25T15:25:50.377368Z @IACIS-HDD-2014 [00002017] Security: An account was successfully logged on
+2014-01-25T15:25:50.392968Z @IACIS-HDD-2014 [00002018] Security: Special privileges assigned to new logon
+2014-01-25T15:25:58.017181Z @IACIS-HDD-2014 [00002019] Security: An account was successfully logged on
+2014-01-25T15:25:58.017181Z @IACIS-HDD-2014 [00002020] Security: Special privileges assigned to new logon
+2014-01-25T15:27:41.532564Z @IACIS-HDD-2014 [00002022] Security: A user account was created
+2014-01-25T15:27:41.610564Z @IACIS-HDD-2014 [00002024] Security: A user account was changed
+2014-01-25T15:27:41.797764Z @IACIS-HDD-2014 [00002025] Security: A member was added to a security-enabled local group
+2014-01-25T15:27:42.031765Z @IACIS-HDD-2014 [00002026] Security: A user account was changed
+2014-01-25T15:27:42.811766Z @IACIS-HDD-2014 [00002027] Security: A member was added to a security-enabled local group
+2014-01-25T15:27:42.936566Z @IACIS-HDD-2014 [00002028] Security: A user account was changed
+2014-01-25T15:28:56.162695Z @IACIS-HDD-2014 [00002029] Security: A user account was changed
+2014-01-25T15:28:56.381096Z @IACIS-HDD-2014 [00002031] Security: A user account was changed
+2014-01-25T15:30:36.969672Z @IACIS-HDD-2014 [00002033] Security: A user account was created
+2014-01-25T15:30:36.985272Z @IACIS-HDD-2014 [00002035] Security: A user account was changed
+2014-01-25T15:30:37.125673Z @IACIS-HDD-2014 [00002036] Security: A member was added to a security-enabled local group
+2014-01-25T15:30:37.406473Z @IACIS-HDD-2014 [00002037] Security: A user account was changed
+2014-01-25T15:30:37.780874Z @IACIS-HDD-2014 [00002038] Security: A member was added to a security-enabled local group
+2014-01-25T15:30:38.077274Z @IACIS-HDD-2014 [00002039] Security: A user account was changed
+2014-01-25T15:31:04.182520Z @IACIS-HDD-2014 [00002040] Security: A user account was changed
+2014-01-25T15:31:04.307321Z @IACIS-HDD-2014 [00002042] Security: A user account was changed
+2014-01-25T15:32:09.638636Z @IACIS-HDD-2014 [00002044] Security: Special privileges assigned to new logon
+2014-01-25T15:32:09.638636Z @IACIS-HDD-2014 [00002043] Security: An account was successfully logged on
+2014-01-25T16:17:39.617429Z @IACIS-HDD-2014 [00002046] Security: Special privileges assigned to new logon
+2014-01-25T16:17:39.617429Z @IACIS-HDD-2014 [00002045] Security: An account was successfully logged on
+2014-01-25T16:19:34.645712Z @IACIS-HDD-2014 [00002047] Security: An account was successfully logged on
+2014-01-25T16:19:34.645712Z @IACIS-HDD-2014 [00002048] Security: Special privileges assigned to new logon
+2014-01-25T16:24:44.899056Z @IACIS-HDD-2014 [00002049] Security: An account was successfully logged on
+2014-01-25T16:24:44.899056Z @IACIS-HDD-2014 [00002050] Security: Special privileges assigned to new logon
+2014-01-25T16:24:46.427859Z @IACIS-HDD-2014 [00002051] Security: An account was successfully logged on
+2014-01-25T16:24:46.427859Z @IACIS-HDD-2014 [00002052] Security: Special privileges assigned to new logon
+2014-01-25T16:25:26.519930Z @IACIS-HDD-2014 [00002054] Security: An attempt was made to unregister a security event source
+2014-01-25T16:25:26.519930Z @IACIS-HDD-2014 [00002053] Security: An attempt was made to register a security event source
+2014-01-25T16:26:11.619609Z @IACIS-HDD-2014 [00002056] Security: Special privileges assigned to new logon
+2014-01-25T16:26:11.619609Z @IACIS-HDD-2014 [00002055] Security: An account was successfully logged on
+2014-01-25T16:45:10.895610Z @IACIS-HDD-2014 [00002058] Security: An account was successfully logged on
+2014-01-25T16:45:10.895610Z @IACIS-HDD-2014 [00002059] Security: Special privileges assigned to new logon
+2014-01-25T18:19:30.235632Z @IACIS-HDD-2014 [00002062] Security: An account was successfully logged on
+2014-01-25T18:19:30.812833Z @IACIS-HDD-2014 [00002063] Security: The Per-user audit policy table was created
+2014-01-25T18:19:31.234034Z @IACIS-HDD-2014 [00002065] Security: Special privileges assigned to new logon
+2014-01-25T18:19:31.234034Z @IACIS-HDD-2014 [00002064] Security: An account was successfully logged on
+2014-01-25T18:19:31.514835Z @IACIS-HDD-2014 [00002067] Security: Special privileges assigned to new logon
+2014-01-25T18:19:31.514835Z @IACIS-HDD-2014 [00002066] Security: An account was successfully logged on
+2014-01-25T18:19:31.546035Z @IACIS-HDD-2014 [00002068] Security: An account was successfully logged on
+2014-01-25T18:19:31.546035Z @IACIS-HDD-2014 [00002069] Security: Special privileges assigned to new logon
+2014-01-25T18:19:36.210443Z @IACIS-HDD-2014 [00002071] Security: Special privileges assigned to new logon
+2014-01-25T18:19:36.210443Z @IACIS-HDD-2014 [00002070] Security: An account was successfully logged on
+2014-01-25T18:19:36.257243Z @IACIS-HDD-2014 [00002072] Security: An account was successfully logged on
+2014-01-25T18:19:36.257243Z @IACIS-HDD-2014 [00002073] Security: Special privileges assigned to new logon
+2014-01-25T18:19:36.288443Z @IACIS-HDD-2014 [00002074] Security: An account was successfully logged on
+2014-01-25T18:19:36.288443Z @IACIS-HDD-2014 [00002075] Security: Special privileges assigned to new logon
+2014-01-25T18:19:39.588463Z @IACIS-HDD-2014 [00002077] Security: An account was successfully logged on
+2014-01-25T18:19:39.588463Z @IACIS-HDD-2014 [00002078] Security: Special privileges assigned to new logon
+2014-01-25T18:19:43.523677Z @IACIS-HDD-2014 [00002081] Security: An account was successfully logged on
+2014-01-25T18:19:48.936887Z @IACIS-HDD-2014 [00002085] Security: Special privileges assigned to new logon
+2014-01-25T18:19:48.936887Z @IACIS-HDD-2014 [00002083] Security: An account was successfully logged on
+2014-01-25T18:19:48.936887Z @IACIS-HDD-2014 [00002082] Security: A logon was attempted using explicit credentials
+2014-01-25T18:19:48.936887Z @IACIS-HDD-2014 [00002084] Security: An account was successfully logged on
+2014-01-25T18:19:58.681703Z @IACIS-HDD-2014 [00002087] Security: Special privileges assigned to new logon
+2014-01-25T18:19:58.681703Z @IACIS-HDD-2014 [00002086] Security: An account was successfully logged on
+2014-01-25T18:21:45.012290Z @IACIS-HDD-2014 [00002088] Security: An account was successfully logged on
+2014-01-25T18:21:45.012290Z @IACIS-HDD-2014 [00002089] Security: Special privileges assigned to new logon
+2014-01-25T18:25:39.480303Z @IACIS-HDD-2014 [00002094] Security: An account was successfully logged on
+2014-01-25T18:25:39.480303Z @IACIS-HDD-2014 [00002095] Security: Special privileges assigned to new logon
+2014-01-25T18:25:39.480303Z @IACIS-HDD-2014 [00002093] Security: An account was successfully logged on
+2014-01-25T18:25:39.480303Z @IACIS-HDD-2014 [00002092] Security: A logon was attempted using explicit credentials
+2014-01-25T18:27:38.439713Z @IACIS-HDD-2014 [00002099] Security: An account was successfully logged on
+2014-01-25T18:27:38.439713Z @IACIS-HDD-2014 [00002100] Security: Special privileges assigned to new logon
+2014-01-25T18:27:38.439713Z @IACIS-HDD-2014 [00002097] Security: A logon was attempted using explicit credentials
+2014-01-25T18:27:38.439713Z @IACIS-HDD-2014 [00002098] Security: An account was successfully logged on
+2014-01-25T18:30:45.901244Z @IACIS-HDD-2014 [00002107] Security: Special privileges assigned to new logon
+2014-01-25T18:30:45.901244Z @IACIS-HDD-2014 [00002106] Security: An account was successfully logged on
+2014-01-29T12:27:46.493224Z @IACIS-HDD-2014 [00002110] Security: An account was successfully logged on
+2014-01-29T12:27:46.586824Z @IACIS-HDD-2014 [00002111] Security: The Per-user audit policy table was created
+2014-01-29T12:27:46.696024Z @IACIS-HDD-2014 [00002112] Security: An account was successfully logged on
+2014-01-29T12:27:46.696024Z @IACIS-HDD-2014 [00002113] Security: Special privileges assigned to new logon
+2014-01-29T12:27:46.867625Z @IACIS-HDD-2014 [00002114] Security: An account was successfully logged on
+2014-01-29T12:27:46.867625Z @IACIS-HDD-2014 [00002115] Security: Special privileges assigned to new logon
+2014-01-29T12:27:46.914425Z @IACIS-HDD-2014 [00002116] Security: An account was successfully logged on
+2014-01-29T12:27:46.914425Z @IACIS-HDD-2014 [00002117] Security: Special privileges assigned to new logon
+2014-01-29T12:27:49.940830Z @IACIS-HDD-2014 [00002118] Security: An account was successfully logged on
+2014-01-29T12:27:49.940830Z @IACIS-HDD-2014 [00002119] Security: Special privileges assigned to new logon
+2014-01-29T12:27:49.987630Z @IACIS-HDD-2014 [00002120] Security: An account was successfully logged on
+2014-01-29T12:27:49.987630Z @IACIS-HDD-2014 [00002121] Security: Special privileges assigned to new logon
+2014-01-29T12:27:50.018830Z @IACIS-HDD-2014 [00002122] Security: An account was successfully logged on
+2014-01-29T12:27:50.018830Z @IACIS-HDD-2014 [00002123] Security: Special privileges assigned to new logon
+2014-01-29T12:27:56.725857Z @IACIS-HDD-2014 [00002125] Security: An account was successfully logged on
+2014-01-29T12:27:56.725857Z @IACIS-HDD-2014 [00002126] Security: Special privileges assigned to new logon
+2014-01-29T12:27:57.640897Z @IACIS-HDD-2014 [00002129] Security: An account was successfully logged on
+2014-01-29T12:30:00.892120Z @IACIS-HDD-2014 [00002130] Security: An account was successfully logged on
+2014-01-29T12:30:00.892120Z @IACIS-HDD-2014 [00002131] Security: Special privileges assigned to new logon
+2014-01-29T12:30:48.519003Z @IACIS-HDD-2014 [00002135] Security: Special privileges assigned to new logon
+2014-01-29T12:30:48.519003Z @IACIS-HDD-2014 [00002132] Security: A logon was attempted using explicit credentials
+2014-01-29T12:30:48.519003Z @IACIS-HDD-2014 [00002134] Security: An account was successfully logged on
+2014-01-29T12:30:48.519003Z @IACIS-HDD-2014 [00002133] Security: An account was successfully logged on
+2014-01-29T12:31:07.571437Z @IACIS-HDD-2014 [00002137] Security: Special privileges assigned to new logon
+2014-01-29T12:31:07.571437Z @IACIS-HDD-2014 [00002136] Security: An account was successfully logged on
+2014-01-29T12:40:36.153125Z @IACIS-HDD-2014 [00002148] Security: Special privileges assigned to new logon
+2014-01-29T12:40:36.153125Z @IACIS-HDD-2014 [00002147] Security: An account was successfully logged on
+2014-01-29T12:40:38.138239Z @IACIS-HDD-2014 [00002150] Security: Special privileges assigned to new logon
+2014-01-29T12:40:38.138239Z @IACIS-HDD-2014 [00002149] Security: An account was successfully logged on
+2014-01-29T12:41:53.335540Z @IACIS-HDD-2014 [00002152] Security: An attempt was made to unregister a security event source
+2014-01-29T12:41:53.335540Z @IACIS-HDD-2014 [00002151] Security: An attempt was made to register a security event source
+2014-01-29T13:17:10.658066Z @IACIS-HDD-2014 [00002153] Security: An account was successfully logged on
+2014-01-29T13:17:10.658066Z @IACIS-HDD-2014 [00002154] Security: Special privileges assigned to new logon
+2014-01-29T14:08:50.035081Z @IACIS-HDD-2014 [00002155] Security: A logon was attempted using explicit credentials
+2014-01-29T14:08:50.035081Z @IACIS-HDD-2014 [00002158] Security: Special privileges assigned to new logon
+2014-01-29T14:08:50.035081Z @IACIS-HDD-2014 [00002156] Security: An account was successfully logged on
+2014-01-29T14:08:50.035081Z @IACIS-HDD-2014 [00002157] Security: An account was successfully logged on
+2014-01-29T14:23:50.999864Z @IACIS-HDD-2014 [00002162] Security: Special privileges assigned to new logon
+2014-01-29T14:23:50.999864Z @IACIS-HDD-2014 [00002161] Security: An account was successfully logged on
+2014-01-29T14:33:26.718875Z @IACIS-HDD-2014 [00002164] Security: Special privileges assigned to new logon
+2014-01-29T14:33:26.718875Z @IACIS-HDD-2014 [00002163] Security: An account was successfully logged on
+2014-01-29T14:33:27.686077Z @IACIS-HDD-2014 [00002165] Security: An account was successfully logged on
+2014-01-29T14:33:27.686077Z @IACIS-HDD-2014 [00002166] Security: Special privileges assigned to new logon
+2014-01-29T14:34:19.306567Z @IACIS-HDD-2014 [00002168] Security: Special privileges assigned to new logon
+2014-01-29T14:34:19.306567Z @IACIS-HDD-2014 [00002167] Security: An account was successfully logged on
+2014-01-29T15:36:13.118690Z @IACIS-HDD-2014 [00002170] Security: An account was successfully logged on
+2014-01-29T15:36:13.118690Z @IACIS-HDD-2014 [00002171] Security: Special privileges assigned to new logon
+2014-01-29T15:36:17.876699Z @IACIS-HDD-2014 [00002172] Security: An account was successfully logged on
+2014-01-29T15:36:17.876699Z @IACIS-HDD-2014 [00002173] Security: Special privileges assigned to new logon
+2014-01-29T15:36:18.017099Z @IACIS-HDD-2014 [00002175] Security: Special privileges assigned to new logon
+2014-01-29T15:36:18.017099Z @IACIS-HDD-2014 [00002174] Security: An account was successfully logged on
+2014-01-29T15:37:24.208015Z @IACIS-HDD-2014 [00002177] Security: An attempt was made to unregister a security event source
+2014-01-29T15:37:24.208015Z @IACIS-HDD-2014 [00002176] Security: An attempt was made to register a security event source
+2014-02-03T12:00:35.588423Z @IACIS-HDD-2014 [00002180] Security: An account was successfully logged on
+2014-02-03T12:00:35.682023Z @IACIS-HDD-2014 [00002181] Security: The Per-user audit policy table was created
+2014-02-03T12:00:35.822423Z @IACIS-HDD-2014 [00002182] Security: An account was successfully logged on
+2014-02-03T12:00:35.822423Z @IACIS-HDD-2014 [00002183] Security: Special privileges assigned to new logon
+2014-02-03T12:00:35.994023Z @IACIS-HDD-2014 [00002184] Security: An account was successfully logged on
+2014-02-03T12:00:35.994023Z @IACIS-HDD-2014 [00002185] Security: Special privileges assigned to new logon
+2014-02-03T12:00:36.040823Z @IACIS-HDD-2014 [00002186] Security: An account was successfully logged on
+2014-02-03T12:00:36.040823Z @IACIS-HDD-2014 [00002187] Security: Special privileges assigned to new logon
+2014-02-03T12:00:38.022027Z @IACIS-HDD-2014 [00002188] Security: An account was successfully logged on
+2014-02-03T12:00:38.022027Z @IACIS-HDD-2014 [00002189] Security: Special privileges assigned to new logon
+2014-02-03T12:00:38.053227Z @IACIS-HDD-2014 [00002190] Security: An account was successfully logged on
+2014-02-03T12:00:38.053227Z @IACIS-HDD-2014 [00002191] Security: Special privileges assigned to new logon
+2014-02-03T12:00:38.100027Z @IACIS-HDD-2014 [00002193] Security: Special privileges assigned to new logon
+2014-02-03T12:00:38.100027Z @IACIS-HDD-2014 [00002192] Security: An account was successfully logged on
+2014-02-03T12:00:38.412028Z @IACIS-HDD-2014 [00002194] Security: An account was successfully logged on
+2014-02-03T12:00:38.412028Z @IACIS-HDD-2014 [00002195] Security: Special privileges assigned to new logon
+2014-02-03T12:00:46.207242Z @IACIS-HDD-2014 [00002198] Security: Special privileges assigned to new logon
+2014-02-03T12:00:46.207242Z @IACIS-HDD-2014 [00002197] Security: An account was successfully logged on
+2014-02-03T12:00:46.859263Z @IACIS-HDD-2014 [00002201] Security: An account was successfully logged on
+2014-02-03T12:01:52.744423Z @IACIS-HDD-2014 [00002249] Security: An account was successfully logged on
+2014-02-03T12:01:52.838023Z @IACIS-HDD-2014 [00002250] Security: The Per-user audit policy table was created
+2014-02-03T12:01:52.962823Z @IACIS-HDD-2014 [00002251] Security: An account was successfully logged on
+2014-02-03T12:01:52.962823Z @IACIS-HDD-2014 [00002252] Security: Special privileges assigned to new logon
+2014-02-03T12:01:53.150024Z @IACIS-HDD-2014 [00002254] Security: Special privileges assigned to new logon
+2014-02-03T12:01:53.150024Z @IACIS-HDD-2014 [00002253] Security: An account was successfully logged on
+2014-02-03T12:01:53.196824Z @IACIS-HDD-2014 [00002255] Security: An account was successfully logged on
+2014-02-03T12:01:53.196824Z @IACIS-HDD-2014 [00002256] Security: Special privileges assigned to new logon
+2014-02-03T12:01:55.646028Z @IACIS-HDD-2014 [00002258] Security: Special privileges assigned to new logon
+2014-02-03T12:01:55.646028Z @IACIS-HDD-2014 [00002257] Security: An account was successfully logged on
+2014-02-03T12:01:55.692828Z @IACIS-HDD-2014 [00002259] Security: An account was successfully logged on
+2014-02-03T12:01:55.692828Z @IACIS-HDD-2014 [00002260] Security: Special privileges assigned to new logon
+2014-02-03T12:01:55.724028Z @IACIS-HDD-2014 [00002261] Security: An account was successfully logged on
+2014-02-03T12:01:55.724028Z @IACIS-HDD-2014 [00002262] Security: Special privileges assigned to new logon
+2014-02-03T12:01:56.020429Z @IACIS-HDD-2014 [00002264] Security: Special privileges assigned to new logon
+2014-02-03T12:01:56.020429Z @IACIS-HDD-2014 [00002263] Security: An account was successfully logged on
+2014-02-03T12:02:03.022841Z @IACIS-HDD-2014 [00002266] Security: An account was successfully logged on
+2014-02-03T12:02:03.022841Z @IACIS-HDD-2014 [00002267] Security: Special privileges assigned to new logon
+2014-02-03T12:02:03.746860Z @IACIS-HDD-2014 [00002270] Security: An account was successfully logged on
+2014-02-03T12:03:17.902799Z @IACIS-HDD-2014 [00002271] Security: A logon was attempted using explicit credentials
+2014-02-03T12:03:17.902799Z @IACIS-HDD-2014 [00002274] Security: Special privileges assigned to new logon
+2014-02-03T12:03:17.902799Z @IACIS-HDD-2014 [00002273] Security: An account was successfully logged on
+2014-02-03T12:03:17.902799Z @IACIS-HDD-2014 [00002272] Security: An account was successfully logged on
+2014-02-03T12:03:26.800214Z @IACIS-HDD-2014 [00002276] Security: Special privileges assigned to new logon
+2014-02-03T12:03:26.800214Z @IACIS-HDD-2014 [00002275] Security: An account was successfully logged on
+2014-02-03T12:13:51.195830Z @IACIS-HDD-2014 [00002284] Security: An account was successfully logged on
+2014-02-03T12:13:51.195830Z @IACIS-HDD-2014 [00002285] Security: Special privileges assigned to new logon
+2014-02-03T12:13:51.991431Z @IACIS-HDD-2014 [00002286] Security: An account was successfully logged on
+2014-02-03T12:13:51.991431Z @IACIS-HDD-2014 [00002287] Security: Special privileges assigned to new logon
+2014-02-03T12:15:03.218290Z @IACIS-HDD-2014 [00002288] Security: An attempt was made to register a security event source
+2014-02-03T12:15:03.235790Z @IACIS-HDD-2014 [00002289] Security: An attempt was made to unregister a security event source
+2014-02-03T12:49:25.636461Z @IACIS-HDD-2014 [00002291] Security: Special privileges assigned to new logon
+2014-02-03T12:49:25.636461Z @IACIS-HDD-2014 [00002290] Security: An account was successfully logged on
+2014-02-03T12:54:23.904986Z @IACIS-HDD-2014 [00002293] Security: Special privileges assigned to new logon
+2014-02-03T12:54:23.904986Z @IACIS-HDD-2014 [00002292] Security: An account was successfully logged on
+2014-02-03T12:54:24.045387Z @IACIS-HDD-2014 [00002295] Security: Special privileges assigned to new logon
+2014-02-03T12:54:24.045387Z @IACIS-HDD-2014 [00002294] Security: An account was successfully logged on
+2014-02-03T12:55:10.253070Z @IACIS-HDD-2014 [00002296] Security: An attempt was made to register a security event source
+2014-02-03T12:55:10.253070Z @IACIS-HDD-2014 [00002297] Security: An attempt was made to unregister a security event source
+2014-02-03T13:28:27.508605Z @IACIS-HDD-2014 [00002299] Security: Special privileges assigned to new logon
+2014-02-03T13:28:27.508605Z @IACIS-HDD-2014 [00002298] Security: An account was successfully logged on
+2014-02-03T13:47:24.703319Z @IACIS-HDD-2014 [00002300] Security: An account was successfully logged on
+2014-02-03T13:47:24.703319Z @IACIS-HDD-2014 [00002301] Security: Special privileges assigned to new logon
+2014-02-03T13:57:30.218383Z @IACIS-HDD-2014 [00002303] Security: Special privileges assigned to new logon
+2014-02-03T13:57:30.218383Z @IACIS-HDD-2014 [00002302] Security: An account was successfully logged on
+2014-02-03T13:57:30.623983Z @IACIS-HDD-2014 [00002304] Security: An account was successfully logged on
+2014-02-03T13:57:30.623983Z @IACIS-HDD-2014 [00002305] Security: Special privileges assigned to new logon
+2014-02-03T13:58:13.633259Z @IACIS-HDD-2014 [00002306] Security: An account was successfully logged on
+2014-02-03T13:58:13.633259Z @IACIS-HDD-2014 [00002307] Security: Special privileges assigned to new logon
+2014-02-03T15:17:09.585577Z @IACIS-HDD-2014 [00002310] Security: An account was successfully logged on
+2014-02-03T15:17:09.585577Z @IACIS-HDD-2014 [00002311] Security: An account was successfully logged on
+2014-02-03T15:17:09.585577Z @IACIS-HDD-2014 [00002309] Security: A logon was attempted using explicit credentials
+2014-02-03T15:17:09.585577Z @IACIS-HDD-2014 [00002312] Security: Special privileges assigned to new logon
+2014-02-03T15:17:10.583979Z @IACIS-HDD-2014 [00002313] Security: A member was added to a security-enabled local group
+2014-02-03T17:45:34.698422Z @IACIS-HDD-2014 [00002314] Security: A logon was attempted using explicit credentials
+2014-02-03T17:45:34.698422Z @IACIS-HDD-2014 [00002316] Security: An account was successfully logged on
+2014-02-03T17:45:34.698422Z @IACIS-HDD-2014 [00002315] Security: An account was successfully logged on
+2014-02-03T17:45:34.698422Z @IACIS-HDD-2014 [00002317] Security: Special privileges assigned to new logon
+2014-02-03T18:01:17.878083Z @IACIS-HDD-2014 [00002321] Security: An account was successfully logged on
+2014-02-03T18:01:17.878083Z @IACIS-HDD-2014 [00002322] Security: Special privileges assigned to new logon
+2014-02-04T14:11:34.718851Z @IACIS-HDD-2014 [00002325] Security: An account was successfully logged on
+2014-02-04T14:11:35.935653Z @IACIS-HDD-2014 [00002326] Security: The Per-user audit policy table was created
+2014-02-04T14:11:36.091653Z @IACIS-HDD-2014 [00002327] Security: An account was successfully logged on
+2014-02-04T14:11:36.091653Z @IACIS-HDD-2014 [00002328] Security: Special privileges assigned to new logon
+2014-02-04T14:11:36.294454Z @IACIS-HDD-2014 [00002330] Security: Special privileges assigned to new logon
+2014-02-04T14:11:36.294454Z @IACIS-HDD-2014 [00002329] Security: An account was successfully logged on
+2014-02-04T14:11:36.341254Z @IACIS-HDD-2014 [00002332] Security: Special privileges assigned to new logon
+2014-02-04T14:11:36.341254Z @IACIS-HDD-2014 [00002331] Security: An account was successfully logged on
+2014-02-04T14:11:38.868458Z @IACIS-HDD-2014 [00002334] Security: Special privileges assigned to new logon
+2014-02-04T14:11:38.868458Z @IACIS-HDD-2014 [00002333] Security: An account was successfully logged on
+2014-02-04T14:11:38.899658Z @IACIS-HDD-2014 [00002335] Security: An account was successfully logged on
+2014-02-04T14:11:38.899658Z @IACIS-HDD-2014 [00002336] Security: Special privileges assigned to new logon
+2014-02-04T14:11:38.946458Z @IACIS-HDD-2014 [00002338] Security: Special privileges assigned to new logon
+2014-02-04T14:11:38.946458Z @IACIS-HDD-2014 [00002337] Security: An account was successfully logged on
+2014-02-04T14:11:44.472468Z @IACIS-HDD-2014 [00002340] Security: An account was successfully logged on
+2014-02-04T14:11:44.472468Z @IACIS-HDD-2014 [00002341] Security: Special privileges assigned to new logon
+2014-02-04T14:11:45.191488Z @IACIS-HDD-2014 [00002344] Security: An account was successfully logged on
+2014-02-04T14:13:48.326514Z @IACIS-HDD-2014 [00002345] Security: An account was successfully logged on
+2014-02-04T14:13:48.326514Z @IACIS-HDD-2014 [00002346] Security: Special privileges assigned to new logon
+2014-02-04T14:14:19.651369Z @IACIS-HDD-2014 [00002348] Security: An account was successfully logged on
+2014-02-04T14:14:19.651369Z @IACIS-HDD-2014 [00002349] Security: An account was successfully logged on
+2014-02-04T14:14:19.651369Z @IACIS-HDD-2014 [00002347] Security: A logon was attempted using explicit credentials
+2014-02-04T14:14:19.651369Z @IACIS-HDD-2014 [00002350] Security: Special privileges assigned to new logon
+2014-02-04T14:15:27.046888Z @IACIS-HDD-2014 [00002355] Security: An account was successfully logged on
+2014-02-04T14:15:27.046888Z @IACIS-HDD-2014 [00002356] Security: Special privileges assigned to new logon
+2014-02-04T14:16:35.000608Z @IACIS-HDD-2014 [00002359] Security: An account was successfully logged on
+2014-02-04T14:16:35.000608Z @IACIS-HDD-2014 [00002360] Security: Special privileges assigned to new logon
+2014-02-04T14:20:21.040605Z @IACIS-HDD-2014 [00002362] Security: Special privileges assigned to new logon
+2014-02-04T14:20:21.040605Z @IACIS-HDD-2014 [00002361] Security: An account was successfully logged on
+2014-02-04T14:24:52.646482Z @IACIS-HDD-2014 [00002363] Security: An account was successfully logged on
+2014-02-04T14:24:52.646482Z @IACIS-HDD-2014 [00002364] Security: Special privileges assigned to new logon
+2014-02-04T14:56:49.976918Z @IACIS-HDD-2014 [00002366] Security: Special privileges assigned to new logon
+2014-02-04T14:56:49.976918Z @IACIS-HDD-2014 [00002365] Security: An account was successfully logged on
+2014-02-04T14:56:50.426919Z @IACIS-HDD-2014 [00002367] Security: An account was successfully logged on
+2014-02-04T14:56:50.426919Z @IACIS-HDD-2014 [00002368] Security: Special privileges assigned to new logon
+2014-02-04T14:57:29.867028Z @IACIS-HDD-2014 [00002369] Security: An attempt was made to register a security event source
+2014-02-04T14:57:29.867028Z @IACIS-HDD-2014 [00002370] Security: An attempt was made to unregister a security event source
+2014-02-04T14:58:25.061128Z @IACIS-HDD-2014 [00002372] Security: Special privileges assigned to new logon
+2014-02-04T14:58:25.061128Z @IACIS-HDD-2014 [00002371] Security: An account was successfully logged on
+2014-02-04T14:58:54.243222Z @IACIS-HDD-2014 [00002374] Security: Special privileges assigned to new logon
+2014-02-04T14:58:54.243222Z @IACIS-HDD-2014 [00002373] Security: An account was successfully logged on
+2014-02-04T14:59:27.611307Z @IACIS-HDD-2014 [00002376] Security: An attempt was made to unregister a security event source
+2014-02-04T14:59:27.611307Z @IACIS-HDD-2014 [00002375] Security: An attempt was made to register a security event source
+2014-02-04T14:59:42.891329Z @IACIS-HDD-2014 [00002377] Security: An account was successfully logged on
+2014-02-04T14:59:42.891329Z @IACIS-HDD-2014 [00002378] Security: Special privileges assigned to new logon
+2014-02-04T15:08:06.863393Z @IACIS-HDD-2014 [00002380] Security: Special privileges assigned to new logon
+2014-02-04T15:08:06.863393Z @IACIS-HDD-2014 [00002379] Security: An account was successfully logged on
+2014-02-04T15:10:08.047582Z @IACIS-HDD-2014 [00002382] Security: Special privileges assigned to new logon
+2014-02-04T15:10:08.047582Z @IACIS-HDD-2014 [00002381] Security: An account was successfully logged on
+2014-02-04T15:10:09.317584Z @IACIS-HDD-2014 [00002383] Security: An account was successfully logged on
+2014-02-04T15:10:09.317584Z @IACIS-HDD-2014 [00002384] Security: Special privileges assigned to new logon
+2014-02-04T15:11:27.629829Z @IACIS-HDD-2014 [00002386] Security: An attempt was made to unregister a security event source
+2014-02-04T15:11:27.629829Z @IACIS-HDD-2014 [00002385] Security: An attempt was made to register a security event source
+2014-02-04T15:13:12.856025Z @IACIS-HDD-2014 [00002387] Security: An account was successfully logged on
+2014-02-04T15:13:12.856025Z @IACIS-HDD-2014 [00002388] Security: Special privileges assigned to new logon
+2014-02-04T15:44:09.820051Z @IACIS-HDD-2014 [00002390] Security: Special privileges assigned to new logon
+2014-02-04T15:44:09.820051Z @IACIS-HDD-2014 [00002389] Security: An account was successfully logged on
+2014-02-04T17:27:25.615299Z @IACIS-HDD-2014 [00002392] Security: An account was successfully logged on
+2014-02-04T17:27:25.615299Z @IACIS-HDD-2014 [00002394] Security: Special privileges assigned to new logon
+2014-02-04T17:27:25.615299Z @IACIS-HDD-2014 [00002393] Security: An account was successfully logged on
+2014-02-04T17:27:25.615299Z @IACIS-HDD-2014 [00002391] Security: A logon was attempted using explicit credentials
+2014-02-04T18:18:01.125948Z @IACIS-HDD-2014 [00002398] Security: Special privileges assigned to new logon
+2014-02-04T18:18:01.125948Z @IACIS-HDD-2014 [00002397] Security: An account was successfully logged on
+2014-02-04T19:18:38.637345Z @IACIS-HDD-2014 [00002400] Security: An account was successfully logged on
+2014-02-04T19:18:38.637345Z @IACIS-HDD-2014 [00002401] Security: Special privileges assigned to new logon
+2014-02-05T13:30:23.886421Z @IACIS-HDD-2014 [00002404] Security: An account was successfully logged on
+2014-02-05T13:30:24.245222Z @IACIS-HDD-2014 [00002405] Security: The Per-user audit policy table was created
+2014-02-05T13:30:32.154436Z @IACIS-HDD-2014 [00002407] Security: Special privileges assigned to new logon
+2014-02-05T13:30:32.154436Z @IACIS-HDD-2014 [00002406] Security: An account was successfully logged on
+2014-02-05T13:30:32.326036Z @IACIS-HDD-2014 [00002408] Security: An account was successfully logged on
+2014-02-05T13:30:32.326036Z @IACIS-HDD-2014 [00002409] Security: Special privileges assigned to new logon
+2014-02-05T13:30:32.357236Z @IACIS-HDD-2014 [00002411] Security: Special privileges assigned to new logon
+2014-02-05T13:30:32.357236Z @IACIS-HDD-2014 [00002410] Security: An account was successfully logged on
+2014-02-05T13:30:33.589638Z @IACIS-HDD-2014 [00002412] Security: An account was successfully logged on
+2014-02-05T13:30:33.589638Z @IACIS-HDD-2014 [00002413] Security: Special privileges assigned to new logon
+2014-02-05T13:30:33.636438Z @IACIS-HDD-2014 [00002415] Security: Special privileges assigned to new logon
+2014-02-05T13:30:33.636438Z @IACIS-HDD-2014 [00002414] Security: An account was successfully logged on
+2014-02-05T13:30:33.667639Z @IACIS-HDD-2014 [00002417] Security: Special privileges assigned to new logon
+2014-02-05T13:30:33.667639Z @IACIS-HDD-2014 [00002416] Security: An account was successfully logged on
+2014-02-05T13:30:35.146443Z @IACIS-HDD-2014 [00002419] Security: An account was successfully logged on
+2014-02-05T13:30:35.146443Z @IACIS-HDD-2014 [00002420] Security: Special privileges assigned to new logon
+2014-02-05T13:30:38.980450Z @IACIS-HDD-2014 [00002423] Security: An account was successfully logged on
+2014-02-05T13:32:43.037871Z @IACIS-HDD-2014 [00002424] Security: An account was successfully logged on
+2014-02-05T13:32:43.037871Z @IACIS-HDD-2014 [00002425] Security: Special privileges assigned to new logon
+2014-02-05T13:33:46.701582Z @IACIS-HDD-2014 [00002426] Security: An account was successfully logged on
+2014-02-05T13:33:46.701582Z @IACIS-HDD-2014 [00002427] Security: Special privileges assigned to new logon
+2014-02-05T13:37:07.380335Z @IACIS-HDD-2014 [00002429] Security: An account was successfully logged on
+2014-02-05T13:37:07.380335Z @IACIS-HDD-2014 [00002431] Security: Special privileges assigned to new logon
+2014-02-05T13:37:07.380335Z @IACIS-HDD-2014 [00002428] Security: A logon was attempted using explicit credentials
+2014-02-05T13:37:07.380335Z @IACIS-HDD-2014 [00002430] Security: An account was successfully logged on
+2014-02-05T13:38:19.636062Z @IACIS-HDD-2014 [00002437] Security: Special privileges assigned to new logon
+2014-02-05T13:38:19.636062Z @IACIS-HDD-2014 [00002436] Security: An account was successfully logged on
+2014-02-05T13:45:35.420429Z @IACIS-HDD-2014 [00002441] Security: Special privileges assigned to new logon
+2014-02-05T13:45:35.420429Z @IACIS-HDD-2014 [00002440] Security: An account was successfully logged on
+2014-02-05T13:45:35.872829Z @IACIS-HDD-2014 [00002443] Security: Special privileges assigned to new logon
+2014-02-05T13:45:35.872829Z @IACIS-HDD-2014 [00002442] Security: An account was successfully logged on
+2014-02-05T13:46:05.372481Z @IACIS-HDD-2014 [00002445] Security: An attempt was made to unregister a security event source
+2014-02-05T13:46:05.372481Z @IACIS-HDD-2014 [00002444] Security: An attempt was made to register a security event source
+2014-02-05T13:46:12.127293Z @IACIS-HDD-2014 [00002446] Security: An account was successfully logged on
+2014-02-05T13:46:12.127293Z @IACIS-HDD-2014 [00002447] Security: Special privileges assigned to new logon
+2014-02-05T16:16:03.570975Z @IACIS-HDD-2014 [00002448] Security: An account was successfully logged on
+2014-02-05T16:16:03.570975Z @IACIS-HDD-2014 [00002449] Security: Special privileges assigned to new logon
+2014-02-05T16:16:14.428594Z @IACIS-HDD-2014 [00002453] Security: Special privileges assigned to new logon
+2014-02-05T16:16:14.428594Z @IACIS-HDD-2014 [00002452] Security: An account was successfully logged on
+2014-02-05T16:16:14.428594Z @IACIS-HDD-2014 [00002451] Security: An account was successfully logged on
+2014-02-05T16:16:14.428594Z @IACIS-HDD-2014 [00002450] Security: A logon was attempted using explicit credentials
+2014-02-05T16:55:19.973915Z @IACIS-HDD-2014 [00002456] Security: An account was successfully logged on
+2014-02-05T16:55:19.973915Z @IACIS-HDD-2014 [00002457] Security: Special privileges assigned to new logon
+2014-02-05T17:02:19.053051Z @IACIS-HDD-2014 [00002458] Security: An account was successfully logged on
+2014-02-05T17:02:19.053051Z @IACIS-HDD-2014 [00002459] Security: Special privileges assigned to new logon
+2014-02-05T17:02:19.474251Z @IACIS-HDD-2014 [00002461] Security: Special privileges assigned to new logon
+2014-02-05T17:02:19.474251Z @IACIS-HDD-2014 [00002460] Security: An account was successfully logged on
+2014-02-05T17:02:39.005486Z @IACIS-HDD-2014 [00002463] Security: An attempt was made to unregister a security event source
+2014-02-05T17:02:39.005486Z @IACIS-HDD-2014 [00002462] Security: An attempt was made to register a security event source
+2014-02-05T17:03:50.250811Z @IACIS-HDD-2014 [00002465] Security: Special privileges assigned to new logon
+2014-02-05T17:03:50.250811Z @IACIS-HDD-2014 [00002464] Security: An account was successfully logged on
+2014-02-05T17:35:49.147781Z @IACIS-HDD-2014 [00002469] Security: Special privileges assigned to new logon
+2014-02-05T17:35:49.147781Z @IACIS-HDD-2014 [00002466] Security: A logon was attempted using explicit credentials
+2014-02-05T17:35:49.147781Z @IACIS-HDD-2014 [00002468] Security: An account was successfully logged on
+2014-02-05T17:35:49.147781Z @IACIS-HDD-2014 [00002467] Security: An account was successfully logged on
+2014-02-06T11:20:23.544819Z @IACIS-HDD-2014 [00002483] Security: An account was successfully logged on
+2014-02-06T11:20:23.763219Z @IACIS-HDD-2014 [00002484] Security: The Per-user audit policy table was created
+2014-02-06T11:20:29.847230Z @IACIS-HDD-2014 [00002485] Security: An account was successfully logged on
+2014-02-06T11:20:29.847230Z @IACIS-HDD-2014 [00002486] Security: Special privileges assigned to new logon
+2014-02-06T11:20:30.050030Z @IACIS-HDD-2014 [00002487] Security: An account was successfully logged on
+2014-02-06T11:20:30.050030Z @IACIS-HDD-2014 [00002488] Security: Special privileges assigned to new logon
+2014-02-06T11:20:30.096830Z @IACIS-HDD-2014 [00002489] Security: An account was successfully logged on
+2014-02-06T11:20:30.096830Z @IACIS-HDD-2014 [00002490] Security: Special privileges assigned to new logon
+2014-02-06T11:20:31.407233Z @IACIS-HDD-2014 [00002492] Security: Special privileges assigned to new logon
+2014-02-06T11:20:31.407233Z @IACIS-HDD-2014 [00002491] Security: An account was successfully logged on
+2014-02-06T11:20:31.454033Z @IACIS-HDD-2014 [00002494] Security: Special privileges assigned to new logon
+2014-02-06T11:20:31.454033Z @IACIS-HDD-2014 [00002493] Security: An account was successfully logged on
+2014-02-06T11:20:31.485233Z @IACIS-HDD-2014 [00002496] Security: Special privileges assigned to new logon
+2014-02-06T11:20:31.485233Z @IACIS-HDD-2014 [00002495] Security: An account was successfully logged on
+2014-02-06T11:20:34.954847Z @IACIS-HDD-2014 [00002499] Security: Special privileges assigned to new logon
+2014-02-06T11:20:34.954847Z @IACIS-HDD-2014 [00002498] Security: An account was successfully logged on
+2014-02-06T11:20:38.390263Z @IACIS-HDD-2014 [00002502] Security: An account was successfully logged on
+2014-02-06T11:22:17.403637Z @IACIS-HDD-2014 [00002504] Security: An account was successfully logged on
+2014-02-06T11:22:17.403637Z @IACIS-HDD-2014 [00002506] Security: Special privileges assigned to new logon
+2014-02-06T11:22:17.403637Z @IACIS-HDD-2014 [00002505] Security: An account was successfully logged on
+2014-02-06T11:22:17.403637Z @IACIS-HDD-2014 [00002503] Security: A logon was attempted using explicit credentials
+2014-02-06T11:22:28.092456Z @IACIS-HDD-2014 [00002507] Security: An account was successfully logged on
+2014-02-06T11:22:28.092456Z @IACIS-HDD-2014 [00002508] Security: Special privileges assigned to new logon
+2014-02-06T11:22:57.106907Z @IACIS-HDD-2014 [00002512] Security: Special privileges assigned to new logon
+2014-02-06T11:22:57.106907Z @IACIS-HDD-2014 [00002511] Security: An account was successfully logged on
+2014-02-06T13:46:22.863731Z @IACIS-HDD-2014 [00002522] Security: Special privileges assigned to new logon
+2014-02-06T13:46:22.863731Z @IACIS-HDD-2014 [00002521] Security: An account was successfully logged on
+2014-02-06T13:46:23.253732Z @IACIS-HDD-2014 [00002524] Security: Special privileges assigned to new logon
+2014-02-06T13:46:23.253732Z @IACIS-HDD-2014 [00002523] Security: An account was successfully logged on
+2014-02-06T13:46:40.897363Z @IACIS-HDD-2014 [00002525] Security: An attempt was made to register a security event source
+2014-02-06T13:46:40.897363Z @IACIS-HDD-2014 [00002526] Security: An attempt was made to unregister a security event source
+2014-02-06T13:47:16.091025Z @IACIS-HDD-2014 [00002527] Security: An account was successfully logged on
+2014-02-06T13:47:16.091025Z @IACIS-HDD-2014 [00002528] Security: Special privileges assigned to new logon
+2014-02-06T14:02:10.190995Z @IACIS-HDD-2014 [00002531] Security: An account was successfully logged on
+2014-02-06T14:02:10.190995Z @IACIS-HDD-2014 [00002532] Security: Special privileges assigned to new logon
+2014-02-06T14:02:10.190995Z @IACIS-HDD-2014 [00002529] Security: A logon was attempted using explicit credentials
+2014-02-06T14:02:10.190995Z @IACIS-HDD-2014 [00002530] Security: An account was successfully logged on
+2014-02-06T18:54:03.529219Z @IACIS-HDD-2014 [00002538] Security: An account was successfully logged on
+2014-02-06T18:54:03.934820Z @IACIS-HDD-2014 [00002539] Security: The Per-user audit policy table was created
+2014-02-06T18:54:04.636821Z @IACIS-HDD-2014 [00002540] Security: An account was successfully logged on
+2014-02-06T18:54:04.636821Z @IACIS-HDD-2014 [00002541] Security: Special privileges assigned to new logon
+2014-02-06T18:54:04.886421Z @IACIS-HDD-2014 [00002543] Security: Special privileges assigned to new logon
+2014-02-06T18:54:04.886421Z @IACIS-HDD-2014 [00002542] Security: An account was successfully logged on
+2014-02-06T18:54:04.995622Z @IACIS-HDD-2014 [00002544] Security: An account was successfully logged on
+2014-02-06T18:54:04.995622Z @IACIS-HDD-2014 [00002545] Security: Special privileges assigned to new logon
+2014-02-06T18:54:07.819226Z @IACIS-HDD-2014 [00002546] Security: An account was successfully logged on
+2014-02-06T18:54:07.819226Z @IACIS-HDD-2014 [00002547] Security: Special privileges assigned to new logon
+2014-02-06T18:54:08.115627Z @IACIS-HDD-2014 [00002548] Security: An account was successfully logged on
+2014-02-06T18:54:08.115627Z @IACIS-HDD-2014 [00002549] Security: Special privileges assigned to new logon
+2014-02-06T18:54:08.146827Z @IACIS-HDD-2014 [00002550] Security: An account was successfully logged on
+2014-02-06T18:54:08.146827Z @IACIS-HDD-2014 [00002551] Security: Special privileges assigned to new logon
+2014-02-06T18:54:13.674842Z @IACIS-HDD-2014 [00002553] Security: An account was successfully logged on
+2014-02-06T18:54:13.674842Z @IACIS-HDD-2014 [00002554] Security: Special privileges assigned to new logon
+2014-02-06T18:54:17.487850Z @IACIS-HDD-2014 [00002557] Security: An account was successfully logged on
+2014-02-06T18:54:41.199893Z @IACIS-HDD-2014 [00002558] Security: A logon was attempted using explicit credentials
+2014-02-06T18:54:41.199893Z @IACIS-HDD-2014 [00002559] Security: An account was successfully logged on
+2014-02-06T18:54:41.199893Z @IACIS-HDD-2014 [00002561] Security: Special privileges assigned to new logon
+2014-02-06T18:54:41.199893Z @IACIS-HDD-2014 [00002560] Security: An account was successfully logged on
+2014-02-06T18:54:47.146303Z @IACIS-HDD-2014 [00002562] Security: An account was successfully logged on
+2014-02-06T18:54:47.146303Z @IACIS-HDD-2014 [00002563] Security: Special privileges assigned to new logon
+2014-02-06T18:55:39.759996Z @IACIS-HDD-2014 [00002569] Security: Special privileges assigned to new logon
+2014-02-06T18:55:39.759996Z @IACIS-HDD-2014 [00002568] Security: An account was successfully logged on
+2014-02-07T12:34:30.591619Z @IACIS-HDD-2014 [00002575] Security: An account was successfully logged on
+2014-02-07T12:34:30.966020Z @IACIS-HDD-2014 [00002576] Security: The Per-user audit policy table was created
+2014-02-07T12:34:31.496421Z @IACIS-HDD-2014 [00002578] Security: Special privileges assigned to new logon
+2014-02-07T12:34:31.496421Z @IACIS-HDD-2014 [00002577] Security: An account was successfully logged on
+2014-02-07T12:34:31.730421Z @IACIS-HDD-2014 [00002579] Security: An account was successfully logged on
+2014-02-07T12:34:31.730421Z @IACIS-HDD-2014 [00002580] Security: Special privileges assigned to new logon
+2014-02-07T12:34:31.824021Z @IACIS-HDD-2014 [00002582] Security: Special privileges assigned to new logon
+2014-02-07T12:34:31.824021Z @IACIS-HDD-2014 [00002581] Security: An account was successfully logged on
+2014-02-07T12:34:34.600826Z @IACIS-HDD-2014 [00002583] Security: An account was successfully logged on
+2014-02-07T12:34:34.600826Z @IACIS-HDD-2014 [00002584] Security: Special privileges assigned to new logon
+2014-02-07T12:34:34.975227Z @IACIS-HDD-2014 [00002586] Security: Special privileges assigned to new logon
+2014-02-07T12:34:34.975227Z @IACIS-HDD-2014 [00002585] Security: An account was successfully logged on
+2014-02-07T12:34:34.990827Z @IACIS-HDD-2014 [00002587] Security: An account was successfully logged on
+2014-02-07T12:34:34.990827Z @IACIS-HDD-2014 [00002588] Security: Special privileges assigned to new logon
+2014-02-07T12:34:40.305639Z @IACIS-HDD-2014 [00002591] Security: Special privileges assigned to new logon
+2014-02-07T12:34:40.305639Z @IACIS-HDD-2014 [00002590] Security: An account was successfully logged on
+2014-02-07T12:34:43.481656Z @IACIS-HDD-2014 [00002594] Security: An account was successfully logged on
+2014-02-07T12:35:37.154760Z @IACIS-HDD-2014 [00002598] Security: Special privileges assigned to new logon
+2014-02-07T12:35:37.154760Z @IACIS-HDD-2014 [00002595] Security: A logon was attempted using explicit credentials
+2014-02-07T12:35:37.154760Z @IACIS-HDD-2014 [00002596] Security: An account was successfully logged on
+2014-02-07T12:35:37.154760Z @IACIS-HDD-2014 [00002597] Security: An account was successfully logged on
+2014-02-07T12:35:40.971567Z @IACIS-HDD-2014 [00002599] Security: An account was successfully logged on
+2014-02-07T12:35:40.971567Z @IACIS-HDD-2014 [00002600] Security: Special privileges assigned to new logon
+2014-02-07T12:51:40.586453Z @IACIS-HDD-2014 [00002608] Security: Special privileges assigned to new logon
+2014-02-07T12:51:40.586453Z @IACIS-HDD-2014 [00002607] Security: An account was successfully logged on
+2014-02-07T13:06:24.485606Z @IACIS-HDD-2014 [00002609] Security: An account was successfully logged on
+2014-02-07T13:06:24.485606Z @IACIS-HDD-2014 [00002610] Security: Special privileges assigned to new logon
+2014-02-07T13:16:22.060256Z @IACIS-HDD-2014 [00002612] Security: Special privileges assigned to new logon
+2014-02-07T13:16:22.060256Z @IACIS-HDD-2014 [00002611] Security: An account was successfully logged on
+2014-02-07T13:16:22.543857Z @IACIS-HDD-2014 [00002613] Security: An account was successfully logged on
+2014-02-07T13:16:22.543857Z @IACIS-HDD-2014 [00002614] Security: Special privileges assigned to new logon
+2014-02-07T14:21:26.801517Z @IACIS-HDD-2014 [00002618] Security: An account was successfully logged on
+2014-02-07T14:21:26.801517Z @IACIS-HDD-2014 [00002616] Security: A logon was attempted using explicit credentials
+2014-02-07T14:21:26.801517Z @IACIS-HDD-2014 [00002619] Security: Special privileges assigned to new logon
+2014-02-07T14:21:26.801517Z @IACIS-HDD-2014 [00002617] Security: An account was successfully logged on
+2014-02-07T14:27:00.263404Z @IACIS-HDD-2014 [00002623] Security: An account was successfully logged on
+2014-02-07T14:27:00.263404Z @IACIS-HDD-2014 [00002621] Security: A logon was attempted using explicit credentials
+2014-02-07T14:27:00.263404Z @IACIS-HDD-2014 [00002624] Security: Special privileges assigned to new logon
+2014-02-07T14:27:00.263404Z @IACIS-HDD-2014 [00002622] Security: An account was successfully logged on
+2014-02-07T14:30:07.592518Z @IACIS-HDD-2014 [00002626] Security: Special privileges assigned to new logon
+2014-02-07T14:30:07.592518Z @IACIS-HDD-2014 [00002625] Security: An account was successfully logged on
+2014-02-07T14:31:04.631781Z @IACIS-HDD-2014 [00002627] Security: An account was successfully logged on
+2014-02-07T14:31:04.631781Z @IACIS-HDD-2014 [00002628] Security: Special privileges assigned to new logon
+2014-02-07T14:37:05.952499Z @IACIS-HDD-2014 [00002630] Security: Special privileges assigned to new logon
+2014-02-07T14:37:05.952499Z @IACIS-HDD-2014 [00002629] Security: An account was successfully logged on
+2014-02-07T15:10:38.317234Z @IACIS-HDD-2014 [00002633] Security: An account was successfully logged on
+2014-02-07T15:10:38.317234Z @IACIS-HDD-2014 [00002635] Security: Special privileges assigned to new logon
+2014-02-07T15:10:38.317234Z @IACIS-HDD-2014 [00002634] Security: An account was successfully logged on
+2014-02-07T15:10:38.317234Z @IACIS-HDD-2014 [00002632] Security: A logon was attempted using explicit credentials
+2014-02-07T16:51:39.168820Z @IACIS-HDD-2014 [00002639] Security: An account was successfully logged on
+2014-02-07T16:51:39.480821Z @IACIS-HDD-2014 [00002640] Security: The Per-user audit policy table was created
+2014-02-07T16:51:46.953234Z @IACIS-HDD-2014 [00002641] Security: An account was successfully logged on
+2014-02-07T16:51:46.953234Z @IACIS-HDD-2014 [00002642] Security: Special privileges assigned to new logon
+2014-02-07T16:51:47.124834Z @IACIS-HDD-2014 [00002644] Security: Special privileges assigned to new logon
+2014-02-07T16:51:47.124834Z @IACIS-HDD-2014 [00002643] Security: An account was successfully logged on
+2014-02-07T16:51:47.156034Z @IACIS-HDD-2014 [00002646] Security: Special privileges assigned to new logon
+2014-02-07T16:51:47.156034Z @IACIS-HDD-2014 [00002645] Security: An account was successfully logged on
+2014-02-07T16:51:50.790840Z @IACIS-HDD-2014 [00002648] Security: Special privileges assigned to new logon
+2014-02-07T16:51:50.790840Z @IACIS-HDD-2014 [00002647] Security: An account was successfully logged on
+2014-02-07T16:51:50.837641Z @IACIS-HDD-2014 [00002649] Security: An account was successfully logged on
+2014-02-07T16:51:50.837641Z @IACIS-HDD-2014 [00002650] Security: Special privileges assigned to new logon
+2014-02-07T16:51:50.884441Z @IACIS-HDD-2014 [00002652] Security: Special privileges assigned to new logon
+2014-02-07T16:51:50.884441Z @IACIS-HDD-2014 [00002651] Security: An account was successfully logged on
+2014-02-07T16:51:51.905643Z @IACIS-HDD-2014 [00002655] Security: Special privileges assigned to new logon
+2014-02-07T16:51:51.905643Z @IACIS-HDD-2014 [00002654] Security: An account was successfully logged on
+2014-02-07T16:51:54.531663Z @IACIS-HDD-2014 [00002658] Security: An account was successfully logged on
+2014-02-07T16:53:59.290486Z @IACIS-HDD-2014 [00002659] Security: An account was successfully logged on
+2014-02-07T16:53:59.290486Z @IACIS-HDD-2014 [00002660] Security: Special privileges assigned to new logon
+2014-02-07T17:28:22.690510Z @IACIS-HDD-2014 [00002661] Security: An account was successfully logged on
+2014-02-07T17:28:22.690510Z @IACIS-HDD-2014 [00002662] Security: Special privileges assigned to new logon
+2014-02-07T17:28:22.986911Z @IACIS-HDD-2014 [00002663] Security: An account was successfully logged on
+2014-02-07T17:28:22.986911Z @IACIS-HDD-2014 [00002664] Security: Special privileges assigned to new logon
+2014-02-07T17:28:36.309334Z @IACIS-HDD-2014 [00002666] Security: An attempt was made to unregister a security event source
+2014-02-07T17:28:36.309334Z @IACIS-HDD-2014 [00002665] Security: An attempt was made to register a security event source
+2014-02-07T17:29:10.956995Z @IACIS-HDD-2014 [00002667] Security: An account was successfully logged on
+2014-02-07T17:29:10.956995Z @IACIS-HDD-2014 [00002668] Security: Special privileges assigned to new logon
+2014-02-07T17:34:24.798346Z @IACIS-HDD-2014 [00002671] Security: An account was successfully logged on
+2014-02-07T17:34:24.798346Z @IACIS-HDD-2014 [00002669] Security: A logon was attempted using explicit credentials
+2014-02-07T17:34:24.798346Z @IACIS-HDD-2014 [00002670] Security: An account was successfully logged on
+2014-02-07T17:34:24.798346Z @IACIS-HDD-2014 [00002672] Security: Special privileges assigned to new logon
+2014-02-10T14:49:37.669619Z @IACIS-HDD-2014 [00002680] Security: An account was successfully logged on
+2014-02-10T14:49:37.997220Z @IACIS-HDD-2014 [00002681] Security: The Per-user audit policy table was created
+2014-02-10T14:49:38.402820Z @IACIS-HDD-2014 [00002683] Security: Special privileges assigned to new logon
+2014-02-10T14:49:38.402820Z @IACIS-HDD-2014 [00002682] Security: An account was successfully logged on
+2014-02-10T14:49:38.699221Z @IACIS-HDD-2014 [00002685] Security: Special privileges assigned to new logon
+2014-02-10T14:49:38.699221Z @IACIS-HDD-2014 [00002684] Security: An account was successfully logged on
+2014-02-10T14:49:38.761621Z @IACIS-HDD-2014 [00002686] Security: An account was successfully logged on
+2014-02-10T14:49:38.761621Z @IACIS-HDD-2014 [00002687] Security: Special privileges assigned to new logon
+2014-02-10T14:49:41.741226Z @IACIS-HDD-2014 [00002689] Security: Special privileges assigned to new logon
+2014-02-10T14:49:41.741226Z @IACIS-HDD-2014 [00002688] Security: An account was successfully logged on
+2014-02-10T14:49:41.944027Z @IACIS-HDD-2014 [00002691] Security: Special privileges assigned to new logon
+2014-02-10T14:49:41.944027Z @IACIS-HDD-2014 [00002690] Security: An account was successfully logged on
+2014-02-10T14:49:41.975227Z @IACIS-HDD-2014 [00002693] Security: Special privileges assigned to new logon
+2014-02-10T14:49:41.975227Z @IACIS-HDD-2014 [00002692] Security: An account was successfully logged on
+2014-02-10T14:49:48.796839Z @IACIS-HDD-2014 [00002695] Security: An account was successfully logged on
+2014-02-10T14:49:48.796839Z @IACIS-HDD-2014 [00002696] Security: Special privileges assigned to new logon
+2014-02-10T14:49:52.438845Z @IACIS-HDD-2014 [00002699] Security: An account was successfully logged on
+2014-02-10T14:50:52.134752Z @IACIS-HDD-2014 [00002700] Security: A logon was attempted using explicit credentials
+2014-02-10T14:50:52.134752Z @IACIS-HDD-2014 [00002701] Security: An account was successfully logged on
+2014-02-10T14:50:52.134752Z @IACIS-HDD-2014 [00002703] Security: Special privileges assigned to new logon
+2014-02-10T14:50:52.134752Z @IACIS-HDD-2014 [00002702] Security: An account was successfully logged on
+2014-02-10T14:51:00.688367Z @IACIS-HDD-2014 [00002704] Security: An account was successfully logged on
+2014-02-10T14:51:00.688367Z @IACIS-HDD-2014 [00002705] Security: Special privileges assigned to new logon
+2014-02-10T14:57:18.822408Z @IACIS-HDD-2014 [00002712] Security: An account was successfully logged on
+2014-02-10T14:57:18.822408Z @IACIS-HDD-2014 [00002713] Security: Special privileges assigned to new logon
+2014-02-10T15:01:05.029127Z @IACIS-HDD-2014 [00002718] Security: Special privileges assigned to new logon
+2014-02-10T15:01:05.029127Z @IACIS-HDD-2014 [00002717] Security: An account was successfully logged on
+2014-02-10T15:01:05.809128Z @IACIS-HDD-2014 [00002719] Security: An account was successfully logged on
+2014-02-10T15:01:05.809128Z @IACIS-HDD-2014 [00002720] Security: Special privileges assigned to new logon
+2014-02-10T15:02:03.388829Z @IACIS-HDD-2014 [00002721] Security: An attempt was made to register a security event source
+2014-02-10T15:02:03.388829Z @IACIS-HDD-2014 [00002722] Security: An attempt was made to unregister a security event source
+2014-02-10T15:40:16.847557Z @IACIS-HDD-2014 [00002724] Security: Special privileges assigned to new logon
+2014-02-10T15:40:16.847557Z @IACIS-HDD-2014 [00002723] Security: An account was successfully logged on
+2014-02-10T15:50:25.997427Z @IACIS-HDD-2014 [00002726] Security: Special privileges assigned to new logon
+2014-02-10T15:50:25.997427Z @IACIS-HDD-2014 [00002725] Security: An account was successfully logged on
+2014-02-10T15:50:26.574628Z @IACIS-HDD-2014 [00002727] Security: An account was successfully logged on
+2014-02-10T15:50:26.574628Z @IACIS-HDD-2014 [00002728] Security: Special privileges assigned to new logon
+2014-02-10T15:51:21.611524Z @IACIS-HDD-2014 [00002729] Security: An account was successfully logged on
+2014-02-10T15:51:21.611524Z @IACIS-HDD-2014 [00002730] Security: Special privileges assigned to new logon
+2014-02-10T18:25:49.837403Z @IACIS-HDD-2014 [00002731] Security: A logon was attempted using explicit credentials
+2014-02-10T18:25:49.837403Z @IACIS-HDD-2014 [00002734] Security: Special privileges assigned to new logon
+2014-02-10T18:25:49.837403Z @IACIS-HDD-2014 [00002732] Security: An account was successfully logged on
+2014-02-10T18:25:49.837403Z @IACIS-HDD-2014 [00002733] Security: An account was successfully logged on
+2014-02-11T13:24:32.513619Z @IACIS-HDD-2014 [00002740] Security: An account was successfully logged on
+2014-02-11T13:24:32.981620Z @IACIS-HDD-2014 [00002741] Security: The Per-user audit policy table was created
+2014-02-11T13:24:33.262420Z @IACIS-HDD-2014 [00002742] Security: An account was successfully logged on
+2014-02-11T13:24:33.262420Z @IACIS-HDD-2014 [00002743] Security: Special privileges assigned to new logon
+2014-02-11T13:24:33.465221Z @IACIS-HDD-2014 [00002745] Security: Special privileges assigned to new logon
+2014-02-11T13:24:33.465221Z @IACIS-HDD-2014 [00002744] Security: An account was successfully logged on
+2014-02-11T13:24:33.512021Z @IACIS-HDD-2014 [00002746] Security: An account was successfully logged on
+2014-02-11T13:24:33.512021Z @IACIS-HDD-2014 [00002747] Security: Special privileges assigned to new logon
+2014-02-11T13:24:36.507226Z @IACIS-HDD-2014 [00002748] Security: An account was successfully logged on
+2014-02-11T13:24:36.507226Z @IACIS-HDD-2014 [00002749] Security: Special privileges assigned to new logon
+2014-02-11T13:24:36.694426Z @IACIS-HDD-2014 [00002751] Security: Special privileges assigned to new logon
+2014-02-11T13:24:36.694426Z @IACIS-HDD-2014 [00002750] Security: An account was successfully logged on
+2014-02-11T13:24:36.710026Z @IACIS-HDD-2014 [00002753] Security: Special privileges assigned to new logon
+2014-02-11T13:24:36.710026Z @IACIS-HDD-2014 [00002752] Security: An account was successfully logged on
+2014-02-11T13:24:42.530038Z @IACIS-HDD-2014 [00002756] Security: Special privileges assigned to new logon
+2014-02-11T13:24:42.530038Z @IACIS-HDD-2014 [00002755] Security: An account was successfully logged on
+2014-02-11T13:24:45.346049Z @IACIS-HDD-2014 [00002759] Security: An account was successfully logged on
+2014-02-11T13:25:17.104713Z @IACIS-HDD-2014 [00002760] Security: A logon was attempted using explicit credentials
+2014-02-11T13:25:17.104713Z @IACIS-HDD-2014 [00002762] Security: An account was successfully logged on
+2014-02-11T13:25:17.104713Z @IACIS-HDD-2014 [00002763] Security: Special privileges assigned to new logon
+2014-02-11T13:25:17.104713Z @IACIS-HDD-2014 [00002761] Security: An account was successfully logged on
+2014-02-11T13:25:26.537529Z @IACIS-HDD-2014 [00002765] Security: Special privileges assigned to new logon
+2014-02-11T13:25:26.537529Z @IACIS-HDD-2014 [00002764] Security: An account was successfully logged on
+2014-02-11T13:46:15.470683Z @IACIS-HDD-2014 [00002773] Security: Special privileges assigned to new logon
+2014-02-11T13:46:15.470683Z @IACIS-HDD-2014 [00002772] Security: An account was successfully logged on
+2014-02-11T15:19:49.489293Z @IACIS-HDD-2014 [00002775] Security: Special privileges assigned to new logon
+2014-02-11T15:19:49.489293Z @IACIS-HDD-2014 [00002774] Security: An account was successfully logged on
+2014-02-11T15:19:49.863694Z @IACIS-HDD-2014 [00002776] Security: An account was successfully logged on
+2014-02-11T15:19:49.863694Z @IACIS-HDD-2014 [00002777] Security: Special privileges assigned to new logon
+2014-02-11T16:45:31.962526Z @IACIS-HDD-2014 [00002779] Security: An account was successfully logged on
+2014-02-11T16:45:31.962526Z @IACIS-HDD-2014 [00002781] Security: Special privileges assigned to new logon
+2014-02-11T16:45:31.962526Z @IACIS-HDD-2014 [00002778] Security: A logon was attempted using explicit credentials
+2014-02-11T16:45:31.962526Z @IACIS-HDD-2014 [00002780] Security: An account was successfully logged on
+2014-02-11T17:08:01.762498Z @IACIS-HDD-2014 [00002784] Security: An account was successfully logged on
+2014-02-11T17:08:01.762498Z @IACIS-HDD-2014 [00002785] Security: Special privileges assigned to new logon
+2014-02-11T17:08:03.946502Z @IACIS-HDD-2014 [00002786] Security: An account was successfully logged on
+2014-02-11T17:08:03.946502Z @IACIS-HDD-2014 [00002787] Security: Special privileges assigned to new logon
+2014-02-11T17:08:04.398903Z @IACIS-HDD-2014 [00002788] Security: An account was successfully logged on
+2014-02-11T17:08:04.398903Z @IACIS-HDD-2014 [00002789] Security: Special privileges assigned to new logon
+2014-02-11T17:08:37.751761Z @IACIS-HDD-2014 [00002791] Security: An attempt was made to unregister a security event source
+2014-02-11T17:08:37.751761Z @IACIS-HDD-2014 [00002790] Security: An attempt was made to register a security event source
+2014-02-11T17:08:42.993371Z @IACIS-HDD-2014 [00002793] Security: Special privileges assigned to new logon
+2014-02-11T17:08:42.993371Z @IACIS-HDD-2014 [00002792] Security: An account was successfully logged on
+2014-02-11T17:09:29.481452Z @IACIS-HDD-2014 [00002794] Security: An attempt was made to register a security event source
+2014-02-11T17:09:29.528252Z @IACIS-HDD-2014 [00002795] Security: An attempt was made to unregister a security event source
+2014-02-11T17:12:01.269719Z @IACIS-HDD-2014 [00002797] Security: An attempt was made to unregister a security event source
+2014-02-11T17:12:01.269719Z @IACIS-HDD-2014 [00002796] Security: An attempt was made to register a security event source
+2014-02-11T17:37:12.405174Z @IACIS-HDD-2014 [00002799] Security: An account was successfully logged on
+2014-02-11T17:37:12.405174Z @IACIS-HDD-2014 [00002800] Security: Special privileges assigned to new logon
+2014-02-11T17:37:12.405174Z @IACIS-HDD-2014 [00002798] Security: A logon was attempted using explicit credentials
+2014-02-11T17:41:20.533631Z @IACIS-HDD-2014 [00002805] Security: An account was successfully logged on
+2014-02-11T17:41:24.901639Z @IACIS-HDD-2014 [00002806] Security: The Per-user audit policy table was created
+2014-02-11T17:41:33.122853Z @IACIS-HDD-2014 [00002807] Security: An account was successfully logged on
+2014-02-11T17:41:33.122853Z @IACIS-HDD-2014 [00002808] Security: Special privileges assigned to new logon
+2014-02-11T17:41:33.278854Z @IACIS-HDD-2014 [00002809] Security: An account was successfully logged on
+2014-02-11T17:41:33.278854Z @IACIS-HDD-2014 [00002810] Security: Special privileges assigned to new logon
+2014-02-11T17:41:33.325654Z @IACIS-HDD-2014 [00002812] Security: Special privileges assigned to new logon
+2014-02-11T17:41:33.325654Z @IACIS-HDD-2014 [00002811] Security: An account was successfully logged on
+2014-02-11T17:41:36.710860Z @IACIS-HDD-2014 [00002814] Security: Special privileges assigned to new logon
+2014-02-11T17:41:36.710860Z @IACIS-HDD-2014 [00002813] Security: An account was successfully logged on
+2014-02-11T17:41:36.757660Z @IACIS-HDD-2014 [00002815] Security: An account was successfully logged on
+2014-02-11T17:41:36.757660Z @IACIS-HDD-2014 [00002816] Security: Special privileges assigned to new logon
+2014-02-11T17:41:36.804460Z @IACIS-HDD-2014 [00002817] Security: An account was successfully logged on
+2014-02-11T17:41:36.804460Z @IACIS-HDD-2014 [00002818] Security: Special privileges assigned to new logon
+2014-02-11T17:41:38.215064Z @IACIS-HDD-2014 [00002821] Security: Special privileges assigned to new logon
+2014-02-11T17:41:38.215064Z @IACIS-HDD-2014 [00002820] Security: An account was successfully logged on
+2014-02-11T17:41:41.613077Z @IACIS-HDD-2014 [00002824] Security: An account was successfully logged on
+2014-02-11T17:41:56.089107Z @IACIS-HDD-2014 [00002827] Security: An account was successfully logged on
+2014-02-11T17:41:56.089107Z @IACIS-HDD-2014 [00002828] Security: Special privileges assigned to new logon
+2014-02-11T17:41:56.089107Z @IACIS-HDD-2014 [00002826] Security: An account was successfully logged on
+2014-02-11T17:41:56.089107Z @IACIS-HDD-2014 [00002825] Security: A logon was attempted using explicit credentials
+2014-02-11T17:42:00.862715Z @IACIS-HDD-2014 [00002829] Security: An account was successfully logged on
+2014-02-11T17:42:00.862715Z @IACIS-HDD-2014 [00002830] Security: Special privileges assigned to new logon
+2014-02-11T17:45:26.221276Z @IACIS-HDD-2014 [00002837] Security: A logon was attempted using explicit credentials
+2014-02-11T17:45:26.221276Z @IACIS-HDD-2014 [00002839] Security: Special privileges assigned to new logon
+2014-02-11T17:45:26.221276Z @IACIS-HDD-2014 [00002838] Security: An account was successfully logged on
+2014-02-11T17:45:26.626877Z @IACIS-HDD-2014 [00002843] Security: An account was successfully logged on
+2014-02-11T17:45:26.626877Z @IACIS-HDD-2014 [00002842] Security: An account was successfully logged on
+2014-02-11T17:45:26.626877Z @IACIS-HDD-2014 [00002841] Security: A logon was attempted using explicit credentials
+2014-02-11T17:45:26.626877Z @IACIS-HDD-2014 [00002844] Security: Special privileges assigned to new logon
+2014-02-11T17:47:05.174650Z @IACIS-HDD-2014 [00002849] Security: Special privileges assigned to new logon
+2014-02-11T17:47:05.174650Z @IACIS-HDD-2014 [00002848] Security: An account was successfully logged on
+2014-02-11T17:47:05.174650Z @IACIS-HDD-2014 [00002847] Security: A logon was attempted using explicit credentials
+2014-02-11T17:47:29.697893Z @IACIS-HDD-2014 [00002851] Security: A logon was attempted using explicit credentials
+2014-02-11T17:47:29.697893Z @IACIS-HDD-2014 [00002853] Security: Special privileges assigned to new logon
+2014-02-11T17:47:29.697893Z @IACIS-HDD-2014 [00002852] Security: An account was successfully logged on
+2014-02-11T17:47:29.729093Z @IACIS-HDD-2014 [00002857] Security: An account was successfully logged on
+2014-02-11T17:47:29.729093Z @IACIS-HDD-2014 [00002858] Security: Special privileges assigned to new logon
+2014-02-11T17:47:29.729093Z @IACIS-HDD-2014 [00002855] Security: A logon was attempted using explicit credentials
+2014-02-11T17:47:29.729093Z @IACIS-HDD-2014 [00002856] Security: An account was successfully logged on
+2014-02-11T17:48:30.275601Z @IACIS-HDD-2014 [00002862] Security: Special privileges assigned to new logon
+2014-02-11T17:48:30.275601Z @IACIS-HDD-2014 [00002861] Security: An account was successfully logged on
+2014-02-11T17:50:26.028420Z @IACIS-HDD-2014 [00002866] Security: An account was successfully logged on
+2014-02-11T17:50:26.590021Z @IACIS-HDD-2014 [00002867] Security: The Per-user audit policy table was created
+2014-02-11T17:50:27.011222Z @IACIS-HDD-2014 [00002868] Security: An account was successfully logged on
+2014-02-11T17:50:27.011222Z @IACIS-HDD-2014 [00002869] Security: Special privileges assigned to new logon
+2014-02-11T17:50:27.198422Z @IACIS-HDD-2014 [00002871] Security: Special privileges assigned to new logon
+2014-02-11T17:50:27.198422Z @IACIS-HDD-2014 [00002870] Security: An account was successfully logged on
+2014-02-11T17:50:27.245222Z @IACIS-HDD-2014 [00002873] Security: Special privileges assigned to new logon
+2014-02-11T17:50:27.245222Z @IACIS-HDD-2014 [00002872] Security: An account was successfully logged on
+2014-02-11T17:50:29.803626Z @IACIS-HDD-2014 [00002874] Security: An account was successfully logged on
+2014-02-11T17:50:29.803626Z @IACIS-HDD-2014 [00002875] Security: Special privileges assigned to new logon
+2014-02-11T17:50:30.240427Z @IACIS-HDD-2014 [00002877] Security: Special privileges assigned to new logon
+2014-02-11T17:50:30.240427Z @IACIS-HDD-2014 [00002876] Security: An account was successfully logged on
+2014-02-11T17:50:30.256027Z @IACIS-HDD-2014 [00002878] Security: An account was successfully logged on
+2014-02-11T17:50:30.256027Z @IACIS-HDD-2014 [00002879] Security: Special privileges assigned to new logon
+2014-02-11T17:50:36.197244Z @IACIS-HDD-2014 [00002881] Security: An account was successfully logged on
+2014-02-11T17:50:36.197244Z @IACIS-HDD-2014 [00002882] Security: Special privileges assigned to new logon
+2014-02-11T17:50:36.369246Z @IACIS-HDD-2014 [00002883] Security: A logon was attempted using explicit credentials
+2014-02-11T17:50:36.369246Z @IACIS-HDD-2014 [00002885] Security: Special privileges assigned to new logon
+2014-02-11T17:50:36.369246Z @IACIS-HDD-2014 [00002884] Security: An account was successfully logged on
+2014-02-11T17:50:40.605455Z @IACIS-HDD-2014 [00002888] Security: An account was successfully logged on
+2014-02-11T17:50:40.652255Z @IACIS-HDD-2014 [00002890] Security: Special privileges assigned to new logon
+2014-02-11T17:50:40.652255Z @IACIS-HDD-2014 [00002889] Security: An account was successfully logged on
+2014-02-11T17:50:54.193079Z @IACIS-HDD-2014 [00002893] Security: An account was successfully logged on
+2014-02-11T17:50:54.193079Z @IACIS-HDD-2014 [00002892] Security: An account was successfully logged on
+2014-02-11T17:50:54.193079Z @IACIS-HDD-2014 [00002894] Security: Special privileges assigned to new logon
+2014-02-11T17:50:54.193079Z @IACIS-HDD-2014 [00002891] Security: A logon was attempted using explicit credentials
+2014-02-11T17:50:57.965086Z @IACIS-HDD-2014 [00002896] Security: Special privileges assigned to new logon
+2014-02-11T17:50:57.965086Z @IACIS-HDD-2014 [00002895] Security: An account was successfully logged on
+2014-02-11T18:28:52.285480Z @IACIS-HDD-2014 [00002905] Security: Special privileges assigned to new logon
+2014-02-11T18:28:52.285480Z @IACIS-HDD-2014 [00002904] Security: An account was successfully logged on
+2014-02-11T18:28:52.659881Z @IACIS-HDD-2014 [00002906] Security: An account was successfully logged on
+2014-02-11T18:28:52.659881Z @IACIS-HDD-2014 [00002907] Security: Special privileges assigned to new logon
+2014-02-11T18:29:29.039145Z @IACIS-HDD-2014 [00002908] Security: An account was successfully logged on
+2014-02-11T18:29:29.039145Z @IACIS-HDD-2014 [00002909] Security: Special privileges assigned to new logon
+2014-02-11T19:04:26.791630Z @IACIS-HDD-2014 [00002913] Security: Special privileges assigned to new logon
+2014-02-11T19:04:26.791630Z @IACIS-HDD-2014 [00002912] Security: An account was successfully logged on
+2014-02-11T19:04:26.791630Z @IACIS-HDD-2014 [00002911] Security: An account was successfully logged on
+2014-02-11T19:04:26.791630Z @IACIS-HDD-2014 [00002910] Security: A logon was attempted using explicit credentials
+2014-02-16T18:59:49.278020Z @IACIS-HDD-2014 [00002919] Security: An account was successfully logged on
+2014-02-16T18:59:49.839621Z @IACIS-HDD-2014 [00002920] Security: The Per-user audit policy table was created
+2014-02-16T18:59:50.167222Z @IACIS-HDD-2014 [00002922] Security: Special privileges assigned to new logon
+2014-02-16T18:59:50.167222Z @IACIS-HDD-2014 [00002921] Security: An account was successfully logged on
+2014-02-16T18:59:50.354422Z @IACIS-HDD-2014 [00002924] Security: Special privileges assigned to new logon
+2014-02-16T18:59:50.354422Z @IACIS-HDD-2014 [00002923] Security: An account was successfully logged on
+2014-02-16T18:59:50.401222Z @IACIS-HDD-2014 [00002925] Security: An account was successfully logged on
+2014-02-16T18:59:50.401222Z @IACIS-HDD-2014 [00002926] Security: Special privileges assigned to new logon
+2014-02-16T18:59:53.802028Z @IACIS-HDD-2014 [00002927] Security: An account was successfully logged on
+2014-02-16T18:59:53.802028Z @IACIS-HDD-2014 [00002928] Security: Special privileges assigned to new logon
+2014-02-16T18:59:53.833228Z @IACIS-HDD-2014 [00002930] Security: Special privileges assigned to new logon
+2014-02-16T18:59:53.833228Z @IACIS-HDD-2014 [00002929] Security: An account was successfully logged on
+2014-02-16T18:59:53.895628Z @IACIS-HDD-2014 [00002932] Security: Special privileges assigned to new logon
+2014-02-16T18:59:53.895628Z @IACIS-HDD-2014 [00002931] Security: An account was successfully logged on
+2014-02-16T18:59:59.182439Z @IACIS-HDD-2014 [00002934] Security: An account was successfully logged on
+2014-02-16T18:59:59.182439Z @IACIS-HDD-2014 [00002935] Security: Special privileges assigned to new logon
+2014-02-16T18:59:59.244440Z @IACIS-HDD-2014 [00002936] Security: A logon was attempted using explicit credentials
+2014-02-16T18:59:59.244440Z @IACIS-HDD-2014 [00002938] Security: Special privileges assigned to new logon
+2014-02-16T18:59:59.244440Z @IACIS-HDD-2014 [00002937] Security: An account was successfully logged on
+2014-02-16T19:00:03.630252Z @IACIS-HDD-2014 [00002941] Security: An account was successfully logged on
+2014-02-16T19:00:03.677052Z @IACIS-HDD-2014 [00002943] Security: Special privileges assigned to new logon
+2014-02-16T19:00:03.677052Z @IACIS-HDD-2014 [00002942] Security: An account was successfully logged on
+2014-02-16T19:02:07.385269Z @IACIS-HDD-2014 [00002944] Security: An account was successfully logged on
+2014-02-16T19:02:07.385269Z @IACIS-HDD-2014 [00002945] Security: Special privileges assigned to new logon
+2014-02-16T19:09:12.768222Z @IACIS-HDD-2014 [00002953] Security: Special privileges assigned to new logon
+2014-02-16T19:09:12.768222Z @IACIS-HDD-2014 [00002951] Security: An account was successfully logged on
+2014-02-16T19:09:12.768222Z @IACIS-HDD-2014 [00002950] Security: A logon was attempted using explicit credentials
+2014-02-16T19:09:12.768222Z @IACIS-HDD-2014 [00002952] Security: An account was successfully logged on
+2014-02-16T19:10:53.868802Z @IACIS-HDD-2014 [00002960] Security: An account was successfully logged on
+2014-02-16T19:10:53.868802Z @IACIS-HDD-2014 [00002961] Security: Special privileges assigned to new logon
+2014-02-16T19:10:54.118403Z @IACIS-HDD-2014 [00002963] Security: Special privileges assigned to new logon
+2014-02-16T19:10:54.118403Z @IACIS-HDD-2014 [00002962] Security: An account was successfully logged on
+2014-02-16T19:11:35.333675Z @IACIS-HDD-2014 [00002964] Security: An attempt was made to register a security event source
+2014-02-16T19:11:35.380475Z @IACIS-HDD-2014 [00002965] Security: An attempt was made to unregister a security event source
+2014-02-16T19:27:13.425723Z @IACIS-HDD-2014 [00002966] Security: An account was successfully logged on
+2014-02-16T19:27:13.425723Z @IACIS-HDD-2014 [00002967] Security: Special privileges assigned to new logon
+2014-02-16T19:50:52.833416Z @IACIS-HDD-2014 [00002968] Security: An account was successfully logged on
+2014-02-16T19:50:52.833416Z @IACIS-HDD-2014 [00002969] Security: Special privileges assigned to new logon
+2014-02-16T20:00:53.652871Z @IACIS-HDD-2014 [00002970] Security: An account was successfully logged on
+2014-02-16T20:00:53.652871Z @IACIS-HDD-2014 [00002971] Security: Special privileges assigned to new logon
+2014-02-16T20:00:53.933672Z @IACIS-HDD-2014 [00002972] Security: An account was successfully logged on
+2014-02-16T20:00:53.933672Z @IACIS-HDD-2014 [00002973] Security: Special privileges assigned to new logon
+2014-02-16T20:01:07.786496Z @IACIS-HDD-2014 [00002974] Security: An attempt was made to register a security event source
+2014-02-16T20:01:07.786496Z @IACIS-HDD-2014 [00002975] Security: An attempt was made to unregister a security event source
+2014-02-16T20:01:42.792958Z @IACIS-HDD-2014 [00002977] Security: Special privileges assigned to new logon
+2014-02-16T20:01:42.792958Z @IACIS-HDD-2014 [00002976] Security: An account was successfully logged on
+2014-02-16T21:50:40.841219Z @IACIS-HDD-2014 [00002981] Security: An account was successfully logged on
+2014-02-16T21:50:41.262420Z @IACIS-HDD-2014 [00002982] Security: The Per-user audit policy table was created
+2014-02-16T21:50:41.558821Z @IACIS-HDD-2014 [00002984] Security: Special privileges assigned to new logon
+2014-02-16T21:50:41.558821Z @IACIS-HDD-2014 [00002983] Security: An account was successfully logged on
+2014-02-16T21:50:41.746021Z @IACIS-HDD-2014 [00002985] Security: An account was successfully logged on
+2014-02-16T21:50:41.746021Z @IACIS-HDD-2014 [00002986] Security: Special privileges assigned to new logon
+2014-02-16T21:50:41.808421Z @IACIS-HDD-2014 [00002987] Security: An account was successfully logged on
+2014-02-16T21:50:41.808421Z @IACIS-HDD-2014 [00002988] Security: Special privileges assigned to new logon
+2014-02-16T21:50:44.460426Z @IACIS-HDD-2014 [00002990] Security: Special privileges assigned to new logon
+2014-02-16T21:50:44.460426Z @IACIS-HDD-2014 [00002989] Security: An account was successfully logged on
+2014-02-16T21:50:44.663226Z @IACIS-HDD-2014 [00002991] Security: An account was successfully logged on
+2014-02-16T21:50:44.663226Z @IACIS-HDD-2014 [00002992] Security: Special privileges assigned to new logon
+2014-02-16T21:50:44.678826Z @IACIS-HDD-2014 [00002993] Security: An account was successfully logged on
+2014-02-16T21:50:44.678826Z @IACIS-HDD-2014 [00002994] Security: Special privileges assigned to new logon
+2014-02-16T21:50:50.772837Z @IACIS-HDD-2014 [00002996] Security: An account was successfully logged on
+2014-02-16T21:50:50.772837Z @IACIS-HDD-2014 [00002997] Security: Special privileges assigned to new logon
+2014-02-16T21:50:50.834838Z @IACIS-HDD-2014 [00003000] Security: Special privileges assigned to new logon
+2014-02-16T21:50:50.834838Z @IACIS-HDD-2014 [00002998] Security: A logon was attempted using explicit credentials
+2014-02-16T21:50:50.834838Z @IACIS-HDD-2014 [00002999] Security: An account was successfully logged on
+2014-02-16T21:50:55.275445Z @IACIS-HDD-2014 [00003003] Security: An account was successfully logged on
+2014-02-16T21:50:55.322245Z @IACIS-HDD-2014 [00003005] Security: Special privileges assigned to new logon
+2014-02-16T21:50:55.322245Z @IACIS-HDD-2014 [00003004] Security: An account was successfully logged on
+2014-02-16T21:51:17.411884Z @IACIS-HDD-2014 [00003009] Security: Special privileges assigned to new logon
+2014-02-16T21:51:17.411884Z @IACIS-HDD-2014 [00003008] Security: An account was successfully logged on
+2014-02-16T21:51:17.411884Z @IACIS-HDD-2014 [00003007] Security: An account was successfully logged on
+2014-02-16T21:51:17.411884Z @IACIS-HDD-2014 [00003006] Security: A logon was attempted using explicit credentials
+2014-02-16T21:51:20.182689Z @IACIS-HDD-2014 [00003011] Security: Special privileges assigned to new logon
+2014-02-16T21:51:20.182689Z @IACIS-HDD-2014 [00003010] Security: An account was successfully logged on
+2014-02-16T22:39:31.794419Z @IACIS-HDD-2014 [00003022] Security: An account was successfully logged on
+2014-02-16T22:39:32.215620Z @IACIS-HDD-2014 [00003023] Security: The Per-user audit policy table was created
+2014-02-16T22:39:32.527621Z @IACIS-HDD-2014 [00003024] Security: An account was successfully logged on
+2014-02-16T22:39:32.527621Z @IACIS-HDD-2014 [00003025] Security: Special privileges assigned to new logon
+2014-02-16T22:39:32.730421Z @IACIS-HDD-2014 [00003026] Security: An account was successfully logged on
+2014-02-16T22:39:32.730421Z @IACIS-HDD-2014 [00003027] Security: Special privileges assigned to new logon
+2014-02-16T22:39:32.777221Z @IACIS-HDD-2014 [00003029] Security: Special privileges assigned to new logon
+2014-02-16T22:39:32.777221Z @IACIS-HDD-2014 [00003028] Security: An account was successfully logged on
+2014-02-16T22:39:35.554026Z @IACIS-HDD-2014 [00003031] Security: Special privileges assigned to new logon
+2014-02-16T22:39:35.554026Z @IACIS-HDD-2014 [00003030] Security: An account was successfully logged on
+2014-02-16T22:39:35.600826Z @IACIS-HDD-2014 [00003033] Security: Special privileges assigned to new logon
+2014-02-16T22:39:35.600826Z @IACIS-HDD-2014 [00003032] Security: An account was successfully logged on
+2014-02-16T22:39:35.647626Z @IACIS-HDD-2014 [00003035] Security: Special privileges assigned to new logon
+2014-02-16T22:39:35.647626Z @IACIS-HDD-2014 [00003034] Security: An account was successfully logged on
+2014-02-16T22:39:41.181636Z @IACIS-HDD-2014 [00003038] Security: An account was successfully logged on
+2014-02-16T22:39:41.181636Z @IACIS-HDD-2014 [00003039] Security: Special privileges assigned to new logon
+2014-02-16T22:39:41.181636Z @IACIS-HDD-2014 [00003040] Security: An account was successfully logged on
+2014-02-16T22:39:41.181636Z @IACIS-HDD-2014 [00003037] Security: A logon was attempted using explicit credentials
+2014-02-16T22:39:41.181636Z @IACIS-HDD-2014 [00003041] Security: Special privileges assigned to new logon
+2014-02-16T22:39:45.341651Z @IACIS-HDD-2014 [00003044] Security: An account was successfully logged on
+2014-02-16T22:39:45.420652Z @IACIS-HDD-2014 [00003045] Security: An account was successfully logged on
+2014-02-16T22:39:45.420652Z @IACIS-HDD-2014 [00003046] Security: Special privileges assigned to new logon
+2014-02-16T22:39:47.004263Z @IACIS-HDD-2014 [00003048] Security: An account was successfully logged on
+2014-02-16T22:39:47.004263Z @IACIS-HDD-2014 [00003050] Security: Special privileges assigned to new logon
+2014-02-16T22:39:47.004263Z @IACIS-HDD-2014 [00003049] Security: An account was successfully logged on
+2014-02-16T22:39:47.004263Z @IACIS-HDD-2014 [00003047] Security: A logon was attempted using explicit credentials
+2014-02-16T22:39:54.232676Z @IACIS-HDD-2014 [00003051] Security: An account was successfully logged on
+2014-02-16T22:39:54.232676Z @IACIS-HDD-2014 [00003052] Security: Special privileges assigned to new logon
+2014-02-16T22:47:18.947598Z @IACIS-HDD-2014 [00003060] Security: A logon was attempted using explicit credentials
+2014-02-16T22:47:18.947598Z @IACIS-HDD-2014 [00003062] Security: An account was successfully logged on
+2014-02-16T22:47:18.947598Z @IACIS-HDD-2014 [00003063] Security: Special privileges assigned to new logon
+2014-02-16T22:47:18.947598Z @IACIS-HDD-2014 [00003061] Security: An account was successfully logged on
+2014-02-19T13:30:18.872420Z @IACIS-HDD-2014 [00003069] Security: An account was successfully logged on
+2014-02-19T13:30:19.340420Z @IACIS-HDD-2014 [00003070] Security: The Per-user audit policy table was created
+2014-02-19T13:30:19.699221Z @IACIS-HDD-2014 [00003071] Security: An account was successfully logged on
+2014-02-19T13:30:19.699221Z @IACIS-HDD-2014 [00003072] Security: Special privileges assigned to new logon
+2014-02-19T13:30:19.886421Z @IACIS-HDD-2014 [00003074] Security: Special privileges assigned to new logon
+2014-02-19T13:30:19.886421Z @IACIS-HDD-2014 [00003073] Security: An account was successfully logged on
+2014-02-19T13:30:19.980021Z @IACIS-HDD-2014 [00003075] Security: An account was successfully logged on
+2014-02-19T13:30:19.980021Z @IACIS-HDD-2014 [00003076] Security: Special privileges assigned to new logon
+2014-02-19T13:30:22.429226Z @IACIS-HDD-2014 [00003078] Security: Special privileges assigned to new logon
+2014-02-19T13:30:22.429226Z @IACIS-HDD-2014 [00003077] Security: An account was successfully logged on
+2014-02-19T13:30:22.491626Z @IACIS-HDD-2014 [00003079] Security: An account was successfully logged on
+2014-02-19T13:30:22.491626Z @IACIS-HDD-2014 [00003080] Security: Special privileges assigned to new logon
+2014-02-19T13:30:22.554026Z @IACIS-HDD-2014 [00003081] Security: An account was successfully logged on
+2014-02-19T13:30:22.554026Z @IACIS-HDD-2014 [00003082] Security: Special privileges assigned to new logon
+2014-02-19T13:30:28.615049Z @IACIS-HDD-2014 [00003084] Security: An account was successfully logged on
+2014-02-19T13:30:28.615049Z @IACIS-HDD-2014 [00003085] Security: Special privileges assigned to new logon
+2014-02-19T13:30:28.637050Z @IACIS-HDD-2014 [00003087] Security: An account was successfully logged on
+2014-02-19T13:30:28.637050Z @IACIS-HDD-2014 [00003088] Security: Special privileges assigned to new logon
+2014-02-19T13:30:28.637050Z @IACIS-HDD-2014 [00003086] Security: A logon was attempted using explicit credentials
+2014-02-19T13:30:32.321068Z @IACIS-HDD-2014 [00003091] Security: An account was successfully logged on
+2014-02-19T13:30:32.386068Z @IACIS-HDD-2014 [00003092] Security: An account was successfully logged on
+2014-02-19T13:30:32.386068Z @IACIS-HDD-2014 [00003093] Security: Special privileges assigned to new logon
+2014-02-19T13:30:58.202922Z @IACIS-HDD-2014 [00003096] Security: An account was successfully logged on
+2014-02-19T13:30:58.202922Z @IACIS-HDD-2014 [00003097] Security: Special privileges assigned to new logon
+2014-02-19T13:30:58.202922Z @IACIS-HDD-2014 [00003094] Security: A logon was attempted using explicit credentials
+2014-02-19T13:30:58.202922Z @IACIS-HDD-2014 [00003095] Security: An account was successfully logged on
+2014-02-19T13:31:00.249328Z @IACIS-HDD-2014 [00003098] Security: An account was successfully logged on
+2014-02-19T13:31:00.249328Z @IACIS-HDD-2014 [00003099] Security: Special privileges assigned to new logon
+2014-02-19T14:07:16.574361Z @IACIS-HDD-2014 [00003108] Security: An account was successfully logged on
+2014-02-19T14:07:16.574361Z @IACIS-HDD-2014 [00003109] Security: Special privileges assigned to new logon
+2014-02-19T14:14:09.585086Z @IACIS-HDD-2014 [00003111] Security: Special privileges assigned to new logon
+2014-02-19T14:14:09.585086Z @IACIS-HDD-2014 [00003110] Security: An account was successfully logged on
+2014-02-19T14:14:09.975087Z @IACIS-HDD-2014 [00003113] Security: Special privileges assigned to new logon
+2014-02-19T14:14:09.975087Z @IACIS-HDD-2014 [00003112] Security: An account was successfully logged on
+2014-02-19T14:14:24.795113Z @IACIS-HDD-2014 [00003114] Security: An attempt was made to register a security event source
+2014-02-19T14:14:24.826313Z @IACIS-HDD-2014 [00003115] Security: An attempt was made to unregister a security event source
+2014-02-19T14:14:59.302373Z @IACIS-HDD-2014 [00003117] Security: Special privileges assigned to new logon
+2014-02-19T14:14:59.302373Z @IACIS-HDD-2014 [00003116] Security: An account was successfully logged on
+2014-02-19T17:19:42.482240Z @IACIS-HDD-2014 [00003118] Security: A logon was attempted using explicit credentials
+2014-02-19T17:19:42.482240Z @IACIS-HDD-2014 [00003121] Security: Special privileges assigned to new logon
+2014-02-19T17:19:42.482240Z @IACIS-HDD-2014 [00003120] Security: An account was successfully logged on
+2014-02-19T17:19:42.482240Z @IACIS-HDD-2014 [00003119] Security: An account was successfully logged on
+2014-02-20T14:22:11.435619Z @IACIS-HDD-2014 [00003125] Security: An account was successfully logged on
+2014-02-20T14:22:11.856820Z @IACIS-HDD-2014 [00003126] Security: The Per-user audit policy table was created
+2014-02-20T14:22:12.262420Z @IACIS-HDD-2014 [00003127] Security: An account was successfully logged on
+2014-02-20T14:22:12.262420Z @IACIS-HDD-2014 [00003128] Security: Special privileges assigned to new logon
+2014-02-20T14:22:12.449621Z @IACIS-HDD-2014 [00003130] Security: Special privileges assigned to new logon
+2014-02-20T14:22:12.449621Z @IACIS-HDD-2014 [00003129] Security: An account was successfully logged on
+2014-02-20T14:22:12.512021Z @IACIS-HDD-2014 [00003131] Security: An account was successfully logged on
+2014-02-20T14:22:12.512021Z @IACIS-HDD-2014 [00003132] Security: Special privileges assigned to new logon
+2014-02-20T14:22:15.257625Z @IACIS-HDD-2014 [00003133] Security: An account was successfully logged on
+2014-02-20T14:22:15.257625Z @IACIS-HDD-2014 [00003134] Security: Special privileges assigned to new logon
+2014-02-20T14:22:15.413626Z @IACIS-HDD-2014 [00003136] Security: Special privileges assigned to new logon
+2014-02-20T14:22:15.413626Z @IACIS-HDD-2014 [00003135] Security: An account was successfully logged on
+2014-02-20T14:22:15.444826Z @IACIS-HDD-2014 [00003137] Security: An account was successfully logged on
+2014-02-20T14:22:15.444826Z @IACIS-HDD-2014 [00003138] Security: Special privileges assigned to new logon
+2014-02-20T14:22:21.427237Z @IACIS-HDD-2014 [00003142] Security: Special privileges assigned to new logon
+2014-02-20T14:22:21.427237Z @IACIS-HDD-2014 [00003141] Security: An account was successfully logged on
+2014-02-20T14:22:21.427237Z @IACIS-HDD-2014 [00003140] Security: A logon was attempted using explicit credentials
+2014-02-20T14:22:21.447237Z @IACIS-HDD-2014 [00003143] Security: An account was successfully logged on
+2014-02-20T14:22:21.447237Z @IACIS-HDD-2014 [00003144] Security: Special privileges assigned to new logon
+2014-02-20T14:22:25.637243Z @IACIS-HDD-2014 [00003147] Security: An account was successfully logged on
+2014-02-20T14:22:25.687243Z @IACIS-HDD-2014 [00003148] Security: An account was successfully logged on
+2014-02-20T14:22:25.687243Z @IACIS-HDD-2014 [00003149] Security: Special privileges assigned to new logon
+2014-02-20T14:24:28.320060Z @IACIS-HDD-2014 [00003151] Security: Special privileges assigned to new logon
+2014-02-20T14:24:28.320060Z @IACIS-HDD-2014 [00003150] Security: An account was successfully logged on
+2014-02-20T14:30:25.529488Z @IACIS-HDD-2014 [00003153] Security: A logon was attempted using explicit credentials
+2014-02-20T14:30:25.529488Z @IACIS-HDD-2014 [00003154] Security: An account was successfully logged on
+2014-02-20T14:30:25.529488Z @IACIS-HDD-2014 [00003155] Security: An account was successfully logged on
+2014-02-20T14:30:25.529488Z @IACIS-HDD-2014 [00003156] Security: Special privileges assigned to new logon
+2014-02-20T15:19:44.841091Z @IACIS-HDD-2014 [00003158] Security: Special privileges assigned to new logon
+2014-02-20T15:19:44.841091Z @IACIS-HDD-2014 [00003157] Security: An account was successfully logged on
+2014-02-20T15:29:38.952535Z @IACIS-HDD-2014 [00003160] Security: Special privileges assigned to new logon
+2014-02-20T15:29:38.952535Z @IACIS-HDD-2014 [00003159] Security: An account was successfully logged on
+2014-02-20T15:29:39.404935Z @IACIS-HDD-2014 [00003162] Security: Special privileges assigned to new logon
+2014-02-20T15:29:39.404935Z @IACIS-HDD-2014 [00003161] Security: An account was successfully logged on
+2014-02-20T17:46:52.212196Z @IACIS-HDD-2014 [00003164] Security: An account was successfully logged on
+2014-02-20T17:46:52.212196Z @IACIS-HDD-2014 [00003163] Security: A logon was attempted using explicit credentials
+2014-02-20T17:46:52.212196Z @IACIS-HDD-2014 [00003165] Security: An account was successfully logged on
+2014-02-20T17:46:52.212196Z @IACIS-HDD-2014 [00003166] Security: Special privileges assigned to new logon
