@@ -34,16 +34,28 @@ FLAGS
 
 :   Show logs as JSON objects.
 
-**-J, --jsonl**
+**-l, --jsonl**
 
 :   Show logs as JSON lines.
+
+**-t, --triage**
+
+:   Show logs in Triage format. Implies **--sort** and **--uniq** flags.
 
 **-p, --parquet**
 
 :   Save logs as Parquet file.
 
-Sigma Flags
------------
+Filter Flags
+------------
+
+**-N, --min**=_time_
+
+:   Minimum event _time_ in **RFC3339** format. Example: _2026-12-31T12:00:00.0Z_.
+
+**-X, --max**=_time_
+
+:   Maximum event _time_ in **RFC3339** format. Example: _2026-12-31T12:00:00.0Z_.
 
 **-R, --rule**=_file_
 
@@ -76,7 +88,7 @@ Globbing paths to open or '-' to read from **STDIN(4)**. If **local** is specifi
 EXAMPLES
 ========
 
-$ fox hunt -u *.dd
+$ fox hunt -t *.dd
 
 :   Hunt down critical events.
 

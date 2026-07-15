@@ -186,7 +186,7 @@ $ fox hash -Hmd5 files.7z
 
 :   Hash archive contents as MD5.
 
-$ fox hunt -u *.dd
+$ fox hunt -t *.dd
 
 :   Hunt down critical events.
 

@@ -47,6 +47,17 @@ func (e *Event) SortKey() string {
 	return fmt.Sprintf("%020d-%020d", uint64(e.Time.UnixNano())^(1<<63), xxh3.HashString(e.String()))
 }
 
+func (e *Event) AsTriage() string {
+	return strings.TrimSpace(fmt.Sprintf("%s %s@%s [%08s] %s: %s",
+		e.Time.Format("2006-01-02T15:04:05.000000Z07:00"),
+		pkg.Sanitize(e.User),
+		pkg.Sanitize(e.Host),
+		pkg.Sanitize(e.Sequence),
+		pkg.Sanitize(e.Category),
+		pkg.Sanitize(e.Message),
+	))
+}
+
 func (e *Event) AsCEF() string {
 	var sb strings.Builder
 

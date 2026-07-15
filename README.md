@@ -69,7 +69,7 @@ fox -L512b image.dd
 
 Show NTLM password hashes:
 ```console
-fox ad -hl NTDS.dit SYSTEM
+fox ad -hw NTDS.dit SYSTEM
 ```
 
 Show all strings in a binary:
@@ -94,7 +94,7 @@ fox hash -Hmd5 files.7z
 
 Hunt down critical events:
 ```console
-fox hunt -u *.dd
+fox hunt -t *.dd
 ```
 
 ## Capabilities

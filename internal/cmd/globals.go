@@ -68,7 +68,7 @@ Example: Find occurrences in event logs
   $ fox -FWinlogon ./**/*.evtx
 
 Example: Hunt down critical events
-  $ fox hunt -u *.dd
+  $ fox hunt -t *.dd
 
 Example: Show help on sub commands
   $ fox help hunt

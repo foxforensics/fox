@@ -9,6 +9,12 @@ import (
 	"go.foxforensics.eu/fox/v5/internal/pkg/tests"
 )
 
+type Request struct {
+	body        []byte
+	authHeader  string
+	contentType string
+}
+
 func TestMain(m *testing.M) {
 	if err := os.Chdir("../../../"); err != nil {
 		slog.Error(err.Error())
@@ -50,10 +56,19 @@ func TestHunt(t *testing.T) {
 				tests.FixtureFile("binaries/test.dd"),
 			},
 		},
+		{
+			"Triage",
+			"hunt.triage.txt",
+			[]string{
+				"hunt",
+				"-t",
+				tests.FixtureFile("binaries/test.evtx"),
+			},
+		},
 	} {
 		for range tests.Cycles {
 			t.Run(tt.name, func(t *testing.T) {
-				b, err := tests.FixtureMain(tt.args...)
+				b, err := tests.ExecuteMain(tt.args...)
 
 				if err != nil {
 					t.Error(err)
@@ -64,5 +79,31 @@ func TestHunt(t *testing.T) {
 				}
 			})
 		}
+	}
+}
+
+func TestStream(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		sample string
+		args   []string
+	}{
+		{
+			"Triage",
+			"hunt.triage.txt",
+			[]string{
+				"hunt",
+				"-t",
+				tests.FixtureFile("binaries/test.evtx"),
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := tests.ExecuteMain(tt.args...)
+
+			if err != nil {
+				t.Error(err)
+			}
+		})
 	}
 }

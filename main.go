@@ -39,7 +39,7 @@ Example: Find occurrences in event logs
   $ fox -FWinlogon ./**/*.evtx
 
 Example: Hunt down critical events
-  $ fox hunt -u *.dd
+  $ fox hunt -t *.dd
 
 Use 'fox help' to show further information.
 `)

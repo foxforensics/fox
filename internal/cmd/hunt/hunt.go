@@ -33,10 +33,13 @@ Flags:
   -s, --sort               Show logs sorted by timestamp
   -u, --uniq               Show logs that are unique 
   -j, --json               Show logs as JSON objects
-  -J, --jsonl              Show logs as JSON lines
+  -l, --jsonl              Show logs as JSON lines
+  -t, --triage             Show logs as Triage
   -p, --parquet            Save logs as Parquet
 
-Sigma flags:
+Filter flags:
+  -N, --min=TIME           Minimum event time (RFC3339)
+  -X, --max=TIME           Maximum event time (RFC3339)
   -R, --rule=FILE          Filter using Sigma rules file
 
 Stream flags:
@@ -49,7 +52,7 @@ Remarks:
   If 'local' is specified as path, built-in paths will be used.
 
 Example: Hunt down critical events
-  $ fox hunt -u *.dd
+  $ fox hunt -t *.dd
 
 Example: Save local events as Parquet
   $ fox hunt -ap local
@@ -64,12 +67,15 @@ type Hunt struct {
 	All     bool `short:"a"`
 	Sort    bool `short:"s"`
 	Uniq    bool `short:"u"`
-	Json    bool `short:"j" xor:"json,jsonl"`
-	Jsonl   bool `short:"J" xor:"json,jsonl"`
+	Json    bool `short:"j" xor:"triage,json,jsonl"`
+	Jsonl   bool `short:"l" xor:"triage,json,jsonl"`
+	Triage  bool `short:"t" xor:"triage,json,jsonl"`
 	Parquet bool `short:"p"`
 
-	// sigma flags
-	Rule []byte `short:"R" type:"filecontent"`
+	// filter flags
+	Min  time.Time `short:"N"`
+	Max  time.Time `short:"X"`
+	Rule []byte    `short:"R" type:"filecontent"`
 
 	// stream flags
 	Url  string `short:"U" xor:"url,ecs,hec"`
@@ -88,6 +94,10 @@ type Hunt struct {
 }
 
 func (cmd *Hunt) Validate() error {
+	if !cmd.Min.IsZero() && !cmd.Max.IsZero() && cmd.Min.After(cmd.Max) {
+		return errors.New("invalid range")
+	}
+
 	if len(cmd.Hec) > 0 && len(cmd.Auth) == 0 {
 		return errors.New("auth required")
 	}
@@ -101,6 +111,11 @@ func (cmd *Hunt) Validate() error {
 
 func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 	var err error
+
+	if cmd.Triage {
+		cmd.Sort = true
+		cmd.Uniq = true
+	}
 
 	if cmd.Uniq {
 		cmd.unique = types.NewUnique()
@@ -181,7 +196,7 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 
 	if !fox.Quiet {
 		mux.AddHandler(func(_ context.Context, e *event.Event) error {
-			fox.Writer.Match(formats.Event(e, cmd.Json, cmd.Jsonl), fox.Regexp)
+			fox.Writer.Match(formats.Event(e, cmd.Json, cmd.Jsonl, cmd.Triage), fox.Regexp)
 			return nil
 		})
 	}
@@ -205,6 +220,14 @@ func (cmd *Hunt) Run(fox *cmd.Globals) error {
 
 		if !cmd.All && !m.Match {
 			continue // not matched
+		}
+
+		if !cmd.Min.IsZero() && e.Time.Before(cmd.Min) {
+			continue // to soon
+		}
+
+		if !cmd.Max.IsZero() && e.Time.After(cmd.Max) {
+			continue // to late
 		}
 
 		mux.Handle(fox.Context, e)

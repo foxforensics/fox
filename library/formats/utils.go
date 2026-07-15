@@ -23,12 +23,14 @@ func Auto(s fmt.Stringer, json, jsonl bool) string {
 	}
 }
 
-func Event(e *event.Event, json, jsonl bool) string {
+func Event(e *event.Event, json, jsonl, triage bool) string {
 	switch {
 	case json:
 		return writer.ColorizeAs(AsJSON(e), "json")
 	case jsonl:
 		return writer.ColorizeAs(AsJSONL(e), "json")
+	case triage:
+		return e.AsTriage()
 	default:
 		return writer.MarkEvent(e.AsCEF())
 	}
