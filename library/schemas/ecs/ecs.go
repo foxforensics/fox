@@ -28,16 +28,15 @@ type Ecs struct {
 		ID string `json:"id,omitempty"`
 	} `json:"user,omitempty"`
 	Event struct {
-		ID       string    `json:"id,omitempty"`
-		Kind     string    `json:"kind,omitempty"`
-		Module   string    `json:"module,omitempty"`
-		Dataset  string    `json:"dataset,omitempty"`
-		Severity int64     `json:"severity,omitempty"`
-		Provider string    `json:"provider,omitempty"`
-		Ingested time.Time `json:"ingested,omitempty"`
-		Original string    `json:"original,omitempty"`
-		Hash     string    `json:"hash,omitempty"`
-		Code     string    `json:"code,omitempty"`
+		ID       string `json:"id,omitempty"`
+		Kind     string `json:"kind,omitempty"`
+		Module   string `json:"module,omitempty"`
+		Dataset  string `json:"dataset,omitempty"`
+		Severity int64  `json:"severity,omitempty"`
+		Provider string `json:"provider,omitempty"`
+		Original string `json:"original,omitempty"`
+		Hash     string `json:"hash,omitempty"`
+		Code     string `json:"code,omitempty"`
 	} `json:"event"`
 	Labels    map[string]any `json:"labels,omitempty"`
 	Timestamp time.Time      `json:"@timestamp"`
@@ -64,7 +63,6 @@ func Apply(evt *event.Event) ([]byte, error) {
 	ecs.Event.Dataset = fmt.Sprintf("%s.%s", evt.Source, evt.Category)
 	ecs.Event.Severity = int64(evt.Severity)
 	ecs.Event.Provider = evt.Service
-	ecs.Event.Ingested = time.Now().UTC()
 	ecs.Event.Original = original
 	ecs.Event.Hash = hash.MustSum(hash.MURMUR3, []byte(original))
 
