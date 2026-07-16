@@ -92,7 +92,7 @@ require (
 	github.com/libp2p/go-sockaddr v0.2.0 // indirect
 	github.com/malwarology/sdhash v0.6.0 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
-	github.com/mattn/go-isatty v0.0.22 // indirect
+	github.com/mattn/go-isatty v0.0.23 // indirect
 	github.com/parquet-go/bitpack v1.0.0 // indirect
 	github.com/parquet-go/jsonlite v1.5.2 // indirect
 	github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4 // indirect
@@ -101,7 +101,7 @@ require (
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
-	github.com/smallstep/pkcs7 v0.2.1 // indirect
+	github.com/smallstep/pkcs7 v0.2.2 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/stangelandcl/ppmd v0.1.1 // indirect
