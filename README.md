@@ -58,7 +58,7 @@ Standalone binaries and packages are available for:
 ## Commands
 Use `fox help` to get comprehensive help about: 
 
-| Mode                               | Description                                                 |
+| Verb                               | Description                                                 |
 |:----------------------------------:|:------------------------------------------------------------|
 |  [`ad`](assets/man/fox-ad.md)      | Shows Active Directory users, groups, computers and secrets |
 |  [`cat`](assets/man/fox-cat.md)    | Shows file contents as either text or hexdump (*default*)   |
