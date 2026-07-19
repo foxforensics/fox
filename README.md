@@ -55,6 +55,19 @@ Standalone binaries and packages are available for:
 |  macOs  | [amd](https://github.com/foxforensics/fox/releases/latest/download/fox_darwin_amd64.tar.gz) \| [arm](https://github.com/foxforensics/fox/releases/latest/download/fox_darwin_arm64.tar.gz) | `brew install foxforensics/fox/fox`                                                                                                                                                                                                                                                                                                                                              |
 | Windows | [amd](https://github.com/foxforensics/fox/releases/latest/download/fox_windows_amd64.zip) \| [arm](https://github.com/foxforensics/fox/releases/latest/download/fox_windows_arm64.zip)     | Binaries are standalone executables                                                                                                                                                                                                                                                                                                                                              |
 
+## Commands
+Use `fox help` to get comprehensive help about: 
+
+| Mode                               | Description                                                 |
+|:----------------------------------:|:------------------------------------------------------------|
+|  [`ad`](assets/man/fox-ad.md)      | Shows Active Directory users, groups, computers and secrets |
+|  [`cat`](assets/man/fox-cat.md)    | Shows file contents as either text or hexdump (*default*)   |
+|  [`str`](assets/man/fox-str.md)    | Shows all contained strings in a file and classify them     |
+|  [`info`](assets/man/fox-info.md)  | Shows file or block infos about size, lines and entropy     |
+|  [`time`](assets/man/fox-time.md)  | Shows the super timeline of different files as bodyfile     |
+|  [`hash`](assets/man/fox-hash.md)  | Shows the cryptography, fuzzy and fast hashes of files      |
+|  [`hunt`](assets/man/fox-hunt.md)  | Hunts critical system events by carving raw data for logs   |
+
 ## Examples
 
 Find occurrences in event logs:
@@ -87,9 +100,9 @@ Show entries as bodyfile:
 fox time ./$MFT
 ```
 
-Hash archive contents as MD5:
+Hash archive content as TLSH:
 ```console
-fox hash -Hmd5 files.7z
+fox hash -Htlsh ioc.7z!ioc.exe
 ```
 
 Hunt down critical events:
