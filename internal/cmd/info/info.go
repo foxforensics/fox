@@ -144,7 +144,13 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 	for h := range heaps {
 		fi := &FileInfo{File: h.String(), IsBlock: cmd.block > 0}
 
-		n := int64(h.Size)
+		var n int64
+
+		if h.Size > math.MaxInt64 {
+			n = math.MaxInt64
+		} else {
+			n = int64(h.Size)
+		}
 
 		if fi.IsBlock {
 			n = cmd.block
@@ -160,15 +166,15 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 		}
 
 		for block := range slices.Chunk(h.Bytes(), int(n)) {
-			fi.Bytes = uint64(len(block))
-			fi.Lines = uint64(bytes.Count(block, []byte{'\n'}))
+			fi.Bytes = uint64(max(0, len(block)))
+			fi.Lines = uint64(max(0, bytes.Count(block, []byte{'\n'})))
 			fi.Entropy = float64(int(entropy.Calculate(block)*Precision)) / Precision
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
 				fox.Writer.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)
 			}
 
-			fi.Offset += uint64(n)
+			fi.Offset += uint64(max(0, n))
 		}
 
 		h.Free()

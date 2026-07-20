@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"math"
 	"slices"
 	"strconv"
 	"strings"
@@ -266,5 +267,8 @@ func floatToUTC(v float64) time.Time {
 
 func intToUTC(v uint64) time.Time {
 	const nsec int64 = 116444736000000000
+	if v > math.MaxInt64 {
+		v = math.MaxInt64 // prevent overflow
+	}
 	return time.Unix(0, (int64(v)-nsec)*100).UTC()
 }

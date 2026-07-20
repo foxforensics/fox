@@ -1,0 +1,17 @@
+version: "2"
+
+linters:
+  enable:
+    - gosec
+
+  exclusions:
+    presets:
+      - common-false-positives
+
+    paths:
+      - testdata
+
+formatters:
+  exclusions:
+    paths:
+      - testdata

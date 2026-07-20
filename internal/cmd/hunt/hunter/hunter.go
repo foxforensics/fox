@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"math"
 	"slices"
 	"strings"
 	"sync"
@@ -127,7 +128,12 @@ func (htr *Hunter) carve(ctx context.Context, ch chan<- *event.Event, h *heap.He
 }
 
 func (htr *Hunter) carveEvtx(ctx context.Context, ch chan<- *event.Event, h *heap.Heap) error {
+	if h.Size > math.MaxInt64 {
+		return errors.New("heap size overflow")
+	}
+
 	sr := io.NewSectionReader(h.Reader(), 0, int64(h.Size))
+
 	for off := range htr.findOffset(ctx, h, evtx.Chunk) {
 		for evt := range evtx.Carve(ctx, sr, off, cap(ch)) {
 			select {
@@ -142,7 +148,12 @@ func (htr *Hunter) carveEvtx(ctx context.Context, ch chan<- *event.Event, h *hea
 }
 
 func (htr *Hunter) carveJournal(ctx context.Context, ch chan<- *event.Event, h *heap.Heap) error {
+	if h.Size > math.MaxInt64 {
+		return errors.New("heap size overflow")
+	}
+
 	sr := io.NewSectionReader(h.Reader(), 0, int64(h.Size))
+
 	for off := range htr.findOffset(ctx, h, journal.Magic) {
 		for evt := range journal.Carve(ctx, sr, off, cap(ch)) {
 			select {

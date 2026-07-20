@@ -86,7 +86,10 @@ func Generate(path string) error {
 		return err
 	}
 
-	return os.WriteFile(path+".cc", []byte(fmt.Sprintf(header,
+	cc := fmt.Sprintf("%s.cc", filepath.Clean(p))
+
+	//nolint:gosec // G703: path is not externally tainted
+	return os.WriteFile(cc, []byte(fmt.Sprintf(header,
 		version.Number, runtime.GOOS, runtime.GOARCH,
 		p,
 		time.Now().UTC().Format(time.RFC3339Nano),

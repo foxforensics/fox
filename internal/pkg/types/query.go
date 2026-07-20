@@ -76,9 +76,9 @@ func SetQuery(q *Query, s string, re *regexp2.Regexp) error {
 
 	switch {
 	case s[len(s)-1] == 'l':
-		q.Lines = uint(val)
+		q.Lines = uint(max(0, val))
 	default:
-		q.Bytes = uint(val)
+		q.Bytes = uint(max(0, val))
 	}
 
 	return nil

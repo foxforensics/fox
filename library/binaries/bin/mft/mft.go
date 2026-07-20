@@ -55,7 +55,7 @@ func Parse(b []byte) []entry.Entry {
 			Name:    mh.FileName(),
 			Inode:   fmt.Sprintf("%d-%d", mh.EntryNumber, mh.SequenceNumber),
 			Mode:    buildMode(mh),
-			Size:    uint64(mh.FileSize),
+			Size:    uint64(max(0, mh.FileSize)),
 			Mtime:   mh.LastModified0x10.UTC(),
 			Atime:   mh.LastAccess0x10.UTC(),
 			Ctime:   mh.LastRecordChange0x10.UTC(),
