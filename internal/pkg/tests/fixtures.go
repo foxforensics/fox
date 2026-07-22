@@ -2,8 +2,10 @@ package tests
 
 import (
 	"bytes"
+	crand "crypto/rand"
 	"fmt"
 	"log/slog"
+	mrand "math/rand"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -73,6 +75,19 @@ func Sample(name string) []byte {
 	}
 
 	return buf
+}
+
+func Random() [][]byte {
+	v := make([][]byte, 0)
+	v = append(v, []byte{})
+
+	for i := 0; i < 10; i++ {
+		b := make([]byte, mrand.Int()%256)
+		_, _ = crand.Read(b)
+		v = append(v, b)
+	}
+
+	return v
 }
 
 func getRoot() string {
