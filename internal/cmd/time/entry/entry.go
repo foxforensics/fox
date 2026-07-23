@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
 )
 
@@ -30,7 +31,7 @@ type Entry struct {
 
 func (e Entry) String() string {
 	s := fmt.Sprintf("0|%s|%s|%s|0|0|%d|%d|%d|%d|%d",
-		replacer.Replace(e.Name),
+		pkg.Sanitize(replacer.Replace(e.Name)),
 		e.Inode,
 		e.Mode,
 		e.Size,

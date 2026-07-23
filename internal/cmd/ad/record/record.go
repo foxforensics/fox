@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"go.foxforensics.eu/fox/v5/internal/cmd/ad/tables"
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 	"go.foxforensics.eu/fox/v5/internal/pkg/writer"
 	"go.foxforensics.eu/hashdump/extract"
 )
@@ -23,7 +24,7 @@ type Computer struct {
 }
 
 func (c *Computer) String() string {
-	return c.Name
+	return pkg.Sanitize(c.Name)
 }
 
 type Group struct {
@@ -31,7 +32,7 @@ type Group struct {
 }
 
 func (g *Group) String() string {
-	return g.Name
+	return pkg.Sanitize(g.Name)
 }
 
 type User struct {
@@ -39,7 +40,7 @@ type User struct {
 }
 
 func (u *User) String() string {
-	return u.Name
+	return pkg.Sanitize(u.Name)
 }
 
 type Secret struct {
@@ -51,7 +52,7 @@ func (s *Secret) ToNTLM(history bool) string {
 
 	// append actual hashes
 	fmt.Fprintf(&sb, "%s:%d:%s:%s:::",
-		s.SAMAccountName,
+		pkg.Sanitize(s.SAMAccountName),
 		s.RID,
 		s.format(s.LMHash, defaultLM, true),
 		s.format(s.NTHash, defaultNT, false),
@@ -72,7 +73,7 @@ func (s *Secret) ToNTLM(history bool) string {
 			}
 
 			fmt.Fprintf(&sb, "\n%s_history%d:%d:%s:%s:::",
-				s.SAMAccountName,
+				pkg.Sanitize(s.SAMAccountName),
 				i,
 				s.RID,
 				s.format(lm, defaultLM, true),

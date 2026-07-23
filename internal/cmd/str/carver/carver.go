@@ -8,6 +8,7 @@ import (
 	"strings"
 	"sync"
 
+	"go.foxforensics.eu/fox/v5/internal/pkg"
 	fstrings "go.foxforensics.eu/strings/strings"
 )
 
@@ -65,6 +66,9 @@ func (crv *Carver) Carve(ctx context.Context, block []byte) <-chan *String {
 		) {
 			var adr = fmt.Sprintf("%08x", str.Offset)
 			var cls string
+
+			// sanitize value
+			str.Value = pkg.Sanitize(str.Value)
 
 			// lookup classes
 			if crv.opts.What > 0 {
