@@ -27,6 +27,38 @@ func BenchmarkExtract(b *testing.B) {
 	}
 }
 
+func FuzzDetect(f *testing.F) {
+	for _, rnd := range tests.Random() {
+		f.Add(rnd)
+	}
+
+	f.Fuzz(func(t *testing.T, b []byte) {
+		defer func() {
+			if r := recover(); r != nil {
+				t.Fatalf("panic on %x: %v", b, r)
+			}
+		}()
+
+		_ = Detect(b)
+	})
+}
+
+func FuzzExtract(f *testing.F) {
+	for _, rnd := range tests.Random() {
+		f.Add(rnd)
+	}
+
+	f.Fuzz(func(t *testing.T, b []byte) {
+		defer func() {
+			if r := recover(); r != nil {
+				t.Fatalf("panic on %x: %v", b, r)
+			}
+		}()
+
+		_ = Extract(b, "", "")
+	})
+}
+
 func TestDetect(t *testing.T) {
 	if !Detect(tests.Fixture(src1)) {
 		t.Fatal("not detected")

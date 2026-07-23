@@ -143,11 +143,11 @@ func (cmd *Hunt) AfterApply(_ *kong.Kong, _ kong.Vars) error {
 
 	switch {
 	case len(cmd.Url) > 0:
-		cmd.client, err = client.Raw(cmd.Url)
+		cmd.client, err = client.WithRaw(cmd.Url)
 	case len(cmd.Ecs) > 0:
-		cmd.client, err = client.Ecs(cmd.Ecs)
+		cmd.client, err = client.WithEcs(cmd.Ecs)
 	case len(cmd.Hec) > 0:
-		cmd.client, err = client.Hec(cmd.Hec, cmd.Auth)
+		cmd.client, err = client.WithHec(cmd.Hec, cmd.Auth)
 	}
 
 	return err

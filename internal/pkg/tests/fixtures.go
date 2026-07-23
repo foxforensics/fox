@@ -2,10 +2,9 @@ package tests
 
 import (
 	"bytes"
-	crand "crypto/rand"
+	"crypto/rand"
 	"fmt"
 	"log/slog"
-	mrand "math/rand"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -14,6 +13,7 @@ import (
 
 const Fox = "fox.txt"
 const Cycles = 5
+const Length = 10
 
 func AssertFox(b []byte) bool {
 	return bytes.Equal(b, Fixture(filepath.Join("texts", Fox)))
@@ -79,11 +79,10 @@ func Sample(name string) []byte {
 
 func Random() [][]byte {
 	v := make([][]byte, 0)
-	v = append(v, []byte{})
 
-	for i := 0; i < 10; i++ {
-		b := make([]byte, mrand.Int()%256)
-		_, _ = crand.Read(b)
+	for i := 0; i < Length; i++ {
+		b := make([]byte, i)
+		_, _ = rand.Read(b)
 		v = append(v, b)
 	}
 

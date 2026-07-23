@@ -33,6 +33,38 @@ func TestDetect(t *testing.T) {
 	}
 }
 
+func FuzzDetect(f *testing.F) {
+	for _, rnd := range tests.Random() {
+		f.Add(rnd)
+	}
+
+	f.Fuzz(func(t *testing.T, b []byte) {
+		defer func() {
+			if r := recover(); r != nil {
+				t.Fatalf("panic on %x: %v", b, r)
+			}
+		}()
+
+		_ = Detect(b)
+	})
+}
+
+func FuzzExtract(f *testing.F) {
+	for _, rnd := range tests.Random() {
+		f.Add(rnd)
+	}
+
+	f.Fuzz(func(t *testing.T, b []byte) {
+		defer func() {
+			if r := recover(); r != nil {
+				t.Fatalf("panic on %x: %v", b, r)
+			}
+		}()
+
+		_ = Extract(b, "", "")
+	})
+}
+
 func TestExtract(t *testing.T) {
 	for _, tt := range []struct {
 		file, pass string

@@ -24,6 +24,38 @@ func BenchmarkDeflate(b *testing.B) {
 	}
 }
 
+func FuzzDetect(f *testing.F) {
+	for _, rnd := range tests.Random() {
+		f.Add(rnd)
+	}
+
+	f.Fuzz(func(t *testing.T, b []byte) {
+		defer func() {
+			if r := recover(); r != nil {
+				t.Fatalf("panic on %x: %v", b, r)
+			}
+		}()
+
+		_ = Detect(b)
+	})
+}
+
+func FuzzDeflate(f *testing.F) {
+	for _, rnd := range tests.Random() {
+		f.Add(rnd)
+	}
+
+	f.Fuzz(func(t *testing.T, b []byte) {
+		defer func() {
+			if r := recover(); r != nil {
+				t.Fatalf("panic on %x: %v", b, r)
+			}
+		}()
+
+		_, _ = Deflate(b)
+	})
+}
+
 func TestDetect(t *testing.T) {
 	if !Detect(tests.Fixture(src)) {
 		t.Fatal("not detected")

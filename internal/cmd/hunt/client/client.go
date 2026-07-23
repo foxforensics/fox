@@ -14,27 +14,49 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v6"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/client/ecs"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/client/hec"
+	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/client/raw"
 	"go.foxforensics.eu/fox/v5/internal/cmd/hunt/event"
 	"go.foxforensics.eu/fox/v5/internal/pkg/version"
-	"go.foxforensics.eu/fox/v5/library/schemas"
-	"go.foxforensics.eu/fox/v5/library/schemas/ecs"
-	"go.foxforensics.eu/fox/v5/library/schemas/hec"
-	"go.foxforensics.eu/fox/v5/library/schemas/raw"
 )
 
 // Timeout for everything network related.
 const timeout = time.Second * 30
 
+type formater func(*event.Event) ([]byte, error)
+
+type Format int
+
+const (
+	Raw Format = iota
+	ECS
+	HEC
+)
+
+func (f Format) String() string {
+	switch f {
+	case Raw:
+		return "raw"
+	case ECS:
+		return "ecs"
+	case HEC:
+		return "hec"
+	default:
+		return "unknown"
+	}
+}
+
 type Options struct {
 	Url    string
 	Token  string
-	Schema schemas.Schema
+	Format Format
 }
 
 type Client struct {
 	client http.Client
 	header http.Header
-	apply  schemas.Apply
+	apply  formater
 	opts   *Options
 }
 
@@ -67,7 +89,8 @@ func New(opts *Options) (*Client, error) {
 			},
 		},
 		header: make(http.Header, 4),
-		opts:   opts}
+		opts:   opts,
+	}
 
 	// add fox agent
 	cli.header.Set("User-Agent", fmt.Sprintf("fox %s", version.Number))
@@ -78,48 +101,48 @@ func New(opts *Options) (*Client, error) {
 	}
 
 	// add content type
-	if cli.opts.Schema != schemas.Raw {
+	if cli.opts.Format != Raw {
 		cli.header.Set("Content-Type", "application/json")
 	} else {
 		cli.header.Set("Content-Type", "text/plain")
 	}
 
-	switch cli.opts.Schema {
-	case schemas.Ecs:
+	switch cli.opts.Format {
+	case ECS:
 		cli.apply = ecs.Apply
-	case schemas.Hec:
+	case HEC:
 		cli.apply = hec.Apply
-	case schemas.Raw:
+	case Raw:
 		cli.apply = raw.Apply
 	}
 
 	return cli, nil
 }
 
-func Raw(url string) (*Client, error) {
+func WithRaw(url string) (*Client, error) {
 	return New(&Options{
 		Url:    url,
-		Schema: schemas.Raw,
+		Format: Raw,
 	})
 }
 
-func Ecs(url string) (*Client, error) {
+func WithEcs(url string) (*Client, error) {
 	return New(&Options{
 		Url:    url,
-		Schema: schemas.Ecs,
+		Format: ECS,
 	})
 }
 
-func Hec(url, token string) (*Client, error) {
+func WithHec(url, token string) (*Client, error) {
 	return New(&Options{
 		Url:    url,
 		Token:  token,
-		Schema: schemas.Hec,
+		Format: HEC,
 	})
 }
 
 func (cli *Client) String() string {
-	return fmt.Sprintf("%s@%s", cli.opts.Schema, cli.opts.Url)
+	return fmt.Sprintf("%s@%s", cli.opts.Format, cli.opts.Url)
 }
 
 func (cli *Client) Send(ctx context.Context, evt *event.Event) error {
