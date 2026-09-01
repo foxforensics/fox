@@ -1,4 +1,4 @@
-<div style="text-align: center;">
+<div align="center">
   <img src="assets/img/fox.svg" width="160" alt=""/>
   <br/><br/><b>The Forensic Examiner's Swiss Army Knife</b><br/><br/>
 
