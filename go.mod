@@ -7,8 +7,8 @@ require (
 	github.com/Velocidex/ordereddict v0.0.0-20250821063524-02dc06e46238
 	github.com/aixiansheng/lzfse v0.2.4
 	github.com/alecthomas/chroma/v2 v2.27.0
-	github.com/alecthomas/kong v1.16.0
-	github.com/andybalholm/brotli v1.2.2
+	github.com/alecthomas/kong v1.16.1
+	github.com/andybalholm/brotli v1.2.3
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/bodgit/sevenzip v1.6.5
 	github.com/bradleyjkemp/sigma-go v0.6.6
@@ -16,19 +16,19 @@ require (
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cenkalti/backoff/v6 v6.0.1
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
-	github.com/dlclark/regexp2/v2 v2.5.0
+	github.com/dlclark/regexp2/v2 v2.7.1
 	github.com/emersion/go-message v0.18.2
 	github.com/fatih/color v1.19.0
 	github.com/flanglet/kanzi-go/v2 v2.5.1
 	github.com/hooklift/iso9660 v1.0.0
 	github.com/josephspurrier/goversioninfo v1.7.0
-	github.com/klauspost/compress v1.19.0
+	github.com/klauspost/compress v1.19.2
 	github.com/korylprince/goxar v0.1.2
 	github.com/minio/minlz v1.2.0
 	github.com/mkrautz/goar v0.0.0-20150919110319-282caa8bd9da
-	github.com/nwaples/rardecode/v2 v2.2.5
-	github.com/parquet-go/parquet-go v0.30.1
-	github.com/pierrec/lz4/v4 v4.1.27
+	github.com/nwaples/rardecode/v2 v2.4.1
+	github.com/parquet-go/parquet-go v0.32.0
+	github.com/pierrec/lz4/v4 v4.1.29
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
 	github.com/rotisserie/eris v0.5.4
 	github.com/saferwall/elf v0.3.1
@@ -36,7 +36,7 @@ require (
 	github.com/secDre4mer/go-cab v0.0.0-20260602061637-8f8e7163d35b
 	github.com/sorairolake/lzip-go v0.3.8
 	github.com/sourcegraph/conc v0.3.0
-	github.com/ulikunitz/xz v0.5.15
+	github.com/ulikunitz/xz v0.5.16
 	github.com/zeebo/xxh3 v1.1.0
 	go.foxforensics.eu/bootkey v1.0.1
 	go.foxforensics.eu/entropy v1.0.1
@@ -55,9 +55,9 @@ require (
 	go.foxforensics.eu/strings v1.0.1
 	go.foxforensics.eu/wordlist v1.0.2
 	golang.org/x/term v0.45.0
-	golang.org/x/text v0.40.0
+	golang.org/x/text v0.41.0
 	www.velocidex.com/golang/evtx v0.2.0
-	www.velocidex.com/golang/go-ntfs v0.2.0
+	www.velocidex.com/golang/go-ntfs v0.2.1
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
 )
 
@@ -92,16 +92,16 @@ require (
 	github.com/libp2p/go-sockaddr v0.2.0 // indirect
 	github.com/malwarology/sdhash v0.6.0 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
-	github.com/mattn/go-isatty v0.0.23 // indirect
-	github.com/parquet-go/bitpack v1.0.0 // indirect
-	github.com/parquet-go/jsonlite v1.5.2 // indirect
+	github.com/mattn/go-isatty v0.0.24 // indirect
+	github.com/parquet-go/bitpack v1.1.0 // indirect
+	github.com/parquet-go/jsonlite v1.5.5 // indirect
 	github.com/pedroalbanese/md6 v0.0.0-20240815222317-052c055905a4 // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/saferwall/binstream v0.1.2 // indirect
 	github.com/secDre4mer/lzx v0.0.0-20250826110518-fedea00d45a5 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
-	github.com/smallstep/pkcs7 v0.2.2 // indirect
+	github.com/smallstep/pkcs7 v0.2.3 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/stangelandcl/ppmd v0.1.1 // indirect
@@ -117,13 +117,13 @@ require (
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
-	golang.org/x/crypto v0.54.0 // indirect
-	golang.org/x/exp v0.0.0-20260709172345-9ea1abe57597 // indirect
-	golang.org/x/image v0.44.0 // indirect
-	golang.org/x/net v0.57.0 // indirect
+	golang.org/x/crypto v0.55.0 // indirect
+	golang.org/x/exp v0.0.0-20260824195058-e88cd73687aa // indirect
+	golang.org/x/image v0.45.0 // indirect
+	golang.org/x/net v0.58.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
-	google.golang.org/protobuf v1.36.11 // indirect
+	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	www.velocidex.com/golang/binparsergen v0.1.1-0.20201101234514-bbdb29f9ee31 // indirect
 	www.velocidex.com/golang/go-pe v0.1.1-0.20211006062218-8f6d1ad6b2d5 // indirect
