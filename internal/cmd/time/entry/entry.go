@@ -22,10 +22,10 @@ type Entry struct {
 	Inode   string    `json:"inode,omitempty"`
 	Size    uint64    `json:"size"`
 	Mode    string    `json:"mode,omitempty"`
-	Mtime   time.Time `json:"m_time,omitempty"`
-	Atime   time.Time `json:"a_time,omitempty"`
-	Ctime   time.Time `json:"c_time,omitempty"`
-	Btime   time.Time `json:"b_time,omitempty"`
+	Mtime   time.Time `json:"m_time"`
+	Atime   time.Time `json:"a_time"`
+	Ctime   time.Time `json:"c_time"`
+	Btime   time.Time `json:"b_time"`
 	Anomaly bool      `json:"anomaly,omitempty"`
 }
 

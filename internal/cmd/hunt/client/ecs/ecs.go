@@ -23,10 +23,10 @@ type Ecs struct {
 	} `json:"agent"`
 	Host struct {
 		Hostname string `json:"hostname,omitempty"`
-	} `json:"host,omitempty"`
+	} `json:"host"`
 	User struct {
 		ID string `json:"id,omitempty"`
-	} `json:"user,omitempty"`
+	} `json:"user"`
 	Event struct {
 		ID       string `json:"id,omitempty"`
 		Kind     string `json:"kind,omitempty"`
