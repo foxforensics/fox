@@ -17,28 +17,14 @@ import (
 )
 
 var header = strings.TrimSpace(`
-FOX CHAIN OF CUSTODY
-====================
-v%s (%s-%s)
+FOX CHAIN OF CUSTODY v%s [%s-%s]
 
-EVIDENCE
---------
-%s
+ACQUIRED : %s
+EXAMINER : %s (%s)
+HOSTNAME : %s
+EVIDENCE : %s
 
-METADATA
---------
-Acquired : %s
-Examiner : %s (%s)
-Host     : %s
-Size     : %d
-
-INTEGRITY
----------
-%x SHA-256
-
-COMMAND
--------
-%s
+SHA256 %x
 `)
 
 func Generate(path string) error {
@@ -54,49 +40,35 @@ func Generate(path string) error {
 		}
 	}()
 
-	fi, err := f.Stat()
+	sha := sha256.New()
+
+	_, err = io.Copy(sha, f)
 
 	if err != nil {
 		return err
 	}
 
-	h := sha256.New()
-
-	_, err = io.Copy(h, f)
+	hst, err := os.Hostname()
 
 	if err != nil {
 		return err
 	}
 
-	hn, err := os.Hostname()
+	usr, err := user.Current()
 
 	if err != nil {
 		return err
 	}
 
-	un, err := user.Current()
-
-	if err != nil {
-		return err
-	}
-
-	p, err := filepath.Abs(path)
-
-	if err != nil {
-		return err
-	}
-
-	cc := fmt.Sprintf("%s.cc", filepath.Clean(p))
+	cc := fmt.Sprintf("%s.cc", filepath.Base(path))
 
 	//nolint:gosec // G703: path is not externally tainted
 	return os.WriteFile(cc, []byte(fmt.Sprintf(header,
 		version.Number, runtime.GOOS, runtime.GOARCH,
-		p,
 		time.Now().UTC().Format(time.RFC3339Nano),
-		un.Name, un.Username,
-		hn,
-		fi.Size(),
-		h.Sum(nil),
+		usr.Name, usr.Username,
+		hst,
 		strings.Join(os.Args, " "),
+		sha.Sum(nil),
 	)), 0600)
 }
