@@ -3,6 +3,7 @@ package buffer
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"strings"
 
 	"go.foxforensics.eu/fox/v5/internal/cmd"
@@ -76,7 +77,11 @@ func formatStd(ctx *HexContext) HexLine {
 		case v >= 1 && v <= 31:
 			val.WriteString(writer.AsBold(fmt.Sprintf("%02x ", v)))
 		default:
-			fmt.Fprintf(&val, "%02x ", v)
+			_, err := fmt.Fprintf(&val, "%02x ", v)
+
+			if err != nil {
+				slog.Error(err.Error())
+			}
 		}
 
 		if (i+1)%8 == 0 {
@@ -108,7 +113,11 @@ func formatRaw(ctx *HexContext) HexLine {
 			break
 		}
 
-		fmt.Fprintf(&val, "%02x ", ctx.Data[ctx.Index+i])
+		_, err := fmt.Fprintf(&val, "%02x ", ctx.Data[ctx.Index+i])
+
+		if err != nil {
+			slog.Error(err.Error())
+		}
 	}
 
 	return HexLine{"", val.String(), ""}
