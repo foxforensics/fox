@@ -30,6 +30,21 @@ FLAGS
 
 :   Show timeline as JSON lines.
 
+Filter Flags
+------------
+
+**-M, --mode**=[m|a|c|b]
+
+:   Filter using timestamp _type_ (default: **m**).
+
+**-N, --min**=_time_
+
+:   Minimum record _time_ in **RFC3339** format. Example: _2026-12-31T12:00:00.0Z_.
+
+**-X, --max**=_time_
+
+:   Maximum record _time_ in **RFC3339** format. Example: _2026-12-31T12:00:00.0Z_.
+
 POSITIONAL ARGUMENTS
 ====================
 

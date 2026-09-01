@@ -30,6 +30,13 @@ FLAGS
 
 :   Trim strings whitespaces.
 
+**-w, --what**[=_level_]
+
+:   Show string classifications (**w**/**ww**/**www**).
+
+Filter Flags
+------------
+
 **-N, --min**=_length_
 
 :   Minimum string _length_ (default: **3**).
@@ -38,16 +45,9 @@ FLAGS
 
 :   Maximum string _length_ (default: **256**).
 
-Class Flags
------------
-
-**-w, --what**[=_level_]
-
-:   Show string classifications (**w**/**ww**/**www**).
-
 **-C, --class**=_name_,...
 
-:   Show only strings classes that match _name_. Implies **--what** flag at level _3_.
+:   Filter using class _name_. Implies **--what** flag at level _3_.
 
 POSITIONAL ARGUMENTS
 ====================

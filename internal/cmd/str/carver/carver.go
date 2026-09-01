@@ -18,12 +18,12 @@ var (
 )
 
 type Options struct {
-	Min     uint
-	Max     uint
 	Ascii   bool
 	Sort    bool
 	Trim    bool
 	What    int
+	Min     uint
+	Max     uint
 	Class   []string
 	Threads int
 }
