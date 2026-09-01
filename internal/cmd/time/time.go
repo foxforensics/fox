@@ -39,7 +39,7 @@ type Time struct {
 	Jsonl bool `short:"l" xor:"json,jsonl"`
 
 	// filter flags
-	Mode string    `short:"M" enum:"m,a,c,b" default:"m"`
+	Mode string    `short:"M" enum:"m,a,c,b" default:"a"`
 	Min  time.Time `short:"N"`
 	Max  time.Time `short:"X"`
 

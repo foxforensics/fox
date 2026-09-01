@@ -35,7 +35,7 @@ Filter Flags
 
 **-M, --mode**=[m|a|c|b]
 
-:   Filter using timestamp _type_ (default: **m**).
+:   Filter using timestamp _type_ (default: **a**).
 
 **-N, --min**=_time_
 
