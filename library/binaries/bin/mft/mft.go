@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log/slog"
+	"math"
 	"strings"
 	"time"
 
@@ -76,6 +77,10 @@ func buildPath(mh *parser.MFTHighlight, mc cache) string {
 	e, s := mh, mh.FileName()
 
 	for len(s) < length && e.FileName() != "." {
+		if e.ParentEntryNumber > math.MaxInt64 {
+			break // prevent overflow
+		}
+
 		if v, ok := mc[int64(e.ParentEntryNumber)]; ok {
 			s, e = fmt.Sprintf(`%s\%s`, v.FileName(), s), v
 		} else {
