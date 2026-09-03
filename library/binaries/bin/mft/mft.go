@@ -17,7 +17,10 @@ import (
 const (
 	cluster = 4096 // sane size
 	record  = 1024
+	length  = 32767
 )
+
+type cache map[int64]*parser.MFTHighlight
 
 func Detect(b []byte) bool {
 	return library.HasMagic(b, 0, []byte{
@@ -47,12 +50,14 @@ func Convert(b []byte) ([]byte, error) {
 
 func Parse(b []byte) []entry.Entry {
 	v := make([]entry.Entry, 0, len(b)/record)
+	m := make(cache)
 
 	ch := parser.ParseMFTFile(context.Background(), bytes.NewReader(b), int64(len(b)), cluster, record)
 
 	for mh := range ch {
+		m[mh.EntryNumber] = mh
 		v = append(v, entry.Entry{
-			Name:    mh.FileName(),
+			Name:    buildPath(mh, m),
 			Inode:   fmt.Sprintf("%d-%d", mh.EntryNumber, mh.SequenceNumber),
 			Mode:    buildMode(mh),
 			Size:    uint64(max(0, mh.FileSize)),
@@ -65,6 +70,20 @@ func Parse(b []byte) []entry.Entry {
 	}
 
 	return v
+}
+
+func buildPath(mh *parser.MFTHighlight, mc cache) string {
+	e, s := mh, mh.FileName()
+
+	for len(s) < length && e.FileName() != "." {
+		if v, ok := mc[int64(e.ParentEntryNumber)]; ok {
+			s, e = fmt.Sprintf(`%s\%s`, v.FileName(), s), v
+		} else {
+			break
+		}
+	}
+
+	return s
 }
 
 func buildMode(mh *parser.MFTHighlight) string {
