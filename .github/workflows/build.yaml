@@ -16,7 +16,7 @@ jobs:
       name: release
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Setup Syft
@@ -26,7 +26,7 @@ jobs:
       - name: Setup Pandoc
         uses: pandoc/actions/setup@v1
       - name: Setup Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with:
           go-version: '1.26'
       - name: Setup GoVersionInfo

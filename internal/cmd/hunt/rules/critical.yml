@@ -43,7 +43,7 @@ detection:
       - 4776 # The computer attempted to validate credentials
       - 4778 # A session was reconnected to a Window Station
       - 4779 # A session was disconnected from a Window Station
-      - 4902 # The per user audit policy table was created
+      - 4902 # The per-user audit policy table was created
       - 4904 # An attempt was made to register a security event source
       - 4905 # An attempt was made to unregister a security event source
       - 5140 # A network share object was accessed

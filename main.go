@@ -33,7 +33,7 @@ var About = strings.TrimSpace(`
 `)
 
 var Usage = strings.TrimSpace(`
-Usage: fox {ad,cat,str,info,time,hash,hunt} <...>
+Usage: fox <ad|cat|str|info|time|hash|hunt> <...>
 
 Example: Find occurrences in event logs
   $ fox -FWinlogon ./**/*.evtx

@@ -58,11 +58,11 @@ Standalone binaries and packages are available for:
 ## Commands
 Use `fox help` to get comprehensive help about: 
 
-| Verb                               | Description                                                 |
+|                Verb                | Description                                                 |
 |:----------------------------------:|:------------------------------------------------------------|
-|  [`ad`](assets/man/fox-ad.md)      | Shows Active Directory users, groups, computers and secrets |
-|  [`cat`](assets/man/fox-cat.md)    | Shows file contents as either text or hexdump (*default*)   |
-|  [`str`](assets/man/fox-str.md)    | Shows all contained strings in a file and classify them     |
+|    [`ad`](assets/man/fox-ad.md)    | Shows Active Directory users, groups, computers and secrets |
+|   [`cat`](assets/man/fox-cat.md)   | Shows file contents as either text or hexdump (*default*)   |
+|   [`str`](assets/man/fox-str.md)   | Shows all contained strings in a file and classify them     |
 |  [`info`](assets/man/fox-info.md)  | Shows file or block infos about size, lines and entropy     |
 |  [`time`](assets/man/fox-time.md)  | Shows the super timeline of different files as bodyfile     |
 |  [`hash`](assets/man/fox-hash.md)  | Shows the cryptography, fuzzy and fast hashes of files      |

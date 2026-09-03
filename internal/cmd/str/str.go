@@ -20,12 +20,12 @@ Flags:
   -a, --ascii              Show only strings with ASCII encoding
   -s, --sort               Sort strings alphabetically
   -t, --trim               Trim strings whitespaces
+  -w, --what[=LEVEL]       Show string classifications (w/ww/www)
+
+Filter flags:
   -N, --min=LENGTH         Minimum string length (default: 3)
   -X, --max=LENGTH         Maximum string length (default: 256)
-
-Class flags:
-  -w, --what[=LEVEL]       Show string classifications (w/ww/www)
-  -C, --class=NAME,...     Show only classes that match name(es)
+  -C, --class=NAME,...     Filter using classes name(es)
 
 Remarks:
   If 'list' is specified as path, only the built-in classifications
@@ -44,11 +44,11 @@ type Str struct {
 	Ascii bool `short:"a"`
 	Sort  bool `short:"s"`
 	Trim  bool `short:"t"`
-	Min   uint `short:"N" default:"3"`
-	Max   uint `short:"X" default:"256"`
+	What  int  `short:"w" type:"counter"`
 
-	// class flags
-	What  int      `short:"w" type:"counter"`
+	// filter flags
+	Min   uint     `short:"N" default:"3"`
+	Max   uint     `short:"X" default:"256"`
 	Class []string `short:"C" sep:","`
 
 	// paths
@@ -102,12 +102,12 @@ func (cmd *Str) Run(fox *cmd.Globals) error {
 		}
 
 		for s := range carver.New(&carver.Options{
-			Min:     cmd.Min,
-			Max:     cmd.Max,
 			Ascii:   cmd.Ascii,
 			Sort:    cmd.Sort,
 			Trim:    cmd.Trim,
 			What:    cmd.What,
+			Min:     cmd.Min,
+			Max:     cmd.Max,
 			Class:   cmd.Class,
 			Threads: fox.Threads,
 		}).Carve(fox.Context, h.Bytes()) {

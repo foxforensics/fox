@@ -2,6 +2,7 @@ package record
 
 import (
 	"fmt"
+	"log/slog"
 	"strings"
 
 	"go.foxforensics.eu/fox/v5/internal/cmd/ad/tables"
@@ -51,12 +52,17 @@ func (s *Secret) ToNTLM(history bool) string {
 	var sb strings.Builder
 
 	// append actual hashes
-	fmt.Fprintf(&sb, "%s:%d:%s:%s:::",
+	_, err := fmt.Fprintf(&sb, "%s:%d:%s:%s:::",
 		pkg.Sanitize(s.SAMAccountName),
 		s.RID,
 		s.format(s.LMHash, defaultLM, true),
 		s.format(s.NTHash, defaultNT, false),
 	)
+
+	if err != nil {
+		slog.Error(err.Error())
+		return ""
+	}
 
 	// append historic hashes
 	if history {
@@ -72,13 +78,17 @@ func (s *Secret) ToNTLM(history bool) string {
 				nt = s.NTHashHistory[i]
 			}
 
-			fmt.Fprintf(&sb, "\n%s_history%d:%d:%s:%s:::",
+			_, err = fmt.Fprintf(&sb, "\n%s_history%d:%d:%s:%s:::",
 				pkg.Sanitize(s.SAMAccountName),
 				i,
 				s.RID,
 				s.format(lm, defaultLM, true),
 				s.format(nt, defaultNT, false),
 			)
+
+			if err != nil {
+				slog.Error(err.Error())
+			}
 		}
 	}
 
