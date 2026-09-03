@@ -38,7 +38,10 @@ Usage: fox {ad,cat,str,info,time,hash,hunt} <...>
 Example: Find occurrences in event logs
   $ fox -FWinlogon ./**/*.evtx
 
-Example: Hunt down critical events
+Example: Show NTLM hashes
+  $ fox ad -hw NTDS.dit SYSTEM
+
+Example: Hunt critical events
   $ fox hunt -t *.dd
 
 Use 'fox help' to show further information.

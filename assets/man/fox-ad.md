@@ -8,12 +8,12 @@ NAME
 SYNOPSIS
 ========
 
-| **fox** **ad** \[_flags_ ...] **NTDS** **SYSTEM**
+| **fox** **ad** \[_flags_ ...] **NTDS** \[**SYSTEM**]
 
 DESCRIPTION
 ===========
 
-Extract **NTLM** password hashes and records from Active Directory offline databases. Hashes will be shown in **secretsdump** manner, if _records_ are not specified.
+Extract records and **NTLM** password hashes from Active Directory offline databases. Hashes will be shown in **secretsdump** manner, if _records_ are not specified.
 
 FLAGS
 =====
@@ -75,13 +75,13 @@ ENVIRONMENT
 EXAMPLES
 ========
 
+$ fox ad -uj NTDS.dit
+
+:   Show user records.
+
 $ fox ad -hw NTDS.dit SYSTEM
 
 :   Show NTLM hashes.
-
-$ fox ad -uj NTDS.dit SYSTEM
-
-:   Show user records.
 
 BUGS
 ====

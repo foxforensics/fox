@@ -19,7 +19,7 @@ import (
 )
 
 var Usage = strings.TrimSpace(`
-Usage: fox ad [FLAGS...] NTDS SYSTEM
+Usage: fox ad [FLAGS...] NTDS [SYSTEM]
 
 Record flags:
   -u, --users              Show all user records
@@ -37,11 +37,11 @@ Secret flags:
 Remarks:
   If no records are specified, hashes will be shown in secretsdump manner.
 
+Example: Show user records
+  $ fox ad -uj NTDS.dit
+
 Example: Show NTLM hashes
   $ fox ad -hw NTDS.dit SYSTEM
-
-Example: Show user records
-  $ fox ad -uj NTDS.dit SYSTEM
 
 Report bugs at: foxforensics.eu/issues
 `)
@@ -70,7 +70,7 @@ type Ad struct {
 func (cmd *Ad) Run(fox *cmd.Globals) error {
 	cmd.Paths = append(cmd.Paths, fox.Paths...)
 
-	if len(cmd.Paths) < 2 {
+	if len(cmd.Paths) < 1 {
 		pkg.Usage(Usage)
 		return nil
 	}
@@ -97,16 +97,38 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		return errors.New("invalid file format")
 	}
 
-	hive := <-heaps
+	var bk []byte
 
-	if hive == nil {
-		return errors.New("required file(s) missing")
-	}
+	if len(cmd.Paths) > 1 {
+		hive := <-heaps
 
-	defer hive.Free()
+		if hive == nil {
+			return errors.New("required file(s) missing")
+		}
 
-	if !reg.Detect(hive.Bytes()) {
-		return errors.New("invalid file format")
+		defer hive.Free()
+
+		if !reg.Detect(hive.Bytes()) {
+			return errors.New("invalid file format")
+		}
+
+		bk, err = bootkey.ExtractFromReader(hive.Reader())
+
+		if err != nil {
+			return err
+		}
+
+		slog.Debug(fmt.Sprintf("BootKey %x", bk))
+
+		peks, err := extract.Keys(fox.Context, ntds.Bytes(), bk)
+
+		if err != nil {
+			return err
+		}
+
+		for i, pek := range peks {
+			slog.Debug(fmt.Sprintf("PEK #%d %x", i, pek))
+		}
 	}
 
 	if cmd.Wordlist {
@@ -121,25 +143,7 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 		slog.Debug(fmt.Sprintf("using %d NTLM hashes", n))
 	}
 
-	key, err := bootkey.ExtractFromReader(hive.Reader())
-
-	if err != nil {
-		return err
-	}
-
-	slog.Debug(fmt.Sprintf("BootKey %x", key))
-
-	pek, err := extract.Keys(fox.Context, ntds.Bytes(), key)
-
-	if err != nil {
-		return err
-	}
-
-	for i, k := range pek {
-		slog.Debug(fmt.Sprintf("PEK #%d %x", i, k))
-	}
-
-	n, err := cmd.extract(fox, key, ntds.Bytes())
+	n, err := cmd.extract(fox, bk, ntds.Bytes())
 
 	if err != nil {
 		return err
@@ -150,12 +154,12 @@ func (cmd *Ad) Run(fox *cmd.Globals) error {
 	return nil
 }
 
-func (cmd *Ad) extract(fox *cmd.Globals, k, b []byte) (int, error) {
+func (cmd *Ad) extract(fox *cmd.Globals, bk, b []byte) (int, error) {
 	var a []fmt.Stringer
 
 	switch {
 	case cmd.Users:
-		if v, err := extract.Accounts(fox.Context, b, k); err != nil {
+		if v, err := extract.Accounts(fox.Context, b, bk); err != nil {
 			return 0, err
 		} else {
 			for _, r := range v {
@@ -182,7 +186,7 @@ func (cmd *Ad) extract(fox *cmd.Globals, k, b []byte) (int, error) {
 		}
 
 	default:
-		if v, err := extract.Accounts(fox.Context, b, k); err != nil {
+		if v, err := extract.Accounts(fox.Context, b, bk); err != nil {
 			return 0, err
 		} else {
 			for _, r := range v {

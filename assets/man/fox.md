@@ -166,7 +166,7 @@ $ fox -L512b image.dd
 
 :   Show MBR in canonical hex.
 
-$ fox ad NTDS.dit SYSTEM
+$ fox ad -hw NTDS.dit SYSTEM
 
 :   Show NTLM password hashes.
 

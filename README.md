@@ -105,7 +105,7 @@ Hash archive content as TLSH:
 fox hash -Htlsh ioc.7z!ioc.exe
 ```
 
-Hunt down critical events:
+Hunt critical events:
 ```console
 fox hunt -t *.dd
 ```
