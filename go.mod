@@ -8,7 +8,7 @@ require (
 	github.com/aixiansheng/lzfse v0.2.4
 	github.com/alecthomas/chroma/v2 v2.27.0
 	github.com/alecthomas/kong v1.16.1
-	github.com/andybalholm/brotli v1.2.3
+	github.com/andybalholm/brotli v1.2.4
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/bodgit/sevenzip v1.6.5
 	github.com/bradleyjkemp/sigma-go v0.6.6
@@ -16,7 +16,7 @@ require (
 	github.com/cavaliergopher/rpm v1.3.0
 	github.com/cenkalti/backoff/v6 v6.0.1
 	github.com/cyucelen/marker v0.0.0-20220628090808-ec8d542c2d28
-	github.com/dlclark/regexp2/v2 v2.7.1
+	github.com/dlclark/regexp2/v2 v2.8.0
 	github.com/emersion/go-message v0.18.2
 	github.com/fatih/color v1.19.0
 	github.com/flanglet/kanzi-go/v2 v2.5.1
@@ -54,8 +54,8 @@ require (
 	go.foxforensics.eu/rhash v1.7.4
 	go.foxforensics.eu/strings v1.0.1
 	go.foxforensics.eu/wordlist v1.0.2
-	golang.org/x/term v0.45.0
-	golang.org/x/text v0.41.0
+	golang.org/x/term v0.46.0
+	golang.org/x/text v0.42.0
 	www.velocidex.com/golang/evtx v0.2.0
 	www.velocidex.com/golang/go-ntfs v0.2.1
 	www.velocidex.com/golang/go-prefetch v0.0.0-20251027080408-85407689d0cb
@@ -117,11 +117,11 @@ require (
 	go.solidsystem.no/fletcher4 v0.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20260112195520-a5071408f32f // indirect
-	golang.org/x/crypto v0.56.0 // indirect
-	golang.org/x/exp v0.0.0-20260824195058-e88cd73687aa // indirect
-	golang.org/x/image v0.45.0 // indirect
-	golang.org/x/net v0.58.0 // indirect
-	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/crypto v0.57.0 // indirect
+	golang.org/x/exp v0.0.0-20260908205506-85c1c2202aba // indirect
+	golang.org/x/image v0.46.0 // indirect
+	golang.org/x/net v0.59.0 // indirect
+	golang.org/x/sys v0.48.0 // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
 	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
