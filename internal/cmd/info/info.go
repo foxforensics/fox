@@ -49,6 +49,7 @@ type FileInfo struct {
 	Bytes   uint64  `json:"bytes"`
 	Lines   uint64  `json:"lines"`
 	Offset  uint64  `json:"offset"`
+	Average byte    `json:"average"`
 	Entropy float64 `json:"entropy"`
 	IsBlock bool    `json:"is_block,omitempty"`
 }
@@ -62,9 +63,11 @@ func (fi *FileInfo) String() string {
 	_, _ = fmt.Fprintf(&sb, "%7s ", pkg.Humanize(fi.Bytes))
 
 	if fi.Entropy > Threshold {
+		sb.WriteString(writer.AsBold(fmt.Sprintf(" %3da ", fi.Average)))
 		sb.WriteString(writer.AsBold(fmt.Sprintf(" %.1fe ", fi.Entropy)))
 		sb.WriteString(writer.AsBold(fmt.Sprintf("[%-16s] ", e)))
 	} else {
+		_, _ = fmt.Fprintf(&sb, " %3da ", fi.Average)
 		_, _ = fmt.Fprintf(&sb, " %.1fe ", fi.Entropy)
 		_, _ = fmt.Fprintf(&sb, "[%-16s] ", e)
 	}
@@ -166,9 +169,12 @@ func (cmd *Info) Run(fox *cmd.Globals) error {
 		}
 
 		for block := range slices.Chunk(h.Bytes(), int(n)) {
+			avg, ent := entropy.Calculate(block)
+
 			fi.Bytes = uint64(max(0, len(block)))
 			fi.Lines = uint64(max(0, bytes.Count(block, []byte{'\n'})))
-			fi.Entropy = float64(int(entropy.Calculate(block)*Precision)) / Precision
+			fi.Entropy = float64(int(ent*Precision)) / Precision
+			fi.Average = avg
 
 			if fi.Entropy >= cmd.Min && fi.Entropy <= cmd.Max {
 				fox.Writer.Match(formats.Auto(fi, cmd.Json, cmd.Jsonl), fox.Regexp)

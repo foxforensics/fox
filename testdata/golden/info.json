@@ -3,6 +3,7 @@
   "bytes": 2263904,
   "lines": 10733,
   "offset": 0,
+  "average": 86,
   "entropy": 6.822318
 }
 {
@@ -10,6 +11,7 @@
   "bytes": 1591808,
   "lines": 11217,
   "offset": 0,
+  "average": 71,
   "entropy": 6.101687
 }
 {
@@ -17,6 +19,7 @@
   "bytes": 68,
   "lines": 0,
   "offset": 0,
+  "average": 67,
   "entropy": 4.872327
 }
 {
@@ -24,6 +27,7 @@
   "bytes": 4000000,
   "lines": 4836,
   "offset": 0,
+  "average": 49,
   "entropy": 2.425836
 }
 {
@@ -31,6 +35,7 @@
   "bytes": 10502144,
   "lines": 33864,
   "offset": 0,
+  "average": 37,
   "entropy": 4.078823
 }
 {
@@ -38,6 +43,7 @@
   "bytes": 1024,
   "lines": 3,
   "offset": 0,
+  "average": 18,
   "entropy": 2.047695
 }
 {
@@ -45,6 +51,7 @@
   "bytes": 70241,
   "lines": 661,
   "offset": 0,
+  "average": 59,
   "entropy": 6.792509
 }
 {
@@ -52,6 +59,7 @@
   "bytes": 33619968,
   "lines": 27732,
   "offset": 0,
+  "average": 6,
   "entropy": 0.844257
 }
 {
@@ -59,6 +67,7 @@
   "bytes": 3215360,
   "lines": 9413,
   "offset": 0,
+  "average": 39,
   "entropy": 4.301596
 }
 {
@@ -66,6 +75,7 @@
   "bytes": 8388608,
   "lines": 1606,
   "offset": 0,
+  "average": 12,
   "entropy": 1.449846
 }
 {
@@ -73,6 +83,7 @@
   "bytes": 601,
   "lines": 0,
   "offset": 0,
+  "average": 67,
   "entropy": 5.23811
 }
 {
@@ -80,6 +91,7 @@
   "bytes": 512,
   "lines": 0,
   "offset": 0,
+  "average": 89,
   "entropy": 5.890062
 }
 {
@@ -87,6 +99,7 @@
   "bytes": 6029312,
   "lines": 4403,
   "offset": 0,
+  "average": 22,
   "entropy": 2.283347
 }
 {
@@ -94,6 +107,7 @@
   "bytes": 0,
   "lines": 0,
   "offset": 0,
+  "average": 0,
   "entropy": 0
 }
 {
@@ -101,6 +115,7 @@
   "bytes": 64266,
   "lines": 455,
   "offset": 0,
+  "average": 27,
   "entropy": 4.175647
 }
 {
@@ -108,6 +123,7 @@
   "bytes": 779264,
   "lines": 1811,
   "offset": 0,
+  "average": 90,
   "entropy": 6.496406
 }
 {
@@ -115,6 +131,7 @@
   "bytes": 2621440,
   "lines": 5838,
   "offset": 0,
+  "average": 59,
   "entropy": 4.396943
 }
 {
@@ -122,6 +139,7 @@
   "bytes": 4096,
   "lines": 12,
   "offset": 0,
+  "average": 128,
   "entropy": 7.951484
 }
 {
@@ -129,6 +147,7 @@
   "bytes": 262095,
   "lines": 1075,
   "offset": 0,
+  "average": 54,
   "entropy": 6.719352
 }
 {
@@ -136,6 +155,7 @@
   "bytes": 1024,
   "lines": 1,
   "offset": 0,
+  "average": 13,
   "entropy": 1.429437
 }
 {
@@ -143,5 +163,6 @@
   "bytes": 1024,
   "lines": 1,
   "offset": 0,
+  "average": 13,
   "entropy": 1.508834
 }

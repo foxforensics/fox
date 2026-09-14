@@ -1,4 +1,4 @@
-      3l    1.0k  7.8e [■■■■■■■■■■■■■■■■] 00000000 testdata/corpus/binaries/test.rnd
-      4l    1.0k  7.8e [■■■■■■■■■■■■■■■■] 00000400 testdata/corpus/binaries/test.rnd
-      2l    1.0k  7.8e [■■■■■■■■■■■■■■■■] 00000800 testdata/corpus/binaries/test.rnd
-      3l    1.0k  7.8e [■■■■■■■■■■■■■■■■] 00000c00 testdata/corpus/binaries/test.rnd
+      3l    1.0k  123a  7.8e [■■■■■■■■■■■■■■■■] 00000000 testdata/corpus/binaries/test.rnd
+      4l    1.0k  130a  7.8e [■■■■■■■■■■■■■■■■] 00000400 testdata/corpus/binaries/test.rnd
+      2l    1.0k  128a  7.8e [■■■■■■■■■■■■■■■■] 00000800 testdata/corpus/binaries/test.rnd
+      3l    1.0k  132a  7.8e [■■■■■■■■■■■■■■■■] 00000c00 testdata/corpus/binaries/test.rnd
